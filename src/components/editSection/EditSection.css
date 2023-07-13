@@ -1,0 +1,18 @@
+.editSec {
+  background-color: #ffffff;
+}
+.editSec_midSec {
+  background: #e3eeff;
+  height: auto;
+}
+.editSec_rightMenu {
+  padding: 15px 20px;
+  background-color: #fbfbfb;
+}
+
+.finalize_reject {
+  background: #363636;
+  width: 30%;
+  display: flex;
+  justify-content: space-between;
+}
