@@ -108,6 +108,7 @@ const MidSection = React.forwardRef((props, ref) => {
   console.log("decode", decoded);
   console.log("data", data);
 
+  const documentsMap = documnentsMap;
   if (documnentsMap?.length > 0) {
     const documentsMap = documnentsMap;
   } else {
@@ -205,6 +206,11 @@ const MidSection = React.forwardRef((props, ref) => {
 
   let resizing = false;
   let contentFile = [];
+
+  const defaultWidth = "100px";
+  const defaultHeight = "100px";
+  const defaultTop = "0px";
+  const defaultLeft = "0px";
 
   function getResizer(attr1, attr2) {
     const resizer = document.createElement("span");
@@ -703,41 +709,6 @@ const MidSection = React.forwardRef((props, ref) => {
         });
 
         scaleField.append(scale);
-        // Axios.post(
-        //   "https://100035.pythonanywhere.com/api/nps_settings_create/",
-        //   {
-        //     username: "nake",
-        //     orientation: "horizontal",
-        //     scalecolor: "#8f1e1e",
-        //     roundcolor: "#938585",
-        //     fontcolor: "#000000",
-        //     fomat: "numbers",
-        //     time: "00",
-        //     name: `${title}_scale`,
-        //     left: "good",
-        //     right: "best",
-        //     center: "neutral",
-        //   }
-        // )
-        //   .then((res) => {
-        //     setIsLoading(false);
-        //     console.log(res.data, "scaleData");
-        //     setScaleData(res.data);
-        //     const success = res.data.success;
-        //     var successObj = JSON.parse(success);
-        //     const id = successObj.inserted_id;
-        //     console.log(res.scale_urls, "stateScale");
-        //     if (id.length) {
-        //       console.log(id, "id");
-        //       // setScaleId(id);
-        //       scaleIdHolder.innerHTML = id;
-        //     }
-        //     scale.src = res.data.scale_urls;
-        //   })
-        //   .catch((err) => {
-        //     setIsLoading(false);
-        //     console.log(err);
-        //   });
 
         scaleField.onclick = (e) => {
           e.stopPropagation();
@@ -817,10 +788,6 @@ const MidSection = React.forwardRef((props, ref) => {
         imageSignButton.append(signBtn);
 
         signField.innerText = `${element.data}`;
-
-        // const para = document.createElement("p");
-        // para.innerHTML = "Place your signature here";
-        // signField.append(para);
         holderDIV.append(signField);
         holderDIV.append(imageSignButton);
         cutItem_value.append(holderDIV);
@@ -866,12 +833,6 @@ const MidSection = React.forwardRef((props, ref) => {
               ycoordinate: getOffset(holderDIV).top,
             },
           };
-
-          // postData.push(dropdownField);
-          // setPostData({
-          //   ...postData,
-          //   dropdownField: { value: dropdownField.innerHTML, xcoordinate: getOffset(holderDIV).left, ycoordinate: getOffset(holderDIV).top }
-          // })
         }
 
         dropdownField.onclick = (e) => {
@@ -1478,8 +1439,6 @@ const MidSection = React.forwardRef((props, ref) => {
     };
     sessionStorage.setItem("cutItem", JSON.stringify(elem));
     cutItem.remove();
-
-    // console.log(sessionStorage);
   };
 
   const contextMenuClose = () => setContextMenu(initialContextMenu);
@@ -1758,74 +1717,78 @@ const MidSection = React.forwardRef((props, ref) => {
       holder = hitTarget;
       const holderPos = (function () {
         const holderPos = {
-          top: parseInt(holder?.style.top.slice(0, -2)),
-          left: parseInt(holder?.style.left.slice(0, -2)),
+          top: parseInt(holder?.style?.top?.slice(0, -2)), 
+          left: parseInt(holder?.style?.left?.slice(0, -2)), 
         };
         return Object.seal(holderPos);
       })();
 
-      let holderParentHolder = "";
-      let holderParentHolderRect = "";
-      let hodlerRect = "";
-      if (holder?.parentElement.classList.contains("containerInput")) {
-        holderParentHolder = holder?.parentElement?.parentElement;
-      }
-      if (holderParentHolder) {
-        holderParentHolderRect = holderParentHolder.getBoundingClientRect();
-      }
-      hodlerRect = holder?.getBoundingClientRect();
-
-      window.addEventListener("mousemove", moveObject);
-      function moveObject(ev) {
-        ev.preventDefault();
-        const el = document.getElementById("midSection_container");
-        const midsectionRect = el.getBoundingClientRect();
-
-        const elemtnMeasureX =
-          ev.screenX + holderPos.left + hodlerRect.width - initX;
-        const elmentMeasureY =
-          ev.screenY + holderPos.top + hodlerRect.height - initY;
-
+      if (holder && holderPos) {
+        
+        let holderParentHolder = "";
+        let holderParentHolderRect = "";
+        let hodlerRect = "";
         if (holder?.parentElement.classList.contains("containerInput")) {
-          if (
-            holderParentHolderRect.width > elemtnMeasureX + 5 &&
-            ev.screenX + holderPos.left - initX > 0 &&
-            holderParentHolderRect.height > elmentMeasureY + 5 &&
-            ev.screenY + holderPos.top - initY > 0
-          ) {
-            const diffX = ev.screenX - initX;
-            const diffY = ev.screenY - initY;
-            holder.style.top = holderPos.top + diffY + "px";
-            holder.style.left = holderPos.left + diffX + "px";
+          holderParentHolder = holder?.parentElement?.parentElement;
+        }
+        if (holderParentHolder) {
+          holderParentHolderRect = holderParentHolder.getBoundingClientRect();
+        }
+        hodlerRect = holder?.getBoundingClientRect();
+
+        window.addEventListener("mousemove", moveObject);
+        function moveObject(ev) {
+          ev.preventDefault();
+          const el = document.getElementById("midSection_container");
+          const midsectionRect = el.getBoundingClientRect();
+
+          const elemtnMeasureX =
+            ev.screenX + holderPos.left + hodlerRect.width - initX;
+          const elmentMeasureY =
+            ev.screenY + holderPos.top + hodlerRect.height - initY;
+
+          if (holder?.parentElement.classList.contains("containerInput")) {
+            if (
+              holderParentHolderRect.width > elemtnMeasureX + 5 &&
+              ev.screenX + holderPos.left - initX > 0 &&
+              holderParentHolderRect.height > elmentMeasureY + 5 &&
+              ev.screenY + holderPos.top - initY > 0
+            ) {
+              const diffX = ev.screenX - initX;
+              const diffY = ev.screenY - initY;
+              holder.style.top = holderPos.top + diffY + "px";
+              holder.style.left = holderPos.left + diffX + "px";
+            } else {
+              holder.style.top = holderPos.top + "px";
+              holder.style.left = holderPos.left + "px";
+            }
           } else {
-            holder.style.top = holderPos.top + "px";
-            holder.style.left = holderPos.left + "px";
-          }
-        } else {
-          if (
-            midsectionRect.width > elemtnMeasureX + 5 &&
-            ev.screenX + holderPos.left - initX > 0 &&
-            midsectionRect.height > elmentMeasureY + 5 &&
-            ev.screenY + holderPos.top - initY > 0
-          ) {
-            const diffX = ev.screenX - initX;
-            const diffY = ev.screenY - initY;
-            holder.style.top = holderPos.top + diffY + "px";
-            holder.style.left = holderPos.left + diffX + "px";
-          } else {
-            holder.style.top = holderPos.top + "px";
-            holder.style.left = holderPos.left + "px";
+            if (
+              midsectionRect.width > elemtnMeasureX + 5 &&
+              ev.screenX + holderPos.left - initX > 0 &&
+              midsectionRect.height > elmentMeasureY + 5 &&
+              ev.screenY + holderPos.top - initY > 0
+            ) {
+              const diffX = ev.screenX - initX;
+              const diffY = ev.screenY - initY;
+              holder.style.top = holderPos.top + diffY + "px";
+              holder.style.left = holderPos.left + diffX + "px";
+            } else {
+              holder.style.top = holderPos.top + "px";
+              holder.style.left = holderPos.left + "px";
+            }
           }
         }
-      }
 
-      window.addEventListener("mouseup", stopMove);
-      function stopMove(ev) {
-        window.removeEventListener("mousemove", moveObject);
-        window.removeEventListener("mouseup", stopMove);
+        window.addEventListener("mouseup", stopMove);
+        function stopMove(ev) {
+          window.removeEventListener("mousemove", moveObject);
+          window.removeEventListener("mouseup", stopMove);
+        }
       }
     }
   };
+
 
   function getHolderMenu(auth_user) {
     //putting functional menu on holder
@@ -2553,7 +2516,7 @@ const MidSection = React.forwardRef((props, ref) => {
           buttonField.onmouseover = (e) => {
             const required_map_document = document_map_required?.filter(
               (item) => element.id == item.content
-            );
+            ) || [];
             if (
               buttonField.parentElement.classList.contains("holderDIV") &&
               required_map_document.length > 0
@@ -3638,16 +3601,6 @@ const MidSection = React.forwardRef((props, ref) => {
                 });
               };
 
-              // if (dropdownFieldContainer) {
-              //   const dropdownFieldContainer = {
-              //     dropdownFieldContainer: {
-              //       value: event.target.value,
-              //       xcoordinate: getOffset(holderDIVContainer).left,
-              //       ycoordinate: getOffset(holderDIVContainer).top,
-              //     },
-              //   };
-              // }
-
               dropdownFieldContainer.onclick = (e) => {
                 e.stopPropagation();
                 if (e.ctrlKey) {
@@ -3685,17 +3638,6 @@ const MidSection = React.forwardRef((props, ref) => {
               inputFieldContainer.style.position = "relative";
               inputFieldContainer.style.cursor = "text";
               inputFieldContainer.oninput = (e) => {
-                //setIsFinializeDisabled(false);
-                // const doc_map_copy = [...doc_map]
-                // if (
-                //   inputFieldContainer.parentElement.classList.contains(
-                //     "holderDIV"
-                //   )
-                // ) {
-                //   inputFieldContainer.parentElement.classList.add(
-                //     "element_updated"
-                //   );
-                // }
                 const required_map_document = document_map_required?.filter(
                   (item) => element.id == item.content
                 );
@@ -3721,12 +3663,7 @@ const MidSection = React.forwardRef((props, ref) => {
                 }
                 handleClicked("align2");
                 setSidebar(true);
-                // inputFieldContainer.parentElement.focus()
               };
-              // inputFieldContainer.ontouchstart = () => {
-              //   handleClicked("align2");
-              //   setSidebar(true);
-              // };
 
               const text = `${containerElement.raw_data}`;
 

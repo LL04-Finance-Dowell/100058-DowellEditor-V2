@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-no-duplicate-props */
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Row } from "react-bootstrap";
 import { useStateContext } from "../../contexts/contextProvider";
 import Axios from "axios";
