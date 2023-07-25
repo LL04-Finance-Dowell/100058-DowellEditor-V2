@@ -224,6 +224,7 @@ const Header = () => {
     pageNum = targetParent.innerText.split("\n")[0];
     return pageNum;
   };
+  
   function savingTableData() {
     const tables = document.getElementsByClassName("tableInput");
     let tables_tags = [];

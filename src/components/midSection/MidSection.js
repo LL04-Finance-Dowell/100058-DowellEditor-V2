@@ -15,6 +15,7 @@ import jwt_decode from "jwt-decode";
 import { table_dropdown_focuseddClassMaintain } from "../../utils/focusClassMaintain/focusClass";
 import { Print } from "react-easy-print";
 import RightContextMenu from "../contextMenu/RightContextMenu";
+
 // tHIS IS FOR A TEST COMMIT
 
 const dummyData = {
@@ -207,11 +208,6 @@ const MidSection = React.forwardRef((props, ref) => {
   let resizing = false;
   let contentFile = [];
 
-  const defaultWidth = "100px";
-  const defaultHeight = "100px";
-  const defaultTop = "0px";
-  const defaultLeft = "0px";
-
   function getResizer(attr1, attr2) {
     const resizer = document.createElement("span");
     resizer.style.width = "5px";
@@ -220,6 +216,8 @@ const MidSection = React.forwardRef((props, ref) => {
     resizer.className = "resizeBtn";
     resizer.style.position = "absolute";
     resizer.style.backgroundColor = "#00aaff";
+
+    let resizing = false;
 
     if (attr1 === "top") {
       resizer.style.top = "-5px";
@@ -312,7 +310,13 @@ const MidSection = React.forwardRef((props, ref) => {
     return resizer;
   }
 
+  const defaultWidth = "100px";
+  const defaultHeight = "100px";
+  const defaultTop = "0px";
+  const defaultLeft = "0px";
+
   const [cutItem_value, setCutItem_value] = useState(null);
+
   const handleContextMenu = (e) => {
     e.preventDefault();
 
@@ -1717,14 +1721,13 @@ const MidSection = React.forwardRef((props, ref) => {
       holder = hitTarget;
       const holderPos = (function () {
         const holderPos = {
-          top: parseInt(holder?.style?.top?.slice(0, -2)), 
-          left: parseInt(holder?.style?.left?.slice(0, -2)), 
+          top: parseInt(holder?.style?.top?.slice(0, -2)),
+          left: parseInt(holder?.style?.left?.slice(0, -2)),
         };
         return Object.seal(holderPos);
       })();
 
       if (holder && holderPos) {
-        
         let holderParentHolder = "";
         let holderParentHolderRect = "";
         let hodlerRect = "";
@@ -1788,7 +1791,6 @@ const MidSection = React.forwardRef((props, ref) => {
       }
     }
   };
-
 
   function getHolderMenu(auth_user) {
     //putting functional menu on holder
@@ -2514,9 +2516,10 @@ const MidSection = React.forwardRef((props, ref) => {
           }
 
           buttonField.onmouseover = (e) => {
-            const required_map_document = document_map_required?.filter(
-              (item) => element.id == item.content
-            ) || [];
+            const required_map_document =
+              document_map_required?.filter(
+                (item) => element.id == item.content
+              ) || [];
             if (
               buttonField.parentElement.classList.contains("holderDIV") &&
               required_map_document.length > 0

@@ -7,17 +7,20 @@ import reportWebVitals from "./reportWebVitals";
 import { ContextProvider } from "./contexts/contextProvider";
 
 import PrintProvider from "react-easy-print";
+import { DraggableProvider } from "./contexts/DraggableContext";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <ContextProvider>
     <PrintProvider>
-      <React.StrictMode>
-        <Router basename={window.location.pathname || ""}>
-          <Routes>
-            <Route path="/" element={<App />} />
-          </Routes>
-        </Router>
-      </React.StrictMode>
+      <DraggableProvider>
+        <React.StrictMode>
+          <Router basename={window.location.pathname || ""}>
+            <Routes>
+              <Route path="/" element={<App />} />
+            </Routes>
+          </Router>
+        </React.StrictMode>
+      </DraggableProvider>
     </PrintProvider>
   </ContextProvider>
 );

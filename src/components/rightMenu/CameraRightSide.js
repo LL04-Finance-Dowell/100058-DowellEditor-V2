@@ -140,7 +140,7 @@ function CameraRightSide() {
 
   function removeCamera() {
     const focusseddElmnt = document.querySelector(".focussedd");
-    if (focusseddElmnt.classList.contains("holderDIV")) {
+    if (focusseddElmnt?.classList.contains("holderDIV")) {
       document.querySelector(".focussedd").remove();
     }
   }

@@ -30,53 +30,40 @@ const ImageRightSidebar = () => {
   //clicked choose file button
   const chooseFileClick = (e) => {
     e.stopPropagation();
-
-    var imageDiv = document.querySelector(".focussedd");
-    const addImageButtonInput = document.getElementsByClassName(
-      "addImageButtonInput"
-    );
-    addImageButtonInput.item(0).click();
-    imageDiv.firstElementChild.innerText = "";
-
-    handleClicked("image2", "table2");
-
-    console.log("iamgeDiv", imageDiv);
-    const removalbeFocusseddDiv = document.getElementsByClassName("focussedd");
-    // console.log("removalbeFocusseddDiv", removalbeFocusseddDiv);
-    if (removalbeFocusseddDiv) {
-      for (let i = 0; i < removalbeFocusseddDiv?.length; i++) {
-        removalbeFocusseddDiv[i].classList.remove("focussedd");
-      }
-    }
-
-    const removalbeFocussedDiv = document.getElementsByClassName("focussed");
-    // console.log("removalbeFocusseddDiv", removalbeFocusseddDiv);
-    if (removalbeFocussedDiv) {
-      for (let i = 0; i < removalbeFocussedDiv?.length; i++) {
-        removalbeFocussedDiv[i].classList.remove("focussed");
-      }
-    }
-    // // addImageButton;
-    while (1) {
-      if (imageDiv.classList.contains("holderDIV")) {
-        imageDiv.classList.add("focussedd");
-        imageDiv.firstElementChild.classList.add("focussed");
-        console.log("imageDiv", imageDiv);
-        break;
-      } else {
-        imageDiv = imageDiv.parentElement;
-      }
-    }
-
-    // if(imageDiv.)
+    const imageDiv = document.querySelector(".focussedd");
 
     if (imageDiv) {
-      if (imageDiv.parentElement.classList.contains("holderDIV")) {
+      const addImageButtonInput = document.getElementsByClassName(
+        "addImageButtonInput"
+      );
+      addImageButtonInput.item(0).click();
+      imageDiv.firstElementChild.innerText = "";
+
+      handleClicked("image2", "table2");
+
+      const removalbeFocussedDiv = document.getElementsByClassName("focussed");
+      if (removalbeFocussedDiv) {
+        for (let i = 0; i < removalbeFocussedDiv.length; i++) {
+          removalbeFocussedDiv[i].classList.remove("focussed");
+        }
+      }
+
+      while (imageDiv) {
+        if (imageDiv.classList.contains("holderDIV")) {
+          imageDiv.classList.add("focussedd");
+          imageDiv.firstElementChild.classList.add("focussed");
+          break;
+        } else {
+          imageDiv = imageDiv.parentElement;
+        }
+      }
+
+      if (imageDiv && imageDiv.parentElement.classList.contains("holderDIV")) {
         imageDiv.parentElement.classList.add("element_updated");
-        console.log("imagediv", imageDiv);
       }
     }
   };
+
   const handleUpdate = () => {
     const imageName = document.getElementById("image_name");
     const button = document.querySelector(".focussed");
@@ -85,19 +72,18 @@ const ImageRightSidebar = () => {
     }
   };
 
-  function removeImage() {
-    if (document.querySelector(".focussedd").classList.contains("dropp")) {
-      if (document.querySelector(".focussedd").hasChildNodes()) {
-        const childLength =
-          document.querySelector(".focussedd").children.length;
-        for (let i = 0; i < childLength; i++) {
-          document.querySelector(".focussedd").firstElementChild.remove();
+  const removeImage = () => {
+    const imageDiv = document.querySelector(".focussedd");
+    if (imageDiv) {
+      if (imageDiv.classList.contains("dropp") && imageDiv.hasChildNodes()) {
+        while (imageDiv.firstChild) {
+          imageDiv.removeChild(imageDiv.firstChild);
         }
+      } else {
+        imageDiv.remove();
       }
-    } else {
-      document.querySelector(".focussedd").remove();
     }
-  }
+  };
 
   const handleBorderSizeChange = (e) => {
     setBorderSize(e.target.value);
