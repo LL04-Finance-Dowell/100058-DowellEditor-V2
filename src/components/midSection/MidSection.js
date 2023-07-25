@@ -2045,28 +2045,11 @@ const MidSection = React.forwardRef((props, ref) => {
 
   const onPost = () => {
     const curr_user = document.getElementById("curr_user");
-
     const midSec = document.getElementsByClassName("midSection_container");
 
     let pageNo = 0;
-
     let isAnyRequiredElementEdited = false;
-    const elementTypeHandlers = {
-      DATE_INPUT: "DATE_INPUT",
-      TEXT_INPUT: "TEXT_INPUT",
-      IMAGE_INPUT: "IMAGE_INPUT",
-      SIGN_INPUT: "SIGN_INPUT",
-      IFRAME_INPUT: "IFRAME_INPUT",
-      SCALE_INPUT: "SCALE_INPUT",
-      BUTTON_INPUT: "BUTTON_INPUT",
-      DROPDOWN_INPUT: "DROPDOWN_INPUT",
-      TABLE_INPUT: "TABLE_INPUT",
-      FORM: "FORM",
-      CAMERA_INPUT: "CAMERA_INPUT",
-      NEW_SCALE_INPUT: "NEW_SCALE_INPUT",
-      CONTAINER_INPUT: "CONTAINER_INPUT",
-    };
-    
+
     for (let p = 1; p <= item?.length; p++) {
       pageNo++;
       fetchedData[p]?.forEach((element) => {
