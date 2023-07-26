@@ -2093,7 +2093,7 @@ const MidSection = React.forwardRef((props, ref) => {
 
             if (
               inputField?.parentElement.classList.contains("holderDIV") &&
-              required_map_document.length > 0
+              required_map_document?.length > 0
             ) {
               inputField?.parentElement.classList.toggle("element_updated", true);
             }
@@ -2146,7 +2146,7 @@ const MidSection = React.forwardRef((props, ref) => {
             (item) => element.id === item.content
           );
 
-          if (imageField?.parentElement?.classList.contains("holderDIV") && required_map_document.length > 0) {
+          if (imageField?.parentElement?.classList.contains("holderDIV") && required_map_document?.length > 0) {
             imageField?.parentElement?.classList.add("element_updated");
           }
 
@@ -2649,7 +2649,7 @@ const MidSection = React.forwardRef((props, ref) => {
               ) || [];
             if (
               buttonField.parentElement.classList.contains("holderDIV") &&
-              required_map_document.length > 0
+              required_map_document?.length > 0
             ) {
               buttonField.parentElement.classList.add("element_updated");
             }
@@ -3775,7 +3775,7 @@ const MidSection = React.forwardRef((props, ref) => {
                   inputFieldContainer.parentElement.classList.contains(
                     "holderDIV"
                   ) &&
-                  required_map_document.length > 0
+                  required_map_document?.length > 0
                 ) {
                   inputFieldContainer.parentElement.classList.add(
                     "element_updated"
@@ -4028,7 +4028,7 @@ const MidSection = React.forwardRef((props, ref) => {
                   buttonFieldContainer.parentElement.classList.contains(
                     "holderDIV"
                   ) &&
-                  required_map_document.length > 0
+                  required_map_document?.length > 0
                 ) {
                   buttonFieldContainer.parentElement.classList.add(
                     "element_updated"
