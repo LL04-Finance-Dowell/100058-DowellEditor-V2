@@ -16,7 +16,6 @@ import { table_dropdown_focuseddClassMaintain } from "../../utils/focusClassMain
 import { Print } from "react-easy-print";
 import RightContextMenu from "../contextMenu/RightContextMenu";
 import { getResizer } from "./GetResizerElement";
-// import { getHolderDIV } from "./GetHolderDivElement";
 import { dragElementOverPage } from "./DragElementOverPage";
 import { getHolderMenu } from "./GetHolderMenu";
 import TextInputElement from "./midSectionElements/TextInputElement.jsx";
@@ -1726,7 +1725,65 @@ const MidSection = React.forwardRef((props, ref) => {
             auth_user: curr_user,
           };
           console.log("getting text input value", measure.border);
-          <TextInputElement element={element} documnetMap={documnetMap} pageNo={pageNo}/>
+
+          const idMatch = documnetMap?.filter((elmnt) => elmnt == element?.id);
+          // console.log("element", element);
+
+          const holderDIV = getHolderDIV(measure, pageNo, idMatch);
+          const id = `${element.id}`;
+          // <TextInputElement element={element} documnetMap={documnetMap} pageNo={pageNo}/>
+
+          let inputField = document.createElement("div");
+          inputField.setAttribute("contenteditable", true);
+          //  inputField.setAttribute('draggable', true);
+          inputField.className = "textInput";
+          inputField.id = id;
+          inputField.style.width = "100%";
+          inputField.style.height = "100%";
+          inputField.style.resize = "none";
+          inputField.style.zIndex = 2;
+          inputField.style.backgroundColor = "#0000";
+          inputField.style.borderRadius = "0px";
+          inputField.style.outline = "0px";
+          inputField.style.overflow = "overlay";
+          inputField.style.position = "relative";
+          inputField.style.cursor = "text";
+
+          inputField.oninput = (e) => {
+            const required_map_document = document_map_required?.filter(
+              (item) => element.id == item.content
+            );
+
+            if (
+              inputField?.parentElement.classList.contains("holderDIV") &&
+              required_map_document?.length > 0
+            ) {
+              inputField?.parentElement.classList.add("element_updated");
+            }
+            if (element.required) {
+              isAnyRequiredElementEdited = true;
+            }
+          };
+          inputField.onclick = (e) => {
+            focuseddClassMaintain(e);
+            if (e.ctrlKey) {
+              copyInput("align2");
+            }
+            handleClicked("align2");
+            setSidebar(true);
+          };
+
+          const text = `${element.raw_data}`;
+
+          inputField.innerHTML = text;
+
+          holderDIV.append(inputField);
+
+          document
+            .getElementsByClassName("midSection_container")
+            [p - 1] // ?.item(0)
+            ?.append(holderDIV);
+
         }
         if (element.type === "IMAGE_INPUT") {
           const measure = {
@@ -1742,87 +1799,87 @@ const MidSection = React.forwardRef((props, ref) => {
           const holderDIV = getHolderDIV(measure, pageNo, idMatch);
           const id = `${element.id}`;
           
-          <ImageInputElement element={element} measure={measure} documnetMap={documnetMap} />
+          // <ImageInputElement element={element} measure={measure} documnetMap={documnetMap} />
 
-          // const imageField = document.createElement("div");
-          // imageField.className = "imageInput";
-          // imageField.id = id;
-          // imageField.style = {
-          //   width: "100%",
-          //   height: "100%",
-          //   backgroundColor: "#0000",
-          //   borderRadius: "0px",
-          //   outline: "0px",
-          //   overflow: "overlay",
-          //   position: "relative",
-          // };
+          const imageField = document.createElement("div");
+          imageField.className = "imageInput";
+          imageField.id = id;
+          imageField.style = {
+            width: "100%",
+            height: "100%",
+            backgroundColor: "#0000",
+            borderRadius: "0px",
+            outline: "0px",
+            overflow: "overlay",
+            position: "relative",
+          };
 
-          // const required_map_document = document_map_required?.filter(
-          //   (item) => element.id === item.content
-          // );
+          const required_map_document = document_map_required?.filter(
+            (item) => element.id === item.content
+          );
 
-          // if (imageField?.parentElement?.classList.contains("holderDIV") && required_map_document?.length > 0) {
-          //   imageField?.parentElement?.classList.add("element_updated");
-          // }
+          if (imageField?.parentElement?.classList.contains("holderDIV") && required_map_document?.length > 0) {
+            imageField?.parentElement?.classList.add("element_updated");
+          }
 
-          // if (element.required) {
-          //   isAnyRequiredElementEdited = true;
-          // }
+          if (element.required) {
+            isAnyRequiredElementEdited = true;
+          }
 
-          // imageField.addEventListener("input", (e) => {
-          //   // setIsFinializeDisabled(false);
-          // });
+          imageField.addEventListener("input", (e) => {
+            // setIsFinializeDisabled(false);
+          });
 
-          // holderDIV.appendChild(imageField);
+          holderDIV.appendChild(imageField);
 
-          // document
-          //   .getElementsByClassName("midSection_container")[p - 1]
-          //   ?.appendChild(holderDIV);
+          document
+            .getElementsByClassName("midSection_container")[p - 1]
+            ?.appendChild(holderDIV);
 
-          // imageField.onclick = (e) => {
-          //   focuseddClassMaintain(e);
-          //   if (e.ctrlKey) {
-          //     copyInput("image2");
-          //   }
-          //   handleClicked("image2");
-          //   setSidebar(true);
-          // };
+          imageField.onclick = (e) => {
+            focuseddClassMaintain(e);
+            if (e.ctrlKey) {
+              copyInput("image2");
+            }
+            handleClicked("image2");
+            setSidebar(true);
+          };
           
-          // const createImageButton = (text, type, eventListener) => {
-          //   const button = document.createElement("div");
-          //   button.className = type;
-          //   button.innerText = text;
-          //   button.style.display = "none";
-          //   button.addEventListener("click", eventListener);
-          //   return button;
-          // };
+          const createImageButton = (text, type, eventListener) => {
+            const button = document.createElement("div");
+            button.className = type;
+            button.innerText = text;
+            button.style.display = "none";
+            button.addEventListener("click", eventListener);
+            return button;
+          };
           
-          // const imgBtn = document.createElement("input");
-          // imgBtn.className = "addImageButtonInput";
-          // imgBtn.type = "file";
-          // imgBtn.style.objectFit = "cover";
-          // var uploadedImage = "";
+          const imgBtn = document.createElement("input");
+          imgBtn.className = "addImageButtonInput";
+          imgBtn.type = "file";
+          imgBtn.style.objectFit = "cover";
+          var uploadedImage = "";
           
-          // imgBtn.addEventListener("input", () => {
-          //   const reader = new FileReader();
+          imgBtn.addEventListener("input", () => {
+            const reader = new FileReader();
           
-          //   reader.addEventListener("load", () => {
-          //     uploadedImage = reader.result;
-          //     document.querySelector(".focussed").style.backgroundImage = `url(${uploadedImage})`;
-          //   });
-          //   reader.readAsDataURL(imgBtn.files[0]);
-          // });
+            reader.addEventListener("load", () => {
+              uploadedImage = reader.result;
+              document.querySelector(".focussed").style.backgroundImage = `url(${uploadedImage})`;
+            });
+            reader.readAsDataURL(imgBtn.files[0]);
+          });
           
-          // imageField.style.backgroundImage = element.data.startsWith("url(") ? element.data : "";
-          // imageField.innerText = element.data;
+          imageField.style.backgroundImage = element.data.startsWith("url(") ? element.data : "";
+          imageField.innerText = element.data;
           
-          // const imageButton = createImageButton("Choose File", "addImageButton", () => imgBtn.click());
-          // imageButton.appendChild(imgBtn);
+          const imageButton = createImageButton("Choose File", "addImageButton", () => imgBtn.click());
+          imageButton.appendChild(imgBtn);
           
-          // holderDIV.appendChild(imageField);
-          // holderDIV.appendChild(imageButton);
+          holderDIV.appendChild(imageField);
+          holderDIV.appendChild(imageButton);
           
-          // document.getElementsByClassName("midSection_container")[p - 1]?.appendChild(holderDIV);
+          document.getElementsByClassName("midSection_container")[p - 1]?.appendChild(holderDIV);
         }
         if (element.type === "DATE_INPUT") {
           const measure = {

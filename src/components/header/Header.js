@@ -822,6 +822,8 @@ const Header = () => {
   const actionName = decoded?.details?.action;
   const docMap = decoded?.details?.document_map;
   const documentFlag = decoded?.details?.document_flag;
+  const titleName = decoded?.details?.name;
+  const finalDocName = decoded?.details?.update_field.document_name;
 
   const element_updated_length =
     document.getElementsByClassName("element_updated")?.length;
@@ -951,6 +953,12 @@ const Header = () => {
       {
         document_id: decoded.details._id,
         action: decoded.details.action,
+        database: decoded.details.database,
+        collection: decoded.details.collection,
+        team_member_ID: decoded.details.team_member_ID,
+        function_ID: decoded.details.function_ID,
+        cluster: decoded.details.cluster,
+        document: decoded.details.document,
       }
     )
       .then((res) => {
@@ -1275,7 +1283,7 @@ const Header = () => {
                 spellCheck="false"
                 ref={inputRef}
               >
-                {title && title}
+                {docMap ? finalDocName : titleName}
               </div>
               <FaPen className="cursor-pointer" onClick={handleTitle} />
             </div>
