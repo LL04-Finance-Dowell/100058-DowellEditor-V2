@@ -15,6 +15,12 @@ import jwt_decode from "jwt-decode";
 import { table_dropdown_focuseddClassMaintain } from "../../utils/focusClassMaintain/focusClass";
 import { Print } from "react-easy-print";
 import RightContextMenu from "../contextMenu/RightContextMenu";
+import { getResizer } from "./GetResizerElement";
+// import { getHolderDIV } from "./GetHolderDivElement";
+import { dragElementOverPage } from "./DragElementOverPage";
+import { getHolderMenu } from "./GetHolderMenu";
+import TextInputElement from "./midSectionElements/TextInputElement.jsx";
+import ImageInputElement from "./midSectionElements/ImageInputElement.jsx";
 
 // tHIS IS FOR A TEST COMMIT
 
@@ -219,108 +225,6 @@ const MidSection = React.forwardRef((props, ref) => {
 
   let resizing = false;
   let contentFile = [];
-
-  function getResizer(attr1, attr2) {
-    const resizer = document.createElement("span");
-    resizer.style.width = "5px";
-    resizer.style.height = "5px";
-    resizer.style.display = "block";
-    resizer.className = "resizeBtn";
-    resizer.style.position = "absolute";
-    resizer.style.backgroundColor = "#00aaff";
-
-    let resizing = false;
-
-    if (attr1 === "top") {
-      resizer.style.top = "-5px";
-    } else {
-      resizer.style.bottom = "-5px";
-    }
-
-    if (attr2 === "left") {
-      resizer.style.left = "-5px";
-    } else {
-      resizer.style.right = "-5px";
-    }
-
-    if (
-      (attr1 == "top" && attr2 === "right") ||
-      (attr1 == "bottom" && attr2 === "left")
-    ) {
-      resizer.onmouseover = (event) => {
-        event.target.style.cursor = "nesw-resize";
-      };
-    } else {
-      resizer.onmouseover = (event) => {
-        event.target.style.cursor = "nwse-resize";
-      };
-    }
-
-    resizer.onmousedown = (event) => {
-      let initX = event.screenX;
-      let initY = event.screenY;
-      resizing = true;
-      event.preventDefault();
-
-      const holder = event.target.parentNode;
-
-      const holderSize = (function () {
-        const holderSize = {
-          width:
-            decoded.details.flag === "editing" ? holder.offsetWidth : undefined,
-          height:
-            decoded.details.flag === "editing"
-              ? holder.offsetHeight
-              : undefined,
-          top:
-            decoded.details.flag === "editing" ? holder.offsetTop : undefined,
-          left:
-            decoded.details.flag === "editing" ? holder.offsetLeft : undefined,
-        };
-        return Object.seal(holderSize);
-      })();
-
-      window.addEventListener("mousemove", resizeElement);
-      function resizeElement(ev) {
-        const el = document.getElementById("midSection_container");
-        const midsectionRect = el.getBoundingClientRect();
-        if (
-          ev.screenX > midsectionRect.left &&
-          ev.screenY > midsectionRect.top &&
-          ev.screenX < midsectionRect.right
-        ) {
-          if (attr1 == "bottom" && attr2 == "right") {
-            holder.style.width = ev.screenX - initX + holderSize.width + "px";
-            holder.style.height = ev.screenY - initY + holderSize.height + "px";
-          } else if (attr1 == "bottom" && attr2 == "left") {
-            holder.style.left = holderSize.left + (ev.screenX - initX) + "px";
-            holder.style.width = holderSize.width - (ev.screenX - initX) + "px";
-            holder.style.height = ev.screenY - initY + holderSize.height + "px";
-          } else if (attr1 == "top" && attr2 == "left") {
-            holder.style.top = holderSize.top + (ev.screenY - initY) + "px";
-            holder.style.left = holderSize.left + (ev.screenX - initX) + "px";
-            holder.style.width = holderSize.width - (ev.screenX - initX) + "px";
-            holder.style.height =
-              holderSize.height - (ev.screenY - initY) + "px";
-          } else if (attr1 == "top" && attr2 == "right") {
-            holder.style.top = holderSize.top + (ev.screenY - initY) + "px";
-            holder.style.width = holderSize.width + (ev.screenX - initX) + "px";
-            holder.style.height =
-              holderSize.height - (ev.screenY - initY) + "px";
-          }
-        }
-      }
-
-      window.addEventListener("mouseup", stopResizing);
-      function stopResizing(ev) {
-        window.removeEventListener("mousemove", resizeElement);
-        window.removeEventListener("mouseup", stopResizing);
-        resizing = false;
-      }
-    };
-
-    return resizer;
-  }
 
   const defaultWidth = "100px";
   const defaultHeight = "100px";
@@ -1562,87 +1466,6 @@ const MidSection = React.forwardRef((props, ref) => {
     // cutItem.remove();
   };
 
-  // const handleCopyInput = () => {
-  //   const copyItem = document.querySelector(".focussedd");
-  //   const copyEle = copyItem.cloneNode(true);
-
-  //   function getPosition(el) {
-  //     console.log("element check", el);
-  //     const midSec = document.getElementById("midSection_container");
-  //     const rect = el.getBoundingClientRect();
-  //     const midsectionRect = midSec.getBoundingClientRect();
-  //     return {
-  //       top:
-  //         rect.top > 0
-  //           ? Math.abs(midsectionRect.top)
-  //           : rect.top - midsectionRect.top,
-  //       left: rect.left - midsectionRect.left,
-  //       bottom: rect.bottom,
-  //       right: rect.right,
-  //       width: rect.width,
-  //       height: rect.height,
-  //     };
-  //   }
-
-  //   let tempPosn = getPosition(copyEle);
-  //   const find_class_name = copyEle.firstElementChild?.className.split(" ")[0];
-  //   let type = "";
-  //   // console.log("containerChildClassName", containerChildClassName);
-  //   switch (find_class_name) {
-  //     case "dateInput":
-  //       type = "DATE_INPUT";
-  //       break;
-  //     case "textInput":
-  //       type = "TEXT_INPUT";
-  //       break;
-  //     case "imageInput":
-  //       type = "IMAGE_INPUT";
-  //       break;
-  //     case "signInput":
-  //       type = "SIGN_INPUT";
-  //       break;
-  //     case "iframeInput":
-  //       type = "IFRAME_INPUT";
-  //       break;
-  //     case "scaleInput":
-  //       type = "SCALE_INPUT";
-  //       break;
-  //     case "newScaleInput":
-  //       type = "NEW_SCALE_INPUT";
-  //       break;
-  //     case "buttonInput":
-  //       type = "BUTTON_INPUT";
-  //       break;
-  //     case "dropdownInput":
-  //       type = "DROPDOWN_INPUT";
-  //       break;
-  //     case "containerInput":
-  //       type = "CONTAINER_INPUT";
-  //       break;
-  //     case "newScaleInput":
-  //       type = "NEW_SCALE_INPUT";
-  //       break;
-  //     case "cameraInput":
-  //       type = "CAMERA_INPUT";
-  //       break;
-  //     default:
-  //       type = "";
-  //   }
-
-  //   elem = {
-  //     width: copyEle.style.width,
-  //     height: copyEle.style.height,
-  //     top: copyEle.style.top,
-  //     topp: copyEle.style.top,
-  //     left: copyEle.style.left,
-  //     type: type,
-  //     data: copyEle.firstChild.innerHTML,
-  //     // id: `d${h + 1}`,
-  //   };
-  //   sessionStorage.setItem("copyItem", JSON.stringify(elem));
-  //   // cutItem.remove();
-  // };
-
   // Remove Input
   const handleRemoveInput = () => {
     const selectInput = document.querySelector(".focussedd");
@@ -1681,7 +1504,7 @@ const MidSection = React.forwardRef((props, ref) => {
       copyEle.onmousedown = copyEle.addEventListener(
         "mousedown",
         (event) => {
-          dragElementOverPage(event);
+          dragElementOverPage(event, resizing);
         },
         false
       );
@@ -1693,10 +1516,10 @@ const MidSection = React.forwardRef((props, ref) => {
         resizeTags[0].remove();
       }
 
-      const resizerTL = getResizer("top", "left");
-      const resizerTR = getResizer("top", "right");
-      const resizerBL = getResizer("bottom", "left");
-      const resizerBR = getResizer("bottom", "right");
+      const resizerTL = getResizer("top", "left", decoded);
+      const resizerTR = getResizer("top", "right", decoded);
+      const resizerBL = getResizer("bottom", "left", decoded);
+      const resizerBR = getResizer("bottom", "right", decoded);
       // parseInt(holder.style.top.slice(0, -2))
 
       copyEle.addEventListener("focus", function (e) {
@@ -1776,179 +1599,6 @@ const MidSection = React.forwardRef((props, ref) => {
     };
   };
 
-  const dragElementOverPage = (event) => {
-    let holder;
-    // console.log("dragElement", event.target);
-    // event.dataTransfer.setData("text/plain", "DATE_INPUT");
-    if (!resizing) {
-      let initX = event.screenX;
-      let initY = event.screenY;
-
-      // console.log("initX ", initX, "initY ", initY);
-      /* Ensure That target has changed */
-
-      // var counterCheck = true;
-      // var tempTarget = event.target;
-      // var hitTarget = "";
-      // while (counterCheck) {
-      //   // if(tempTarget.className === 'holderDIV'){
-      //   if (tempTarget.classList.contains("holderDIV")) {
-      //     hitTarget = tempTarget;
-      //     counterCheck = false;
-      //   } else if (tempTarget.classList.contains("textInput")) {
-      //     hitTarget = null;
-      //     counterCheck = false;
-      //   }
-      //   tempTarget = tempTarget?.parentNode;
-      // }
-
-      let tempTarget = event.target;
-      let hitTarget = null;
-
-      while (tempTarget) {
-        if (tempTarget.classList.contains("holderDIV")) {
-          hitTarget = tempTarget;
-          break;
-        } else if (tempTarget.classList.contains("textInput")) {
-          break;
-        }
-        tempTarget = tempTarget?.parentNode;
-      }
-
-      holder = hitTarget;
-      const holderPos = (function () {
-        const holderPos = {
-          // top:
-          //   decoded.details.flag === "editing" ? holder?.offsetTop : undefined,
-          // left:
-          //   decoded.details.flag === "editing" ? holder?.offsetLeft : undefined,
-          top: parseInt(holder?.style.top.slice(0, -2)),
-          left: parseInt(holder?.style.left.slice(0, -2)),
-        };
-        return Object.seal(holderPos);
-      })();
-      // holder.ondragstart = (e) => {
-      //   console.log("i am dragged", e.target);
-      // };
-      // code for conatainer element move start
-      let holderParentHolder = "";
-      let holderParentHolderRect = "";
-      let hodlerRect = "";
-      if (holder?.parentElement.classList.contains("containerInput")) {
-        holderParentHolder = holder?.parentElement?.parentElement;
-      }
-      if (holderParentHolder) {
-        holderParentHolderRect = holderParentHolder.getBoundingClientRect();
-      }
-      hodlerRect = holder?.getBoundingClientRect();
-      // code for container element move end
-      // console.log("finding moveable element", holderPos);
-
-      window.addEventListener("mousemove", moveObject);
-      function moveObject(ev) {
-        //console.log(ev);
-        ev.preventDefault();
-        const el = document.getElementById("midSection_container");
-        const midsectionRect = el.getBoundingClientRect();
-        //console.log(
-        //   midsectionRect.left,
-        //   midsectionRect.top,
-        //   midsectionRect.right
-        // );
-        //  screenX: 531, screenY: 175, clientX: 531, Top-left
-        //  screenX: 1061, screenY: 154, Top right
-
-        // console.log("midsectionRect", midsectionRect);
-        // const eventClientX = ev.clientX;
-        const elemtnMeasureX =
-          ev.screenX + holderPos.left + hodlerRect.width - initX;
-        const elmentMeasureY =
-          ev.screenY + holderPos.top + hodlerRect.height - initY;
-        // if (
-        //   ev.screenX > holderParentHolderRect.left &&
-        //   ev.screenY > holderParentHolderRect.top &&
-        //   ev.screenX < holderParentHolderRect.right
-        // ) {
-        if (holder?.parentElement.classList.contains("containerInput")) {
-          if (
-            holderParentHolderRect.width > elemtnMeasureX + 5 &&
-            // holderParentHolderRect.left + 20 < elemtnMeasureX &&
-            ev.screenX + holderPos.left - initX > 0 &&
-            holderParentHolderRect.height > elmentMeasureY + 5 &&
-            // holderParentHolderRect.top - 50 < elmentMeasureY
-            ev.screenY + holderPos.top - initY > 0
-          ) {
-            //console.log("checking motion");
-            const diffX = ev.screenX - initX;
-            const diffY = ev.screenY - initY;
-            holder.style.top = holderPos.top + diffY + "px";
-            holder.style.left = holderPos.left + diffX + "px";
-          } else {
-            holder.style.top = holderPos.top + "px";
-            holder.style.left = holderPos.left + "px";
-          }
-        } else {
-          // if (
-          //   ev.screenX > midsectionRect.left &&
-          //   ev.screenY > midsectionRect.top &&
-          //   ev.screenX < midsectionRect.right
-          // ) {
-
-          if (
-            midsectionRect.width > elemtnMeasureX + 5 &&
-            ev.screenX + holderPos.left - initX > 0 &&
-            midsectionRect.height > elmentMeasureY + 5 &&
-            // midsectionRect.top - 50 < elmentMeasureY
-            ev.screenY + holderPos.top - initY > 0
-          ) {
-            //console.log("checking motion");
-            const diffX = ev.screenX - initX;
-            const diffY = ev.screenY - initY;
-            holder.style.top = holderPos.top + diffY + "px";
-            holder.style.left = holderPos.left + diffX + "px";
-          } else {
-            holder.style.top = holderPos.top + "px";
-            holder.style.left = holderPos.left + "px";
-          }
-        }
-      }
-
-      window.addEventListener("mouseup", stopMove);
-      function stopMove(ev) {
-        window.removeEventListener("mousemove", moveObject);
-        window.removeEventListener("mouseup", stopMove);
-      }
-    }
-  };
-
-  function getHolderMenu(auth_user) {
-    //putting functional menu on holder
-
-    const HMContainer = document.createElement("div");
-
-    HMContainer.style.height = "100%";
-    HMContainer.style.padding = "5px";
-    HMContainer.style.display = "flex";
-    HMContainer.style.alignItems = "center";
-    HMContainer.style.justifyContent = "center";
-    HMContainer.style.backgroundColor = "rgb(129 129 129 / 50%)";
-
-    const holderMenu = document.createElement("div");
-    holderMenu.className = "holder-menu";
-    holderMenu.style.height = "35px";
-    holderMenu.style.display = "flex";
-    holderMenu.style.justifyContent = "center";
-    holderMenu.style.width = "100%";
-    holderMenu.style.borderRadius = "0%";
-    holderMenu.style.position = "absolute";
-    holderMenu.style.right = "0px";
-    holderMenu.style.top = "-40px";
-
-    holderMenu.append(HMContainer);
-
-    return holderMenu;
-  }
-
   function getHolderDIV(measure, i, idMatch) {
     const holderDIV = document.createElement("div");
 
@@ -1992,16 +1642,28 @@ const MidSection = React.forwardRef((props, ref) => {
       console.log("dragStart fun called");
     };
 
-    const resizerTL = getResizer("top", "left");
-    const resizerTR = getResizer("top", "right");
-    const resizerBL = getResizer("bottom", "left");
-    const resizerBR = getResizer("bottom", "right");
+    // const resizerTL = <GetResizerElement attr1="top" attr2="left" />
+    const resizerTL = getResizer("top", "left", decoded);
+    console.log("mubeen resizertL", resizerTL)
+    const resizerTR = getResizer("top", "right", decoded);
+    // const resizerTR = <GetResizerElement attr1="top" attr2="right" />
+
+    console.log("mubeen resizerTR", resizerTR)
+    const resizerBL = getResizer("bottom", "left", decoded);
+    // const resizerBL = <GetResizerElement attr1="bottom" attr2="left" />
+    console.log("mubeen resizerBL", resizerBL)
+    const resizerBR = getResizer("bottom", "right", decoded);
+    // const resizerBR = <GetResizerElement attr1="bottom" attr2="right" />
+    console.log("mubeen resizerBR", resizerBR)
+
     const holderMenu = getHolderMenu(measure.auth_user);
+    
+    // const holderMenu = getHolderMenu(measure.auth_user);
 
     holderDIV.onmousedown = holderDIV.addEventListener(
       "mousedown",
       (event) => {
-        dragElementOverPage(event);
+        dragElementOverPage(event, resizing);
       },
       false
     );
@@ -2050,6 +1712,7 @@ const MidSection = React.forwardRef((props, ref) => {
     let pageNo = 0;
     let isAnyRequiredElementEdited = false;
 
+    console.log("getting text input value", item)
     for (let p = 1; p <= item?.length; p++) {
       pageNo++;
       fetchedData[p]?.forEach((element) => {
@@ -2063,57 +1726,7 @@ const MidSection = React.forwardRef((props, ref) => {
             auth_user: curr_user,
           };
           console.log("getting text input value", measure.border);
-
-          const idMatch = documnetMap?.filter((elmnt) => elmnt == element?.id);
-          const holderDIV = getHolderDIV(measure, pageNo, idMatch);
-          const id = `${element.id}`;
-
-          const inputField = document.createElement("div");
-          inputField.setAttribute("contenteditable", true);
-          inputField.className = "textInput";
-          inputField.id = id;
-          inputField.style.cssText = `
-            width: 100%;
-            height: 100%;
-            resize: none;
-            z-index: 2;
-            background-color: #0000;
-            border-radius: 0px;
-            outline: 0px;
-            overflow: overlay;
-            position: relative;
-            cursor: text;
-          `;
-          inputField.textContent = element.raw_data;
-
-          inputField.oninput = (e) => {
-            const required_map_document = document_map_required?.filter(
-              (item) => element.id == item.content
-            );
-
-            if (
-              inputField?.parentElement.classList.contains("holderDIV") &&
-              required_map_document?.length > 0
-            ) {
-              inputField?.parentElement.classList.toggle("element_updated", true);
-            }
-            if (element.required) {
-              isAnyRequiredElementEdited = true;
-            }
-          };
-
-          inputField.onclick = (e) => {
-            focuseddClassMaintain(e);
-            if (e.ctrlKey) {
-              copyInput("align2");
-            }
-            handleClicked("align2");
-            setSidebar(true);
-          };
-
-          holderDIV.append(inputField);
-
-          document.getElementsByClassName("midSection_container")[p - 1]?.append(holderDIV);
+          <TextInputElement element={element} documnetMap={documnetMap} pageNo={pageNo}/>
         }
         if (element.type === "IMAGE_INPUT") {
           const measure = {
@@ -2128,86 +1741,88 @@ const MidSection = React.forwardRef((props, ref) => {
           const idMatch = documnetMap?.filter((elmnt) => elmnt === element?.id);
           const holderDIV = getHolderDIV(measure, pageNo, idMatch);
           const id = `${element.id}`;
-
-          const imageField = document.createElement("div");
-          imageField.className = "imageInput";
-          imageField.id = id;
-          imageField.style = {
-            width: "100%",
-            height: "100%",
-            backgroundColor: "#0000",
-            borderRadius: "0px",
-            outline: "0px",
-            overflow: "overlay",
-            position: "relative",
-          };
-
-          const required_map_document = document_map_required?.filter(
-            (item) => element.id === item.content
-          );
-
-          if (imageField?.parentElement?.classList.contains("holderDIV") && required_map_document?.length > 0) {
-            imageField?.parentElement?.classList.add("element_updated");
-          }
-
-          if (element.required) {
-            isAnyRequiredElementEdited = true;
-          }
-
-          imageField.addEventListener("input", (e) => {
-            // setIsFinializeDisabled(false);
-          });
-
-          holderDIV.appendChild(imageField);
-
-          document
-            .getElementsByClassName("midSection_container")[p - 1]
-            ?.appendChild(holderDIV);
-
-          imageField.onclick = (e) => {
-            focuseddClassMaintain(e);
-            if (e.ctrlKey) {
-              copyInput("image2");
-            }
-            handleClicked("image2");
-            setSidebar(true);
-          };
           
-          const createImageButton = (text, type, eventListener) => {
-            const button = document.createElement("div");
-            button.className = type;
-            button.innerText = text;
-            button.style.display = "none";
-            button.addEventListener("click", eventListener);
-            return button;
-          };
+          <ImageInputElement element={element} measure={measure} documnetMap={documnetMap} />
+
+          // const imageField = document.createElement("div");
+          // imageField.className = "imageInput";
+          // imageField.id = id;
+          // imageField.style = {
+          //   width: "100%",
+          //   height: "100%",
+          //   backgroundColor: "#0000",
+          //   borderRadius: "0px",
+          //   outline: "0px",
+          //   overflow: "overlay",
+          //   position: "relative",
+          // };
+
+          // const required_map_document = document_map_required?.filter(
+          //   (item) => element.id === item.content
+          // );
+
+          // if (imageField?.parentElement?.classList.contains("holderDIV") && required_map_document?.length > 0) {
+          //   imageField?.parentElement?.classList.add("element_updated");
+          // }
+
+          // if (element.required) {
+          //   isAnyRequiredElementEdited = true;
+          // }
+
+          // imageField.addEventListener("input", (e) => {
+          //   // setIsFinializeDisabled(false);
+          // });
+
+          // holderDIV.appendChild(imageField);
+
+          // document
+          //   .getElementsByClassName("midSection_container")[p - 1]
+          //   ?.appendChild(holderDIV);
+
+          // imageField.onclick = (e) => {
+          //   focuseddClassMaintain(e);
+          //   if (e.ctrlKey) {
+          //     copyInput("image2");
+          //   }
+          //   handleClicked("image2");
+          //   setSidebar(true);
+          // };
           
-          const imgBtn = document.createElement("input");
-          imgBtn.className = "addImageButtonInput";
-          imgBtn.type = "file";
-          imgBtn.style.objectFit = "cover";
-          var uploadedImage = "";
+          // const createImageButton = (text, type, eventListener) => {
+          //   const button = document.createElement("div");
+          //   button.className = type;
+          //   button.innerText = text;
+          //   button.style.display = "none";
+          //   button.addEventListener("click", eventListener);
+          //   return button;
+          // };
           
-          imgBtn.addEventListener("input", () => {
-            const reader = new FileReader();
+          // const imgBtn = document.createElement("input");
+          // imgBtn.className = "addImageButtonInput";
+          // imgBtn.type = "file";
+          // imgBtn.style.objectFit = "cover";
+          // var uploadedImage = "";
           
-            reader.addEventListener("load", () => {
-              uploadedImage = reader.result;
-              document.querySelector(".focussed").style.backgroundImage = `url(${uploadedImage})`;
-            });
-            reader.readAsDataURL(imgBtn.files[0]);
-          });
+          // imgBtn.addEventListener("input", () => {
+          //   const reader = new FileReader();
           
-          imageField.style.backgroundImage = element.data.startsWith("url(") ? element.data : "";
-          imageField.innerText = element.data;
+          //   reader.addEventListener("load", () => {
+          //     uploadedImage = reader.result;
+          //     document.querySelector(".focussed").style.backgroundImage = `url(${uploadedImage})`;
+          //   });
+          //   reader.readAsDataURL(imgBtn.files[0]);
+          // });
           
-          const imageButton = createImageButton("Choose File", "addImageButton", () => imgBtn.click());
-          imageButton.appendChild(imgBtn);
+          // imageField.style.backgroundImage = element.data.startsWith("url(") ? element.data : "";
+          // imageField.innerText = element.data;
           
-          holderDIV.appendChild(imageField);
-          holderDIV.appendChild(imageButton);
+          // const imageButton = createImageButton("Choose File", "addImageButton", () => imgBtn.click());
+          // imageButton.appendChild(imgBtn);
           
-          document.getElementsByClassName("midSection_container")[p - 1]?.appendChild(holderDIV);
+          // holderDIV.appendChild(imageField);
+          // holderDIV.appendChild(imageButton);
+          
+          // document.getElementsByClassName("midSection_container")[p - 1]?.appendChild(holderDIV);
         }
         if (element.type === "DATE_INPUT") {
           const measure = {
@@ -5097,15 +4712,15 @@ const MidSection = React.forwardRef((props, ref) => {
             copyEle.onmousedown = copyEle.addEventListener(
               "mousedown",
               (event) => {
-                dragElementOverPage(event);
+                dragElementOverPage(event, resizing);
               },
               false
             );
 
-            const resizerTL = getResizer("top", "left");
-            const resizerTR = getResizer("top", "right");
-            const resizerBL = getResizer("bottom", "left");
-            const resizerBR = getResizer("bottom", "right");
+            const resizerTL = getResizer("top", "left", decoded);
+            const resizerTR = getResizer("top", "right", decoded);
+            const resizerBL = getResizer("bottom", "left", decoded);
+            const resizerBR = getResizer("bottom", "right", decoded);
             // parseInt(holder.style.top.slice(0, -2))
 
             copyEle.addEventListener("focus", function (e) {
