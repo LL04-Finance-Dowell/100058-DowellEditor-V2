@@ -1,55 +1,57 @@
 import React, { useState } from 'react';
+import copyInput from '../CopyInput';
 
-const TextInputElement = ({ element, documentMapRequired, pageNo }) => {
-  const [isAnyRequiredElementEdited, setIsAnyRequiredElementEdited] = useState(false);
+// Regular JavaScript function to create a text input field
+function createTextInputField(id, element, document_map_required, p, holderDIV, focuseddClassMaintain, handleClicked, setSidebar) {
 
-  const handleInput = (e) => {
-    const required_map_document = documentMapRequired?.filter(
-      (item) => element.id === item.content
+  const inputField = document.createElement("div");
+  inputField.setAttribute("contenteditable", true);
+  inputField.className = "textInput";
+  inputField.id = id;
+  inputField.style.width = "100%";
+  inputField.style.height = "100%";
+  inputField.style.resize = "none";
+  inputField.style.zIndex = 2;
+  inputField.style.backgroundColor = "#0000";
+  inputField.style.borderRadius = "0px";
+  inputField.style.outline = "0px";
+  inputField.style.overflow = "overlay";
+  inputField.style.position = "relative";
+  inputField.style.cursor = "text";
+
+  inputField.oninput = (e) => {
+    const required_map_document = document_map_required?.filter(
+      (item) => element.id == item.content
     );
 
     if (
-      e.currentTarget.parentElement.classList.contains('holderDIV') &&
-      required_map_document.length > 0
+      inputField?.parentElement.classList.contains("holderDIV") &&
+      required_map_document?.length > 0
     ) {
-      e.currentTarget.parentElement.classList.add('element_updated');
+      inputField?.parentElement.classList.add("element_updated");
     }
     if (element.required) {
-      setIsAnyRequiredElementEdited(true);
+      isAnyRequiredElementEdited = true;
     }
   };
 
-  const handleClick = (e) => {
+  inputField.onclick = (e) => {
     focuseddClassMaintain(e);
     if (e.ctrlKey) {
-      copyInput('align2');
+      copyInput("align2");
     }
-    handleClicked('align2');
+    handleClicked("align2");
     setSidebar(true);
   };
 
-  return (
-    <div
-      contentEditable={true}
-      className="textInput"
-      id={element.id}
-      style={{
-        width: '100%',
-        height: '100%',
-        resize: 'none',
-        zIndex: 2,
-        backgroundColor: '#0000',
-        borderRadius: '0px',
-        outline: '0px',
-        overflow: 'overlay',
-        position: 'relative',
-        cursor: 'text',
-      }}
-      onInput={handleInput}
-      onClick={handleClick}
-      dangerouslySetInnerHTML={{ __html: element.raw_data }}
-    ></div>
-  );
-};
+  const text = `${element.raw_data}`;
+  inputField.innerHTML = text;
 
-export default TextInputElement;
+  holderDIV.appendChild(inputField);
+
+  const midSectionContainers = document.getElementsByClassName("midSection_container");
+  if (midSectionContainers[p - 1]) {
+    midSectionContainers[p - 1].appendChild(holderDIV);
+  }
+}
+export default createTextInputField;
