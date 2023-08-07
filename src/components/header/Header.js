@@ -118,6 +118,10 @@ const Header = () => {
     document.execCommand("redo");
   };
 
+  const handleCopy = () => {
+    document.execCommand("copy");
+  };
+
   const handleTitle = () => {
     const divElement = inputRef.current;
     divElement.focus();
@@ -126,8 +130,11 @@ const Header = () => {
     range.selectNodeContents(divElement);
 
     const endOffset = divElement.innerText.length;
-    range.setStart(divElement.firstChild, endOffset);
-    range.setEnd(divElement.firstChild, endOffset);
+    // range.setStart(divElement.firstChild, endOffset);
+    // range.setEnd(divElement.firstChild, endOffset);
+
+    range.setStart(divElement, endOffset);
+    range.setEnd(divElement, endOffset);
 
     range.collapse(false);
 
@@ -1017,7 +1024,8 @@ const Header = () => {
   useEffect(() => {
     function handleClickOutside(event) {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
-        isMenuVisible(false);
+        // isMenuVisible(false);
+        setIsMenuVisible(true);
       }
     }
     window.addEventListener("click", handleClickOutside);

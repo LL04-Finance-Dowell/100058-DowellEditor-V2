@@ -22,6 +22,9 @@ import copyInput from "./CopyInput";
 import createTextInputField  from "./midSectionElements/TextInputElement.jsx";
 import createImageInputField from "./midSectionElements/ImageInputElement.jsx";
 import createDateInputField from "./midSectionElements/DateInputElement.jsx";
+import createSignInputField from "./midSectionElements/SignInputElement.jsx";
+import createIframeInputField from "./midSectionElements/IframeInputElement.jsx";
+import createButtonInputField from "./midSectionElements/ButtonInputElement.jsx";
 
 // tHIS IS FOR A TEST COMMIT
 
@@ -1658,63 +1661,7 @@ const MidSection = React.forwardRef((props, ref) => {
           const holderDIV = getHolderDIV(measure, pageNo, idMatch);
           const id = `${element.id}`;
 
-          let signField = document.createElement("div");
-          signField.className = "signInput";
-          signField.id = id;
-          signField.style.width = "100%";
-          signField.style.height = "100%";
-          signField.style.backgroundColor = "#0000";
-          signField.style.borderRadius = "0px";
-          signField.style.outline = "0px";
-          signField.style.overflow = "overlay";
-
-          signField.style.position = "absolute";
-
-          signField.onclick = (e) => {
-            focuseddClassMaintain(e);
-            if (e.ctrlKey) {
-              copyInput("signs2");
-            }
-
-            handleClicked("signs2");
-            setSidebar(true);
-          };
-
-          element.data.startsWith("url(" && "data")
-            ? (signField.innerHTML = `<img src=${element.data} />`)
-            : (signField.innerHTML = `${element.data}`);
-
-          const imageSignButton = document.createElement("div");
-          imageSignButton.className = "addImageSignButton";
-          imageSignButton.innerText = "Choose File";
-          imageSignButton.style.display = "none";
-
-          const signBtn = document.createElement("input");
-          signBtn.className = "addSignButtonInput";
-          signBtn.type = "file";
-          signBtn.style.objectFit = "cover";
-          var uploadedImage = "";
-
-          signBtn.addEventListener("input", () => {
-            const reader = new FileReader();
-
-            reader.addEventListener("load", () => {
-              uploadedImage = reader.result;
-              const signImage = `<img src=${uploadedImage} width="100%" height="100%"/>`;
-              document.querySelector(".focussed").innerHTML = signImage;
-            });
-            reader.readAsDataURL(signBtn.files[0]);
-          });
-
-          imageSignButton.append(signBtn);
-
-          holderDIV.append(imageSignButton);
-          holderDIV.append(signField);
-
-          document
-            .getElementsByClassName("midSection_container")
-            [p - 1] // ?.item(0)
-            ?.append(holderDIV);
+          createSignInputField(id, element, p, holderDIV, focuseddClassMaintain, handleClicked, setSidebar)
         }
         if (element.type === "TABLE_INPUT") {
           const measure = {
@@ -1928,45 +1875,7 @@ const MidSection = React.forwardRef((props, ref) => {
           const holderDIV = getHolderDIV(measure, pageNo, idMatch);
           const id = `${element.id}`;
 
-          let iframeField = document.createElement("div");
-          iframeField.className = "iframeInput";
-          iframeField.id = id;
-          iframeField.style.width = "100%";
-          iframeField.style.height = "100%";
-          iframeField.style.backgroundColor = "#dedede";
-          iframeField.style.borderRadius = "0px";
-          iframeField.style.outline = "0px";
-          iframeField.style.overflow = "overlay";
-
-          iframeField.style.position = "absolute";
-
-          if (element.data == "iFrame here") {
-            iframeField.innerHTML = element.data;
-          }
-          if (element.data != "iFrame here") {
-            const iframe = document.createElement("iframe");
-            iframe.src = element.data;
-            iframe.width = "100%";
-            iframe.height = "100%";
-
-            iframeField.append(iframe);
-          }
-
-          iframeField.onclick = (e) => {
-            table_dropdown_focuseddClassMaintain(e);
-            if (e.ctrlKey) {
-              copyInput("iframe2");
-            }
-            handleClicked("iframe2");
-            setSidebar(true);
-          };
-
-          holderDIV.append(iframeField);
-
-          document
-            .getElementsByClassName("midSection_container")
-            [p - 1] // ?.item(0)
-            ?.append(holderDIV);
+          createIframeInputField(id, element, p, holderDIV, table_dropdown_focuseddClassMaintain, handleClicked, setSidebar)
         }
 
         if (element.type === "BUTTON_INPUT") {
@@ -1985,90 +1894,7 @@ const MidSection = React.forwardRef((props, ref) => {
           const finalizeButton = document.getElementById("finalize-button");
           const rejectButton = document.getElementById("reject-button");
 
-          let buttonField = document.createElement("button");
-          buttonField.className = "buttonInput";
-          buttonField.id = id;
-          buttonField.style.width = "100%";
-          buttonField.style.height = "100%";
-          buttonField.style.backgroundColor = "#0000";
-          buttonField.style.borderRadius = "0px";
-          buttonField.style.outline = "0px";
-          buttonField.style.overflow = "overlay";
-          buttonField.style.position = "absolute";
-          buttonField.textContent = element.data;
-
-          if (decoded.details.action === "template") {
-            buttonField.onclick = (e) => {
-              focuseddClassMaintain(e);
-              if (e.ctrlKey) {
-                copyInput("button2");
-              }
-              handleClicked("button2");
-              setSidebar(true);
-            };
-          }
-
-          buttonField.onmouseover = (e) => {
-            const required_map_document =
-              document_map_required?.filter(
-                (item) => element.id == item.content
-              ) || [];
-            if (
-              buttonField.parentElement.classList.contains("holderDIV") &&
-              required_map_document?.length > 0
-            ) {
-              buttonField.parentElement.classList.add("element_updated");
-            }
-            if (element.required) {
-              isAnyRequiredElementEdited = true;
-            }
-          };
-
-          if (
-            decoded.details.action === "document" &&
-            element.purpose == "custom" &&
-            element.raw_data !== ""
-          ) {
-            buttonField.onclick = (e) => {
-              window.open(element.raw_data, "_blank");
-            };
-          }
-
-          if (finalizeButton) {
-            if (isAnyRequiredElementEdited) {
-              finalizeButton?.click();
-            } else {
-              finalizeButton.disabled = true;
-            }
-          }
-
-          if (
-            decoded.details.action === "document" &&
-            element.purpose == "reject"
-          ) {
-            buttonField.onclick = (e) => {
-              rejectButton?.click();
-            };
-          }
-
-          const linkHolder = document.createElement("div");
-          linkHolder.className = "link_holder";
-          linkHolder.innerHTML = element.raw_data;
-          linkHolder.style.display = "none";
-
-          const purposeHolder = document.createElement("div");
-          purposeHolder.className = "purpose_holder";
-          purposeHolder.innerHTML = element.purpose;
-          purposeHolder.style.display = "none";
-
-          holderDIV.append(buttonField);
-          holderDIV.append(linkHolder);
-          holderDIV.append(purposeHolder);
-          console.log(element);
-          document
-            .getElementsByClassName("midSection_container")
-            [p - 1] // ?.item(0)
-            ?.append(holderDIV);
+          createButtonInputField(id, element, p, holderDIV, focuseddClassMaintain, handleClicked, setSidebar, finalizeButton, rejectButton, decoded, document_map_required)
         }
         if (element.type === "FORM") {
           const measure = {
