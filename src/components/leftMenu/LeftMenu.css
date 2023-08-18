@@ -3,7 +3,6 @@
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
-
   gap: 1rem;
 }
 
@@ -78,5 +77,10 @@
     justify-content: space-around;
     align-items: center;
     margin-top: 0px;
+  }
+  .left_menu_wrapper{
+    height: auto;
+    z-index: 999;
+    width: 100%;
   }
 }
