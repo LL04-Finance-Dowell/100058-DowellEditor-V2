@@ -46,7 +46,7 @@ const LeftMenu = ({ showSidebar }) => {
             <ButtonButton customFunc={() => handleDrop("button")} />
             <EmailButton customFunc={() => handleDrop("email")} />
             <NewScaleButton customFunc={() => handleDrop("newScale")} />
-            <CameraButton customFunc={() => handleDrop("camera")} />: ""
+            <CameraButton customFunc={() => handleDrop("camera")} />
           </div>
         )
       ) : (
