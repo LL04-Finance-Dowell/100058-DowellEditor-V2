@@ -2215,6 +2215,12 @@ const MidSection = React.forwardRef((props, ref) => {
     event.preventDefault();
     //console.log("log from on drop", event);
     // document.querySelector('.drop_zone').classList.remove('drop_zone')
+    // testing right menu dragable or not
+
+    var data = event.dataTransfer.getData("text");
+    if(data == "rightMenuDragStart"){
+      alert("some one draged me")
+    }else{
     const has_table_drag_class = event.target.classList.contains("table_drag");
     const has_container_drag_class =
       event.target.classList.contains("containerInput");
@@ -3649,7 +3655,10 @@ const MidSection = React.forwardRef((props, ref) => {
         document.querySelector(".drop_zone").append(holderDIV);
       }
     }
-  };
+  
+  }
+  
+};
 
   contentFile = [];
   let page = [];
