@@ -35,7 +35,6 @@ export const getResizer = (attr1, attr2, decoded) => {
         event.target.style.cursor = "nwse-resize";
       };
     }
-    debugger
 
     resizer.onmousedown = (event) => {
       let initX = event.screenX;
