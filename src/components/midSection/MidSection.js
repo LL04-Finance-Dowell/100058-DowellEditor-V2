@@ -31,6 +31,10 @@ import createCameraInputField from "./midSectionElements/CameraInputElement.jsx"
 import createDropDownInputField from "./midSectionElements/DropDownInputElement.jsx";
 import createNewScaleInputField from "./midSectionElements/NewScaleInputElement.jsx";
 import createContainerInputField from "./midSectionElements/ContainerInputElement.jsx";
+import createTextElement from "./createElements/CreateTextElement.jsx";
+import createImageElement from "./createElements/CreateImageElement.jsx";
+import createTextFillElement from "./createElements/CreateTextFillElement.jsx";
+import createIframeElement from "./createElements/CreateIframeElement.jsx";
 
 // tHIS IS FOR A TEST COMMIT
 
@@ -2254,186 +2258,21 @@ const MidSection = React.forwardRef((props, ref) => {
         typeOfOperation === "TEXT_INPUT" &&
         decoded.details.action === "template"
       ) {
-        let inputField = document.createElement("div");
-        //  inputField.setAttribute('draggable', true);
-        inputField.setAttribute("contenteditable", true);
-        inputField.className = "textInput";
-        inputField.placeholder = "Enter text here";
-        inputField.style.width = "100%";
-        inputField.style.height = "100%";
-        inputField.style.resize = "none";
-        inputField.style.backgroundColor = "#0000";
-        inputField.style.borderRadius = "0px";
-        inputField.style.outline = "0px";
-        inputField.style.overflow = "overlay";
-        inputField.style.position = "relative";
-        inputField.style.cursor = "text";
 
-        const txt = document.getElementsByClassName("textInput");
-        if (txt.length) {
-          const h = txt.length;
-          inputField.id = `t${h + 1}`;
-        } else {
-          inputField.id = "t1";
-        }
-
-        if (inputField.innerHTML[0]) {
-          const editTextField = {
-            editTextField: {
-              value: inputField.innerHTML,
-              xcoordinate: getOffset(holderDIV).left,
-              ycoordinate: getOffset(holderDIV).top,
-            },
-          };
-        }
-
-        if (inputField.value !== "") {
-        }
-
-        inputField.onclick = (e) => {
-          e.stopPropagation();
-          focuseddClassMaintain(e);
-          if (e.ctrlKey) {
-            copyInput("align2");
-          }
-          handleClicked("align2", "container2");
-          setSidebar(true);
-        };
-        holderDIV.append(inputField);
+        createTextElement(holderDIV, focuseddClassMaintain, handleClicked, setSidebar, getOffset)
       } else if (
         typeOfOperation === "IMAGE_INPUT" &&
         decoded.details.action === "template"
       ) {
-        let imageField = document.createElement("div");
-        imageField.className = "imageInput";
-        imageField.id = "inputImg";
-        imageField.style.width = "100%";
-        imageField.style.height = "100%";
-        imageField.style.backgroundColor = "#0000";
-        imageField.style.borderRadius = "0px";
-        imageField.style.outline = "none";
-        // imageField.style.border = "none";
-        imageField.style.overflow = "overlay";
-        imageField.innerText = "Choose Image";
-        // imageField.innerHTML = `<img src="${postData.imageField.value}" alt="">`;
-        imageField.style.position = "relative";
 
-        const img = document.getElementsByClassName("imageInput");
-        if (img.length) {
-          const h = img.length;
-          imageField.id = `i${h + 1}`;
-        } else {
-          imageField.id = "i1";
-        }
-
-        imageField.addEventListener("onclick", () => {
-          console.log("imgData clicked");
-        });
-
-        imageField.onclick = (e) => {
-          e.stopPropagation();
-          focuseddClassMaintain(e);
-
-          if (e.ctrlKey) {
-            copyInput("image2");
-          }
-          // imageField.classList.add("focussed");
-          handleClicked("image2", "container2");
-          // copyImage()
-          setSidebar(true);
-        };
-
-        const imageButton = document.createElement("div");
-        imageButton.className = "addImageButton";
-        imageButton.innerText = "Choose File";
-        imageButton.style.display = "none";
-        // imageButton.onclick = (e) => chooseFileClick(e);
-
-        const imgBtn = document.createElement("input");
-        imgBtn.className = "addImageButtonInput";
-        imgBtn.type = "file";
-        imgBtn.style.objectFit = "cover";
-        var uploadedImage = "";
-
-        imgBtn.addEventListener("input", () => {
-          const reader = new FileReader();
-
-          reader.addEventListener("load", () => {
-            uploadedImage = reader.result;
-            document.querySelector(
-              ".focussed"
-            ).style.backgroundImage = `url(${uploadedImage})`;
-          });
-          reader.readAsDataURL(imgBtn.files[0]);
-        });
-
-        // imgBtn.style.width = "100%";
-        imageButton.append(imgBtn);
-        holderDIV.append(imageField);
-        holderDIV.append(imageButton);
+        createImageElement(holderDIV, focuseddClassMaintain, handleClicked, setSidebar)
       } else if (typeOfOperation === "TEXT_FILL") {
-        let texttField = document.createElement("textarea");
-        texttField.className = "texttInput";
-        texttField.placeholder = "input text here";
-        texttField.style.width = "100%";
-        texttField.style.height = "100%";
-        texttField.style.resize = "none";
-        texttField.style.backgroundColor = "#0000";
-        texttField.style.borderRadius = "0px";
-        texttField.style.outline = "0px";
-        texttField.style.overflow = "overlay";
-        // texttField.innerText = `${postData.textField.value}`
-        texttField.style.position = "relative";
-
-        texttField.onchange = (event) => {
-          event.preventDefault();
-          const textField = {
-            textField: {
-              value: event.target.value,
-              xcoordinate: getOffset(holderDIV).left,
-              ycoordinate: getOffset(holderDIV).top,
-            },
-          };
-        };
-
-        holderDIV.append(texttField);
+        createTextFillElement(holderDIV, getOffset)
       } else if (
         typeOfOperation === "IFRAME_INPUT" &&
         decoded.details.action === "template"
       ) {
-        let iframeField = document.createElement("div");
-        iframeField.className = "iframeInput";
-        iframeField.style.width = "100%";
-        iframeField.style.height = "100%";
-        iframeField.style.backgroundColor = "#dedede";
-        iframeField.style.borderRadius = "0px";
-        iframeField.style.outline = "0px";
-        iframeField.style.overflow = "overlay";
-        // iframeField.innerHTML = "iframe";
-        iframeField.style.position = "absolute";
-        iframeField.innerText = "iFrame here";
-
-        const iframes = document.getElementsByClassName("iframeInput");
-        if (iframes.length) {
-          const i = iframes.length;
-          iframeField.id = `ifr${i + 1}`;
-        } else {
-          iframeField.id = "ifr1";
-        }
-
-        iframeField.onclick = (e) => {
-          // focuseddClassMaintain(e);
-          e.stopPropagation();
-          if (e.ctrlKey) {
-            copyInput("iframe2");
-          }
-          table_dropdown_focuseddClassMaintain(e);
-          // tableField.classList.add("focussed");
-          handleClicked("iframe2", "container2");
-          setSidebar(true);
-        };
-
-        holderDIV.append(iframeField);
+        createIframeElement( holderDIV, table_dropdown_focuseddClassMaintain, handleClicked, setSidebar)
       }
 
       //Limon
