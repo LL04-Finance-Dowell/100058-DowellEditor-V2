@@ -71,16 +71,20 @@
 @media screen and (max-width: 992px) {
   .leftMenu {
     background-color: #ffffff;
-    height: 13vh;
+    min-height: 8vh;
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
+    justify-content: center;
     align-items: center;
     margin-top: 0px;
+    flex-wrap: wrap;
+    padding: 5px 2px;
   }
   .left_menu_wrapper{
     height: auto;
     z-index: 999;
     width: 100%;
+    padding-top: 5px;
+    padding-bottom: 5px;
   }
 }

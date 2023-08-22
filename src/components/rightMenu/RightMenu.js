@@ -294,9 +294,14 @@ const RightMenu = () => {
     isClicked.camera2,
   ]);
 
+  function rightMenuDragStart(ev) {
+    ev.dataTransfer.setData("text", ev.target.id);
+    // alert(ev.target.id)
+  }
+
   return (
     <>
-      <div className="fixed3">
+      <div className="fixed3" id="rightMenuDragStart" draggable="true" onDragStart={(event) => rightMenuDragStart(event)}>
         {isClicked.align2 && <AlignRightSide />}
         {isClicked.image2 && <ImageRightSidebar />}
         {isClicked.table2 && <TableRightSidebar />}
