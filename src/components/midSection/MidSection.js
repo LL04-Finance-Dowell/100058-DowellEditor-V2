@@ -37,6 +37,8 @@ import createTextFillElement from "./createElements/CreateTextFillElement.jsx";
 import createIframeElement from "./createElements/CreateIframeElement.jsx";
 import createScaleInputElement from "./midSectionElements/ScaleInputElement.jsx";
 import createNewScaleInputElement from "./createElements/CreateNewScaleElement.jsx";
+import createCameraInputElement from "./createElements/CreateCameraElement.jsx";
+import createSignInputElement from "./createElements/CreateSignElement.jsx";
 // tHIS IS FOR A TEST COMMIT
 
 const dummyData = {
@@ -2379,345 +2381,39 @@ const MidSection = React.forwardRef((props, ref) => {
         decoded.details.action === "template"
       ) {
         createNewScaleInputElement( holderDIV, focuseddClassMaintain, handleClicked, setSidebar, table_dropdown_focuseddClassMaintain, decoded, setIsLoading)
-        // let scaleField = document.createElement("div");
-        // scaleField.className = "newScaleInput";
-        // scaleField.style.width = "100%";
-        // scaleField.style.height = "100%";
-        // scaleField.style.backgroundColor = "#fff";
-        // scaleField.style.borderRadius = "0px";
-        // scaleField.style.outline = "0px";
-        // scaleField.style.overflow = "overlay";
-        // scaleField.style.position = "absolute";
-        // // scaleField.innerText = "scale here";
-
-        // const tempText = document.createElement("div");
-        // tempText.className = "tempText";
-        // tempText.textContent = "New scale";
-        // tempText.style.fontWeight = "700";
-        // tempText.style.width = "100%";
-        // tempText.style.textAlign = "center";
-        // scaleField.appendChild(tempText);
-
-        // const scaleHold = document.createElement("div");
-        // scaleHold.className = "scool_input";
-        // scaleHold.style.color = "black";
-        // scaleHold.style.width = "100%";
-        // scaleHold.style.height = "90%";
-        // scaleHold.style.padding = "10px";
-        // scaleHold.style.display = "none";
-
-        // scaleField.append(scaleHold);
-
-        // const scaleText = document.createElement("div");
-        // scaleText.className = "scale_text";
-        // scaleText.textContent = "Untitled-file_scale";
-        // scaleText.style.marginBottom = "10px";
-        // scaleText.style.width = "100%";
-        // scaleText.style.display = "flex";
-        // scaleText.style.alignItems = "center";
-        // scaleText.style.justifyContent = "center";
-        // scaleText.style.height = "10%";
-        // scaleText.style.backgroundColor = "transparent";
-        // scaleText.style.borderRadius = "0px";
-        // scaleHold.append(scaleText);
-
-        // const labelHold = document.createElement("div");
-        // labelHold.className = "label_hold";
-        // labelHold.style.width = "100%";
-        // labelHold.style.height = "85%";
-        // labelHold.style.border = "1px solid black";
-        // labelHold.style.backgroundColor = "blue";
-        // // labelHold.style.display = "none";
-        // scaleHold.appendChild(labelHold);
-        // labelHold.style.display = "flex";
-        // // labelHold.style.flexWrap = "wrap";
-        // labelHold.style.justifyContent = "space-between";
-        // labelHold.style.alignItems = "center";
-        // // labelHold.style.margin = "0px";
-
-        // for (let i = 0; i < 11; i++) {
-        //   const circle = document.createElement("div");
-        //   circle.className = "circle_label";
-        //   circle.style.width = "35%";
-        //   circle.style.height = "35%";
-        //   circle.style.borderRadius = "50%";
-        //   circle.style.backgroundColor = "red";
-        //   circle.style.top = "30%";
-        //   circle.style.left = "30%";
-        //   circle.style.display = "flex";
-        //   circle.style.justifyContent = "center";
-        //   circle.style.alignItems = "center";
-        //   circle.style.marginLeft = "2px";
-
-        //   circle.textContent = i;
-
-        //   labelHold.append(circle);
-        // }
-
-        // const childDiv = document.createElement("div");
-        // childDiv.id = "child";
-        // childDiv.style.display = "flex";
-        // childDiv.style.justifyContent = "space-between";
-        // // childDiv.style.margin = "0px";
-
-        // const element1 = document.createElement("h6");
-        // element1.className = "left_child";
-        // element1.style.marginLeft = "0px";
-        // element1.textContent = "Good";
-        // childDiv.appendChild(element1);
-
-        // const element2 = document.createElement("h6");
-        // element2.className = "neutral_child";
-        // element2.textContent = "Neutral";
-        // childDiv.appendChild(element2);
-
-        // const element3 = document.createElement("h6");
-        // element3.className = "right_child";
-        // element3.textContent = "Best";
-        // childDiv.appendChild(element3);
-
-        // const idHolder = document.createElement("h6");
-        // idHolder.className = "scaleId";
-        // idHolder.textContent = "scale Id";
-        // idHolder.style.display = "none";
-        // childDiv.appendChild(idHolder);
-        // // childDiv.appendChild( idHolder);
-
-        // // childDiv.appendChild(element3);
-        // scaleHold.append(childDiv);
-        // const scales = document.getElementsByClassName("newScaleInput");
-        // if (scales.length) {
-        //   const s = scales.length;
-        //   scaleField.id = `scl${s + 1}`;
-        // } else {
-        //   scaleField.id = "scl1";
-        // }
-
-        // let scale = document.createElement("div");
-        // scale.style.width = "90%";
-        // scale.style.height = "0%";
-
-        // console.log(Element);
-        // scaleField.addEventListener("resize", () => {
-        //   scale.style.width = scaleField.clientWidth + "px";
-        //   scale.style.height = scaleField.clientHeight + "px";
-        // });
-
-        // setIsLoading(false);
-
-        // const copyScales = () => {
-        //   // if (typeOfOperation === "IMAGE_INPUT") {
-        //   const element = document.querySelector(".focussedd");
-        //   // console.log(element);
-        //   let counter = 1;
-        //   const copyEle = element.cloneNode(true);
-        //   const copyEleTop =
-        //     parseInt(copyEle.style.top.slice(0, -2)) + 100 + "px";
-
-        //   // parseInt(holder.style.top.slice(0, -2))
-        //   copyEle.classList.remove("focussedd");
-        //   copyEle.firstChild.classList.remove("focussed");
-        //   // copyEle.classList.add("imageInput")
-        //   console.log(copyEleTop);
-        //   copyEle.onfocus = () => {
-        //     copyEle.style.border = "1px solid rgb(255 191 0)";
-        //   };
-        //   copyEle.onblur = () => {
-        //     copyEle.style.border = "1px dotted black";
-        //   };
-        //   if (copyEle) {
-        //     copyEle.style.top = copyEleTop;
-        //     copyEle.style.border = "1px dotted black";
-
-        //     copyEle.onmousedown = copyEle.addEventListener(
-        //       "mousedown",
-        //       (event) => {
-        //         dragElementOverPage(event, resizing);
-        //       },
-        //       false
-        //     );
-
-        //     const resizerTL = getResizer("top", "left", decoded);
-        //     const resizerTR = getResizer("top", "right", decoded);
-        //     const resizerBL = getResizer("bottom", "left", decoded);
-        //     const resizerBR = getResizer("bottom", "right", decoded);
-        //     // parseInt(holder.style.top.slice(0, -2))
-
-        //     copyEle.addEventListener("focus", function (e) {
-        //       // holderDIV.classList.add("focussedd");
-        //       copyEle.classList.add("zIndex-two");
-        //       copyEle.style.border = "2px solid orange";
-        //       // holderDIV.append(holderMenu);
-
-        //       copyEle.append(resizerTL, resizerTR, resizerBL, resizerBR);
-        //     });
-        //     copyEle.addEventListener("click", (e) => {
-        //       e.stopPropagation();
-        //       focuseddClassMaintain(e);
-        //       // imageField.classList.add("focussed");
-        //       handleClicked("image2", "container2");
-        //       // copyImage()
-        //       // resizing = true;
-        //       setSidebar(true);
-        //     });
-        //   }
-        //   // console.log(copyEle)
-        //   copyEle.id += counter;
-        //   midSec.appendChild(copyEle);
-        //   console.log("coping", copyEle);
-        //   // }
-        // };
-
-        // scaleField.addEventListener("click", (event) => {
-        //   if (event.ctrlKey) {
-        //     console.log("clicked it");
-        //     copyScales();
-        //     // setSidebar(true)
-        //   } else {
-        //     console.log("Faild to copy");
-        //   }
-        // });
-
-        // scaleField.onclick = (e) => {
-        //   e.stopPropagation();
-        //   table_dropdown_focuseddClassMaintain(e);
-        //   handleClicked("newScale2");
-        //   setSidebar(true);
-        //   console.log(scaleField.id);
-        // };
-
-        // holderDIV.append(scaleField);
       } else if (
         typeOfOperation === "CAMERA_INPUT" &&
         decoded.details.action === "template"
       ) {
-        let cameraField = document.createElement("div");
-        cameraField.className = "cameraInput";
-        cameraField.style.width = "100%";
-        cameraField.style.height = "100%";
-        cameraField.style.borderRadius = "0px";
-        cameraField.style.outline = "0px";
-        cameraField.style.overflow = "overlay";
 
-        const camera = document.getElementsByClassName("cameraInput");
-        if (camera.length) {
-          const h = camera.length;
-          cameraField.id = `cam1${h + 1}`;
-        } else {
-          cameraField.id = "cam1";
-        }
-
-        let videoField = document.createElement("video");
-        videoField.className = "videoInput";
-        videoField.style.width = "100%";
-        videoField.style.height = "100%";
-        videoField.autoplay = true;
-        videoField.loop = true;
-        cameraField.append(videoField);
-
-        let cameraImageInput = document.createElement("canvas");
-        cameraImageInput.className = "cameraImageInput";
-        cameraImageInput.style.display = "none";
-        cameraField.append(cameraImageInput);
-
-        const imgHolder = document.createElement("img");
-        imgHolder.className = "imageHolder";
-        imgHolder.alt = "";
-        imgHolder.style.display = "none";
-        cameraField.append(imgHolder);
-
-        const imageLinkHolder = document.createElement("h1");
-        imageLinkHolder.className = "imageLinkHolder";
-        imageLinkHolder.textContent = "image_link";
-        imageLinkHolder.style.display = "none";
-        cameraField.append(imageLinkHolder);
-
-        const videoLinkHolder = document.createElement("h1");
-        videoLinkHolder.className = "videoLinkHolder";
-        videoLinkHolder.textContent = "video_link";
-        videoLinkHolder.style.display = "none";
-        cameraField.append(videoLinkHolder);
-
-        cameraField.addEventListener("resize", () => {
-          videoField.style.width = cameraField.clientWidth + "px";
-          videoField.style.height = cameraField.clientHeight + "px";
-        });
-
-        function openCam() {
-          let All_mediaDevices = navigator.mediaDevices;
-          if (!All_mediaDevices || !All_mediaDevices.getUserMedia) {
-            alert("Media not supported.");
-            return;
-          }
-          All_mediaDevices.getUserMedia({
-            video: true,
-            audio: true,
-          })
-            .then(function (vidStream) {
-              var video = videoField;
-              if ("srcObject" in video) {
-                video.srcObject = vidStream;
-              } else {
-                video.src = window.URL.createObjectURL(vidStream);
-              }
-              video.onloadedmetadata = function (e) {
-                video.play();
-              };
-            })
-            .catch(function (e) {
-              alert(e.name + ": " + e.message);
-            });
-        }
-
-        openCam();
-
-        cameraField.onclick = (e) => {
-          e.stopPropagation();
-          table_dropdown_focuseddClassMaintain(e);
-          if (e.ctrlKey) {
-            copyInput("camera2");
-          }
-          handleClicked("camera2");
-          setSidebar(true);
-        };
-
-        cameraImageInput.onclick = (e) => {
-          e.stopPropagation();
-          table_dropdown_focuseddClassMaintain(e);
-          if (e.ctrlKey) {
-            copyInput("camera2");
-          }
-          handleClicked("camera2");
-          setSidebar(true);
-        };
-
-        holderDIV.append(cameraField);
+        createCameraInputElement(holderDIV, handleClicked, setSidebar, table_dropdown_focuseddClassMaintain)
       } else if (typeOfOperation === "TEXT_FILL") {
-        let texttField = document.createElement("textarea");
-        texttField.className = "texttInput";
-        texttField.placeholder = "input text here";
-        texttField.style.width = "100%";
-        texttField.style.height = "100%";
-        texttField.style.resize = "none";
-        texttField.style.backgroundColor = "#0000";
-        texttField.style.borderRadius = "0px";
-        texttField.style.outline = "0px";
-        texttField.style.overflow = "overlay";
+        createTextElement(holderDIV, focuseddClassMaintain, handleClicked, setSidebar, getOffset)
+        // let texttField = document.createElement("textarea");
+        // texttField.className = "texttInput";
+        // texttField.placeholder = "input text here";
+        // texttField.style.width = "100%";
+        // texttField.style.height = "100%";
+        // texttField.style.resize = "none";
+        // texttField.style.backgroundColor = "#0000";
+        // texttField.style.borderRadius = "0px";
+        // texttField.style.outline = "0px";
+        // texttField.style.overflow = "overlay";
 
-        texttField.style.position = "relative";
+        // texttField.style.position = "relative";
 
-        texttField.onchange = (event) => {
-          event.preventDefault();
-          const textField = {
-            textField: {
-              value: event.target.value,
-              xcoordinate: getOffset(holderDIV).left,
-              ycoordinate: getOffset(holderDIV).top,
-            },
-          };
-        };
+        // texttField.onchange = (event) => {
+        //   event.preventDefault();
+        //   const textField = {
+        //     textField: {
+        //       value: event.target.value,
+        //       xcoordinate: getOffset(holderDIV).left,
+        //       ycoordinate: getOffset(holderDIV).top,
+        //     },
+        //   };
+        // };
 
-        holderDIV.append(texttField);
+        // holderDIV.append(texttField);
       } else if (
         typeOfOperation === "TABLE_INPUT" &&
         decoded.details.action === "template"
@@ -2760,66 +2456,67 @@ const MidSection = React.forwardRef((props, ref) => {
         typeOfOperation === "SIGN_INPUT" &&
         decoded.details.action === "template"
       ) {
-        let signField = document.createElement("div");
-        signField.className = "signInput";
-        signField.style.width = "100%";
-        signField.style.height = "100%";
-        signField.style.backgroundColor = "#0000";
-        signField.style.borderRadius = "0px";
-        signField.style.outline = "0px";
-        signField.style.overflow = "overlay";
+        // let signField = document.createElement("div");
+        // signField.className = "signInput";
+        // signField.style.width = "100%";
+        // signField.style.height = "100%";
+        // signField.style.backgroundColor = "#0000";
+        // signField.style.borderRadius = "0px";
+        // signField.style.outline = "0px";
+        // signField.style.overflow = "overlay";
 
-        signField.innerText = "Signature here";
-        signField.style.position = "absolute";
+        // signField.innerText = "Signature here";
+        // signField.style.position = "absolute";
 
-        signField.onchange = (event) => {
-          event.preventDefault();
-          setPostData({
-            ...postData,
-            signField: {
-              value: event.target.value,
-              xcoordinate: getOffset(holderDIV).left,
-              ycoordinate: getOffset(holderDIV).top,
-            },
-          });
-        };
+        // signField.onchange = (event) => {
+        //   event.preventDefault();
+        //   setPostData({
+        //     ...postData,
+        //     signField: {
+        //       value: event.target.value,
+        //       xcoordinate: getOffset(holderDIV).left,
+        //       ycoordinate: getOffset(holderDIV).top,
+        //     },
+        //   });
+        // };
 
-        signField.onclick = (e) => {
-          e.stopPropagation();
-          focuseddClassMaintain(e);
+        // signField.onclick = (e) => {
+        //   e.stopPropagation();
+        //   focuseddClassMaintain(e);
 
-          if (e.ctrlKey) {
-            copyInput("signs2");
-          }
-          handleClicked("signs2", "container2");
-          setSidebar(true);
-        };
-        const imageSignButton = document.createElement("div");
-        imageSignButton.className = "addImageSignButton";
-        imageSignButton.innerText = "Choose File";
-        imageSignButton.style.display = "none";
+        //   if (e.ctrlKey) {
+        //     copyInput("signs2");
+        //   }
+        //   handleClicked("signs2", "container2");
+        //   setSidebar(true);
+        // };
+        createSignInputElement(holderDIV, focuseddClassMaintain, handleClicked, setSidebar, setPostData, getOffset)
+        // const imageSignButton = document.createElement("div");
+        // imageSignButton.className = "addImageSignButton";
+        // imageSignButton.innerText = "Choose File";
+        // imageSignButton.style.display = "none";
 
-        const signBtn = document.createElement("input");
-        signBtn.className = "addSignButtonInput";
-        signBtn.type = "file";
-        signBtn.style.objectFit = "cover";
-        var uploadedImage = "";
+        // const signBtn = document.createElement("input");
+        // signBtn.className = "addSignButtonInput";
+        // signBtn.type = "file";
+        // signBtn.style.objectFit = "cover";
+        // var uploadedImage = "";
 
-        signBtn.addEventListener("input", () => {
-          const reader = new FileReader();
+        // signBtn.addEventListener("input", () => {
+        //   const reader = new FileReader();
 
-          reader.addEventListener("load", () => {
-            uploadedImage = reader.result;
-            const signImage = `<img src=${uploadedImage} width="100%" height="100%"/>`;
-            document.querySelector(".focussed").innerHTML = signImage;
-          });
-          reader.readAsDataURL(signBtn.files[0]);
-        });
+        //   reader.addEventListener("load", () => {
+        //     uploadedImage = reader.result;
+        //     const signImage = `<img src=${uploadedImage} width="100%" height="100%"/>`;
+        //     document.querySelector(".focussed").innerHTML = signImage;
+        //   });
+        //   reader.readAsDataURL(signBtn.files[0]);
+        // });
 
-        imageSignButton.append(signBtn);
+        // imageSignButton.append(signBtn);
 
-        holderDIV.append(signField);
-        holderDIV.append(imageSignButton);
+        // holderDIV.append(signField);
+        // holderDIV.append(imageSignButton);
       } else if (
         typeOfOperation === "DATE_INPUT" &&
         decoded.details.action === "template"
