@@ -40,6 +40,8 @@ import createNewScaleInputElement from "./createElements/CreateNewScaleElement.j
 import createCameraInputElement from "./createElements/CreateCameraElement.jsx";
 import createSignInputElement from "./createElements/CreateSignElement.jsx";
 import createDateInputElement from "./createElements/CreateDateElement.jsx";
+import createDropDownInputElement from "./createElements/CreateDropDownElement.jsx";
+import createButtonInputElement from "./createElements/CreateButtonElement.jsx";
 // tHIS IS FOR A TEST COMMIT
 
 const dummyData = {
@@ -2390,31 +2392,6 @@ const MidSection = React.forwardRef((props, ref) => {
         createCameraInputElement(holderDIV, handleClicked, setSidebar, table_dropdown_focuseddClassMaintain)
       } else if (typeOfOperation === "TEXT_FILL") {
         createTextElement(holderDIV, focuseddClassMaintain, handleClicked, setSidebar, getOffset)
-        // let texttField = document.createElement("textarea");
-        // texttField.className = "texttInput";
-        // texttField.placeholder = "input text here";
-        // texttField.style.width = "100%";
-        // texttField.style.height = "100%";
-        // texttField.style.resize = "none";
-        // texttField.style.backgroundColor = "#0000";
-        // texttField.style.borderRadius = "0px";
-        // texttField.style.outline = "0px";
-        // texttField.style.overflow = "overlay";
-
-        // texttField.style.position = "relative";
-
-        // texttField.onchange = (event) => {
-        //   event.preventDefault();
-        //   const textField = {
-        //     textField: {
-        //       value: event.target.value,
-        //       xcoordinate: getOffset(holderDIV).left,
-        //       ycoordinate: getOffset(holderDIV).top,
-        //     },
-        //   };
-        // };
-
-        // holderDIV.append(texttField);
       } else if (
         typeOfOperation === "TABLE_INPUT" &&
         decoded.details.action === "template"
@@ -2464,169 +2441,17 @@ const MidSection = React.forwardRef((props, ref) => {
         decoded.details.action === "template"
       ) {
         createDateInputElement(holderDIV, focuseddClassMaintain, handleClicked, setSidebar, setRightSideDateMenu, setPostData, setStartDate, setMethod)
-        // let dateField = document.createElement("div");
-        // dateField.className = "dateInput";
-        // dateField.style.width = "100%";
-        // dateField.style.height = "100%";
-        // dateField.style.backgroundColor = "#0000";
-        // dateField.style.borderRadius = "0px";
-        // dateField.style.outline = "0px";
-        // dateField.style.overflow = "overlay";
-
-        // dateField.style.position = "relative";
-
-        // dateField.onchange = (event) => {
-        //   event.preventDefault();
-        //   setPostData({
-        //     ...postData,
-        //     calenderField: {
-        //       value: event.target.value,
-        //       xcoordinate: getOffset(holderDIV).left,
-        //       ycoordinate: getOffset(holderDIV).top,
-        //     },
-        //   });
-        // };
-        // setStartDate(new Date());
-        // setMethod("select");
-
-        // function dateClick() {
-        //   document.getElementById("date_picker").click();
-        //   setRightSideDateMenu(false);
-        // }
-        // dateField.onclick = (e) => {
-        //   e.stopPropagation();
-        //   focuseddClassMaintain(e);
-        //   if (e.ctrlKey) {
-        //     copyInput("calendar2");
-        //   }
-        //   handleClicked("calendar2", "container2");
-        //   setRightSideDateMenu(false);
-        //   if (e.target.innerText != "mm/dd/yyyy") {
-        //     if (e.target.innerText.includes("/")) {
-        //       const setDate = new Date(e.target.innerText);
-        //       setMethod("first");
-        //       setStartDate(setDate);
-        //     } else {
-        //       if (e.target.innerText.includes("-")) {
-        //         setMethod("fourth");
-        //       } else {
-        //         setMethod("second");
-        //       }
-        //       const setDate = new Date(e.target.innerText);
-        //       setStartDate(setDate);
-        //     }
-        //   }
-        //   setSidebar(true);
-        //   setTimeout(dateClick, 0);
-        // };
-
-        // dateField.innerText = "mm/dd/yyyy";
-
-        // holderDIV.append(dateField);
       } else if (
         typeOfOperation === "DROPDOWN_INPUT" &&
         decoded.details.action === "template"
       ) {
-        let dropdownField = document.createElement("div");
-        dropdownField.className = "dropdownInput";
-        dropdownField.style.width = "100%";
-        dropdownField.style.height = "100%";
-        dropdownField.style.backgroundColor = "#0000";
-        dropdownField.style.borderRadius = "0px";
-        dropdownField.style.outline = "0px";
-        dropdownField.style.overflow = "overlay";
-
-        dropdownField.style.position = "absolute";
-
-        const selectElement = document.createElement("select");
-        selectElement.className = "select-element";
-        selectElement.style.width = "500";
-        selectElement.style.height = "auto";
-        selectElement.onclick = () => {
-          selectElement.parentElement.click();
-        };
-
-        dropdownField.onchange = (event) => {
-          event.preventDefault();
-          setPostData({
-            ...postData,
-            dropdownField: {
-              value: event.target.value,
-              xcoordinate: getOffset(holderDIV).left,
-              ycoordinate: getOffset(holderDIV).top,
-            },
-          });
-        };
-
-        if (dropdownField) {
-          const dropdownField = {
-            dropdownField: {
-              value: event.target.value,
-              xcoordinate: getOffset(holderDIV).left,
-              ycoordinate: getOffset(holderDIV).top,
-            },
-          };
-        }
-
-        dropdownField.onclick = (e) => {
-          e.stopPropagation();
-          // focuseddClassMaintain(e);
-          table_dropdown_focuseddClassMaintain(e);
-          // dropdownField.classList.add("focussed");
-          if (e.ctrlKey) {
-            copyInput("dropdown2");
-          }
-          handleClicked("dropdown2", "container2");
-          setRightSideDropDown(false);
-          setSidebar(true);
-        };
-
-        const para = document.createElement("p");
-        para.innerHTML = " Dropdown Name";
-        para.className = "dropdownName";
-        para.onclick = () => {
-          para.parentElement.click();
-        };
-        dropdownField.append(para);
-        dropdownField.append(selectElement);
-        holderDIV.append(dropdownField);
+        createDropDownInputElement(holderDIV, handleClicked, setSidebar, table_dropdown_focuseddClassMaintain, setRightSideDropDown, setPostData, getOffset)
       } else if (
         typeOfOperation === "BUTTON_INPUT" &&
         decoded.details.action === "template"
       ) {
-        let buttonField = document.createElement("button");
-        buttonField.className = "buttonInput";
-        buttonField.style.width = "100%";
-        buttonField.style.height = "100%";
-        buttonField.style.backgroundColor = "#0000";
-        buttonField.style.borderRadius = "0px";
-        buttonField.style.outline = "0px";
-        buttonField.style.overflow = "overlay";
-        buttonField.style.position = "absolute";
-        buttonField.textContent = "Button";
-
-        buttonField.onclick = (e) => {
-          e.stopPropagation();
-          focuseddClassMaintain(e);
-          if (e.ctrlKey) {
-            copyInput("button2");
-          }
-          handleClicked("button2", "container2");
-          setSidebar(true);
-        };
-
-        const linkHolder = document.createElement("div");
-        linkHolder.className = "link_holder";
-        linkHolder.style.display = "none";
-
-        const purposeHolder = document.createElement("div");
-        purposeHolder.className = "purpose_holder";
-        purposeHolder.style.display = "none";
-
-        holderDIV.append(buttonField);
-        holderDIV.append(linkHolder);
-        holderDIV.append(purposeHolder);
-      } else if (
+        createButtonInputElement(holderDIV, focuseddClassMaintain, handleClicked, setSidebar)
+       } else if (
         typeOfOperation === "CONTAINER_INPUT" &&
         decoded.details.action === "template"
       ) {
