@@ -68,7 +68,7 @@ function createNewScaleInputElement(
   labelHold.style.width = "100%";
   labelHold.style.height = "85%";
   labelHold.style.border = "1px solid black";
-  labelHold.style.backgroundColor = "blue";
+  labelHold.style.backgroundColor = "white";
   // labelHold.style.display = "none";
   scaleHold.appendChild(labelHold);
   labelHold.style.display = "flex";

@@ -1478,6 +1478,12 @@ const ScaleRightSide = () => {
       npsLiteTextArray.style.display = "none";
       labelHold.append(npsLiteTextArray);
 
+      const orientation = document.createElement("div");
+      orientation.className = "orientation";
+      orientation.textContent = option.value;
+      orientation.style.display = "none";
+      button4.appendChild(orientation);
+
       for (let i = 0; i < textValues.length; i++) {
         const selectedOption = optionSelect.value;
         const circle = document.createElement("div");
