@@ -680,6 +680,7 @@ const Header = () => {
 
           if (scaleType.textContent === "nps_lite") {
             npsLiteTextArray = newScales[b].querySelector(".nps_lite_text");
+            orientation = newScales[b].querySelector(".orientation");
           }
 
           let likertScaleArray = "";
