@@ -39,6 +39,7 @@ import createScaleInputElement from "./midSectionElements/ScaleInputElement.jsx"
 import createNewScaleInputElement from "./createElements/CreateNewScaleElement.jsx";
 import createCameraInputElement from "./createElements/CreateCameraElement.jsx";
 import createSignInputElement from "./createElements/CreateSignElement.jsx";
+import createDateInputElement from "./createElements/CreateDateElement.jsx";
 // tHIS IS FOR A TEST COMMIT
 
 const dummyData = {
@@ -2456,130 +2457,72 @@ const MidSection = React.forwardRef((props, ref) => {
         typeOfOperation === "SIGN_INPUT" &&
         decoded.details.action === "template"
       ) {
-        // let signField = document.createElement("div");
-        // signField.className = "signInput";
-        // signField.style.width = "100%";
-        // signField.style.height = "100%";
-        // signField.style.backgroundColor = "#0000";
-        // signField.style.borderRadius = "0px";
-        // signField.style.outline = "0px";
-        // signField.style.overflow = "overlay";
 
-        // signField.innerText = "Signature here";
-        // signField.style.position = "absolute";
+        createSignInputElement(holderDIV, focuseddClassMaintain, handleClicked, setSidebar, setPostData, getOffset)
+      } else if (
+        typeOfOperation === "DATE_INPUT" &&
+        decoded.details.action === "template"
+      ) {
+        createDateInputElement(holderDIV, focuseddClassMaintain, handleClicked, setSidebar, setRightSideDateMenu, setPostData, setStartDate, setMethod)
+        // let dateField = document.createElement("div");
+        // dateField.className = "dateInput";
+        // dateField.style.width = "100%";
+        // dateField.style.height = "100%";
+        // dateField.style.backgroundColor = "#0000";
+        // dateField.style.borderRadius = "0px";
+        // dateField.style.outline = "0px";
+        // dateField.style.overflow = "overlay";
 
-        // signField.onchange = (event) => {
+        // dateField.style.position = "relative";
+
+        // dateField.onchange = (event) => {
         //   event.preventDefault();
         //   setPostData({
         //     ...postData,
-        //     signField: {
+        //     calenderField: {
         //       value: event.target.value,
         //       xcoordinate: getOffset(holderDIV).left,
         //       ycoordinate: getOffset(holderDIV).top,
         //     },
         //   });
         // };
+        // setStartDate(new Date());
+        // setMethod("select");
 
-        // signField.onclick = (e) => {
+        // function dateClick() {
+        //   document.getElementById("date_picker").click();
+        //   setRightSideDateMenu(false);
+        // }
+        // dateField.onclick = (e) => {
         //   e.stopPropagation();
         //   focuseddClassMaintain(e);
-
         //   if (e.ctrlKey) {
-        //     copyInput("signs2");
+        //     copyInput("calendar2");
         //   }
-        //   handleClicked("signs2", "container2");
+        //   handleClicked("calendar2", "container2");
+        //   setRightSideDateMenu(false);
+        //   if (e.target.innerText != "mm/dd/yyyy") {
+        //     if (e.target.innerText.includes("/")) {
+        //       const setDate = new Date(e.target.innerText);
+        //       setMethod("first");
+        //       setStartDate(setDate);
+        //     } else {
+        //       if (e.target.innerText.includes("-")) {
+        //         setMethod("fourth");
+        //       } else {
+        //         setMethod("second");
+        //       }
+        //       const setDate = new Date(e.target.innerText);
+        //       setStartDate(setDate);
+        //     }
+        //   }
         //   setSidebar(true);
+        //   setTimeout(dateClick, 0);
         // };
-        createSignInputElement(holderDIV, focuseddClassMaintain, handleClicked, setSidebar, setPostData, getOffset)
-        // const imageSignButton = document.createElement("div");
-        // imageSignButton.className = "addImageSignButton";
-        // imageSignButton.innerText = "Choose File";
-        // imageSignButton.style.display = "none";
 
-        // const signBtn = document.createElement("input");
-        // signBtn.className = "addSignButtonInput";
-        // signBtn.type = "file";
-        // signBtn.style.objectFit = "cover";
-        // var uploadedImage = "";
+        // dateField.innerText = "mm/dd/yyyy";
 
-        // signBtn.addEventListener("input", () => {
-        //   const reader = new FileReader();
-
-        //   reader.addEventListener("load", () => {
-        //     uploadedImage = reader.result;
-        //     const signImage = `<img src=${uploadedImage} width="100%" height="100%"/>`;
-        //     document.querySelector(".focussed").innerHTML = signImage;
-        //   });
-        //   reader.readAsDataURL(signBtn.files[0]);
-        // });
-
-        // imageSignButton.append(signBtn);
-
-        // holderDIV.append(signField);
-        // holderDIV.append(imageSignButton);
-      } else if (
-        typeOfOperation === "DATE_INPUT" &&
-        decoded.details.action === "template"
-      ) {
-        let dateField = document.createElement("div");
-        dateField.className = "dateInput";
-        dateField.style.width = "100%";
-        dateField.style.height = "100%";
-        dateField.style.backgroundColor = "#0000";
-        dateField.style.borderRadius = "0px";
-        dateField.style.outline = "0px";
-        dateField.style.overflow = "overlay";
-
-        dateField.style.position = "relative";
-
-        dateField.onchange = (event) => {
-          event.preventDefault();
-          setPostData({
-            ...postData,
-            calenderField: {
-              value: event.target.value,
-              xcoordinate: getOffset(holderDIV).left,
-              ycoordinate: getOffset(holderDIV).top,
-            },
-          });
-        };
-        setStartDate(new Date());
-        setMethod("select");
-
-        function dateClick() {
-          document.getElementById("date_picker").click();
-          setRightSideDateMenu(false);
-        }
-        dateField.onclick = (e) => {
-          e.stopPropagation();
-          focuseddClassMaintain(e);
-          if (e.ctrlKey) {
-            copyInput("calendar2");
-          }
-          handleClicked("calendar2", "container2");
-          setRightSideDateMenu(false);
-          if (e.target.innerText != "mm/dd/yyyy") {
-            if (e.target.innerText.includes("/")) {
-              const setDate = new Date(e.target.innerText);
-              setMethod("first");
-              setStartDate(setDate);
-            } else {
-              if (e.target.innerText.includes("-")) {
-                setMethod("fourth");
-              } else {
-                setMethod("second");
-              }
-              const setDate = new Date(e.target.innerText);
-              setStartDate(setDate);
-            }
-          }
-          setSidebar(true);
-          setTimeout(dateClick, 0);
-        };
-
-        dateField.innerText = "mm/dd/yyyy";
-
-        holderDIV.append(dateField);
+        // holderDIV.append(dateField);
       } else if (
         typeOfOperation === "DROPDOWN_INPUT" &&
         decoded.details.action === "template"
