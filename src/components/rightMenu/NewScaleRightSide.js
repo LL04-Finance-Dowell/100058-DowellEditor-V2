@@ -1177,6 +1177,7 @@ const ScaleRightSide = () => {
         return emojiLabels;
       };
       const emojiLabels = prepareEmojiLabels();
+      console.log("These are emoji labels", emojiLabels)
 
       if (option.value === "Horizontal") {
         button4.style.border = "block";

@@ -42,7 +42,7 @@ function createNewScaleInputElement(
 
   const scaleHold = document.createElement("div");
   scaleHold.className = "scool_input";
-  scaleHold.style.color = "black";
+  scaleHold.style.color = "white";
   scaleHold.style.width = "100%";
   scaleHold.style.height = "90%";
   scaleHold.style.padding = "10px";
@@ -83,7 +83,7 @@ function createNewScaleInputElement(
     circle.style.width = "35%";
     circle.style.height = "35%";
     circle.style.borderRadius = "50%";
-    circle.style.backgroundColor = "red";
+    circle.style.backgroundColor = "white";
     circle.style.top = "30%";
     circle.style.left = "30%";
     circle.style.display = "flex";
@@ -105,17 +105,17 @@ function createNewScaleInputElement(
   const element1 = document.createElement("h6");
   element1.className = "left_child";
   element1.style.marginLeft = "0px";
-  element1.textContent = "Good";
+  element1.textContent = "";
   childDiv.appendChild(element1);
 
   const element2 = document.createElement("h6");
   element2.className = "neutral_child";
-  element2.textContent = "Neutral";
+  element2.textContent = "";
   childDiv.appendChild(element2);
 
   const element3 = document.createElement("h6");
   element3.className = "right_child";
-  element3.textContent = "Best";
+  element3.textContent = "";
   childDiv.appendChild(element3);
 
   const idHolder = document.createElement("h6");

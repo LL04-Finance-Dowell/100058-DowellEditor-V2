@@ -1952,7 +1952,7 @@ const MidSection = React.forwardRef((props, ref) => {
           const imageLinkHolder = `${element?.raw_data?.imageLinkHolder}`;
           // const holderDIV = getHolderDIV(measure, pageNo);
 
-          createCameraInputField(id, p, holderDIV, handleClicked, setSidebar, table_dropdown_focuseddClassMaintain, videoLinkHolder, imageLinkHolder)
+          createCameraInputField(id, p, holderDIV, handleClicked, setSidebar, table_dropdown_focuseddClassMaintain, videoLinkHolder, imageLinkHolder, decoded)
 
           // let cameraField = document.createElement("div");
           // cameraField.className = "cameraInput";
