@@ -7,6 +7,10 @@ import jwt_decode from "jwt-decode";
 import { useSearchParams } from "react-router-dom";
 import { GrEmoji } from "react-icons/gr";
 import Picker from "emoji-picker-react";
+import SelectAnsAndQuestion from "../selectAnsAndQuestion";
+import useSelectedAnswer from '../../customHooks/useSelectedAnswers';
+
+
 
 const ScaleRightSide = () => {
   const {
@@ -27,8 +31,12 @@ const ScaleRightSide = () => {
     setScaleData,
     setScaleId,
     scaleId,
+    setConfirmRemove, confirmRemove
   } = useStateContext();
 
+  const [selectedType, setSelectedType] = useState('')
+  // const [addedAns, setAddedAns] = useState([])
+  const { addedAns, setAddedAns } = useSelectedAnswer()
   const [inputStr, setInputStr] = useState("");
   const [showPicker, setShowPicker] = useState(false);
   const [isSwitchEnabled, setIsSwitchEnabled] = useState(false);
@@ -325,7 +333,7 @@ const ScaleRightSide = () => {
     const optionSelect = document.getElementById("format");
     const option =
       document.querySelector("#orientationId").options[
-        document.querySelector("#orientationId").selectedIndex
+      document.querySelector("#orientationId").selectedIndex
       ];
     const test = document.querySelector("select");
     console.log(test);
@@ -1770,6 +1778,13 @@ const ScaleRightSide = () => {
                       </option>
                     </select>
                   </div>
+                  <br />
+                  <SelectAnsAndQuestion
+                    selectedType={selectedType}
+                    setSelectedType={setSelectedType}
+                    setAddedAns={setAddedAns}
+                    addedAns={addedAns} />
+                  <br />
                   <div>
                     <Button
                       id="button_id"
@@ -1879,7 +1894,8 @@ const ScaleRightSide = () => {
                 variant="secondary"
                 // className="remove_button"
                 className="remove_button"
-                onClick={removeScale}
+                // onClick={removeScale}
+                onClick={() => setConfirmRemove(!confirmRemove)}
               >
                 Remove Scale
               </Button>

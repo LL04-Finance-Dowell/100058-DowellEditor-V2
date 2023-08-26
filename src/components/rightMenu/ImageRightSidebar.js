@@ -3,6 +3,10 @@ import { Row, Button, Form } from "react-bootstrap";
 import { useStateContext } from "../../contexts/contextProvider";
 import { useSearchParams } from "react-router-dom";
 import jwt_decode from "jwt-decode";
+import SelectAnsAndQuestion from "../selectAnsAndQuestion";
+
+import useSelectedAnswer from '../../customHooks/useSelectedAnswers';
+
 
 const ImageRightSidebar = () => {
   var {
@@ -13,7 +17,13 @@ const ImageRightSidebar = () => {
     setBorderSize,
     borderColor,
     setBorderColor,
+    setConfirmRemove, confirmRemove
   } = useStateContext();
+
+  const [selectedType, setSelectedType] = useState('')
+  // const [addedAns, setAddedAns] = useState([])
+
+  const { addedAns, setAddedAns } = useSelectedAnswer()
 
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token");
@@ -110,7 +120,7 @@ const ImageRightSidebar = () => {
           type="text"
           placeholder="Image Place Holder"
           id="image_name"
-          onChange={() => {}}
+          onChange={() => { }}
         />
       </div>
       <hr />
@@ -154,6 +164,12 @@ const ImageRightSidebar = () => {
         )}
       </Row>
       <hr />
+      <SelectAnsAndQuestion
+        selectedType={selectedType}
+        setSelectedType={setSelectedType}
+        setAddedAns={setAddedAns}
+        addedAns={addedAns} />
+      <hr />
       <div className="mt-2 text-center pt-5">
         <Button variant="secondary" className="px-5" onClick={handleUpdate}>
           Update Changes
@@ -176,7 +192,8 @@ const ImageRightSidebar = () => {
               : "w-7 remove_button disable_button"
           }
           variant="primary"
-          onClick={removeImage}
+          // onClick={removeImage}
+          onClick={() => setConfirmRemove(!confirmRemove)}
         >
           Remove Image
         </Button>

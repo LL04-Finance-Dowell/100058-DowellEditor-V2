@@ -3,6 +3,8 @@ import { Row, Button, Form } from "react-bootstrap";
 import { useStateContext } from "../../contexts/contextProvider";
 import { useSearchParams } from "react-router-dom";
 import jwt_decode from "jwt-decode";
+import SelectAnsAndQuestion from "../selectAnsAndQuestion";
+import useSelectedAnswer from "../../customHooks/useSelectedAnswers";
 
 const ButtonRightSide = () => {
   const {
@@ -14,6 +16,7 @@ const ButtonRightSide = () => {
     setButtonBorderSize,
     buttonBorderColor,
     setButtonBorderColor,
+    setConfirmRemove, confirmRemove
   } = useStateContext();
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token");
@@ -26,6 +29,8 @@ const ButtonRightSide = () => {
   const purpose = holderDIV?.children[2]?.innerHTML;
   const link = holderDIV?.children[1]?.innerHTML;
   const [showSlider, setShowSlider] = useState(false);
+
+  const [selectedType, setSelectedType] = useState('')
 
   const handleUpdate = () => {
     const btnName = document.getElementById("button_name");
@@ -80,7 +85,7 @@ const ButtonRightSide = () => {
   const handleRangeBlur = (e) => {
     e.target.focus();
   };
-
+  const { addedAns, setAddedAns } = useSelectedAnswer()
   return (
     <>
       <div className="mt-2 mb-3 w-100">
@@ -90,7 +95,7 @@ const ButtonRightSide = () => {
           type="text"
           placeholder="Button name"
           id="button_name"
-          onChange={() => {}}
+          onChange={() => { }}
         />
       </div>
       <select
@@ -115,7 +120,7 @@ const ButtonRightSide = () => {
           type="text"
           placeholder="Website link"
           id="link"
-          onChange={() => {}}
+          onChange={() => { }}
         />
       </div>
       <hr />
@@ -159,6 +164,12 @@ const ButtonRightSide = () => {
         )}
       </Row>
       <hr />
+      <SelectAnsAndQuestion
+        selectedType={selectedType}
+        setSelectedType={setSelectedType}
+        setAddedAns={setAddedAns}
+        addedAns={addedAns} />
+      <hr />
       <div className="mt-2 text-center pt-5">
         <Button variant="secondary" className="px-5" onClick={handleUpdate}>
           Update Changes
@@ -173,7 +184,8 @@ const ButtonRightSide = () => {
               ? "px-5 remove_button"
               : "px-5 remove_button disable_button"
           }
-          onClick={removeButton}
+          // onClick={removeButton}
+          onClick={() => setConfirmRemove(!confirmRemove)}
         >
           Remove Button
         </Button>

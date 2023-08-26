@@ -1,8 +1,18 @@
 import Axios from "axios";
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "react-bootstrap";
+import SelectAnsAndQuestion from '../selectAnsAndQuestion';
+import { useStateContext } from '../../contexts/contextProvider';
+import useSelectedAnswer from "../../customHooks/useSelectedAnswers";
+
 
 function CameraRightSide() {
+  const [selectedType, setSelectedType] = useState('')
+  // const [addedAns, setAddedAns] = useState([])
+  const { setConfirmRemove, confirmRemove } = useStateContext()
+  const { addedAns, setAddedAns } = useSelectedAnswer();
+
+
   let mediaRecorder;
   const snap = () => {
     let camera = document.querySelector(".focussedd");
@@ -172,11 +182,20 @@ function CameraRightSide() {
         >
           Record
         </Button>
+        <div>
+          <SelectAnsAndQuestion
+            selectedType={selectedType}
+            setSelectedType={setSelectedType}
+            setAddedAns={setAddedAns}
+            addedAns={addedAns} />
+          <br />
+        </div>
         <Button
           variant="secondary"
           // className="remove_button"
           className="remove_button"
-          onClick={removeCamera}
+          // onClick={removeCamera}
+          onClick={() => setConfirmRemove(!confirmRemove)}
         >
           Remove Camera
         </Button>

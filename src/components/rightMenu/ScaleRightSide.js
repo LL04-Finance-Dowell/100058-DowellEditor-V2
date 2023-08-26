@@ -4,6 +4,9 @@ import { useStateContext } from "../../contexts/contextProvider";
 import Axios from "axios";
 import jwt_decode from "jwt-decode";
 import { useSearchParams } from "react-router-dom";
+import SelectAnsAndQuestion from "../selectAnsAndQuestion";
+import useSelectedAnswer from '../../customHooks/useSelectedAnswers';
+
 
 const ScaleRightSide = () => {
   const {
@@ -25,7 +28,12 @@ const ScaleRightSide = () => {
     setScaleBorderSize,
     scaleBorderColor,
     setScaleBorderColor,
+    setConfirmRemove, confirmRemove
   } = useStateContext();
+
+  const [selectedType, setSelectedType] = useState('')
+  // const [addedAns, setAddedAns] = useState([])
+  const { addedAns, setAddedAns } = useSelectedAnswer()
 
   const [showSlider, setShowSlider] = useState(false);
   const [showBorder, setShowBorder] = useState(true);
@@ -336,6 +344,12 @@ const ScaleRightSide = () => {
             )}
           </Row>
           <hr />
+          <SelectAnsAndQuestion
+            selectedType={selectedType}
+            setSelectedType={setSelectedType}
+            setAddedAns={setAddedAns}
+            addedAns={addedAns} />
+          <hr />
           <div id="settingRight" style={{ display: "none" }}>
             <h3>Configurations</h3>
             {/* iframe */}
@@ -345,7 +359,7 @@ const ScaleRightSide = () => {
                 id="select"
                 // onChange={handleDateMethod}
                 className="select border-0 bg-white rounded w-100 h-75 p-2 "
-                //multiple
+              //multiple
               >
                 <option value="select">Select Element</option>
                 {options}
@@ -388,7 +402,8 @@ const ScaleRightSide = () => {
                     ? "remove_button"
                     : "remove_button disable_button"
                 }
-                onClick={removeScale}
+                // onClick={removeScale}
+                onClick={() => setConfirmRemove(!confirmRemove)}
               >
                 Remove Scale
               </Button>

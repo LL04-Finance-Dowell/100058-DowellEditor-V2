@@ -5,21 +5,25 @@ import { useStateContext } from '../../contexts/contextProvider';
 
 import { useSearchParams } from "react-router-dom";
 import jwt_decode from "jwt-decode";
+import SelectAnsAndQuestion from '../selectAnsAndQuestion';
+import useSelectedAnswer from '../../customHooks/useSelectedAnswers';
 
-const IframeRightSidebar = () =>
-{
-  const { setSidebar, handleClicked, setIsFinializeDisabled,  iframeBorderSize, setIframeBorderSize, iframeBorderColor, setIframeBorderColor } =
+
+const IframeRightSidebar = () => {
+  const { setSidebar, handleClicked, setIsFinializeDisabled, iframeBorderSize, setIframeBorderSize, iframeBorderColor, setIframeBorderColor, setConfirmRemove, confirmRemove } =
     useStateContext();
 
-    const [searchParams] = useSearchParams();
-    const token = searchParams.get("token");
-    var decoded = jwt_decode(token);
+  const [searchParams] = useSearchParams();
+  const token = searchParams.get("token");
+  var decoded = jwt_decode(token);
 
 
   const [showSlider, setShowSlider] = useState(false);
+  const [selectedType, setSelectedType] = useState('')
+  // const [addedAns, setAddedAns] = useState([])
+  const { addedAns, setAddedAns } = useSelectedAnswer()
 
-  const makeIframe = () =>
-  {
+  const makeIframe = () => {
     var iframeDiv = document.querySelector('.focussed');
     var iframe = document.createElement('iframe');
     iframe.id = 'iframe';
@@ -29,24 +33,20 @@ const IframeRightSidebar = () =>
 
     iframeDiv.appendChild(iframe);
     //setIsFinializeDisabled(false)
-    if (iframeDiv.parentElement.classList.contains('holderDIV'))
-    {
+    if (iframeDiv.parentElement.classList.contains('holderDIV')) {
       iframeDiv.parentElement.classList.add('element_updated');
       // console.log('iframe.parentElement', iframeDiv.parentElement);
     }
   };
-  function handleChange()
-  {
+  function handleChange() {
     document.querySelector('.focussed').innerHTML = '';
   }
 
-  function removeIframe()
-  {
+  function removeIframe() {
     document.querySelector('.focussedd').remove();
   }
 
-  const handleBorderSizeChange = (e) =>
-  {
+  const handleBorderSizeChange = (e) => {
     setIframeBorderSize(e.target.value);
 
     const box = document.getElementsByClassName("focussedd")[0];
@@ -54,18 +54,16 @@ const IframeRightSidebar = () =>
 
   };
 
-  const handleBorderColorChange = (e) =>
-  {
+  const handleBorderColorChange = (e) => {
     setIframeBorderColor(e.target.value);
     const box = document.getElementsByClassName("focussedd")[0];
     box.style.borderColor = `${iframeBorderColor}`;
 
   };
-  const handleRangeBlur = (e) =>
-  {
+  const handleRangeBlur = (e) => {
     e.target.focus();
   };
-  
+
   return (
     <>
       <div>
@@ -134,6 +132,12 @@ const IframeRightSidebar = () =>
         )}
       </Row>
       <hr />
+      <SelectAnsAndQuestion
+        selectedType={selectedType}
+        setSelectedType={setSelectedType}
+        setAddedAns={setAddedAns}
+        addedAns={addedAns} />
+      <hr />
       <div className="mt-2 text-center pt-5">
         <Button variant="secondary" className="px-5" onClick={makeIframe}>
           Create Iframe
@@ -145,7 +149,8 @@ const IframeRightSidebar = () =>
           variant="primary"
 
           className={decoded.details.action === "template" ? "px-5 remove_button" : "px-5 remove_button disable_button"}
-          onClick={removeIframe}
+          // onClick={removeIframe}
+          onClick={() => setConfirmRemove(!confirmRemove)}
         >
           Remove Iframe
         </Button>

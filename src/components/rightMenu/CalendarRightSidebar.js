@@ -5,9 +5,10 @@ import jwt_decode from "jwt-decode";
 import DatePicker from "react-datepicker";
 import { useStateContext } from "../../contexts/contextProvider";
 import { useSearchParams } from "react-router-dom";
+import SelectAnsAndQuestion from "../selectAnsAndQuestion";
+import useSelectedAnswer from "../../customHooks/useSelectedAnswers";
 
-const CalendarRightSidebar = (props) =>
-{
+const CalendarRightSidebar = (props) => {
   const {
     startDate,
     setStartDate,
@@ -17,11 +18,14 @@ const CalendarRightSidebar = (props) =>
     method,
     setMethod,
     setIsFinializeDisabled,
-    calendarBorderSize, 
+    calendarBorderSize,
     setCalendarBorderSize,
     calendarBorderColor,
-    setCalendarBorderColor
+    setCalendarBorderColor,
+    setConfirmRemove,
+    confirmRemove
   } = useStateContext();
+  const [selectedType, setSelectedType] = useState('')
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token");
   var decoded = jwt_decode(token);
@@ -30,32 +34,26 @@ const CalendarRightSidebar = (props) =>
   const [datePickerMargin, setDatePickerMargin] = useState("");
   const date = document.querySelector(".focussed");
   const [showSlider, setShowSlider] = useState(false);
- 
+  const { addedAns, setAddedAns } = useSelectedAnswer()
 
-  if (date?.parentElement?.classList?.contains("focussedd"))
-  {
-    if (rightSideDatemenu)
-    {
-     
-      if (method == "select")
-      {
+
+  if (date?.parentElement?.classList?.contains("focussedd")) {
+    if (rightSideDatemenu) {
+
+      if (method == "select") {
         date.innerHTML = startDate.toLocaleString().split(",")[0];
-      } else if (method == "first")
-      {
-        
-        if (startDate)
-        {
+      } else if (method == "first") {
+
+        if (startDate) {
           const localDate = new Date(startDate).toLocaleString().split(",")[0];
           const localDateArray = localDate.split("/");
-          
+
           date.innerHTML = `${localDateArray[1]}/${localDateArray[0]}/${localDateArray[2]}`;
         }
-      } else if (method == "second")
-      {
+      } else if (method == "second") {
         //console.log("second", startDate);
         date.innerHTML = startDate && new Date(startDate)?.toDateString();
-      } else if (method == "fourth")
-      {
+      } else if (method == "fourth") {
         //console.log("fourth", startDate);
         date.innerHTML =
           startDate && new Date(startDate)?.toISOString().split("T")[0];
@@ -63,64 +61,53 @@ const CalendarRightSidebar = (props) =>
     }
   }
 
-  
 
-  function removeDate()
-  {
-    if (document.querySelector(".focussedd").classList.contains("dropp"))
-    {
-      if (document.querySelector(".focussedd").hasChildNodes())
-      {
+
+  function removeDate() {
+    if (document.querySelector(".focussedd").classList.contains("dropp")) {
+      if (document.querySelector(".focussedd").hasChildNodes()) {
         const childLength =
           document.querySelector(".focussedd").children.length;
-        for (let i = 0; i < childLength; i++)
-        {
+        for (let i = 0; i < childLength; i++) {
           document.querySelector(".focussedd").firstElementChild.remove();
         }
       }
-    } else
-    {
+    } else {
       document.querySelector(".focussedd").remove();
     }
   }
 
-  function handleDateMethod(e)
-  {
+  function handleDateMethod(e) {
     setMethod(e.target.value);
     setRightSideDateMenu(true);
   }
-  const handleBorderSizeChange = (e) =>
-  {
+  const handleBorderSizeChange = (e) => {
     setCalendarBorderSize(parseInt(e.target.value));
 
     const box = document.getElementsByClassName("focussedd")[0];
     box.style.borderWidth = `${calendarBorderSize}px`;
 
   };
-  const handleBorderColorChange = (e) =>
-  {
+  const handleBorderColorChange = (e) => {
     setCalendarBorderColor(e.target.value);
     const box = document.getElementsByClassName("focussedd")[0];
     box.style.borderColor = `${calendarBorderColor}`;
   };
-  const handleRangeBlur = (e) =>
-  {
+  const handleRangeBlur = (e) => {
     e.target.focus();
   };
 
-  useEffect(() =>
-  {
-    if (document.querySelector(".react-datepicker"))
-    {
-      
+  useEffect(() => {
+    if (document.querySelector(".react-datepicker")) {
+
       setDatePickerMargin(
         document.querySelector(".react-datepicker").offsetHeight + "px"
       );
     }
-   
+
   }, [datePickerMargin]);
 
- 
+
   return (
     <div>
       <div className="dropdown pb-3">
@@ -153,15 +140,12 @@ const CalendarRightSidebar = (props) =>
             openToDate={new Date()}
             selected={startDate}
             open={true}
-            onChange={(date) =>
-            {
-             
-              if (date != startDate)
-              {
-              
+            onChange={(date) => {
+
+              if (date != startDate) {
+
                 var dateDiv = document.querySelector(".focussed");
-                if (dateDiv.parentElement.classList.contains("holderDIV"))
-                {
+                if (dateDiv.parentElement.classList.contains("holderDIV")) {
                   dateDiv.parentElement.classList.add("element_updated");
                 }
               }
@@ -188,6 +172,15 @@ const CalendarRightSidebar = (props) =>
           </Button>
         </div>
       )}
+      <hr />
+
+      <SelectAnsAndQuestion
+        selectedType={selectedType}
+        setSelectedType={setSelectedType}
+        addedAns={addedAns}
+        setAddedAns={setAddedAns}
+      />
+
       <hr />
       <Row className="pt-4">
         <div style={{ display: "flex", alignItems: "center" }}>

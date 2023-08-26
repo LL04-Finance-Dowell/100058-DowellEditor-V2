@@ -372,6 +372,12 @@ export const ContextProvider = ({ children }) => {
     e.target.classList.add("focussed");
   }
 
+  const [questionAndAnswerGroupedData,
+    setQuestionAndAnsGroupedData] = useState([])
+
+
+  const [confirmRemove, setConfirmRemove] = useState(false)
+
   return (
     <StateContext.Provider
       value={{
@@ -505,6 +511,9 @@ export const ContextProvider = ({ children }) => {
         setFormBorderSize,
         formBorderColor,
         setFormBorderColor,
+        questionAndAnswerGroupedData,
+        setQuestionAndAnsGroupedData,
+        confirmRemove, setConfirmRemove
       }}
     >
       {children}

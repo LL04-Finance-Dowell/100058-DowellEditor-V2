@@ -27,6 +27,8 @@ import {
 import { useStateContext } from "../../contexts/contextProvider";
 import { useSearchParams } from "react-router-dom";
 import jwt_decode from "jwt-decode";
+import SelectAnsAndQuestion from "../selectAnsAndQuestion";
+import useSelectedAnswer from "../../customHooks/useSelectedAnswers";
 
 const AlignRightSide = () => {
   const {
@@ -44,6 +46,7 @@ const AlignRightSide = () => {
     setInputBorderColor,
     inputBorderSize,
     setInputBorderSize,
+    confirmRemove, setConfirmRemove,
   } = useStateContext();
 
   const [searchParams] = useSearchParams();
@@ -53,6 +56,9 @@ const AlignRightSide = () => {
   const [isWindowHightSmall, setIsWindowHightSmall] = useState(false);
 
   const [showSlider, setShowSlider] = useState(false);
+  const [selectedType, setSelectedType] = useState("")
+
+  const { addedAns, setAddedAns } = useSelectedAnswer()
 
   var changeFontFamily = (ev) => {
     const userSelection = window.getSelection();
@@ -61,6 +67,8 @@ const AlignRightSide = () => {
     //console.log(selectedTextRange);
     selectedTextRange.style.fontFamily = `${ev.target.value}`;
   };
+
+
 
   const handleBold = () => {
     setBold(!bold);
@@ -631,22 +639,22 @@ const AlignRightSide = () => {
               </Button>
             </Col>
             <Col className="mx-0 p-0">
-              <Button onClick={() => {}} variant="white">
+              <Button onClick={() => { }} variant="white">
                 <FaIndent color="gray" size={20} />
               </Button>
             </Col>
             <Col className="mx-0 p-0">
-              <Button onClick={() => {}} variant="white">
+              <Button onClick={() => { }} variant="white">
                 <FaIndent color="gray" size={20} />
               </Button>
             </Col>
             <Col className="mx-0 p-0">
-              <Button onClick={() => {}} variant="white">
+              <Button onClick={() => { }} variant="white">
                 <FaIndent color="gray" size={20} />
               </Button>
             </Col>
             <Col className="mx-0 p-0">
-              <Button onClick={() => {}} variant="white">
+              <Button onClick={() => { }} variant="white">
                 <FaIndent color="gray" size={20} />
               </Button>
             </Col>
@@ -655,11 +663,20 @@ const AlignRightSide = () => {
 
         <hr />
 
+        <SelectAnsAndQuestion
+          selectedType={selectedType}
+          setSelectedType={setSelectedType}
+          setAddedAns={setAddedAns}
+          addedAns={addedAns}
+        />
+        <hr />
+
         <Row className="pt-0">
           <div className="mt-3 text-center">
             <Button
               variant="primary"
-              onClick={removeTextBox}
+              // onClick={removeTextBox}
+              onClick={() => setConfirmRemove(!confirmRemove)}
               className={
                 decoded.details.action === "template"
                   ? "remove_button"

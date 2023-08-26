@@ -4,6 +4,10 @@ import jwt_decode from "jwt-decode";
 import { Row, Button, Form } from "react-bootstrap";
 import { useStateContext } from "../../contexts/contextProvider";
 import { table_dropdown_focuseddClassMaintain } from "../../utils/focusClassMaintain/focusClass";
+import SelectAnsAndQuestion from "../selectAnsAndQuestion";
+import useSelectedAnswer from '../../customHooks/useSelectedAnswers';
+
+
 
 const TableRightSidebar = () => {
   const {
@@ -25,12 +29,17 @@ const TableRightSidebar = () => {
     setTableBorderSize,
     tableBorderColor,
     setTableBorderColor,
+    setConfirmRemove, confirmRemove
     // handleDropp,
   } = useStateContext();
 
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token");
   var decoded = jwt_decode(token);
+
+  const [selectedType, setSelectedType] = useState('')
+  // const [addedAns, setAddedAns] = useState([])
+  const { addedAns, setAddedAns } = useSelectedAnswer();
 
   // const [borderSize, setBorderSize] = useState(1);
   // const [borderColor, setBorderColor] = useState("#000000");
@@ -511,7 +520,7 @@ const TableRightSidebar = () => {
     var child = focusseddElmnt.lastElementChild;
 
     if (focusseddElmnt.classList.contains("holderDIV")) {
-      document.querySelector(".focussedd").remove();
+      document.querySelector(".focussedd")?.remove();
     }
     e.stopPropagation();
   }
@@ -573,6 +582,14 @@ const TableRightSidebar = () => {
         </Button>
       </div>
 
+      <hr />
+      <SelectAnsAndQuestion
+        selectedType={selectedType}
+        setSelectedType={setSelectedType}
+        setAddedAns={setAddedAns}
+        addedAns={addedAns} />
+      <hr />
+
       <div className="mt-2 text-center pt-5">
         <Button
           variant="primary"
@@ -581,7 +598,7 @@ const TableRightSidebar = () => {
               ? "px-5 remove_button"
               : "px-5 remove_button disable_button"
           }
-          onClick={removeTable}
+          onClick={() => setConfirmRemove(!confirmRemove)}
         >
           Remove Table
         </Button>

@@ -4,6 +4,9 @@ import { Row, Button, Form } from "react-bootstrap";
 import { useStateContext } from "../../contexts/contextProvider";
 import { useSearchParams } from "react-router-dom";
 import jwt_decode from "jwt-decode";
+import SelectAnsAndQuestion from "../selectAnsAndQuestion";
+import useSelectedAnswer from '../../customHooks/useSelectedAnswers';
+
 
 const SignsRightSidebar = () => {
   const [showSlider, setShowSlider] = useState(false);
@@ -16,10 +19,14 @@ const SignsRightSidebar = () => {
     setSignBorderSize,
     signBorderColor,
     setSignBorderColor,
+    setConfirmRemove, confirmRemove
   } = useStateContext();
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token");
   var decoded = jwt_decode(token);
+  const [selectedType, setSelectedType] = useState('')
+  // const [addedAns, setAddedAns] = useState([])
+  const { addedAns, setAddedAns } = useSelectedAnswer()
 
   let sigPad = useRef({});
   let data = "";
@@ -179,7 +186,7 @@ const SignsRightSidebar = () => {
           type="text"
           placeholder="Signature Place Holder"
           id="image_name"
-          onChange={() => {}}
+          onChange={() => { }}
         />
       </div>
       <div className="mt-2 text-center pt-5">
@@ -188,11 +195,18 @@ const SignsRightSidebar = () => {
         </Button>
       </div>
       <hr />
+      <SelectAnsAndQuestion
+        selectedType={selectedType}
+        setSelectedType={setSelectedType}
+        setAddedAns={setAddedAns}
+        addedAns={addedAns} />
+      <hr />
 
       <div className="mt-5 text-center">
         <Button
           variant="primary"
-          onClick={removeSign}
+          // onClick={removeSign}
+          onClick={() => setConfirmRemove(!confirmRemove)}
           className={
             decoded.details.action === "template"
               ? "remove_button"
