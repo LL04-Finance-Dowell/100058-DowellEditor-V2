@@ -161,6 +161,8 @@ const MidSection = React.forwardRef((props, ref) => {
 
   useEffect(() => {
     document.addEventListener("mousedown", (event) => {
+
+      // console.log("getting mouse position on midsection", event.screenX, event.screenY);
       const holderDIV = document.getElementsByClassName("holderDIV");
       const holderr = document.getElementsByClassName("holder-menu");
       const resizerr = document.getElementsByClassName("resizeBtn");
@@ -1606,7 +1608,7 @@ const MidSection = React.forwardRef((props, ref) => {
         console.log("element mubeen",element)
         if (element.type === "TEXT_INPUT") {
           const measure = {
-            width: element.width + "px",
+            width: window.innerWidth <993 ? ((element.width/794) *100) + "%" : element.width + "px",
             height: element.height + "px",
             left: element.left + "px",
             top: element.topp,
@@ -1626,7 +1628,8 @@ const MidSection = React.forwardRef((props, ref) => {
         }
         if (element.type === "IMAGE_INPUT") {
           const measure = {
-            width: element.width + "px",
+            // width: element.width + "px",
+            width: window.innerWidth <993 ? ((element.width/794) *100) + "%" : element.width + "px",
             height: element.height + "px",
             left: element.left + "px",
             top: element.topp,
@@ -1642,7 +1645,8 @@ const MidSection = React.forwardRef((props, ref) => {
        }
         if (element.type === "DATE_INPUT") {
           const measure = {
-            width: element.width + "px",
+            // width: element.width + "px",
+            width: window.innerWidth <993 ? ((element.width/794) *100) + "%" : element.width + "px",
             height: element.height + "px",
             left: element.left + "px",
             top: element.topp,
@@ -1659,7 +1663,8 @@ const MidSection = React.forwardRef((props, ref) => {
         }
         if (element.type === "SIGN_INPUT") {
           const measure = {
-            width: element.width + "px",
+            // width: element.width + "px",
+            width: window.innerWidth <993 ? ((element.width/794) *100) + "%" : element.width + "px",
             height: element.height + "px",
             left: element.left + "px",
             top: element.topp,
@@ -1675,7 +1680,8 @@ const MidSection = React.forwardRef((props, ref) => {
         }
         if (element.type === "TABLE_INPUT") {
           const measure = {
-            width: element.width + "px",
+            // width: element.width + "px",
+            width: window.innerWidth <993 ? ((element.width/794) *100) + "%" : element.width + "px",
             height: element.height + "px",
             left: element.left + "px",
             top: element.topp,
@@ -1874,7 +1880,8 @@ const MidSection = React.forwardRef((props, ref) => {
         }
         if (element.type === "IFRAME_INPUT") {
           const measure = {
-            width: element.width + "px",
+            // width: element.width + "px",
+            width: window.innerWidth <993 ? ((element.width/794) *100) + "%" : element.width + "px",
             height: element.height + "px",
             left: element.left + "px",
             top: element.topp,
@@ -1890,7 +1897,8 @@ const MidSection = React.forwardRef((props, ref) => {
 
         if (element.type === "BUTTON_INPUT") {
           const measure = {
-            width: element.width + "px",
+            // width: element.width + "px",
+            width: window.innerWidth <993 ? ((element.width/794) *100) + "%" : element.width + "px",
             height: element.height + "px",
             left: element.left + "px",
             top: element.topp,
@@ -1908,7 +1916,8 @@ const MidSection = React.forwardRef((props, ref) => {
         }
         if (element.type === "FORM") {
           const measure = {
-            width: element.width + "px",
+            // width: element.width + "px",
+            width: window.innerWidth <993 ? ((element.width/794) *100) + "%" : element.width + "px",
             height: element.height + "px",
             left: element.left + "px",
             top: element.topp,
@@ -1925,7 +1934,8 @@ const MidSection = React.forwardRef((props, ref) => {
 
         if (element.type === "SCALE_INPUT") {
           const measure = {
-            width: element.width + "px",
+            // width: element.width + "px",
+            width: window.innerWidth <993 ? ((element.width/794) *100) + "%" : element.width + "px",
             height: element.height + "px",
             left: element.left + "px",
             top: element.topp,
@@ -1941,7 +1951,8 @@ const MidSection = React.forwardRef((props, ref) => {
 
         if (element.type === "CAMERA_INPUT") {
           const measure = {
-            width: element.width + "px",
+            // width: element.width + "px",
+            width: window.innerWidth <993 ? ((element.width/794) *100) + "%" : element.width + "px",
             height: element.height + "px",
             left: element.left + "px",
             top: element.topp,
@@ -2058,7 +2069,8 @@ const MidSection = React.forwardRef((props, ref) => {
         }
         if (element.type === "NEW_SCALE_INPUT") {
           const measure = {
-            width: element.width + "px",
+            // width: element.width + "px",
+            width: window.innerWidth <993 ? ((element.width/794) *100) + "%" : element.width + "px",
             height: element.height + "px",
             left: element.left + "px",
             top: element.topp,
@@ -2073,7 +2085,8 @@ const MidSection = React.forwardRef((props, ref) => {
         // Limon
         if (element.type === "DROPDOWN_INPUT") {
           const measure = {
-            width: element.width + "px",
+            // width: element.width + "px",
+            width: window.innerWidth <993 ? ((element.width/794) *100) + "%" : element.width + "px",
             height: element.height + "px",
             left: element.left + "px",
             top: element.topp,
@@ -2091,7 +2104,8 @@ const MidSection = React.forwardRef((props, ref) => {
         // conteiner retrive data
         if (element.type === "CONTAINER_INPUT") {
           const measure = {
-            width: element.width + "px",
+            // width: element.width + "px",
+            width: window.innerWidth <993 ? ((element.width/794) *100) + "%" : element.width + "px",
             height: element.height + "px",
             left: element.left + "px",
             top: element.topp,
@@ -2223,7 +2237,12 @@ const MidSection = React.forwardRef((props, ref) => {
 
     var data = event.dataTransfer.getData("text");
     if(data == "rightMenuDragStart"){
-      alert("some one draged me")
+
+      // to do 
+      // alert("some one draged me")
+
+
+
     }else{
     const has_table_drag_class = event.target.classList.contains("table_drag");
     const has_container_drag_class =
@@ -3522,6 +3541,7 @@ const MidSection = React.forwardRef((props, ref) => {
                   //   ? "midSection_without_RightMenu_container"
                   "midSection_container print_container"
                 }
+                style={{marginTop: window.innerWidth <993 && (0+"px")} }
                 // className="midSection_container"
                 id="midSection_container"
                 onDragOver={dragOver}

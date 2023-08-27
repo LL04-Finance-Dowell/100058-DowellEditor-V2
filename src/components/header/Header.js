@@ -258,7 +258,7 @@ const Header = () => {
         ) {
           let tempElem = txt[h].parentElement;
           let tempPosn = getPosition(tempElem);
-
+          console.log("element position in header js", tempPosn);
           elem = {
             width: tempPosn.width,
             height: tempPosn.height,
@@ -1287,7 +1287,7 @@ const Header = () => {
               <div
                 className="title-name px-3"
                 contentEditable={true}
-                style={{ fontSize: 24 }}
+                style={{ fontSize: 2 + "vw" }}
                 spellCheck="false"
                 ref={inputRef}
               >
