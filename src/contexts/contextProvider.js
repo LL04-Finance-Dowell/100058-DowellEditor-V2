@@ -52,6 +52,7 @@ export const ContextProvider = ({ children }) => {
 
   //nps scale custom data
   const [customId, setCustomId] = useState([]);
+  const [scaleTypeContent, setScaleTypeContent] = useState("");
 
   //Right Sidebar context
   const [signState, setSignState] = React.useState({ trimmedDataURL: null }); // Signature
@@ -475,6 +476,8 @@ export const ContextProvider = ({ children }) => {
         setCalendarBorderColor,
         buttonBorderSize,
         setButtonBorderSize,
+        scaleTypeContent,
+        setScaleTypeContent,
         dropdownBorderColor,
         setDropdownBorderColor,
         dropdownBorderSize,
