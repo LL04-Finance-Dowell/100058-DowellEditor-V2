@@ -42,6 +42,7 @@ import createSignInputElement from "./createElements/CreateSignElement.jsx";
 import createDateInputElement from "./createElements/CreateDateElement.jsx";
 import createDropDownInputElement from "./createElements/CreateDropDownElement.jsx";
 import createButtonInputElement from "./createElements/CreateButtonElement.jsx";
+// import { createTextInputField } from "./midSectionElements/TextInputElement";
 // tHIS IS FOR A TEST COMMIT
 
 const dummyData = {
@@ -332,7 +333,7 @@ const MidSection = React.forwardRef((props, ref) => {
 
         dateField.onclick = (e) => {
           if (e.ctrlKey) {
-            copyInput("calendar2");
+            copyInput("calendar2", setSidebar, handleClicked, focuseddClassMaintain);
           }
           focuseddClassMaintain(e);
           handleClicked("calendar2");
@@ -405,7 +406,7 @@ const MidSection = React.forwardRef((props, ref) => {
           e.stopPropagation();
           focuseddClassMaintain(e);
           if (e.ctrlKey) {
-            copyInput("align2");
+            copyInput("align2", setSidebar, handleClicked, focuseddClassMaintain);
           }
           handleClicked("align2", "container2");
           setSidebar(true);
@@ -1708,7 +1709,7 @@ const MidSection = React.forwardRef((props, ref) => {
             table_dropdown_focuseddClassMaintain(e);
 
             if (e.ctrlKey) {
-              copyInput("table2");
+              copyInput("table2", setSidebar, handleClicked, focuseddClassMaintain);
             }
             handleClicked("table2");
             setSidebar(true);

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import copyInput from '../CopyInput';
+// import copyInput from '../CopyInput';
 
 // Regular JavaScript function to create a text input field
 function createTextInputField(id, element, document_map_required, p, holderDIV, focuseddClassMaintain, handleClicked, setSidebar) {
@@ -38,13 +39,13 @@ function createTextInputField(id, element, document_map_required, p, holderDIV, 
   inputField.onclick = (e) => {
     focuseddClassMaintain(e);
     if (e.ctrlKey) {
-      copyInput("align2");
+      copyInput("align2", setSidebar, handleClicked, focuseddClassMaintain);
     }
     handleClicked("align2");
     setSidebar(true);
   };
 
-  const text = `${element.raw_data}`;
+  const text = `${element.data}`;
   inputField.innerHTML = text;
 
   holderDIV.appendChild(inputField);
