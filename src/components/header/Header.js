@@ -232,6 +232,7 @@ const Header = () => {
     return pageNum;
   };
 
+
   function savingTableData() {
     const tables = document.getElementsByClassName("tableInput");
     let tables_tags = [];
@@ -258,7 +259,7 @@ const Header = () => {
         ) {
           let tempElem = txt[h].parentElement;
           let tempPosn = getPosition(tempElem);
-
+          console.log("element position in header js", tempPosn);
           elem = {
             width: tempPosn.width,
             height: tempPosn.height,
@@ -637,20 +638,91 @@ const Header = () => {
           )
         ) {
           let tempElem = newScales[b].parentElement;
-
           let tempPosn = getPosition(tempElem);
           console.log(newScales[b]);
           let circles = newScales[b].querySelector(".circle_label");
+          // const hasNegative = [...circles].some((circle) => parseInt(circle.textContent) < 0);
           let scaleBg = newScales[b].querySelector(".label_hold");
           let leftChild = newScales[b].querySelector(".left_child");
           let neutralChild = newScales[b].querySelector(".neutral_child");
           let rightChild = newScales[b].querySelector(".right_child");
           let scaleText = newScales[b].querySelector(".scale_text");
-
+          // console.log(circles.style.backgroundColor);
           let font = newScales[b].querySelector(".scool_input");
+          let scaleType = newScales[b].querySelector(".scaleTypeHolder");
           let scaleID = newScales[b].querySelector(".scaleId");
+          let orentation = newScales[b].querySelector(".nps_vertical");
           console.log(font);
 
+          let buttonText = newScales[b].querySelectorAll(".circle_label");
+          console.log(buttonText);
+
+          let emojiArr = [];
+
+          if (buttonText.length !== 0) {
+            for (let i = 0; i < buttonText.length; i++) {
+              emojiArr.push(buttonText[i].textContent);
+            }
+          }
+
+          let stapelOptionHolder = "";
+          let stapelScaleArray = "";
+
+          if (scaleType.textContent === "snipte") {
+            stapelOptionHolder = newScales[b].querySelector(
+              ".stapelOptionHolder"
+            );
+            stapelScaleArray = newScales[b].querySelector(".stapelScaleArray");
+            console.log("This is the saved stapel", stapelOptionHolder);
+          }
+
+          let npsLiteTextArray = "";
+          let orientation = "";
+
+          if (scaleType.textContent === "nps_lite") {
+            npsLiteTextArray = newScales[b].querySelector(".nps_lite_text");
+            orientation = newScales[b].querySelector(".orientation");
+          }
+
+          let likertScaleArray = "";
+
+          if (scaleType.textContent === "likert") {
+            likertScaleArray = newScales[b].querySelector(
+              ".likert_Scale_Array"
+            );
+            orientation = newScales[b].querySelector(".orientation");
+          }
+
+          let percentBackground = "";
+          let percentLabel = "";
+          let percentLeft = "";
+          let percentCenter = [];
+          let percentRight = "";
+          let prodName = [];
+
+          if (
+            scaleType.textContent === "percent_scale" ||
+            scaleType.textContent === "percent_sum_scale"
+          ) {
+            percentBackground = newScales[b].querySelector(".percent-slider");
+            percentLabel = newScales[b]?.querySelectorAll(".label_hold");
+            console.log(percentLabel);
+
+            percentLabel.forEach((elem) => {
+              prodName.push(elem.querySelector(".product_name")?.textContent);
+              percentCenter.push(
+                elem.querySelector("center-percent")?.textContent
+                  ? elem.querySelector("center-percent")?.textContent
+                  : 1
+              );
+              console.log(prodName);
+              console.log(percentCenter);
+            });
+            percentLeft = newScales[b].querySelector(".left-percent");
+            percentRight = document.querySelector(".right-percent");
+
+            orientation = newScales[b].querySelector(".orientation");
+          }
           let properties = {
             scaleBgColor: scaleBg.style.backgroundColor,
             fontColor: font.style.color,
@@ -658,9 +730,23 @@ const Header = () => {
             left: leftChild.textContent,
             center: neutralChild.textContent,
             right: rightChild.textContent,
-            buttonColor: circles.style.backgroundColor,
+            buttonColor: circles?.style?.backgroundColor,
             scaleID: scaleID.textContent,
             scaleText: scaleText.textContent,
+            buttonText: emojiArr,
+            scaleType: scaleType.textContent,
+            stapelOptionHolder: stapelOptionHolder.textContent,
+            stapelScaleArray: stapelScaleArray.textContent,
+            npsLiteTextArray: npsLiteTextArray.textContent,
+            likertScaleArray: likertScaleArray.textContent,
+            percentProdName: prodName,
+            percentBackground: percentBackground?.style?.background,
+            percentLabel: percentLabel?.length,
+            percentLeft: percentLeft?.textContent,
+            percentCenter: percentCenter?.textContent,
+            percentRight: percentRight?.textContent,
+            orientation: orientation?.textContent,
+            orentation: orentation?.textContent,
           };
           console.log(properties);
           elem = {
@@ -671,11 +757,17 @@ const Header = () => {
             left: tempPosn.left,
             type: "NEW_SCALE_INPUT",
             data: `${title}_scale_${b + 1}`,
-
+            // raw_data: tempElem.children[1].innerHTML,
             raw_data: properties,
-
+            // purpose: tempElem.children[2].innerHTML,
             id: `scl${b + 1}`,
+            // newScaleId = scale
+            // details:
+            //   decoded.details.action === "document"
+            //     ? "Document instance"
+            //     : "Template scale",
           };
+
           console.log(elem);
           const pageNum = findPaageNum(newScales[b]);
           page[0][pageNum].push(elem);

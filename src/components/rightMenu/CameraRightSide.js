@@ -1,9 +1,56 @@
 import Axios from "axios";
 import React from "react";
 import { Button } from "react-bootstrap";
+import { useSearchParams } from "react-router-dom";
+import jwt_decode from "jwt-decode";
 
 function CameraRightSide() {
+
+  const [isCameraOn, setIsCameraOn] = React.useState(false)
+  const [searchParams] = useSearchParams();
+
+  const token = searchParams.get("token");
+  var decoded = jwt_decode(token);
   let mediaRecorder;
+
+  function openCam() {
+    videoField.src = ""
+    videoField.style.display = "block"
+    imageField.style.display = "none"
+    imageField.src = ""
+    setIsCameraOn(true)
+    let All_mediaDevices = navigator.mediaDevices;
+    if (!All_mediaDevices || !All_mediaDevices.getUserMedia) {
+      alert("Media not supported.");
+      return;
+    }
+    All_mediaDevices.getUserMedia({
+      video: true,
+      audio: true,
+    })
+      .then(function (vidStream) {
+        var video = videoField;
+        if ("srcObject" in video) {
+          video.srcObject = vidStream;
+        } else {
+          video.src = window.URL.createObjectURL(vidStream);
+        }
+        video.onloadedmetadata = function (e) {
+          video.play();
+        };
+      })
+      .catch(function (e) {
+        alert(e.name + ": " + e.message);
+      });
+  }
+
+  const photo = () => {
+    openCam();
+  }
+
+  const video = () => {
+    openCam();
+  }
   const snap = () => {
     let camera = document.querySelector(".focussedd");
     let canvas = camera?.querySelector(".cameraImageInput");
@@ -32,7 +79,7 @@ function CameraRightSide() {
       while (n--) {
         dataArr[n] = dataStr.charCodeAt(n);
       }
-      let file = new File([dataArr], "myPic9.jpg", { type: mime });
+      let file = new File([dataArr], `'${decoded.details.update_field.document_name}'.jpg`, { type: mime });
       console.log(file);
       return file;
       //console.log(data)
@@ -42,7 +89,7 @@ function CameraRightSide() {
     const formData = new FormData();
     formData.append("image", imageFile);
     Axios.post(
-      "http://67.217.61.253/uploadfiles/upload-image-to-drive/",
+      "https://dowellfileuploader.uxlivinglab.online/uploadfiles/upload-image-to-drive/",
       formData
     )
       .then((res) => {
@@ -101,14 +148,14 @@ function CameraRightSide() {
     if (event.data && event.data.size > 0) {
       video.srcObject = null;
       let vidUrl = event.data;
-      let file = new File([vidUrl], "video.mp4", {
+      let file = new File([vidUrl], `'${decoded.details.update_field.document_name}'.mp4`, {
         type: "video/webm;codecs=vp9,opus",
       });
       console.log(file);
       const formData = new FormData();
       formData.append("video", file);
       Axios.post(
-        "http://67.217.61.253/uploadfiles/upload-video-to-drive/",
+        "https://dowellfileuploader.uxlivinglab.online/uploadfiles/upload-video-to-drive/",
         formData
       )
         .then((res) => {
@@ -155,28 +202,50 @@ function CameraRightSide() {
           justifyContent: "center",
         }}
       >
-        <Button
-          variant="primary"
-          className="px-5"
-          style={{ marginBottom: "30px" }}
-          onClick={snap}
+        {isCameraOn ? 
+         <Button
+         variant="primary"
+         className="px-5"
+         style={{ marginBottom: "30px" }}
+         onClick={snap}
+       >
+         Capture
+       </Button>:
+      <Button
+        variant="primary"
+        className="px-5"
+        style={{ marginBottom: "30px" }}
+        onClick={photo}
+        disabled = {decoded.details.action === "template" ? true : false}
         >
-          Capture
-        </Button>
+          Photo
+        </Button>}
+        { isCameraOn ? 
         <Button
-          id="recordBtn"
-          variant="primary"
-          className="px-5"
-          style={{ marginBottom: "30px" }}
-          onClick={handleRecord}
-        >
-          Record
-        </Button>
+        id="recordBtn"
+        variant="primary"
+        className="px-5"
+        style={{ marginBottom: "30px" }}
+        onClick={handleRecord}
+      >
+        Record
+      </Button> : 
+      <Button
+      id="recordBtn"
+      variant="primary"
+      className="px-5"
+      style={{ marginBottom: "30px" }}
+      onClick={video}
+      disabled = {decoded.details.action === "template" ? true : false}
+    >
+      Video
+    </Button>}
         <Button
           variant="secondary"
           // className="remove_button"
           className="remove_button"
           onClick={removeCamera}
+          disabled = {decoded.details.action === "document" ? true : false}
         >
           Remove Camera
         </Button>

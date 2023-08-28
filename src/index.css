@@ -60,3 +60,8 @@ code {
     margin-top: 181px;
   }
 }
+@media screen and (max-width: 437px){
+  .midSection_container {
+    margin-top: 270px;
+  }
+}
