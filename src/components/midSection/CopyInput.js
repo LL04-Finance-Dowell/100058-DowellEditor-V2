@@ -2,9 +2,10 @@ import { useStateContext } from "../../contexts/contextProvider";
 import { dragElementOverPage } from "./DragElementOverPage";
 import { getResizer } from "./GetResizerElement";
 
-const copyInput = (clickHandler) => {
-  const { setSidebar, handleClicked, focuseddClassMaintain } =
-    useStateContext();
+const copyInput = (clickHandler, setSidebar, handleClicked, focuseddClassMaintain) => {
+
+  // const { setSidebar, handleClicked, focuseddClassMaintain } =
+  //   useStateContext();
 
   const element = document.querySelector(".focussedd");
 

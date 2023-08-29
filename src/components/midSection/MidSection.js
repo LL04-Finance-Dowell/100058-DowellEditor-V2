@@ -336,7 +336,7 @@ const MidSection = React.forwardRef((props, ref) => {
 
         dateField.onclick = (e) => {
           if (e.ctrlKey) {
-            copyInput("calendar2");
+            copyInput("calendar2", setSidebar, handleClicked, focuseddClassMaintain);
           }
           focuseddClassMaintain(e);
           handleClicked("calendar2");
@@ -409,7 +409,7 @@ const MidSection = React.forwardRef((props, ref) => {
           e.stopPropagation();
           focuseddClassMaintain(e);
           if (e.ctrlKey) {
-            copyInput("align2");
+            copyInput("align2", setSidebar, handleClicked, focuseddClassMaintain);
           }
           handleClicked("align2", "container2");
           setSidebar(true);
@@ -1706,7 +1706,7 @@ const MidSection = React.forwardRef((props, ref) => {
             table_dropdown_focuseddClassMaintain(e);
 
             if (e.ctrlKey) {
-              copyInput("table2");
+              copyInput("table2", setSidebar, handleClicked, focuseddClassMaintain);
             }
             handleClicked("table2");
             setSidebar(true);
