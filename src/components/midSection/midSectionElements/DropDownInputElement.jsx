@@ -17,7 +17,8 @@ function createDropDownInputField(id, element, p, holderDIV, focuseddClassMainta
 
     const selectElement = document.createElement("select");
     selectElement.className = "select-element";
-
+    selectElement.innerHTML = element.data2;
+    
     dropdownField.onclick = (e) => {
         // focuseddClassMaintain(e);
         table_dropdown_focuseddClassMaintain(e);

@@ -39,13 +39,13 @@ function createTextInputField(id, element, document_map_required, p, holderDIV, 
   inputField.onclick = (e) => {
     focuseddClassMaintain(e);
     if (e.ctrlKey) {
-      copyInput("align2", setSidebar, handleClicked, focuseddClassMaintain);
+      copyInput("align2");
     }
     handleClicked("align2");
     setSidebar(true);
   };
 
-  const text = `${element.data}`;
+  const text = `${element.raw_data}`;
   inputField.innerHTML = text;
 
   holderDIV.appendChild(inputField);

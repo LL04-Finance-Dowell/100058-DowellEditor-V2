@@ -45,6 +45,7 @@ import createButtonInputElement from "./createElements/CreateButtonElement.jsx";
 import createFormInputElement from "./createElements/CreateFormElement.jsx";
 import createContainerInputElement from "./createElements/CreateContainerElement.jsx";
 import { finding_percent } from './../../utils/util_functions/finding_percent';
+import { CreateTableComponent } from "./midSectionElements/TableInputElement.jsx";
 // tHIS IS FOR A TEST COMMIT
 
 const dummyData = {
@@ -291,6 +292,118 @@ const MidSection = React.forwardRef((props, ref) => {
     console.log("target.parentElement", e.target);
   };
 
+  function getResizer(attr1, attr2) {
+    const resizer = document.createElement("span");
+    resizer.style.width = "5px";
+    resizer.style.height = "5px";
+    resizer.style.display = "block";
+    resizer.className = "resizeBtn";
+    resizer.style.position = "absolute";
+    resizer.style.backgroundColor = "#00aaff";
+
+    if (attr1 === "top") {
+      resizer.style.top = "-5px";
+    } else {
+      resizer.style.bottom = "-5px";
+    }
+
+    if (attr2 === "left") {
+      resizer.style.left = "-5px";
+    } else {
+      resizer.style.right = "-5px";
+    }
+
+    if (
+      (attr1 == "top" && attr2 === "right") ||
+      (attr1 == "bottom" && attr2 === "left")
+    ) {
+      resizer.onmouseover = (event) => {
+        event.target.style.cursor = "nesw-resize";
+      };
+    } else {
+      resizer.onmouseover = (event) => {
+        event.target.style.cursor = "nwse-resize";
+      };
+    }
+
+    resizer.onmousedown = (event) => {
+      let initX = event.screenX;
+      let initY = event.screenY;
+      resizing = true;
+      event.preventDefault();
+
+      const holder = event.target.parentNode;
+
+      const holderSize = (function () {
+        const holderSize = {
+          width:
+            decoded.details.flag === "editing" ? holder.offsetWidth : undefined,
+          height:
+            decoded.details.flag === "editing"
+              ? holder.offsetHeight
+              : undefined,
+          top:
+            decoded.details.flag === "editing" ? holder.offsetTop : undefined,
+          left:
+            decoded.details.flag === "editing" ? holder.offsetLeft : undefined,
+
+          // width: parseInt(holder.style.width.slice(0, -2)),
+          // height: parseInt(holder.style.height.slice(0, -2)),
+          // top: parseInt(holder.style.top.slice(0, -2)),
+          // left: parseInt(holder.style.left.slice(0, -2))//elemLeft : 0
+        };
+        return Object.seal(holderSize);
+      })();
+
+      window.addEventListener("mousemove", resizeElement);
+      function resizeElement(ev) {
+        const el = document.getElementById("midSection_container");
+        const midsectionRect = el.getBoundingClientRect();
+        if (
+          ev.screenX > midsectionRect.left &&
+          ev.screenY > midsectionRect.top &&
+          ev.screenX < midsectionRect.right
+        ) {
+          if (attr1 == "bottom" && attr2 == "right") {
+            holder.style.width = ev.screenX - initX + holderSize.width + "px";
+            holder.style.height = ev.screenY - initY + holderSize.height + "px";
+          } else if (attr1 == "bottom" && attr2 == "left") {
+            holder.style.left = holderSize.left + (ev.screenX - initX) + "px";
+            holder.style.width = holderSize.width - (ev.screenX - initX) + "px";
+            holder.style.height = ev.screenY - initY + holderSize.height + "px";
+          } else if (attr1 == "top" && attr2 == "left") {
+            holder.style.top = holderSize.top + (ev.screenY - initY) + "px";
+            holder.style.left = holderSize.left + (ev.screenX - initX) + "px";
+            holder.style.width = holderSize.width - (ev.screenX - initX) + "px";
+            holder.style.height =
+              holderSize.height - (ev.screenY - initY) + "px";
+          } else if (attr1 == "top" && attr2 == "right") {
+            holder.style.top = holderSize.top + (ev.screenY - initY) + "px";
+            holder.style.width = holderSize.width + (ev.screenX - initX) + "px";
+            holder.style.height =
+              holderSize.height - (ev.screenY - initY) + "px";
+          }
+        }
+      }
+
+      window.addEventListener("mouseup", stopResizing);
+      function stopResizing(ev) {
+        window.removeEventListener("mousemove", resizeElement);
+        window.removeEventListener("mouseup", stopResizing);
+        resizing = false;
+      }
+    };
+
+    return resizer;
+  }
+
+  //colse context menu 
+
+  const contextMenuClose = () => setContextMenu(initialContextMenu);
+  document.addEventListener("click", () => {
+    setContextMenu(initialContextMenu);
+  });
+
   const handlePaste = () => {
     const midSec = document.getElementById("midSection_container");
     // const element = JSON.parse(sessionStorage.getItem("cutItem"));
@@ -300,7 +413,7 @@ const MidSection = React.forwardRef((props, ref) => {
     const copyData = sessionStorage.getItem("copyItem");
 
     const measure = {
-      width: element.width,
+      // width: element.width,
       height: element.height,
       left: element.left,
       top: element.topp,
@@ -337,7 +450,7 @@ const MidSection = React.forwardRef((props, ref) => {
 
         dateField.onclick = (e) => {
           if (e.ctrlKey) {
-            copyInput("calendar2", setSidebar, handleClicked, focuseddClassMaintain);
+            copyInput("calendar2");
           }
           focuseddClassMaintain(e);
           handleClicked("calendar2");
@@ -410,12 +523,12 @@ const MidSection = React.forwardRef((props, ref) => {
           e.stopPropagation();
           focuseddClassMaintain(e);
           if (e.ctrlKey) {
-            copyInput("align2", setSidebar, handleClicked, focuseddClassMaintain);
+            copyInput("align2");
           }
           handleClicked("align2", "container2");
           setSidebar(true);
         };
-        inputField.innerText = `${element.data}`;
+        inputField.innerHTML = `${element.data}`;
 
         holderDIV.append(inputField);
         cutItem_value.append(holderDIV);
@@ -1304,6 +1417,7 @@ const MidSection = React.forwardRef((props, ref) => {
       }
 
       console.log("data", element, "cutItem_value", cutItem_value);
+      // sessionStorage.clear();
     }
   };
 
@@ -1403,10 +1517,160 @@ const MidSection = React.forwardRef((props, ref) => {
     // console.log(sessionStorage);
   };
 
-  const contextMenuClose = () => setContextMenu(initialContextMenu);
-  document.addEventListener("click", () => {
-    setContextMenu(initialContextMenu);
-  });
+  // const copyInput = (clickHandler) => {
+
+  //   // const { setSidebar, handleClicked, focuseddClassMaintain } =
+  //   //   useStateContext();
+
+  //   const element = document.querySelector(".focussedd");
+
+  //   let counter = 1;
+  //   const copyEle = element.cloneNode(true);
+  //   const rect = element.getBoundingClientRect();
+
+  //   const copyEleTop =
+  //     parseInt(copyEle.style.top.slice(0, -2)) +
+  //     parseInt(rect.height) +
+  //     20 +
+  //     "px";
+
+  //   copyEle.classList.remove("focussedd");
+  //   copyEle.firstChild.classList.remove("focussed");
+
+  //   copyEle.onfocus = () => {
+  //     copyEle.style.border = "1px solid rgb(255 191 0)";
+  //   };
+  //   copyEle.onblur = () => {
+  //     copyEle.style.border = "3px dotted gray";
+  //   };
+  //   if (copyEle) {
+  //     copyEle.style.top = copyEleTop;
+  //     copyEle.style.border = "3px dotted gray";
+  //     copyEle.classList.remove("resizeBtn");
+
+  //     copyEle.onmousedown = copyEle.addEventListener(
+  //       "mousedown",
+  //       (event) => {
+  //         dragElementOverPage(event);
+  //       },
+  //       false
+  //     );
+
+  //     // trying to remove resize btn
+
+  //     const resizeTags = copyEle.getElementsByClassName("resizeBtn");
+  //     while (resizeTags.length > 0) {
+  //       console.log("resizeTags", resizeTags[0]);
+  //       resizeTags[0].remove();
+  //     }
+
+  //     const resizerTL = getResizer("top", "left", decoded);
+  //     const resizerTR = getResizer("top", "right", decoded);
+  //     const resizerBL = getResizer("bottom", "left", decoded);
+  //     const resizerBR = getResizer("bottom", "right", decoded);
+
+  //     copyEle.addEventListener("focus", function (e) {
+  //       copyEle.style.border = "2px solid orange";
+  //       copyEle.append(resizerTL, resizerTR, resizerBL, resizerBR);
+  //     });
+  //     copyEle.addEventListener("focusout", function (e) {
+  //       copyEle.classList.remove("zIndex-two");
+  //       copyEle.style.border = "3px dotted gray";
+
+  //       resizerTL.remove();
+  //       resizerTR.remove();
+  //       resizerBL.remove();
+  //       resizerBR.remove();
+  //     });
+  //     copyEle.addEventListener("click", (e) => {
+  //       e.stopPropagation();
+  //       focuseddClassMaintain(e);
+  //       console.log("find classlist", e.target.classList[0]);
+  //       if (
+  //         e.target?.parentElement?.parentElement.classList.contains(
+  //           "containerInput"
+  //         )
+  //       ) {
+  //         let type = "";
+  //         const containerClassName = e.target.classList[0];
+  //         switch (containerClassName) {
+  //           case "dateInput":
+  //             type = "calendar2";
+  //             break;
+  //           case "textInput":
+  //             type = "align2";
+  //             break;
+  //           case "imageInput":
+  //             type = "image2";
+  //             break;
+  //           case "signInput":
+  //             type = "signs2";
+  //             break;
+  //           case "iframeInput":
+  //             type = "iframe2";
+  //             break;
+  //           case "scaleInput":
+  //             type = "scale2";
+  //             break;
+  //           case "buttonInput":
+  //             type = "button2";
+  //             break;
+  //           case "dropdownInput":
+  //             type = "dropdown2";
+  //             break;
+  //           case "emailButton":
+  //             type = "email2";
+  //             break;
+  //           default:
+  //             type = "";
+  //         }
+  //         handleClicked(type, "container2");
+  //         console.log("inside if", type);
+  //       } else {
+  //         handleClicked(clickHandler);
+  //       }
+  //       setSidebar(true);
+  //     });
+  //   }
+
+  //   let midSec = null;
+  //   if (!midSec) {
+  //     let targetParent = element;
+  //     while (1) {
+  //       if (
+  //         targetParent.classList.contains("containerInput") ||
+  //         targetParent.classList.contains("midSection_container")
+  //       ) {
+  //         targetParent = targetParent;
+  //         break;
+  //       } else {
+  //         targetParent = targetParent.parentElement;
+  //         midSec = targetParent;
+  //       }
+  //     }
+  //   }
+
+  //   copyEle.id += counter;
+  //   if (
+  //     parseInt(copyEle.style.top.slice(0, -2)) +
+  //       parseInt(rect.height) +
+  //       parseInt(rect.height) +
+  //       20 <
+  //     1122
+  //   ) {
+  //     midSec.appendChild(copyEle);
+  //   }
+  //   copyEle.onclick = (clickHandler2) => {
+  //     if (clickHandler2.ctrlKey) {
+  //       copyInput(clickHandler);
+  //     }
+  //   };
+  // };
+
+  // const contextMenuClose = () => setContextMenu(initialContextMenu);
+  // document.addEventListener("click", () => {
+  //   setContextMenu(initialContextMenu);
+  // });
 
   // handle copy input from context menu
 
@@ -1494,7 +1758,11 @@ const MidSection = React.forwardRef((props, ref) => {
   // Remove Input
   const handleRemoveInput = () => {
     const selectInput = document.querySelector(".focussedd");
-    selectInput.remove();
+    if (selectInput) {
+      selectInput.remove();
+    } else {
+      console.log("It's not any input field")
+    }
   };
 
   function getHolderDIV(measure, i, idMatch) {
@@ -1540,10 +1808,15 @@ const MidSection = React.forwardRef((props, ref) => {
       console.log("dragStart fun called");
     };
 
-    const resizerTL = getResizer("top", "left", decoded);
-    const resizerTR = getResizer("top", "right", decoded);
-    const resizerBL = getResizer("bottom", "left", decoded);
-    const resizerBR = getResizer("bottom", "right", decoded);
+    // const resizerTL = getResizer("top", "left", decoded);
+    // const resizerTR = getResizer("top", "right", decoded);
+    // const resizerBL = getResizer("bottom", "left", decoded);
+    // const resizerBR = getResizer("bottom", "right", decoded);
+
+    const resizerTL = getResizer("top", "left");
+    const resizerTR = getResizer("top", "right");
+    const resizerBL = getResizer("bottom", "left");
+    const resizerBR = getResizer("bottom", "right");
 
     const holderMenu = getHolderMenu(measure.auth_user);
 
@@ -1552,7 +1825,12 @@ const MidSection = React.forwardRef((props, ref) => {
     holderDIV.onmousedown = holderDIV.addEventListener(
       "mousedown",
       (event) => {
-        dragElementOverPage(event, resizing);
+        if (
+          event.target.className != "td-resizer" &&
+          event.target.className != "row-resizer"
+        ) {
+          dragElementOverPage(event, resizing);
+        }
       },
       false
     );
@@ -1640,6 +1918,7 @@ const MidSection = React.forwardRef((props, ref) => {
           console.log("texteleemnt");
 
           createTextInputField(id, element, document_map_required, p, holderDIV, focuseddClassMaintain, handleClicked, setSidebar)
+
         }
         if (element.type === "IMAGE_INPUT") {
           const measure = {
@@ -1673,7 +1952,7 @@ const MidSection = React.forwardRef((props, ref) => {
           console.log("getting cal element", element.calBorder);
           const id = `${element.id}`;
 
-          createDateInputField(id, element, document_map_required, p, holderDIV, focuseddClassMaintain, handleClicked, setSidebar, setRightSideDateMenu)
+          createDateInputField(id, element, document_map_required, p, holderDIV, focuseddClassMaintain, handleClicked, setSidebar, setRightSideDateMenu, setMethod, setStartDate)
         }
         if (element.type === "SIGN_INPUT") {
           const measure = {
@@ -1703,198 +1982,28 @@ const MidSection = React.forwardRef((props, ref) => {
           const idMatch = documnetMap?.filter((elmnt) => elmnt == element?.id);
           const holderDIV = getHolderDIV(measure, pageNo, idMatch);
           const id = `${element.id}`;
+          CreateTableComponent(
+            holderDIV,
+            id,
+            element,
+            handleDropp,
+            p,
+            table_dropdown_focuseddClassMaintain
+            ,focuseddClassMaintain,
+            handleClicked,
+            setSidebar,
+            setStartDate,
+            setMethod,
+            setRightSideDateMenu 
+            )
 
-          let tableField = document.createElement("div");
-          tableField.className = "tableInput";
-          tableField.id = id;
-          tableField.style.width = "100%";
-          tableField.style.height = "100%";
-          tableField.style.backgroundColor = "#0000";
-          tableField.style.borderRadius = "0px";
-          tableField.style.outline = "0px";
-          tableField.style.overflow = "overlay";
-
-          tableField.style.position = "absolute";
-          tableField.oninput = (e) => { };
-          tableField.onclick = (e) => {
-            table_dropdown_focuseddClassMaintain(e);
-
-            if (e.ctrlKey) {
-              copyInput("table2", setSidebar, handleClicked, focuseddClassMaintain);
-            }
-            handleClicked("table2");
-            setSidebar(true);
-          };
-
-          const tabb = document.createElement("table");
-
-          const tableData = element?.data;
-
-          for (let i = 0; i < tableData.length; i++) {
-            const tabbTR = document.createElement("tr");
-            const tableTRData = tableData[i]["tr"];
-            for (let j = 0; j < tableTRData.length; j++) {
-              const tableTDData = tableTRData[j]["td"];
-
-              var cells = document.createElement("td");
-              cells.className = "dropp";
-              cells.ondragover = function (e) {
-                e.preventDefault();
-                e.target.classList.add("table_drag");
-                if (!e.target.hasChildNodes()) {
-                  e.target.style.border = "3px solid blue";
-                }
-                if (e.target.classList.contains("imageInput")) {
-                  e.target.style.border = "none";
-                }
-              };
-              cells.ondragleave = (e) => {
-                e.preventDefault();
-                if (
-                  !e.target.hasChildNodes() &&
-                  !e.target.classList.contains("imageInput")
-                ) {
-                  e.target.style.border = "1px solid black";
-                }
-                if (e.target.classList.contains("imageInput")) {
-                  e.target.style.border = "none";
-                }
-              };
-
-              //  tableTDData.
-              const cellsDiv = document.createElement("div");
-              const dataType = tableTDData.type;
-              cellsDiv.className =
-                (dataType == "DATE_INPUT" && "dateInput") ||
-                (dataType == "TEXT_INPUT" && "textInput") ||
-                (dataType == "IMAGE_INPUT" && "imageInput") ||
-                (dataType == "SIGN_INPUT" && "signInput");
-              if (dataType == "DATE_INPUT") {
-                setStartDate(new Date());
-                setMethod("select");
-
-                function dateClick() {
-                  document.getElementById("date_picker").click();
-                  setRightSideDateMenu(false);
-                }
-                cellsDiv.onclick = (e) => {
-                  focuseddClassMaintain(e);
-                  handleClicked("calendar2");
-                  setRightSideDateMenu(false);
-                  if (e.target.innerText != "mm/dd/yyyy") {
-                    if (e.target.innerText.includes("/")) {
-                      const setDate = new Date(e.target.innerText);
-                      setMethod("first");
-                      setStartDate(setDate);
-                    } else {
-                      if (e.target.innerText.includes("-")) {
-                        setMethod("fourth");
-                      } else {
-                        setMethod("second");
-                      }
-                      const setDate = new Date(e.target.innerText);
-                      setStartDate(setDate);
-                    }
-                  }
-                  setSidebar(true);
-                  setTimeout(dateClick, 0);
-                  e.stopPropagation();
-                };
-              }
-              if (dataType == "TEXT_INPUT") {
-                cellsDiv.onclick = (e) => {
-                  focuseddClassMaintain(e);
-                  // handleClicked("align2");
-                  // setSidebar(true);
-                  handleClicked("align2", "table2");
-                  setSidebar(true);
-                  e.stopPropagation();
-                };
-              }
-              if (dataType == "IMAGE_INPUT") {
-                cellsDiv.onclick = (e) => {
-                  focuseddClassMaintain(e);
-                  // handleClicked("image2");
-                  // setSidebar(true);
-                  handleClicked("image2", "table2");
-                  setSidebar(true);
-                  // console.log("imageclick test", e.target);
-                  e.stopPropagation();
-                };
-              }
-              if (dataType == "SIGN_INPUT") {
-                cellsDiv.onclick = (e) => {
-                  focuseddClassMaintain(e);
-                  handleClicked("signs2", "table2");
-                  setSidebar(true);
-                  e.stopPropagation();
-                };
-              }
-              cellsDiv.setAttribute("contenteditable", true);
-              cellsDiv.style.width = "100%";
-              cellsDiv.style.height = "100%";
-              cellsDiv.style.backgroundColor = "#0000";
-              cellsDiv.style.borderRadius = "0px";
-              cellsDiv.style.outline = "0px";
-              cellsDiv.style.overflow = "overlay";
-
-              if (dataType == "IMAGE_INPUT") {
-                const imageButton = document.createElement("div");
-                imageButton.className = "addImageButton";
-                imageButton.innerText = "Choose File";
-                imageButton.style.display = "none";
-
-                const imgBtn = document.createElement("input");
-                imgBtn.className = "addImageButtonInput";
-                imgBtn.type = "file";
-                imgBtn.style.objectFit = "cover";
-                var uploadedImage = "";
-
-                imgBtn.addEventListener("input", () => {
-                  const reader = new FileReader();
-
-                  reader.addEventListener("load", () => {
-                    uploadedImage = reader.result;
-                    document.querySelector(
-                      ".focussed"
-                    ).style.backgroundImage = `url(${uploadedImage})`;
-                  });
-                  reader.readAsDataURL(imgBtn.files[0]);
-                });
-
-                cellsDiv.style.backgroundImage = `${tableTDData.data}`;
-
-                imageButton.append(imgBtn);
-                if (dataType) {
-                  cells.appendChild(cellsDiv);
-                  cells.appendChild(imgBtn);
-                }
-              } else {
-                cellsDiv.innerHTML = `${tableTDData.data}`;
-                if (dataType) {
-                  cells.appendChild(cellsDiv);
-                }
-              }
-
-              cells.ondrop = handleDropp;
-              tabbTR.appendChild(cells);
-            }
-            tabb.appendChild(tabbTR);
-          }
-          tableField.append(tabb);
-
-          holderDIV.append(tableField);
-
-          document
-            .getElementsByClassName("midSection_container")
-          [p - 1] // ?.item(0)
-            ?.append(holderDIV);
         }
         if (element.type === "IFRAME_INPUT") {
           const measure = {
-            width: finding_percent(element, "width"),
+            // width: element.width + "px",
+            width: window.innerWidth < 993 ? ((element.width / 794) * 100) + "%" : element.width + "px",
             height: element.height + "px",
-            left: finding_percent(element, "left"),
+            left: window.innerWidth < 993 ? ((element.left / 794) * 100) + "%" : element.left + "px",
             top: element.topp,
             border: element.iframeBorder,
             auth_user: curr_user,
