@@ -3,6 +3,7 @@ import { dragElementOverPage } from "./DragElementOverPage";
 import { getResizer } from "./GetResizerElement";
 
 const copyInput = (clickHandler) => {
+
   const { setSidebar, handleClicked, focuseddClassMaintain } =
     useStateContext();
 

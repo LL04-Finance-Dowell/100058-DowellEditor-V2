@@ -76,13 +76,13 @@ const DropDownRightSide = () => {
     setDropdownBorderSize(e.target.value);
 
     const box = document.getElementsByClassName("focussedd")[0];
-    box.style.borderWidth = `${dropdownBorderSize}px`;
+    box.style.borderWidth = `${e.target.value}px`;
   };
 
   const handleBorderColorChange = (e) => {
     setDropdownBorderColor(e.target.value);
     const box = document.getElementsByClassName("focussedd")[0];
-    box.style.borderColor = `${dropdownBorderColor}`;
+    box.style.borderColor = `${e.target.value}`;
   };
   const handleRangeBlur = (e) => {
     e.target.focus();
@@ -141,7 +141,7 @@ const DropDownRightSide = () => {
             />
             <input
               type="range"
-              min="-10"
+              min="0"
               max="20"
               value={dropdownBorderSize}
               onChange={handleBorderSizeChange}

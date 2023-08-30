@@ -50,7 +50,7 @@ const IframeRightSidebar = () =>
     setIframeBorderSize(e.target.value);
 
     const box = document.getElementsByClassName("focussedd")[0];
-    box.style.borderWidth = `${iframeBorderSize}px`;
+    box.style.borderWidth = `${e.target.value}px`;
 
   };
 
@@ -58,7 +58,7 @@ const IframeRightSidebar = () =>
   {
     setIframeBorderColor(e.target.value);
     const box = document.getElementsByClassName("focussedd")[0];
-    box.style.borderColor = `${iframeBorderColor}`;
+    box.style.borderColor = `${e.target.value}`;
 
   };
   const handleRangeBlur = (e) =>
@@ -120,7 +120,7 @@ const IframeRightSidebar = () =>
             />
             <input
               type="range"
-              min="-10"
+              min="0"
               max="20"
               value={iframeBorderSize}
               onChange={handleBorderSizeChange}

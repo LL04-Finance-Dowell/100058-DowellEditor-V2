@@ -42,7 +42,7 @@ const LeftMenu = ({ showSidebar }) => {
             <CalendarButton customFunc={() => handleDrop("calendar")} />
             <DropdownButton customFunc={() => handleDrop("dropdown")} />
             <IframeButton customFunc={() => handleDrop("iframe")} />
-            <ScaleButton customFunc={() => handleDrop("scale")} />
+            {/* <ScaleButton customFunc={() => handleDrop("scale")} /> */}
             <ButtonButton customFunc={() => handleDrop("button")} />
             <EmailButton customFunc={() => handleDrop("email")} />
             <NewScaleButton customFunc={() => handleDrop("newScale")} />
