@@ -130,6 +130,11 @@ tr:nth-child(even) {
 .tableInput{
   overflow: visible !important;
 }
+.target-el img{
+  height: clamp(0.5rem,1.5rem,2.5rem);
+  width: clamp(0.5rem, 2rem,3rem);
+}
+
 
 
 .addImageButtonInput {
