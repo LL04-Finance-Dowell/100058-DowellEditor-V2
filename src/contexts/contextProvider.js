@@ -139,6 +139,9 @@ export const ContextProvider = ({ children }) => {
   const [isMenuVisible, setIsMenuVisible] = useState(false);
   // handle drop event for table and retrieve midsection
 
+
+  const [allowHighlight, setAllowHighlight] = useState(false)
+
   const handleDropp = (e) => {
     e.preventDefault();
     if (
@@ -513,7 +516,8 @@ export const ContextProvider = ({ children }) => {
         setFormBorderColor,
         questionAndAnswerGroupedData,
         setQuestionAndAnsGroupedData,
-        confirmRemove, setConfirmRemove
+        confirmRemove, setConfirmRemove,
+        allowHighlight, setAllowHighlight
       }}
     >
       {children}
