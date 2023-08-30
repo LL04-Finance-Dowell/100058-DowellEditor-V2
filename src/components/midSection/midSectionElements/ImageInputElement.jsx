@@ -7,15 +7,22 @@ function createImageInputField(id, element, document_map_required, p, holderDIV,
   const imageField = document.createElement("div");
   imageField.className = "imageInput";
   imageField.id = id;
-  imageField.style = {
-    width: "100%",
-    height: "100%",
-    backgroundColor: "#0000",
-    borderRadius: "0px",
-    outline: "0px",
-    overflow: "overlay",
-    position: "relative",
-  };
+  // imageField.style = {
+  //   width: "100%",
+  //   height: "100%",
+  //   backgroundColor: "#0000",
+  //   borderRadius: "0px",
+  //   outline: "0px",
+  //   overflow: "overlay",
+  //   position: "relative",
+  // };
+  imageField.style.width = "100%";
+  imageField.style.height = "100%";
+  imageField.style.backgroundColor = "#0000";
+  imageField.style.borderRadius = "0px";
+  imageField.style.outline = "0px";
+  imageField.style.overflow = "overlay";
+  imageField.style.position = "relative";
 
   const required_map_document = document_map_required?.filter(
     (item) => element.id === item.content
@@ -73,8 +80,12 @@ function createImageInputField(id, element, document_map_required, p, holderDIV,
     reader.readAsDataURL(imgBtn.files[0]);
   });
 
-  imageField.style.backgroundImage = element.data.startsWith("url(") ? element.data : "";
-  imageField.innerText = element.data;
+  // imageField.style.backgroundImage = element.data.startsWith("url(") ? element.data : "";
+  // imageField.innerText = element.data;
+
+  element.data.startsWith("url(")
+    ? (imageField.style.backgroundImage = `${element.data}`)
+    : (imageField.innerText = `${element.data}`);
 
   const imageButton = createImageButton("Choose File", "addImageButton", () => imgBtn.click());
   imageButton.appendChild(imgBtn);
@@ -184,3 +195,4 @@ export default createImageInputField;
 // };
 
 // export default ImageInputElement;
+
