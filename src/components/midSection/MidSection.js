@@ -290,6 +290,111 @@ const MidSection = React.forwardRef((props, ref) => {
     console.log("target.parentElement", e.target);
   };
 
+  function getResizer(attr1, attr2) {
+    const resizer = document.createElement("span");
+    resizer.style.width = "5px";
+    resizer.style.height = "5px";
+    resizer.style.display = "block";
+    resizer.className = "resizeBtn";
+    resizer.style.position = "absolute";
+    resizer.style.backgroundColor = "#00aaff";
+
+    if (attr1 === "top") {
+      resizer.style.top = "-5px";
+    } else {
+      resizer.style.bottom = "-5px";
+    }
+
+    if (attr2 === "left") {
+      resizer.style.left = "-5px";
+    } else {
+      resizer.style.right = "-5px";
+    }
+
+    if (
+      (attr1 == "top" && attr2 === "right") ||
+      (attr1 == "bottom" && attr2 === "left")
+    ) {
+      resizer.onmouseover = (event) => {
+        event.target.style.cursor = "nesw-resize";
+      };
+    } else {
+      resizer.onmouseover = (event) => {
+        event.target.style.cursor = "nwse-resize";
+      };
+    }
+
+    resizer.onmousedown = (event) => {
+      let initX = event.screenX;
+      let initY = event.screenY;
+      resizing = true;
+      event.preventDefault();
+
+      const holder = event.target.parentNode;
+
+      const holderSize = (function () {
+        const holderSize = {
+          width:
+            decoded.details.flag === "editing" ? holder.offsetWidth : undefined,
+          height:
+            decoded.details.flag === "editing"
+              ? holder.offsetHeight
+              : undefined,
+          top:
+            decoded.details.flag === "editing" ? holder.offsetTop : undefined,
+          left:
+            decoded.details.flag === "editing" ? holder.offsetLeft : undefined,
+
+          // width: parseInt(holder.style.width.slice(0, -2)),
+          // height: parseInt(holder.style.height.slice(0, -2)),
+          // top: parseInt(holder.style.top.slice(0, -2)),
+          // left: parseInt(holder.style.left.slice(0, -2))//elemLeft : 0
+        };
+        return Object.seal(holderSize);
+      })();
+
+      window.addEventListener("mousemove", resizeElement);
+      function resizeElement(ev) {
+        const el = document.getElementById("midSection_container");
+        const midsectionRect = el.getBoundingClientRect();
+        if (
+          ev.screenX > midsectionRect.left &&
+          ev.screenY > midsectionRect.top &&
+          ev.screenX < midsectionRect.right
+        ) {
+          if (attr1 == "bottom" && attr2 == "right") {
+            holder.style.width = ev.screenX - initX + holderSize.width + "px";
+            holder.style.height = ev.screenY - initY + holderSize.height + "px";
+          } else if (attr1 == "bottom" && attr2 == "left") {
+            holder.style.left = holderSize.left + (ev.screenX - initX) + "px";
+            holder.style.width = holderSize.width - (ev.screenX - initX) + "px";
+            holder.style.height = ev.screenY - initY + holderSize.height + "px";
+          } else if (attr1 == "top" && attr2 == "left") {
+            holder.style.top = holderSize.top + (ev.screenY - initY) + "px";
+            holder.style.left = holderSize.left + (ev.screenX - initX) + "px";
+            holder.style.width = holderSize.width - (ev.screenX - initX) + "px";
+            holder.style.height =
+              holderSize.height - (ev.screenY - initY) + "px";
+          } else if (attr1 == "top" && attr2 == "right") {
+            holder.style.top = holderSize.top + (ev.screenY - initY) + "px";
+            holder.style.width = holderSize.width + (ev.screenX - initX) + "px";
+            holder.style.height =
+              holderSize.height - (ev.screenY - initY) + "px";
+          }
+        }
+      }
+
+      window.addEventListener("mouseup", stopResizing);
+      function stopResizing(ev) {
+        window.removeEventListener("mousemove", resizeElement);
+        window.removeEventListener("mouseup", stopResizing);
+        resizing = false;
+      }
+    };
+
+    return resizer;
+  }
+
   //colse context menu 
 
   const contextMenuClose = () => setContextMenu(initialContextMenu);
@@ -1701,10 +1806,15 @@ const MidSection = React.forwardRef((props, ref) => {
       console.log("dragStart fun called");
     };
 
-    const resizerTL = getResizer("top", "left", decoded);
-    const resizerTR = getResizer("top", "right", decoded);
-    const resizerBL = getResizer("bottom", "left", decoded);
-    const resizerBR = getResizer("bottom", "right", decoded);
+    // const resizerTL = getResizer("top", "left", decoded);
+    // const resizerTR = getResizer("top", "right", decoded);
+    // const resizerBL = getResizer("bottom", "left", decoded);
+    // const resizerBR = getResizer("bottom", "right", decoded);
+
+    const resizerTL = getResizer("top", "left");
+    const resizerTR = getResizer("top", "right");
+    const resizerBL = getResizer("bottom", "left");
+    const resizerBR = getResizer("bottom", "right");
 
     const holderMenu = getHolderMenu(measure.auth_user);
     
@@ -1825,7 +1935,7 @@ const MidSection = React.forwardRef((props, ref) => {
           console.log("getting cal element", element.calBorder);
           const id = `${element.id}`;
 
-          createDateInputField(id, element, document_map_required, p, holderDIV, focuseddClassMaintain, handleClicked, setSidebar, setRightSideDateMenu)
+          createDateInputField(id, element, document_map_required, p, holderDIV, focuseddClassMaintain, handleClicked, setSidebar, setRightSideDateMenu, setMethod, setStartDate)
         }
         if (element.type === "SIGN_INPUT") {
           const measure = {
@@ -2615,8 +2725,8 @@ const MidSection = React.forwardRef((props, ref) => {
         typeOfOperation === "DATE_INPUT" &&
         decoded.details.action === "template"
       ) {
-        createDateInputElement(holderDIV, focuseddClassMaintain, handleClicked, setSidebar, setRightSideDateMenu, setPostData, setStartDate, setMethod)
-      } else if (
+        createDateInputElement(holderDIV, focuseddClassMaintain, handleClicked, setSidebar, setRightSideDateMenu, setPostData, setStartDate, setMethod, setStartDate)
+      } else if ( 
         typeOfOperation === "DROPDOWN_INPUT" &&
         decoded.details.action === "template"
       ) {
