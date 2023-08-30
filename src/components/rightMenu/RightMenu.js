@@ -309,71 +309,71 @@ const RightMenu = () => {
     isClicked.camera2,
   ]);
 
-  function rightMenuDragStart(ev) {
-    ev.dataTransfer.setData("text", ev.target.id);
-    console.log("inside dragstart isClicked", isClicked);
+  // function rightMenuDragStart(ev) {
+  //   ev.dataTransfer.setData("text", ev.target.id);
+  //   console.log("inside dragstart isClicked", isClicked);
     
-    if (isClicked.align2) {
-      setFindIsClicked("align2")
-      setIsClicked({
-        ...isClicked,align2:true
-      });
-    }else if (isClicked.image2) {
-      setFindIsClicked("image2")
-      setIsClicked({
-        ...isClicked,iamge2:true
-      });
-    }else if (isClicked.table2) {
-      setFindIsClicked("table2")
-    }else if (isClicked.signs2) {
-      setFindIsClicked("signs2")
-    }else if (isClicked.calendar2) {
-      setFindIsClicked("calendar2")
-    }else if (isClicked.dropdown2) {
-      setFindIsClicked("dropdown2")
-    }
+  //   if (isClicked.align2) {
+  //     setFindIsClicked("align2")
+  //     setIsClicked({
+  //       ...isClicked,align2:true
+  //     });
+  //   }else if (isClicked.image2) {
+  //     setFindIsClicked("image2")
+  //     setIsClicked({
+  //       ...isClicked,iamge2:true
+  //     });
+  //   }else if (isClicked.table2) {
+  //     setFindIsClicked("table2")
+  //   }else if (isClicked.signs2) {
+  //     setFindIsClicked("signs2")
+  //   }else if (isClicked.calendar2) {
+  //     setFindIsClicked("calendar2")
+  //   }else if (isClicked.dropdown2) {
+  //     setFindIsClicked("dropdown2")
+  //   }
    
-  }
+  // }
 
-  function rightMenuDragEnd(ev) {
-    // alert("drag end")
+  // function rightMenuDragEnd(ev) {
+  //   // alert("drag end")
     
-    console.log("from rught menu drang end findIsClicked", findIsClicked);
-    if(findIsClicked == "align2"){
-      // setIsClicked({
-      //   ...isClicked,
-      //   align2: true,
-      //   textfill2: false,
-      //   image2: false,
-      //   table2: false,
-      //   signs2: false,
-      //   dropdown2: false,
-      //   calendar2: false,
-      //   iframe2: false,
-      //   scale2: false,
-      //   button2: false,
-      //   container2: false,
-      //   newScale2: false,
-      //   camera2: false,
+  //   console.log("from rught menu drang end findIsClicked", findIsClicked);
+  //   if(findIsClicked == "align2"){
+  //     // setIsClicked({
+  //     //   ...isClicked,
+  //     //   align2: true,
+  //     //   textfill2: false,
+  //     //   image2: false,
+  //     //   table2: false,
+  //     //   signs2: false,
+  //     //   dropdown2: false,
+  //     //   calendar2: false,
+  //     //   iframe2: false,
+  //     //   scale2: false,
+  //     //   button2: false,
+  //     //   container2: false,
+  //     //   newScale2: false,
+  //     //   camera2: false,
 
-      // });
-      setIsClicked({
-        ...isClicked,align2:true
-      });
-    // }
-    }else if (findIsClicked == "image2") {
-      // if(findIsClicked == "align2"){
-        setIsClicked({
-          ...isClicked,image2:true
-        });
-      // }
-    }
-    setRightMEnuTop(ev.screenY)
-    setRightMEnuLeft(ev.screenX)
-    // console.log("from right menu", ev.screenX, ev.screenY)
-    // console.log("isClicked from right menu", isClicked);
+  //     // });
+  //     setIsClicked({
+  //       ...isClicked,align2:true
+  //     });
+  //   // }
+  //   }else if (findIsClicked == "image2") {
+  //     // if(findIsClicked == "align2"){
+  //       setIsClicked({
+  //         ...isClicked,image2:true
+  //       });
+  //     // }
+  //   }
+  //   setRightMEnuTop(ev.screenY)
+  //   setRightMEnuLeft(ev.screenX)
+  //   // console.log("from right menu", ev.screenX, ev.screenY)
+  //   // console.log("isClicked from right menu", isClicked);
 
-  }
+  // }
   
 // useEffect(()=>{
 //   setIsClicked({
@@ -397,7 +397,8 @@ const RightMenu = () => {
 
   return (
     <>
-      <div className="fixed3" id="rightMenuDragStart" draggable="true" onDragStart={(event) => rightMenuDragStart(event)} onDragEnd={(event) => rightMenuDragEnd(event)} >
+      {/* <div className="fixed3" id="rightMenuDragStart" draggable="true" onDragStart={(event) => rightMenuDragStart(event)} onDragEnd={(event) => rightMenuDragEnd(event)} > */}
+      {/* <div className="fixed3" id="rightMenuDragStart" draggable="true" onDragStart={(event) => rightMenuDragStart(event)} onDragEnd={(event) => rightMenuDragEnd(event)} > */}
         {isClicked.align2 && <AlignRightSide />}
         {isClicked.image2 && <ImageRightSidebar />}
         {isClicked.table2 && <TableRightSidebar />}
@@ -411,7 +412,7 @@ const RightMenu = () => {
         {isClicked.email2 && <EmailRightSideBar />}
         {isClicked.newScale2 && <NewScaleRightSide />}
         {isClicked.camera2 && <CameraRightSide />}
-      </div>
+      {/* </div> */}
     </>
   );
 };
