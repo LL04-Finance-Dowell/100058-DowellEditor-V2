@@ -1151,7 +1151,7 @@ const ScaleRightSide = () => {
           .filter((emoji) => emoji !== "");
 
         const emojiLabels = {};
-
+        console.log("This is the emoji",emojis)
         const selectedCount = Math.min(
           emojis.length,
           Math.abs(Math.floor(upperLimit / space) * 2) +
@@ -1160,18 +1160,14 @@ const ScaleRightSide = () => {
         );
 
         for (
-          let i = -Math.floor(upperLimit / space) * 2;
+          let i = (Math.floor(upperLimit / space) * 2) * -1;
           i <= Math.floor(upperLimit / space) * 2;
           i += spacing
         ) {
-          if (i !== 0) {
-            const emojiIndex =
-              (i >= 0
-                ? i - -Math.floor(upperLimit / space) * 2
-                : Math.abs(Math.floor(upperLimit / space) * 2) + i) %
-              selectedCount;
-            emojiLabels[i] = emojis[emojiIndex];
-          }
+            for(let j = 0; j < emojis.length; j ++) {
+              const emojiIndex = j
+              emojiLabels[i] = emojis[emojiIndex];
+            }
         }
 
         return emojiLabels;
