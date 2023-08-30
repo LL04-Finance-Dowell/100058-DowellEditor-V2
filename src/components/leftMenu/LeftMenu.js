@@ -9,6 +9,7 @@ import SignsButton from "./buttons/SignsButton";
 import CalendarButton from "./buttons/CalendarButton";
 import DropdownButton from "./buttons/DropdownButton";
 import IframeButton from "./buttons/IframeButton";
+import TableButton from "./buttons/TableButton";
 import ScaleButton from "./buttons/ScaleButton";
 import ButtonButton from "./buttons/ButtonButton";
 import EmailButton from "./buttons/EmailButton";
@@ -37,6 +38,7 @@ const LeftMenu = ({ showSidebar }) => {
           <div className="leftMenu fixed2" ref={leftMenuRef}>
             <TextButton customFunc={() => handleDrop("align")} />
             <ImageButton customFunc={() => handleDrop("image")} />
+            <TableButton customFunc={() => handleDrop('table')} />
             <ContainerButton customFunc={() => handleDrop("container")} />
             <SignsButton customFunc={() => handleDrop("signs")} />
             <CalendarButton customFunc={() => handleDrop("calendar")} />
