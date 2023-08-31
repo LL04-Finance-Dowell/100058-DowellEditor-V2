@@ -653,7 +653,6 @@ function createNewScaleInputField(
     console.log("This is the likertjddddddd++++!!!!!!!!!", likertScale);
 
     for (let i = 0; i < likertScale.length; i++) {
-      let orientation = element?.raw_data?.orientation;
       const circle = document.createElement("div");
       circle.className = "circle_label";
       circle.textContent = likertScale[i];
@@ -671,12 +670,8 @@ function createNewScaleInputField(
       labelHold.style.gridTemplateColumns = `repeat(3, 1fr)`;
       labelHold.style.gridTemplateRows = `repeat(${numRows}, 1fr)`;
       labelHold.appendChild(circle);
-      // circle.addEventListener("mouseover", () => {
-      //   circle.style.backgroundColor = "green"; // Change the color on hover
-      // });
-      // circle.addEventListener("mouseout", () => {
-      //   circle.style.backgroundColor = element?.raw_data?.buttonColor; // Reset the color when not hovered
-      // });
+      
+      let orientation = element?.raw_data?.orientation;
       if (orientation === "vertical") {
         labelHold.style.position = "absolute";
         circle.style.margin = "5px 0";
@@ -689,6 +684,14 @@ function createNewScaleInputField(
         labelHold.style.marginTop = "1%";
         labelHold.style.marginLeft = "26%";
       }
+      // var optionPosition = document.querySelector("#orientationIdLinkert");
+      // if (optionPosition) {
+      //   const newSelectedOrientation = getSelectedOrientationValue(); // Get the selected orientation
+      //   optionPosition.value = newSelectedOrientation;
+
+      //   // Save the selected orientation to local storage
+      //   localStorage.setItem('selectedOrientation', newSelectedOrientation);
+      // }
       if (decoded.details.action === "document") {
         let isClicked = false;
         const shouldHideFinalizeButton =

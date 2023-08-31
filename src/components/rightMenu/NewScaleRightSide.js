@@ -1780,7 +1780,9 @@ const ScaleRightSide = () => {
           {
             user: "yes",
             username: "TadesseJemal",
+            instance_id: "2",
             orientation: option?.value,
+            fontstyle: btnUpdateScaleFontLinkert.value,
             scale_name: beNametnUpdateScal.value,
             no_of_scales: numberOfScalesValue,
             font_color: btnUpdateFontColor.value,
@@ -1807,20 +1809,17 @@ const ScaleRightSide = () => {
               idHolder.textContent = id && id;
             }
 
-            if (btnUpdateScale.value !== "") {
-              button.style.backgroundColor = "white";
+            const settings = res.data.data.settings;
+            if (settings.name) {
+              scaleText.textContent = settings.name;
             }
-
-            if (beNametnUpdateScal.value !== "") {
-              scaleText.textContent = beNametnUpdateScal.value;
+        
+            if (settings.font_color) {
+              button4.style.color = settings.font_color;
             }
-
-            if (btnUpdateFontColor.value !== "") {
-              button4.style.color = btnUpdateFontColor.value;
-            }
-
-            if (btnUpdateScaleFontLinkert.value !== "") {
-              button4.style.fontFamily = btnUpdateScaleFontLinkert.value;
+        
+            if (settings.fontstyle) {
+              button4.style.fontFamily = settings.fontstyle;
             }
 
             button4.style.display = "block";
@@ -1832,7 +1831,7 @@ const ScaleRightSide = () => {
               circle.style.height = "55%";
               circle.style.borderRadius = "25px";
               circle.style.padding = "12px 20px";
-              circle.style.backgroundColor = btnUpdateButton.value;
+              circle.style.backgroundColor = settings.round_color;
               circle.style.display = "flex";
               circle.style.justifyContent = "center";
               circle.style.alignItems = "center";
@@ -1842,7 +1841,7 @@ const ScaleRightSide = () => {
                 circle.style.backgroundColor = "green"; // Change the color on hover
               });
               circle.addEventListener("mouseout", () => {
-                circle.style.backgroundColor = btnUpdateButton.value; // Reset the color when not hovered
+                circle.style.backgroundColor = settings.round_color; // Reset the color when not hovered
               });
 
               // Set the text content to the appropriate label (either text or emoji)
@@ -1855,6 +1854,7 @@ const ScaleRightSide = () => {
 
               labelHold.appendChild(circle);
             }
+            
             console.log("This is the likert scale response", res.data.data);
           })
           .catch((err) => {
@@ -1866,12 +1866,16 @@ const ScaleRightSide = () => {
         sendMessage();
         console.log("PUT req");
         console.log(idHolder.textContent);
+        const timestamp = new Date().getTime(); // Generate a unique timestamp
+        const apiUrl = `https://100035.pythonanywhere.com/likert/likert-scale_create/?timestamp=${timestamp}`;
         Axios.put(
-          "https://100035.pythonanywhere.com/likert/likert-scale_create/",
+          apiUrl,
           {
             scale_id: idHolder.textContent,
             user: "yes",
+            instance_id: "2",
             username: "TadesseJemal",
+            fontstyle: btnUpdateScaleFontLinkert.value,
             orientation: option?.value,
             scale_name: beNametnUpdateScal.value,
             no_of_scales: numberOfScalesValue,
@@ -1894,20 +1898,18 @@ const ScaleRightSide = () => {
               console.log(res);
               console.log("This is the still scale", scale);
 
-              if (btnUpdateScale.value !== "") {
-                button.style.backgroundColor = "white";
+              const settings = res.data.data;
+              // Update the value
+              if (settings.font_color) {
+                button4.style.color = settings.font_color;
+              }
+
+              if (settings.fontstyle) {
+                button4.style.fontFamily = settings.fontstyle;
               }
 
               if (beNametnUpdateScal.value !== "") {
                 scaleText.textContent = beNametnUpdateScal.value;
-              }
-
-              if (btnUpdateFontColor.value !== "") {
-                button4.style.color = btnUpdateFontColor.value;
-              }
-
-              if (btnUpdateScaleFontLinkert.value !== "") {
-                button4.style.fontFamily = btnUpdateScaleFontLinkert.value;
               }
 
               button4.style.display = "block";
@@ -1919,7 +1921,7 @@ const ScaleRightSide = () => {
                 circle.style.height = "55%";
                 circle.style.borderRadius = "25px";
                 circle.style.padding = "12px 20px";
-                circle.style.backgroundColor = btnUpdateButton.value;
+                circle.style.backgroundColor = settings.round_color;
                 circle.style.display = "flex";
                 circle.style.justifyContent = "center";
                 circle.style.alignItems = "center";
@@ -1929,7 +1931,7 @@ const ScaleRightSide = () => {
                   circle.style.backgroundColor = "green"; // Change the color on hover
                 });
                 circle.addEventListener("mouseout", () => {
-                  circle.style.backgroundColor = btnUpdateButton.value; // Reset the color when not hovered
+                  circle.style.backgroundColor = settings.round_color; // Reset the color when not hovered
                 });
 
                 // Set the text content to the appropriate label (either text or emoji)
