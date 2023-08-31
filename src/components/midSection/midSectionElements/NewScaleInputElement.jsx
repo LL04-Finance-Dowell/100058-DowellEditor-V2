@@ -679,6 +679,11 @@ function createNewScaleInputField(
       
       let orientation = element?.raw_data?.orientation;
       if (orientation === "vertical") {
+        const orientation = document.createElement("div");
+        orientation.className = "orientation";
+        orientation.textContent = "vertical";
+        orientation.style.display = "none";
+        labelHold.appendChild(orientation);
         labelHold.style.position = "absolute";
         circle.style.margin = "5px 0";
         circle.style.padding = "6px 12px";

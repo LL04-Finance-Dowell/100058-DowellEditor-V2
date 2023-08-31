@@ -1862,6 +1862,7 @@ const ScaleRightSide = () => {
             }
 
             button4.style.display = "block";
+            const updatedLabels = settings.label_input;
 
             for (let i = 0; i < updatedLabelScale; i++) {
               const circle = document.createElement("div");
@@ -1953,6 +1954,7 @@ const ScaleRightSide = () => {
 
               button4.style.display = "block";
 
+              const updatedLabels = settings.label_input;
               for (let i = 0; i < updatedLabelScale; i++) {
                 const circle = document.createElement("div");
                 circle.className = "circle_label";
