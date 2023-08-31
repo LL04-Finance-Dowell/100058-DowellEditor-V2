@@ -396,7 +396,6 @@ const Header = () => {
         ) {
           let tempElem = tables[t].parentElement;
           let tempPosn = getPosition(tempElem);
-
           function getChildData() {
             const allTableCCells = [];
             const tableChildren = tables[t].firstElementChild.children;
@@ -404,13 +403,17 @@ const Header = () => {
               const tableTR = { tr: null };
               const newTableTR = [];
               for (let j = 0; j < tableChildren[i].children.length; j++) {
-                // const element = tableChildren[i];
-
-                const TdDivClassName =
-                  tableChildren[i].children[
-                    j
-                  ]?.firstElementChild?.className.split(" ")[0];
-
+                const childNodes = tableChildren[i].children[j]?.childNodes;
+                const tdElement = [];
+                childNodes.forEach((child) => {
+                  if (
+                    !child.classList.contains("row-resizer") &&
+                    !child.classList.contains("td-resizer")
+                  ) {
+                    tdElement.push(child);
+                  }
+                });
+                const TdDivClassName = tdElement[0]?.className.split(" ")[0];
                 const trChild = {
                   td: {
                     type:
@@ -418,7 +421,6 @@ const Header = () => {
                       (TdDivClassName == "textInput" && "TEXT_INPUT") ||
                       (TdDivClassName == "imageInput" && "IMAGE_INPUT") ||
                       (TdDivClassName == "signInput" && "SIGN_INPUT"),
-                    // if(){
                     data:
                       TdDivClassName == "imageInput"
                         ? tableChildren[i].children[j]?.firstElementChild.style
@@ -428,13 +430,11 @@ const Header = () => {
                     id: `tableTd${j + 1}`,
                   },
                 };
-
                 newTableTR.push(trChild);
               }
               tableTR.tr = newTableTR;
               allTableCCells.push(tableTR);
             }
-            // console.log("allTableCCells", allTableCCells);
             return allTableCCells;
           }
           elem = {
@@ -444,14 +444,11 @@ const Header = () => {
             topp: tables[t].parentElement.style.top,
             left: tempPosn.left,
             type: "TABLE_INPUT",
-            // start work here
-            // data: tables[t].firstElementChild.innerHTML,
             data: getChildData(),
             border: `${tableBorderSize} dotted ${tableBorderColor}`,
             tableBorder: tables[t].parentElement.style.border,
             id: `tab${t + 1}`,
           };
-          // dataInsertWithPage(tempPosn, elem);
           const pageNum = findPaageNum(tables[t]);
           page[0][pageNum].push(elem);
         }

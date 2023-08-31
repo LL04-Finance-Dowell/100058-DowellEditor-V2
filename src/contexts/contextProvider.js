@@ -307,8 +307,7 @@ export const ContextProvider = ({ children }) => {
 
         e.target.append(signField);
         e.target.append(imageSignButton);
-        e.target.style.width = signField.style.width;
-        e.target.style.height = signField.style.height;
+
       } else if (typeOfOperation === "DATE_INPUT") {
         let dateField = document.createElement("div");
         dateField.className = "dateInput";
