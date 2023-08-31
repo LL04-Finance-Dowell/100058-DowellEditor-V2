@@ -1,5 +1,5 @@
 {
-  "homepage": "https://LL04-Finance-Dowell.github.io/100058-dowelleditor",
+  "homepage": "https://LL04-Finance-Dowell.github.io/100058-DowellEditor-V2",
   "name": "editor-app",
   "version": "0.1.0",
   "private": true,
@@ -8,8 +8,7 @@
   "scripts": {
     "start": "webpack-dev-server --mode development --open --hot",
     "build": "webpack --mode production",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d dist" 
   },
   "eslintConfig": {
     "extends": [

@@ -9,6 +9,7 @@ module.exports = {
   output: {
     path: path.join(__dirname, "/dist"),
     filename: "bundle.js",
+    publicPath: '/100058-DowellEditor-V2/'
   },
   devServer: {
     port: 3000,
