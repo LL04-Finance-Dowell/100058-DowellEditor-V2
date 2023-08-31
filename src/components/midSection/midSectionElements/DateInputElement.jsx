@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import copyInput from '../CopyInput';
 
 // Regular JavaScript function to create a text input field
-function createDateInputField(id, element, document_map_required, p, holderDIV, focuseddClassMaintain, handleClicked, setSidebar, setRightSideDateMenu) {
+function createDateInputField(id, element, document_map_required, p, holderDIV, focuseddClassMaintain, handleClicked, setSidebar, setRightSideDateMenu, setMethod, setStartDate) {
     let dateField = document.createElement("div");
     dateField.className = "dateInput";
     dateField.id = id;
