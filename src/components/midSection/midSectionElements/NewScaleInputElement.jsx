@@ -492,6 +492,12 @@ function createNewScaleInputField(
 
       let orientation = element?.raw_data?.orientation;
       if (orientation === "Vertical") {
+        const orientation = document.createElement("div");
+        orientation.className = "orientation";
+        orientation.textContent = "Vertical";
+        orientation.style.display = "none";
+        labelHold.appendChild(orientation);
+
         circle.style.margin = "15px 0";
         circle.style.padding = "10px 30px";
 
@@ -979,6 +985,12 @@ function createNewScaleInputField(
       }
       let orientation = element?.raw_data?.orientation;
       if (orientation === "Vertical") {
+        const orientation = document.createElement("div");
+        orientation.className = "orientation";
+        orientation.textContent = "Vertical";
+        orientation.style.display = "none";
+        labelHold.appendChild(orientation);
+  
         scaleHold.style.display = "flex";
         scaleHold.style.flexDirection = "column";
         scaleHold.style.alignItems = "center";
