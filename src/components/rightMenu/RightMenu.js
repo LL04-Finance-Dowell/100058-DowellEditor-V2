@@ -309,7 +309,7 @@ const RightMenu = () => {
     isClicked.camera2,
   ]);
 
-  // function rightMenuDragStart(ev) {
+  function rightMenuDragStart(ev) {
   //   ev.dataTransfer.setData("text", ev.target.id);
   //   console.log("inside dragstart isClicked", isClicked);
     
@@ -333,9 +333,9 @@ const RightMenu = () => {
   //     setFindIsClicked("dropdown2")
   //   }
    
-  // }
+  }
 
-  // function rightMenuDragEnd(ev) {
+  function rightMenuDragEnd(ev) {
   //   // alert("drag end")
     
   //   console.log("from rught menu drang end findIsClicked", findIsClicked);
@@ -373,7 +373,7 @@ const RightMenu = () => {
   //   // console.log("from right menu", ev.screenX, ev.screenY)
   //   // console.log("isClicked from right menu", isClicked);
 
-  // }
+  }
   
 // useEffect(()=>{
 //   setIsClicked({
@@ -398,7 +398,7 @@ const RightMenu = () => {
   return (
     <>
       {/* <div className="fixed3" id="rightMenuDragStart" draggable="true" onDragStart={(event) => rightMenuDragStart(event)} onDragEnd={(event) => rightMenuDragEnd(event)} > */}
-      {/* <div className="fixed3" id="rightMenuDragStart" draggable="true" onDragStart={(event) => rightMenuDragStart(event)} onDragEnd={(event) => rightMenuDragEnd(event)} > */}
+      <div className="fixed3" id="rightMenuDragStart" draggable={`${window.innerWidth<993 && 'true'}`} onDragStart={(event) => rightMenuDragStart(event)} onDragEnd={(event) => rightMenuDragEnd(event)} >
         {isClicked.align2 && <AlignRightSide />}
         {isClicked.image2 && <ImageRightSidebar />}
         {isClicked.table2 && <TableRightSidebar />}
@@ -412,7 +412,7 @@ const RightMenu = () => {
         {isClicked.email2 && <EmailRightSideBar />}
         {isClicked.newScale2 && <NewScaleRightSide />}
         {isClicked.camera2 && <CameraRightSide />}
-      {/* </div> */}
+      </div>
     </>
   );
 };

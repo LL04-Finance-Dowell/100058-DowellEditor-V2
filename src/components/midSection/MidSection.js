@@ -2616,7 +2616,7 @@ const MidSection = React.forwardRef((props, ref) => {
                   //   ? "midSection_without_RightMenu_container"
                   "midSection_container print_container"
                 }
-                style={{ marginTop: window.innerWidth < 993 && (0 + "px") }}
+                style={{ marginTop: window.innerWidth < 993 && actionName != "template" && (0 + "px") }}
                 // className="midSection_container"
                 id="midSection_container"
                 onDragOver={dragOver}
