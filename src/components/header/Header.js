@@ -232,7 +232,6 @@ const Header = () => {
     return pageNum;
   };
 
-
   function savingTableData() {
     const tables = document.getElementsByClassName("tableInput");
     let tables_tags = [];
@@ -374,7 +373,7 @@ const Header = () => {
             data:
               sign[h].firstElementChild === null
                 ? // decoded.details.action === "document"
-                sign[h].innerHTML
+                  sign[h].innerHTML
                 : sign[h].firstElementChild.src,
             id: `s${h + 1}`,
           };
@@ -404,13 +403,16 @@ const Header = () => {
               const tableTR = { tr: null };
               const newTableTR = [];
               for (let j = 0; j < tableChildren[i].children.length; j++) {
-                const childNodes = tableChildren[i].children[j]?.childNodes
-                const tdElement = []
-                childNodes.forEach(child => {
-                  if (!child.classList.contains("row-resizer") && !child.classList.contains("td-resizer")) {
+                const childNodes = tableChildren[i].children[j]?.childNodes;
+                const tdElement = [];
+                childNodes.forEach((child) => {
+                  if (
+                    !child.classList.contains("row-resizer") &&
+                    !child.classList.contains("td-resizer")
+                  ) {
                     tdElement.push(child);
                   }
-                })
+                });
                 const TdDivClassName = tdElement[0]?.className.split(" ")[0];
                 const trChild = {
                   td: {
@@ -422,8 +424,9 @@ const Header = () => {
                     data:
                       TdDivClassName == "imageInput"
                         ? tableChildren[i].children[j]?.firstElementChild.style
-                          .backgroundImage
-                        : tdElement[0]?.innerHTML,
+                            .backgroundImage
+                        : tableChildren[i].children[j]?.firstElementChild
+                            ?.innerHTML,
                     id: `tableTd${j + 1}`,
                   },
                 };
@@ -519,7 +522,7 @@ const Header = () => {
               childData.type = type;
               const imageData =
                 "imageInput" &&
-                  element?.firstElementChild?.style?.backgroundImage
+                element?.firstElementChild?.style?.backgroundImage
                   ? element.firstElementChild.style.backgroundImage
                   : element.firstElementChild?.innerHTML;
               if (type != "TEXT_INPUT") {
@@ -634,13 +637,11 @@ const Header = () => {
           let tempPosn = getPosition(tempElem);
           console.log(newScales[b]);
           let circles = newScales[b].querySelector(".circle_label");
-          // const hasNegative = [...circles].some((circle) => parseInt(circle.textContent) < 0);
           let scaleBg = newScales[b].querySelector(".label_hold");
           let leftChild = newScales[b].querySelector(".left_child");
           let neutralChild = newScales[b].querySelector(".neutral_child");
           let rightChild = newScales[b].querySelector(".right_child");
           let scaleText = newScales[b].querySelector(".scale_text");
-          // console.log(circles.style.backgroundColor);
           let font = newScales[b].querySelector(".scool_input");
           let scaleType = newScales[b].querySelector(".scaleTypeHolder");
           let scaleID = newScales[b].querySelector(".scaleId");
@@ -660,8 +661,10 @@ const Header = () => {
 
           let stapelOptionHolder = "";
           let stapelScaleArray = "";
+          let stapelOrientation = "";
 
           if (scaleType.textContent === "snipte") {
+            stapelOrientation = newScales[b].querySelector(".stapel_vertical");
             stapelOptionHolder = newScales[b].querySelector(
               ".stapelOptionHolder"
             );
@@ -740,6 +743,7 @@ const Header = () => {
             percentRight: percentRight?.textContent,
             orientation: orientation?.textContent,
             orentation: orentation?.textContent,
+            stapelOrientation: stapelOrientation?.textContent,
           };
           console.log(properties);
           elem = {
@@ -1288,8 +1292,9 @@ const Header = () => {
 
   return (
     <div
-      className={`header ${actionName == "template" ? "header_bg_template" : "header_bg_document"
-        }`}
+      className={`header ${
+        actionName == "template" ? "header_bg_template" : "header_bg_document"
+      }`}
     >
       <Container fluid>
         <Row>
@@ -1299,8 +1304,9 @@ const Header = () => {
               {isMenuVisible && (
                 <div
                   ref={menuRef}
-                  className={`position-absolute bg-white d-flex flex-column p-4 bar-menu menu ${isMenuVisible ? "show" : ""
-                    }`}
+                  className={`position-absolute bg-white d-flex flex-column p-4 bar-menu menu ${
+                    isMenuVisible ? "show" : ""
+                  }`}
                 >
                   <div className="d-flex cursor_pointer" onClick={handleUndo}>
                     <ImUndo />
@@ -1372,7 +1378,12 @@ const Header = () => {
               <div
                 className="title-name px-3"
                 contentEditable={true}
-                style={{ fontSize: 15, height: '50px', overflowY: 'auto', padding: '10px' }}
+                style={{
+                  fontSize: 15,
+                  height: "50px",
+                  overflowY: "auto",
+                  padding: "10px",
+                }}
                 spellCheck="false"
                 ref={inputRef}
               >

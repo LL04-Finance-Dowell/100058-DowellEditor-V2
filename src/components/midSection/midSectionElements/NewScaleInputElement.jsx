@@ -114,6 +114,12 @@ function createNewScaleInputField(
 
       const orientation = element?.raw_data?.orentation;
       if (orientation === "nps_vertical") {
+        const nps_vertical = document.createElement("h2");
+        nps_vertical.className = "nps_vertical";
+        nps_vertical.style.display = "none";
+        nps_vertical.textContent = "nps_vertical";
+        labelHold.appendChild(nps_vertical);
+
         labelHold.style.height = "82%";
         labelHold.style.top = "54%";
         labelHold.style.left = "50%";
@@ -141,7 +147,6 @@ function createNewScaleInputField(
         const buttonText = element.raw_data.buttonText;
         if (Array.isArray(buttonText) && buttonText.length > 0) {
           circle.textContent = buttonText[i % buttonText.length];
-          circle.style.fontSize = "1.8vw";
           console.log("EMOJIIIIIIIIIII");
         } else {
           console.log("Empty buttonText array");
@@ -316,10 +321,29 @@ function createNewScaleInputField(
       circle.style.alignItems = "center";
       circle.style.margin = "0 2px";
       circle.style.backgroundColor = element?.raw_data?.buttonColor;
+      const stapelOrientation = element?.raw_data?.stapelOrientation;
+      if (stapelOrientation === "stapel_vertical") {
+        const stapel_vertical = document.createElement("h2");
+        stapel_vertical.className = "stapel_vertical";
+        stapel_vertical.style.display = "none";
+        stapel_vertical.textContent = "stapel_vertical";
+        labelHold.appendChild(stapel_vertical);
+
+        labelHold.style.height = "82%";
+        labelHold.style.top = "54%";
+        labelHold.style.left = "50%";
+        labelHold.style.transform = "translate(-50%, -50%)";
+        scaleHold.style.border = "none";
+        scaleHold.style.textAlign = "center";
+        labelHold.style.width = "30%";
+        labelHold.style.position = "absolute";
+        labelHold.style.flexDirection = "column";
+        labelHold.style.alignItems = "center";
+        labelHold.style.marginTop = "0";
+      }
       if (selectedOption === "emoji") {
         const buttonText = element.raw_data.buttonText;
         circle.textContent = buttonText[i % buttonText.length];
-        circle.style.fontSize = "1.8vw";
       }
 
       if (!token) {
@@ -1056,6 +1080,18 @@ function createNewScaleInputField(
     childDiv.style.height = "98%";
 
     // buttonCircleM.style.marginTop = "2px";
+  }
+
+  const stapelOrientation = element?.raw_data?.stapelOrientation;
+  if (stapelOrientation === "stapel_vertical") {
+    childDiv.style.display = "flex";
+    childDiv.style.flexDirection = "column";
+    childDiv.style.justifyContent = "space-between";
+
+    childDiv.style.alignItems = "flex-start";
+    childDiv.style.width = "32%";
+    childDiv.style.marginLeft = "auto";
+    childDiv.style.height = "98%";
   }
 
   const idHolder = document.createElement("h6");
