@@ -785,10 +785,6 @@ const ScaleRightSide = () => {
       const btnUpdateScaleFont = document.getElementById("font_style");
       const beNametnUpdateScal = document.getElementById("scaleLabel");
 
-      const headerText = document.getElementById("headerText");
-      console.log(headerText);
-      console.log(btnUpdateScale);
-      // const btnUpdateOrientation = document.getElementById("orientation");
       const btnUpdateLeft = document.getElementById("left");
       const btnUpdateRight = document.getElementById("right");
       const btnUpdateCenter = document.getElementById("centre");
@@ -808,57 +804,14 @@ const ScaleRightSide = () => {
         document.querySelector("#orientationId").options[
           document.querySelector("#orientationId").selectedIndex
         ];
-      const test = document.querySelector("select");
-      console.log(test);
-      console.log(option);
+
+      console.log(idHolder);
+      let timeId = document.getElementById("timeId");
+      let time = document.getElementById("time");
 
       let tempText = scale?.querySelector(".tempText");
-      tempText?.remove();
-      button4.style.display = "block";
-      if (btnUpdateScale.value !== "") {
-        button.style.backgroundColor = btnUpdateScale.value;
-      }
-
-      labelHold.innerHTML = "";
-
-      for (let i = 0; i <= 10; i++) {
-        const selectedOption = optionSelect.value;
-        const circle = document.createElement("div");
-        circle.className = "circle_label";
-        circle.textContent = i;
-
-        // Apply circular background using inline style
-        circle.style.width = "35%";
-        circle.style.height = "35%";
-        circle.style.borderRadius = "50%";
-        circle.style.display = "flex";
-        circle.style.justifyContent = "center";
-        circle.style.alignItems = "center";
-        circle.style.backgroundColor = btnUpdateButton.value;
-        labelHold.appendChild(circle);
-        if (selectedOption === "emoji" && emojiInp !== "") {
-          // Set the text content of the div to the corresponding emoji
-          const emojiFormat = /(\p{Emoji}|\uFE0F)/gu;
-          const emojis = emojiInp
-            .split(emojiFormat)
-            .filter((emoji) => emoji !== "");
-          circle.textContent = emojis[i % emojis.length];
-          circle.style.fontSize = "1.8vw";
-        } else {
-          // Set the text content of the div to the number
-          circle.textContent = i;
-        }
-      }
-
-      if (btnUpdateFontColor.value !== "") {
-        button4.style.color = btnUpdateFontColor.value;
-      }
-
-      if (btnUpdateScaleFont.value !== "") {
-        button4.style.fontFamily = btnUpdateScaleFont.value;
-      }
-
       const selectedOption = optionSelect.value;
+      tempText?.remove();
 
       if (option.value === "Horizontal") {
         button4.style.border = "block";
@@ -885,7 +838,7 @@ const ScaleRightSide = () => {
         nps_vertical.style.display = "none";
         nps_vertical.textContent = "nps_vertical";
 
-        labelHold.appendChild(nps_vertical);
+        button4.appendChild(nps_vertical);
 
         labelHold.style.height = "82%";
         labelHold.style.top = "54%";
@@ -909,30 +862,6 @@ const ScaleRightSide = () => {
 
         buttonCircleM.style.marginTop = "2px";
       }
-
-      buttonChildLeft.textContent = btnUpdateLeft.value;
-
-      buttonChildRight.textContent = btnUpdateRight.value;
-
-      buttonChildNeutral.style.display = "block";
-      buttonChildNeutral.textContent = btnUpdateCenter.value;
-      // if (btnUpdateScales.value !=="") {
-      //   button4.style.textContent = btnUpdateScales.value;
-      // }
-      // if (btnUpdateScore.value !=="") {
-      //   buttonChild.style.color = btnUpdateScore.value;
-      // }
-      if (beNametnUpdateScal.value !== "") {
-        scaleText.textContent = beNametnUpdateScal.value;
-      }
-      console.log(btnUpdateButton.value);
-      console.log(btnUpdateScale.value);
-      console.log(btnUpdateFontColor.value);
-      // setScaleId("");
-      const idHolder = scale?.querySelector(".scaleId");
-      console.log(idHolder);
-      let timeId = document.getElementById("timeId");
-      let time = document.getElementById("time");
 
       const prepareImageLabels = () => {
         const imageLabels = {};
@@ -1009,6 +938,7 @@ const ScaleRightSide = () => {
         })
           .then((res) => {
             setIsLoading(false);
+
             sendMessage();
             setScaleData(res.data);
             const success = res.data.success;
@@ -1020,6 +950,62 @@ const ScaleRightSide = () => {
               const idHolder = scale?.querySelector(".scaleId");
               idHolder.textContent = id && id;
             }
+
+            labelHold.innerHTML = "";
+
+            if (beNametnUpdateScal.value !== "") {
+              scaleText.textContent = beNametnUpdateScal.value;
+            }
+
+            if (btnUpdateFontColor.value !== "") {
+              button4.style.color = btnUpdateFontColor.value;
+            }
+
+            button4.style.display = "block";
+            if (btnUpdateScale.value !== "") {
+              button.style.backgroundColor = btnUpdateScale.value;
+            }
+
+            if (btnUpdateScaleFont.value !== "") {
+              button4.style.fontFamily = btnUpdateScaleFont.value;
+            }
+
+            buttonChildLeft.textContent = btnUpdateLeft.value;
+
+            buttonChildRight.textContent = btnUpdateRight.value;
+
+            buttonChildNeutral.style.display = "block";
+            buttonChildNeutral.textContent = btnUpdateCenter.value;
+
+            for (let i = 0; i <= 10; i++) {
+              const selectedOption = optionSelect.value;
+              const circle = document.createElement("div");
+              circle.className = "circle_label";
+              circle.textContent = i;
+
+              // Apply circular background using inline style
+              circle.style.width = "35%";
+              circle.style.height = "35%";
+              circle.style.borderRadius = "50%";
+              circle.style.display = "flex";
+              circle.style.justifyContent = "center";
+              circle.style.alignItems = "center";
+              circle.style.backgroundColor = btnUpdateButton.value;
+              labelHold.appendChild(circle);
+              if (selectedOption === "emoji" && emojiInp !== "") {
+                // Set the text content of the div to the corresponding emoji
+                const emojiFormat = /(\p{Emoji}|\uFE0F)/gu;
+                const emojis = emojiInp
+                  .split(emojiFormat)
+                  .filter((emoji) => emoji !== "");
+                circle.textContent = emojis[i % emojis.length];
+                circle.style.fontSize = "1.8vw";
+              } else {
+                // Set the text content of the div to the number
+                circle.textContent = i;
+              }
+            }
+
             console.log(res);
           })
           .catch((err) => {
@@ -1056,9 +1042,65 @@ const ScaleRightSide = () => {
               setIsLoading(false);
               sendMessage();
               setScaleData(res.data);
+              console.log(res.data.data.data);
               setScaleId(scaleId);
               console.log(res);
               console.log("This is the still scale", scale);
+
+              labelHold.innerHTML = "";
+
+              if (beNametnUpdateScal.value !== "") {
+                scaleText.textContent = beNametnUpdateScal.value;
+              }
+
+              if (btnUpdateFontColor.value !== "") {
+                button4.style.color = btnUpdateFontColor.value;
+              }
+
+              button4.style.display = "block";
+              if (btnUpdateScale.value !== "") {
+                button.style.backgroundColor = btnUpdateScale.value;
+              }
+
+              if (btnUpdateScaleFont.value !== "") {
+                button4.style.fontFamily = btnUpdateScaleFont.value;
+              }
+
+              buttonChildLeft.textContent = btnUpdateLeft.value;
+
+              buttonChildRight.textContent = btnUpdateRight.value;
+
+              buttonChildNeutral.style.display = "block";
+              buttonChildNeutral.textContent = btnUpdateCenter.value;
+
+              for (let i = 0; i <= 10; i++) {
+                const selectedOption = optionSelect.value;
+                const circle = document.createElement("div");
+                circle.className = "circle_label";
+                circle.textContent = i;
+
+                // Apply circular background using inline style
+                circle.style.width = "35%";
+                circle.style.height = "35%";
+                circle.style.borderRadius = "50%";
+                circle.style.display = "flex";
+                circle.style.justifyContent = "center";
+                circle.style.alignItems = "center";
+                circle.style.backgroundColor = btnUpdateButton.value;
+                labelHold.appendChild(circle);
+                if (selectedOption === "emoji" && emojiInp !== "") {
+                  // Set the text content of the div to the corresponding emoji
+                  const emojiFormat = /(\p{Emoji}|\uFE0F)/gu;
+                  const emojis = emojiInp
+                    .split(emojiFormat)
+                    .filter((emoji) => emoji !== "");
+                  circle.textContent = emojis[i % emojis.length];
+                  circle.style.fontSize = "1.8vw";
+                } else {
+                  // Set the text content of the div to the number
+                  circle.textContent = i;
+                }
+              }
             }
           })
           .catch((err) => {
@@ -1083,7 +1125,7 @@ const ScaleRightSide = () => {
       // const headerText = document.getElementById("headerText");
       const btnUpdateLeft = document.getElementById("leftStapel");
       const btnUpdateRight = document.getElementById("rightStapel");
-      const btnUpdateCenter = document.getElementById("centre");
+
       // let upperVal = document.getElementById("upperVal").value;
       // console.log(value?.value);
       // console.log(value);
@@ -1109,6 +1151,7 @@ const ScaleRightSide = () => {
       const option = document.querySelector("#orientationIdStapel").options[
         document.querySelector("#orientationIdStapel").selectedIndex
       ];
+      buttonChildNeutral.textContent = "";
       let timeId = document.getElementById("timeId_stapel");
       let time = document.getElementById("time_stapel");
       const emojiInp = document.getElementById("emojiInp_stapel").value;
@@ -1151,7 +1194,7 @@ const ScaleRightSide = () => {
           .filter((emoji) => emoji !== "");
 
         const emojiLabels = {};
-        console.log("This is the emoji",emojis)
+        console.log("This is the emoji", emojis);
         const selectedCount = Math.min(
           emojis.length,
           Math.abs(Math.floor(upperLimit / space) * 2) +
@@ -1160,20 +1203,20 @@ const ScaleRightSide = () => {
         );
 
         for (
-          let i = (Math.floor(upperLimit / space) * 2) * -1;
+          let i = Math.floor(upperLimit / space) * 2 * -1;
           i <= Math.floor(upperLimit / space) * 2;
           i += spacing
         ) {
-            for(let j = 0; j < emojis.length; j ++) {
-              const emojiIndex = j
-              emojiLabels[i] = emojis[emojiIndex];
-            }
+          for (let j = 0; j < emojis.length; j++) {
+            const emojiIndex = j;
+            emojiLabels[i] = emojis[emojiIndex];
+          }
         }
 
         return emojiLabels;
       };
       const emojiLabels = prepareEmojiLabels();
-      console.log("These are emoji labels", emojiLabels)
+      console.log("These are emoji labels", emojiLabels);
 
       if (option.value === "Horizontal") {
         button4.style.border = "block";
@@ -1197,6 +1240,12 @@ const ScaleRightSide = () => {
       }
 
       if (option.value === "Vertical") {
+        const stapel_vertical = document.createElement("h2");
+        stapel_vertical.className = "stapel_vertical";
+        stapel_vertical.style.display = "none";
+        stapel_vertical.textContent = "stapel_vertical";
+        console.log(stapel_vertical);
+        button4.appendChild(stapel_vertical);
         labelHold.style.height = "82%";
 
         labelHold.style.top = "54%";
