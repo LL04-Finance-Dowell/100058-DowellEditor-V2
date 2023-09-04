@@ -3,7 +3,8 @@ import copyInput from '../CopyInput';
 
 // Regular JavaScript function to create a text input field
 function createCameraInputField(id, p, holderDIV, handleClicked, setSidebar, table_dropdown_focuseddClassMaintain, videoLinkHolder, imageLinkHolder, decoded) {
-    let cameraField = document.createElement("div");
+  let isAnyRequiredElementEdited = false;  
+  let cameraField = document.createElement("div");
           cameraField.className = "cameraInput";
           cameraField.id = id;
           cameraField.style.width = "100%";

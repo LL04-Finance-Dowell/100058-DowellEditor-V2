@@ -15,6 +15,8 @@ function createNewScaleInputField(
   decoded,
   token
 ) {
+  let isAnyRequiredElementEdited = false;
+  
   let scaleField = document.createElement("div");
   scaleField.className = "newScaleInput";
   scaleField.id = id;

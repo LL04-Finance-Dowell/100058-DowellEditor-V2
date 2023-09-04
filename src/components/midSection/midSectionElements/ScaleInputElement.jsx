@@ -3,7 +3,8 @@ import copyInput from '../CopyInput';
 
 // Regular JavaScript function to create a text input field
 function createScaleInputField(id, element, p, holderDIV, focuseddClassMaintain, handleClicked, setSidebar, table_dropdown_focuseddClassMaintain, decoded) {
-    let scaleField = document.createElement("div");
+  let isAnyRequiredElementEdited = false;  
+  let scaleField = document.createElement("div");
     scaleField.className = "scaleInput";
     scaleField.id = id;
     scaleField.style.width = "100%";

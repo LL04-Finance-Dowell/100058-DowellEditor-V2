@@ -3,7 +3,8 @@ import copyInput from '../CopyInput';
 
 // Regular JavaScript function to create a text input field
 function createImageInputField(id, element, document_map_required, p, holderDIV, focuseddClassMaintain, handleClicked, setSidebar) {
-
+  let isAnyRequiredElementEdited = false;
+  
   const imageField = document.createElement("div");
   imageField.className = "imageInput";
   imageField.id = id;
