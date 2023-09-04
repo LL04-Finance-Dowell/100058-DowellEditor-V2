@@ -1162,7 +1162,6 @@ const ScaleRightSide = () => {
         parseInt(document.getElementById("upperVal").value, 10)
       );
       const spacing = parseInt(document.getElementById("spacing").value, 10);
-      const lowerVal = -upperVal;
       tempText?.remove();
 
       // for (let i = 0; i < buttonCircle.length; i++) {
@@ -1194,13 +1193,6 @@ const ScaleRightSide = () => {
           .filter((emoji) => emoji !== "");
 
         const emojiLabels = {};
-        console.log("This is the emoji", emojis);
-        const selectedCount = Math.min(
-          emojis.length,
-          Math.abs(Math.floor(upperLimit / space) * 2) +
-          Math.abs(-Math.floor(upperLimit / space) * 2) +
-          spacing
-        );
         let j = 0
         let valRange = (upperLimit % space) !== 0 ? Math.floor(upperLimit / space) * 2 : upperLimit
         for (let i = valRange * -1; i <= valRange; i += spacing) {
