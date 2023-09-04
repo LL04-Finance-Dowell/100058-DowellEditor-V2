@@ -17,6 +17,7 @@ const initialState = {
   email: false,
   newScale: false,
   camera: false,
+  payment: false,
 };
 const initialState2 = {
   align2: false,
@@ -33,6 +34,7 @@ const initialState2 = {
   email2: false,
   newScale2: false,
   camera2: false,
+  payment2: false,
 };
 
 export const ContextProvider = ({ children }) => {

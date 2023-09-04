@@ -46,6 +46,7 @@ import createFormInputElement from "./createElements/CreateFormElement.jsx";
 import createContainerInputElement from "./createElements/CreateContainerElement.jsx";
 import { finding_percent } from './../../utils/util_functions/finding_percent';
 import { CreateTableComponent } from "./midSectionElements/TableInputElement.jsx";
+import CreatePyamentElement from "./createElements/CreatePyamentElement.jsx";
 // tHIS IS FOR A TEST COMMIT
 
 const dummyData = {
@@ -2583,6 +2584,11 @@ const MidSection = React.forwardRef((props, ref) => {
           decoded.details.action === "template"
         ) {
           createFormInputElement(holderDIV, focuseddClassMaintain, handleClicked, setSidebar)
+        } else if (
+          typeOfOperation === "PAYMENT_INPUT" &&
+          decoded.details.action === "template"
+        ){
+          CreatePyamentElement(holderDIV, focuseddClassMaintain, handleClicked, setSidebar);
         }
         if (decoded.details.action === "template") {
           document.querySelector(".drop_zone").append(holderDIV);
