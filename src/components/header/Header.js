@@ -1379,8 +1379,8 @@ const Header = () => {
                 className="title-name px-3"
                 contentEditable={true}
                 style={{
-                  fontSize: 15,
-                  height: "50px",
+                  fontSize: 18,
+                  height: "75px",
                   overflowY: "auto",
                   padding: "10px",
                 }}
