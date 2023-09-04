@@ -839,12 +839,8 @@ function createNewScaleInputField(
                 holdElem.textContent = likertScale[i];
                 holding?.appendChild(holdElem);
                 console.log("This is holdEle", holdElem.textContent);
-                const required_map_document = document_map_required?.filter(
-                  (item) => element.id == item.content
-                );
                 if (
-                  scaleField?.parentElement?.classList.contains("holderDIV") &&
-                  required_map_document.length > 0
+                  scaleField?.parentElement?.classList.contains("holderDIV")
                 ) {
                   scaleField?.parentElement?.classList.add("element_updated");
                 }
