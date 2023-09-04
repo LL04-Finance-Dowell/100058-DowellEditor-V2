@@ -1220,7 +1220,7 @@ const Header = () => {
 
         authorized: authorized,
 
-        item_type: action,
+        item_type: "clone",
         item_id: _id,
         company_id: companyId,
         role: role,
