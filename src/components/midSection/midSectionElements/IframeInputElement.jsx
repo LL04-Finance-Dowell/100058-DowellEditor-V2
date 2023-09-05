@@ -3,6 +3,8 @@ import copyInput from '../CopyInput';
 
 // Regular JavaScript function to create a text input field
 function createIframeInputField(id, element, p, holderDIV, table_dropdown_focuseddClassMaintain, handleClicked, setSidebar) {
+    let isAnyRequiredElementEdited = false;
+    
     let iframeField = document.createElement("div");
     iframeField.className = "iframeInput";
     iframeField.id = id;
