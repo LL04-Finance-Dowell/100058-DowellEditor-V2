@@ -1014,13 +1014,14 @@ const Header = () => {
       const scaleId = scale?.querySelector(".scaleId")?.textContent;
       const holdElem = scale?.querySelector(".holdElem")?.textContent;
 
-      documentResponses.push({ scale_id: scaleId, score: holdElem });
+      documentResponses.push({ scale_id: scaleId, score: parseInt(holdElem) });
     });
 
     console.log(generateLoginUser());
     console.log(documentResponses);
 
     const requestBody = {
+      process_id: decoded.details.process_id,
       instance_id: 1,
       brand_name: "XYZ545",
       product_name: "XYZ511",
@@ -1225,18 +1226,18 @@ const Header = () => {
           if (finalize) {
             handleFinalize();
           }
-          
+
           let scaleType = document.querySelector(".scaleTypeHolder");
-            if (scaleType.textContent === "nps") {
-              handleFinalizeButton();
-            } else if (scaleType.textContent === "snipte") {
-              handleFinalizeButtonStapel();
-            } else if (scaleType.textContent === "nps_lite") {
-              handleFinalizeButtonNpsLite();
-            } else if (scaleType.textContent === "likert") {
-              handleFinalizeButtonLikert();
-            }
-            setIsDataSaved(true);
+          if (scaleType.textContent === "nps") {
+            handleFinalizeButton();
+          } else if (scaleType.textContent === "snipte") {
+            handleFinalizeButtonStapel();
+          } else if (scaleType.textContent === "nps_lite") {
+            handleFinalizeButtonNpsLite();
+          } else if (scaleType.textContent === "likert") {
+            handleFinalizeButtonLikert();
+          }
+          setIsDataSaved(true);
         }
       })
       .catch((err) => {
