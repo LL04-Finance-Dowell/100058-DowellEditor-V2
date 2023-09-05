@@ -13,7 +13,8 @@ function createNewScaleInputField(
   setSidebar,
   table_dropdown_focuseddClassMaintain,
   decoded,
-  token
+  token,
+  document_map_required
 ) {
   let scaleField = document.createElement("div");
   scaleField.className = "newScaleInput";
@@ -223,11 +224,6 @@ function createNewScaleInputField(
                 ? scale.querySelectorAll(".circle_label")
                 : [];
 
-              console.log(
-                "This is the background color",
-                circle.style.backgroundColor
-              );
-
               function componentToHex(c) {
                 var hex = c.toString(16);
                 return hex.length == 1 ? "0" + hex : hex;
@@ -276,15 +272,6 @@ function createNewScaleInputField(
                 holdElem.textContent = i;
                 holding?.appendChild(holdElem);
                 console.log("This is holdEle", holdElem.textContent);
-                const required_map_document = document_map_required?.filter(
-                  (item) => element.id == item.content
-                );
-                if (
-                  scaleField?.parentElement?.classList.contains("holderDIV") &&
-                  required_map_document.length > 0
-                ) {
-                  scaleField?.parentElement?.classList.add("element_updated");
-                }
               }
 
               const scaleID = scale?.querySelector(".scaleId")?.textContent;
@@ -455,15 +442,15 @@ function createNewScaleInputField(
               holdElem.textContent = stapelScale[i];
               holding?.appendChild(holdElem);
               console.log("This is holdEle", holdElem.textContent);
-              const required_map_document = document_map_required?.filter(
-                (item) => element.id == item.content
-              );
-              if (
-                scaleField?.parentElement?.classList.contains("holderDIV") &&
-                required_map_document.length > 0
-              ) {
-                scaleField?.parentElement?.classList.add("element_updated");
-              }
+              // const required_map_document = document_map_required?.filter(
+              //   (item) => element?.id == item?.content
+              // );
+              // if (
+              //   scaleField?.parentElement?.classList.contains("holderDIV") &&
+              //   required_map_document.length > 0
+              // ) {
+              //   scaleField?.parentElement?.classList.add("element_updated");
+              // }
             }
             const scaleID = scale?.querySelector(".scaleId")?.textContent;
             setClickedCircleBackgroundColor(
@@ -700,7 +687,7 @@ function createNewScaleInputField(
       labelHold.style.gridTemplateColumns = `repeat(3, 1fr)`;
       labelHold.style.gridTemplateRows = `repeat(${numRows}, 1fr)`;
       labelHold.appendChild(circle);
-      
+
       let orientation = element?.raw_data?.orientation;
       if (orientation === "vertical") {
         const orientation = document.createElement("div");
@@ -928,7 +915,13 @@ function createNewScaleInputField(
         return res.status(401).json({ error: "Unauthorized" });
       }
       let orientation = element?.raw_data?.orientation;
-      if (orientation === "vertical") {
+      if (orientation === "Vertical") {
+        const orientation = document.createElement("div");
+        orientation.className = "orientation";
+        orientation.textContent = "Vertical";
+        orientation.style.display = "none";
+        scaleHold.appendChild(orientation);
+
         scaleHold.style.display = "flex";
         scaleHold.style.flexDirection = "column";
         scaleHold.style.alignItems = "center";
@@ -1018,7 +1011,7 @@ function createNewScaleInputField(
         orientation.textContent = "Vertical";
         orientation.style.display = "none";
         labelHold.appendChild(orientation);
-  
+
         scaleHold.style.display = "flex";
         scaleHold.style.flexDirection = "column";
         scaleHold.style.alignItems = "center";
