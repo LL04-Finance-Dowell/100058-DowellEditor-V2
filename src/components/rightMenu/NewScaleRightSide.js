@@ -1596,16 +1596,7 @@ const ScaleRightSide = () => {
 
             button4.style.display = "block";
             labelHold.innerHTML = "";
-            const {
-              fomat,
-              left,
-              center,
-              right,
-              scalecolor,
-              name,
-              fontcolor,
-              fontstyle,
-            } = res.data.data;
+            const {fomat, left, center, right, scalecolor, name, fontcolor, fontstyle, custom_emoji_format} = res.data.data
             const textValues = [left, center, right];
 
             const npsLiteTextArray = document.createElement("div");
@@ -1639,11 +1630,7 @@ const ScaleRightSide = () => {
 
               if (fomat === "emoji" && emojiInp !== "") {
                 // Set the text content of the div to the corresponding emoji
-                const emojiFormat = /(\p{Emoji}|\uFE0F)/gu;
-                const emojis = emojiInp
-                  .split(emojiFormat)
-                  .filter((emoji) => emoji !== "");
-                circle.textContent = emojis[i % emojis.length];
+                circle.textContent = custom_emoji_format[i];
               } else {
                 circle.textContent = textValues[i];
               }
@@ -1693,16 +1680,7 @@ const ScaleRightSide = () => {
 
               button4.style.display = "block";
               labelHold.innerHTML = "";
-              const {
-                fomat,
-                left,
-                center,
-                right,
-                scalecolor,
-                name,
-                fontcolor,
-                fontstyle,
-              } = res.data.data;
+              const {fomat, left, center, right, scalecolor, name, fontcolor, fontstyle, custom_emoji_format} = res.data.data
               const textValues = [left, center, right];
 
               const npsLiteTextArray = document.createElement("div");
@@ -1736,11 +1714,7 @@ const ScaleRightSide = () => {
 
                 if (fomat === "emoji" && emojiInp !== "") {
                   // Set the text content of the div to the corresponding emoji
-                  const emojiFormat = /(\p{Emoji}|\uFE0F)/gu;
-                  const emojis = emojiInp
-                    .split(emojiFormat)
-                    .filter((emoji) => emoji !== "");
-                  circle.textContent = emojis[i % emojis.length];
+                  circle.textContent = custom_emoji_format[i];
                 } else {
                   circle.textContent = textValues[i];
                 }

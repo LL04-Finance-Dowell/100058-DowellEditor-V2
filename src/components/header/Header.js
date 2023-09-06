@@ -1046,7 +1046,6 @@ const Header = () => {
   }
 
   function handleFinalizeButtonNpsLite() {
-    localStorage.setItem("hideFinalizeButton", "true");
     const username = decoded?.details?.authorized;
     console.log(username);
 
@@ -1074,13 +1073,14 @@ const Header = () => {
     });
 
     const requestBody = {
+      process_id: decoded.details.process_id,
       instance_id: 1,
       brand_name: "XYZ545",
       product_name: "XYZ511",
-      user: authorizedLogin(),
+      username: authorizedLogin(),
       scale_id: scaleId,
       score: holdElem,
-      response: documentResponses,
+      document_responses: documentResponses,
     };
 
     Axios.post(
