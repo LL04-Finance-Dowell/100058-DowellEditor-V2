@@ -1809,6 +1809,12 @@ const ScaleRightSide = () => {
       const updatedLabelInput =
         labelType === "Text" ? labelTexts : selectedEmojis;
       const updatedLabels = labelType === "Text" ? labelTexts : selectedEmojis;
+
+      const customEmojiFormat = updatedLabels.reduce((acc, label, index) => {
+        acc[`${index + 1}`] = label;
+        return acc;
+      }, {});
+
       const updatedLabelScale =
         labelType === "Text" ? Number(labelScale) : selectedEmojis.length;
       // Remove any previous circles from the labelHold
@@ -1886,7 +1892,7 @@ const ScaleRightSide = () => {
             label_type: labelTypeForPut,
             label_scale_selection: updatedLabelScale,
             label_scale_input: updatedLabelInput,
-            custom_emoji_format: updatedLabelInput,
+            custom_emoji_format: customEmojiFormat,
             time: timeId.style.display === "none" ? "00" : time?.value,
             fomat: labelTypeForPut,
           }
@@ -1978,7 +1984,7 @@ const ScaleRightSide = () => {
           label_type: labelTypeForPut,
           label_scale_selection: updatedLabelScale,
           label_scale_input: updatedLabelInput,
-          custom_emoji_format: updatedLabelInput,
+          custom_emoji_format: customEmojiFormat,
           time: timeId.style.display === "none" ? "00" : time?.value,
           fomat: labelTypeForPut,
         })
