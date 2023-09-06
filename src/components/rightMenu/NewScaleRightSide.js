@@ -1596,7 +1596,17 @@ const ScaleRightSide = () => {
 
             button4.style.display = "block";
             labelHold.innerHTML = "";
-            const {fomat, left, center, right, scalecolor, name, fontcolor, fontstyle, custom_emoji_format} = res.data.data
+            const {
+              fomat,
+              left,
+              center,
+              right,
+              scalecolor,
+              name,
+              fontcolor,
+              fontstyle,
+              custom_emoji_format
+            } = res.data.data;
             const textValues = [left, center, right];
 
             const npsLiteTextArray = document.createElement("div");
@@ -1680,7 +1690,17 @@ const ScaleRightSide = () => {
 
               button4.style.display = "block";
               labelHold.innerHTML = "";
-              const {fomat, left, center, right, scalecolor, name, fontcolor, fontstyle, custom_emoji_format} = res.data.data
+              const {
+                fomat,
+                left,
+                center,
+                right,
+                scalecolor,
+                name,
+                fontcolor,
+                fontstyle,
+                custom_emoji_format
+              } = res.data.data;
               const textValues = [left, center, right];
 
               const npsLiteTextArray = document.createElement("div");
