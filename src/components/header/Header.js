@@ -684,9 +684,10 @@ const Header = () => {
 
           if (scaleType.textContent === "likert") {
             likertScaleArray = newScales[b].querySelector(
-              ".likert_Scale_Array"
+              ".likertScaleArray"
             );
             orientation = newScales[b].querySelector(".orientation");
+            console.log("This is likert",likertScaleArray.textContent)
           }
 
           let percentBackground = "";
@@ -935,6 +936,229 @@ const Header = () => {
     }
   }, [element_updated_length]);
 
+  function handleFinalizeButton() {
+    const username = decoded?.details?.authorized;
+    console.log(username);
+
+    function generateLoginUser() {
+      return "user_" + Math.random().toString(36).substring(7);
+      // return token;
+    }
+
+    function authorizedLogin() {
+      return username === undefined ? generateLoginUser() : username;
+    }
+
+    let scaleElements = document.querySelectorAll(".newScaleInput");
+
+    const documentResponses = [];
+    console.log(scaleElements);
+
+    scaleElements.forEach((scale) => {
+      console.log(scale);
+      const scaleId = scale?.querySelector(".scaleId")?.textContent;
+      const holdElem = scale?.querySelector(".holdElem")?.textContent;
+
+      documentResponses.push({ scale_id: scaleId, score: holdElem });
+    });
+
+    console.log(generateLoginUser());
+    console.log(documentResponses);
+
+    const requestBody = {
+      process_id: decoded.details.process_id,
+      instance_id: 1,
+      brand_name: "XYZ545",
+      product_name: "XYZ511",
+      username: authorizedLogin(),
+      document_responses: documentResponses,
+    };
+
+    Axios.post(
+      "https://100035.pythonanywhere.com/api/nps_responses_create",
+      requestBody
+    )
+      .then((response) => {
+        if (response.status === 200) {
+          setIsLoading(false);
+          var responseData = response.data;
+          setScaleData(responseData);
+          console.log(response);
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
+  function handleFinalizeButtonStapel() {
+    const username = decoded?.details?.authorized;
+    console.log(username);
+
+    function generateLoginUser() {
+      return "user_" + Math.random().toString(36).substring(7);
+      // return token;
+    }
+
+    function authorizedLogin() {
+      return username === undefined ? generateLoginUser() : username;
+    }
+
+    let scaleElements = document.querySelectorAll(".newScaleInput");
+
+    const documentResponses = [];
+    console.log(scaleElements);
+
+    scaleElements.forEach((scale) => {
+      console.log(scale);
+      const scaleId = scale?.querySelector(".scaleId")?.textContent;
+      const holdElem = scale?.querySelector(".holdElem")?.textContent;
+
+      documentResponses.push({ scale_id: scaleId, score: parseInt(holdElem) });
+    });
+
+    console.log(generateLoginUser());
+    console.log(documentResponses);
+
+    const requestBody = {
+      process_id: decoded.details.process_id,
+      instance_id: 1,
+      brand_name: "XYZ545",
+      product_name: "XYZ511",
+      username: authorizedLogin(),
+      document_responses: documentResponses,
+    };
+
+    Axios.post(
+      "https://100035.pythonanywhere.com/stapel/api/stapel_responses_create/",
+      requestBody
+    )
+      .then((response) => {
+        if (response.status === 200) {
+          setIsLoading(false);
+          var responseData = response.data;
+          setScaleData(responseData);
+          console.log(response);
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
+  function handleFinalizeButtonNpsLite() {
+    const username = decoded?.details?.authorized;
+    console.log(username);
+
+    function generateLoginUser() {
+      return "user_" + Math.random().toString(36).substring(7);
+      // return token;
+    }
+
+    function authorizedLogin() {
+      return username === undefined ? generateLoginUser() : username;
+    }
+
+    let scaleElements = document.querySelectorAll(".newScaleInput");
+
+    let scaleId;
+    let holdElem;
+    let documentResponses = [];
+
+    scaleElements.forEach((scale) => {
+      console.log(scale);
+      scaleId = scale?.querySelector(".scaleId")?.textContent;
+      holdElem = scale?.querySelector(".holdElem")?.textContent;
+
+      documentResponses.push({ scale_id: scaleId, score: holdElem });
+    });
+
+    const requestBody = {
+      process_id: decoded.details.process_id,
+      instance_id: 1,
+      brand_name: "XYZ545",
+      product_name: "XYZ511",
+      username: authorizedLogin(),
+      scale_id: scaleId,
+      score: holdElem,
+      document_responses: documentResponses,
+    };
+
+    Axios.post(
+      "https://100035.pythonanywhere.com/nps-lite/api/nps-lite-response",
+      requestBody
+    )
+      .then((response) => {
+        if (response.status === 200) {
+          setIsLoading(false);
+          var responseData = response.data;
+          setScaleData(responseData);
+          console.log(response);
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
+  function handleFinalizeButtonLikert() {
+    localStorage.setItem("hideFinalizeButton", "true");
+    const username = decoded?.details?.authorized;
+    console.log(username);
+
+    function generateLoginUser() {
+      return "user_" + Math.random().toString(36).substring(7);
+      // return token;
+    }
+
+    function authorizedLogin() {
+      return username === undefined ? generateLoginUser() : username;
+    }
+
+    let scaleElements = document.querySelectorAll(".newScaleInput");
+
+    let scaleId;
+    let holdElem;
+    let documentResponses = [];
+    console.log(scaleElements);
+
+    scaleElements.forEach((scale) => {
+      console.log(scale);
+      scaleId = scale?.querySelector(".scaleId")?.textContent;
+      holdElem = scale?.querySelector(".holdElem")?.textContent;
+
+      documentResponses.push({ scale_id: scaleId, score: holdElem });
+    });
+
+    console.log(generateLoginUser());
+    console.log(documentResponses);
+
+    const requestBody = {
+      process_id: decoded.details.process_id,
+      instance_id: 1,
+      brand_name: "XYZ545",
+      product_name: "XYZ511",
+      username: authorizedLogin(),
+      document_responses: documentResponses,
+    };
+
+    Axios.post(
+      "https://100035.pythonanywhere.com/likert/likert-scale_response/",
+      requestBody
+    )
+      .then((response) => {
+        if (response.status === 200) {
+          setIsLoading(false);
+          var responseData = response.data;
+          setScaleData(responseData);
+          console.log(response);
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
   function submit(e) {
     e.preventDefault();
     setIsLoading(true);
@@ -1001,6 +1225,17 @@ const Header = () => {
           setIsLoading(false);
           if (finalize) {
             handleFinalize();
+          }
+
+          let scaleType = document.querySelector(".scaleTypeHolder");
+          if (scaleType.textContent === "nps") {
+            handleFinalizeButton();
+          } else if (scaleType.textContent === "snipte") {
+            handleFinalizeButtonStapel();
+          } else if (scaleType.textContent === "nps_lite") {
+            handleFinalizeButtonNpsLite();
+          } else if (scaleType.textContent === "likert") {
+            handleFinalizeButtonLikert();
           }
           setIsDataSaved(true);
         }
@@ -1230,10 +1465,8 @@ const Header = () => {
         user_type: user_type,
         link_id: link_idd,
         action: "finalized",
-
         authorized: authorized,
-
-        item_type: "clone",
+        item_type: action,
         item_id: _id,
         company_id: companyId,
         role: role,
