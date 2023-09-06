@@ -76,6 +76,11 @@ code {
     overflow: auto;
     touch-action: none;
     max-width: 500px;
+    cursor: grab;
+  }
+
+  .fixed3:active {
+    cursor: grabbing;
   }
   /* .fixed3 {
     position: fixed;
