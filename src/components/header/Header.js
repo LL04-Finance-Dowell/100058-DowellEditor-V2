@@ -936,7 +936,6 @@ const Header = () => {
   }, [element_updated_length]);
 
   function handleFinalizeButton() {
-    localStorage.setItem("hideFinalizeButton", "true");
     const username = decoded?.details?.authorized;
     console.log(username);
 
