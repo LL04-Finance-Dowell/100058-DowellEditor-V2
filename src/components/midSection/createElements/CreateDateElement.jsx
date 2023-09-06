@@ -29,8 +29,14 @@ function createDateInputElement(holderDIV, focuseddClassMaintain, handleClicked,
         setMethod("select");
 
         function dateClick() {
-          document.getElementById("date_picker").click();
-          setRightSideDateMenu(false);
+          const datePickerElement = document.getElementById("date_picker");
+          if (datePickerElement) {
+            console.log("Element found:", datePickerElement);
+            datePickerElement.click();
+            setRightSideDateMenu(false);
+          } else {
+            console.error("Element with ID 'date_picker' not found.");
+          }
         }
         dateField.onclick = (e) => {
           e.stopPropagation();
