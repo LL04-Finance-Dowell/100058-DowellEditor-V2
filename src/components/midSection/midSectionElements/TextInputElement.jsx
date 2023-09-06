@@ -4,7 +4,7 @@ import copyInput from '../CopyInput';
 
 // Regular JavaScript function to create a text input field
 function createTextInputField(id, element, document_map_required, p, holderDIV, focuseddClassMaintain, handleClicked, setSidebar) {
-
+  let isAnyRequiredElementEdited = false;
   const inputField = document.createElement("div");
   inputField.setAttribute("contenteditable", true);
   inputField.className = "textInput";

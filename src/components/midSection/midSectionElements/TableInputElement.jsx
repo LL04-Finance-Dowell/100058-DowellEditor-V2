@@ -111,7 +111,8 @@ export const CreateTableComponent = (
      setRightSideDateMenu 
      )=>{
 
-   
+      let isAnyRequiredElementEdited = false;
+      
     let tableField = document.createElement("div");
     tableField.className = "tableInput";
     tableField.id = id;

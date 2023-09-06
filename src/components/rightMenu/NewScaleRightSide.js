@@ -1162,7 +1162,6 @@ const ScaleRightSide = () => {
         parseInt(document.getElementById("upperVal").value, 10)
       );
       const spacing = parseInt(document.getElementById("spacing").value, 10);
-      const lowerVal = -upperVal;
       tempText?.remove();
 
       // for (let i = 0; i < buttonCircle.length; i++) {
@@ -1194,22 +1193,15 @@ const ScaleRightSide = () => {
           .filter((emoji) => emoji !== "");
 
         const emojiLabels = {};
-        console.log("This is the emoji", emojis);
-        const selectedCount = Math.min(
-          emojis.length,
-          Math.abs(Math.floor(upperLimit / space) * 2) +
-            Math.abs(-Math.floor(upperLimit / space) * 2) +
-            spacing
-        );
-
-        for (
-          let i = Math.floor(upperLimit / space) * 2 * -1;
-          i <= Math.floor(upperLimit / space) * 2;
-          i += spacing
-        ) {
-          for (let j = 0; j < emojis.length; j++) {
+        let j = 0
+        let valRange = (upperLimit % space) !== 0 ? Math.floor(upperLimit / space) * 2 : upperLimit
+        for (let i = valRange * -1; i <= valRange; i += spacing) {
+          if(i !== 0) { 
             const emojiIndex = j;
             emojiLabels[i] = emojis[emojiIndex];
+            j++
+            console.log(i)
+            console.log(Math.floor(upperLimit / space))
           }
         }
 
@@ -7500,7 +7492,7 @@ const ScaleRightSide = () => {
             // </select>
           </div> */}
             </div>
-            <div className="mt-2 text-center pt-3">
+            <div className=" text-center pt-3">
               <Button
                 variant="primary"
                 className="px-5"
@@ -7511,7 +7503,7 @@ const ScaleRightSide = () => {
             </div>
             <div
               className="text-center pt-3"
-              style={{ display: "flex", gap: "10px" }}
+              style={{display: "flex", justifyContent:"center"}}
             >
               <Button
                 variant="primary"
