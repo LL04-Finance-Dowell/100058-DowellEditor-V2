@@ -7492,7 +7492,7 @@ const ScaleRightSide = () => {
             // </select>
           </div> */}
             </div>
-            <div className="mt-2 text-center pt-3">
+            <div className=" text-center pt-3">
               <Button
                 variant="primary"
                 className="px-5"
@@ -7503,7 +7503,7 @@ const ScaleRightSide = () => {
             </div>
             <div
               className="text-center pt-3"
-              style={{ display: "flex", gap: "10px" }}
+              style={{display: "flex", justifyContent:"center"}}
             >
               <Button
                 variant="primary"
