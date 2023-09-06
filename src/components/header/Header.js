@@ -1380,7 +1380,7 @@ const Header = () => {
                 contentEditable={true}
                 style={{
                   fontSize: 18,
-                  height: "75px",
+                  height: window.innerWidth<993 ? "75px": "50px",
                   overflowY: "auto",
                   padding: "10px",
                 }}
