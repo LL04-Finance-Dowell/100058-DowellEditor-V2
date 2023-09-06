@@ -1817,7 +1817,7 @@ const ScaleRightSide = () => {
       const numColumns = Math.min(updatedLabelScale, 3);
 
       const likertScaleArray = document.createElement("div");
-      likertScaleArray.className = "likert_Scale_Array";
+      likertScaleArray.className = "likertScaleArray";
       likertScaleArray.textContent = updatedLabels;
       likertScaleArray.style.display = "none";
       labelHold.append(likertScaleArray);
@@ -2036,6 +2036,7 @@ const ScaleRightSide = () => {
 
                 labelHold.appendChild(circle);
               }
+              console.log("This is it", likertScaleArray)
             }
           })
           .catch((err) => {

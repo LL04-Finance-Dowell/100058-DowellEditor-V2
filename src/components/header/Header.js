@@ -684,9 +684,10 @@ const Header = () => {
 
           if (scaleType.textContent === "likert") {
             likertScaleArray = newScales[b].querySelector(
-              ".likert_Scale_Array"
+              ".likertScaleArray"
             );
             orientation = newScales[b].querySelector(".orientation");
+            console.log("This is likert",likertScaleArray.textContent)
           }
 
           let percentBackground = "";
