@@ -1989,13 +1989,13 @@ const MidSection = React.forwardRef((props, ref) => {
             handleDropp,
             p,
             table_dropdown_focuseddClassMaintain
-            ,focuseddClassMaintain,
+            , focuseddClassMaintain,
             handleClicked,
             setSidebar,
             setStartDate,
             setMethod,
-            setRightSideDateMenu 
-            )
+            setRightSideDateMenu
+          )
 
         }
         if (element.type === "IFRAME_INPUT") {
@@ -2348,8 +2348,7 @@ const MidSection = React.forwardRef((props, ref) => {
     var data = event.dataTransfer.getData("text");
     if (data == "rightMenuDragStart") {
 
-      // to do 
-      // alert("some one draged me")
+      console.log('right menu drag');
 
 
 
