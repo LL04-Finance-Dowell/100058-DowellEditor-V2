@@ -1606,7 +1606,7 @@ const ScaleRightSide = () => {
               fontcolor,
               fontstyle,
               custom_emoji_format
-            } = res.data.data;
+            } = res.data.data.settings;
             const textValues = [left, center, right];
 
             const npsLiteTextArray = document.createElement("div");
@@ -1700,7 +1700,7 @@ const ScaleRightSide = () => {
                 fontcolor,
                 fontstyle,
                 custom_emoji_format
-              } = res.data.data;
+              } = res.data.data.settings;
               const textValues = [left, center, right];
 
               const npsLiteTextArray = document.createElement("div");

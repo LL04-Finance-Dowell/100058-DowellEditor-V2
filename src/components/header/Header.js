@@ -683,11 +683,9 @@ const Header = () => {
           let likertScaleArray = "";
 
           if (scaleType.textContent === "likert") {
-            likertScaleArray = newScales[b].querySelector(
-              ".likertScaleArray"
-            );
+            likertScaleArray = newScales[b].querySelector(".likertScaleArray");
             orientation = newScales[b].querySelector(".orientation");
-            console.log("This is likert",likertScaleArray.textContent)
+            console.log("This is likert", likertScaleArray.textContent);
           }
 
           let percentBackground = "";
@@ -972,6 +970,26 @@ const Header = () => {
       product_name: "XYZ511",
       username: authorizedLogin(),
       document_responses: documentResponses,
+
+      action: decoded.details.action,
+      authorized: decoded.details.authorized,
+      cluster: decoded.details.cluster,
+      collection: decoded.details.collection,
+      command: decoded.details.command,
+      database: decoded.details.database,
+      document: decoded.details.document,
+      document_flag: decoded.details.document_flag,
+      document_right: decoded.details.document_right,
+      field: decoded.details.field,
+      function_ID: decoded.details.function_ID,
+      metadata_id: decoded.details.metadata_id,
+      role: decoded.details.role,
+      team_member_ID: decoded.details.team_member_ID,
+      content: decoded.details.update_field.content,
+      document_name: decoded.details.update_field.document_name,
+      page: decoded.details.update_field.page,
+      user_type: decoded.details.user_type,
+      _id: decoded.details._id,
     };
 
     Axios.post(
@@ -1027,6 +1045,25 @@ const Header = () => {
       product_name: "XYZ511",
       username: authorizedLogin(),
       document_responses: documentResponses,
+      action: decoded.details.action,
+      authorized: decoded.details.authorized,
+      cluster: decoded.details.cluster,
+      collection: decoded.details.collection,
+      command: decoded.details.command,
+      database: decoded.details.database,
+      document: decoded.details.document,
+      document_flag: decoded.details.document_flag,
+      document_right: decoded.details.document_right,
+      field: decoded.details.field,
+      function_ID: decoded.details.function_ID,
+      metadata_id: decoded.details.metadata_id,
+      role: decoded.details.role,
+      team_member_ID: decoded.details.team_member_ID,
+      content: decoded.details.update_field.content,
+      document_name: decoded.details.update_field.document_name,
+      page: decoded.details.update_field.page,
+      user_type: decoded.details.user_type,
+      _id: decoded.details._id,
     };
 
     Axios.post(
@@ -1140,6 +1177,25 @@ const Header = () => {
       product_name: "XYZ511",
       username: authorizedLogin(),
       document_responses: documentResponses,
+      action: decoded.details.action,
+      authorized: decoded.details.authorized,
+      cluster: decoded.details.cluster,
+      collection: decoded.details.collection,
+      command: decoded.details.command,
+      database: decoded.details.database,
+      document: decoded.details.document,
+      document_flag: decoded.details.document_flag,
+      document_right: decoded.details.document_right,
+      field: decoded.details.field,
+      function_ID: decoded.details.function_ID,
+      metadata_id: decoded.details.metadata_id,
+      role: decoded.details.role,
+      team_member_ID: decoded.details.team_member_ID,
+      content: decoded.details.update_field.content,
+      document_name: decoded.details.update_field.document_name,
+      page: decoded.details.update_field.page,
+      user_type: decoded.details.user_type,
+      _id: decoded.details._id,
     };
 
     Axios.post(
@@ -1278,7 +1334,7 @@ const Header = () => {
     cluster: decoded.details.cluster,
     document: decoded.details.document,
   };
-  console.log("here is new data for export",dataa);
+  console.log("here is new data for export", dataa);
 
   var stringifiedData = CryptoJS.enc.Utf8.parse(JSON.stringify(dataa));
   var encodedData = base64url(stringifiedData);
