@@ -861,7 +861,7 @@ const Header = () => {
             top: tempPosn.top,
             topp: payments[p].parentElement.style.top,
             left: tempPosn.left,
-            type: "BUTTON_INPUT",
+            type: "PAYMENT_INPUT",
             buttonBorder: `${buttonBorderSize}px dotted ${buttonBorderColor}`,
             data: payments[p].textContent,
             raw_data: tempElem.children[1].innerHTML,

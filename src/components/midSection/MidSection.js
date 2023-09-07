@@ -207,6 +207,7 @@ const MidSection = React.forwardRef((props, ref) => {
           email2: false,
           newScale2: false,
           camera2: false,
+          payment2: false,
         });
 
         const divsArray = document.getElementsByClassName(

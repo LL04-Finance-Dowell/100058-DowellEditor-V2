@@ -26,6 +26,17 @@ function createPaymentInputField(id, element, p, holderDIV, focuseddClassMaintai
         };
     }
 
+    if (decoded.details.action === "document") {
+        paymentField.onclick = (e) => {
+            focuseddClassMaintain(e);
+            if (e.ctrlKey) {
+                copyInput("payment2");
+            }
+            handleClicked("payment2");
+            setSidebar(true);
+        };
+    }
+
     paymentField.onmouseover = (e) => {
         // if (buttonField?.parentElement?.classList.contains("holderDIV")) {
         //   buttonField?.parentElement?.classList.add("element_updated");
@@ -36,7 +47,7 @@ function createPaymentInputField(id, element, p, holderDIV, focuseddClassMaintai
         );
         if (
             paymentField.parentElement.classList.contains("holderDIV") &&
-            required_map_document.length > 0
+            required_map_document?.length > 0
         ) {
             paymentField.parentElement.classList.add("element_updated");
         }
@@ -50,7 +61,7 @@ function createPaymentInputField(id, element, p, holderDIV, focuseddClassMaintai
         element.purpose == "custom" &&
         element.raw_data !== ""
     ) {
-        buttonField.onclick = (e) => {
+        paymentField.onclick = (e) => {
             window.open(element.raw_data, "_blank");
         };
     }

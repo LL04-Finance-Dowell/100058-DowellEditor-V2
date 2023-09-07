@@ -22,7 +22,7 @@ const PaymentRightSide = () => {
     const [stripePaymentData, setStripePaymentData] = useState({});
     const [paypalPaymentData, setPaypalPaymentData] = useState({});
     
-    const [stripeKey, setStripeKey] = useState("");
+    // const [stripeKey, setStripeKey] = useState("");
     const [paypalClientId, setPaypalClientId] = useState("");
     const [loader, setLoader] = useState(false);
     var decoded = jwt_decode(token);
@@ -45,16 +45,21 @@ const PaymentRightSide = () => {
         const btnName = document.getElementById("button_name");
         const button = document.querySelector(".focussed");
 
-        if (btnName.value != "") {
-            button.textContent = btnName.value;
-        }
+        // if (btnName.value != "") {
+        //     button.textContent = btnName?.value;
+        // }
 
         const link = document.getElementById("link").value;
         if (link.value != "") {
             setButtonLink(link);
             holderDIV.children[1].innerHTML = link;
         }
+        // console.log("Master link", holderDIV);
+
     };
+    // console.log("Master link", link);
+    // console.log("Master link", holderDIV.children[1].innerHTML);
+
 
     const handleSelect = (event) => {
         let selectField = document.getElementById("selectt");
@@ -116,12 +121,12 @@ const PaymentRightSide = () => {
         e.preventDefault();
         const stripeData = {
             // stripe_key: "sk_test_51LiKUnEJkGNthfbzNbTn7Up7EnVwyeqRWLcRX1UWyq7ABL7wn1VMmHsS4Aox3U9b2nh3HkHd32vsQRR7nItC8ybv00WChhFen4",
-            stripe_key: stripeKey,
+            stripe_key: link,
             template_id: decoded.details._id,
-            price: 0,
-            product: '',
-            currency_code: '',
-            callback_url: '',
+            price: +price,
+            product: productName,
+            currency_code: currencyCode,
+            callback_url: callbackUrl,
             // template_id: decoded.details._id,
             // price: +price,
             // product: productName,
@@ -218,7 +223,7 @@ const PaymentRightSide = () => {
                     selectPayment == "paypal" ?
                         <Form noValidate validated={validated} onSubmit={handlePaypalPayment}>
                             {
-                                decoded.details.action == "template" ? <div>
+                                decoded.details.action === "template" ? <div>
                                     <Form.Label>Paypal Client Id</Form.Label>
                                     <Form.Control
                                         required
@@ -229,14 +234,8 @@ const PaymentRightSide = () => {
                                         onChange={(e) => setPaypalClientId(e.target.value)}
 
                                     />
-                                    <br />
-                                    <button type="submit" className="btn btn-primary">
-                                        {
-                                            loader ? "Wait...." : "Submit Info"
-                                        }
-                                    </button>
-                                </div> : <div>
-                                    <Form.Label>Product Name</Form.Label>
+                                    {/* <br /> */}
+                                    {/* <Form.Label>Product Name</Form.Label>
                                     <Form.Control
                                         required
                                         type="text"
@@ -282,13 +281,67 @@ const PaymentRightSide = () => {
                                         // id="button_name"
                                         value={callbackUrl}
                                         onChange={(e) => setCallbackUrl(e.target.value)}
-                                    />
+                                    /> */}
                                     <br />
                                     <button type="submit" className="btn btn-primary">
                                         {
                                             loader ? "Wait...." : "Submit Info"
                                         }
                                     </button>
+                                </div> : <div>
+                                    <Form.Label>Product Name</Form.Label>
+                                    <Form.Control
+                                       required
+                                        type="text"
+                                        placeholder="Product name"
+                                        id="button_name"
+                                        value={productName}
+                                      onChange={(e) => setProductName(e.target.value)}
+                                     />
+
+                                     <br />
+
+                                    <Form.Label>Price</Form.Label>
+                                    <Form.Control
+                                        required
+                                        type="number"
+                                        placeholder="Product Price"
+                                        // id="button_name"
+                                        value={price}
+                                        onChange={(e) => setPrice(e.target.value)}
+                                    />
+                                     <br />
+                                     <select
+                                        required
+                                        onChange={(e) => setCurrencyCode(e.target.value)}
+                                        id="selectt"
+                                        // onChange={handleDateMethod}
+                                        className="select border-0 bg-white rounded w-100 h-75 p-2"
+                                    >
+                                        <option value="">Select Currency</option>
+                                        <option value="usd">USD</option>
+                                        <option value="aed">AED</option>
+                                        <option value="afn">AFN</option>
+                                        <option value="amd">AMD</option>
+                                        <option value="ang">ANG</option>
+                                        <option value="aoa">AOA</option>
+                                    </select>
+                                    <br />
+                                    <Form.Label>Callback URL</Form.Label>
+                                    <Form.Control
+                                        required
+                                        type="url"
+                                        placeholder="Callback URL"
+                                        // id="button_name"
+                                        value={callbackUrl}
+                                        onChange={(e) => setCallbackUrl(e.target.value)}
+                                    />
+                                    <br />
+                                    <button type="submit" className="btn btn-primary">
+                                        {
+                                            loader ? "Wait...." : "Submit Info"
+                                        }
+                                    </button> 
                                 </div>
                             }
                         </Form> : <Form noValidate validated={validated} onSubmit={handleStripePayment}>
@@ -299,12 +352,62 @@ const PaymentRightSide = () => {
                                         required
                                         type="text"
                                         placeholder="Stripe Key"
-                                        // id="button_name"
-                                        value={stripeKey}
-                                        onChange={(e) => setStripeKey(e.target.value)}
+                                        id="link"
+                                        // value={stripeKey}
+                                        onChange={() => {}}
+                                        // onChange={(e) => setStripeKey(e.target.value)}
 
                                     />
                                     <br />
+                                    {/* <Form.Label>Product Name</Form.Label>
+                                    <Form.Control
+                                        required
+                                        type="text"
+                                        placeholder="Product name"
+                                        id="button_name"
+                                        value={productName}
+                                        onChange={(e) => setProductName(e.target.value)}
+
+                                    />
+                                    <br />
+
+                                    <Form.Label>Price</Form.Label>
+                                    <Form.Control
+                                        required
+                                        type="number"
+                                        placeholder="Product Price"
+                                        // id="button_name"
+                                        value={price}
+                                        onChange={(e) => setPrice(e.target.value)}
+                                    />
+                                    <br />
+                                    <select
+                                        required
+                                        onChange={(e) => setCurrencyCode(e.target.value)}
+                                        id="selectt"
+                                        // onChange={handleDateMethod}
+                                        className="select border-0 bg-white rounded w-100 h-75 p-2"
+                                    >
+                                        <option value="">Select Currency</option>
+                                        <option value="usd">USD</option>
+                                        <option value="aed">AED</option>
+                                        <option value="afn">AFN</option>
+                                        <option value="amd">AMD</option>
+                                        <option value="ang">ANG</option>
+                                        <option value="aoa">AOA</option>
+                                    </select>
+                                    <br />
+                                    <Form.Label>Callback URL</Form.Label>
+                                    <Form.Control
+                                        required
+                                        type="url"
+                                        placeholder="Callback URL"
+                                        // id="button_name"
+                                        value={callbackUrl}
+                                        onChange={(e) => setCallbackUrl(e.target.value)}
+                                    />
+                                    <br /> */}
+
                                     <button type="submit" className="btn btn-primary">
                                         {
                                             loader ? "Wait...." : "Submit Info"
@@ -360,7 +463,6 @@ const PaymentRightSide = () => {
                                     />
                                     <br />
 
-                                    {/* <Link to={"/thanks"} > */}
                                     <button type="submit" className="btn btn-primary">
                                         {
                                             loader ? "Wait...." : "Submit Info"
