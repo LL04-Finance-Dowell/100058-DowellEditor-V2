@@ -79,7 +79,7 @@ function createNewScaleInputField(
   scaleHold.append(npsLiteOptionHolder);
 
   const likertScaleArray = document.createElement("div");
-  likertScaleArray.className = "likert_Scale_Array";
+  likertScaleArray.className = "likertScaleArray";
   likertScaleArray.textContent = element?.raw_data?.likertScaleArray || "";
   likertScaleArray.style.display = "none";
   scaleHold.append(likertScaleArray);
