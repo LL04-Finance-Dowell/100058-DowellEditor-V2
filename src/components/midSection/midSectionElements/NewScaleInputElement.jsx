@@ -17,7 +17,7 @@ function createNewScaleInputField(
   document_map_required
 ) {
   let isAnyRequiredElementEdited = false;
-  
+
   let scaleField = document.createElement("div");
   scaleField.className = "newScaleInput";
   scaleField.id = id;
@@ -267,6 +267,9 @@ function createNewScaleInputField(
               holdElem.textContent = circle.textContent;
               holding?.appendChild(holdElem);
               console.log("This is holdEle", holdElem.textContent);
+              if (scaleField?.parentElement?.classList.contains("holderDIV")) {
+                scaleField?.parentElement?.classList.add("element_updated");
+              }
             }
 
             const scaleID = scale?.querySelector(".scaleId")?.textContent;
@@ -585,10 +588,7 @@ function createNewScaleInputField(
 
             function rgbToHex(r, g, b) {
               return (
-                "#" +
-                componentToHex(r) +
-                componentToHex(g) +
-                componentToHex(b)
+                "#" + componentToHex(r) + componentToHex(g) + componentToHex(b)
               );
             }
 
