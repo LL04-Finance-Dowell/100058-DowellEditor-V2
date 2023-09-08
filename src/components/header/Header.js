@@ -403,16 +403,15 @@ const Header = () => {
               const tableTR = { tr: null };
               const newTableTR = [];
               for (let j = 0; j < tableChildren[i].children.length; j++) {
-                const childNodes = tableChildren[i].children[j]?.childNodes;
-                const tdElement = [];
-                childNodes.forEach((child) => {
-                  if (
-                    !child.classList.contains("row-resizer") &&
-                    !child.classList.contains("td-resizer")
-                  ) {
+                // const element = tableChildren[i];
+
+                const childNodes = tableChildren[i].children[j]?.childNodes
+                const tdElement=[]
+                childNodes.forEach(child=>{
+                  if (!child.classList.contains("row-resizer") && !child.classList.contains("td-resizer")) {
                     tdElement.push(child);
-                  }
-                });
+                  }               
+                })
                 const TdDivClassName = tdElement[0]?.className.split(" ")[0];
                 const trChild = {
                   td: {
@@ -421,12 +420,12 @@ const Header = () => {
                       (TdDivClassName == "textInput" && "TEXT_INPUT") ||
                       (TdDivClassName == "imageInput" && "IMAGE_INPUT") ||
                       (TdDivClassName == "signInput" && "SIGN_INPUT"),
+                    // if(){
                     data:
                       TdDivClassName == "imageInput"
                         ? tableChildren[i].children[j]?.firstElementChild.style
                             .backgroundImage
-                        : tableChildren[i].children[j]?.firstElementChild
-                            ?.innerHTML,
+                        : tdElement[0]?.innerHTML,
                     id: `tableTd${j + 1}`,
                   },
                 };
@@ -435,6 +434,7 @@ const Header = () => {
               tableTR.tr = newTableTR;
               allTableCCells.push(tableTR);
             }
+            // console.log("allTableCCells", allTableCCells);
             return allTableCCells;
           }
           elem = {
