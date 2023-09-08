@@ -743,7 +743,6 @@ function createNewScaleInputField(
           });
         }, 1000);
 
-        if (!shouldHideFinalizeButton) {
           circle.addEventListener("click", function () {
             if (!isClicked) {
               let scale =
@@ -826,7 +825,6 @@ function createNewScaleInputField(
               );
             }
           });
-        }
       }
     }
   } else if (scaleTypeHolder.textContent === "percent_scale") {
