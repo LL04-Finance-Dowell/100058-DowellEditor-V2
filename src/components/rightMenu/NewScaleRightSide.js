@@ -1871,6 +1871,61 @@ const ScaleRightSide = () => {
         // circle.style.gap = "20px";
       }
 
+      const basePayload = {
+        user: "yes",
+        username: "TadesseJemal",
+        instance_id: "2",
+        orientation: option?.value,
+        fontstyle: btnUpdateScaleFontLinkert.value,
+        scale_name: beNametnUpdateScal.value,
+        no_of_scales: numberOfScalesValue,
+        font_color: btnUpdateFontColor.value,
+        round_color: btnUpdateButton.value,
+        label_type: labelTypeForPut,
+        label_scale_selection: updatedLabelScale,
+        time: timeId.style.display === "none" ? "00" : time?.value,
+        fomat: labelTypeForPut,
+      };
+
+      // Create a dynamic payload by conditionally adding fields
+      const dynamicPayload = {
+        ...basePayload,
+      // Conditionally add either 'custom_emoji_format' or 'label_scale_input'
+        ...(labelType === "Text"
+          ? { label_scale_input: updatedLabels }
+          :{ label_scale_input: updatedLabels,
+           custom_emoji_format: customEmojiFormat }),
+      };
+
+      // for put request
+      const basePayloadPut = {
+        scale_id: idHolder.textContent,
+        user: "yes",
+        instance_id: "2",
+        username: "TadesseJemal",
+        fontstyle: btnUpdateScaleFontLinkert.value,
+        orientation: option?.value,
+        scale_name: beNametnUpdateScal.value,
+        no_of_scales: numberOfScalesValue,
+        font_color: btnUpdateFontColor.value,
+        round_color: btnUpdateButton.value,
+        label_type: labelTypeForPut,
+        label_scale_selection: updatedLabelScale,
+        label_scale_input: updatedLabelInput,
+        custom_emoji_format: customEmojiFormat,
+        time: timeId.style.display === "none" ? "00" : time?.value,
+        fomat: labelTypeForPut,
+      };
+  
+      const dynamicPayloadPut = {
+        ...basePayloadPut,
+      // Conditionally add either 'custom_emoji_format' or 'label_scale_input'
+        ...(labelType === "Text"
+          ? { label_scale_input: updatedLabels }
+          :{ label_scale_input: updatedLabels,
+           custom_emoji_format: customEmojiFormat }),
+      };
+
       if (
         idHolder.textContent === "scale Id" ||
         idHolder.textContent === "id"
@@ -1879,23 +1934,7 @@ const ScaleRightSide = () => {
         console.log("post req");
         Axios.post(
           "https://100035.pythonanywhere.com/likert/likert-scale_create/",
-          {
-            user: "yes",
-            username: "TadesseJemal",
-            instance_id: "2",
-            orientation: option?.value,
-            fontstyle: btnUpdateScaleFontLinkert.value,
-            scale_name: beNametnUpdateScal.value,
-            no_of_scales: numberOfScalesValue,
-            font_color: btnUpdateFontColor.value,
-            round_color: btnUpdateButton.value,
-            label_type: labelTypeForPut,
-            label_scale_selection: updatedLabelScale,
-            label_scale_input: updatedLabelInput,
-            custom_emoji_format: customEmojiFormat,
-            time: timeId.style.display === "none" ? "00" : time?.value,
-            fomat: labelTypeForPut,
-          }
+          dynamicPayload,
         )
           .then((res) => {
             setIsLoading(false);
@@ -1970,24 +2009,8 @@ const ScaleRightSide = () => {
         console.log(idHolder.textContent);
         const timestamp = new Date().getTime(); // Generate a unique timestamp
         const apiUrl = `https://100035.pythonanywhere.com/likert/likert-scale_create/?timestamp=${timestamp}`;
-        Axios.put(apiUrl, {
-          scale_id: idHolder.textContent,
-          user: "yes",
-          instance_id: "2",
-          username: "TadesseJemal",
-          fontstyle: btnUpdateScaleFontLinkert.value,
-          orientation: option?.value,
-          scale_name: beNametnUpdateScal.value,
-          no_of_scales: numberOfScalesValue,
-          font_color: btnUpdateFontColor.value,
-          round_color: btnUpdateButton.value,
-          label_type: labelTypeForPut,
-          label_scale_selection: updatedLabelScale,
-          label_scale_input: updatedLabelInput,
-          custom_emoji_format: customEmojiFormat,
-          time: timeId.style.display === "none" ? "00" : time?.value,
-          fomat: labelTypeForPut,
-        })
+        Axios.put(apiUrl, 
+          dynamicPayloadPut)
           .then((res) => {
             if (res.status == 200) {
               setIsLoading(false);
