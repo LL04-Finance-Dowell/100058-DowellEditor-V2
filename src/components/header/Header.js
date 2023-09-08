@@ -690,6 +690,7 @@ const Header = () => {
 
           let percentBackground = "";
           let percentLabel = "";
+          let percentContainer = "";
           let percentLeft = "";
           let percentCenter = [];
           let percentRight = "";
@@ -700,10 +701,13 @@ const Header = () => {
             scaleType.textContent === "percent_sum_scale"
           ) {
             percentBackground = newScales[b].querySelector(".percent-slider");
-            percentLabel = newScales[b]?.querySelectorAll(".label_hold");
+            percentLabel = newScales[b]?.querySelector(".label_hold").children;
+            percentContainer = newScales[b]?.querySelectorAll(".containerDIV");
+            // percentLabel =
+            //   newScales[b]?.querySelector(".containerDIV").children;
             console.log(percentLabel);
 
-            percentLabel.forEach((elem) => {
+            percentContainer.forEach((elem) => {
               prodName.push(elem.querySelector(".product_name")?.textContent);
               percentCenter.push(
                 elem.querySelector("center-percent")?.textContent

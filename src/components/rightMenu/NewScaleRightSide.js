@@ -813,7 +813,14 @@ const ScaleRightSide = () => {
       const selectedOption = optionSelect.value;
       tempText?.remove();
 
+      const nps_vertical = document.createElement("h2");
+      nps_vertical.className = "nps_vertical";
+      nps_vertical.style.display = "none";
+      nps_vertical.textContent = "";
+
       if (option.value === "Horizontal") {
+        nps_vertical.textContent = "";
+
         button4.style.border = "block";
         button4.style.textAlign = "center";
         button.style.display = "flex";
@@ -827,18 +834,16 @@ const ScaleRightSide = () => {
         buttonChild.style.flexDirection = "row";
         buttonChild.style.justifyContent = "space-between";
         buttonChild.style.alignItems = "center";
-        button.style.position = "relative";
+        button.style.position = "";
         buttonChild.style.marginLeft = "0px";
         button.style.marginLeft = "0px";
+        labelHold.style.transform = "";
+        buttonChild.style.width = "";
+        buttonChild.style.height = "";
       }
 
       if (option.value === "Vertical") {
-        const nps_vertical = document.createElement("h2");
-        nps_vertical.className = "nps_vertical";
-        nps_vertical.style.display = "none";
         nps_vertical.textContent = "nps_vertical";
-
-        button4.appendChild(nps_vertical);
 
         labelHold.style.height = "82%";
         labelHold.style.top = "54%";
@@ -862,6 +867,8 @@ const ScaleRightSide = () => {
 
         buttonCircleM.style.marginTop = "2px";
       }
+      const orientation = scale?.querySelector(".nps_vertical")?.remove();
+      button4.appendChild(nps_vertical);
 
       const prepareImageLabels = () => {
         const imageLabels = {};
@@ -1193,15 +1200,18 @@ const ScaleRightSide = () => {
           .filter((emoji) => emoji !== "");
 
         const emojiLabels = {};
-        let j = 0
-        let valRange = (upperLimit % space) !== 0 ? Math.floor(upperLimit / space) * 2 : upperLimit
+        let j = 0;
+        let valRange =
+          upperLimit % space !== 0
+            ? Math.floor(upperLimit / space) * 2
+            : upperLimit;
         for (let i = valRange * -1; i <= valRange; i += spacing) {
-          if(i !== 0) { 
+          if (i !== 0) {
             const emojiIndex = j;
             emojiLabels[i] = emojis[emojiIndex];
-            j++
-            console.log(i)
-            console.log(Math.floor(upperLimit / space))
+            j++;
+            console.log(i);
+            console.log(Math.floor(upperLimit / space));
           }
         }
 
@@ -1605,7 +1615,7 @@ const ScaleRightSide = () => {
               name,
               fontcolor,
               fontstyle,
-              custom_emoji_format
+              custom_emoji_format,
             } = res.data.data.settings;
             const textValues = [left, center, right];
 
@@ -1699,7 +1709,7 @@ const ScaleRightSide = () => {
                 name,
                 fontcolor,
                 fontstyle,
-                custom_emoji_format
+                custom_emoji_format,
               } = res.data.data.settings;
               const textValues = [left, center, right];
 
@@ -1890,11 +1900,13 @@ const ScaleRightSide = () => {
       // Create a dynamic payload by conditionally adding fields
       const dynamicPayload = {
         ...basePayload,
-      // Conditionally add either 'custom_emoji_format' or 'label_scale_input'
+        // Conditionally add either 'custom_emoji_format' or 'label_scale_input'
         ...(labelType === "Text"
           ? { label_scale_input: updatedLabels }
-          :{ label_scale_input: updatedLabels,
-           custom_emoji_format: customEmojiFormat }),
+          : {
+              label_scale_input: updatedLabels,
+              custom_emoji_format: customEmojiFormat,
+            }),
       };
 
       // for put request
@@ -1916,14 +1928,16 @@ const ScaleRightSide = () => {
         time: timeId.style.display === "none" ? "00" : time?.value,
         fomat: labelTypeForPut,
       };
-  
+
       const dynamicPayloadPut = {
         ...basePayloadPut,
-      // Conditionally add either 'custom_emoji_format' or 'label_scale_input'
+        // Conditionally add either 'custom_emoji_format' or 'label_scale_input'
         ...(labelType === "Text"
           ? { label_scale_input: updatedLabels }
-          :{ label_scale_input: updatedLabels,
-           custom_emoji_format: customEmojiFormat }),
+          : {
+              label_scale_input: updatedLabels,
+              custom_emoji_format: customEmojiFormat,
+            }),
       };
 
       if (
@@ -1934,7 +1948,7 @@ const ScaleRightSide = () => {
         console.log("post req");
         Axios.post(
           "https://100035.pythonanywhere.com/likert/likert-scale_create/",
-          dynamicPayload,
+          dynamicPayload
         )
           .then((res) => {
             setIsLoading(false);
@@ -2009,8 +2023,7 @@ const ScaleRightSide = () => {
         console.log(idHolder.textContent);
         const timestamp = new Date().getTime(); // Generate a unique timestamp
         const apiUrl = `https://100035.pythonanywhere.com/likert/likert-scale_create/?timestamp=${timestamp}`;
-        Axios.put(apiUrl, 
-          dynamicPayloadPut)
+        Axios.put(apiUrl, dynamicPayloadPut)
           .then((res) => {
             if (res.status == 200) {
               setIsLoading(false);
@@ -2065,7 +2078,7 @@ const ScaleRightSide = () => {
 
                 labelHold.appendChild(circle);
               }
-              console.log("This is it", likertScaleArray)
+              console.log("This is it", likertScaleArray);
             }
           })
           .catch((err) => {
@@ -2125,7 +2138,7 @@ const ScaleRightSide = () => {
       ).value;
 
       const containerDiv = document.createElement("div");
-      containerDiv.className = "containerDIV";
+      containerDiv.className = "label_hold";
 
       let product_names = document.getElementById("product_name");
       console.log(product_names.length);
@@ -2180,9 +2193,12 @@ const ScaleRightSide = () => {
               product_count,
               product_names,
             } = res.data.data.settings;
+            console.log(name, product_count, product_names);
 
             for (let i = 0; i < product_count; i++) {
               let newLabelHold = labelHold.cloneNode(true);
+              newLabelHold.classList.add("containerDIV");
+              newLabelHold.classList.remove("label_hold");
               newLabelHold.innerHTML = "";
               newLabelHold.style = "";
 
@@ -2242,12 +2258,13 @@ const ScaleRightSide = () => {
               percentChilds.appendChild(rightPercent);
 
               containerDiv.appendChild(newLabelHold);
+              // labelHold.append(newLabelHold);
 
               newLabelHold.appendChild(percentChilds);
               button4.appendChild(containerDiv);
 
               if (orientation === "Horizontal") {
-                scale.querySelector(".orientation").textContent = "";
+                scale?.querySelector(".orientation")?.remove();
                 button4.style.border = "block";
                 button4.style.textAlign = "center";
                 button.style.marginTop = "10px";
@@ -2281,9 +2298,9 @@ const ScaleRightSide = () => {
 
               scaleText.textContent = name;
 
-              button4.style.color = fontcolor;
+              button4.style.color = btnUpdateFontColor.value;
 
-              button4.style.fontFamily = fontstyle;
+              button4.style.fontFamily = btnUpdateScaleFont.value;
             }
           })
           .catch((err) => {
@@ -2330,6 +2347,8 @@ const ScaleRightSide = () => {
 
               for (let i = 0; i < product_count; i++) {
                 let newLabelHold = labelHold.cloneNode(true);
+                newLabelHold.classList.add("containerDIV");
+                newLabelHold.classList.remove("label_hold");
                 newLabelHold.innerHTML = "";
                 newLabelHold.style = "";
 
@@ -2389,12 +2408,13 @@ const ScaleRightSide = () => {
                 percentChilds.appendChild(rightPercent);
 
                 containerDiv.appendChild(newLabelHold);
+                // labelHold.append(newLabelHold);
 
                 newLabelHold.appendChild(percentChilds);
                 button4.appendChild(containerDiv);
 
                 if (orientation === "Horizontal") {
-                  scale.querySelector(".orientation").textContent = "";
+                  scale?.querySelector(".orientation")?.remove();
                   button4.style.border = "block";
                   button4.style.textAlign = "center";
                   button.style.marginTop = "10px";
@@ -2428,9 +2448,9 @@ const ScaleRightSide = () => {
 
                 scaleText.textContent = name;
 
-                button4.style.color = fontcolor;
+                button4.style.color = btnUpdateFontColor.value;
 
-                button4.style.fontFamily = fontstyle;
+                button4.style.fontFamily = btnUpdateScaleFont.value;
               }
             }
           })
@@ -7527,7 +7547,7 @@ const ScaleRightSide = () => {
             </div>
             <div
               className="text-center pt-3"
-              style={{display: "flex", justifyContent:"center"}}
+              style={{ display: "flex", justifyContent: "center" }}
             >
               <Button
                 variant="primary"
