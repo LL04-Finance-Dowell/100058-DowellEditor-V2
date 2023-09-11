@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import copyInput from '../CopyInput';
 
-// Regular JavaScript function to create a text input field
+// Regular JavaScript function to create text input field
 function createButtonInputField(id, element, p, holderDIV, focuseddClassMaintain, handleClicked, setSidebar, finalizeButton, rejectButton, decoded, document_map_required) {
+    let isAnyRequiredElementEdited = false;
     let buttonField = document.createElement("button");
     buttonField.className = "buttonInput";
     buttonField.id = id;

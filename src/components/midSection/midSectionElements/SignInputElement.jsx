@@ -4,6 +4,8 @@ import copyInput from '../CopyInput';
 // Regular JavaScript function to create a text input field
 function createSignInputField(id, element, p, holderDIV, focuseddClassMaintain, handleClicked, setSidebar) {
 
+    let isAnyRequiredElementEdited = false;
+    
     let signField = document.createElement("div");
     signField.className = "signInput";
     signField.id = id;

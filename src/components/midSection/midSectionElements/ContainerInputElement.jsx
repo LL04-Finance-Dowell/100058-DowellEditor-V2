@@ -4,6 +4,7 @@ import Axios from 'axios';
 
 // Regular JavaScript function to create a text input field
 function createContainerInputField(id, element, p, holderDIV, focuseddClassMaintain, handleClicked, setSidebar, table_dropdown_focuseddClassMaintain, decoded, setPostData, postData, getHolderDIV, getOffset, setStartDate, setMethod, setRightSideDateMenu, title, curr_user) {
+    let isAnyRequiredElementEdited = false;
     let containerField = document.createElement("div");
     containerField.className = "containerInput";
     containerField.id = id;

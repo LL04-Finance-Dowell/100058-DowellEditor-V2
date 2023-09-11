@@ -34,7 +34,7 @@ function createNewScaleInputElement(
 
   const tempText = document.createElement("div");
   tempText.className = "tempText";
-  tempText.textContent = "New scale";
+  tempText.textContent = "create your scale";
   tempText.style.fontWeight = "700";
   tempText.style.width = "100%";
   tempText.style.textAlign = "center";
