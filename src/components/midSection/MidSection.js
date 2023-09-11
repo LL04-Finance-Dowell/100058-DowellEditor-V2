@@ -135,18 +135,18 @@ const MidSection = React.forwardRef((props, ref) => {
   const divList = documnentsMap?.map?.((item) => item.page);
   var documnetMap = documnentsMap?.map?.((item) => item.content);
   const document_map_required = documnentsMap?.filter((item) => item.required);
-  console.log("document_map_required", document_map_required);
-  console.log("decode", decoded);
-  console.log("data", data);
+  // console.log("document_map_required", document_map_required);
+  // console.log("decode", decoded);
+  // console.log("data", data);
 
   const documentsMap = documnentsMap;
   if (documnentsMap?.length > 0) {
     const documentsMap = documnentsMap;
   } else {
-    console.log("There's no document map");
+    // console.log("There's no document map");
   }
 
-  console.log(documnetMap);
+  // console.log(documnetMap);
 
   const editorRef = useRef(null);
   const cutItemRef = useRef(null);
@@ -172,7 +172,7 @@ const MidSection = React.forwardRef((props, ref) => {
   useEffect(() => {
     document.addEventListener("mousedown", (event) => {
 
-      // console.log("getting mouse position on midsection", event.screenX, event.screenY);
+      // // console.log("getting mouse position on midsection", event.screenX, event.screenY);
       const holderDIV = document.getElementsByClassName("holderDIV");
       const holderr = document.getElementsByClassName("holder-menu");
       const resizerr = document.getElementsByClassName("resizeBtn");
@@ -218,7 +218,7 @@ const MidSection = React.forwardRef((props, ref) => {
 
   const getPostData = async () => {
     var decoded = jwt_decode(token);
-    //console.log(decoded);
+    //// console.log(decoded);
     const response = await Axios.post(
       "https://100058.pythonanywhere.com/api/get-data-from-collection/",
       {
@@ -289,7 +289,7 @@ const MidSection = React.forwardRef((props, ref) => {
     }
     setCutItem_value(e.target);
     cutItemRef.current = e.target;
-    console.log("target.parentElement", e.target);
+    // console.log("target.parentElement", e.target);
   };
 
   function getResizer(attr1, attr2) {
@@ -407,7 +407,7 @@ const MidSection = React.forwardRef((props, ref) => {
   const handlePaste = () => {
     const midSec = document.getElementById("midSection_container");
     // const element = JSON.parse(sessionStorage.getItem("cutItem"));
-    // console.log("sessionStorage.getItem", JSON.parse(sessionStorage.getItem("cutItem")))
+    // // console.log("sessionStorage.getItem", JSON.parse(sessionStorage.getItem("cutItem")))
     const element = JSON.parse(handleCutInputRef.current)
     const curr_user = document.getElementById("current-user");
     const copyData = sessionStorage.getItem("copyItem");
@@ -421,7 +421,7 @@ const MidSection = React.forwardRef((props, ref) => {
 
     const holderDIV = getHolderDIV(measure);
     if (handleCutInputRef.current) {
-      console.log("getting cutItem");
+      // console.log("getting cutItem");
 
       if (element.type === "DATE_INPUT") {
         const measure = {
@@ -592,7 +592,7 @@ const MidSection = React.forwardRef((props, ref) => {
           reader.readAsDataURL(imgBtn.files[0]);
         });
         imageField.outerHTML = `${element.data2}`;
-        console.log("element data getting", `${element.data}`);
+        // console.log("element data getting", `${element.data}`);
 
         // imgBtn.style.width = "100%";
         imageButton.append(imgBtn);
@@ -695,14 +695,14 @@ const MidSection = React.forwardRef((props, ref) => {
         )
           .then((res) => {
             setIsLoading(false);
-            console.log(res.data, "scaleData");
+            // console.log(res.data, "scaleData");
             setScaleData(res.data);
             const success = res.data.success;
             var successObj = JSON.parse(success);
             const id = successObj.inserted_id;
-            console.log(res.scale_urls, "stateScale");
+            // console.log(res.scale_urls, "stateScale");
             if (id.length) {
-              console.log(id, "id");
+              // console.log(id, "id");
               // setScaleId(id);
               scaleIdHolder.innerHTML = id;
             }
@@ -710,7 +710,7 @@ const MidSection = React.forwardRef((props, ref) => {
           })
           .catch((err) => {
             setIsLoading(false);
-            console.log(err);
+            // console.log(err);
           });
 
         scaleField.onclick = (e) => {
@@ -944,10 +944,10 @@ const MidSection = React.forwardRef((props, ref) => {
           }
           handleClicked("container2");
           setSidebar(true);
-          console.log("container field clicked");
+          // console.log("container field clicked");
         };
         containerField.ondragover = (e) => {
-          console.log("console from container dragover", e.target);
+          // console.log("console from container dragover", e.target);
           if (e.ctrlKey) {
             copyInput("container2");
           }
@@ -1277,21 +1277,21 @@ const MidSection = React.forwardRef((props, ref) => {
             )
               .then((res) => {
                 setIsLoading(false);
-                console.log(res.data, "scaleData");
+                // console.log(res.data, "scaleData");
                 setScaleData(res.data);
                 const success = res.data.success;
                 var successObj = JSON.parse(success);
                 const id = successObj.inserted_id;
-                console.log(res.scale_urls, "stateScale");
+                // console.log(res.scale_urls, "stateScale");
                 if (id.length) {
-                  console.log(id, "id");
+                  // console.log(id, "id");
                   setScaleId(id);
                 }
                 scale.src = res.data.scale_urls;
               })
               .catch((err) => {
                 setIsLoading(false);
-                console.log(err);
+                // console.log(err);
               });
 
             scaleFieldContainer.onclick = (e) => {
@@ -1416,7 +1416,7 @@ const MidSection = React.forwardRef((props, ref) => {
         holderDIV.append(purposeHolder);
       }
 
-      console.log("data", element, "cutItem_value", cutItem_value);
+      // console.log("data", element, "cutItem_value", cutItem_value);
       // sessionStorage.clear();
     }
   };
@@ -1436,7 +1436,7 @@ const MidSection = React.forwardRef((props, ref) => {
     }
 
     function getPosition(el) {
-      console.log("element check", el);
+      // console.log("element check", el);
       const midSec = document.getElementById("midSection_container");
       const rect = el.getBoundingClientRect();
       const midsectionRect = midSec.getBoundingClientRect();
@@ -1456,7 +1456,7 @@ const MidSection = React.forwardRef((props, ref) => {
     let tempPosn = getPosition(cutEle);
     const find_class_name = cutEle.firstElementChild?.className.split(" ")[0];
     let type = "";
-    // console.log("containerChildClassName", containerChildClassName);
+    // // console.log("containerChildClassName", containerChildClassName);
     switch (find_class_name) {
       case "dateInput":
         type = "DATE_INPUT";
@@ -1511,10 +1511,10 @@ const MidSection = React.forwardRef((props, ref) => {
     };
 
     sessionStorage.setItem('cutItem', JSON.stringify(elem));
-    console.log('session', sessionStorage.getItem("cutItem"));
+    // console.log('session', sessionStorage.getItem("cutItem"));
     handleCutInputRef.current = JSON.stringify(elem)
     cutItem.remove();
-    // console.log(sessionStorage);
+    // // console.log(sessionStorage);
   };
 
   // const copyInput = (clickHandler) => {
@@ -1560,7 +1560,7 @@ const MidSection = React.forwardRef((props, ref) => {
 
   //     const resizeTags = copyEle.getElementsByClassName("resizeBtn");
   //     while (resizeTags.length > 0) {
-  //       console.log("resizeTags", resizeTags[0]);
+  //       // console.log("resizeTags", resizeTags[0]);
   //       resizeTags[0].remove();
   //     }
 
@@ -1585,7 +1585,7 @@ const MidSection = React.forwardRef((props, ref) => {
   //     copyEle.addEventListener("click", (e) => {
   //       e.stopPropagation();
   //       focuseddClassMaintain(e);
-  //       console.log("find classlist", e.target.classList[0]);
+  //       // console.log("find classlist", e.target.classList[0]);
   //       if (
   //         e.target?.parentElement?.parentElement.classList.contains(
   //           "containerInput"
@@ -1625,7 +1625,7 @@ const MidSection = React.forwardRef((props, ref) => {
   //             type = "";
   //         }
   //         handleClicked(type, "container2");
-  //         console.log("inside if", type);
+  //         // console.log("inside if", type);
   //       } else {
   //         handleClicked(clickHandler);
   //       }
@@ -1679,7 +1679,7 @@ const MidSection = React.forwardRef((props, ref) => {
     const copyEle = copyItem.cloneNode(true);
 
     function getPosition(el) {
-      console.log("element check", el);
+      // console.log("element check", el);
       const midSec = document.getElementById("midSection_container");
       const rect = el.getBoundingClientRect();
       const midsectionRect = midSec.getBoundingClientRect();
@@ -1761,7 +1761,7 @@ const MidSection = React.forwardRef((props, ref) => {
     if (selectInput) {
       selectInput.remove();
     } else {
-      console.log("It's not any input field")
+      // console.log("It's not any input field")
     }
   };
 
@@ -1782,7 +1782,7 @@ const MidSection = React.forwardRef((props, ref) => {
     holderDIV.style.flexDirection = "column";
     // holderDIV.style.border = "2px dotted red";
     holderDIV.tabIndex = "1";
-    // //console.log("measure", measure);
+    // //// console.log("measure", measure);
     holderDIV.style.width = measure.width;
     holderDIV.style.height = measure.height;
     holderDIV.style.left = measure.left;
@@ -1802,10 +1802,10 @@ const MidSection = React.forwardRef((props, ref) => {
     }
 
     holderDIV.addEventListener("dragstart", (event) => {
-      console.log("dragStart fun called");
+      // console.log("dragStart fun called");
     });
     holderDIV.ondragstart = (e) => {
-      console.log("dragStart fun called");
+      // console.log("dragStart fun called");
     };
 
     // const resizerTL = getResizer("top", "left", decoded);
@@ -1868,7 +1868,7 @@ const MidSection = React.forwardRef((props, ref) => {
   if (source) {
     source.addEventListener("dragstart", (event) => {
       dragged = event.target;
-      console.log("dragged", dragged);
+      // console.log("dragged", dragged);
     });
   }
   // const findPercent = (element, arg) => {
@@ -1895,7 +1895,7 @@ const MidSection = React.forwardRef((props, ref) => {
     let pageNo = 0;
     let isAnyRequiredElementEdited = false;
 
-    console.log("getting text input value", item)
+    // console.log("getting text input value", item)
     for (let p = 1; p <= item?.length; p++) {
       pageNo++;
       fetchedData[p]?.forEach((element) => {
@@ -1908,14 +1908,14 @@ const MidSection = React.forwardRef((props, ref) => {
             border: element.borderWidths,
             auth_user: curr_user,
           };
-          console.log("getting text input value", measure.border);
+          // console.log("getting text input value", measure.border);
 
           const idMatch = documnetMap?.filter((elmnt) => elmnt == element?.id);
-          // console.log("element", element);
+          // // console.log("element", element);
 
           const holderDIV = getHolderDIV(measure, pageNo, idMatch);
           const id = `${element.id}`;
-          console.log("texteleemnt");
+          // console.log("texteleemnt");
 
           createTextInputField(id, element, document_map_required, p, holderDIV, focuseddClassMaintain, handleClicked, setSidebar)
 
@@ -1930,7 +1930,7 @@ const MidSection = React.forwardRef((props, ref) => {
             border: element.borderWidth,
             auth_user: curr_user,
           };
-          console.log("element", element);
+          // console.log("element", element);
           const idMatch = documnetMap?.filter((elmnt) => elmnt === element?.id);
           const holderDIV = getHolderDIV(measure, pageNo, idMatch);
           const id = `${element.id}`;
@@ -1946,10 +1946,10 @@ const MidSection = React.forwardRef((props, ref) => {
             border: element.calBorder,
             auth_user: curr_user,
           };
-          console.log("date data and value", measure.border);
+          // console.log("date data and value", measure.border);
           const idMatch = documnetMap?.filter((elmnt) => elmnt == element?.id);
           const holderDIV = getHolderDIV(measure, pageNo, idMatch);
-          console.log("getting cal element", element.calBorder);
+          // console.log("getting cal element", element.calBorder);
           const id = `${element.id}`;
 
           createDateInputField(id, element, document_map_required, p, holderDIV, focuseddClassMaintain, handleClicked, setSidebar, setRightSideDateMenu, setMethod, setStartDate)
@@ -2174,7 +2174,7 @@ const MidSection = React.forwardRef((props, ref) => {
           //   }
           //   handleClicked("camera2");
           //   setSidebar(true);
-          //   console.log("The camera", cameraField);
+          //   // console.log("The camera", cameraField);
           // };
           // holderDIV.append(cameraField);
 
@@ -2207,7 +2207,7 @@ const MidSection = React.forwardRef((props, ref) => {
             border: element.dropdownBorder,
             auth_user: curr_user,
           };
-          // console.log("dropdown border value", measure.border);
+          // // console.log("dropdown border value", measure.border);
           const idMatch = documnetMap?.filter((elmnt) => elmnt == element?.id);
           const holderDIV = getHolderDIV(measure, pageNo, idMatch);
           const id = `${element.id}`;
@@ -2348,7 +2348,7 @@ const MidSection = React.forwardRef((props, ref) => {
     var data = event.dataTransfer.getData("text");
     if (data == "rightMenuDragStart") {
 
-      console.log('right menu drag');
+      // console.log('right menu drag');
 
 
 
@@ -2469,14 +2469,14 @@ const MidSection = React.forwardRef((props, ref) => {
           )
             .then((res) => {
               setIsLoading(false);
-              console.log(res.data, "scaleData");
+              // console.log(res.data, "scaleData");
               setScaleData(res.data);
               const success = res.data.success;
               var successObj = JSON.parse(success);
               const id = successObj.inserted_id;
-              console.log(res.scale_urls, "stateScale");
+              // console.log(res.scale_urls, "stateScale");
               if (id.length) {
-                console.log(id, "id");
+                // console.log(id, "id");
                 // setScaleId(id);
                 scaleIdHolder.innerHTML = id;
               }
@@ -2484,7 +2484,7 @@ const MidSection = React.forwardRef((props, ref) => {
             })
             .catch((err) => {
               setIsLoading(false);
-              console.log(err);
+              // console.log(err);
             });
 
           scaleField.onclick = (e) => {

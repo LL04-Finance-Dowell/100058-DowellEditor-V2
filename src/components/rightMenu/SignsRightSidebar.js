@@ -16,6 +16,8 @@ const SignsRightSidebar = () => {
     setSignBorderSize,
     signBorderColor,
     setSignBorderColor,
+    docMapRequired,
+    currentSignElId
   } = useStateContext();
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token");
@@ -23,6 +25,11 @@ const SignsRightSidebar = () => {
 
   let sigPad = useRef({});
   let data = "";
+
+  const isRequired =
+    docMapRequired.find(
+      (item) => document.querySelector(".focussed").id == item.content
+    ) ? true : false;
 
   const clear = () => {
     sigPad.current.clear();
@@ -38,11 +45,11 @@ const SignsRightSidebar = () => {
     const sign = document.querySelector(".focussed");
     if (sign.parentElement.classList.contains("focussedd")) {
       if (document.querySelector(".focussed").innerHTML != signImage) {
-        if (sign.parentElement.classList.contains("holderDIV")) {
+        if (sign.parentElement.classList.contains("holderDIV") && isRequired) {
           sign.parentElement.classList.add("element_updated");
         }
       }
-      console.log("sign data", data);
+      // console.log("sign data", data);
       document.querySelector(".focussed").innerHTML = signImage;
     }
   };
@@ -179,7 +186,7 @@ const SignsRightSidebar = () => {
           type="text"
           placeholder="Signature Place Holder"
           id="image_name"
-          onChange={() => {}}
+          onChange={() => { }}
         />
       </div>
       <div className="mt-2 text-center pt-5">

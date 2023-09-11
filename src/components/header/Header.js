@@ -104,6 +104,7 @@ const Header = () => {
     setContainerBorderSize,
     containerBorderColor,
     setContainerBorderColor,
+    docMapRequired, setDocMapRequired
   } = useStateContext();
 
   const [printContent, setPrintContent] = useState(false);
@@ -258,7 +259,7 @@ const Header = () => {
         ) {
           let tempElem = txt[h].parentElement;
           let tempPosn = getPosition(tempElem);
-          console.log("element position in header js", tempPosn);
+          // console.log("element position in header js", tempPosn);
           elem = {
             width: tempPosn.width,
             height: tempPosn.height,
@@ -299,7 +300,7 @@ const Header = () => {
           const dataName = img[h].style.backgroundImage
             ? img[h].style.backgroundImage
             : img[h].innerText;
-          console.log("dataName", dataName);
+          // console.log("dataName", dataName);
 
           elem = {
             width: tempPosn.width,
@@ -373,7 +374,7 @@ const Header = () => {
             data:
               sign[h].firstElementChild === null
                 ? // decoded.details.action === "document"
-                  sign[h].innerHTML
+                sign[h].innerHTML
                 : sign[h].firstElementChild.src,
             id: `s${h + 1}`,
           };
@@ -424,9 +425,9 @@ const Header = () => {
                     data:
                       TdDivClassName == "imageInput"
                         ? tableChildren[i].children[j]?.firstElementChild.style
-                            .backgroundImage
+                          .backgroundImage
                         : tableChildren[i].children[j]?.firstElementChild
-                            ?.innerHTML,
+                          ?.innerHTML,
                     id: `tableTd${j + 1}`,
                   },
                 };
@@ -522,7 +523,7 @@ const Header = () => {
               childData.type = type;
               const imageData =
                 "imageInput" &&
-                element?.firstElementChild?.style?.backgroundImage
+                  element?.firstElementChild?.style?.backgroundImage
                   ? element.firstElementChild.style.backgroundImage
                   : element.firstElementChild?.innerHTML;
               if (type != "TEXT_INPUT") {
@@ -599,7 +600,7 @@ const Header = () => {
         ) {
           let tempElem = scales[s].parentElement;
           let tempPosn = getPosition(tempElem);
-          console.log(scales[s].firstElementChild);
+          // console.log(scales[s].firstElementChild);
           elem = {
             width: tempPosn.width,
             height: tempPosn.height,
@@ -635,7 +636,7 @@ const Header = () => {
         ) {
           let tempElem = newScales[b].parentElement;
           let tempPosn = getPosition(tempElem);
-          console.log(newScales[b]);
+          // console.log(newScales[b]);
           let circles = newScales[b].querySelector(".circle_label");
           let scaleBg = newScales[b].querySelector(".label_hold");
           let leftChild = newScales[b].querySelector(".left_child");
@@ -646,10 +647,10 @@ const Header = () => {
           let scaleType = newScales[b].querySelector(".scaleTypeHolder");
           let scaleID = newScales[b].querySelector(".scaleId");
           let orentation = newScales[b].querySelector(".nps_vertical");
-          console.log(font);
+          // console.log(font);
 
           let buttonText = newScales[b].querySelectorAll(".circle_label");
-          console.log(buttonText);
+          // console.log(buttonText);
 
           let emojiArr = [];
 
@@ -669,7 +670,7 @@ const Header = () => {
               ".stapelOptionHolder"
             );
             stapelScaleArray = newScales[b].querySelector(".stapelScaleArray");
-            console.log("This is the saved stapel", stapelOptionHolder);
+            // console.log("This is the saved stapel", stapelOptionHolder);
           }
 
           let npsLiteTextArray = "";
@@ -702,7 +703,7 @@ const Header = () => {
           ) {
             percentBackground = newScales[b].querySelector(".percent-slider");
             percentLabel = newScales[b]?.querySelectorAll(".label_hold");
-            console.log(percentLabel);
+            // console.log(percentLabel);
 
             percentLabel.forEach((elem) => {
               prodName.push(elem.querySelector(".product_name")?.textContent);
@@ -711,8 +712,8 @@ const Header = () => {
                   ? elem.querySelector("center-percent")?.textContent
                   : 1
               );
-              console.log(prodName);
-              console.log(percentCenter);
+              // console.log(prodName);
+              // console.log(percentCenter);
             });
             percentLeft = newScales[b].querySelector(".left-percent");
             percentRight = document.querySelector(".right-percent");
@@ -745,7 +746,7 @@ const Header = () => {
             orentation: orentation?.textContent,
             stapelOrientation: stapelOrientation?.textContent,
           };
-          console.log(properties);
+          // console.log(properties);
           elem = {
             width: tempPosn.width,
             height: tempPosn.height,
@@ -765,7 +766,7 @@ const Header = () => {
             //     : "Template scale",
           };
 
-          console.log(elem);
+          // console.log(elem);
           const pageNum = findPaageNum(newScales[b]);
           page[0][pageNum].push(elem);
         }
@@ -783,7 +784,7 @@ const Header = () => {
           let tempElem = imageCanva[b].parentElement;
 
           let tempPosn = getPosition(tempElem);
-          console.log(imageCanva[b]);
+          // console.log(imageCanva[b]);
           let imageLinkHolder = imageCanva[b].querySelector(".imageLinkHolder");
           let videoLinkHolder = imageCanva[b].querySelector(".videoLinkHolder");
 
@@ -791,7 +792,7 @@ const Header = () => {
             imageLinkHolder: imageLinkHolder.textContent,
             videoLinkHolder: videoLinkHolder.textContent,
           };
-          console.log(properties);
+          // console.log(properties);
           elem = {
             width: tempPosn.width,
             height: tempPosn.height,
@@ -802,7 +803,7 @@ const Header = () => {
             raw_data: properties,
             id: `cam1${b + 1}`,
           };
-          console.log(elem);
+          // console.log(elem);
           const pageNum = findPaageNum(imageCanva[b]);
           page[0][pageNum].push(elem);
         }
@@ -921,9 +922,15 @@ const Header = () => {
   const titleName = decoded?.details?.name;
   const finalDocName = decoded?.details?.update_field.document_name;
 
+
+
   const element_updated_length =
     document.getElementsByClassName("element_updated")?.length;
   const document_map_required = docMap?.filter((item) => item.required);
+
+  // ? This "if" condition is to prevent code from running, everytime Header.js renders
+  if (!docMapRequired.length) setDocMapRequired(document_map_required)
+
 
   useEffect(() => {
     if (document_map_required?.length > 0) {
@@ -934,6 +941,8 @@ const Header = () => {
       setIsFinializeDisabled(false);
     }
   }, [element_updated_length]);
+
+
 
   function submit(e) {
     e.preventDefault();
@@ -962,7 +971,7 @@ const Header = () => {
       };
     }
 
-    console.log(updateField);
+    // console.log(updateField);
 
     <iframe src="http://localhost:5500/"></iframe>;
 
@@ -1062,7 +1071,7 @@ const Header = () => {
       .then((res) => {
         // Handling title
         const loadedDataT = res.data;
-        // console.log(res.data.content, "loaded");
+        // // console.log(res.data.content, "loaded");
 
         if (decoded.details.action === "template") {
           setTitle(loadedDataT.template_name);
@@ -1088,22 +1097,22 @@ const Header = () => {
       })
       .catch((err) => {
         setIsLoading(false);
-        console.log(err);
+        // console.log(err);
       });
   };
 
   const npsCustomData = () => {
-    console.log(decoded.details._id);
+    // console.log(decoded.details._id);
     Axios.post("https://100035.pythonanywhere.com/api/nps_custom_data_all", {
       template_id: decoded.details._id,
     })
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         const data = res.data.data;
         setCustomId(data);
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
       });
   };
 
@@ -1161,7 +1170,7 @@ const Header = () => {
     var tokenn = prompt("Paste your token here");
     if (tokenn != null) {
       const decodedTok = jwt_decode(tokenn);
-      console.log("tokkkkkkennn", tokenn);
+      // console.log("tokkkkkkennn", tokenn);
       const getPostData = async () => {
         const response = await Axios.post(
           "https://100058.pythonanywhere.com/api/get-data-from-collection/",
@@ -1173,7 +1182,7 @@ const Header = () => {
           .then((res) => {
             // Handling title
             const loadedDataT = res.data;
-            console.log(res);
+            // console.log(res);
 
             if (decoded.details.action === "template") {
               setTitle("Untitle-File");
@@ -1185,8 +1194,8 @@ const Header = () => {
             const loadedData = JSON.parse(res.data.content);
             const pageData = res.data.page;
             setItem(pageData);
-            console.log(loadedData);
-            console.log(loadedData[0][0]);
+            // console.log(loadedData);
+            // console.log(loadedData[0][0]);
             setData(loadedData[0][0]);
             setFetchedData(loadedData[0][0]);
             setIsDataRetrieved(true);
@@ -1196,14 +1205,14 @@ const Header = () => {
           })
           .catch((err) => {
             setIsLoading(false);
-            console.log(err);
+            // console.log(err);
           });
       };
       getPostData();
     }
   }
 
-  // console.log('page count check', item);
+  // // console.log('page count check', item);
   const linkId = decoded.details.link_id;
 
   function handleFinalize() {
@@ -1227,7 +1236,7 @@ const Header = () => {
       }
     )
       .then((res) => {
-        console.log("This is my response", res);
+        // console.log("This is my response", res);
         setIsLoading(false);
         toast.success(res?.data);
         finalize.style.visibility = "hidden";
@@ -1235,7 +1244,7 @@ const Header = () => {
       })
       .catch((err) => {
         setIsLoading(false);
-        console.log(err);
+        // console.log(err);
         toast.error(err);
         // alert(err?.message);
       });
@@ -1261,13 +1270,13 @@ const Header = () => {
     )
       .then((res) => {
         setIsLoading(false);
-        console.log(res);
+        // console.log(res);
         // alert(res?.data);
         toast.error(res?.data);
       })
       .catch((err) => {
         setIsLoading(false);
-        console.log(err);
+        // console.log(err);
         toast.error(err);
       });
   }
@@ -1292,9 +1301,8 @@ const Header = () => {
 
   return (
     <div
-      className={`header ${
-        actionName == "template" ? "header_bg_template" : "header_bg_document"
-      }`}
+      className={`header ${actionName == "template" ? "header_bg_template" : "header_bg_document"
+        }`}
     >
       <Container fluid>
         <Row>
@@ -1304,9 +1312,8 @@ const Header = () => {
               {isMenuVisible && (
                 <div
                   ref={menuRef}
-                  className={`position-absolute bg-white d-flex flex-column p-4 bar-menu menu ${
-                    isMenuVisible ? "show" : ""
-                  }`}
+                  className={`position-absolute bg-white d-flex flex-column p-4 bar-menu menu ${isMenuVisible ? "show" : ""
+                    }`}
                 >
                   <div className="d-flex cursor_pointer" onClick={handleUndo}>
                     <ImUndo />

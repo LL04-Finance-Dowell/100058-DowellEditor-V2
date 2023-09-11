@@ -139,7 +139,7 @@ function createNewScaleInputElement(
   scale.style.width = "90%";
   scale.style.height = "0%";
 
-  console.log(Element);
+  // console.log(Element);
   scaleField.addEventListener("resize", () => {
     scale.style.width = scaleField.clientWidth + "px";
     scale.style.height = scaleField.clientHeight + "px";
@@ -150,7 +150,7 @@ function createNewScaleInputElement(
   const copyScales = () => {
     // if (typeOfOperation === "IMAGE_INPUT") {
     const element = document.querySelector(".focussedd");
-    // console.log(element);
+    // // console.log(element);
     let counter = 1;
     const copyEle = element.cloneNode(true);
     const copyEleTop = parseInt(copyEle.style.top.slice(0, -2)) + 100 + "px";
@@ -159,7 +159,7 @@ function createNewScaleInputElement(
     copyEle.classList.remove("focussedd");
     copyEle.firstChild.classList.remove("focussed");
     // copyEle.classList.add("imageInput")
-    console.log(copyEleTop);
+    // console.log(copyEleTop);
     copyEle.onfocus = () => {
       copyEle.style.border = "1px solid rgb(255 191 0)";
     };
@@ -202,20 +202,20 @@ function createNewScaleInputElement(
         setSidebar(true);
       });
     }
-    // console.log(copyEle)
+    // // console.log(copyEle)
     copyEle.id += counter;
     midSec.appendChild(copyEle);
-    console.log("coping", copyEle);
+    // console.log("coping", copyEle);
     // }
   };
 
   scaleField.addEventListener("click", (event) => {
     if (event.ctrlKey) {
-      console.log("clicked it");
+      // console.log("clicked it");
       copyScales();
       // setSidebar(true)
     } else {
-      console.log("Faild to copy");
+      // console.log("Faild to copy");
     }
   });
 
@@ -224,7 +224,7 @@ function createNewScaleInputElement(
     table_dropdown_focuseddClassMaintain(e);
     handleClicked("newScale2");
     setSidebar(true);
-    console.log(scaleField.id);
+    // console.log(scaleField.id);
   };
 
   holderDIV.append(scaleField);

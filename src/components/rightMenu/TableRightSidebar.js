@@ -78,8 +78,8 @@ const TableRightSidebar = () => {
       e.target.style.border = "none";
     }
     const typeOfOperation = e.dataTransfer.getData("text/plain");
-    console.log("cell has been dropped on " + typeOfOperation);
-    // console.log("e.target", e.target, e.target.hasChildNodes());
+    // console.log("cell has been dropped on " + typeOfOperation);
+    // // console.log("e.target", e.target, e.target.hasChildNodes());
     // if (
     //   e.target.childNodes.length < 2 &&
     //   !e.target.classList.contains("imageInput")
@@ -153,7 +153,7 @@ const TableRightSidebar = () => {
       imgBtnContainer.addEventListener("input", (e) => {
         const reader = new FileReader();
         const targetId = e.target.id;
-        console.log("from input:", targetId);
+        // console.log("from input:", targetId);
 
         reader.addEventListener("load", () => {
           const uploadedImage = reader.result;
@@ -193,7 +193,7 @@ const TableRightSidebar = () => {
     //     handleClicked("image2", "table2");
     //     // handleClicked("image2");
     //     setSidebar(true);
-    //     // console.log("imageclick test", e.target);
+    //     // // console.log("imageclick test", e.target);
     //     e.stopPropagation();
     //   };
 
@@ -219,12 +219,12 @@ const TableRightSidebar = () => {
     //       ).style.backgroundImage = `url(${uploadedImage})`;
     //     });
     //     reader.readAsDataURL(imgBtn.files[0]);
-    //     // console.log("baprebap", document.querySelector(".focussed"));
+    //     // // console.log("baprebap", document.querySelector(".focussed"));
     //     // document.querySelector(".focussed").innerHTML = null;
     //   });
 
     //   // if (uploadedImage) {
-    //   // console.log("imageField", imageField, uploadedImage);
+    //   // // console.log("imageField", imageField, uploadedImage);
     //   // }
     //   // imgBtn.style.width = "100%";
     //   imageButton.append(imgBtn);
@@ -394,7 +394,7 @@ const TableRightSidebar = () => {
 
       // dateField.append(para)
       e.target.append(dateField);
-      //console.log(para);
+      //// console.log(para);
     }
     // }
   };
@@ -433,7 +433,7 @@ const TableRightSidebar = () => {
         break;
       }
     }
-    // console.log("onmouse leave", notes, cells_menu.childNodes.length);
+    // // console.log("onmouse leave", notes, cells_menu.childNodes.length);
     if (!notes) {
       focussedDiv.style.border = "none";
       editableTable.parentElement.classList.add("over_flow_maintainer");
@@ -580,14 +580,14 @@ const TableRightSidebar = () => {
 
       const resizeObserver = new ResizeObserver(entries => {
         entries.forEach(entry => {
-          // console.log("Observing: ",entry.target);
+          // // console.log("Observing: ",entry.target);
           const width = entry.contentRect.width;
           const height = entry.contentRect.height;
           const table = entry.target
           const holderDIV = table.parentElement.parentElement
 
           setColRowSize(table, width, height, holderDIV)
-          //  console.log("called setcolrowsize");
+          //  // console.log("called setcolrowsize");
         })
       })
       resizeObserver.observe(table)
@@ -646,7 +646,7 @@ const TableRightSidebar = () => {
           }
         };
 
-        // console.log("cells[i]", cells[i].classList.contains("dropp"));
+        // // console.log("cells[i]", cells[i].classList.contains("dropp"));
 
         cells[i].ondrop = handleDropp;
         document.getElementById("rows").value = "";
@@ -667,7 +667,7 @@ const TableRightSidebar = () => {
     for (const resizer of col_resizers) {
       if (height) {
         resizer.style.height = `${height}px`
-        // console.log("set height: ",height);
+        // // console.log("set height: ",height);
       } else {
         resizer.style.height = `${table.offsetHeight}px`
 
@@ -676,7 +676,7 @@ const TableRightSidebar = () => {
     for (const resizer of row_resizers) {
       if (width) {
         resizer.style.width = `${width}px`
-        // console.log("set witdh: ",width);
+        // // console.log("set witdh: ",width);
       } else {
         resizer.style.width = `${table.offsetWidth}px`
       }
@@ -780,12 +780,12 @@ const TableRightSidebar = () => {
       }
       var tablee = focusseddDiv?.firstElementChild?.firstElementChild;
       var cells = tablee.getElementsByTagName("td");
-      // console.log("cells", tablee, cells);
+      // // console.log("cells", tablee, cells);
       for (let i = 0; i < cells.length; i++) {
-        // console.log("cells", cells[i]);
+        // // console.log("cells", cells[i]);
         cells[i].onmouseover = function (e) {
 
-          // console.log("mouseOver", e.target);
+          // // console.log("mouseOver", e.target);
         };
         cells[i].ondragover = function (e) {
           e.preventDefault();
@@ -924,7 +924,7 @@ const TableRightSidebar = () => {
             td.appendChild(rowDeleteBtn);
             // }
           }
-          // console.log("child element check", focusseddDiv?.firstElementChild);
+          // // console.log("child element check", focusseddDiv?.firstElementChild);
           focusseddDiv?.firstElementChild?.children[1].childNodes[
             rowIndex
           ].appendChild(td);
@@ -950,7 +950,7 @@ const TableRightSidebar = () => {
     focusseddDiv.style.overflow = 'visible';
     focusseddDiv.style.borderWidth = "0px";
     focusseddDiv.querySelector('.tableInput').style.backgroundColor = "#fff";
-    console.log(focusseddDiv.style.border)
+    // console.log(focusseddDiv.style.border)
     focusseddDiv.classList.remove('.dotted_border')
     const isUpdating = document.querySelector(".table_update_save_div"); // check if user is already editing
     if (isUpdating) return; //do nothing if user is editing
@@ -969,7 +969,7 @@ const TableRightSidebar = () => {
     for (var rowIndex = 0; rowIndex < 1; rowIndex++) {
       var tr = document.createElement("tr");
       for (var colIndex = 1; colIndex < numOfCol; colIndex++) {
-        // console.log("numOfCol", numOfTr, numOfTd, numOfCol);
+        // // console.log("numOfCol", numOfTr, numOfTd, numOfCol);
         var td = document.createElement("td");
         td.className = "dropp";
 
@@ -1044,7 +1044,7 @@ const TableRightSidebar = () => {
     for (var rowIndex = 0; rowIndex < 1; rowIndex++) {
       var tr = document.createElement("tr");
       for (var colIndex = 0; colIndex < numOfCol; colIndex++) {
-        // console.log("numOfCol", numOfTr, numOfTd, numOfCol);
+        // // console.log("numOfCol", numOfTr, numOfTd, numOfCol);
         var td = document.createElement("td");
         td.className = "dropp";
         const iconMenu = createIconMenu();
@@ -1101,7 +1101,7 @@ const TableRightSidebar = () => {
           }
         };
 
-        // console.log("td", td.classList.contains("dropp"));
+        // // console.log("td", td.classList.contains("dropp"));
         td.ondrop = handleDropp;
         e.target.parentElement.prepend(td);
         tr.prepend(td);
@@ -1189,7 +1189,7 @@ const TableRightSidebar = () => {
     const numOfTd = numOfTdElement.length;
     const numOfCol = numOfTd / numOfTr;
 
-    // console.log("numOfTr", numOfTr, "numOfTd", numOfTd, "numOfCol", numOfCol);
+    // // console.log("numOfTr", numOfTr, "numOfTd", numOfTd, "numOfCol", numOfCol);
     const AllTrOfEditableTable = editableTable.querySelectorAll("tr");
 
     const index = Array.from(
@@ -1239,7 +1239,7 @@ const TableRightSidebar = () => {
         }
       };
 
-      // console.log("td", td.classList.contains("dropp"));
+      // // console.log("td", td.classList.contains("dropp"));
       td.ondrop = handleDropp;
       AllTrOfEditableTable[i].insertBefore(
         td,
@@ -1317,7 +1317,7 @@ const TableRightSidebar = () => {
     }
     e.stopPropagation();
   }
-  // console.log("isCreateTableBtnDisabled", isCreateTableBtnDisabled);
+  // // console.log("isCreateTableBtnDisabled", isCreateTableBtnDisabled);
 
   const handleBorderSizeChange = (e) => {
     setTableBorderSize(e.target.value);
@@ -1344,7 +1344,7 @@ const TableRightSidebar = () => {
           targets[i].remove()
         }
       }
-         } else {
+    } else {
       targetEl.remove()
       setSidebar(true)
     }

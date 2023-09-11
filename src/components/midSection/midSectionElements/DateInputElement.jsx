@@ -17,6 +17,7 @@ function createDateInputField(id, element, document_map_required, p, holderDIV, 
 
     function dateClick() {
         document.getElementById("date_picker")?.click();
+
     }
 
     dateField.onclick = (e) => {
@@ -26,11 +27,11 @@ function createDateInputField(id, element, document_map_required, p, holderDIV, 
         focuseddClassMaintain(e);
         handleClicked("calendar2");
         setRightSideDateMenu(false);
-        //console.log("innerText", e.target.innerText);
+        //// console.log("innerText", e.target.innerText);
         if (e.target.innerText != "mm/dd/yyyy") {
             if (e.target.innerText.includes("/")) {
                 const setDate = new Date(e.target.innerText);
-                //console.log("First from Midsection", setDate);
+                //// console.log("First from Midsection", setDate);
                 setMethod("first");
                 setStartDate(setDate);
             } else {
@@ -40,7 +41,7 @@ function createDateInputField(id, element, document_map_required, p, holderDIV, 
                     setMethod("second");
                 }
                 const setDate = new Date(e.target.innerText);
-                //console.log("Second from Midsection", setDate);
+                //// console.log("Second from Midsection", setDate);
 
                 setStartDate(setDate);
             }
