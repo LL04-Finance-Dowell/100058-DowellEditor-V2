@@ -869,6 +869,7 @@ const Header = () => {
             id: `pay${p + 1}`,
           };
 
+          console.log("raw_data", elem.raw_data);
           const pageNum = findPaageNum(payments[p]);
           page[0][pageNum].push(elem);
         }
@@ -988,7 +989,8 @@ const Header = () => {
         content: JSON.stringify(dataa),
         page: item,
       };
-    } else if (decoded.details.action === "document") {
+    } 
+    else if (decoded.details.action === "document") {
       updateField = {
         document_name: titleName,
         content: JSON.stringify(dataa),
@@ -996,7 +998,7 @@ const Header = () => {
       };
     }
 
-    console.log(updateField);
+    console.log(updateField.content);
 
     <iframe src="http://localhost:5500/"></iframe>;
 
@@ -1091,6 +1093,8 @@ const Header = () => {
         function_ID: decoded.details.function_ID,
         cluster: decoded.details.cluster,
         document: decoded.details.document,
+        update_field: decoded.details.update_field,
+
       }
     )
       .then((res) => {

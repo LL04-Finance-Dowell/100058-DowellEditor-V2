@@ -8,7 +8,7 @@ import { ToastContainer, toast } from "react-toastify";
 
 
 const PaymentRightSide = () => {
-    const { buttonLink, setButtonLink, buttonPurpose, setButtonPurpose, buttonBorderSize, setButtonBorderSize, buttonBorderColor, setButtonBorderColor, setConfirmRemove, confirmRemove, setIsLoading, isLoading } =
+    const { buttonLink, setButtonLink, buttonPurpose, setButtonPurpose, buttonBorderSize, setButtonBorderSize, buttonBorderColor, setButtonBorderColor, setConfirmRemove, confirmRemove, setIsLoading, isLoading, paymentKey, setPaymentKey } =
         useStateContext();
     const [selectedType, setSelectedType] = useState('')
     const [addedAns, setAddedAns] = useState([])
@@ -42,8 +42,6 @@ const PaymentRightSide = () => {
     const [showSlider, setShowSlider] = useState(false);
 
     const handleUpdate = () => {
-        const btnName = document.getElementById("button_name");
-        const button = document.querySelector(".focussed");
 
         // if (btnName.value != "") {
         //     button.textContent = btnName?.value;
@@ -51,7 +49,7 @@ const PaymentRightSide = () => {
 
         const link = document.getElementById("link").value;
         if (link.value != "") {
-            setButtonLink(link);
+            setPaymentKey(link);
             holderDIV.children[1].innerHTML = link;
         }
         // console.log("Master link", holderDIV);
@@ -146,7 +144,6 @@ const PaymentRightSide = () => {
         if (form.checkValidity() === true) {
             e.preventDefault();
             setLoader(true)
-
             try {
                 const res = await axios.post("https://100088.pythonanywhere.com/api/workflow/stripe/initialize", stripeData)
                 setStripePaymentData(res.data);

@@ -67,6 +67,7 @@ export const ContextProvider = ({ children }) => {
   const [dropdownOptions, setDropdownOptions] = useState(["Enter List Items"]);
 
   const [buttonLink, setButtonLink] = useState("");
+  const [paymentKey, setPaymentKey] = useState("");
   const [buttonPurpose, setButtonPurpose] = useState("");
 
   const [fontPlus, setFontPlus] = useState(false);
@@ -657,7 +658,9 @@ export const ContextProvider = ({ children }) => {
         setFormBorderSize,
         formBorderColor,
         setFormBorderColor,
-        copyInput
+        copyInput,
+        paymentKey, 
+        setPaymentKey,
       }}
     >
       {children}
