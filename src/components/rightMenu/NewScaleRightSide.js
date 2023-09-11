@@ -616,7 +616,7 @@ const ScaleRightSide = () => {
   const onEmojiClick = (emojiObject) => {
     const emoji = emojiObject.emoji;
     if (inputStr.includes(emoji)) {
-      alert("The is already selected");
+      alert("The emoji is already selected");
     } else {
       setInputStr((prevInputStr) => prevInputStr + emoji);
       setShowPicker(false);
