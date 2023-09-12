@@ -61,9 +61,9 @@ function createNewScaleInputField(
   scaleHold.append(stapelScaleArray);
 
   const percentScaleArray = document.createElement("div");
-  stapelScaleArray.className = "percentScaleArray";
-  stapelScaleArray.textContent = element?.raw_data?.percentLabel;
-  stapelScaleArray.style.display = "none";
+  percentScaleArray.className = "percentScaleArray";
+  percentScaleArray.textContent = element?.raw_data?.percentLabel;
+  percentScaleArray.style.display = "none";
   scaleHold.append(percentScaleArray);
 
   const npsLiteTextArray = document.createElement("div");
