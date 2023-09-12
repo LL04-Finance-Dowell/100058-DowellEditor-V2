@@ -60,6 +60,12 @@ function createNewScaleInputField(
   stapelScaleArray.style.display = "none";
   scaleHold.append(stapelScaleArray);
 
+  const percentScaleArray = document.createElement("div");
+  stapelScaleArray.className = "percentScaleArray";
+  stapelScaleArray.textContent = element?.raw_data?.percentLabel;
+  stapelScaleArray.style.display = "none";
+  scaleHold.append(percentScaleArray);
+
   const npsLiteTextArray = document.createElement("div");
   npsLiteTextArray.className = "nps_lite_text";
   npsLiteTextArray.textContent = element?.raw_data?.npsLiteTextArray;
@@ -824,7 +830,8 @@ function createNewScaleInputField(
     }
   } else if (scaleTypeHolder.textContent === "percent_scale") {
     let prodLength = element?.raw_data?.percentLabel;
-    console.log(prodLength);
+    let scale = document.querySelectorAll("newScaleInput");
+    console.log(labelHold.children.length);
 
     for (let i = 0; i < prodLength; i++) {
       // let originalText = element?.raw_data?.percentCenter[i];
@@ -908,8 +915,8 @@ function createNewScaleInputField(
         conatainerDIV.style.width = "90%";
         conatainerDIV.style.position = "relative";
 
-        labelHold.style.width = "52%";
-        labelHold.style.height = "69%";
+        labelHold.style.width = "90%";
+        labelHold.style.height = "96%";
         labelHold.style.alignItems = "center";
         labelHold.style.transform = "rotate(270deg)";
 
@@ -922,6 +929,105 @@ function createNewScaleInputField(
         inputPercent.style.width = "100%";
       }
     }
+
+    // if (decoded.details.action === "document") {
+    //   for (let i = 0; i < prodLength; i++) {
+    //     // let originalText = element?.raw_data?.percentCenter[i];
+    //     // let percentValue = originalText?.replace("%", "");
+    //     labelHold.style.display = "flex";
+    //     labelHold.style.justifyContent = "center";
+    //     labelHold.style.height = "100%";
+    //     labelHold.style.flexDirection = "column";
+    //     labelHold.style.border = "none";
+
+    //     let conatainerDIV = document.createElement("div");
+    //     conatainerDIV.className = "containerDIV";
+    //     conatainerDIV.style.width = "95%";
+    //     conatainerDIV.style.padding = "10px 39px 10px 10px";
+    //     conatainerDIV.style.border = "1px solid gray";
+    //     labelHold.append(conatainerDIV);
+    //     // conatainerDIV.append(labelHold);
+    //     // scaleHold.append(conatainerDIV)
+
+    //     let nameDiv = document.createElement("div");
+    //     nameDiv.className = "product_name";
+    //     nameDiv.style.textAlign = "center";
+    //     nameDiv.style.fontWeight = "700";
+    //     nameDiv.textContent = element?.raw_data?.percentProdName[i];
+    //     conatainerDIV.appendChild(nameDiv);
+    //     // labelHold.appendChild(nameDiv);
+
+    //     const inputPercent = document.createElement("input");
+    //     inputPercent.type = "range";
+    //     inputPercent.min = "0";
+    //     inputPercent.max = "100";
+    //     // inputPercent.value = percentValue;
+    //     inputPercent.disabled = "true";
+    //     inputPercent.className = "percent-slider";
+    //     inputPercent.style.width = "100%";
+    //     inputPercent.style.cursor = "pointer";
+    //     inputPercent.style.background = element?.raw_data?.percentBackground;
+    //     inputPercent.style.webkitAppearance = "none";
+    //     inputPercent.style.borderRadius = "10px";
+    //     conatainerDIV.appendChild(inputPercent);
+    //     // labelHold.appendChild(inputPercent);
+
+    //     let percentChilds = document.createElement("div");
+    //     percentChilds.style.display = "flex";
+    //     percentChilds.style.width = "100%";
+    //     percentChilds.style.alignItems = "center";
+    //     percentChilds.style.justifyContent = "space-between";
+
+    //     let leftPercent = document.createElement("div");
+    //     leftPercent.textContent = "0";
+    //     leftPercent.className = "left-percent";
+    //     percentChilds.appendChild(leftPercent);
+
+    //     let centerPercent = document.createElement("div");
+    //     // centerPercent.textContent = `${element?.raw_data?.percentCenter[i]}`;
+    //     centerPercent.className = "center-percent";
+    //     percentChilds.appendChild(centerPercent);
+
+    //     let rightPercent = document.createElement("div");
+    //     rightPercent.textContent = "100";
+    //     rightPercent.className = "right-percent";
+    //     percentChilds.appendChild(rightPercent);
+
+    //     conatainerDIV.appendChild(percentChilds);
+    //     // labelHold.appendChild(percentChilds);
+    //     if (!token) {
+    //       return res.status(401).json({ error: "Unauthorized" });
+    //     }
+    //     let orientation = element?.raw_data?.orientation;
+    //     if (orientation === "Vertical") {
+    //       const orientation = document.createElement("div");
+    //       orientation.className = "orientation";
+    //       orientation.textContent = "Vertical";
+    //       orientation.style.display = "none";
+    //       scaleHold.appendChild(orientation);
+
+    //       scaleHold.style.display = "flex";
+    //       scaleHold.style.flexDirection = "column";
+    //       scaleHold.style.alignItems = "center";
+    //       scaleHold.style.justifyContent = "center";
+    //       conatainerDIV.style.width = "90%";
+    //       conatainerDIV.style.position = "relative";
+
+    //       labelHold.style.width = "90%";
+    //       labelHold.style.height = "96%";
+    //       labelHold.style.alignItems = "center";
+    //       labelHold.style.transform = "rotate(270deg)";
+
+    //       nameDiv.style.position = "absolute";
+    //       nameDiv.style.top = "7px";
+    //       nameDiv.style.right = "-2px";
+    //       nameDiv.style.left = "85%";
+    //       nameDiv.style.transform = "rotate(90deg)";
+
+    //       inputPercent.style.width = "100%";
+    //     }
+    //   }
+    // }
   } else if (scaleTypeHolder.textContent === "percent_sum_scale") {
     let prodLength = element?.raw_data?.percentLabel;
     console.log(prodLength);
