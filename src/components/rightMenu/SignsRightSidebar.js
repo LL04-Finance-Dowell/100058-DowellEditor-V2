@@ -100,7 +100,7 @@ const SignsRightSidebar = () => {
 
   return (
     <div>
-      {decoded.details.action === "template" && (
+      {decoded.details.action === "document" && (
         <>
           <h3>Add Signature</h3>
           <div>
