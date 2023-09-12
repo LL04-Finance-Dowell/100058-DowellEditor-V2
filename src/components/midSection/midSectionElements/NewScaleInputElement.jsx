@@ -294,7 +294,7 @@ function createNewScaleInputField(
       }
     }
   } else if (scaleTypeHolder.textContent === "snipte") {
-    const stapelScale = stapelScaleArray.textContent.split(",");
+    const stapelScale = stapelScaleArray.textContent;
     const selectedOption = stapelOptionHolder.textContent;
     console.log("This is the stapel", stapelScale);
     console.log("This is option", selectedOption);

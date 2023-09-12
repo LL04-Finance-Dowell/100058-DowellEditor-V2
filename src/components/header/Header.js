@@ -669,7 +669,7 @@ const Header = () => {
               ".stapelOptionHolder"
             );
             stapelScaleArray = newScales[b].querySelector(".stapelScaleArray");
-            console.log("This is the saved stapel", stapelOptionHolder);
+            console.log("This is the saved stapel", stapelScaleArray);
           }
 
           let npsLiteTextArray = "";

@@ -1364,6 +1364,7 @@ const ScaleRightSide = () => {
             labelHold.appendChild(optionHolder);
             stapelScaleArray.textContent = res.data.data.settings.scale;
             labelHold.append(stapelScaleArray);
+            console.log("This is stapel", stapelScaleArray)
           })
           .catch((err) => {
             setIsLoading(false);
