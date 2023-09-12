@@ -2118,9 +2118,9 @@ const ScaleRightSide = () => {
 
       let labelHold = scale?.querySelector(".label_hold");
 
-      setTimeout(() => {
-        labelHold.style.flexDirection = "column";
-      }, 50);
+      // setTimeout(() => {
+      //   labelHold.style.flexDirection = "column";
+      // }, 50);
       let tempText = scale?.querySelector(".tempText");
       tempText?.remove();
 
