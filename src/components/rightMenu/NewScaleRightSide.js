@@ -1595,9 +1595,7 @@ const ScaleRightSide = () => {
             setIsLoading(false);
             sendMessage();
             setScaleData(res.data);
-            const success = res.data.success;
-            var successObj = JSON.parse(success);
-            const id = successObj.inserted_id;
+            const id = res.data.data.scale_id;
             console.log(id);
             if (id.length) {
               setScaleId(id && id);
@@ -1711,8 +1709,8 @@ const ScaleRightSide = () => {
                 name,
                 fontcolor,
                 fontstyle,
-                custom_emoji_format,
-              } = res.data.data.settings;
+                custom_emoji_format
+              } = res.data.data;
               const textValues = [left, center, right];
 
               const npsLiteTextArray = document.createElement("div");
