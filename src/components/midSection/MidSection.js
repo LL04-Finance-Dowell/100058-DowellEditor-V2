@@ -139,7 +139,7 @@ const MidSection = React.forwardRef((props, ref) => {
   const document_map_required = documnentsMap?.filter((item) => item.required);
   console.log("document_map_required", document_map_required);
   console.log("decode", decoded);
-  console.log("data", data);
+  console.log("data", data[1]);
 
   const documentsMap = documnentsMap;
   if (documnentsMap?.length > 0) {

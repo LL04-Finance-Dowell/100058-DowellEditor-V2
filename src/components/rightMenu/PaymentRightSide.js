@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Row, Button, Form } from "react-bootstrap";
 import { useStateContext } from "../../contexts/contextProvider";
 import { useSearchParams } from "react-router-dom";
@@ -8,7 +8,7 @@ import { ToastContainer, toast } from "react-toastify";
 
 
 const PaymentRightSide = () => {
-    const { buttonLink, setButtonLink, buttonPurpose, setButtonPurpose, buttonBorderSize, setButtonBorderSize, buttonBorderColor, setButtonBorderColor, setConfirmRemove, confirmRemove, setIsLoading, isLoading, paymentKey, setPaymentKey } =
+    const { buttonLink, setButtonLink, buttonPurpose, setButtonPurpose, buttonBorderSize, setButtonBorderSize, buttonBorderColor, setButtonBorderColor, setConfirmRemove, confirmRemove, setIsLoading, isLoading, paymentKey, setPaymentKey, data, pageNum } =
         useStateContext();
     const [selectedType, setSelectedType] = useState('')
     const [addedAns, setAddedAns] = useState([])
@@ -57,6 +57,23 @@ const PaymentRightSide = () => {
     };
     // console.log("Master link", link);
     // console.log("Master link", holderDIV.children[1].innerHTML);
+
+    const [passData, setPassData] = useState("");
+
+    const dataFind = data[1].map(data => data.type);
+    console.log("midsection data", dataFind)
+
+  
+
+
+    if(data[1].find(data => data.type === "PAYMENT_INPUT")) {
+        // console.log("This is payment input data")
+        useEffect(() => {
+            setPassData(data[1].map(data => data.raw_data));
+        }, [])
+        console.log("This is payment input data", passData)
+    }
+    
 
 
     const handleSelect = (event) => {
@@ -168,7 +185,7 @@ const PaymentRightSide = () => {
         e.preventDefault();
         const paypalData = {
             // paypal_client_id: "AVJXJddOEG7WGrLkTzg4_9ODsDNhIHrqT4ZL6gwXRz1ftQELliYtticZH-kLjoYaTZfNn_8y5onH_YP3",
-            paypal_client_id: paypalClientId,
+            paypal_client_id: link,
             paypal_secret_key: "ELsNyOGLDJVZCsfuuu5AhsFRmQbgBwxEVZteB-2XLZm8RLa8cPeS_cfNi35w7bJwkOKDHOnNxyHsJKu6",
             template_id: decoded.details._id,
             price: +price,
@@ -227,8 +244,10 @@ const PaymentRightSide = () => {
                                         type="text"
                                         placeholder="Paypal Client Id"
                                         // id="button_name"
-                                        value={paypalClientId}
-                                        onChange={(e) => setPaypalClientId(e.target.value)}
+                                        id="link"
+                                        // value={stripeKey}
+                                        onChange={() => {}}
+
 
                                     />
                                     {/* <br /> */}
