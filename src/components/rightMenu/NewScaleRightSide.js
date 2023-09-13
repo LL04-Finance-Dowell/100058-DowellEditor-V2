@@ -924,7 +924,7 @@ const ScaleRightSide = () => {
           roundcolor: btnUpdateButton.value,
           fontcolor: btnUpdateFontColor.value,
           fomat: "numbers",
-          allow_resp: false,
+          allow_resp: true,
           show_total_score: true,
           no_of_scales: 6,
           time: timeId.style.display === "none" ? "00" : time?.value,
@@ -1025,7 +1025,7 @@ const ScaleRightSide = () => {
           roundcolor: btnUpdateButton.value,
           fontcolor: btnUpdateFontColor.value,
           fomat: selectedOption,
-          allow_resp: false,
+          allow_resp: true,
           show_total_score: true,
           no_of_scales: 6,
           time: timeId?.style?.display === "none" ? "00" : time?.value,
@@ -1162,7 +1162,6 @@ const ScaleRightSide = () => {
         parseInt(document.getElementById("upperVal").value, 10)
       );
       const spacing = parseInt(document.getElementById("spacing").value, 10);
-      const lowerVal = -upperVal;
       tempText?.remove();
 
       // for (let i = 0; i < buttonCircle.length; i++) {
@@ -1194,22 +1193,15 @@ const ScaleRightSide = () => {
           .filter((emoji) => emoji !== "");
 
         const emojiLabels = {};
-        console.log("This is the emoji", emojis);
-        const selectedCount = Math.min(
-          emojis.length,
-          Math.abs(Math.floor(upperLimit / space) * 2) +
-            Math.abs(-Math.floor(upperLimit / space) * 2) +
-            spacing
-        );
-
-        for (
-          let i = Math.floor(upperLimit / space) * 2 * -1;
-          i <= Math.floor(upperLimit / space) * 2;
-          i += spacing
-        ) {
-          for (let j = 0; j < emojis.length; j++) {
+        let j = 0
+        let valRange = (upperLimit % space) !== 0 ? Math.floor(upperLimit / space) * 2 : upperLimit
+        for (let i = valRange * -1; i <= valRange; i += spacing) {
+          if(i !== 0) { 
             const emojiIndex = j;
             emojiLabels[i] = emojis[emojiIndex];
+            j++
+            console.log(i)
+            console.log(Math.floor(upperLimit / space))
           }
         }
 
@@ -1237,6 +1229,13 @@ const ScaleRightSide = () => {
         button.style.position = "relative";
         buttonChild.style.marginLeft = "0px";
         button.style.marginLeft = "0px";
+
+        labelHold.style.position = "";
+        labelHold.style.transform = "";
+
+        buttonChild.style = "";
+        buttonChild.style.display = "flex";
+        buttonChild.style.justifyContent = "space-between";
       }
 
       if (option.value === "Vertical") {
@@ -1244,7 +1243,6 @@ const ScaleRightSide = () => {
         stapel_vertical.className = "stapel_vertical";
         stapel_vertical.style.display = "none";
         stapel_vertical.textContent = "stapel_vertical";
-        console.log(stapel_vertical);
         button4.appendChild(stapel_vertical);
         labelHold.style.height = "82%";
 
@@ -1598,7 +1596,17 @@ const ScaleRightSide = () => {
 
             button4.style.display = "block";
             labelHold.innerHTML = "";
-            const {fomat, left, center, right, scalecolor, name, fontcolor, fontstyle} = res.data.data
+            const {
+              fomat,
+              left,
+              center,
+              right,
+              scalecolor,
+              name,
+              fontcolor,
+              fontstyle,
+              custom_emoji_format
+            } = res.data.data.settings;
             const textValues = [left, center, right];
 
             const npsLiteTextArray = document.createElement("div");
@@ -1606,12 +1614,12 @@ const ScaleRightSide = () => {
             npsLiteTextArray.textContent = [...textValues];
             npsLiteTextArray.style.display = "none";
             labelHold.append(npsLiteTextArray);
-      
+
             for (let i = 0; i < textValues.length; i++) {
               const circle = document.createElement("div");
               circle.className = `circle_label circle_${i}`;
               circle.textContent = textValues[i];
-      
+
               circle.style.borderRadius = "25px";
               circle.style.padding = "12px 27px";
               circle.style.margin = "0 auto";
@@ -1622,30 +1630,25 @@ const ScaleRightSide = () => {
               circle.style.height = "35%";
               circle.style.fontSize = "18px";
               circle.style.backgroundColor = scalecolor;
-      
+
               if (option.value === "Vertical") {
                 circle.style.margin = "15px 0";
                 circle.style.padding = "10px 30px";
               }
-      
+
               labelHold.appendChild(circle);
-      
+
               if (fomat === "emoji" && emojiInp !== "") {
                 // Set the text content of the div to the corresponding emoji
-                const emojiFormat = /(\p{Emoji}|\uFE0F)/gu;
-                const emojis = emojiInp
-                  .split(emojiFormat)
-                  .filter((emoji) => emoji !== "");
-                circle.textContent = emojis[i % emojis.length];
+                circle.textContent = custom_emoji_format[i];
               } else {
                 circle.textContent = textValues[i];
               }
             }
 
             scaleText.textContent = name;
-            button4.style.color = fontcolor
+            button4.style.color = fontcolor;
             button4.style.fontFamily = fontstyle;
-
           })
           .catch((err) => {
             setIsLoading(false);
@@ -1687,7 +1690,17 @@ const ScaleRightSide = () => {
 
               button4.style.display = "block";
               labelHold.innerHTML = "";
-              const {fomat, left, center, right, scalecolor, name, fontcolor, fontstyle} = res.data.data
+              const {
+                fomat,
+                left,
+                center,
+                right,
+                scalecolor,
+                name,
+                fontcolor,
+                fontstyle,
+                custom_emoji_format
+              } = res.data.data.settings;
               const textValues = [left, center, right];
 
               const npsLiteTextArray = document.createElement("div");
@@ -1695,12 +1708,12 @@ const ScaleRightSide = () => {
               npsLiteTextArray.textContent = [...textValues];
               npsLiteTextArray.style.display = "none";
               labelHold.append(npsLiteTextArray);
-        
+
               for (let i = 0; i < textValues.length; i++) {
                 const circle = document.createElement("div");
                 circle.className = `circle_label circle_${i}`;
                 circle.textContent = textValues[i];
-        
+
                 circle.style.borderRadius = "25px";
                 circle.style.padding = "12px 27px";
                 circle.style.margin = "0 auto";
@@ -1711,30 +1724,25 @@ const ScaleRightSide = () => {
                 circle.style.height = "35%";
                 circle.style.fontSize = "18px";
                 circle.style.backgroundColor = scalecolor;
-        
+
                 if (option.value === "Vertical") {
                   circle.style.margin = "15px 0";
                   circle.style.padding = "10px 30px";
                 }
-        
+
                 labelHold.appendChild(circle);
-        
+
                 if (fomat === "emoji" && emojiInp !== "") {
                   // Set the text content of the div to the corresponding emoji
-                  const emojiFormat = /(\p{Emoji}|\uFE0F)/gu;
-                  const emojis = emojiInp
-                    .split(emojiFormat)
-                    .filter((emoji) => emoji !== "");
-                  circle.textContent = emojis[i % emojis.length];
+                  circle.textContent = custom_emoji_format[i];
                 } else {
                   circle.textContent = textValues[i];
                 }
               }
 
               scaleText.textContent = name;
-              button4.style.color = fontcolor
+              button4.style.color = fontcolor;
               button4.style.fontFamily = fontstyle;
-            
             }
           })
           .catch((err) => {
@@ -1801,6 +1809,12 @@ const ScaleRightSide = () => {
       const updatedLabelInput =
         labelType === "Text" ? labelTexts : selectedEmojis;
       const updatedLabels = labelType === "Text" ? labelTexts : selectedEmojis;
+
+      const customEmojiFormat = updatedLabels.reduce((acc, label, index) => {
+        acc[`${index + 1}`] = label;
+        return acc;
+      }, {});
+
       const updatedLabelScale =
         labelType === "Text" ? Number(labelScale) : selectedEmojis.length;
       // Remove any previous circles from the labelHold
@@ -1809,7 +1823,7 @@ const ScaleRightSide = () => {
       const numColumns = Math.min(updatedLabelScale, 3);
 
       const likertScaleArray = document.createElement("div");
-      likertScaleArray.className = "likert_Scale_Array";
+      likertScaleArray.className = "likertScaleArray";
       likertScaleArray.textContent = updatedLabels;
       likertScaleArray.style.display = "none";
       labelHold.append(likertScaleArray);
@@ -1878,7 +1892,7 @@ const ScaleRightSide = () => {
             label_type: labelTypeForPut,
             label_scale_selection: updatedLabelScale,
             label_scale_input: updatedLabelInput,
-            custom_emoji_format: updatedLabelInput,
+            custom_emoji_format: customEmojiFormat,
             time: timeId.style.display === "none" ? "00" : time?.value,
             fomat: labelTypeForPut,
           }
@@ -1901,11 +1915,11 @@ const ScaleRightSide = () => {
             if (settings.name) {
               scaleText.textContent = settings.name;
             }
-        
+
             if (settings.font_color) {
               button4.style.color = settings.font_color;
             }
-        
+
             if (settings.fontstyle) {
               button4.style.fontFamily = settings.fontstyle;
             }
@@ -1942,7 +1956,7 @@ const ScaleRightSide = () => {
 
               labelHold.appendChild(circle);
             }
-            
+
             console.log("This is the likert scale response", res.data.data);
           })
           .catch((err) => {
@@ -1956,27 +1970,24 @@ const ScaleRightSide = () => {
         console.log(idHolder.textContent);
         const timestamp = new Date().getTime(); // Generate a unique timestamp
         const apiUrl = `https://100035.pythonanywhere.com/likert/likert-scale_create/?timestamp=${timestamp}`;
-        Axios.put(
-          apiUrl,
-          {
-            scale_id: idHolder.textContent,
-            user: "yes",
-            instance_id: "2",
-            username: "TadesseJemal",
-            fontstyle: btnUpdateScaleFontLinkert.value,
-            orientation: option?.value,
-            scale_name: beNametnUpdateScal.value,
-            no_of_scales: numberOfScalesValue,
-            font_color: btnUpdateFontColor.value,
-            round_color: btnUpdateButton.value,
-            label_type: labelTypeForPut,
-            label_scale_selection: updatedLabelScale,
-            label_scale_input: updatedLabelInput,
-            custom_emoji_format: updatedLabelInput,
-            time: timeId.style.display === "none" ? "00" : time?.value,
-            fomat: labelTypeForPut,
-          }
-        )
+        Axios.put(apiUrl, {
+          scale_id: idHolder.textContent,
+          user: "yes",
+          instance_id: "2",
+          username: "TadesseJemal",
+          fontstyle: btnUpdateScaleFontLinkert.value,
+          orientation: option?.value,
+          scale_name: beNametnUpdateScal.value,
+          no_of_scales: numberOfScalesValue,
+          font_color: btnUpdateFontColor.value,
+          round_color: btnUpdateButton.value,
+          label_type: labelTypeForPut,
+          label_scale_selection: updatedLabelScale,
+          label_scale_input: updatedLabelInput,
+          custom_emoji_format: customEmojiFormat,
+          time: timeId.style.display === "none" ? "00" : time?.value,
+          fomat: labelTypeForPut,
+        })
           .then((res) => {
             if (res.status == 200) {
               setIsLoading(false);
@@ -2031,6 +2042,7 @@ const ScaleRightSide = () => {
 
                 labelHold.appendChild(circle);
               }
+              console.log("This is it", likertScaleArray)
             }
           })
           .catch((err) => {
@@ -2076,17 +2088,6 @@ const ScaleRightSide = () => {
       let tempText = scale?.querySelector(".tempText");
       tempText?.remove();
 
-      if (beNametnUpdateScal.value !== "") {
-        scaleText.textContent = beNametnUpdateScal.value;
-      }
-
-      if (btnUpdateFontColor.value !== "") {
-        button4.style.color = btnUpdateFontColor.value;
-      }
-      if (btnUpdateScaleFont.value !== "") {
-        button4.style.fontFamily = btnUpdateScaleFont.value;
-      }
-
       buttonChildLeft.textContent = "";
       buttonChildNeutral.textContent = "";
       buttonChildRight.textContent = "";
@@ -2103,187 +2104,317 @@ const ScaleRightSide = () => {
       const containerDiv = document.createElement("div");
       containerDiv.className = "containerDIV";
 
-      for (let i = 0; i < product_percent_scale; i++) {
-        let newLabelHold = labelHold.cloneNode(true);
-        newLabelHold.innerHTML = "";
-        newLabelHold.style = "";
+      let product_names = document.getElementById("product_name");
+      console.log(product_names.length);
+      let inputFields = product_names?.querySelectorAll("input");
 
-        newLabelHold.style.padding = "3px";
-        newLabelHold.style.borderBottom = "1px solid gray";
+      let productNames = [];
+      for (let i = 0; i < inputFields.length; i++) {
+        productNames.push(inputFields[i].value);
+      }
+      console.log(productNames);
 
-        newLabelHold.style.paddingRight = "35px";
-        newLabelHold.style.paddingLeft = "35px";
-        newLabelHold.style.borderBottom = "1px solid gray";
-        newLabelHold.style.borderTop = "1px solid gray";
-
-        let product_names = document.getElementById("product_name");
-        console.log(product_names.length);
-        let inputFields = product_names?.querySelectorAll("input");
-        console.log(inputFields);
-
-        let nameDiv = document.createElement("div");
-        nameDiv.className = "product_name";
-        nameDiv.style.textAlign = "center";
-        nameDiv.style.fontWeight = "700";
-        nameDiv.textContent = inputFields[i]?.value;
-
-        newLabelHold.insertBefore(nameDiv, newLabelHold.firstChild);
-        let inputPercent = document.createElement("input");
-        inputPercent.type = "range";
-        inputPercent.min = "0";
-        inputPercent.value = "50";
-        inputPercent.max = "100";
-        inputPercent.className = "percent-slider";
-        inputPercent.disabled = "true";
-        inputPercent.style.width = "100%";
-        inputPercent.style.cursor = "pointer";
-        inputPercent.style.background = btnUpdateScale.value;
-        inputPercent.style.webkitAppearance = "none";
-        inputPercent.style.borderRadius = "10px";
-
-        newLabelHold.appendChild(inputPercent);
-
-        let percentChilds = document.createElement("div");
-        percentChilds.style.display = "flex";
-        percentChilds.style.width = "100%";
-        percentChilds.style.alignItems = "center";
-        percentChilds.style.justifyContent = "space-between";
-
-        let leftPercent = document.createElement("div");
-        leftPercent.textContent = "0";
-        leftPercent.className = "left-percent";
-        percentChilds.appendChild(leftPercent);
-
-        let centerPercent = document.createElement("div");
-        inputPercent.addEventListener("input", () => {
-          centerPercent.textContent = `${inputPercent.value}%`
-            ? `${inputPercent.value}%`
-            : "50%";
-        });
-        // centerPercent.textContent = `${inputPercent.value}%`;
-        centerPercent.className = "center-percent";
-        percentChilds.appendChild(centerPercent);
-
-        let rightPercent = document.createElement("div");
-        rightPercent.textContent = "100";
-        rightPercent.className = "right-percent";
-        percentChilds.appendChild(rightPercent);
-
-        containerDiv.appendChild(newLabelHold);
-
-        newLabelHold.appendChild(percentChilds);
-        button4.appendChild(containerDiv);
-
-        if (option.value === "Horizontal") {
-          button4.style.border = "block";
-          button4.style.textAlign = "center";
-          button.style.marginTop = "10px";
-          button.style.alignItems = "center";
-          button.style.height = "85%";
-          button.style.width = "100%";
-          button.style.flexDirection = "row";
-          button.style.position = "relative";
-          button.style.marginLeft = "0px";
-        }
-
-        if (option.value === "Vertical") {
-          let orientation = document.createElement("h2");
-          orientation.className = "orientation";
-          orientation.textContent = "vertical";
-          orientation.style.display = "none";
-          button4.appendChild(orientation);
-          containerDiv.style.transform = "rotate(270deg)";
-          nameDiv.style.position = "absolute";
-          nameDiv.style.left = "93%";
-          nameDiv.style.top = "7px";
-          nameDiv.style.right = "-8px";
-          nameDiv.style.transform = "rotate(90deg)";
-
-          newLabelHold.style.position = "relative";
-          newLabelHold.style.width = "80%";
-          newLabelHold.style.paddingTop = "24px";
-          percentChilds.style.alignItems = "start";
-          percentChilds.style.height = "100%";
-        }
-        let productNames = [];
-        for (let i = 0; i < inputFields.length; i++) {
-          productNames.push(inputFields[i].value);
-        }
-        console.log(productNames);
-
-        if (
-          idHolder.textContent === "scale Id" ||
-          idHolder.textContent === "id"
-        ) {
-          setIsLoading(true);
-          console.log("post req");
-          Axios.post(
-            "https://100035.pythonanywhere.com/percent/api/percent_settings_create/",
-            {
-              username: "pfactorial",
-              time: time.value,
-              scale_name: beNametnUpdateScal.value,
-              no_of_scale: 1,
-              orientation: option.value,
-              scale_color: btnUpdateScale.value,
-              product_count: product_percent_scale,
-              product_names: productNames,
-              user: "yes",
+      if (
+        idHolder.textContent === "scale Id" ||
+        idHolder.textContent === "id"
+      ) {
+        setIsLoading(true);
+        console.log("post req");
+        Axios.post(
+          "https://100035.pythonanywhere.com/percent/api/percent_settings_create/",
+          {
+            username: "pfactorial",
+            time: time.value,
+            scale_name: beNametnUpdateScal.value,
+            no_of_scale: 1,
+            orientation: option.value,
+            scale_color: btnUpdateScale.value,
+            product_count: Number(product_percent_scale),
+            product_names: productNames,
+            user: "yes",
+          }
+        )
+          .then((res) => {
+            setIsLoading(false);
+            sendMessage();
+            setScaleData(res.data);
+            const success = res.data.success;
+            var successObj = JSON.parse(success);
+            const id = successObj.inserted_id;
+            console.log(id);
+            if (id.length) {
+              setScaleId(id && id);
+              const idHolder = scale?.querySelector(".scaleId");
+              idHolder.textContent = id && id;
             }
-          )
-            .then((res) => {
+
+            const {
+              name,
+              orientation,
+              fontcolor,
+              fontstyle,
+              scale_color,
+              product_count,
+              product_names,
+            } = res.data.data.settings;
+
+            for (let i = 0; i < product_count; i++) {
+              let newLabelHold = labelHold.cloneNode(true);
+              newLabelHold.innerHTML = "";
+              newLabelHold.style = "";
+
+              newLabelHold.style.padding = "3px";
+              newLabelHold.style.borderBottom = "1px solid gray";
+
+              newLabelHold.style.paddingRight = "35px";
+              newLabelHold.style.paddingLeft = "35px";
+              newLabelHold.style.borderBottom = "1px solid gray";
+              newLabelHold.style.borderTop = "1px solid gray";
+
+              let nameDiv = document.createElement("div");
+              nameDiv.className = "product_name";
+              nameDiv.style.textAlign = "center";
+              nameDiv.style.fontWeight = "700";
+              nameDiv.textContent = product_names[i];
+
+              newLabelHold.insertBefore(nameDiv, newLabelHold.firstChild);
+              let inputPercent = document.createElement("input");
+              inputPercent.type = "range";
+              inputPercent.min = "0";
+              inputPercent.value = "50";
+              inputPercent.max = "100";
+              inputPercent.className = "percent-slider";
+              inputPercent.disabled = "true";
+              inputPercent.style.width = "100%";
+              inputPercent.style.cursor = "pointer";
+              inputPercent.style.background = scale_color;
+              inputPercent.style.webkitAppearance = "none";
+              inputPercent.style.borderRadius = "10px";
+
+              newLabelHold.appendChild(inputPercent);
+
+              let percentChilds = document.createElement("div");
+              percentChilds.style.display = "flex";
+              percentChilds.style.width = "100%";
+              percentChilds.style.alignItems = "center";
+              percentChilds.style.justifyContent = "space-between";
+
+              let leftPercent = document.createElement("div");
+              leftPercent.textContent = "0";
+              leftPercent.className = "left-percent";
+              percentChilds.appendChild(leftPercent);
+
+              let centerPercent = document.createElement("div");
+              inputPercent.addEventListener("input", () => {
+                centerPercent.textContent = `${inputPercent.value}%`
+                  ? `${inputPercent.value}%`
+                  : "50%";
+              });
+              centerPercent.className = "center-percent";
+              percentChilds.appendChild(centerPercent);
+
+              let rightPercent = document.createElement("div");
+              rightPercent.textContent = "100";
+              rightPercent.className = "right-percent";
+              percentChilds.appendChild(rightPercent);
+
+              containerDiv.appendChild(newLabelHold);
+
+              newLabelHold.appendChild(percentChilds);
+              button4.appendChild(containerDiv);
+
+              if (orientation === "Horizontal") {
+                scale.querySelector(".orientation").textContent = "";
+                button4.style.border = "block";
+                button4.style.textAlign = "center";
+                button.style.marginTop = "10px";
+                button.style.alignItems = "center";
+                button.style.height = "85%";
+                button.style.width = "100%";
+                button.style.flexDirection = "row";
+                button.style.position = "relative";
+                button.style.marginLeft = "0px";
+              }
+
+              if (orientation === "Vertical") {
+                let orientation = document.createElement("h2");
+                orientation.className = "orientation";
+                orientation.textContent = "Vertical";
+                orientation.style.display = "none";
+                button4.appendChild(orientation);
+                containerDiv.style.transform = "rotate(270deg)";
+                nameDiv.style.position = "absolute";
+                nameDiv.style.left = "93%";
+                nameDiv.style.top = "7px";
+                nameDiv.style.right = "-8px";
+                nameDiv.style.transform = "rotate(90deg)";
+
+                newLabelHold.style.position = "relative";
+                newLabelHold.style.width = "80%";
+                newLabelHold.style.paddingTop = "24px";
+                percentChilds.style.alignItems = "start";
+                percentChilds.style.height = "100%";
+              }
+
+              scaleText.textContent = name;
+
+              button4.style.color = fontcolor;
+
+              button4.style.fontFamily = fontstyle;
+            }
+          })
+          .catch((err) => {
+            setIsLoading(false);
+            console.log(err);
+          });
+      } else {
+        setIsLoading(true);
+        console.log("PUT req");
+        console.log(idHolder.textContent);
+        Axios.put(
+          "https://100035.pythonanywhere.com/percent/api/percent_settings_create/",
+          {
+            scale_id: idHolder.textContent,
+            username: "pfactorial",
+            time: time.value,
+            scale_name: beNametnUpdateScal.value,
+            no_of_scale: 1,
+            orientation: option.value,
+            scale_color: btnUpdateScale.value,
+            product_count: Number(product_percent_scale),
+            product_names: productNames,
+            user: "yes",
+          }
+        )
+          .then((res) => {
+            if (res.status == 200) {
               setIsLoading(false);
               sendMessage();
               setScaleData(res.data);
-              const success = res.data.success;
-              var successObj = JSON.parse(success);
-              const id = successObj.inserted_id;
-              console.log(id);
-              if (id.length) {
-                setScaleId(id && id);
-                const idHolder = scale?.querySelector(".scaleId");
-                idHolder.textContent = id && id;
-              }
+              setScaleId(scaleId);
               console.log(res);
-            })
-            .catch((err) => {
-              setIsLoading(false);
-              console.log(err);
-            });
-        } else {
-          setIsLoading(true);
-          console.log("PUT req");
-          console.log(idHolder.textContent);
-          Axios.put(
-            "https://100035.pythonanywhere.com/percent/api/percent_settings_create/",
-            {
-              scale_id: idHolder.textContent,
-              username: "pfactorial",
-              time: time.value,
-              scale_name: beNametnUpdateScal.value,
-              no_of_scale: 1,
-              orientation: option.value,
-              scale_color: btnUpdateScale.value,
-              product_count: product_percent_scale,
-              product_names: productNames,
-              user: "yes",
-            }
-          )
-            .then((res) => {
-              if (res.status == 200) {
-                setIsLoading(false);
-                sendMessage();
-                setScaleData(res.data);
-                setScaleId(scaleId);
-                console.log(res);
-                console.log("This is the still scale", scale);
+              console.log("This is the still scale", scale);
+
+              const {
+                name,
+                orientation,
+                fontcolor,
+                fontstyle,
+                scale_color,
+                product_count,
+                product_names,
+              } = res.data.data;
+
+              for (let i = 0; i < product_count; i++) {
+                let newLabelHold = labelHold.cloneNode(true);
+                newLabelHold.innerHTML = "";
+                newLabelHold.style = "";
+
+                newLabelHold.style.padding = "3px";
+                newLabelHold.style.borderBottom = "1px solid gray";
+
+                newLabelHold.style.paddingRight = "35px";
+                newLabelHold.style.paddingLeft = "35px";
+                newLabelHold.style.borderBottom = "1px solid gray";
+                newLabelHold.style.borderTop = "1px solid gray";
+
+                let nameDiv = document.createElement("div");
+                nameDiv.className = "product_name";
+                nameDiv.style.textAlign = "center";
+                nameDiv.style.fontWeight = "700";
+                nameDiv.textContent = product_names[i];
+
+                newLabelHold.insertBefore(nameDiv, newLabelHold.firstChild);
+                let inputPercent = document.createElement("input");
+                inputPercent.type = "range";
+                inputPercent.min = "0";
+                inputPercent.value = "50";
+                inputPercent.max = "100";
+                inputPercent.className = "percent-slider";
+                inputPercent.disabled = "true";
+                inputPercent.style.width = "100%";
+                inputPercent.style.cursor = "pointer";
+                inputPercent.style.background = scale_color;
+                inputPercent.style.webkitAppearance = "none";
+                inputPercent.style.borderRadius = "10px";
+
+                newLabelHold.appendChild(inputPercent);
+
+                let percentChilds = document.createElement("div");
+                percentChilds.style.display = "flex";
+                percentChilds.style.width = "100%";
+                percentChilds.style.alignItems = "center";
+                percentChilds.style.justifyContent = "space-between";
+
+                let leftPercent = document.createElement("div");
+                leftPercent.textContent = "0";
+                leftPercent.className = "left-percent";
+                percentChilds.appendChild(leftPercent);
+
+                let centerPercent = document.createElement("div");
+                inputPercent.addEventListener("input", () => {
+                  centerPercent.textContent = `${inputPercent.value}%`
+                    ? `${inputPercent.value}%`
+                    : "50%";
+                });
+                centerPercent.className = "center-percent";
+                percentChilds.appendChild(centerPercent);
+
+                let rightPercent = document.createElement("div");
+                rightPercent.textContent = "100";
+                rightPercent.className = "right-percent";
+                percentChilds.appendChild(rightPercent);
+
+                containerDiv.appendChild(newLabelHold);
+
+                newLabelHold.appendChild(percentChilds);
+                button4.appendChild(containerDiv);
+
+                if (orientation === "Horizontal") {
+                  scale.querySelector(".orientation").textContent = "";
+                  button4.style.border = "block";
+                  button4.style.textAlign = "center";
+                  button.style.marginTop = "10px";
+                  button.style.alignItems = "center";
+                  button.style.height = "85%";
+                  button.style.width = "100%";
+                  button.style.flexDirection = "row";
+                  button.style.position = "relative";
+                  button.style.marginLeft = "0px";
+                }
+
+                if (orientation === "Vertical") {
+                  let orientation = document.createElement("h2");
+                  orientation.className = "orientation";
+                  orientation.textContent = "Vertical";
+                  orientation.style.display = "none";
+                  button4.appendChild(orientation);
+                  containerDiv.style.transform = "rotate(270deg)";
+                  nameDiv.style.position = "absolute";
+                  nameDiv.style.left = "93%";
+                  nameDiv.style.top = "7px";
+                  nameDiv.style.right = "-8px";
+                  nameDiv.style.transform = "rotate(90deg)";
+
+                  newLabelHold.style.position = "relative";
+                  newLabelHold.style.width = "80%";
+                  newLabelHold.style.paddingTop = "24px";
+                  percentChilds.style.alignItems = "start";
+                  percentChilds.style.height = "100%";
+                }
+
+                scaleText.textContent = name;
+
+                button4.style.color = fontcolor;
+
+                button4.style.fontFamily = fontstyle;
               }
-            })
-            .catch((err) => {
-              setIsLoading(false);
-              console.log(err.message);
-            });
-        }
+            }
+          })
+          .catch((err) => {
+            setIsLoading(false);
+            console.log(err.message);
+          });
       }
     } else if (
       scaleType
@@ -2355,7 +2486,6 @@ const ScaleRightSide = () => {
       orientation.style.display = "none";
       button4.appendChild(orientation);
 
-
       let productNameLabels = [];
       for (let i = 0; i < inputFields.length; i++) {
         productNameLabels.push(inputFields[i].value);
@@ -2398,7 +2528,15 @@ const ScaleRightSide = () => {
             }
             console.log(res);
 
-            const {name, orientation, fontcolor, fontstyle, scale_color, product_count, product_names} = res.data.data.settings;
+            const {
+              name,
+              orientation,
+              fontcolor,
+              fontstyle,
+              scale_color,
+              product_count,
+              product_names,
+            } = res.data.data.settings;
 
             for (let i = 0; i < product_count; i++) {
               let newLabelHold = labelHold.cloneNode(true);
@@ -2410,14 +2548,14 @@ const ScaleRightSide = () => {
               newLabelHold.style.paddingLeft = "35px";
               newLabelHold.style.borderBottom = "1px solid gray";
               newLabelHold.style.borderTop = "1px solid gray";
-      
+
               let nameDiv = document.createElement("div");
               nameDiv.className = "product_name";
               nameDiv.style.textAlign = "center";
               nameDiv.style.fontWeight = "700";
               nameDiv.textContent = product_names[i];
               newLabelHold.insertBefore(nameDiv, newLabelHold.firstChild);
-      
+
               let inputPercent = document.createElement("input");
               inputPercent.type = "range";
               inputPercent.disabled = "true";
@@ -2431,18 +2569,18 @@ const ScaleRightSide = () => {
               inputPercent.style.webkitAppearance = "none";
               inputPercent.style.borderRadius = "10px";
               newLabelHold.appendChild(inputPercent);
-      
+
               let percentChilds = document.createElement("div");
               percentChilds.style.display = "flex";
               percentChilds.style.width = "100%";
               percentChilds.style.alignItems = "center";
               percentChilds.style.justifyContent = "space-between";
-      
+
               let leftPercent = document.createElement("div");
               leftPercent.textContent = "0";
               leftPercent.className = "left-percent";
               percentChilds.appendChild(leftPercent);
-      
+
               let centerPercent = document.createElement("div");
               inputPercent.addEventListener("input", () => {
                 centerPercent.textContent = `${inputPercent.value}%`
@@ -2451,17 +2589,17 @@ const ScaleRightSide = () => {
               });
               centerPercent.className = "center-percent";
               percentChilds.appendChild(centerPercent);
-      
+
               let rightPercent = document.createElement("div");
               rightPercent.textContent = "100";
               rightPercent.className = "right-percent";
               percentChilds.appendChild(rightPercent);
-      
+
               containerDiv.appendChild(newLabelHold);
-      
+
               newLabelHold.appendChild(percentChilds);
               button4.appendChild(containerDiv);
-      
+
               if (orientation === "Horizontal") {
                 button4.style.border = "block";
                 button4.style.textAlign = "center";
@@ -2473,7 +2611,7 @@ const ScaleRightSide = () => {
                 button.style.position = "relative";
                 button.style.marginLeft = "0px";
               }
-      
+
               if (orientation === "Vertical") {
                 containerDiv.style.transform = "rotate(270deg)";
                 containerDiv.style.marginTop = "80px";
@@ -2489,38 +2627,36 @@ const ScaleRightSide = () => {
                 newLabelHold.style.width = "85%";
                 percentChilds.style.alignItems = "start";
                 percentChilds.style.height = "100%";
-      
+
                 if (inputFields.length == 5) {
                   scaleText.style.marginBottom = "-100px";
                 }
-      
+
                 if (inputFields.length == 6) {
                   scaleText.style.marginBottom = "-31px";
                 }
-      
+
                 if (inputFields.length == 7) {
                   scaleText.style.marginBottom = "-62px";
                 }
-      
+
                 if (inputFields.length == 8) {
                   scaleText.style.marginBottom = "-80px";
                 }
-      
+
                 if (inputFields.length == 9) {
                   scaleText.style.marginBottom = "-117px";
                 }
-      
+
                 if (inputFields.length == 10) {
                   scaleText.style.marginBottom = "-151px";
                 }
               }
 
               scaleText.textContent = name;
-              button4.style.color = fontcolor
+              button4.style.color = fontcolor;
               button4.style.fontFamily = fontstyle;
-
             }
-      
           })
           .catch((err) => {
             setIsLoading(false);
@@ -2556,7 +2692,15 @@ const ScaleRightSide = () => {
               console.log(res);
               console.log("This is the still scale", scale);
 
-              const {name, orientation, fontcolor, fontstyle, scale_color, product_count, product_names} = res.data.data;
+              const {
+                name,
+                orientation,
+                fontcolor,
+                fontstyle,
+                scale_color,
+                product_count,
+                product_names,
+              } = res.data.data;
 
               for (let i = 0; i < product_count; i++) {
                 let newLabelHold = labelHold.cloneNode(true);
@@ -2568,14 +2712,14 @@ const ScaleRightSide = () => {
                 newLabelHold.style.paddingLeft = "35px";
                 newLabelHold.style.borderBottom = "1px solid gray";
                 newLabelHold.style.borderTop = "1px solid gray";
-        
+
                 let nameDiv = document.createElement("div");
                 nameDiv.className = "product_name";
                 nameDiv.style.textAlign = "center";
                 nameDiv.style.fontWeight = "700";
                 nameDiv.textContent = product_names[i];
                 newLabelHold.insertBefore(nameDiv, newLabelHold.firstChild);
-        
+
                 let inputPercent = document.createElement("input");
                 inputPercent.type = "range";
                 inputPercent.disabled = "true";
@@ -2589,18 +2733,18 @@ const ScaleRightSide = () => {
                 inputPercent.style.webkitAppearance = "none";
                 inputPercent.style.borderRadius = "10px";
                 newLabelHold.appendChild(inputPercent);
-        
+
                 let percentChilds = document.createElement("div");
                 percentChilds.style.display = "flex";
                 percentChilds.style.width = "100%";
                 percentChilds.style.alignItems = "center";
                 percentChilds.style.justifyContent = "space-between";
-        
+
                 let leftPercent = document.createElement("div");
                 leftPercent.textContent = "0";
                 leftPercent.className = "left-percent";
                 percentChilds.appendChild(leftPercent);
-        
+
                 let centerPercent = document.createElement("div");
                 inputPercent.addEventListener("input", () => {
                   centerPercent.textContent = `${inputPercent.value}%`
@@ -2609,17 +2753,17 @@ const ScaleRightSide = () => {
                 });
                 centerPercent.className = "center-percent";
                 percentChilds.appendChild(centerPercent);
-        
+
                 let rightPercent = document.createElement("div");
                 rightPercent.textContent = "100";
                 rightPercent.className = "right-percent";
                 percentChilds.appendChild(rightPercent);
-        
+
                 containerDiv.appendChild(newLabelHold);
-        
+
                 newLabelHold.appendChild(percentChilds);
                 button4.appendChild(containerDiv);
-        
+
                 if (orientation === "Horizontal") {
                   button4.style.border = "block";
                   button4.style.textAlign = "center";
@@ -2631,7 +2775,7 @@ const ScaleRightSide = () => {
                   button.style.position = "relative";
                   button.style.marginLeft = "0px";
                 }
-        
+
                 if (orientation === "Vertical") {
                   containerDiv.style.transform = "rotate(270deg)";
                   containerDiv.style.marginTop = "80px";
@@ -2647,27 +2791,27 @@ const ScaleRightSide = () => {
                   newLabelHold.style.width = "85%";
                   percentChilds.style.alignItems = "start";
                   percentChilds.style.height = "100%";
-        
+
                   if (inputFields.length == 5) {
                     scaleText.style.marginBottom = "-100px";
                   }
-        
+
                   if (inputFields.length == 6) {
                     scaleText.style.marginBottom = "-31px";
                   }
-        
+
                   if (inputFields.length == 7) {
                     scaleText.style.marginBottom = "-62px";
                   }
-        
+
                   if (inputFields.length == 8) {
                     scaleText.style.marginBottom = "-80px";
                   }
-        
+
                   if (inputFields.length == 9) {
                     scaleText.style.marginBottom = "-117px";
                   }
-        
+
                   if (inputFields.length == 10) {
                     scaleText.style.marginBottom = "-151px";
                   }
@@ -2675,9 +2819,8 @@ const ScaleRightSide = () => {
               }
 
               scaleText.textContent = name;
-              button4.style.color = fontcolor
+              button4.style.color = fontcolor;
               button4.style.fontFamily = fontstyle;
-
             }
           })
           .catch((err) => {
@@ -7350,7 +7493,7 @@ const ScaleRightSide = () => {
             // </select>
           </div> */}
             </div>
-            <div className="mt-2 text-center pt-3">
+            <div className=" text-center pt-3">
               <Button
                 variant="primary"
                 className="px-5"
@@ -7361,7 +7504,7 @@ const ScaleRightSide = () => {
             </div>
             <div
               className="text-center pt-3"
-              style={{ display: "flex", gap: "10px" }}
+              style={{display: "flex", justifyContent:"center"}}
             >
               <Button
                 variant="primary"
