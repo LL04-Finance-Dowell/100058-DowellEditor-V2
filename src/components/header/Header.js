@@ -1075,6 +1075,8 @@ const Header = () => {
       documentResponses.push({ scale_id: scaleId, score: parseInt(holdElem) });
     });
 
+    console.log("This is stapel_res", documentResponses)
+
     console.log(generateLoginUser());
     console.log(documentResponses);
 
@@ -1147,8 +1149,9 @@ const Header = () => {
       scaleId = scale?.querySelector(".scaleId")?.textContent;
       holdElem = scale?.querySelector(".holdElem")?.textContent;
 
-      documentResponses.push({ scale_id: scaleId, score: holdElem });
+      documentResponses.push({ scale_id: scaleId, score: typeof holdElem === "number" || !isNaN(holdElem) ? parseInt(holdElem) : holdElem });
     });
+    console.log("This is docresp", documentResponses)
 
     const requestBody = {
       process_id: decoded.details.process_id,

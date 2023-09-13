@@ -629,7 +629,7 @@ function createNewScaleInputField(
               holdElem = document.createElement("div");
               holdElem.className = "holdElem";
               holdElem.style.display = "none";
-              holdElem.textContent = npsLiteText[i];
+              holdElem.textContent = npsLiteText[i] === '' ? i : npsLiteText[i];
               holding?.appendChild(holdElem);
               console.log("This is holdEle", holdElem.textContent);
             }
