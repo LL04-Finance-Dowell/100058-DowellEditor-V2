@@ -46,6 +46,8 @@ import createFormInputElement from "./createElements/CreateFormElement.jsx";
 import createContainerInputElement from "./createElements/CreateContainerElement.jsx";
 import { finding_percent } from './../../utils/util_functions/finding_percent';
 import { CreateTableComponent } from "./midSectionElements/TableInputElement.jsx";
+import CreatePyamentElement from "./createElements/CreatePyamentElement.jsx";
+import createPaymentInputField from "./midSectionElements/PaymentInputElement.jsx";
 // tHIS IS FOR A TEST COMMIT
 
 const dummyData = {
@@ -205,6 +207,7 @@ const MidSection = React.forwardRef((props, ref) => {
           email2: false,
           newScale2: false,
           camera2: false,
+          payment2: false,
         });
 
         const divsArray = document.getElementsByClassName(
@@ -2033,6 +2036,24 @@ const MidSection = React.forwardRef((props, ref) => {
 
           createButtonInputField(id, element, p, holderDIV, focuseddClassMaintain, handleClicked, setSidebar, finalizeButton, rejectButton, decoded, document_map_required)
         }
+        if (element.type === "PAYMENT_INPUT") {
+          const measure = {
+            width: finding_percent(element, "width"),
+            height: element.height + "px",
+            left: finding_percent(element, "left"),
+            top: element.topp,
+            border: element.buttonBorder,
+            auth_user: curr_user,
+          };
+
+          const idMatch = documnetMap?.filter((elmnt) => elmnt == element?.id);
+          const holderDIV = getHolderDIV(measure, pageNo);
+          const id = `${element.id}`;
+          const finalizeButton = document.getElementById("finalize-button");
+          const rejectButton = document.getElementById("reject-button");
+
+          createPaymentInputField(id, element, p, holderDIV, focuseddClassMaintain, handleClicked, setSidebar, finalizeButton, rejectButton, decoded, document_map_required)
+        }
         if (element.type === "FORM") {
           const measure = {
             width: finding_percent(element, "width"),
@@ -2583,6 +2604,11 @@ const MidSection = React.forwardRef((props, ref) => {
           decoded.details.action === "template"
         ) {
           createFormInputElement(holderDIV, focuseddClassMaintain, handleClicked, setSidebar)
+        } else if (
+          typeOfOperation === "PAYMENT_INPUT" &&
+          decoded.details.action === "template"
+        ){
+          CreatePyamentElement(holderDIV, focuseddClassMaintain, handleClicked, setSidebar);
         }
         if (decoded.details.action === "template") {
           document.querySelector(".drop_zone").append(holderDIV);

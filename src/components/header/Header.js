@@ -373,7 +373,7 @@ const Header = () => {
             data:
               sign[h].firstElementChild === null
                 ? // decoded.details.action === "document"
-                  sign[h].innerHTML
+                sign[h].innerHTML
                 : sign[h].firstElementChild.src,
             id: `s${h + 1}`,
           };
@@ -403,16 +403,15 @@ const Header = () => {
               const tableTR = { tr: null };
               const newTableTR = [];
               for (let j = 0; j < tableChildren[i].children.length; j++) {
-                const childNodes = tableChildren[i].children[j]?.childNodes;
-                const tdElement = [];
-                childNodes.forEach((child) => {
-                  if (
-                    !child.classList.contains("row-resizer") &&
-                    !child.classList.contains("td-resizer")
-                  ) {
+                // const element = tableChildren[i];
+
+                const childNodes = tableChildren[i].children[j]?.childNodes
+                const tdElement=[]
+                childNodes.forEach(child=>{
+                  if (!child.classList.contains("row-resizer") && !child.classList.contains("td-resizer")) {
                     tdElement.push(child);
-                  }
-                });
+                  }               
+                })
                 const TdDivClassName = tdElement[0]?.className.split(" ")[0];
                 const trChild = {
                   td: {
@@ -421,12 +420,12 @@ const Header = () => {
                       (TdDivClassName == "textInput" && "TEXT_INPUT") ||
                       (TdDivClassName == "imageInput" && "IMAGE_INPUT") ||
                       (TdDivClassName == "signInput" && "SIGN_INPUT"),
+                    // if(){
                     data:
                       TdDivClassName == "imageInput"
                         ? tableChildren[i].children[j]?.firstElementChild.style
                             .backgroundImage
-                        : tableChildren[i].children[j]?.firstElementChild
-                            ?.innerHTML,
+                        : tdElement[0]?.innerHTML,
                     id: `tableTd${j + 1}`,
                   },
                 };
@@ -435,6 +434,7 @@ const Header = () => {
               tableTR.tr = newTableTR;
               allTableCCells.push(tableTR);
             }
+            // console.log("allTableCCells", allTableCCells);
             return allTableCCells;
           }
           elem = {
@@ -515,6 +515,9 @@ const Header = () => {
                 case "cameraInput":
                   type = "CAMERA_INPUT";
                   break;
+                case "paymentInput":
+                  type = "PAYMENT_INPUT";
+                  break;
                 default:
                   type = "";
               }
@@ -522,7 +525,7 @@ const Header = () => {
               childData.type = type;
               const imageData =
                 "imageInput" &&
-                element?.firstElementChild?.style?.backgroundImage
+                  element?.firstElementChild?.style?.backgroundImage
                   ? element.firstElementChild.style.backgroundImage
                   : element.firstElementChild?.innerHTML;
               if (type != "TEXT_INPUT") {
@@ -840,6 +843,38 @@ const Header = () => {
           };
 
           const pageNum = findPaageNum(buttons[b]);
+          page[0][pageNum].push(elem);
+        }
+      }
+    }
+    const payments = document.getElementsByClassName("paymentInput");
+    if (payments.length) {
+      for (let p = 0; p < payments.length; p++) {
+        if (
+          !buttons[p]?.parentElement?.parentElement?.classList?.contains(
+            "containerInput"
+          )
+        ) {
+          let tempElem = payments[p].parentElement;
+          let tempPosn = getPosition(tempElem);
+          const link = buttonLink;
+
+          elem = {
+            width: tempPosn.width,
+            height: tempPosn.height,
+            top: tempPosn.top,
+            topp: payments[p].parentElement.style.top,
+            left: tempPosn.left,
+            type: "PAYMENT_INPUT",
+            buttonBorder: `${buttonBorderSize}px dotted ${buttonBorderColor}`,
+            data: payments[p].textContent,
+            raw_data: tempElem.children[1].innerHTML,
+            purpose: tempElem.children[2].innerHTML,
+            id: `pay${p + 1}`,
+          };
+
+          console.log("raw_data", elem.raw_data);
+          const pageNum = findPaageNum(payments[p]);
           page[0][pageNum].push(elem);
         }
       }
@@ -1239,7 +1274,8 @@ const Header = () => {
         content: JSON.stringify(dataa),
         page: item,
       };
-    } else if (decoded.details.action === "document") {
+    } 
+    else if (decoded.details.action === "document") {
       updateField = {
         document_name: titleName,
         content: JSON.stringify(dataa),
@@ -1247,7 +1283,7 @@ const Header = () => {
       };
     }
 
-    console.log(updateField);
+    console.log(updateField.content);
 
     <iframe src="http://localhost:5500/"></iframe>;
 
@@ -1360,6 +1396,8 @@ const Header = () => {
         function_ID: decoded.details.function_ID,
         cluster: decoded.details.cluster,
         document: decoded.details.document,
+        update_field: decoded.details.update_field,
+
       }
     )
       .then((res) => {
@@ -1599,9 +1637,8 @@ const Header = () => {
 
   return (
     <div
-      className={`header ${
-        actionName == "template" ? "header_bg_template" : "header_bg_document"
-      }`}
+      className={`header ${actionName == "template" ? "header_bg_template" : "header_bg_document"
+        }`}
     >
       <Container fluid>
         <Row>
@@ -1611,9 +1648,8 @@ const Header = () => {
               {isMenuVisible && (
                 <div
                   ref={menuRef}
-                  className={`position-absolute bg-white d-flex flex-column p-4 bar-menu menu ${
-                    isMenuVisible ? "show" : ""
-                  }`}
+                  className={`position-absolute bg-white d-flex flex-column p-4 bar-menu menu ${isMenuVisible ? "show" : ""
+                    }`}
                 >
                   <div className="d-flex cursor_pointer" onClick={handleUndo}>
                     <ImUndo />

@@ -26,6 +26,11 @@ const SignsRightSidebar = () => {
 
   const clear = () => {
     sigPad.current.clear();
+    const targetDiv = document.querySelector(".focussedd")
+    if(targetDiv?.querySelector('img')){
+      targetDiv.querySelector('img').remove();
+    }
+    const prevHTML = targetDiv.innerHTML
   };
 
   const save = () => {
@@ -41,6 +46,7 @@ const SignsRightSidebar = () => {
         if (sign.parentElement.classList.contains("holderDIV")) {
           sign.parentElement.classList.add("element_updated");
         }
+        
       }
       console.log("sign data", data);
       document.querySelector(".focussed").innerHTML = signImage;
