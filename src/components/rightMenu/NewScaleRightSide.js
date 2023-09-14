@@ -49,6 +49,7 @@ const ScaleRightSide = () => {
   const [percentSumInputValue, setPercentSumInputValue] = useState("");
   const [percentSumLabelTexts, setPercentSumLabelTexts] = useState([]);
   const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
+  const [isButtonDisabled, setButtonDisabled] = useState(true);
 
   const [productCount, setProductCount] = useState(1);
   const [inputFields, setInputFields] = useState([
@@ -616,7 +617,7 @@ const ScaleRightSide = () => {
   const onEmojiClick = (emojiObject) => {
     const emoji = emojiObject.emoji;
     if (inputStr.includes(emoji)) {
-      alert("The is already selected");
+      alert("The emoji is already selected");
     } else {
       setInputStr((prevInputStr) => prevInputStr + emoji);
       setShowPicker(false);
@@ -813,7 +814,14 @@ const ScaleRightSide = () => {
       const selectedOption = optionSelect.value;
       tempText?.remove();
 
+      const nps_vertical = document.createElement("h2");
+      nps_vertical.className = "nps_vertical";
+      nps_vertical.style.display = "none";
+      nps_vertical.textContent = "";
+
       if (option.value === "Horizontal") {
+        nps_vertical.textContent = "";
+
         button4.style.border = "block";
         button4.style.textAlign = "center";
         button.style.display = "flex";
@@ -827,18 +835,16 @@ const ScaleRightSide = () => {
         buttonChild.style.flexDirection = "row";
         buttonChild.style.justifyContent = "space-between";
         buttonChild.style.alignItems = "center";
-        button.style.position = "relative";
+        button.style.position = "";
         buttonChild.style.marginLeft = "0px";
         button.style.marginLeft = "0px";
+        labelHold.style.transform = "";
+        buttonChild.style.width = "";
+        buttonChild.style.height = "";
       }
 
       if (option.value === "Vertical") {
-        const nps_vertical = document.createElement("h2");
-        nps_vertical.className = "nps_vertical";
-        nps_vertical.style.display = "none";
         nps_vertical.textContent = "nps_vertical";
-
-        button4.appendChild(nps_vertical);
 
         labelHold.style.height = "82%";
         labelHold.style.top = "54%";
@@ -862,6 +868,8 @@ const ScaleRightSide = () => {
 
         buttonCircleM.style.marginTop = "2px";
       }
+      const orientation = scale?.querySelector(".nps_vertical")?.remove();
+      button4.appendChild(nps_vertical);
 
       const prepareImageLabels = () => {
         const imageLabels = {};
@@ -1193,15 +1201,18 @@ const ScaleRightSide = () => {
           .filter((emoji) => emoji !== "");
 
         const emojiLabels = {};
-        let j = 0
-        let valRange = (upperLimit % space) !== 0 ? Math.floor(upperLimit / space) * 2 : upperLimit
+        let j = 0;
+        let valRange =
+          upperLimit % space !== 0
+            ? Math.floor(upperLimit / space) * 2
+            : upperLimit;
         for (let i = valRange * -1; i <= valRange; i += spacing) {
-          if(i !== 0) { 
+          if (i !== 0) {
             const emojiIndex = j;
             emojiLabels[i] = emojis[emojiIndex];
-            j++
-            console.log(i)
-            console.log(Math.floor(upperLimit / space))
+            j++;
+            console.log(i);
+            console.log(Math.floor(upperLimit / space));
           }
         }
 
@@ -1353,6 +1364,7 @@ const ScaleRightSide = () => {
             labelHold.appendChild(optionHolder);
             stapelScaleArray.textContent = res.data.data.settings.scale;
             labelHold.append(stapelScaleArray);
+            console.log("This is stapel", stapelScaleArray)
           })
           .catch((err) => {
             setIsLoading(false);
@@ -1583,9 +1595,7 @@ const ScaleRightSide = () => {
             setIsLoading(false);
             sendMessage();
             setScaleData(res.data);
-            const success = res.data.success;
-            var successObj = JSON.parse(success);
-            const id = successObj.inserted_id;
+            const id = res.data.data.scale_id;
             console.log(id);
             if (id.length) {
               setScaleId(id && id);
@@ -1605,7 +1615,7 @@ const ScaleRightSide = () => {
               name,
               fontcolor,
               fontstyle,
-              custom_emoji_format
+              custom_emoji_format,
             } = res.data.data.settings;
             const textValues = [left, center, right];
 
@@ -1700,7 +1710,7 @@ const ScaleRightSide = () => {
                 fontcolor,
                 fontstyle,
                 custom_emoji_format
-              } = res.data.data.settings;
+              } = res.data.data;
               const textValues = [left, center, right];
 
               const npsLiteTextArray = document.createElement("div");
@@ -1871,6 +1881,65 @@ const ScaleRightSide = () => {
         // circle.style.gap = "20px";
       }
 
+      const basePayload = {
+        user: "yes",
+        username: "TadesseJemal",
+        instance_id: "2",
+        orientation: option?.value,
+        fontstyle: btnUpdateScaleFontLinkert.value,
+        scale_name: beNametnUpdateScal.value,
+        no_of_scales: numberOfScalesValue,
+        font_color: btnUpdateFontColor.value,
+        round_color: btnUpdateButton.value,
+        label_type: labelTypeForPut,
+        label_scale_selection: updatedLabelScale,
+        time: timeId.style.display === "none" ? "00" : time?.value,
+        fomat: labelTypeForPut,
+      };
+
+      // Create a dynamic payload by conditionally adding fields
+      const dynamicPayload = {
+        ...basePayload,
+        // Conditionally add either 'custom_emoji_format' or 'label_scale_input'
+        ...(labelType === "Text"
+          ? { label_scale_input: updatedLabels }
+          : {
+              label_scale_input: updatedLabels,
+              custom_emoji_format: customEmojiFormat,
+            }),
+      };
+
+      // for put request
+      const basePayloadPut = {
+        scale_id: idHolder.textContent,
+        user: "yes",
+        instance_id: "2",
+        username: "TadesseJemal",
+        fontstyle: btnUpdateScaleFontLinkert.value,
+        orientation: option?.value,
+        scale_name: beNametnUpdateScal.value,
+        no_of_scales: numberOfScalesValue,
+        font_color: btnUpdateFontColor.value,
+        round_color: btnUpdateButton.value,
+        label_type: labelTypeForPut,
+        label_scale_selection: updatedLabelScale,
+        label_scale_input: updatedLabelInput,
+        custom_emoji_format: customEmojiFormat,
+        time: timeId.style.display === "none" ? "00" : time?.value,
+        fomat: labelTypeForPut,
+      };
+
+      const dynamicPayloadPut = {
+        ...basePayloadPut,
+        // Conditionally add either 'custom_emoji_format' or 'label_scale_input'
+        ...(labelType === "Text"
+          ? { label_scale_input: updatedLabels }
+          : {
+              label_scale_input: updatedLabels,
+              custom_emoji_format: customEmojiFormat,
+            }),
+      };
+
       if (
         idHolder.textContent === "scale Id" ||
         idHolder.textContent === "id"
@@ -1879,23 +1948,7 @@ const ScaleRightSide = () => {
         console.log("post req");
         Axios.post(
           "https://100035.pythonanywhere.com/likert/likert-scale_create/",
-          {
-            user: "yes",
-            username: "TadesseJemal",
-            instance_id: "2",
-            orientation: option?.value,
-            fontstyle: btnUpdateScaleFontLinkert.value,
-            scale_name: beNametnUpdateScal.value,
-            no_of_scales: numberOfScalesValue,
-            font_color: btnUpdateFontColor.value,
-            round_color: btnUpdateButton.value,
-            label_type: labelTypeForPut,
-            label_scale_selection: updatedLabelScale,
-            label_scale_input: updatedLabelInput,
-            custom_emoji_format: customEmojiFormat,
-            time: timeId.style.display === "none" ? "00" : time?.value,
-            fomat: labelTypeForPut,
-          }
+          dynamicPayload
         )
           .then((res) => {
             setIsLoading(false);
@@ -1970,24 +2023,7 @@ const ScaleRightSide = () => {
         console.log(idHolder.textContent);
         const timestamp = new Date().getTime(); // Generate a unique timestamp
         const apiUrl = `https://100035.pythonanywhere.com/likert/likert-scale_create/?timestamp=${timestamp}`;
-        Axios.put(apiUrl, {
-          scale_id: idHolder.textContent,
-          user: "yes",
-          instance_id: "2",
-          username: "TadesseJemal",
-          fontstyle: btnUpdateScaleFontLinkert.value,
-          orientation: option?.value,
-          scale_name: beNametnUpdateScal.value,
-          no_of_scales: numberOfScalesValue,
-          font_color: btnUpdateFontColor.value,
-          round_color: btnUpdateButton.value,
-          label_type: labelTypeForPut,
-          label_scale_selection: updatedLabelScale,
-          label_scale_input: updatedLabelInput,
-          custom_emoji_format: customEmojiFormat,
-          time: timeId.style.display === "none" ? "00" : time?.value,
-          fomat: labelTypeForPut,
-        })
+        Axios.put(apiUrl, dynamicPayloadPut)
           .then((res) => {
             if (res.status == 200) {
               setIsLoading(false);
@@ -2042,7 +2078,7 @@ const ScaleRightSide = () => {
 
                 labelHold.appendChild(circle);
               }
-              console.log("This is it", likertScaleArray)
+              console.log("This is it", likertScaleArray);
             }
           })
           .catch((err) => {
@@ -2082,9 +2118,9 @@ const ScaleRightSide = () => {
 
       let labelHold = scale?.querySelector(".label_hold");
 
-      setTimeout(() => {
-        labelHold.style.flexDirection = "column";
-      }, 50);
+      // setTimeout(() => {
+      //   labelHold.style.flexDirection = "column";
+      // }, 50);
       let tempText = scale?.querySelector(".tempText");
       tempText?.remove();
 
@@ -2102,7 +2138,7 @@ const ScaleRightSide = () => {
       ).value;
 
       const containerDiv = document.createElement("div");
-      containerDiv.className = "containerDIV";
+      containerDiv.className = "label_hold";
 
       let product_names = document.getElementById("product_name");
       console.log(product_names.length);
@@ -2157,9 +2193,12 @@ const ScaleRightSide = () => {
               product_count,
               product_names,
             } = res.data.data.settings;
+            console.log(name, product_count, product_names);
 
             for (let i = 0; i < product_count; i++) {
               let newLabelHold = labelHold.cloneNode(true);
+              newLabelHold.classList.add("containerDIV");
+              newLabelHold.classList.remove("label_hold");
               newLabelHold.innerHTML = "";
               newLabelHold.style = "";
 
@@ -2219,12 +2258,13 @@ const ScaleRightSide = () => {
               percentChilds.appendChild(rightPercent);
 
               containerDiv.appendChild(newLabelHold);
+              // labelHold.append(newLabelHold);
 
               newLabelHold.appendChild(percentChilds);
               button4.appendChild(containerDiv);
 
               if (orientation === "Horizontal") {
-                scale.querySelector(".orientation").textContent = "";
+                scale?.querySelector(".orientation")?.remove();
                 button4.style.border = "block";
                 button4.style.textAlign = "center";
                 button.style.marginTop = "10px";
@@ -2258,9 +2298,9 @@ const ScaleRightSide = () => {
 
               scaleText.textContent = name;
 
-              button4.style.color = fontcolor;
+              button4.style.color = btnUpdateFontColor.value;
 
-              button4.style.fontFamily = fontstyle;
+              button4.style.fontFamily = btnUpdateScaleFont.value;
             }
           })
           .catch((err) => {
@@ -2307,6 +2347,8 @@ const ScaleRightSide = () => {
 
               for (let i = 0; i < product_count; i++) {
                 let newLabelHold = labelHold.cloneNode(true);
+                newLabelHold.classList.add("containerDIV");
+                newLabelHold.classList.remove("label_hold");
                 newLabelHold.innerHTML = "";
                 newLabelHold.style = "";
 
@@ -2366,12 +2408,13 @@ const ScaleRightSide = () => {
                 percentChilds.appendChild(rightPercent);
 
                 containerDiv.appendChild(newLabelHold);
+                // labelHold.append(newLabelHold);
 
                 newLabelHold.appendChild(percentChilds);
                 button4.appendChild(containerDiv);
 
                 if (orientation === "Horizontal") {
-                  scale.querySelector(".orientation").textContent = "";
+                  scale?.querySelector(".orientation")?.remove();
                   button4.style.border = "block";
                   button4.style.textAlign = "center";
                   button.style.marginTop = "10px";
@@ -2405,9 +2448,9 @@ const ScaleRightSide = () => {
 
                 scaleText.textContent = name;
 
-                button4.style.color = fontcolor;
+                button4.style.color = btnUpdateFontColor.value;
 
-                button4.style.fontFamily = fontstyle;
+                button4.style.fontFamily = btnUpdateScaleFont.value;
               }
             }
           })
@@ -2846,6 +2889,19 @@ const ScaleRightSide = () => {
     border.style.display = "none";
   }
 
+  function showIframeDo() {
+    const divIframeRight = document.getElementById("iframeRight");
+    const divSettingRight = document.getElementById("settingRight");
+    const updateScale = document.getElementById("updateScale");
+    const setScale = document.getElementById("setScale");
+    divIframeRight.style.display = "block";
+    updateScale.style.borderBottom = "2px solid lightgreen";
+    setScale.style.border = "none";
+    divSettingRight.style.display = "none";
+    const border = document.getElementById("border");
+    border.style.display = "block";
+  }
+
   function showSetting() {
     const divIframeRight = document.getElementById("iframeRight");
     const divSettingRight = document.getElementById("settingRight");
@@ -3083,7 +3139,7 @@ const ScaleRightSide = () => {
               id="updateScale"
               className="py-2 bg-white border-none"
               // style={{"}}
-              // onClick={showIframe}
+              onClick={showIframeDo}
             >
               Appearance
             </button>
@@ -3096,7 +3152,7 @@ const ScaleRightSide = () => {
               id="setScale"
               className="py-2 bg-white border-none"
               // style={{ bordern: "none", outline: "none" }}
-              // onClick={showSetting}
+              onClick={showSetting}
             >
               Configurations
             </button>
@@ -3104,55 +3160,118 @@ const ScaleRightSide = () => {
           <div id="iframeRight">
             <div className="mb-4"></div>
           </div>
-          {showBorder === true ? (
-            <>
-              <hr />
-              <Row className="pt-4">
-                <div style={{ display: "flex", alignItems: "center" }}>
-                  <h6 style={{ marginRight: "10rem" }}>Border</h6>
-                  <label className="switch">
-                    <input
-                      type="checkbox"
-                      onClick={() => setShowSlider(!showSlider)}
-                    />
-                    <span className="slider round"></span>
-                  </label>
-                </div>
-                {showSlider && (
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      backgroundColor: "#abab",
-                      gap: "10px",
-                      height: "40px",
-                      width: "90%",
-                    }}
-                  >
-                    <input
-                      type="color"
-                      value={borderColor}
-                      onChange={handleBorderColorChange}
-                      id="color"
-                      style={{ border: "none", width: "10%", height: "15px" }}
-                    />
-                    <input
-                      type="range"
-                      min="-10"
-                      max="20"
-                      value={borderSize}
-                      onChange={handleBorderSizeChange}
-                      id="range"
-                      className="range-color"
-                    />
-                  </div>
-                )}
-              </Row>
-              <hr />
-            </>
-          ) : (
-            ""
-          )}
+          <div id="border">
+          <Row className="pt-4">
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <h6 style={{ marginRight: "10rem" }}>Border</h6>
+              <label className="switch">
+                <input
+                  type="checkbox"
+                  onClick={() => setShowSlider(!showSlider)}
+                />
+                <span className="slider round"></span>
+              </label>
+            </div>
+            {showSlider && (
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  backgroundColor: "#abab",
+                  gap: "10px",
+                  height: "40px",
+                  width: "90%",
+                }}
+              >
+                <input
+                  type="color"
+                  value={borderColor}
+                  onChange={handleBorderColorChange}
+                  id="color"
+                  style={{ border: "none", width: "10%", height: "15px" }}
+                />
+                <input
+                  type="range"
+                  min="-10"
+                  max="20"
+                  value={borderSize}
+                  onChange={handleBorderSizeChange}
+                  onBlur={handleRangeBlur}
+                  id="range"
+                  className="range-color"
+                />
+              </div>
+            )}
+          </Row>
+          <hr />
+        </div>
+        <div id="settingRight" style={{ display: "none" }}>
+          <h3>Configurations</h3>
+          <div id="settingSelect">
+            <select
+              onChange={handleSelect}
+              id="select1"
+              // onChange={handleDateMethod}
+              className="select border-0 bg-white rounded w-100 h-75 p-2"
+              //multiple
+              style={{ marginBottom: "40px" }}
+            >
+              <option value="select">Select Element</option>
+              {options}
+            </select>
+          </div>
+
+          {/* iframe */}
+          <div>
+            {/* <Form.Control
+          type="text"
+          placeholder={`${decoded.details._id}_scl1`}
+          disabled
+          className="mb-4"
+        // id="iframe_src"
+        // onChange={handleChange}
+        /> */}
+          </div>
+          <div id="invisible">
+            <div
+              id="singleScale"
+              style={{ padding: "10px", gap: "10px" }}
+              className="select border-0 bg-white rounded w-100 h-75 p-2"
+            ></div>
+          </div>
+          <div className=" text-center pt-3">
+            <Button
+              variant="primary"
+              className="px-5"
+              onClick={refreshIframe}
+            >
+              refresh
+            </Button>
+          </div>
+          <div
+            className="text-center pt-3"
+            style={{ display: "flex", justifyContent: "center" }}
+          >
+            <Button
+              variant="primary"
+              className="px-5"
+              onClick={scaleSubmit}
+              style={{ marginRight: "10px" }}
+            >
+              Save
+            </Button>
+
+            <Button
+              variant="secondary"
+              disabled={isButtonDisabled}
+              className="remove_button"
+              // onClick={removeScale}
+            >
+              Remove Scale
+            </Button>
+          </div>
+          {/* iframe */}
+        </div>
           <div id="settingRight" style={{ display: "none" }}>
             {/* iframe */}
             <div>
@@ -3161,8 +3280,8 @@ const ScaleRightSide = () => {
             placeholder={`${decoded.details._id}_scl1`}
             disabled
             className="mb-4"
-          // id="iframe_src"
-          // onChange={handleChange}
+          id="iframe_src"
+          onChange={handleChange}
           /> */}
             </div>
           </div>
@@ -7504,7 +7623,7 @@ const ScaleRightSide = () => {
             </div>
             <div
               className="text-center pt-3"
-              style={{display: "flex", justifyContent:"center"}}
+              style={{ display: "flex", justifyContent: "center" }}
             >
               <Button
                 variant="primary"

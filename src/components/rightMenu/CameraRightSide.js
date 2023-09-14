@@ -13,6 +13,10 @@ function CameraRightSide() {
   var decoded = jwt_decode(token);
   let mediaRecorder;
 
+  const camera = document.querySelector(".focussedd");
+  let videoField = camera?.querySelector(".videoInput")
+  let imageField = camera?.querySelector(".imageHolder")
+
   function openCam() {
     videoField.src = ""
     videoField.style.display = "block"
@@ -105,6 +109,8 @@ function CameraRightSide() {
           let imageLinkHolder = camera?.querySelector(".imageLinkHolder");
           imageLinkHolder.textContent = res.data.file_url;
           console.log(imageLinkHolder);
+          let videoLinkHolder = camera?.querySelector(".videoLinkHolder")
+          videoLinkHolder.textContent = "video_link"
         }
       })
       .catch((err) => {
@@ -168,6 +174,8 @@ function CameraRightSide() {
             videoLinkHolder.textContent = res.data.file_url;
           }
           console.log(videoLinkHolder);
+          let imageLinkHolder = camera?.querySelector(".imageLinkHolder")
+          imageLinkHolder.textContent = "image_link"
         })
         .catch((err) => {
           console.log(err);

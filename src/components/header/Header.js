@@ -672,7 +672,7 @@ const Header = () => {
               ".stapelOptionHolder"
             );
             stapelScaleArray = newScales[b].querySelector(".stapelScaleArray");
-            console.log("This is the saved stapel", stapelOptionHolder);
+            console.log("This is the saved stapel", stapelScaleArray);
           }
 
           let npsLiteTextArray = "";
@@ -693,6 +693,7 @@ const Header = () => {
 
           let percentBackground = "";
           let percentLabel = "";
+          let percentContainer = "";
           let percentLeft = "";
           let percentCenter = [];
           let percentRight = "";
@@ -703,10 +704,13 @@ const Header = () => {
             scaleType.textContent === "percent_sum_scale"
           ) {
             percentBackground = newScales[b].querySelector(".percent-slider");
-            percentLabel = newScales[b]?.querySelectorAll(".label_hold");
+            percentLabel = newScales[b]?.querySelector(".label_hold").children;
+            percentContainer = newScales[b]?.querySelectorAll(".containerDIV");
+            // percentLabel =
+            //   newScales[b]?.querySelector(".containerDIV").children;
             console.log(percentLabel);
 
-            percentLabel.forEach((elem) => {
+            percentContainer.forEach((elem) => {
               prodName.push(elem.querySelector(".product_name")?.textContent);
               percentCenter.push(
                 elem.querySelector("center-percent")?.textContent
@@ -743,6 +747,7 @@ const Header = () => {
             percentLeft: percentLeft?.textContent,
             percentCenter: percentCenter?.textContent,
             percentRight: percentRight?.textContent,
+            percentContainer: percentContainer?.length,
             orientation: orientation?.textContent,
             orentation: orentation?.textContent,
             stapelOrientation: stapelOrientation?.textContent,
@@ -1070,6 +1075,8 @@ const Header = () => {
       documentResponses.push({ scale_id: scaleId, score: parseInt(holdElem) });
     });
 
+    console.log("This is stapel_res", documentResponses)
+
     console.log(generateLoginUser());
     console.log(documentResponses);
 
@@ -1142,8 +1149,9 @@ const Header = () => {
       scaleId = scale?.querySelector(".scaleId")?.textContent;
       holdElem = scale?.querySelector(".holdElem")?.textContent;
 
-      documentResponses.push({ scale_id: scaleId, score: holdElem });
+      documentResponses.push({ scale_id: scaleId, score: typeof holdElem === "number" || !isNaN(holdElem) ? parseInt(holdElem) : holdElem });
     });
+    console.log("This is docresp", documentResponses)
 
     const requestBody = {
       process_id: decoded.details.process_id,
@@ -1151,9 +1159,26 @@ const Header = () => {
       brand_name: "XYZ545",
       product_name: "XYZ511",
       username: authorizedLogin(),
-      scale_id: scaleId,
-      score: holdElem,
       document_responses: documentResponses,
+      action: decoded.details.action,
+      authorized: decoded.details.authorized,
+      cluster: decoded.details.cluster,
+      collection: decoded.details.collection,
+      command: decoded.details.command,
+      database: decoded.details.database,
+      document: decoded.details.document,
+      document_flag: decoded.details.document_flag,
+      document_right: decoded.details.document_right,
+      field: decoded.details.field,
+      function_ID: decoded.details.function_ID,
+      metadata_id: decoded.details.metadata_id,
+      role: decoded.details.role,
+      team_member_ID: decoded.details.team_member_ID,
+      content: decoded.details.update_field.content,
+      document_name: decoded.details.update_field.document_name,
+      page: decoded.details.update_field.page,
+      user_type: decoded.details.user_type,
+      _id: decoded.details._id,
     };
 
     Axios.post(
