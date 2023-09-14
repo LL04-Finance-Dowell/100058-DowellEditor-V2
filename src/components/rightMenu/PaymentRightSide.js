@@ -8,7 +8,8 @@ import { ToastContainer, toast } from "react-toastify";
 
 
 const PaymentRightSide = () => {
-    const { buttonLink, setButtonLink, buttonPurpose, setButtonPurpose, buttonBorderSize, setButtonBorderSize, buttonBorderColor, setButtonBorderColor, setConfirmRemove, confirmRemove, setIsLoading, isLoading, paymentKey, setPaymentKey, data, pageNum } =
+    const { buttonLink, setButtonLink, buttonPurpose, setButtonPurpose, buttonBorderSize, setButtonBorderSize, buttonBorderColor, setButtonBorderColor, setConfirmRemove, confirmRemove, setIsLoading, isLoading, paymentKey, setPaymentKey, data, pageNum, paypalId,
+        setPaypalId, } =
         useStateContext();
     const [selectedType, setSelectedType] = useState('')
     const [addedAns, setAddedAns] = useState([])
@@ -21,7 +22,12 @@ const PaymentRightSide = () => {
     const [callbackUrl, setCallbackUrl] = useState("");
     const [stripePaymentData, setStripePaymentData] = useState({});
     const [paypalPaymentData, setPaypalPaymentData] = useState({});
-    
+    const [validated, setValidated] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
+    const [popupUrl, setPopupUrl] = useState(null);
+    const [showSlider, setShowSlider] = useState(false);
+
+
     // const [stripeKey, setStripeKey] = useState("");
     const [paypalClientId, setPaypalClientId] = useState("");
     const [loader, setLoader] = useState(false);
@@ -38,42 +44,23 @@ const PaymentRightSide = () => {
     const purpose = holderDIV?.children[2]?.innerHTML;
     const link = holderDIV?.children[1]?.innerHTML;
 
- 
-    const [showSlider, setShowSlider] = useState(false);
+
 
     const handleUpdate = () => {
 
-        // if (btnName.value != "") {
-        //     button.textContent = btnName?.value;
-        // }
-
         const link = document.getElementById("link").value;
+        const purpose = document.getElementById("link2").value;
         if (link.value != "") {
             setPaymentKey(link);
             holderDIV.children[1].innerHTML = link;
         }
-        // console.log("Master link", holderDIV);
+        if (purpose.value != "") {
+            setPaypalId(purpose);
+            holderDIV.children[2].innerHTML = purpose;
+        }
+
 
     };
-    // console.log("Master link", link);
-    // console.log("Master link", holderDIV.children[1].innerHTML);
-
-    const [passData, setPassData] = useState("");
-
-    const dataFind = data[1].map(data => data.type);
-    console.log("midsection data", dataFind)
-
-  
-
-
-    if(data[1].find(data => data.type === "PAYMENT_INPUT")) {
-        // console.log("This is payment input data")
-        useEffect(() => {
-            setPassData(data[1].map(data => data.raw_data));
-        }, [])
-        console.log("This is payment input data", passData)
-    }
-    
 
 
     const handleSelect = (event) => {
@@ -119,9 +106,7 @@ const PaymentRightSide = () => {
     const handleSelectPayment = (e) => {
         setSelectPayment(e.target.value);
     }
-    const [validated, setValidated] = useState(false);
-    const [isOpen, setIsOpen] = useState(false);
-    const [popupUrl, setPopupUrl] = useState(null);
+ 
 
     const openPopup = (url) => {
         setPopupUrl(url);
@@ -142,11 +127,6 @@ const PaymentRightSide = () => {
             product: productName,
             currency_code: currencyCode,
             callback_url: callbackUrl,
-            // template_id: decoded.details._id,
-            // price: +price,
-            // product: productName,
-            // currency_code: currencyCode,
-            // callback_url: callbackUrl
         }
         console.log("stripe data", stripeData);
         const form = e.currentTarget;
@@ -185,7 +165,7 @@ const PaymentRightSide = () => {
         e.preventDefault();
         const paypalData = {
             // paypal_client_id: "AVJXJddOEG7WGrLkTzg4_9ODsDNhIHrqT4ZL6gwXRz1ftQELliYtticZH-kLjoYaTZfNn_8y5onH_YP3",
-            paypal_client_id: link,
+            paypal_client_id: purpose,
             paypal_secret_key: "ELsNyOGLDJVZCsfuuu5AhsFRmQbgBwxEVZteB-2XLZm8RLa8cPeS_cfNi35w7bJwkOKDHOnNxyHsJKu6",
             template_id: decoded.details._id,
             price: +price,
@@ -221,7 +201,7 @@ const PaymentRightSide = () => {
         <>
             <div className="mt-2 mb-3 w-100">
                 <h3>Payment Settings</h3>
-                <select
+                {/* <select
                     onChange={handleSelectPayment}
                     id="selectt"
                     // onChange={handleDateMethod}
@@ -230,265 +210,170 @@ const PaymentRightSide = () => {
                 >
                     <option value="stripe">Stripe</option>
                     <option value="paypal">Paypal</option>
-                </select>
+                </select> */}
                 <br />
 
                 {
-                    selectPayment == "paypal" ?
-                        <Form noValidate validated={validated} onSubmit={handlePaypalPayment}>
+                    decoded.details.action === "template" ?
+                        <div>
+                            <Form.Label>Paypal Client Id</Form.Label>
+                            <Form.Control
+                                required
+                                type="text"
+                                placeholder="Paypal Client Id"
+                                // id="button_name"
+                                id="link2"
+                                // value={stripeKey}
+                                onChange={() => { }}
+
+
+                            />
+                            <br />
+                            <Form.Label>Stripe Key</Form.Label>
+                            <Form.Control
+                                required
+                                type="text"
+                                placeholder="Paypal Client Id"
+                                // id="button_name"
+                                id="link"
+                                // value={stripeKey}
+                                onChange={() => { }}
+
+
+                            />
+                        </div> : <div>
+                            <select
+                                onChange={handleSelectPayment}
+                                id="selectt"
+                                // onChange={handleDateMethod}
+
+                                className="select border-0 bg-white rounded w-100 h-75 p-2"
+                            >
+                                <option value="stripe">Stripe</option>
+                                <option value="paypal">Paypal</option>
+                            </select>
+
                             {
-                                decoded.details.action === "template" ? <div>
-                                    <Form.Label>Paypal Client Id</Form.Label>
-                                    <Form.Control
-                                        required
-                                        type="text"
-                                        placeholder="Paypal Client Id"
-                                        // id="button_name"
-                                        id="link"
-                                        // value={stripeKey}
-                                        onChange={() => {}}
+                                selectPayment == "paypal" ? <div>
+                                    <Form noValidate validated={validated} onSubmit={handlePaypalPayment}>
+                                        <Form.Label>Product Name</Form.Label>
+                                        <Form.Control
+                                            required
+                                            type="text"
+                                            placeholder="Product name"
+                                            id="button_name"
+                                            value={productName}
+                                            onChange={(e) => setProductName(e.target.value)}
+                                        />
 
+                                        <br />
 
-                                    />
-                                    {/* <br /> */}
-                                    {/* <Form.Label>Product Name</Form.Label>
-                                    <Form.Control
-                                        required
-                                        type="text"
-                                        placeholder="Product name"
-                                        id="button_name"
-                                        value={productName}
-                                        onChange={(e) => setProductName(e.target.value)}
-                                    />
+                                        <Form.Label>Price</Form.Label>
+                                        <Form.Control
+                                            required
+                                            type="number"
+                                            placeholder="Product Price"
+                                            // id="button_name"
+                                            value={price}
+                                            onChange={(e) => setPrice(e.target.value)}
+                                        />
+                                        <br />
+                                        <select
+                                            required
+                                            onChange={(e) => setCurrencyCode(e.target.value)}
+                                            id="selectt"
+                                            // onChange={handleDateMethod}
+                                            className="select border-0 bg-white rounded w-100 h-75 p-2"
+                                        >
+                                            <option value="">Select Currency</option>
+                                            <option value="usd">USD</option>
+                                            <option value="aed">AED</option>
+                                            <option value="afn">AFN</option>
+                                            <option value="amd">AMD</option>
+                                            <option value="ang">ANG</option>
+                                            <option value="aoa">AOA</option>
+                                        </select>
+                                        <br />
+                                        <Form.Label>Callback URL</Form.Label>
+                                        <Form.Control
+                                            required
+                                            type="url"
+                                            placeholder="Callback URL"
+                                            // id="button_name"
+                                            value={callbackUrl}
+                                            onChange={(e) => setCallbackUrl(e.target.value)}
+                                        />
+                                        <br />
+                                        <button type="submit" className="btn btn-primary">
+                                            {
+                                                loader ? "Wait...." : "Submit Info"
+                                            }
+                                        </button>
+                                    </Form>
 
-                                    <br />
-
-                                    <Form.Label>Price</Form.Label>
-                                    <Form.Control
-                                        required
-                                        type="number"
-                                        placeholder="Product Price"
-                                        // id="button_name"
-                                        value={price}
-                                        onChange={(e) => setPrice(e.target.value)}
-                                    />
-                                    <br />
-                                    <select
-                                        required
-                                        onChange={(e) => setCurrencyCode(e.target.value)}
-                                        id="selectt"
-                                        // onChange={handleDateMethod}
-                                        className="select border-0 bg-white rounded w-100 h-75 p-2"
-                                    >
-                                        <option value="">Select Currency</option>
-                                        <option value="usd">USD</option>
-                                        <option value="aed">AED</option>
-                                        <option value="afn">AFN</option>
-                                        <option value="amd">AMD</option>
-                                        <option value="ang">ANG</option>
-                                        <option value="aoa">AOA</option>
-                                    </select>
-                                    <br />
-                                    <Form.Label>Callback URL</Form.Label>
-                                    <Form.Control
-                                        required
-                                        type="url"
-                                        placeholder="Callback URL"
-                                        // id="button_name"
-                                        value={callbackUrl}
-                                        onChange={(e) => setCallbackUrl(e.target.value)}
-                                    /> */}
-                                    <br />
-                                    <button type="submit" className="btn btn-primary">
-                                        {
-                                            loader ? "Wait...." : "Submit Info"
-                                        }
-                                    </button>
                                 </div> : <div>
-                                    <Form.Label>Product Name</Form.Label>
-                                    <Form.Control
-                                       required
-                                        type="text"
-                                        placeholder="Product name"
-                                        id="button_name"
-                                        value={productName}
-                                      onChange={(e) => setProductName(e.target.value)}
-                                     />
+                                    <Form noValidate validated={validated} onSubmit={handleStripePayment}>
+                                        <Form.Label>Product Name</Form.Label>
+                                        <Form.Control
+                                            required
+                                            type="text"
+                                            placeholder="Product name"
+                                            id="button_name"
+                                            value={productName}
+                                            onChange={(e) => setProductName(e.target.value)}
+                                        />
 
-                                     <br />
+                                        <br />
 
-                                    <Form.Label>Price</Form.Label>
-                                    <Form.Control
-                                        required
-                                        type="number"
-                                        placeholder="Product Price"
-                                        // id="button_name"
-                                        value={price}
-                                        onChange={(e) => setPrice(e.target.value)}
-                                    />
-                                     <br />
-                                     <select
-                                        required
-                                        onChange={(e) => setCurrencyCode(e.target.value)}
-                                        id="selectt"
-                                        // onChange={handleDateMethod}
-                                        className="select border-0 bg-white rounded w-100 h-75 p-2"
-                                    >
-                                        <option value="">Select Currency</option>
-                                        <option value="usd">USD</option>
-                                        <option value="aed">AED</option>
-                                        <option value="afn">AFN</option>
-                                        <option value="amd">AMD</option>
-                                        <option value="ang">ANG</option>
-                                        <option value="aoa">AOA</option>
-                                    </select>
-                                    <br />
-                                    <Form.Label>Callback URL</Form.Label>
-                                    <Form.Control
-                                        required
-                                        type="url"
-                                        placeholder="Callback URL"
-                                        // id="button_name"
-                                        value={callbackUrl}
-                                        onChange={(e) => setCallbackUrl(e.target.value)}
-                                    />
-                                    <br />
-                                    <button type="submit" className="btn btn-primary">
-                                        {
-                                            loader ? "Wait...." : "Submit Info"
-                                        }
-                                    </button> 
+                                        <Form.Label>Price</Form.Label>
+                                        <Form.Control
+                                            required
+                                            type="number"
+                                            placeholder="Product Price"
+                                            // id="button_name"
+                                            value={price}
+                                            onChange={(e) => setPrice(e.target.value)}
+                                        />
+                                        <br />
+                                        <select
+                                            required
+                                            onChange={(e) => setCurrencyCode(e.target.value)}
+                                            id="selectt"
+                                            // onChange={handleDateMethod}
+                                            className="select border-0 bg-white rounded w-100 h-75 p-2"
+                                        >
+                                            <option value="">Select Currency</option>
+                                            <option value="usd">USD</option>
+                                            <option value="aed">AED</option>
+                                            <option value="afn">AFN</option>
+                                            <option value="amd">AMD</option>
+                                            <option value="ang">ANG</option>
+                                            <option value="aoa">AOA</option>
+                                        </select>
+                                        <br />
+                                        <Form.Label>Callback URL</Form.Label>
+                                        <Form.Control
+                                            required
+                                            type="url"
+                                            placeholder="Callback URL"
+                                            // id="button_name"
+                                            value={callbackUrl}
+                                            onChange={(e) => setCallbackUrl(e.target.value)}
+                                        />
+                                        <br />
+                                        <button type="submit" className="btn btn-primary">
+                                            {
+                                                loader ? "Wait...." : "Submit Info"
+                                            }
+                                        </button>
+                                    </Form>
+
                                 </div>
                             }
-                        </Form> : <Form noValidate validated={validated} onSubmit={handleStripePayment}>
-                            {
-                                decoded.details.action == "template" ? <div>
-                                    <Form.Label>Stripe Key</Form.Label>
-                                    <Form.Control
-                                        required
-                                        type="text"
-                                        placeholder="Stripe Key"
-                                        id="link"
-                                        // value={stripeKey}
-                                        onChange={() => {}}
-                                        // onChange={(e) => setStripeKey(e.target.value)}
-
-                                    />
-                                    <br />
-                                    {/* <Form.Label>Product Name</Form.Label>
-                                    <Form.Control
-                                        required
-                                        type="text"
-                                        placeholder="Product name"
-                                        id="button_name"
-                                        value={productName}
-                                        onChange={(e) => setProductName(e.target.value)}
-
-                                    />
-                                    <br />
-
-                                    <Form.Label>Price</Form.Label>
-                                    <Form.Control
-                                        required
-                                        type="number"
-                                        placeholder="Product Price"
-                                        // id="button_name"
-                                        value={price}
-                                        onChange={(e) => setPrice(e.target.value)}
-                                    />
-                                    <br />
-                                    <select
-                                        required
-                                        onChange={(e) => setCurrencyCode(e.target.value)}
-                                        id="selectt"
-                                        // onChange={handleDateMethod}
-                                        className="select border-0 bg-white rounded w-100 h-75 p-2"
-                                    >
-                                        <option value="">Select Currency</option>
-                                        <option value="usd">USD</option>
-                                        <option value="aed">AED</option>
-                                        <option value="afn">AFN</option>
-                                        <option value="amd">AMD</option>
-                                        <option value="ang">ANG</option>
-                                        <option value="aoa">AOA</option>
-                                    </select>
-                                    <br />
-                                    <Form.Label>Callback URL</Form.Label>
-                                    <Form.Control
-                                        required
-                                        type="url"
-                                        placeholder="Callback URL"
-                                        // id="button_name"
-                                        value={callbackUrl}
-                                        onChange={(e) => setCallbackUrl(e.target.value)}
-                                    />
-                                    <br /> */}
-
-                                    <button type="submit" className="btn btn-primary">
-                                        {
-                                            loader ? "Wait...." : "Submit Info"
-                                        }
-                                    </button>
-                                </div> : <div>
-                                    <Form.Label>Product Name</Form.Label>
-                                    <Form.Control
-                                        required
-                                        type="text"
-                                        placeholder="Product name"
-                                        id="button_name"
-                                        value={productName}
-                                        onChange={(e) => setProductName(e.target.value)}
-
-                                    />
-                                    <br />
-
-                                    <Form.Label>Price</Form.Label>
-                                    <Form.Control
-                                        required
-                                        type="number"
-                                        placeholder="Product Price"
-                                        // id="button_name"
-                                        value={price}
-                                        onChange={(e) => setPrice(e.target.value)}
-                                    />
-                                    <br />
-                                    <select
-                                        required
-                                        onChange={(e) => setCurrencyCode(e.target.value)}
-                                        id="selectt"
-                                        // onChange={handleDateMethod}
-                                        className="select border-0 bg-white rounded w-100 h-75 p-2"
-                                    >
-                                        <option value="">Select Currency</option>
-                                        <option value="usd">USD</option>
-                                        <option value="aed">AED</option>
-                                        <option value="afn">AFN</option>
-                                        <option value="amd">AMD</option>
-                                        <option value="ang">ANG</option>
-                                        <option value="aoa">AOA</option>
-                                    </select>
-                                    <br />
-                                    <Form.Label>Callback URL</Form.Label>
-                                    <Form.Control
-                                        required
-                                        type="url"
-                                        placeholder="Callback URL"
-                                        // id="button_name"
-                                        value={callbackUrl}
-                                        onChange={(e) => setCallbackUrl(e.target.value)}
-                                    />
-                                    <br />
-
-                                    <button type="submit" className="btn btn-primary">
-                                        {
-                                            loader ? "Wait...." : "Submit Info"
-                                        }
-                                    </button>
-                                </div>
-                            }
-                        </Form>
-
+                        </div>
                 }
+
+            
             </div>
 
             <hr />

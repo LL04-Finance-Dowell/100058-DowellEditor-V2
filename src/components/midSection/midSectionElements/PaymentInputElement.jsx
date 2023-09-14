@@ -92,12 +92,14 @@ function createPaymentInputField(id, element, p, holderDIV, focuseddClassMaintai
     }
 
     const linkHolder = document.createElement("div");
-    linkHolder.className = "link_holder";
+    // linkHolder.className = "link_holder";
+    linkHolder.className = "stripe_key";
     linkHolder.innerHTML = element.raw_data;
     linkHolder.style.display = "none";
 
     const purposeHolder = document.createElement("div");
-    purposeHolder.className = "purpose_holder";
+    // purposeHolder.className = "purpose_holder";
+    purposeHolder.className = "paypal_id";
     purposeHolder.innerHTML = element.purpose;
     purposeHolder.style.display = "none";
 
