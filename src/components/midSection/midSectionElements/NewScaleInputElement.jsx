@@ -632,6 +632,9 @@ function createNewScaleInputField(
               holdElem.textContent = npsLiteText[i] === '' ? i : npsLiteText[i];
               holding?.appendChild(holdElem);
               console.log("This is holdEle", holdElem.textContent);
+              if (scaleField?.parentElement?.classList.contains("holderDIV")) {
+                scaleField?.parentElement?.classList.add("element_updated");
+              }
             }
 
             const scaleID = scale?.querySelector(".scaleId")?.textContent;
