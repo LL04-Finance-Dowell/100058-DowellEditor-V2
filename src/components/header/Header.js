@@ -182,6 +182,7 @@ const Header = () => {
     const midSec = document.getElementById("midSection_container");
 
     const rect = el.getBoundingClientRect();
+    console.log("rect position from header", rect);
     const midsectionRect = midSec.getBoundingClientRect();
 
     return {

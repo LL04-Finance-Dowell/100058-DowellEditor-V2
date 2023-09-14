@@ -2347,11 +2347,7 @@ const MidSection = React.forwardRef((props, ref) => {
 
     var data = event.dataTransfer.getData("text");
     if (data == "rightMenuDragStart") {
-
       console.log('right menu drag');
-
-
-
     } else {
       const has_table_drag_class = event.target.classList.contains("table_drag");
       const has_container_drag_class =

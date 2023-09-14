@@ -320,7 +320,7 @@ const RightMenu = () => {
   ]);
 
   function rightMenuDragStart(ev) {
-    // ev.dataTransfer.setData("text", ev.target.id);
+    ev.dataTransfer.setData("text", ev.target.id);
     // console.log("inside dragstart isClicked", isClicked);
 
     // if (isClicked.align2) {
@@ -400,9 +400,6 @@ const RightMenu = () => {
     if (pointerDown) {
       const diffMouseX = e.clientX - initialTouchX
       const diffMouseY = e.clientY - initialTouchY
-
-
-
       e.currentTarget.style.maxWidth = (windInnerWidth - 40) < 500 ? (windInnerWidth - 40) + 'px' : '500px';
       e.currentTarget.style.transform = `translate(0,0)`
       e.currentTarget.style.top = initialElY + diffMouseY + 'px'
@@ -439,9 +436,9 @@ const RightMenu = () => {
   return (
     <>
       {/* <div className="fixed3" id="rightMenuDragStart" draggable="true" onDragStart={(event) => rightMenuDragStart(event)} onDragEnd={(event) => rightMenuDragEnd(event)} > */}
-      <div className="fixed3" id="rightMenuDragStart" draggable={false} onDragStart={(event) => rightMenuDragStart(event)} onDragEnd={(event) => rightMenuDragEnd(event)} ref={rightMenuRef} onPointerDown={handleGestureDown} onPointerMove={handleGestureMove} onPointerUp={handleGestureUp} onPointerLeave={handleGestureUp}>
+      <div className="fixed3" id="rightMenuDragStart" onDragStart={rightMenuDragStart} ref={rightMenuRef} onPointerDown={handleGestureDown} onPointerMove={handleGestureMove} onPointerUp={handleGestureUp} onPointerLeave={handleGestureUp}>
         {isClicked.align2 && <AlignRightSide />}
-        {isClicked.image2 && <ImageRightSidebar />}
+        {isClicked.image2 && <ImageRightSidebar />}''
         {isClicked.table2 && <TableRightSidebar />}
         {isClicked.signs2 && <SignsRightSidebar />}
         {isClicked.calendar2 && <CalendarRightSidebar />}
