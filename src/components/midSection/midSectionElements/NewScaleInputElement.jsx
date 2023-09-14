@@ -454,6 +454,9 @@ function createNewScaleInputField(
               // ) {
               //   scaleField?.parentElement?.classList.add("element_updated");
               // }
+              if (scaleField?.parentElement?.classList.contains("holderDIV")) {
+                scaleField?.parentElement?.classList.add("element_updated");
+              }
             }
             const scaleID = scale?.querySelector(".scaleId")?.textContent;
             setClickedCircleBackgroundColor(
