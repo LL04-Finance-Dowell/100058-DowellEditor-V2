@@ -18,6 +18,7 @@ import { AiFillPrinter } from "react-icons/ai";
 import { downloadPDF } from "../../utils/genratePDF.js";
 
 import generateImage from "../../utils/generateImage.js";
+import RejectionModal from "../modals/RejectionModal.jsx";
 
 const Header = () => {
   const inputRef = useRef(null);
@@ -108,6 +109,8 @@ const Header = () => {
   } = useStateContext();
 
   const [printContent, setPrintContent] = useState(false);
+  const [rejectionMsg, setRejectionMsg] = useState('');
+  const [isOpenRejectionModal, setIsOpenRejectionModal] = useState(false)
 
   const handleOptions = () => {
     setIsMenuVisible(!isMenuVisible);
@@ -1251,34 +1254,53 @@ const Header = () => {
   }
 
   function handleReject() {
-    setIsLoading(true);
-    Axios.post(
-      // `https://100094.pythonanywhere.com/v1/processes/${process_id}/reject/`,
-      `https://100094.pythonanywhere.com/v1/processes/${process_id}/finalize-or-reject/`,
-      {
-        action: "rejected",
-        // item_id: process_id,
-        authorized: authorized,
-        // document_id: _id,
-        item_type: action,
-        item_id: _id,
-        company_id: companyId,
-        role: role,
-        user_type: user_type,
-        link_id: link_idd,
-      }
-    )
-      .then((res) => {
-        setIsLoading(false);
-        // console.log(res);
-        // alert(res?.data);
-        toast.error(res?.data);
-      })
-      .catch((err) => {
-        setIsLoading(false);
-        // console.log(err);
-        toast.error(err);
-      });
+    if (rejectionMsg) {
+      setIsOpenRejectionModal(false);
+      console.log(rejectionMsg);
+      setIsLoading(true);
+      Axios.post(
+        // `https://100094.pythonanywhere.com/v1/processes/${process_id}/reject/`,
+        `https://100094.pythonanywhere.com/v1/processes/${process_id}/finalize-or-reject/`,
+        // {
+        //   action: "rejected",
+        //   // item_id: process_id,
+        //   authorized: authorized,
+        //   // document_id: _id,
+        //   item_type: action,
+        //   item_id: _id,
+        //   company_id: companyId,
+        //   role: role,
+        //   user_type: user_type,
+        //   link_id: link_idd,
+        //   message: rejectionMsg
+        // }
+
+        {
+          action: "rejected",
+          // item_id: process_id,
+          authorized: authorized,
+          // document_id: _id,
+          item_type: "clone",
+          item_id: _id,
+          company_id: companyId,
+          role: role,
+          user_type: user_type,
+          link_id: link_idd,
+          message: rejectionMsg
+        })
+        .then((res) => {
+          setIsLoading(false);
+          // console.log(res);
+          // alert(res?.data);
+          toast.error(res?.data);
+        })
+        .catch((err) => {
+          setIsLoading(false);
+          // console.log(err);
+          toast.error(err);
+        });
+      setRejectionMsg('');
+    } else toast.error('Field must not be empty!', { toastId: 'rejMsg' })
   }
   const hanldePrint = (e) => {
     window.print();
@@ -1486,7 +1508,9 @@ const Header = () => {
                       size="md"
                       className="rounded px-4"
                       id="reject-button"
-                      onClick={handleReject}
+                      onClick={
+                        () => setIsOpenRejectionModal(true)
+                      }
                       style={{
                         visibility:
                           documentFlag == "processing" ? "visible" : "hidden",
@@ -1502,6 +1526,8 @@ const Header = () => {
           </Col>
         </Row>
       </Container>
+
+      {isOpenRejectionModal && <RejectionModal openModal={setIsOpenRejectionModal} handleReject={handleReject} msg={rejectionMsg} setMsg={setRejectionMsg} />}
     </div>
   );
 };
