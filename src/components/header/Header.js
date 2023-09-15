@@ -1151,7 +1151,6 @@ const Header = () => {
 
       documentResponses.push({ scale_id: scaleId, score: typeof holdElem === "number" || !isNaN(holdElem) ? parseInt(holdElem) : holdElem });
     });
-    console.log("This is docresp", documentResponses)
 
     const requestBody = {
       process_id: decoded.details.process_id,

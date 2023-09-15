@@ -3020,6 +3020,7 @@ const ScaleRightSide = () => {
     selectField.setAttribute("data-prev-option", selectedElements.id);
   };
 
+  
   const options = newArray?.map((element, index) => (
     <option key={index} value={element.type} id={element.id}>
       {`${element.type} ${element.id}`}
