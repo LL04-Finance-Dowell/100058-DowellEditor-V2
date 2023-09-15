@@ -693,32 +693,6 @@ const ScaleRightSide = () => {
     setInputFields(newInputFields);
   };
 
-  function scaleSubmit(e) {
-    console.log(selectedOptions);
-    console.log(selectedOptions[0]);
-    const scale = document.querySelector(".focussedd");
-    const idHolder = scale?.querySelector(".scaleId");
-    console.log("This is the scale Id", idHolder.textContent);
-    e.preventDefault();
-    setIsLoading(true);
-    Axios.post("https://100035.pythonanywhere.com/api/nps_custom_data/", {
-      template_id: decoded.details._id,
-      scale_id: idHolder.textContent,
-      custom_input_groupings: selectedOptions,
-      scale_label: scaleTitle,
-    })
-      .then((res) => {
-        if (res.status == 200) {
-          setIsLoading(false);
-          sendMessage();
-          console.log(res.data);
-        }
-      })
-      .catch((err) => {
-        setIsLoading(false);
-        console.log(err);
-      });
-  }
 
   console.log(scale);
 
@@ -2976,6 +2950,56 @@ const ScaleRightSide = () => {
     // console.log(element.children[0]);
   }
 
+  const [selectedElementId, setSelectedElementId] = useState(null);
+  const [availableTextElements, setAvailableTextElements] = useState(newArray);
+
+  useEffect(() => {
+    // Save the availableTextElements state to local storage whenever it changes
+    localStorage.setItem('availableTextElements', JSON.stringify(availableTextElements));
+  }, [availableTextElements]);
+
+  const removeSelectedOption = () => {
+    if (selectedElementId) {
+      console.log(`Removing option with ID: ${selectedElementId}`);
+      setAvailableTextElements((prevOptions) =>
+        prevOptions.filter((element) => element.id !== selectedElementId)
+      );
+      setSelectedElementId(null);
+      console.log(`Updated availableTextElements:`, availableTextElements);
+    }
+  };
+
+  console.log(removeSelectedOption);
+
+  function scaleSubmit(e) {
+    console.log(selectedOptions);
+    console.log(selectedOptions[0]);
+    const scale = document.querySelector(".focussedd");
+    const idHolder = scale?.querySelector(".scaleId");
+    console.log("This is the scale Id", idHolder.textContent);
+    removeSelectedOption(); // Call this function to remove the selected option
+    console.log(removeSelectedOption(), "what shall I do@@@@@@@@@@@@@!!!!!!!!!!!!!!");
+    e.preventDefault();
+    setIsLoading(true);
+    Axios.post("https://100035.pythonanywhere.com/api/nps_custom_data/", {
+      template_id: decoded.details._id,
+      scale_id: idHolder.textContent,
+      custom_input_groupings: selectedOptions,
+      scale_label: scaleTitle,
+    })
+      .then((res) => {
+        if (res.status == 200) {
+          setIsLoading(false);
+          sendMessage();
+          console.log(res.data);
+        }
+      })
+      .catch((err) => {
+        setIsLoading(false);
+        console.log(err);
+      });
+  }
+
   const handleSelect = (event) => {
     let selectField = document.getElementById("select1");
     var selectedValues = {};
@@ -2999,7 +3023,10 @@ const ScaleRightSide = () => {
     const selectedElements = myArray.find(
       (element) => element.id === selectedElementId
     );
+
+    setSelectedElementId(selectedElements.id);
     console.log(selectedElements, "selectedElement");
+    console.log(selectedElementId, "dhhhhhhhhh+++++++++++@@@@@@!!!!!!!!!");
 
     let divElement = document.getElementById(selectedElements.id);
     console.log(divElement.id, "divElement");
@@ -3019,12 +3046,14 @@ const ScaleRightSide = () => {
     // Store the ID of the currently selected option as the previous option
     selectField.setAttribute("data-prev-option", selectedElements.id);
   };
-
-  const options = newArray?.map((element, index) => (
+ 
+  const options = availableTextElements.map((element, index) => (
     <option key={index} value={element.type} id={element.id}>
       {`${element.type} ${element.id}`}
     </option>
   ));
+
+  console.log(options,"ava++++++++++++++____")
 
   const handleBorderSizeChange = (e) => {
     setBorderSize(e.target.value);
