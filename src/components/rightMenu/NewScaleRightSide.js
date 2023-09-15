@@ -2965,7 +2965,7 @@ const ScaleRightSide = () => {
     "type",
     "NEW_SCALE_INPUT"
   );
-  // console.log(newArray);
+   console.log("Try this",newArray);
 
   const filteredArray = newArray?.filter((obj) => !customId.includes(obj.id));
   // console.log(filteredArray);
