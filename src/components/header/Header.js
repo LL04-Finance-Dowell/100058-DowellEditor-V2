@@ -924,6 +924,8 @@ const Header = () => {
   const documentFlag = decoded?.details?.document_flag;
   const titleName = decoded?.details?.name;
   const finalDocName = decoded?.details?.update_field.document_name;
+  const docRight = decoded?.details?.document_right;
+
 
 
 
@@ -932,7 +934,7 @@ const Header = () => {
   const document_map_required = docMap?.filter((item) => item.required);
 
   // ? This "if" condition is to prevent code from running, everytime Header.js renders
-  if (!docMapRequired.length) setDocMapRequired(document_map_required)
+  if (!docMapRequired?.length) setDocMapRequired(document_map_required)
 
 
   useEffect(() => {
@@ -1483,7 +1485,7 @@ const Header = () => {
                 </div>
               </div>
 
-              {actionName == "document" && docMap && data != "" && (
+              {actionName == "document" && docMap && data != "" && docRight !== 'view' && (
                 <>
                   <div className="mt-2 text-center mb-2 px-2">
                     <Button
