@@ -693,32 +693,6 @@ const ScaleRightSide = () => {
     setInputFields(newInputFields);
   };
 
-  function scaleSubmit(e) {
-    console.log(selectedOptions);
-    console.log(selectedOptions[0]);
-    const scale = document.querySelector(".focussedd");
-    const idHolder = scale?.querySelector(".scaleId");
-    console.log("This is the scale Id", idHolder.textContent);
-    e.preventDefault();
-    setIsLoading(true);
-    Axios.post("https://100035.pythonanywhere.com/api/nps_custom_data/", {
-      template_id: decoded.details._id,
-      scale_id: idHolder.textContent,
-      custom_input_groupings: selectedOptions,
-      scale_label: scaleTitle,
-    })
-      .then((res) => {
-        if (res.status == 200) {
-          setIsLoading(false);
-          sendMessage();
-          console.log(res.data);
-        }
-      })
-      .catch((err) => {
-        setIsLoading(false);
-        console.log(err);
-      });
-  }
 
   console.log(scale);
 
@@ -2976,6 +2950,76 @@ const ScaleRightSide = () => {
     // console.log(element.children[0]);
   }
 
+  const [selectedElementId, setSelectedElementId] = useState(null);
+  const [availableTextElements, setAvailableTextElements] = useState(newArray);
+
+  useEffect(() => {
+    // Save the availableTextElements state to local storage whenever it changes
+    localStorage.setItem('availableTextElements', JSON.stringify(availableTextElements));
+  }, [availableTextElements]);
+
+  const removeSelectedOption = () => {
+    // if (selectedElementId) {
+    //   console.log(`Removing option with ID: ${selectedElementId}`);
+    //   setAvailableTextElements((prevOptions) =>
+    //     prevOptions.filter((element) => element.id !== selectedElementId)
+    //   );
+    //   setSelectedElementId(null);
+    //   console.log(`Updated availableTextElements:`, availableTextElements);
+    // }
+    let selectField = document.getElementById("select1");
+    var selectedValues = {};
+    const options = selectField.options;
+
+    for (let i = 0; i < options.length; i++) {
+      const option = options[i];
+      if (option.selected) {
+        selectedValues[option.value] = option.id;
+        console.log("This is option",option);
+      }
+    }
+
+    console.log(selectedValues);
+    setSelectedOptions(selectedValues);
+
+    let selectedOption = selectField.options[selectField.selectedIndex];
+    let selectedElementId = selectedOption.id;
+    console.log(selectedElementId, "selectedElementId");
+    const scale = document.querySelector(".focussedd")
+    const otherComponent = scale?.querySelector(".otherComponent");
+    otherComponent.textContent = selectedOption.value + " "+selectedOption.id
+    console.log("Other Component", otherComponent.textContent)
+  };
+
+  function scaleSubmit(e) {
+    e.preventDefault();
+    console.log(selectedOptions);
+    console.log(selectedOptions[0]);
+    const scale = document.querySelector(".focussedd");
+    const idHolder = scale?.querySelector(".scaleId");
+    console.log("This is the scale Id", idHolder.textContent);
+    removeSelectedOption(); // Call this function to remove the selected option
+    console.log(removeSelectedOption(), "what shall I do@@@@@@@@@@@@@!!!!!!!!!!!!!!");
+    setIsLoading(true);
+    Axios.post("https://100035.pythonanywhere.com/api/nps_custom_data/", {
+      template_id: decoded.details._id,
+      scale_id: idHolder.textContent,
+      custom_input_groupings: selectedOptions,
+      scale_label: scaleTitle,
+    })
+      .then((res) => {
+        if (res.status == 200) {
+          setIsLoading(false);
+          sendMessage();
+          console.log(res.data);
+        }
+      })
+      .catch((err) => {
+        setIsLoading(false);
+        console.log(err);
+      });
+  }
+
   const handleSelect = (event) => {
     let selectField = document.getElementById("select1");
     var selectedValues = {};
@@ -2985,7 +3029,7 @@ const ScaleRightSide = () => {
       const option = options[i];
       if (option.selected) {
         selectedValues[option.value] = option.id;
-        console.log(option);
+        console.log("This is option",option);
       }
     }
 
@@ -2996,10 +3040,15 @@ const ScaleRightSide = () => {
     let selectedElementId = selectedOption.id;
     console.log(selectedElementId, "selectedElementId");
 
-    const selectedElements = myArray.find(
-      (element) => element.id === selectedElementId
-    );
+    // const selectedElements = myArray.find(
+    //   (element) => element.id === selectedElementId
+    // );
+
+    const selectedElements = document.getElementById(`${selectedElementId}`)
+
+    setSelectedElementId(selectedElements.id);
     console.log(selectedElements, "selectedElement");
+    console.log(selectedElementId, "dhhhhhhhhh+++++++++++@@@@@@!!!!!!!!!");
 
     let divElement = document.getElementById(selectedElements.id);
     console.log(divElement.id, "divElement");
@@ -3008,7 +3057,7 @@ const ScaleRightSide = () => {
     let previousOptionId = selectField.getAttribute("data-prev-option");
     if (previousOptionId) {
       let previousOptionDiv = document.getElementById(previousOptionId);
-      previousOptionDiv.parentElement.style.border = "none";
+      previousOptionDiv.parentElement.style.border = "doted";
     }
 
     // Add the green border to the currently selected option
@@ -3019,13 +3068,113 @@ const ScaleRightSide = () => {
     // Store the ID of the currently selected option as the previous option
     selectField.setAttribute("data-prev-option", selectedElements.id);
   };
+  let optionArray = []
+  const createOptions = () => {
+  const imageCanva = document.getElementsByClassName("cameraInput")
+  if(imageCanva.length){
+    for(let i = 0; i<imageCanva.length; i++) {
+      optionArray.push("CAMERA_INPUT "+imageCanva[i].id)
+    }
+  }
 
-  
-  const options = newArray?.map((element, index) => (
-    <option key={index} value={element.type} id={element.id}>
-      {`${element.type} ${element.id}`}
+  const txt = document.getElementsByClassName("textInput");
+  if(txt.length){
+    for(let i = 0; i<txt.length; i++) {
+      optionArray.push("TEXT_INPUT "+txt[i].id)
+    }
+  }
+
+  const img = document.getElementsByClassName("imageInput");
+  if(img.length){
+    for(let i = 0; i<img.length; i++) {
+      optionArray.push("IMAGE_INPUT "+img[i].id)
+    }
+  }
+
+  const date = document.getElementsByClassName("dateInput");
+  if(date.length){
+    for(let i = 0; i<date.length; i++) {
+      optionArray.push("DATE_INPUT "+date[i].id)
+    }
+  }
+
+  const sign = document.getElementsByClassName("signInput");
+  if(sign.length){
+    for(let i = 0; i<sign.length; i++) {
+      optionArray.push("SIGN_INPUT "+sign[i].id)
+    }
+  }
+
+  const tables = document.getElementsByClassName("tableInput");
+  if(tables.length){
+    for(let i = 0; i<tables.length; i++) {
+      optionArray.push("TABLE_INPUT "+tables[i].id)
+    }
+  }
+
+  const containerElements = document.getElementsByClassName("containerInput");
+  if(containerElements.length){
+    for(let i = 0; i<containerElements.length; i++) {
+      optionArray.push("CONTAINER_INPUT "+containerElements[i].id)
+    }
+  }
+
+  const iframes = document.getElementsByClassName("iframeInput");
+  if(iframes.length){
+    for(let i = 0; i<iframes.length; i++) {
+      optionArray.push("IFRAME_INPUT "+iframes[i].id)
+    }
+  }
+
+  const buttons = document.getElementsByClassName("buttonInput");
+  if(buttons.length){
+    for(let i = 0; i<buttons.length; i++) {
+      optionArray.push("BUTTON_INPUT "+buttons[i].id)
+    }
+  }
+
+  const payments = document.getElementsByClassName("paymentInput");
+  if(payments.length){
+    for(let i = 0; i<payments.length; i++) {
+      optionArray.push("PAYMENT_INPUT "+payments[i].id)
+    }
+  }
+
+  const dropDowns = document.getElementsByClassName("dropdownInput");
+  if(dropDowns.length){
+    for(let i = 0; i<dropDowns.length; i++) {
+      optionArray.push("DROPDOWN_INPUT "+dropDowns[i].id)
+    }
+  }
+
+  const emails = document.getElementsByClassName("emailButton");
+  if(emails.length){
+    for(let i = 0; i<emails.length; i++) {
+      optionArray.push("FORM_INPUT "+emails[i].id)
+    }
+  }
+}
+
+createOptions()
+
+  console.log("This is optionArray",optionArray)
+ 
+  // const options = availableTextElements.map((element, index) => (
+  //   <option key={index} value={element.type} id={element.id}>
+  //     {`${element.type} ${element.id}`}
+  //   </option>
+  // ));
+
+  const otherComponent = scale?.querySelector(".otherComponent");
+  const options = otherComponent.textContent === "" ? optionArray.map((element, index) => (
+    <option key={index} value={element.split(" ")[0]} id={element.split(" ")[1]}>
+      {`${element}`}
     </option>
-  ));
+  )) : <option key={0} selected value={otherComponent.textContent.split(" ")[0]} id={otherComponent.textContent.split(" ")[1]}>
+  {`${otherComponent.textContent}`}
+</option>;
+
+  console.log(options,"ava++++++++++++++____")
 
   const handleBorderSizeChange = (e) => {
     setBorderSize(e.target.value);

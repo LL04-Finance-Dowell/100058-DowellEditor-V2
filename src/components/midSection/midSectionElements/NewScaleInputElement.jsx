@@ -48,6 +48,12 @@ function createNewScaleInputField(
   scaleText.style.borderRadius = "0px";
   scaleHold.append(scaleText);
 
+  const otherComponent = document.createElement("h6");
+  otherComponent.className = "otherComponent";
+  otherComponent.style.display = "none";
+  otherComponent.textContent = element?.raw_data?.otherComponent
+  scaleHold.appendChild(otherComponent);
+
   const scaleTypeHolder = document.createElement("h6");
   scaleTypeHolder.className = "scaleTypeHolder";
   scaleTypeHolder.textContent = element?.raw_data?.scaleType;
