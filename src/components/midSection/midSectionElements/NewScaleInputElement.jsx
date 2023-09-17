@@ -1036,7 +1036,6 @@ function createNewScaleInputField(
     // }
   } else if (scaleTypeHolder.textContent === "percent_sum_scale") {
     let prodLength = element?.raw_data?.percentLabel;
-    console.log(prodLength);
 
     for (let i = 0; i < prodLength; i++) {
       labelHold.style.display = "flex";
@@ -1046,6 +1045,7 @@ function createNewScaleInputField(
       labelHold.style.border = "none";
 
       let containerDiv = document.createElement("div");
+      containerDiv.className = "containerDIV"
       containerDiv.style.width = "95%";
       containerDiv.style.padding = "10px 39px 10px 10px";
       containerDiv.style.border = "1px solid gray";
@@ -1103,7 +1103,7 @@ function createNewScaleInputField(
         orientation.className = "orientation";
         orientation.textContent = "Vertical";
         orientation.style.display = "none";
-        labelHold.appendChild(orientation);
+        scaleHold.appendChild(orientation);
 
         scaleHold.style.display = "flex";
         scaleHold.style.flexDirection = "column";

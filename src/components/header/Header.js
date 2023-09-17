@@ -706,8 +706,6 @@ const Header = () => {
             percentBackground = newScales[b].querySelector(".percent-slider");
             percentLabel = newScales[b]?.querySelector(".label_hold").children;
             percentContainer = newScales[b]?.querySelectorAll(".containerDIV");
-            // percentLabel =
-            //   newScales[b]?.querySelector(".containerDIV").children;
             console.log(percentLabel);
 
             percentContainer.forEach((elem) => {
