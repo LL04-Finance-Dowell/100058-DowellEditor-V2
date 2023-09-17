@@ -707,8 +707,6 @@ const Header = () => {
             percentBackground = newScales[b].querySelector(".percent-slider");
             percentLabel = newScales[b]?.querySelector(".label_hold").children;
             percentContainer = newScales[b]?.querySelectorAll(".containerDIV");
-            // percentLabel =
-            //   newScales[b]?.querySelector(".containerDIV").children;
             console.log(percentLabel);
 
             percentContainer.forEach((elem) => {
@@ -1276,6 +1274,97 @@ const Header = () => {
       });
   }
 
+  function handleFinalizeButtonPercent() {
+    const username = decoded?.details?.authorized;
+    console.log(username);
+
+    function generateLoginUser() {
+      return "user_" + Math.random().toString(36).substring(7);
+      // return token;
+    }
+
+    function authorizedLogin() {
+      return username === undefined ? generateLoginUser() : username;
+    }
+
+    let scaleElements = document.querySelectorAll(".newScaleInput");
+
+    const documentResponses = new Set(); // Use a Set to store unique entries
+
+    scaleElements.forEach((scale) => {
+      const scaleIdElement = scale.querySelector(".scaleId");
+      const scaleId = scaleIdElement ? scaleIdElement.textContent : null;
+
+      if (scaleId !== null && !documentResponses.has(scaleId)) {
+        const centerTextElements = scale.querySelectorAll(".center-percent");
+        const centerTextArray = [];
+
+        centerTextElements.forEach((val) => {
+          const originalText = val.textContent;
+          const textWithoutPercent = originalText.replace("%", "");
+          centerTextArray.push(Number(textWithoutPercent));
+        });
+
+        documentResponses.add({
+          scale_id: scaleId,
+          score: centerTextArray,
+        });
+      }
+    });
+
+    // Convert the Set back to an array if needed
+    const documentResponsesArray = Array.from(documentResponses);
+    console.log(documentResponsesArray);
+
+    console.log(generateLoginUser());
+    console.log(documentResponses);
+
+    const requestBody = {
+      process_id: decoded.details.process_id,
+      instance_id: 1,
+      brand_name: "XYZ545",
+      product_name: "XYZ511",
+      username: authorizedLogin(),
+      document_responses: documentResponsesArray,
+
+      action: decoded.details.action,
+      authorized: decoded.details.authorized,
+      cluster: decoded.details.cluster,
+      collection: decoded.details.collection,
+      command: decoded.details.command,
+      database: decoded.details.database,
+      document: decoded.details.document,
+      document_flag: decoded.details.document_flag,
+      document_right: decoded.details.document_right,
+      field: decoded.details.field,
+      function_ID: decoded.details.function_ID,
+      metadata_id: decoded.details.metadata_id,
+      role: decoded.details.role,
+      team_member_ID: decoded.details.team_member_ID,
+      content: decoded.details.update_field.content,
+      document_name: decoded.details.update_field.document_name,
+      page: decoded.details.update_field.page,
+      user_type: decoded.details.user_type,
+      _id: decoded.details._id,
+    };
+
+    Axios.post(
+      "https://100035.pythonanywhere.com/percent/api/percent_responses_create/",
+      requestBody
+    )
+      .then((response) => {
+        if (response.status === 200) {
+          setIsLoading(false);
+          var responseData = response.data;
+          setScaleData(responseData);
+          console.log(response);
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
   function submit(e) {
     e.preventDefault();
     setIsLoading(true);
@@ -1354,6 +1443,8 @@ const Header = () => {
             handleFinalizeButtonNpsLite();
           } else if (scaleType.textContent === "likert") {
             handleFinalizeButtonLikert();
+          } else if (scaleType.textContent === "percent_scale") {
+            handleFinalizeButtonPercent();
           }
           setIsDataSaved(true);
         }

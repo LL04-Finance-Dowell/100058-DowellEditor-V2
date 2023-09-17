@@ -2472,9 +2472,6 @@ const ScaleRightSide = () => {
 
       let labelHold = scale?.querySelector(".label_hold");
 
-      setTimeout(() => {
-        labelHold.style.flexDirection = "column";
-      }, 50);
       let tempText = scale?.querySelector(".tempText");
       tempText?.remove();
 
@@ -2491,17 +2488,11 @@ const ScaleRightSide = () => {
         "percent_sum_product_count"
       ).value;
 
+      const containerDiv = document.createElement("div");
+      containerDiv.className = "label_hold";
+
       let productNames = document.getElementById("product_count_label");
       let inputFields = productNames?.querySelectorAll("input");
-
-      const containerDiv = document.createElement("div");
-      containerDiv.className = "containerDIV";
-
-      const orientation = document.createElement("div");
-      orientation.className = "orientation";
-      orientation.textContent = option.value;
-      orientation.style.display = "none";
-      button4.appendChild(orientation);
 
       let productNameLabels = [];
       for (let i = 0; i < inputFields.length; i++) {
@@ -2557,6 +2548,8 @@ const ScaleRightSide = () => {
 
             for (let i = 0; i < product_count; i++) {
               let newLabelHold = labelHold.cloneNode(true);
+              newLabelHold.classList.add("containerDIV");
+              newLabelHold.classList.remove("label_hold");
               newLabelHold.innerHTML = "";
               newLabelHold.style = "";
               newLabelHold.style.padding = "3px";
@@ -2618,6 +2611,7 @@ const ScaleRightSide = () => {
               button4.appendChild(containerDiv);
 
               if (orientation === "Horizontal") {
+                scale?.querySelector(".orientation")?.remove();
                 button4.style.border = "block";
                 button4.style.textAlign = "center";
                 button.style.marginTop = "10px";
@@ -2630,6 +2624,12 @@ const ScaleRightSide = () => {
               }
 
               if (orientation === "Vertical") {
+                const orientation = document.createElement("h2");
+                orientation.className = "orientation";
+                orientation.textContent = "Vertical";
+                orientation.style.display = "none";
+                button4.appendChild(orientation);
+          
                 containerDiv.style.transform = "rotate(270deg)";
                 containerDiv.style.marginTop = "80px";
                 containerDiv.style.width = "100%";
@@ -2721,6 +2721,8 @@ const ScaleRightSide = () => {
 
               for (let i = 0; i < product_count; i++) {
                 let newLabelHold = labelHold.cloneNode(true);
+                newLabelHold.classList.add("containerDIV");
+                newLabelHold.classList.remove("label_hold");
                 newLabelHold.innerHTML = "";
                 newLabelHold.style = "";
                 newLabelHold.style.padding = "3px";
