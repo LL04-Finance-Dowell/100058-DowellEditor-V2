@@ -27,14 +27,15 @@ function createDateInputField(id, element, document_map_required, p, holderDIV, 
         handleClicked("calendar2");
         setRightSideDateMenu(false);
         //console.log("innerText", e.target.innerText);
-        if (e.target.innerText != "mm/dd/yyyy") {
-            if (e.target.innerText.includes("/")) {
-                const setDate = new Date(e.target.innerText);
+        const date = e.target.innerText
+        if (date != "mm/dd/yyyy") {
+            if (date.includes("/")) {
+                const setDate = new Date(parseInt(date));
                 //console.log("First from Midsection", setDate);
                 setMethod("first");
                 setStartDate(setDate);
             } else {
-                if (e.target.innerText.includes("-")) {
+                if (date.includes("-")) {
                     setMethod("fourth");
                 } else {
                     setMethod("second");

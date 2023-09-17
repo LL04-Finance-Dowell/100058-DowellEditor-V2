@@ -693,32 +693,6 @@ const ScaleRightSide = () => {
     setInputFields(newInputFields);
   };
 
-  function scaleSubmit(e) {
-    console.log(selectedOptions);
-    console.log(selectedOptions[0]);
-    const scale = document.querySelector(".focussedd");
-    const idHolder = scale?.querySelector(".scaleId");
-    console.log("This is the scale Id", idHolder.textContent);
-    e.preventDefault();
-    setIsLoading(true);
-    Axios.post("https://100035.pythonanywhere.com/api/nps_custom_data/", {
-      template_id: decoded.details._id,
-      scale_id: idHolder.textContent,
-      custom_input_groupings: selectedOptions,
-      scale_label: scaleTitle,
-    })
-      .then((res) => {
-        if (res.status == 200) {
-          setIsLoading(false);
-          sendMessage();
-          console.log(res.data);
-        }
-      })
-      .catch((err) => {
-        setIsLoading(false);
-        console.log(err);
-      });
-  }
 
   console.log(scale);
 
@@ -1364,6 +1338,7 @@ const ScaleRightSide = () => {
             labelHold.appendChild(optionHolder);
             stapelScaleArray.textContent = res.data.data.settings.scale;
             labelHold.append(stapelScaleArray);
+            console.log("This is stapel", stapelScaleArray)
           })
           .catch((err) => {
             setIsLoading(false);
@@ -1594,9 +1569,7 @@ const ScaleRightSide = () => {
             setIsLoading(false);
             sendMessage();
             setScaleData(res.data);
-            const success = res.data.success;
-            var successObj = JSON.parse(success);
-            const id = successObj.inserted_id;
+            const id = res.data.data.scale_id;
             console.log(id);
             if (id.length) {
               setScaleId(id && id);
@@ -1710,8 +1683,8 @@ const ScaleRightSide = () => {
                 name,
                 fontcolor,
                 fontstyle,
-                custom_emoji_format,
-              } = res.data.data.settings;
+                custom_emoji_format
+              } = res.data.data;
               const textValues = [left, center, right];
 
               const npsLiteTextArray = document.createElement("div");
@@ -2499,9 +2472,6 @@ const ScaleRightSide = () => {
 
       let labelHold = scale?.querySelector(".label_hold");
 
-      setTimeout(() => {
-        labelHold.style.flexDirection = "column";
-      }, 50);
       let tempText = scale?.querySelector(".tempText");
       tempText?.remove();
 
@@ -2518,17 +2488,11 @@ const ScaleRightSide = () => {
         "percent_sum_product_count"
       ).value;
 
+      const containerDiv = document.createElement("div");
+      containerDiv.className = "label_hold";
+
       let productNames = document.getElementById("product_count_label");
       let inputFields = productNames?.querySelectorAll("input");
-
-      const containerDiv = document.createElement("div");
-      containerDiv.className = "containerDIV";
-
-      const orientation = document.createElement("div");
-      orientation.className = "orientation";
-      orientation.textContent = option.value;
-      orientation.style.display = "none";
-      button4.appendChild(orientation);
 
       let productNameLabels = [];
       for (let i = 0; i < inputFields.length; i++) {
@@ -2584,6 +2548,8 @@ const ScaleRightSide = () => {
 
             for (let i = 0; i < product_count; i++) {
               let newLabelHold = labelHold.cloneNode(true);
+              newLabelHold.classList.add("containerDIV");
+              newLabelHold.classList.remove("label_hold");
               newLabelHold.innerHTML = "";
               newLabelHold.style = "";
               newLabelHold.style.padding = "3px";
@@ -2645,6 +2611,7 @@ const ScaleRightSide = () => {
               button4.appendChild(containerDiv);
 
               if (orientation === "Horizontal") {
+                scale?.querySelector(".orientation")?.remove();
                 button4.style.border = "block";
                 button4.style.textAlign = "center";
                 button.style.marginTop = "10px";
@@ -2657,6 +2624,12 @@ const ScaleRightSide = () => {
               }
 
               if (orientation === "Vertical") {
+                const orientation = document.createElement("h2");
+                orientation.className = "orientation";
+                orientation.textContent = "Vertical";
+                orientation.style.display = "none";
+                button4.appendChild(orientation);
+          
                 containerDiv.style.transform = "rotate(270deg)";
                 containerDiv.style.marginTop = "80px";
                 containerDiv.style.width = "100%";
@@ -2748,6 +2721,8 @@ const ScaleRightSide = () => {
 
               for (let i = 0; i < product_count; i++) {
                 let newLabelHold = labelHold.cloneNode(true);
+                newLabelHold.classList.add("containerDIV");
+                newLabelHold.classList.remove("label_hold");
                 newLabelHold.innerHTML = "";
                 newLabelHold.style = "";
                 newLabelHold.style.padding = "3px";
@@ -2977,6 +2952,56 @@ const ScaleRightSide = () => {
     // console.log(element.children[0]);
   }
 
+  const [selectedElementId, setSelectedElementId] = useState(null);
+  const [availableTextElements, setAvailableTextElements] = useState(newArray);
+
+  useEffect(() => {
+    // Save the availableTextElements state to local storage whenever it changes
+    localStorage.setItem('availableTextElements', JSON.stringify(availableTextElements));
+  }, [availableTextElements]);
+
+  const removeSelectedOption = () => {
+    if (selectedElementId) {
+      console.log(`Removing option with ID: ${selectedElementId}`);
+      setAvailableTextElements((prevOptions) =>
+        prevOptions.filter((element) => element.id !== selectedElementId)
+      );
+      setSelectedElementId(null);
+      console.log(`Updated availableTextElements:`, availableTextElements);
+    }
+  };
+
+  console.log(removeSelectedOption);
+
+  function scaleSubmit(e) {
+    console.log(selectedOptions);
+    console.log(selectedOptions[0]);
+    const scale = document.querySelector(".focussedd");
+    const idHolder = scale?.querySelector(".scaleId");
+    console.log("This is the scale Id", idHolder.textContent);
+    removeSelectedOption(); // Call this function to remove the selected option
+    console.log(removeSelectedOption(), "what shall I do@@@@@@@@@@@@@!!!!!!!!!!!!!!");
+    e.preventDefault();
+    setIsLoading(true);
+    Axios.post("https://100035.pythonanywhere.com/api/nps_custom_data/", {
+      template_id: decoded.details._id,
+      scale_id: idHolder.textContent,
+      custom_input_groupings: selectedOptions,
+      scale_label: scaleTitle,
+    })
+      .then((res) => {
+        if (res.status == 200) {
+          setIsLoading(false);
+          sendMessage();
+          console.log(res.data);
+        }
+      })
+      .catch((err) => {
+        setIsLoading(false);
+        console.log(err);
+      });
+  }
+
   const handleSelect = (event) => {
     let selectField = document.getElementById("select1");
     var selectedValues = {};
@@ -3000,7 +3025,10 @@ const ScaleRightSide = () => {
     const selectedElements = myArray.find(
       (element) => element.id === selectedElementId
     );
+
+    setSelectedElementId(selectedElements.id);
     console.log(selectedElements, "selectedElement");
+    console.log(selectedElementId, "dhhhhhhhhh+++++++++++@@@@@@!!!!!!!!!");
 
     let divElement = document.getElementById(selectedElements.id);
     console.log(divElement.id, "divElement");
@@ -3020,12 +3048,14 @@ const ScaleRightSide = () => {
     // Store the ID of the currently selected option as the previous option
     selectField.setAttribute("data-prev-option", selectedElements.id);
   };
-
-  const options = newArray?.map((element, index) => (
+ 
+  const options = availableTextElements.map((element, index) => (
     <option key={index} value={element.type} id={element.id}>
       {`${element.type} ${element.id}`}
     </option>
   ));
+
+  console.log(options,"ava++++++++++++++____")
 
   const handleBorderSizeChange = (e) => {
     setBorderSize(e.target.value);
@@ -3121,107 +3151,96 @@ const ScaleRightSide = () => {
 
   return (
     <>
-      {decoded.details.action === "document" ? (
-        <>
-          <div
+    {decoded.details.action === "document" ? (
+      <>
+        <div
+          style={{
+            width: "100%",
+            display: "flex",
+            // borderRadius: "20px",
+            // backgroundColor: "red",
+          }}
+        >
+          <button
             style={{
               width: "100%",
-              display: "flex",
-              // borderRadius: "20px",
-              // backgroundColor: "red",
+              border: "none",
+              fontWeight: "600",
             }}
+            id="updateScale"
+            className="py-2 bg-white border-none"
+            // style={{"}}
+            // onClick={showIframe}
           >
-            <button
-              style={{
-                width: "100%",
-                border: "none",
-                fontWeight: "600",
-              }}
-              id="updateScale"
-              className="py-2 bg-white border-none"
-              // style={{"}}
-              onClick={showIframeDo}
-            >
-              Appearance
-            </button>
-            <button
-              style={{
-                width: "100%",
-                border: "none",
-                fontWeight: "600",
-              }}
-              id="setScale"
-              className="py-2 bg-white border-none"
-              // style={{ bordern: "none", outline: "none" }}
-              onClick={showSetting}
-            >
-              Configurations
-            </button>
-          </div>
-          <div id="iframeRight">
-            <div className="mb-4"></div>
-          </div>
-          <div id="border">
-          <Row className="pt-4">
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <h6 style={{ marginRight: "10rem" }}>Border</h6>
-              <label className="switch">
-                <input
-                  type="checkbox"
-                  onClick={() => setShowSlider(!showSlider)}
-                />
-                <span className="slider round"></span>
-              </label>
-            </div>
-            {showSlider && (
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  backgroundColor: "#abab",
-                  gap: "10px",
-                  height: "40px",
-                  width: "90%",
-                }}
-              >
-                <input
-                  type="color"
-                  value={borderColor}
-                  onChange={handleBorderColorChange}
-                  id="color"
-                  style={{ border: "none", width: "10%", height: "15px" }}
-                />
-                <input
-                  type="range"
-                  min="-10"
-                  max="20"
-                  value={borderSize}
-                  onChange={handleBorderSizeChange}
-                  onBlur={handleRangeBlur}
-                  id="range"
-                  className="range-color"
-                />
-              </div>
-            )}
-          </Row>
-          <hr />
+            Appearance
+          </button>
+          <button
+            style={{
+              width: "100%",
+              border: "none",
+              fontWeight: "600",
+            }}
+            id="setScale"
+            className="py-2 bg-white border-none"
+            // style={{ bordern: "none", outline: "none" }}
+            // onClick={showSetting}
+          >
+            Configurations
+          </button>
         </div>
+        <div id="iframeRight">
+          <div className="mb-4"></div>
+        </div>
+        {showBorder === true ? (
+          <>
+            <hr />
+            <Row className="pt-4">
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <h6 style={{ marginRight: "10rem" }}>Border</h6>
+                <label className="switch">
+                  <input
+                    type="checkbox"
+                    onClick={() => setShowSlider(!showSlider)}
+                  />
+                  <span className="slider round"></span>
+                </label>
+              </div>
+              {showSlider && (
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    backgroundColor: "#abab",
+                    gap: "10px",
+                    height: "40px",
+                    width: "90%",
+                  }}
+                >
+                  <input
+                    type="color"
+                    value={borderColor}
+                    onChange={handleBorderColorChange}
+                    id="color"
+                    style={{ border: "none", width: "10%", height: "15px" }}
+                  />
+                  <input
+                    type="range"
+                    min="-10"
+                    max="20"
+                    value={borderSize}
+                    onChange={handleBorderSizeChange}
+                    id="range"
+                    className="range-color"
+                  />
+                </div>
+              )}
+            </Row>
+            <hr />
+          </>
+        ) : (
+          ""
+        )}
         <div id="settingRight" style={{ display: "none" }}>
-          <h3>Configurations</h3>
-          <div id="settingSelect">
-            <select
-              onChange={handleSelect}
-              id="select1"
-              // onChange={handleDateMethod}
-              className="select border-0 bg-white rounded w-100 h-75 p-2"
-              //multiple
-              style={{ marginBottom: "40px" }}
-            >
-              <option value="select">Select Element</option>
-              {options}
-            </select>
-          </div>
-
           {/* iframe */}
           <div>
             {/* <Form.Control
@@ -3233,61 +3252,9 @@ const ScaleRightSide = () => {
         // onChange={handleChange}
         /> */}
           </div>
-          <div id="invisible">
-            <div
-              id="singleScale"
-              style={{ padding: "10px", gap: "10px" }}
-              className="select border-0 bg-white rounded w-100 h-75 p-2"
-            ></div>
-          </div>
-          <div className=" text-center pt-3">
-            <Button
-              variant="primary"
-              className="px-5"
-              onClick={refreshIframe}
-            >
-              refresh
-            </Button>
-          </div>
-          <div
-            className="text-center pt-3"
-            style={{ display: "flex", justifyContent: "center" }}
-          >
-            <Button
-              variant="primary"
-              className="px-5"
-              onClick={scaleSubmit}
-              style={{ marginRight: "10px" }}
-            >
-              Save
-            </Button>
-
-            <Button
-              variant="secondary"
-              disabled={isButtonDisabled}
-              className="remove_button"
-              // onClick={removeScale}
-            >
-              Remove Scale
-            </Button>
-          </div>
-          {/* iframe */}
         </div>
-          <div id="settingRight" style={{ display: "none" }}>
-            {/* iframe */}
-            <div>
-              {/* <Form.Control
-            type="text"
-            placeholder={`${decoded.details._id}_scl1`}
-            disabled
-            className="mb-4"
-          id="iframe_src"
-          onChange={handleChange}
-          /> */}
-            </div>
-          </div>
-        </>
-      ) : (
+      </>
+    ) : (
         <>
           <div
             style={{
