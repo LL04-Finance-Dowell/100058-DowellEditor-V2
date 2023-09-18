@@ -2916,6 +2916,16 @@ const ScaleRightSide = () => {
   // console.log(iframeSrc, "iframeSrc");
 
   function removeScale() {
+    let elementString = localStorage.getItem("elements")
+    let elementArray
+    if(typeof elementString !== 'undefined') {
+      elementArray = JSON.parse(elementString)
+    }
+    const otherComponent = scale?.querySelector(".otherComponent");
+    let elementIndex = elementArray.indexOf(otherComponent.textContent)
+    elementArray.splice(elementIndex, 1)
+    let string = JSON.stringify(elementArray)
+    localStorage.setItem("elements", string)
     const focusseddElmnt = document.querySelector(".focussedd");
     if (focusseddElmnt.classList.contains("holderDIV")) {
       document.querySelector(".focussedd").remove();
@@ -2991,6 +3001,14 @@ const ScaleRightSide = () => {
     const otherComponent = scale?.querySelector(".otherComponent");
     otherComponent.textContent = selectedOption.value + " "+selectedOption.id
     console.log("Other Component", otherComponent.textContent)
+    let elementString = localStorage.getItem("elements")
+    let elementArray = []
+    if(typeof elementString !== 'undefined') {
+      elementArray = JSON.parse(elementString)
+    }
+    elementArray.push(selectedOption.value + " "+selectedOption.id)
+    let string = JSON.stringify(elementArray)
+    localStorage.setItem("elements", string)
   };
 
   function scaleSubmit(e) {
@@ -3158,8 +3176,22 @@ const ScaleRightSide = () => {
 }
 
 createOptions()
-
-  console.log("This is optionArray",optionArray)
+let elementString = localStorage.getItem("elements")
+let elementArray
+if(typeof elementString !== 'undefined') {
+  elementArray = JSON.parse(elementString)
+}
+const filterElements = () => {
+  for(let i = 0; i<optionArray.length; i++) {
+    for(let j = 0; j<elementArray.length; j++){
+      if(elementArray[j] === optionArray[i]) {
+        optionArray.splice(i, 1)
+      }
+    }
+  }
+}
+console.log("This is optionArray", optionArray)
+filterElements()
  
   // const options = availableTextElements.map((element, index) => (
   //   <option key={index} value={element.type} id={element.id}>
@@ -3168,13 +3200,11 @@ createOptions()
   // ));
 
   const otherComponent = scale?.querySelector(".otherComponent");
-  const options = otherComponent.textContent === "" ? optionArray.map((element, index) => (
+  const options = optionArray.map((element, index) => (
     <option key={index} value={element.split(" ")[0]} id={element.split(" ")[1]}>
       {`${element}`}
     </option>
-  )) : <option key={0} selected value={otherComponent.textContent.split(" ")[0]} id={otherComponent.textContent.split(" ")[1]}>
-  {`${otherComponent.textContent}`}
-</option>;
+  )) 
 
   console.log(options,"ava++++++++++++++____")
 

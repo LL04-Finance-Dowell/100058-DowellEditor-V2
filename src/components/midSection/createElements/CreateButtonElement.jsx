@@ -14,6 +14,14 @@ function createButtonInputElement(holderDIV, focuseddClassMaintain, handleClicke
     buttonField.style.position = "absolute";
     buttonField.textContent = "Button";
 
+    const buttonIn = document.getElementsByClassName("buttonInput");
+        if (buttonIn.length) {
+        const d = buttonIn.length;
+        buttonField.id = `btn${d + 1}`;
+        } else {
+          buttonField.id = "btn1";
+        }
+
     buttonField.onclick = (e) => {
         e.stopPropagation();
         focuseddClassMaintain(e);
