@@ -5,6 +5,7 @@ import { useSearchParams } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 import axios, * as others from 'axios';
 import { ToastContainer, toast } from "react-toastify";
+import ThankYouPage from "../../utils/redirectPages/ThankYouPage";
 
 
 const PaymentRightSide = () => {
@@ -117,6 +118,8 @@ const PaymentRightSide = () => {
     };
 
 
+    const [qrCode, setQrCode] = useState();
+
     const handleStripePayment = async (e) => {
         e.preventDefault();
         const stripeData = {
@@ -126,7 +129,7 @@ const PaymentRightSide = () => {
             price: +price,
             product: productName,
             currency_code: currencyCode,
-            callback_url: callbackUrl,
+            callback_url: "https://www.google.com/",
         }
         console.log("stripe data", stripeData);
         const form = e.currentTarget;
@@ -142,9 +145,12 @@ const PaymentRightSide = () => {
             e.preventDefault();
             setLoader(true)
             try {
-                const res = await axios.post("https://100088.pythonanywhere.com/api/workflow/stripe/initialize", stripeData)
+                const res = await axios.post("https://100088.pythonanywhere.com/api/workflow/stripe/initialize", stripeData);
+                const resQR = await axios.post("https://100088.pythonanywhere.com/api/workflow/stripe/initialize/qrcode", stripeData);
                 setStripePaymentData(res.data);
                 console.log("payment response", res.data);
+                setQrCode(res.data);
+                console.log("QR code response", resQR.data);
                 setLoader(false)
                 toast.success("Successfully Submitted!")
                 const timeout = setTimeout(() => {
@@ -171,7 +177,7 @@ const PaymentRightSide = () => {
             price: +price,
             product: productName,
             currency_code: currencyCode,
-            callback_url: callbackUrl
+            callback_url: "https://www.google.com/"
         }
         console.log("paypal data", paypalData);
         setLoader(true)
@@ -294,7 +300,7 @@ const PaymentRightSide = () => {
                                             <option value="aoa">AOA</option>
                                         </select>
                                         <br />
-                                        <Form.Label>Callback URL</Form.Label>
+                                        {/* <Form.Label>Callback URL</Form.Label>
                                         <Form.Control
                                             required
                                             type="url"
@@ -302,7 +308,7 @@ const PaymentRightSide = () => {
                                             // id="button_name"
                                             value={callbackUrl}
                                             onChange={(e) => setCallbackUrl(e.target.value)}
-                                        />
+                                        /> */}
                                         <br />
                                         <button type="submit" className="btn btn-primary">
                                             {
@@ -351,7 +357,7 @@ const PaymentRightSide = () => {
                                             <option value="aoa">AOA</option>
                                         </select>
                                         <br />
-                                        <Form.Label>Callback URL</Form.Label>
+                                        {/* <Form.Label>Callback URL</Form.Label>
                                         <Form.Control
                                             required
                                             type="url"
@@ -359,7 +365,7 @@ const PaymentRightSide = () => {
                                             // id="button_name"
                                             value={callbackUrl}
                                             onChange={(e) => setCallbackUrl(e.target.value)}
-                                        />
+                                        /> */}
                                         <br />
                                         <button type="submit" className="btn btn-primary">
                                             {
@@ -375,6 +381,8 @@ const PaymentRightSide = () => {
 
             
             </div>
+
+            <img src={qrCode?.qr_image_url} alt="Qr code"/>
 
             <hr />
             <Row className="pt-4">
