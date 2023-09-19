@@ -26,10 +26,12 @@ const IframeRightSidebar = () => {
   const makeIframe = () => {
     var iframeDiv = document.querySelector('.focussed');
     var iframe = document.createElement('iframe');
+    const height = document.getElementById('iframe_height').value;
+    const width = document.getElementById('iframe_width').value;
     iframe.id = 'iframe';
     iframe.src = document.getElementById('iframe_src').value;
-    iframe.height = document.getElementById('iframe_height').value;
-    iframe.width = document.getElementById('iframe_width').value;
+    iframe.height = height ? height : "100%";
+    iframe.width = width ? width : "100%";
 
     iframeDiv.appendChild(iframe);
     //setIsFinializeDisabled(false)
@@ -82,6 +84,7 @@ const IframeRightSidebar = () => {
         <Form.Label>Enter Height</Form.Label>
         <Form.Control
           type="number"
+          disabled
           placeholder=""
           min="1"
           id="iframe_height"
@@ -93,6 +96,7 @@ const IframeRightSidebar = () => {
         <Form.Control
           type="number"
           placeholder=""
+          disabled
           min="1"
           id="iframe_width"
           className="shadow bg-white rounded mb-4"

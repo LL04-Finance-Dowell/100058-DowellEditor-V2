@@ -494,6 +494,8 @@ const MidSection = React.forwardRef((props, ref) => {
       } else if (element.type === "IFRAME_INPUT") {
         let iframeField = document.createElement("div");
         iframeField.className = "iframeInput";
+        // iframeField.style.width = element.width + "px";
+        // iframeField.style.height = element.height + "px";
         iframeField.style.width = "100%";
         iframeField.style.height = "100%";
         iframeField.style.backgroundColor = "#dedede";

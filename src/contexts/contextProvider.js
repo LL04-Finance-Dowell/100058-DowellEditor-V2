@@ -380,6 +380,10 @@ export const ContextProvider = ({ children }) => {
 
 
   const [confirmRemove, setConfirmRemove] = useState(false)
+  const [iframeSize,setIframeSize] = useState({
+    width:"",
+    height:""
+  })
 
   return (
     <StateContext.Provider
