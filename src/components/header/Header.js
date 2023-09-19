@@ -188,16 +188,19 @@ const Header = () => {
     const rect = el.getBoundingClientRect();
     console.log("rect position from header", rect);
     const midsectionRect = midSec.getBoundingClientRect();
+    console.log("midsectionRect position from header", midsectionRect);
+
 
     return {
       top:
         rect.top > 0
           ? Math.abs(midsectionRect.top)
           : rect.top - midsectionRect.top,
-      left: rect.left - midsectionRect.left,
+      left: window.innerWidth<993 ? (((rect.left*794)/midsectionRect.width) - midsectionRect.left) : rect.left - midsectionRect.left,
+      // left:rect.left - midsectionRect.left,
       bottom: rect.bottom,
       right: rect.right,
-      width: rect.width,
+      width: window.innerWidth<993 ? ((rect.width*794)/midsectionRect.width) : rect.width,
       height: rect.height,
     };
   }
@@ -297,10 +300,10 @@ const Header = () => {
           const reader = new FileReader();
           let tempElem = img[h].parentElement;
           let tempPosn = getPosition(tempElem);
-          console.log(
-            "img[h].style.backgroundImage",
-            img[h].style.backgroundImage
-          );
+          // console.log(
+          //   "img[h].style.backgroundImage",
+          //   img[h].style.backgroundImage
+          // );
           const dataName = img[h].style.backgroundImage
             ? img[h].style.backgroundImage
             : img[h].innerText;

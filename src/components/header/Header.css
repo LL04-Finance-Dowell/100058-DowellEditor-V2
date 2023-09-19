@@ -171,14 +171,14 @@ svg {
     font-size: 2rem;
     margin-left: 0px;
   }
-  #reject-button {
-    margin-left: -440%;
+  #reject-button, #finalize-button {
+    /* margin-left: -440%; */
     font-size: 12px;
   }
-  #finalize-button {
+  /* #finalize-button {
     margin-left: -380%;
     font-size: 12px;
-  }
+  } */
   .header_icons {
     margin-left: -30px !important;
   }
