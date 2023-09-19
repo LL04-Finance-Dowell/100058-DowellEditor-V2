@@ -652,6 +652,7 @@ const Header = () => {
           let scaleType = newScales[b].querySelector(".scaleTypeHolder");
           let scaleID = newScales[b].querySelector(".scaleId");
           let orentation = newScales[b].querySelector(".nps_vertical");
+          let otherComponent = newScales[b].querySelector(".otherComponent");
           console.log(font);
 
           let buttonText = newScales[b].querySelectorAll(".circle_label");
@@ -689,7 +690,9 @@ const Header = () => {
           let likertScaleArray = "";
 
           if (scaleType.textContent === "likert") {
-            likertScaleArray = newScales[b].querySelector(".likertScaleArray");
+            likertScaleArray = newScales[b].querySelector(
+              ".likert_Scale_Array"
+            );
             orientation = newScales[b].querySelector(".orientation");
             console.log("This is likert", likertScaleArray.textContent);
           }
@@ -752,6 +755,7 @@ const Header = () => {
             orientation: orientation?.textContent,
             orentation: orentation?.textContent,
             stapelOrientation: stapelOrientation?.textContent,
+            otherComponent: otherComponent.textContent,
           };
           console.log(properties);
           elem = {

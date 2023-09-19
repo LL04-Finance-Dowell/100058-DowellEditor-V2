@@ -505,6 +505,16 @@ const ScaleRightSide = () => {
   const [selectedEmojis, setSelectedEmojis] = useState([]);
   const [activeEmojiPicker, setActiveEmojiPicker] = useState(null); // Track active emoji picker for text label type
 
+  useEffect(() => {
+    // Fetch saved data from storage (localStorage, sessionStorage, etc.)
+    const savedLabelScale = localStorage.getItem("labelScale");
+    const savedLabelTexts = JSON.parse(localStorage.getItem("labelTexts"));
+
+    // Set the initial state with fetched data
+    setLabelScale(savedLabelScale || ""); // Use empty string as a fallback
+    setLabelTexts(savedLabelTexts || []); // Use an empty array as a fallback
+  }, []);
+
   const handleLabelTypeChange = (event) => {
     const selectedValue = event.target.value;
     setLabelType(selectedValue);
@@ -552,7 +562,12 @@ const ScaleRightSide = () => {
   const handleLabelTextChange = (index, event) => {
     const updatedLabelTexts = [...labelTexts];
     updatedLabelTexts[index] = event.target.value;
+
+    // Update the state variable
     setLabelTexts(updatedLabelTexts);
+
+    // Save the updated data to storage
+    localStorage.setItem("labelTexts", JSON.stringify(updatedLabelTexts));
   };
 
   const areAllTextInputsFilled = labelTexts.every(
@@ -1810,7 +1825,7 @@ const ScaleRightSide = () => {
       const numColumns = Math.min(updatedLabelScale, 3);
 
       const likertScaleArray = document.createElement("div");
-      likertScaleArray.className = "likertScaleArray";
+      likertScaleArray.className = "likert_Scale_Array";
       likertScaleArray.textContent = updatedLabels;
       likertScaleArray.style.display = "none";
       labelHold.append(likertScaleArray);
@@ -1855,7 +1870,6 @@ const ScaleRightSide = () => {
         button.style.alignItems = "center";
         button.style.marginTop = "1%";
         button.style.marginLeft = "26%";
-        // circle.style.gap = "20px";
       }
 
       const basePayload = {
@@ -2055,7 +2069,7 @@ const ScaleRightSide = () => {
 
                 labelHold.appendChild(circle);
               }
-              console.log("This is it", likertScaleArray);
+              console.log("This is it+++++++______", likertScaleArray);
             }
           })
           .catch((err) => {
@@ -2930,6 +2944,16 @@ const ScaleRightSide = () => {
   // console.log(iframeSrc, "iframeSrc");
 
   function removeScale() {
+    let elementString = localStorage.getItem("elements");
+    let elementArray = [];
+    if (typeof elementString !== "undefined") {
+      elementArray = JSON.parse(elementString);
+    }
+    const otherComponent = scale?.querySelector(".otherComponent");
+    let elementIndex = elementArray.indexOf(otherComponent.textContent);
+    elementArray.splice(elementIndex, 1);
+    let string = JSON.stringify(elementArray);
+    localStorage.setItem("elements", string);
     const focusseddElmnt = document.querySelector(".focussedd");
     if (focusseddElmnt.classList.contains("holderDIV")) {
       document.querySelector(".focussedd").remove();
@@ -2955,7 +2979,7 @@ const ScaleRightSide = () => {
     "type",
     "NEW_SCALE_INPUT"
   );
-  // console.log(newArray);
+  console.log("Try this", newArray);
 
   const filteredArray = newArray?.filter((obj) => !customId.includes(obj.id));
   // console.log(filteredArray);
@@ -2978,19 +3002,50 @@ const ScaleRightSide = () => {
   }, [availableTextElements]);
 
   const removeSelectedOption = () => {
-    if (selectedElementId) {
-      console.log(`Removing option with ID: ${selectedElementId}`);
-      setAvailableTextElements((prevOptions) =>
-        prevOptions.filter((element) => element.id !== selectedElementId)
-      );
-      setSelectedElementId(null);
-      console.log(`Updated availableTextElements:`, availableTextElements);
+    // if (selectedElementId) {
+    //   console.log(`Removing option with ID: ${selectedElementId}`);
+    //   setAvailableTextElements((prevOptions) =>
+    //     prevOptions.filter((element) => element.id !== selectedElementId)
+    //   );
+    //   setSelectedElementId(null);
+    //   console.log(`Updated availableTextElements:`, availableTextElements);
+    // }
+    let selectField = document.getElementById("select1");
+    var selectedValues = {};
+    const options = selectField.options;
+
+    for (let i = 0; i < options.length; i++) {
+      const option = options[i];
+      if (option.selected) {
+        selectedValues[option.value] = option.id;
+        console.log("This is option", option);
+      }
     }
+
+    console.log(selectedValues);
+    setSelectedOptions(selectedValues);
+
+    let selectedOption = selectField.options[selectField.selectedIndex];
+    let selectedElementId = selectedOption.id;
+    console.log(selectedElementId, "selectedElementId");
+    const scale = document.querySelector(".focussedd");
+    const otherComponent = scale?.querySelector(".otherComponent");
+    otherComponent.textContent = selectedOption.value + " " + selectedOption.id;
+    console.log("Other Component", otherComponent.textContent);
+    let elementString = localStorage.getItem("elements");
+    let elemArray = [];
+    if (elementString !== null) {
+      elemArray = JSON.parse(elementString);
+    }
+    console.log(elemArray);
+    console.log(`"${selectedOption.value + " " + selectedOption.id}"`);
+    elemArray.push(selectedOption.value + " " + selectedOption.id);
+    let string = JSON.stringify(elemArray);
+    localStorage.setItem("elements", string);
   };
 
-  console.log(removeSelectedOption);
-
   function scaleSubmit(e) {
+    e.preventDefault();
     console.log(selectedOptions);
     console.log(selectedOptions[0]);
     const scale = document.querySelector(".focussedd");
@@ -3031,7 +3086,7 @@ const ScaleRightSide = () => {
       const option = options[i];
       if (option.selected) {
         selectedValues[option.value] = option.id;
-        console.log(option);
+        console.log("This is option", option);
       }
     }
 
@@ -3042,9 +3097,11 @@ const ScaleRightSide = () => {
     let selectedElementId = selectedOption.id;
     console.log(selectedElementId, "selectedElementId");
 
-    const selectedElements = myArray.find(
-      (element) => element.id === selectedElementId
-    );
+    // const selectedElements = myArray.find(
+    //   (element) => element.id === selectedElementId
+    // );
+
+    const selectedElements = document.getElementById(`${selectedElementId}`);
 
     setSelectedElementId(selectedElements.id);
     console.log(selectedElements, "selectedElement");
@@ -3057,7 +3114,7 @@ const ScaleRightSide = () => {
     let previousOptionId = selectField.getAttribute("data-prev-option");
     if (previousOptionId) {
       let previousOptionDiv = document.getElementById(previousOptionId);
-      previousOptionDiv.parentElement.style.border = "none";
+      previousOptionDiv.parentElement.style.border = "doted";
     }
 
     // Add the green border to the currently selected option

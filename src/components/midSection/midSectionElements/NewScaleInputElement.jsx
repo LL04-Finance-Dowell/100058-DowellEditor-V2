@@ -48,6 +48,12 @@ function createNewScaleInputField(
   scaleText.style.borderRadius = "0px";
   scaleHold.append(scaleText);
 
+  const otherComponent = document.createElement("h6");
+  otherComponent.className = "otherComponent";
+  otherComponent.style.display = "none";
+  otherComponent.textContent = element?.raw_data?.otherComponent
+  scaleHold.appendChild(otherComponent);
+
   const scaleTypeHolder = document.createElement("h6");
   scaleTypeHolder.className = "scaleTypeHolder";
   scaleTypeHolder.textContent = element?.raw_data?.scaleType;
@@ -83,12 +89,6 @@ function createNewScaleInputField(
   npsLiteOptionHolder.textContent = element?.raw_data?.npsLiteOptionHolder;
   npsLiteOptionHolder.style.display = "none";
   scaleHold.append(npsLiteOptionHolder);
-
-  const likertScaleArray = document.createElement("div");
-  likertScaleArray.className = "likertScaleArray";
-  likertScaleArray.textContent = element?.raw_data?.likertScaleArray || "";
-  likertScaleArray.style.display = "none";
-  scaleHold.append(likertScaleArray);
 
   const optionHolderLikert = document.createElement("div");
   optionHolderLikert.className = "likert_Option_Holder";
@@ -656,6 +656,12 @@ function createNewScaleInputField(
       }
     }
   } else if (scaleTypeHolder.textContent === "likert") {
+    const likertScaleArray = document.createElement("div");
+    likertScaleArray.className = "likert_Scale_Array";
+    likertScaleArray.textContent = element?.raw_data?.likertScaleArray || "";
+    likertScaleArray.style.display = "none";
+    
+    scaleHold.append(likertScaleArray);
     const likertScale = likertScaleArray.textContent.split(",");
     const numRows = Math.ceil(likertScale / 3);
     const numColumns = Math.min(likertScale, 3);

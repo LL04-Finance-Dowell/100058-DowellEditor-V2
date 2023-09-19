@@ -2550,6 +2550,14 @@ const MidSection = React.forwardRef((props, ref) => {
           // tableField.innerHTML = 'table';
           tableField.style.position = "absolute";
 
+          const tableF = document.getElementsByClassName("tableInput");
+            if (tableF.length) {
+              const t = tableF.length;
+              tableField.id = `tab${t + 1}`;
+            } else {
+              tableField.id = "tab1";
+            }
+
           tableField.onchange = (event) => {
             event.preventDefault();
 
