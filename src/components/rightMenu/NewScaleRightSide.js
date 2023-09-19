@@ -505,6 +505,16 @@ const ScaleRightSide = () => {
   const [selectedEmojis, setSelectedEmojis] = useState([]);
   const [activeEmojiPicker, setActiveEmojiPicker] = useState(null); // Track active emoji picker for text label type
 
+  useEffect(() => {
+    // Fetch saved data from storage (localStorage, sessionStorage, etc.)
+    const savedLabelScale = localStorage.getItem('labelScale');
+    const savedLabelTexts = JSON.parse(localStorage.getItem('labelTexts'));
+  
+    // Set the initial state with fetched data
+    setLabelScale(savedLabelScale || ""); // Use empty string as a fallback
+    setLabelTexts(savedLabelTexts || []); // Use an empty array as a fallback
+  }, []);
+
   const handleLabelTypeChange = (event) => {
     const selectedValue = event.target.value;
     setLabelType(selectedValue);
@@ -552,7 +562,12 @@ const ScaleRightSide = () => {
   const handleLabelTextChange = (index, event) => {
     const updatedLabelTexts = [...labelTexts];
     updatedLabelTexts[index] = event.target.value;
+  
+    // Update the state variable
     setLabelTexts(updatedLabelTexts);
+  
+    // Save the updated data to storage
+    localStorage.setItem('labelTexts', JSON.stringify(updatedLabelTexts));
   };
 
   const areAllTextInputsFilled = labelTexts.every(
@@ -1807,7 +1822,7 @@ const ScaleRightSide = () => {
       const numColumns = Math.min(updatedLabelScale, 3);
 
       const likertScaleArray = document.createElement("div");
-      likertScaleArray.className = "likertScaleArray";
+      likertScaleArray.className = "likert_Scale_Array";
       likertScaleArray.textContent = updatedLabels;
       likertScaleArray.style.display = "none";
       labelHold.append(likertScaleArray);
@@ -1852,7 +1867,6 @@ const ScaleRightSide = () => {
         button.style.alignItems = "center";
         button.style.marginTop = "1%";
         button.style.marginLeft = "26%";
-        // circle.style.gap = "20px";
       }
 
       const basePayload = {
@@ -2052,7 +2066,7 @@ const ScaleRightSide = () => {
 
                 labelHold.appendChild(circle);
               }
-              console.log("This is it", likertScaleArray);
+              console.log("This is it+++++++______", likertScaleArray);
             }
           })
           .catch((err) => {
