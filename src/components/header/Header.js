@@ -686,7 +686,7 @@ const Header = () => {
           let likertScaleArray = "";
 
           if (scaleType.textContent === "likert") {
-            likertScaleArray = newScales[b].querySelector(".likertScaleArray");
+            likertScaleArray = newScales[b].querySelector(".likert_Scale_Array");
             orientation = newScales[b].querySelector(".orientation");
             console.log("This is likert", likertScaleArray.textContent);
           }
