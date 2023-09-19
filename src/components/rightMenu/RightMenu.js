@@ -47,6 +47,7 @@ const RightMenu = () => {
   const [windInnerWidth, setWindInnerWidth] = useState(window.innerWidth)
   const [windInnerHeight, setWindInnerHeight] = useState(window.innerHeight)
   const [rightMenuWidth, setRightMenuWidth] = useState(0)
+  const [isSmall, setIsSmall] = useState(false);
 
   const actionName = decoded?.details?.action;
   const docMap = decoded?.details?.document_map;
@@ -439,15 +440,26 @@ const RightMenu = () => {
   // },[])
 
 
+  useEffect(() => {
+    if (window.innerWidth < 993 && !isSmall) setIsSmall(true);
 
+    window.addEventListener('resize', (event) => {
+      const windowWidth = window.innerWidth;
+
+      if (windowWidth < 993 && !isSmall) setIsSmall(true)
+      if (windowWidth >= 993 && isSmall) setIsSmall(false)
+    });
+
+    return () => window.removeEventListener('resize', () => { })
+  }, [isSmall])
 
   return (
     <>
       {/* <div className="fixed3" id="rightMenuDragStart" draggable="true" onDragStart={(event) => rightMenuDragStart(event)} onDragEnd={(event) => rightMenuDragEnd(event)} > */}
       <div className="fixed3" id="rightMenuDragStart" draggable={false} onDragStart={(event) => rightMenuDragStart(event)} onDragEnd={(event) => rightMenuDragEnd(event)} ref={rightMenuRef} onPointerDown={handleGestureDown} onPointerMove={handleGestureMove} onPointerUp={handleGestureUp} onPointerLeave={handleGestureUp}>
-        <span id="move_icon" onPointerLeave={handleGestureUp}>
+        {window.innerWidth < 993 && <span id="move_icon" onPointerLeave={handleGestureUp}>
           <AiOutlineDrag />
-        </span>
+        </span>}
         {isClicked.align2 && <AlignRightSide />}
         {isClicked.image2 && <ImageRightSidebar />}
         {isClicked.table2 && <TableRightSidebar />}
