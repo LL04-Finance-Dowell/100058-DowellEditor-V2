@@ -92,4 +92,8 @@ select option {
 
 #move_icon svg {
   pointer-events: none;
+  width: initial !important;
+  height: initial;
+  color: initial;
+  margin-right: 0;
 }

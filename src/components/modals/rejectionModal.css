@@ -9,6 +9,13 @@
   padding: 0 10px;
 }
 
+.reject_modal_sect svg {
+  width: initial !important;
+  height: initial;
+  color: initial;
+  margin-right: 0;
+}
+
 .main_wrapper {
   margin: auto;
   background-color: #fff;
