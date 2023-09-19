@@ -6,20 +6,24 @@ import { useStateContext } from '../../contexts/contextProvider';
 import { useSearchParams } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 
-const IframeRightSidebar = () =>
-{
-  const { setSidebar, handleClicked, setIsFinializeDisabled,  iframeBorderSize, setIframeBorderSize, iframeBorderColor, setIframeBorderColor } =
+const IframeRightSidebar = () => {
+  const { setSidebar, handleClicked, setIsFinializeDisabled, iframeBorderSize, setIframeBorderSize, iframeBorderColor, setIframeBorderColor, docMapRequired } =
     useStateContext();
 
-    const [searchParams] = useSearchParams();
-    const token = searchParams.get("token");
-    var decoded = jwt_decode(token);
+  const [searchParams] = useSearchParams();
+  const token = searchParams.get("token");
+
+  const isRequired =
+    docMapRequired.find(
+      (item) => document.querySelector(".focussed").id == item.content
+    ) ? true : false;
+
+  var decoded = jwt_decode(token);
 
 
   const [showSlider, setShowSlider] = useState(false);
 
-  const makeIframe = () =>
-  {
+  const makeIframe = () => {
     var iframeDiv = document.querySelector('.focussed');
     var iframe = document.createElement('iframe');
     iframe.id = 'iframe';
@@ -29,24 +33,20 @@ const IframeRightSidebar = () =>
 
     iframeDiv.appendChild(iframe);
     //setIsFinializeDisabled(false)
-    if (iframeDiv.parentElement.classList.contains('holderDIV'))
-    {
+    if (iframeDiv.parentElement.classList.contains('holderDIV') && isRequired) {
       iframeDiv.parentElement.classList.add('element_updated');
-      // console.log('iframe.parentElement', iframeDiv.parentElement);
+      // // console.log('iframe.parentElement', iframeDiv.parentElement);
     }
   };
-  function handleChange()
-  {
+  function handleChange() {
     document.querySelector('.focussed').innerHTML = '';
   }
 
-  function removeIframe()
-  {
+  function removeIframe() {
     document.querySelector('.focussedd').remove();
   }
 
-  const handleBorderSizeChange = (e) =>
-  {
+  const handleBorderSizeChange = (e) => {
     setIframeBorderSize(e.target.value);
 
     const box = document.getElementsByClassName("focussedd")[0];
@@ -54,18 +54,16 @@ const IframeRightSidebar = () =>
 
   };
 
-  const handleBorderColorChange = (e) =>
-  {
+  const handleBorderColorChange = (e) => {
     setIframeBorderColor(e.target.value);
     const box = document.getElementsByClassName("focussedd")[0];
     box.style.borderColor = `${e.target.value}`;
 
   };
-  const handleRangeBlur = (e) =>
-  {
+  const handleRangeBlur = (e) => {
     e.target.focus();
   };
-  
+
   return (
     <>
       <div>

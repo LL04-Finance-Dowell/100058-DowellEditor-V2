@@ -77,13 +77,13 @@ const EmailRightSideBar = () => {
     axios
       .post("https://100085.pythonanywhere.com/api/editor-component/", formData)
       .then((response) => {
-        console.log(response);
+        // console.log(response);
         mailBtn.textContent = "Sent";
         mailBtn.style.backgroundColor = "green";
         toast.success("Email has been sent");
       });
     //alert("Mail sent!");
-    console.log(formData);
+    // console.log(formData);
 
     setMessage("");
     setSubject("");

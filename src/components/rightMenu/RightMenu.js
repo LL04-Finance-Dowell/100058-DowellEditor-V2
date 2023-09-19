@@ -17,7 +17,7 @@ import "react-toastify/dist/ReactToastify.css";
 import ContainerRigntSideBar from "./ContainerRightSidebar";
 import EmailRightSideBar from "./EmailRightSideBar";
 import CameraRightSide from "./CameraRightSide";
-import { MdDragIndicator } from "react-icons/md";
+import { AiOutlineDrag } from "react-icons/ai";
 
 const RightMenu = () => {
   const {
@@ -46,6 +46,7 @@ const RightMenu = () => {
   const [rightMenuLeft, setRightMEnuLeft] = useState("50%")
   const [windInnerWidth, setWindInnerWidth] = useState(window.innerWidth)
   const [windInnerHeight, setWindInnerHeight] = useState(window.innerHeight)
+  const [rightMenuWidth, setRightMenuWidth] = useState(0)
 
   const actionName = decoded?.details?.action;
   const docMap = decoded?.details?.document_map;
@@ -60,6 +61,8 @@ const RightMenu = () => {
   let initialElY = 0;
   let initialElX = 0;
   let pointerDown = false
+
+
 
 
   useEffect(() => {
@@ -348,7 +351,7 @@ const RightMenu = () => {
   function rightMenuDragEnd(ev) {
     //   // alert("drag end")
 
-    //   console.log("from rught menu drang end findIsClicked", findIsClicked);
+    //   // console.log("from rught menu drang end findIsClicked", findIsClicked);
     //   if(findIsClicked == "align2"){
     //     // setIsClicked({
     //     //   ...isClicked,
@@ -380,8 +383,8 @@ const RightMenu = () => {
     //   }
     //   setRightMEnuTop(ev.screenY)
     //   setRightMEnuLeft(ev.screenX)
-    //   // console.log("from right menu", ev.screenX, ev.screenY)
-    //   // console.log("isClicked from right menu", isClicked);
+    //   // // console.log("from right menu", ev.screenX, ev.screenY)
+    //   // // console.log("isClicked from right menu", isClicked);
 
   }
 
@@ -394,13 +397,18 @@ const RightMenu = () => {
     initialTouchX = e.clientX
     initialTouchY = e.clientY
     pointerDown = true
+
+    setRightMenuWidth(document.getElementById('rightMenuDragStart').getBoundingClientRect().width);
   }
 
   const handleGestureMove = e => {
-    if (pointerDown) {
+    if (e.target.id === 'move_icon' && pointerDown) {
       const diffMouseX = e.clientX - initialTouchX
       const diffMouseY = e.clientY - initialTouchY
-      e.currentTarget.style.maxWidth = (windInnerWidth - 40) < 500 ? (windInnerWidth - 40) + 'px' : '500px';
+
+
+
+      e.currentTarget.style.width = rightMenuWidth + 'px'
       e.currentTarget.style.transform = `translate(0,0)`
       e.currentTarget.style.top = initialElY + diffMouseY + 'px'
       e.currentTarget.style.left = initialElX + diffMouseX + 'px'
@@ -436,9 +444,12 @@ const RightMenu = () => {
   return (
     <>
       {/* <div className="fixed3" id="rightMenuDragStart" draggable="true" onDragStart={(event) => rightMenuDragStart(event)} onDragEnd={(event) => rightMenuDragEnd(event)} > */}
-      <div className="fixed3" id="rightMenuDragStart" onDragStart={rightMenuDragStart} ref={rightMenuRef} onPointerDown={handleGestureDown} onPointerMove={handleGestureMove} onPointerUp={handleGestureUp} onPointerLeave={handleGestureUp}>
+      <div className="fixed3" id="rightMenuDragStart" draggable={false} onDragStart={(event) => rightMenuDragStart(event)} onDragEnd={(event) => rightMenuDragEnd(event)} ref={rightMenuRef} onPointerDown={handleGestureDown} onPointerMove={handleGestureMove} onPointerUp={handleGestureUp} onPointerLeave={handleGestureUp}>
+        <span id="move_icon" onPointerLeave={handleGestureUp}>
+          <AiOutlineDrag />
+        </span>
         {isClicked.align2 && <AlignRightSide />}
-        {isClicked.image2 && <ImageRightSidebar />}''
+        {isClicked.image2 && <ImageRightSidebar />}
         {isClicked.table2 && <TableRightSidebar />}
         {isClicked.signs2 && <SignsRightSidebar />}
         {isClicked.calendar2 && <CalendarRightSidebar />}

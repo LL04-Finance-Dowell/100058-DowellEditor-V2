@@ -23,7 +23,7 @@ function createContainerInputField(id, element, p, holderDIV, focuseddClassMaint
         handleClicked("container2");
         setSidebar(true);
     };
-    // console.log("element.data container input retrieve", element.data);
+    // // console.log("element.data container input retrieve", element.data);
     for (let p = 0; p < element.data.length; p++) {
         const containerElement = element.data[p];
 
@@ -364,12 +364,12 @@ function createContainerInputField(id, element, p, holderDIV, focuseddClassMaint
             )
                 .then((res) => {
                     setIsLoading(false);
-                    console.log(res.data, "scaleData");
+                    // console.log(res.data, "scaleData");
                     setScaleData(res.data);
                     const success = res.data.success;
                     var successObj = JSON.parse(success);
                     const id = successObj.inserted_id;
-                    console.log(res.scale_urls, "stateScale");
+                    // console.log(res.scale_urls, "stateScale");
                     if (id.length) {
                         setScaleId(id);
                     }
@@ -377,7 +377,7 @@ function createContainerInputField(id, element, p, holderDIV, focuseddClassMaint
                 })
                 .catch((err) => {
                     setIsLoading(false);
-                    console.log(err);
+                    // console.log(err);
                 });
 
             scaleFieldContainer.onclick = (e) => {
@@ -858,12 +858,12 @@ function createContainerInputField(id, element, p, holderDIV, focuseddClassMaint
             )
                 .then((res) => {
                     setIsLoading(false);
-                    console.log(res.data, "scaleData");
+                    // console.log(res.data, "scaleData");
                     setScaleData(res.data);
                     const success = res.data.success;
                     var successObj = JSON.parse(success);
                     const id = successObj.inserted_id;
-                    console.log(res.scale_urls, "stateScale");
+                    // console.log(res.scale_urls, "stateScale");
                     if (id.length) {
                         setScaleId(id);
                     }
@@ -871,7 +871,7 @@ function createContainerInputField(id, element, p, holderDIV, focuseddClassMaint
                 })
                 .catch((err) => {
                     setIsLoading(false);
-                    console.log(err);
+                    // console.log(err);
                 });
 
             scaleFieldContainer.onclick = (e) => {
