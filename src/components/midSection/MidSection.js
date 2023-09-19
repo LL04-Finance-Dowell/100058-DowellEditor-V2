@@ -1984,7 +1984,7 @@ const MidSection = React.forwardRef((props, ref) => {
           };
           const idMatch = documnetMap?.filter((elmnt) => elmnt == element?.id);
           const holderDIV = getHolderDIV(measure, pageNo, idMatch);
-          const id = `${element.id}`;
+          const id = element.id;
           CreateTableComponent(
             holderDIV,
             id,
