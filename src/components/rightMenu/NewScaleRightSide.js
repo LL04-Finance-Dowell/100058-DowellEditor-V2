@@ -693,7 +693,6 @@ const ScaleRightSide = () => {
     setInputFields(newInputFields);
   };
 
-
   console.log(scale);
 
   const handleInputChange = (event) => {
@@ -975,11 +974,13 @@ const ScaleRightSide = () => {
               circle.style.backgroundColor = btnUpdateButton.value;
               labelHold.appendChild(circle);
               if (selectedOption === "emoji" && emojiInp !== "") {
+                console.log(selectedOption);
                 // Set the text content of the div to the corresponding emoji
                 const emojiFormat = /(\p{Emoji}|\uFE0F)/gu;
                 const emojis = emojiInp
                   .split(emojiFormat)
                   .filter((emoji) => emoji !== "");
+                console.log(emojis);
                 circle.textContent = emojis[i % emojis.length];
                 circle.style.fontSize = "1.8vw";
               } else {
@@ -1056,7 +1057,7 @@ const ScaleRightSide = () => {
               buttonChildNeutral.textContent = btnUpdateCenter.value;
 
               for (let i = 0; i <= 10; i++) {
-                const selectedOption = optionSelect.value;
+                // const selectedOption = optionSelect.value;
                 const circle = document.createElement("div");
                 circle.className = "circle_label";
                 circle.textContent = i;
@@ -1070,12 +1071,14 @@ const ScaleRightSide = () => {
                 circle.style.alignItems = "center";
                 circle.style.backgroundColor = btnUpdateButton.value;
                 labelHold.appendChild(circle);
+                console.log(selectedOption);
                 if (selectedOption === "emoji" && emojiInp !== "") {
                   // Set the text content of the div to the corresponding emoji
                   const emojiFormat = /(\p{Emoji}|\uFE0F)/gu;
                   const emojis = emojiInp
                     .split(emojiFormat)
                     .filter((emoji) => emoji !== "");
+                  console.log(emojis);
                   circle.textContent = emojis[i % emojis.length];
                   circle.style.fontSize = "1.8vw";
                 } else {
@@ -1338,7 +1341,7 @@ const ScaleRightSide = () => {
             labelHold.appendChild(optionHolder);
             stapelScaleArray.textContent = res.data.data.settings.scale;
             labelHold.append(stapelScaleArray);
-            console.log("This is stapel", stapelScaleArray)
+            console.log("This is stapel", stapelScaleArray);
           })
           .catch((err) => {
             setIsLoading(false);
@@ -1683,7 +1686,7 @@ const ScaleRightSide = () => {
                 name,
                 fontcolor,
                 fontstyle,
-                custom_emoji_format
+                custom_emoji_format,
               } = res.data.data;
               const textValues = [left, center, right];
 
@@ -2161,8 +2164,6 @@ const ScaleRightSide = () => {
             const {
               name,
               orientation,
-              fontcolor,
-              fontstyle,
               scale_color,
               product_count,
               product_names,
@@ -2176,12 +2177,12 @@ const ScaleRightSide = () => {
               newLabelHold.innerHTML = "";
               newLabelHold.style = "";
 
-              newLabelHold.style.padding = "3px";
+              // newLabelHold.style.padding = "25px";
               newLabelHold.style.borderBottom = "1px solid gray";
 
-              newLabelHold.style.paddingRight = "35px";
-              newLabelHold.style.paddingLeft = "35px";
-              newLabelHold.style.borderBottom = "1px solid gray";
+              // newLabelHold.style.paddingRight = "50px";
+              // newLabelHold.style.paddingLeft = "35px";
+              // newLabelHold.style.borderBottom = "1px solid gray";
               newLabelHold.style.borderTop = "1px solid gray";
 
               let nameDiv = document.createElement("div");
@@ -2257,10 +2258,18 @@ const ScaleRightSide = () => {
                 orientation.style.display = "none";
                 button4.appendChild(orientation);
                 containerDiv.style.transform = "rotate(270deg)";
-                nameDiv.style.position = "absolute";
-                nameDiv.style.left = "93%";
-                nameDiv.style.top = "7px";
                 nameDiv.style.right = "-8px";
+                nameDiv.style.position = "absolute";
+                nameDiv.style.width = "50%";
+                nameDiv.style.left = "75%";
+                nameDiv.textContent.length < 9
+                  ? (nameDiv.style.top = "23px")
+                  : (nameDiv.style.top = "39px");
+
+                newLabelHold.style.padding =
+                  nameDiv.textContent.length < 9
+                    ? "0px 20px 10px 14px"
+                    : "0px 20px 37px 14px";
                 nameDiv.style.transform = "rotate(90deg)";
 
                 newLabelHold.style.position = "relative";
@@ -2312,8 +2321,6 @@ const ScaleRightSide = () => {
               const {
                 name,
                 orientation,
-                fontcolor,
-                fontstyle,
                 scale_color,
                 product_count,
                 product_names,
@@ -2326,11 +2333,10 @@ const ScaleRightSide = () => {
                 newLabelHold.innerHTML = "";
                 newLabelHold.style = "";
 
-                newLabelHold.style.padding = "3px";
                 newLabelHold.style.borderBottom = "1px solid gray";
 
-                newLabelHold.style.paddingRight = "35px";
-                newLabelHold.style.paddingLeft = "35px";
+                // newLabelHold.style.paddingRight = "35px";
+                // newLabelHold.style.paddingLeft = "35px";
                 newLabelHold.style.borderBottom = "1px solid gray";
                 newLabelHold.style.borderTop = "1px solid gray";
 
@@ -2408,8 +2414,16 @@ const ScaleRightSide = () => {
                   button4.appendChild(orientation);
                   containerDiv.style.transform = "rotate(270deg)";
                   nameDiv.style.position = "absolute";
-                  nameDiv.style.left = "93%";
-                  nameDiv.style.top = "7px";
+                  nameDiv.style.width = "50%";
+                  nameDiv.style.left = "75%";
+                  nameDiv.textContent.length < 9
+                    ? (nameDiv.style.top = "23px")
+                    : (nameDiv.style.top = "39px");
+
+                  newLabelHold.style.padding =
+                    nameDiv.textContent.length < 9
+                      ? "0px 20px 10px 14px"
+                      : "0px 20px 37px 14px";
                   nameDiv.style.right = "-8px";
                   nameDiv.style.transform = "rotate(90deg)";
 
@@ -2629,7 +2643,7 @@ const ScaleRightSide = () => {
                 orientation.textContent = "Vertical";
                 orientation.style.display = "none";
                 button4.appendChild(orientation);
-          
+
                 containerDiv.style.transform = "rotate(270deg)";
                 containerDiv.style.marginTop = "80px";
                 containerDiv.style.width = "100%";
@@ -2957,7 +2971,10 @@ const ScaleRightSide = () => {
 
   useEffect(() => {
     // Save the availableTextElements state to local storage whenever it changes
-    localStorage.setItem('availableTextElements', JSON.stringify(availableTextElements));
+    localStorage.setItem(
+      "availableTextElements",
+      JSON.stringify(availableTextElements)
+    );
   }, [availableTextElements]);
 
   const removeSelectedOption = () => {
@@ -2980,7 +2997,10 @@ const ScaleRightSide = () => {
     const idHolder = scale?.querySelector(".scaleId");
     console.log("This is the scale Id", idHolder.textContent);
     removeSelectedOption(); // Call this function to remove the selected option
-    console.log(removeSelectedOption(), "what shall I do@@@@@@@@@@@@@!!!!!!!!!!!!!!");
+    console.log(
+      removeSelectedOption(),
+      "what shall I do@@@@@@@@@@@@@!!!!!!!!!!!!!!"
+    );
     e.preventDefault();
     setIsLoading(true);
     Axios.post("https://100035.pythonanywhere.com/api/nps_custom_data/", {
@@ -3048,14 +3068,14 @@ const ScaleRightSide = () => {
     // Store the ID of the currently selected option as the previous option
     selectField.setAttribute("data-prev-option", selectedElements.id);
   };
- 
+
   const options = availableTextElements.map((element, index) => (
     <option key={index} value={element.type} id={element.id}>
       {`${element.type} ${element.id}`}
     </option>
   ));
 
-  console.log(options,"ava++++++++++++++____")
+  console.log(options, "ava++++++++++++++____");
 
   const handleBorderSizeChange = (e) => {
     setBorderSize(e.target.value);
@@ -3151,99 +3171,99 @@ const ScaleRightSide = () => {
 
   return (
     <>
-    {decoded.details.action === "document" ? (
-      <>
-        <div
-          style={{
-            width: "100%",
-            display: "flex",
-            // borderRadius: "20px",
-            // backgroundColor: "red",
-          }}
-        >
-          <button
+      {decoded.details.action === "document" ? (
+        <>
+          <div
             style={{
               width: "100%",
-              border: "none",
-              fontWeight: "600",
+              display: "flex",
+              // borderRadius: "20px",
+              // backgroundColor: "red",
             }}
-            id="updateScale"
-            className="py-2 bg-white border-none"
-            // style={{"}}
-            // onClick={showIframe}
           >
-            Appearance
-          </button>
-          <button
-            style={{
-              width: "100%",
-              border: "none",
-              fontWeight: "600",
-            }}
-            id="setScale"
-            className="py-2 bg-white border-none"
-            // style={{ bordern: "none", outline: "none" }}
-            // onClick={showSetting}
-          >
-            Configurations
-          </button>
-        </div>
-        <div id="iframeRight">
-          <div className="mb-4"></div>
-        </div>
-        {showBorder === true ? (
-          <>
-            <hr />
-            <Row className="pt-4">
-              <div style={{ display: "flex", alignItems: "center" }}>
-                <h6 style={{ marginRight: "10rem" }}>Border</h6>
-                <label className="switch">
-                  <input
-                    type="checkbox"
-                    onClick={() => setShowSlider(!showSlider)}
-                  />
-                  <span className="slider round"></span>
-                </label>
-              </div>
-              {showSlider && (
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    backgroundColor: "#abab",
-                    gap: "10px",
-                    height: "40px",
-                    width: "90%",
-                  }}
-                >
-                  <input
-                    type="color"
-                    value={borderColor}
-                    onChange={handleBorderColorChange}
-                    id="color"
-                    style={{ border: "none", width: "10%", height: "15px" }}
-                  />
-                  <input
-                    type="range"
-                    min="-10"
-                    max="20"
-                    value={borderSize}
-                    onChange={handleBorderSizeChange}
-                    id="range"
-                    className="range-color"
-                  />
+            <button
+              style={{
+                width: "100%",
+                border: "none",
+                fontWeight: "600",
+              }}
+              id="updateScale"
+              className="py-2 bg-white border-none"
+              // style={{"}}
+              // onClick={showIframe}
+            >
+              Appearance
+            </button>
+            <button
+              style={{
+                width: "100%",
+                border: "none",
+                fontWeight: "600",
+              }}
+              id="setScale"
+              className="py-2 bg-white border-none"
+              // style={{ bordern: "none", outline: "none" }}
+              // onClick={showSetting}
+            >
+              Configurations
+            </button>
+          </div>
+          <div id="iframeRight">
+            <div className="mb-4"></div>
+          </div>
+          {showBorder === true ? (
+            <>
+              <hr />
+              <Row className="pt-4">
+                <div style={{ display: "flex", alignItems: "center" }}>
+                  <h6 style={{ marginRight: "10rem" }}>Border</h6>
+                  <label className="switch">
+                    <input
+                      type="checkbox"
+                      onClick={() => setShowSlider(!showSlider)}
+                    />
+                    <span className="slider round"></span>
+                  </label>
                 </div>
-              )}
-            </Row>
-            <hr />
-          </>
-        ) : (
-          ""
-        )}
-        <div id="settingRight" style={{ display: "none" }}>
-          {/* iframe */}
-          <div>
-            {/* <Form.Control
+                {showSlider && (
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      backgroundColor: "#abab",
+                      gap: "10px",
+                      height: "40px",
+                      width: "90%",
+                    }}
+                  >
+                    <input
+                      type="color"
+                      value={borderColor}
+                      onChange={handleBorderColorChange}
+                      id="color"
+                      style={{ border: "none", width: "10%", height: "15px" }}
+                    />
+                    <input
+                      type="range"
+                      min="-10"
+                      max="20"
+                      value={borderSize}
+                      onChange={handleBorderSizeChange}
+                      id="range"
+                      className="range-color"
+                    />
+                  </div>
+                )}
+              </Row>
+              <hr />
+            </>
+          ) : (
+            ""
+          )}
+          <div id="settingRight" style={{ display: "none" }}>
+            {/* iframe */}
+            <div>
+              {/* <Form.Control
           type="text"
           placeholder={`${decoded.details._id}_scl1`}
           disabled
@@ -3251,10 +3271,10 @@ const ScaleRightSide = () => {
         // id="iframe_src"
         // onChange={handleChange}
         /> */}
+            </div>
           </div>
-        </div>
-      </>
-    ) : (
+        </>
+      ) : (
         <>
           <div
             style={{

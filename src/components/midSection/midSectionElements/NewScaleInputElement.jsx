@@ -632,7 +632,7 @@ function createNewScaleInputField(
               holdElem = document.createElement("div");
               holdElem.className = "holdElem";
               holdElem.style.display = "none";
-              holdElem.textContent = npsLiteText[i] === '' ? i : npsLiteText[i];
+              holdElem.textContent = npsLiteText[i] === "" ? i : npsLiteText[i];
               holding?.appendChild(holdElem);
               console.log("This is holdEle", holdElem.textContent);
               if (scaleField?.parentElement?.classList.contains("holderDIV")) {
@@ -918,18 +918,24 @@ function createNewScaleInputField(
         scaleHold.style.flexDirection = "column";
         scaleHold.style.alignItems = "center";
         scaleHold.style.justifyContent = "center";
+
+        conatainerDIV.style.padding =
+          nameDiv.textContent.length < 9
+            ? "24px 39px 10px 14px"
+            : "24px 39px 37px 14px";
         conatainerDIV.style.width = "90%";
         conatainerDIV.style.position = "relative";
 
-        labelHold.style.width = "90%";
+        labelHold.style.width = "100%";
         labelHold.style.height = "96%";
         labelHold.style.alignItems = "center";
         labelHold.style.transform = "rotate(270deg)";
 
         nameDiv.style.position = "absolute";
-        nameDiv.style.top = "7px";
+        nameDiv.style.top = nameDiv.textContent.length < 9 ? "23px" : "39px";
         nameDiv.style.right = "-2px";
-        nameDiv.style.left = "85%";
+        nameDiv.style.left = "70%";
+        nameDiv.style.width = "50%";
         nameDiv.style.transform = "rotate(90deg)";
 
         inputPercent.style.width = "100%";
@@ -950,6 +956,9 @@ function createNewScaleInputField(
         // Add an event listener to update centerPercent
         inputPercent.addEventListener("input", function () {
           centerPercent.textContent = `${inputPercent.value}%`;
+          if (scaleField?.parentElement?.classList.contains("holderDIV")) {
+            scaleField?.parentElement?.classList.add("element_updated");
+          }
 
           // Store the current inputPercent value in localStorage using the unique key
           localStorage.setItem(localStorageKey, inputPercent.value);
@@ -974,7 +983,7 @@ function createNewScaleInputField(
       labelHold.style.border = "none";
 
       let containerDiv = document.createElement("div");
-      containerDiv.className = "containerDIV"
+      containerDiv.className = "containerDIV";
       containerDiv.style.width = "95%";
       containerDiv.style.padding = "10px 39px 10px 10px";
       containerDiv.style.border = "1px solid gray";
