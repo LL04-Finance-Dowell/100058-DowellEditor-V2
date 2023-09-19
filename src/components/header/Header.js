@@ -406,11 +406,11 @@ const Header = () => {
                 // const element = tableChildren[i];
 
                 const childNodes = tableChildren[i].children[j]?.childNodes
-                const tdElement=[]
-                childNodes.forEach(child=>{
+                const tdElement = []
+                childNodes.forEach(child => {
                   if (!child.classList.contains("row-resizer") && !child.classList.contains("td-resizer")) {
                     tdElement.push(child);
-                  }               
+                  }
                 })
                 const TdDivClassName = tdElement[0]?.className.split(" ")[0];
                 const trChild = {
@@ -424,9 +424,11 @@ const Header = () => {
                     data:
                       TdDivClassName == "imageInput"
                         ? tableChildren[i].children[j]?.firstElementChild.style
-                            .backgroundImage
+                          .backgroundImage
                         : tdElement[0]?.innerHTML,
-                    id: `tableTd${j + 1}`,
+                    id: TdDivClassName == "imageInput"
+                      ? tableChildren[i].children[j]?.id
+                      : tdElement[0]?.id,
                   },
                 };
                 newTableTR.push(trChild);
@@ -447,7 +449,7 @@ const Header = () => {
             data: getChildData(),
             border: `${tableBorderSize} dotted ${tableBorderColor}`,
             tableBorder: tables[t].parentElement.style.border,
-            id: `tab${t + 1}`,
+            id: tables[t].firstElementChild.id,
           };
           const pageNum = findPaageNum(tables[t]);
           page[0][pageNum].push(elem);
@@ -1294,7 +1296,7 @@ const Header = () => {
         content: JSON.stringify(dataa),
         page: item,
       };
-    } 
+    }
     else if (decoded.details.action === "document") {
       updateField = {
         document_name: titleName,
