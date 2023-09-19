@@ -2917,7 +2917,7 @@ const ScaleRightSide = () => {
 
   function removeScale() {
     let elementString = localStorage.getItem("elements")
-    let elementArray
+    let elementArray = []
     if(typeof elementString !== 'undefined') {
       elementArray = JSON.parse(elementString)
     }
@@ -3002,12 +3002,14 @@ const ScaleRightSide = () => {
     otherComponent.textContent = selectedOption.value + " "+selectedOption.id
     console.log("Other Component", otherComponent.textContent)
     let elementString = localStorage.getItem("elements")
-    let elementArray = []
-    if(typeof elementString !== 'undefined') {
-      elementArray = JSON.parse(elementString)
+    let elemArray = []
+    if(elementString !== null) {
+      elemArray = JSON.parse(elementString)
     }
-    elementArray.push(selectedOption.value + " "+selectedOption.id)
-    let string = JSON.stringify(elementArray)
+    console.log(elemArray)
+    console.log(`"${selectedOption.value + " "+selectedOption.id}"`)
+    elemArray.push(selectedOption.value + " "+selectedOption.id)
+    let string = JSON.stringify(elemArray)
     localStorage.setItem("elements", string)
   };
 
@@ -3177,11 +3179,13 @@ const ScaleRightSide = () => {
 
 createOptions()
 let elementString = localStorage.getItem("elements")
-let elementArray
+let elementArray = []
 if(typeof elementString !== 'undefined') {
   elementArray = JSON.parse(elementString)
 }
+
 const filterElements = () => {
+  if(elementArray !== null) {
   for(let i = 0; i<optionArray.length; i++) {
     for(let j = 0; j<elementArray.length; j++){
       if(elementArray[j] === optionArray[i]) {
@@ -3190,9 +3194,9 @@ const filterElements = () => {
     }
   }
 }
+}
 console.log("This is optionArray", optionArray)
 filterElements()
- 
   // const options = availableTextElements.map((element, index) => (
   //   <option key={index} value={element.type} id={element.id}>
   //     {`${element.type} ${element.id}`}
