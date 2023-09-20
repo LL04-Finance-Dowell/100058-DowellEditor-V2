@@ -1748,7 +1748,7 @@ const Header = () => {
             const pageData = res.data.page;
             setItem(pageData);
             console.log(loadedData);
-            console.log(loadedData[0][0]);
+            console.log("Loaded Data ",loadedData[0][0]);
             setData(loadedData[0][0]);
             setFetchedData(loadedData[0][0]);
             setIsDataRetrieved(true);

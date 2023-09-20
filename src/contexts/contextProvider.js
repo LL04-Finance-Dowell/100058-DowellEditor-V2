@@ -69,6 +69,7 @@ export const ContextProvider = ({ children }) => {
   const [buttonLink, setButtonLink] = useState("");
   const [paymentKey, setPaymentKey] = useState("");
   const [buttonPurpose, setButtonPurpose] = useState("");
+  const [paypalId, setPaypalId] = useState("");
 
   const [fontPlus, setFontPlus] = useState(false);
   const [fontMinus, setFontMinus] = useState(false);
@@ -661,6 +662,8 @@ export const ContextProvider = ({ children }) => {
         copyInput,
         paymentKey, 
         setPaymentKey,
+        paypalId, 
+        setPaypalId,
       }}
     >
       {children}

@@ -33,11 +33,11 @@ function CreatePyamentElement (holderDIV, focuseddClassMaintain, handleClicked, 
     };
 
     const linkHolder = document.createElement("div");
-    linkHolder.className = "link_holder";
+    linkHolder.className = "stripe_key";
     linkHolder.style.display = "none";
 
     const purposeHolder = document.createElement("div");
-    purposeHolder.className = "purpose_holder";
+    purposeHolder.className = "paypal_id";
     purposeHolder.style.display = "none";
 
     holderDIV.append(paymentField);
