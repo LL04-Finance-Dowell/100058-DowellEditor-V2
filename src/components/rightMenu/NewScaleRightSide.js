@@ -2957,10 +2957,13 @@ const ScaleRightSide = () => {
       elementArray = JSON.parse(elementString);
     }
     const otherComponent = scale?.querySelector(".otherComponent");
-    let elementIndex = elementArray.indexOf(otherComponent.textContent);
-    elementArray.splice(elementIndex, 1);
-    let string = JSON.stringify(elementArray);
-    localStorage.setItem("elements", string);
+    if(elementArray !== null) {
+      let elementIndex = elementArray.indexOf(otherComponent.textContent);
+      elementArray.splice(elementIndex, 1);
+      let string = JSON.stringify(elementArray);
+      localStorage.setItem("elements", string);
+    }
+
     const focusseddElmnt = document.querySelector(".focussedd");
     if (focusseddElmnt.classList.contains("holderDIV")) {
       document.querySelector(".focussedd").remove();
@@ -3840,6 +3843,7 @@ const ScaleRightSide = () => {
                         display: "none",
                         flexDirection: "column",
                         gap: "2px",
+                        width: "90%"
                       }}
                       id="emoji"
                     >
@@ -3861,8 +3865,8 @@ const ScaleRightSide = () => {
                       >
                         <input
                           style={{
-                            width: "100px",
-                            height: "15px",
+                            width: "100%",
+                            height: "18px",
                             display: "flex",
                             backgroundColor: "transparent",
                             outline: "none",
@@ -3871,6 +3875,7 @@ const ScaleRightSide = () => {
                           }}
                           id="emojiInp"
                           value={inputStr}
+                          contentEditable
                           onChange={(e) => setInputStr(e.target.value)}
                         />
 
@@ -4920,6 +4925,7 @@ const ScaleRightSide = () => {
                         display: "none",
                         flexDirection: "column",
                         gap: "2px",
+                        width: "90%",
                       }}
                       id="emoji_stapel"
                     >
@@ -4942,7 +4948,7 @@ const ScaleRightSide = () => {
                         <input
                           style={{
                             width: "100px",
-                            height: "15px",
+                            height: "18px",
                             display: "flex",
                             backgroundColor: "transparent",
                             outline: "none",

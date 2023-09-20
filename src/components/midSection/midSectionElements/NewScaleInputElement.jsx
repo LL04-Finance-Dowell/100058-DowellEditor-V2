@@ -1069,6 +1069,37 @@ function createNewScaleInputField(
         inputPercent.style.width = "100%";
         inputPercent.style.marginTop = "8px";
       }
+
+      if (decoded.details.action === "document") {
+        inputPercent.disabled = "";
+        const scale = document.querySelector(".focussedd");
+
+        // ...
+
+        // Add an event listener to update centerPercent
+        const scaleId = element?.raw_data?.scaleID; // Replace with your scale identifier
+
+        // Generate a unique key for localStorage using scaleId and index
+        const localStorageKey = `inputPercent_${scaleId}_${i}`;
+
+        // Add an event listener to update centerPercent
+        inputPercent.addEventListener("input", function () {
+          centerPercent.textContent = `${inputPercent.value}%`;
+          if (scaleField?.parentElement?.classList.contains("holderDIV")) {
+            scaleField?.parentElement?.classList.add("element_updated");
+          }
+
+          // Store the current inputPercent value in localStorage using the unique key
+          localStorage.setItem(localStorageKey, inputPercent.value);
+        });
+
+        // Retrieve and set the value from localStorage if available using the unique key
+        const storedInputValue = localStorage.getItem(localStorageKey);
+        if (storedInputValue !== null) {
+          inputPercent.value = storedInputValue;
+          centerPercent.textContent = `${inputPercent.value}%`;
+        }
+      }
     }
   }
 
