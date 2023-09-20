@@ -6,6 +6,7 @@ import jwt_decode from "jwt-decode";
 import axios, * as others from 'axios';
 import { ToastContainer, toast } from "react-toastify";
 import ThankYouPage from "../../utils/redirectPages/ThankYouPage";
+import PaymentPopup from "../../utils/redirectPages/PaymentPopup";
 
 
 const PaymentRightSide = () => {
@@ -27,6 +28,9 @@ const PaymentRightSide = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [popupUrl, setPopupUrl] = useState(null);
     const [showSlider, setShowSlider] = useState(false);
+    const [qrCode, setQrCode] = useState();
+
+
 
 
     // const [stripeKey, setStripeKey] = useState("");
@@ -118,7 +122,6 @@ const PaymentRightSide = () => {
     };
 
 
-    const [qrCode, setQrCode] = useState();
 
     const handleStripePayment = async (e) => {
         e.preventDefault();
@@ -153,6 +156,7 @@ const PaymentRightSide = () => {
                 console.log("QR code response", resQR.data);
                 setLoader(false)
                 toast.success("Successfully Submitted!")
+                openPopup(res.data.qr_image_url)
                 const timeout = setTimeout(() => {
                     window.open(res.data.approval_url, '_blank');
                 }, 2000); // Wait for 2 seconds
@@ -382,7 +386,12 @@ const PaymentRightSide = () => {
             
             </div>
 
-            <img src={qrCode?.qr_image_url} alt="Qr code"/>
+
+
+            {popupUrl && <PaymentPopup url={popupUrl} onClose={closePopup} />}
+
+
+            {/* <img src={qrCode?.qr_image_url} alt="Qr code"/> */}
 
             <hr />
             <Row className="pt-4">
