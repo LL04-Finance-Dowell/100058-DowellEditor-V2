@@ -1561,7 +1561,7 @@ const ScaleRightSide = () => {
         setIsLoading(true);
         console.log("post req");
         Axios.post(
-          "https://100035.pythonanywhere.com/nps-lite/api/nps-lite-settings",
+          "https://100035.pythonanywhere.com/nps-lite/api/nps-lite-settings/",
           {
             user: "true",
             username: "NdoneAmbrose",
