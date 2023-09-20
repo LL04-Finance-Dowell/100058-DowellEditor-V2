@@ -373,7 +373,7 @@ const Header = () => {
             data:
               sign[h].firstElementChild === null
                 ? // decoded.details.action === "document"
-                sign[h].innerHTML
+                  sign[h].innerHTML
                 : sign[h].firstElementChild.src,
             id: `s${h + 1}`,
           };
@@ -405,13 +405,16 @@ const Header = () => {
               for (let j = 0; j < tableChildren[i].children.length; j++) {
                 // const element = tableChildren[i];
 
-                const childNodes = tableChildren[i].children[j]?.childNodes
-                const tdElement=[]
-                childNodes.forEach(child=>{
-                  if (!child.classList.contains("row-resizer") && !child.classList.contains("td-resizer")) {
+                const childNodes = tableChildren[i].children[j]?.childNodes;
+                const tdElement = [];
+                childNodes.forEach((child) => {
+                  if (
+                    !child.classList.contains("row-resizer") &&
+                    !child.classList.contains("td-resizer")
+                  ) {
                     tdElement.push(child);
-                  }               
-                })
+                  }
+                });
                 const TdDivClassName = tdElement[0]?.className.split(" ")[0];
                 const trChild = {
                   td: {
@@ -525,7 +528,7 @@ const Header = () => {
               childData.type = type;
               const imageData =
                 "imageInput" &&
-                  element?.firstElementChild?.style?.backgroundImage
+                element?.firstElementChild?.style?.backgroundImage
                   ? element.firstElementChild.style.backgroundImage
                   : element.firstElementChild?.innerHTML;
               if (type != "TEXT_INPUT") {
@@ -687,7 +690,9 @@ const Header = () => {
           let likertScaleArray = "";
 
           if (scaleType.textContent === "likert") {
-            likertScaleArray = newScales[b].querySelector(".likert_Scale_Array");
+            likertScaleArray = newScales[b].querySelector(
+              ".likert_Scale_Array"
+            );
             orientation = newScales[b].querySelector(".orientation");
             console.log("This is likert", likertScaleArray.textContent);
           }
@@ -750,7 +755,7 @@ const Header = () => {
             orientation: orientation?.textContent,
             orentation: orentation?.textContent,
             stapelOrientation: stapelOrientation?.textContent,
-            otherComponent: otherComponent.textContent
+            otherComponent: otherComponent.textContent,
           };
           console.log(properties);
           elem = {
@@ -1075,7 +1080,7 @@ const Header = () => {
       documentResponses.push({ scale_id: scaleId, score: parseInt(holdElem) });
     });
 
-    console.log("This is stapel_res", documentResponses)
+    console.log("This is stapel_res", documentResponses);
 
     console.log(generateLoginUser());
     console.log(documentResponses);
@@ -1149,8 +1154,15 @@ const Header = () => {
       scaleId = scale?.querySelector(".scaleId")?.textContent;
       holdElem = scale?.querySelector(".holdElem")?.textContent;
 
-      documentResponses.push({ scale_id: scaleId, score: typeof holdElem === "number" || !isNaN(holdElem) ? parseInt(holdElem) : holdElem });
+      documentResponses.push({
+        scale_id: scaleId,
+        score:
+          typeof holdElem === "number" || !isNaN(holdElem)
+            ? parseInt(holdElem)
+            : holdElem,
+      });
     });
+    console.log("This is docresp", documentResponses);
 
     const requestBody = {
       process_id: decoded.details.process_id,
@@ -1384,8 +1396,7 @@ const Header = () => {
         content: JSON.stringify(dataa),
         page: item,
       };
-    } 
-    else if (decoded.details.action === "document") {
+    } else if (decoded.details.action === "document") {
       updateField = {
         document_name: titleName,
         content: JSON.stringify(dataa),
@@ -1509,7 +1520,6 @@ const Header = () => {
         cluster: decoded.details.cluster,
         document: decoded.details.document,
         update_field: decoded.details.update_field,
-
       }
     )
       .then((res) => {
@@ -1749,8 +1759,9 @@ const Header = () => {
 
   return (
     <div
-      className={`header ${actionName == "template" ? "header_bg_template" : "header_bg_document"
-        }`}
+      className={`header ${
+        actionName == "template" ? "header_bg_template" : "header_bg_document"
+      }`}
     >
       <Container fluid>
         <Row>
@@ -1760,8 +1771,9 @@ const Header = () => {
               {isMenuVisible && (
                 <div
                   ref={menuRef}
-                  className={`position-absolute bg-white d-flex flex-column p-4 bar-menu menu ${isMenuVisible ? "show" : ""
-                    }`}
+                  className={`position-absolute bg-white d-flex flex-column p-4 bar-menu menu ${
+                    isMenuVisible ? "show" : ""
+                  }`}
                 >
                   <div className="d-flex cursor_pointer" onClick={handleUndo}>
                     <ImUndo />
