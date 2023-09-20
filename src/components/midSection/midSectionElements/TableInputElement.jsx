@@ -42,7 +42,7 @@ const setColRowSize = (table, width = null, height = null) => {
   for (const resizer of col_resizers) {
     if (height) {
       resizer.style.height = `${height}px`;
-      // // console.log("set height: ",height);
+      // console.log("set height: ",height);
     } else {
       resizer.style.height = `${table.offsetHeight}px`;
     }
@@ -50,7 +50,7 @@ const setColRowSize = (table, width = null, height = null) => {
   for (const resizer of row_resizers) {
     if (width) {
       resizer.style.width = `${width}px`;
-      // // console.log("set witdh: ",width);
+      // console.log("set witdh: ",width);
     } else {
       resizer.style.width = `${table.offsetWidth}px`;
     }
@@ -112,10 +112,8 @@ export const CreateTableComponent = (
 ) => {
 
   let isAnyRequiredElementEdited = false;
-
   let tableField = document.createElement("div");
   tableField.className = "tableInput";
-  tableField.id = id;
   tableField.style.width = "100%";
   tableField.style.height = "100%";
   tableField.style.backgroundColor = "#0000";
@@ -140,15 +138,17 @@ export const CreateTableComponent = (
   };
 
   const tabb = document.createElement("table");
+  tabb.id = id;
+
   // tabb.innerHTML = element.data;
   const tableData = element?.data;
-  // // console.log("tableData", tableData);
+  // console.log("tableData", tableData);
   for (let i = 0; i < tableData.length; i++) {
     const tabbTR = document.createElement("tr");
     const tableTRData = tableData[i]["tr"];
     for (let j = 0; j < tableTRData.length; j++) {
       const tableTDData = tableTRData[j]["td"];
-      // // console.log("tableTD", tableTRData[j]["td"]);
+      // console.log("tableTD", tableTRData[j]["td"]);
       var cells = document.createElement("td");
       cells.className = "dropp";
       if (i === 0) {
@@ -190,6 +190,7 @@ export const CreateTableComponent = (
 
       //  tableTDData.
       const cellsDiv = document.createElement("div");
+      cellsDiv.id = tableTDData.id;
       const dataType = tableTDData.type;
       cellsDiv.className =
         (dataType == "DATE_INPUT" && "dateInput") ||
@@ -245,7 +246,7 @@ export const CreateTableComponent = (
           // setSidebar(true);
           handleClicked("image2", "table2");
           setSidebar(true);
-          // // console.log("imageclick test", e.target);
+          // console.log("imageclick test", e.target);
           e.stopPropagation();
         };
       }
@@ -315,7 +316,7 @@ export const CreateTableComponent = (
   }
   const resizeObserver = new ResizeObserver((entries) => {
     entries.forEach((entry) => {
-      // // console.log("Observing: ",entry.target);
+      // console.log("Observing: ",entry.target);
       const width = entry.contentRect.width;
       const height = entry.contentRect.height;
       const table = entry.target

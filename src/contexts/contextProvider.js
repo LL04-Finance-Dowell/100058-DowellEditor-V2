@@ -17,6 +17,7 @@ const initialState = {
   email: false,
   newScale: false,
   camera: false,
+  payment: false,
 };
 const initialState2 = {
   align2: false,
@@ -33,6 +34,7 @@ const initialState2 = {
   email2: false,
   newScale2: false,
   camera2: false,
+  payment2: false,
 };
 
 export const ContextProvider = ({ children }) => {
@@ -65,7 +67,9 @@ export const ContextProvider = ({ children }) => {
   const [dropdownOptions, setDropdownOptions] = useState(["Enter List Items"]);
 
   const [buttonLink, setButtonLink] = useState("");
+  const [paymentKey, setPaymentKey] = useState("");
   const [buttonPurpose, setButtonPurpose] = useState("");
+  const [paypalId, setPaypalId] = useState("");
 
   const [fontPlus, setFontPlus] = useState(false);
   const [fontMinus, setFontMinus] = useState(false);
@@ -286,7 +290,7 @@ export const ContextProvider = ({ children }) => {
         const imageSignButton = document.createElement("div");
         imageSignButton.className = "addImageSignButton";
         imageSignButton.innerText = "Choose File";
-        imageSignButton.style.display = "none";
+        imageSignButton.style.display = "none"
 
         const signBtn = document.createElement("input");
         signBtn.className = "addSignButtonInput";
@@ -658,7 +662,10 @@ export const ContextProvider = ({ children }) => {
         formBorderColor,
         setFormBorderColor,
         copyInput,
-        docMapRequired, setDocMapRequired,
+        paymentKey, 
+        setPaymentKey,
+        paypalId, 
+        setPaypalId,
       }}
     >
       {children}

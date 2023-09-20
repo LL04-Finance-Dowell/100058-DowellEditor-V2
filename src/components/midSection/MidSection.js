@@ -46,6 +46,8 @@ import createFormInputElement from "./createElements/CreateFormElement.jsx";
 import createContainerInputElement from "./createElements/CreateContainerElement.jsx";
 import { finding_percent } from './../../utils/util_functions/finding_percent';
 import { CreateTableComponent } from "./midSectionElements/TableInputElement.jsx";
+import CreatePyamentElement from "./createElements/CreatePyamentElement.jsx";
+import createPaymentInputField from "./midSectionElements/PaymentInputElement.jsx";
 // tHIS IS FOR A TEST COMMIT
 
 const dummyData = {
@@ -135,9 +137,9 @@ const MidSection = React.forwardRef((props, ref) => {
   const divList = documnentsMap?.map?.((item) => item.page);
   var documnetMap = documnentsMap?.map?.((item) => item.content);
   const document_map_required = documnentsMap?.filter((item) => item.required);
-  // console.log("document_map_required", document_map_required);
-  // console.log("decode", decoded);
-  // console.log("data", data);
+  console.log("document_map_required", document_map_required);
+  console.log("decode", decoded);
+  console.log("data", data[1]);
 
   const documentsMap = documnentsMap;
   if (documnentsMap?.length > 0) {
@@ -205,6 +207,7 @@ const MidSection = React.forwardRef((props, ref) => {
           email2: false,
           newScale2: false,
           camera2: false,
+          payment2: false,
         });
 
         const divsArray = document.getElementsByClassName(
@@ -1981,7 +1984,7 @@ const MidSection = React.forwardRef((props, ref) => {
           };
           const idMatch = documnetMap?.filter((elmnt) => elmnt == element?.id);
           const holderDIV = getHolderDIV(measure, pageNo, idMatch);
-          const id = `${element.id}`;
+          const id = element.id;
           CreateTableComponent(
             holderDIV,
             id,
@@ -2032,6 +2035,24 @@ const MidSection = React.forwardRef((props, ref) => {
           const rejectButton = document.getElementById("reject-button");
 
           createButtonInputField(id, element, p, holderDIV, focuseddClassMaintain, handleClicked, setSidebar, finalizeButton, rejectButton, decoded, document_map_required)
+        }
+        if (element.type === "PAYMENT_INPUT") {
+          const measure = {
+            width: finding_percent(element, "width"),
+            height: element.height + "px",
+            left: finding_percent(element, "left"),
+            top: element.topp,
+            border: element.buttonBorder,
+            auth_user: curr_user,
+          };
+
+          const idMatch = documnetMap?.filter((elmnt) => elmnt == element?.id);
+          const holderDIV = getHolderDIV(measure, pageNo);
+          const id = `${element.id}`;
+          const finalizeButton = document.getElementById("finalize-button");
+          const rejectButton = document.getElementById("reject-button");
+
+          createPaymentInputField(id, element, p, holderDIV, focuseddClassMaintain, handleClicked, setSidebar, finalizeButton, rejectButton, decoded, document_map_required)
         }
         if (element.type === "FORM") {
           const measure = {
@@ -2528,6 +2549,14 @@ const MidSection = React.forwardRef((props, ref) => {
           // tableField.innerHTML = 'table';
           tableField.style.position = "absolute";
 
+          const tableF = document.getElementsByClassName("tableInput");
+            if (tableF.length) {
+              const t = tableF.length;
+              tableField.id = `tab${t + 1}`;
+            } else {
+              tableField.id = "tab1";
+            }
+
           tableField.onchange = (event) => {
             event.preventDefault();
 
@@ -2582,6 +2611,11 @@ const MidSection = React.forwardRef((props, ref) => {
           decoded.details.action === "template"
         ) {
           createFormInputElement(holderDIV, focuseddClassMaintain, handleClicked, setSidebar)
+        } else if (
+          typeOfOperation === "PAYMENT_INPUT" &&
+          decoded.details.action === "template"
+        ){
+          CreatePyamentElement(holderDIV, focuseddClassMaintain, handleClicked, setSidebar);
         }
         if (decoded.details.action === "template") {
           document.querySelector(".drop_zone").append(holderDIV);
@@ -2633,7 +2667,7 @@ const MidSection = React.forwardRef((props, ref) => {
                     removeInput={handleRemoveInput}
                   />
                 )}
-                <Row>
+                <Row style={{height: isLoading ? "79%":"" }}>
                   <Col className="d-flex justify-content-end header_user">
                     <span>{index + 1}</span>
                     {isLoading && <Spinner />}

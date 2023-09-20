@@ -14,6 +14,14 @@ function createDateInputElement(holderDIV, focuseddClassMaintain, handleClicked,
 
   dateField.style.position = "relative";
 
+  const date = document.getElementsByClassName("dateInput");
+    if (date.length) {
+      const h = date.length;
+      dateField.id = `d${h + 1}`;
+    } else {
+      dateField.id = "d1";
+      }
+
   dateField.onchange = (event) => {
     event.preventDefault();
     setPostData({
@@ -29,14 +37,8 @@ function createDateInputElement(holderDIV, focuseddClassMaintain, handleClicked,
   setMethod("select");
 
   function dateClick() {
-    const datePickerElement = document.getElementById("date_picker");
-    if (datePickerElement) {
-      // console.log("Element found:", datePickerElement);
-      datePickerElement.click();
-      setRightSideDateMenu(false);
-    } else {
-      console.error("Element with ID 'date_picker' not found.");
-    }
+    document.getElementById("date_picker").click();
+    setRightSideDateMenu(false);
   }
   dateField.onclick = (e) => {
     e.stopPropagation();
@@ -46,18 +48,22 @@ function createDateInputElement(holderDIV, focuseddClassMaintain, handleClicked,
     }
     handleClicked("calendar2", "container2");
     setRightSideDateMenu(false);
-    if (e.target.innerText != "mm/dd/yyyy") {
-      if (e.target.innerText.includes("/")) {
-        const setDate = new Date(e.target.innerText);
+    const date = e.target.innerText
+    if (date != "mm/dd/yyyy") {
+      if (date.includes("/")) {
+        const setDate = new Date(parseInt(date));
+        //console.log("First from Midsection", setDate);
         setMethod("first");
         setStartDate(setDate);
       } else {
-        if (e.target.innerText.includes("-")) {
+        if (date.includes("-")) {
           setMethod("fourth");
         } else {
           setMethod("second");
         }
         const setDate = new Date(e.target.innerText);
+        //console.log("Second from Midsection", setDate);
+
         setStartDate(setDate);
       }
     }

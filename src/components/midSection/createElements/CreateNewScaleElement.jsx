@@ -34,7 +34,7 @@ function createNewScaleInputElement(
 
   const tempText = document.createElement("div");
   tempText.className = "tempText";
-  tempText.textContent = "New scale";
+  tempText.textContent = "create your scale";
   tempText.style.fontWeight = "700";
   tempText.style.width = "100%";
   tempText.style.textAlign = "center";
@@ -62,6 +62,12 @@ function createNewScaleInputElement(
   scaleText.style.backgroundColor = "transparent";
   scaleText.style.borderRadius = "0px";
   scaleHold.append(scaleText);
+
+  const otherComponent = document.createElement("h6");
+  otherComponent.className = "otherComponent";
+  otherComponent.style.display = "none";
+  otherComponent.textContent = ""
+  scaleHold.appendChild(otherComponent);
 
   const labelHold = document.createElement("div");
   labelHold.className = "label_hold";

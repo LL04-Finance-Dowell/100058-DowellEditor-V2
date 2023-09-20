@@ -13,7 +13,8 @@ function createNewScaleInputField(
   setSidebar,
   table_dropdown_focuseddClassMaintain,
   decoded,
-  token
+  token,
+  document_map_required
 ) {
   let isAnyRequiredElementEdited = false;
 
@@ -47,6 +48,12 @@ function createNewScaleInputField(
   scaleText.style.borderRadius = "0px";
   scaleHold.append(scaleText);
 
+  const otherComponent = document.createElement("h6");
+  otherComponent.className = "otherComponent";
+  otherComponent.style.display = "none";
+  otherComponent.textContent = element?.raw_data?.otherComponent
+  scaleHold.appendChild(otherComponent);
+
   const scaleTypeHolder = document.createElement("h6");
   scaleTypeHolder.className = "scaleTypeHolder";
   scaleTypeHolder.textContent = element?.raw_data?.scaleType;
@@ -58,6 +65,12 @@ function createNewScaleInputField(
   stapelScaleArray.textContent = element?.raw_data?.stapelScaleArray;
   stapelScaleArray.style.display = "none";
   scaleHold.append(stapelScaleArray);
+
+  const percentScaleArray = document.createElement("div");
+  percentScaleArray.className = "percentScaleArray";
+  percentScaleArray.textContent = element?.raw_data?.percentLabel;
+  percentScaleArray.style.display = "none";
+  scaleHold.append(percentScaleArray);
 
   const npsLiteTextArray = document.createElement("div");
   npsLiteTextArray.className = "nps_lite_text";
@@ -76,12 +89,6 @@ function createNewScaleInputField(
   npsLiteOptionHolder.textContent = element?.raw_data?.npsLiteOptionHolder;
   npsLiteOptionHolder.style.display = "none";
   scaleHold.append(npsLiteOptionHolder);
-
-  const likertScaleArray = document.createElement("div");
-  likertScaleArray.className = "likert_Scale_Array";
-  likertScaleArray.textContent = element?.raw_data?.likertScaleArray || "";
-  likertScaleArray.style.display = "none";
-  scaleHold.append(likertScaleArray);
 
   const optionHolderLikert = document.createElement("div");
   optionHolderLikert.className = "likert_Option_Holder";
@@ -168,8 +175,6 @@ function createNewScaleInputField(
 
       if (decoded.details.action === "document") {
         let isClicked = false;
-        const shouldHideFinalizeButton =
-          localStorage.getItem("hideFinalizeButton");
 
         function setClickedCircleBackgroundColor(circle, bgColor, scaleID) {
           localStorage.setItem(
@@ -214,95 +219,78 @@ function createNewScaleInputField(
             });
           });
         }, 500);
+        circle.addEventListener("click", function () {
+          if (!isClicked) {
+            let scale =
+              circle.parentElement.parentElement.parentElement.parentElement;
+            let holding = scale?.querySelector(".newScaleInput");
+            const buttonCircle = scale
+              ? scale.querySelectorAll(".circle_label")
+              : [];
 
-        if (!shouldHideFinalizeButton) {
-          circle.addEventListener("click", function () {
-            if (!isClicked) {
-              let scale =
-                circle.parentElement.parentElement.parentElement.parentElement;
-              let holding = scale?.querySelector(".newScaleInput");
-              const buttonCircle = scale
-                ? scale.querySelectorAll(".circle_label")
-                : [];
+            function componentToHex(c) {
+              var hex = c.toString(16);
+              return hex.length == 1 ? "0" + hex : hex;
+            }
 
-              console.log(
-                "This is the background color",
-                circle.style.backgroundColor
-              );
-
-              function componentToHex(c) {
-                var hex = c.toString(16);
-                return hex.length == 1 ? "0" + hex : hex;
-              }
-
-              function rgbToHex(r, g, b) {
-                return (
-                  "#" +
-                  componentToHex(r) +
-                  componentToHex(g) +
-                  componentToHex(b)
-                );
-              }
-
-              function invert(rgb) {
-                rgb = [].slice
-                  .call(arguments)
-                  .join(",")
-                  .replace(/rgb\(|\)|rgba\(|\)|\s/gi, "")
-                  .split(",");
-                for (var i = 0; i < rgb.length; i++)
-                  rgb[i] = (i === 3 ? 1 : 255) - rgb[i];
-                return rgbToHex(rgb[0], rgb[1], rgb[2]);
-              }
-
-              const circleBgColor = circle.style.backgroundColor;
-
-              circle.style.backgroundColor = invert(circleBgColor);
-
-              for (let i = 0; i < buttonCircle.length; i++) {
-                if (buttonCircle[i].textContent !== circle.textContent) {
-                  buttonCircle[i].style.backgroundColor = circleBgColor;
-                }
-              }
-
-              let holdElem = scale?.querySelector(".holdElem");
-
-              if (holdElem) {
-                // If holdElem exists, update its text content
-                holdElem.textContent = i;
-              } else {
-                // If holdElem doesn't exist, create a new one
-                holdElem = document.createElement("div");
-                holdElem.className = "holdElem";
-                holdElem.style.display = "none";
-                holdElem.textContent = i;
-                holding?.appendChild(holdElem);
-                // console.log("This is holdEle", holdElem.textContent);
-                const required_map_document = document_map_required?.filter(
-                  (item) => element.id == item.content
-                );
-                if (
-                  scaleField?.parentElement?.classList.contains("holderDIV") &&
-                  required_map_document.length > 0
-                ) {
-                  scaleField?.parentElement?.classList.add("element_updated");
-                }
-              }
-
-              const scaleID = scale?.querySelector(".scaleId")?.textContent;
-              setClickedCircleBackgroundColor(
-                circle,
-                circle.style.backgroundColor,
-                scaleID
-              );
-
-              localStorage.setItem(
-                `lastClickedCircleID_${scaleID}`,
-                circle.textContent
+            function rgbToHex(r, g, b) {
+              return (
+                "#" + componentToHex(r) + componentToHex(g) + componentToHex(b)
               );
             }
-          });
-        }
+
+            function invert(rgb) {
+              rgb = [].slice
+                .call(arguments)
+                .join(",")
+                .replace(/rgb\(|\)|rgba\(|\)|\s/gi, "")
+                .split(",");
+              for (var i = 0; i < rgb.length; i++)
+                rgb[i] = (i === 3 ? 1 : 255) - rgb[i];
+              return rgbToHex(rgb[0], rgb[1], rgb[2]);
+            }
+
+            const circleBgColor = circle.style.backgroundColor;
+
+            circle.style.backgroundColor = invert(circleBgColor);
+
+            for (let i = 0; i < buttonCircle.length; i++) {
+              if (buttonCircle[i].textContent !== circle.textContent) {
+                buttonCircle[i].style.backgroundColor = circleBgColor;
+              }
+            }
+
+            let holdElem = scale?.querySelector(".holdElem");
+
+            if (holdElem) {
+              // If holdElem exists, update its text content
+              holdElem.textContent = i;
+            } else {
+              // If holdElem doesn't exist, create a new one
+              holdElem = document.createElement("div");
+              holdElem.className = "holdElem";
+              holdElem.style.display = "none";
+              holdElem.textContent = i;
+              holding?.appendChild(holdElem);
+              console.log("This is holdEle", holdElem.textContent);
+              if (scaleField?.parentElement?.classList.contains("holderDIV")) {
+                scaleField?.parentElement?.classList.add("element_updated");
+              }
+            }
+
+            const scaleID = scale?.querySelector(".scaleId")?.textContent;
+            setClickedCircleBackgroundColor(
+              circle,
+              circle.style.backgroundColor,
+              scaleID
+            );
+
+            localStorage.setItem(
+              `lastClickedCircleID_${scaleID}`,
+              circle.textContent
+            );
+          }
+        });
       }
     }
   } else if (scaleTypeHolder.textContent === "snipte") {
@@ -456,14 +444,17 @@ function createNewScaleInputField(
               holdElem.style.display = "none";
               holdElem.textContent = stapelScale[i];
               holding?.appendChild(holdElem);
-              // console.log("This is holdEle", holdElem.textContent);
-              const required_map_document = document_map_required?.filter(
-                (item) => element.id == item.content
-              );
-              if (
-                scaleField?.parentElement?.classList.contains("holderDIV") &&
-                required_map_document.length > 0
-              ) {
+              console.log("This is holdEle", holdElem.textContent);
+              // const required_map_document = document_map_required?.filter(
+              //   (item) => element?.id == item?.content
+              // );
+              // if (
+              //   scaleField?.parentElement?.classList.contains("holderDIV") &&
+              //   required_map_document.length > 0
+              // ) {
+              //   scaleField?.parentElement?.classList.add("element_updated");
+              // }
+              if (scaleField?.parentElement?.classList.contains("holderDIV")) {
                 scaleField?.parentElement?.classList.add("element_updated");
               }
             }
@@ -541,9 +532,6 @@ function createNewScaleInputField(
 
       if (decoded.details.action === "document") {
         let isClicked = false;
-        const shouldHideFinalizeButton =
-          localStorage.getItem("hideFinalizeButton");
-
         function setClickedCircleBackgroundColor(circle, bgColor, scaleID) {
           localStorage.setItem(
             `circleBgColor_${scaleID}_${circle.textContent}`,
@@ -588,97 +576,92 @@ function createNewScaleInputField(
           });
         }, 1000);
 
-        if (!shouldHideFinalizeButton) {
-          circle.addEventListener("click", function () {
-            if (!isClicked) {
-              let scale =
-                circle.parentElement.parentElement.parentElement.parentElement;
-              let holding = scale?.querySelector(".newScaleInput");
-              const buttonCircle = scale
-                ? scale.querySelectorAll(".circle_label")
-                : [];
+        circle.addEventListener("click", function () {
+          if (!isClicked) {
+            let scale =
+              circle.parentElement.parentElement.parentElement.parentElement;
+            let holding = scale?.querySelector(".newScaleInput");
+            const buttonCircle = scale
+              ? scale.querySelectorAll(".circle_label")
+              : [];
 
-              console.log(
-                "This is the background color",
-                circle.style.backgroundColor
-              );
+            console.log(
+              "This is the background color",
+              circle.style.backgroundColor
+            );
 
-              function componentToHex(c) {
-                var hex = c.toString(16);
-                return hex.length == 1 ? "0" + hex : hex;
-              }
+            function componentToHex(c) {
+              var hex = c.toString(16);
+              return hex.length == 1 ? "0" + hex : hex;
+            }
 
-              function rgbToHex(r, g, b) {
-                return (
-                  "#" +
-                  componentToHex(r) +
-                  componentToHex(g) +
-                  componentToHex(b)
-                );
-              }
-
-              function invert(rgb) {
-                rgb = [].slice
-                  .call(arguments)
-                  .join(",")
-                  .replace(/rgb\(|\)|rgba\(|\)|\s/gi, "")
-                  .split(",");
-                for (var i = 0; i < rgb.length; i++)
-                  rgb[i] = (i === 3 ? 1 : 255) - rgb[i];
-                return rgbToHex(rgb[0], rgb[1], rgb[2]);
-              }
-
-              const circleBgColor = circle.style.backgroundColor;
-
-              circle.style.backgroundColor = invert(circleBgColor);
-
-              for (let i = 0; i < buttonCircle.length; i++) {
-                if (buttonCircle[i].textContent !== circle.textContent) {
-                  buttonCircle[i].style.backgroundColor = circleBgColor;
-                }
-              }
-
-              let holdElem = scale?.querySelector(".holdElem");
-
-              if (holdElem) {
-                // If holdElem exists, update its text content
-                holdElem.textContent = npsLiteText[i];
-              } else {
-                // If holdElem doesn't exist, create a new one
-                holdElem = document.createElement("div");
-                holdElem.className = "holdElem";
-                holdElem.style.display = "none";
-                holdElem.textContent = npsLiteText[i];
-                holding?.appendChild(holdElem);
-                // console.log("This is holdEle", holdElem.textContent);
-                const required_map_document = document_map_required?.filter(
-                  (item) => element.id == item.content
-                );
-                if (
-                  scaleField?.parentElement?.classList.contains("holderDIV") &&
-                  required_map_document.length > 0
-                ) {
-                  scaleField?.parentElement?.classList.add("element_updated");
-                }
-              }
-
-              const scaleID = scale?.querySelector(".scaleId")?.textContent;
-              setClickedCircleBackgroundColor(
-                circle,
-                circle.style.backgroundColor,
-                scaleID
-              );
-
-              localStorage.setItem(
-                `lastClickedCircleID_${scaleID}`,
-                circle.textContent
+            function rgbToHex(r, g, b) {
+              return (
+                "#" + componentToHex(r) + componentToHex(g) + componentToHex(b)
               );
             }
-          });
-        }
+
+            function invert(rgb) {
+              rgb = [].slice
+                .call(arguments)
+                .join(",")
+                .replace(/rgb\(|\)|rgba\(|\)|\s/gi, "")
+                .split(",");
+              for (var i = 0; i < rgb.length; i++)
+                rgb[i] = (i === 3 ? 1 : 255) - rgb[i];
+              return rgbToHex(rgb[0], rgb[1], rgb[2]);
+            }
+
+            const circleBgColor = circle.style.backgroundColor;
+
+            circle.style.backgroundColor = invert(circleBgColor);
+
+            for (let i = 0; i < buttonCircle.length; i++) {
+              if (buttonCircle[i].textContent !== circle.textContent) {
+                buttonCircle[i].style.backgroundColor = circleBgColor;
+              }
+            }
+
+            let holdElem = scale?.querySelector(".holdElem");
+
+            if (holdElem) {
+              // If holdElem exists, update its text content
+              holdElem.textContent = npsLiteText[i];
+            } else {
+              // If holdElem doesn't exist, create a new one
+              holdElem = document.createElement("div");
+              holdElem.className = "holdElem";
+              holdElem.style.display = "none";
+              holdElem.textContent = npsLiteText[i] === "" ? i : npsLiteText[i];
+              holding?.appendChild(holdElem);
+              console.log("This is holdEle", holdElem.textContent);
+              if (scaleField?.parentElement?.classList.contains("holderDIV")) {
+                scaleField?.parentElement?.classList.add("element_updated");
+              }
+            }
+
+            const scaleID = scale?.querySelector(".scaleId")?.textContent;
+            setClickedCircleBackgroundColor(
+              circle,
+              circle.style.backgroundColor,
+              scaleID
+            );
+
+            localStorage.setItem(
+              `lastClickedCircleID_${scaleID}`,
+              circle.textContent
+            );
+          }
+        });
       }
     }
   } else if (scaleTypeHolder.textContent === "likert") {
+    const likertScaleArray = document.createElement("div");
+    likertScaleArray.className = "likert_Scale_Array";
+    likertScaleArray.textContent = element?.raw_data?.likertScaleArray || "";
+    likertScaleArray.style.display = "none";
+    
+    scaleHold.append(likertScaleArray);
     const likertScale = likertScaleArray.textContent.split(",");
     const numRows = Math.ceil(likertScale / 3);
     const numColumns = Math.min(likertScale, 3);
@@ -778,99 +761,88 @@ function createNewScaleInputField(
           });
         }, 1000);
 
-        if (!shouldHideFinalizeButton) {
-          circle.addEventListener("click", function () {
-            if (!isClicked) {
-              let scale =
-                circle.parentElement.parentElement.parentElement.parentElement;
-              let holding = scale?.querySelector(".newScaleInput");
-              const buttonCircle = scale
-                ? scale.querySelectorAll(".circle_label")
-                : [];
+        circle.addEventListener("click", function () {
+          if (!isClicked) {
+            let scale =
+              circle.parentElement.parentElement.parentElement.parentElement;
+            let holding = scale?.querySelector(".newScaleInput");
+            const buttonCircle = scale
+              ? scale.querySelectorAll(".circle_label")
+              : [];
 
-              console.log(
-                "This is the background color",
-                circle.style.backgroundColor
-              );
+            console.log(
+              "This is the background color",
+              circle.style.backgroundColor
+            );
 
-              function componentToHex(c) {
-                var hex = c.toString(16);
-                return hex.length == 1 ? "0" + hex : hex;
-              }
+            function componentToHex(c) {
+              var hex = c.toString(16);
+              return hex.length == 1 ? "0" + hex : hex;
+            }
 
-              function rgbToHex(r, g, b) {
-                return (
-                  "#" +
-                  componentToHex(r) +
-                  componentToHex(g) +
-                  componentToHex(b)
-                );
-              }
-
-              function invert(rgb) {
-                rgb = [].slice
-                  .call(arguments)
-                  .join(",")
-                  .replace(/rgb\(|\)|rgba\(|\)|\s/gi, "")
-                  .split(",");
-                for (var i = 0; i < rgb.length; i++)
-                  rgb[i] = (i === 3 ? 1 : 255) - rgb[i];
-                return rgbToHex(rgb[0], rgb[1], rgb[2]);
-              }
-
-              const circleBgColor = circle.style.backgroundColor;
-
-              circle.style.backgroundColor = invert(circleBgColor);
-
-              for (let i = 0; i < buttonCircle.length; i++) {
-                if (buttonCircle[i].textContent !== circle.textContent) {
-                  buttonCircle[i].style.backgroundColor = circleBgColor;
-                }
-              }
-
-              let holdElem = scale?.querySelector(".holdElem");
-
-              if (holdElem) {
-                // If holdElem exists, update its text content
-                holdElem.textContent = likertScale[i];
-              } else {
-                // If holdElem doesn't exist, create a new one
-                holdElem = document.createElement("div");
-                holdElem.className = "holdElem";
-                holdElem.style.display = "none";
-                holdElem.textContent = likertScale[i];
-                holding?.appendChild(holdElem);
-                // console.log("This is holdEle", holdElem.textContent);
-                const required_map_document = document_map_required?.filter(
-                  (item) => element.id == item.content
-                );
-                if (
-                  scaleField?.parentElement?.classList.contains("holderDIV") &&
-                  required_map_document.length > 0
-                ) {
-                  scaleField?.parentElement?.classList.add("element_updated");
-                }
-              }
-
-              const scaleID = scale?.querySelector(".scaleId")?.textContent;
-              setClickedCircleBackgroundColor(
-                circle,
-                circle.style.backgroundColor,
-                scaleID
-              );
-
-              localStorage.setItem(
-                `lastClickedCircleID_${scaleID}`,
-                circle.textContent
+            function rgbToHex(r, g, b) {
+              return (
+                "#" + componentToHex(r) + componentToHex(g) + componentToHex(b)
               );
             }
-          });
-        }
+
+            function invert(rgb) {
+              rgb = [].slice
+                .call(arguments)
+                .join(",")
+                .replace(/rgb\(|\)|rgba\(|\)|\s/gi, "")
+                .split(",");
+              for (var i = 0; i < rgb.length; i++)
+                rgb[i] = (i === 3 ? 1 : 255) - rgb[i];
+              return rgbToHex(rgb[0], rgb[1], rgb[2]);
+            }
+
+            const circleBgColor = circle.style.backgroundColor;
+
+            circle.style.backgroundColor = invert(circleBgColor);
+
+            for (let i = 0; i < buttonCircle.length; i++) {
+              if (buttonCircle[i].textContent !== circle.textContent) {
+                buttonCircle[i].style.backgroundColor = circleBgColor;
+              }
+            }
+
+            let holdElem = scale?.querySelector(".holdElem");
+
+            if (holdElem) {
+              // If holdElem exists, update its text content
+              holdElem.textContent = likertScale[i];
+            } else {
+              // If holdElem doesn't exist, create a new one
+              holdElem = document.createElement("div");
+              holdElem.className = "holdElem";
+              holdElem.style.display = "none";
+              holdElem.textContent = likertScale[i];
+              holding?.appendChild(holdElem);
+              console.log("This is holdEle", holdElem.textContent);
+              if (scaleField?.parentElement?.classList.contains("holderDIV")) {
+                scaleField?.parentElement?.classList.add("element_updated");
+              }
+            }
+
+            const scaleID = scale?.querySelector(".scaleId")?.textContent;
+            setClickedCircleBackgroundColor(
+              circle,
+              circle.style.backgroundColor,
+              scaleID
+            );
+
+            localStorage.setItem(
+              `lastClickedCircleID_${scaleID}`,
+              circle.textContent
+            );
+          }
+        });
       }
     }
   } else if (scaleTypeHolder.textContent === "percent_scale") {
     let prodLength = element?.raw_data?.percentLabel;
-    // console.log(prodLength);
+    console.log(labelHold.children.length);
 
     for (let i = 0; i < prodLength; i++) {
       // let originalText = element?.raw_data?.percentCenter[i];
@@ -882,10 +854,13 @@ function createNewScaleInputField(
       labelHold.style.border = "none";
 
       let conatainerDIV = document.createElement("div");
+      conatainerDIV.className = "containerDIV";
       conatainerDIV.style.width = "95%";
       conatainerDIV.style.padding = "10px 39px 10px 10px";
       conatainerDIV.style.border = "1px solid gray";
       labelHold.append(conatainerDIV);
+      // conatainerDIV.append(labelHold);
+      // scaleHold.append(conatainerDIV)
 
       let nameDiv = document.createElement("div");
       nameDiv.className = "product_name";
@@ -893,6 +868,7 @@ function createNewScaleInputField(
       nameDiv.style.fontWeight = "700";
       nameDiv.textContent = element?.raw_data?.percentProdName[i];
       conatainerDIV.appendChild(nameDiv);
+      // labelHold.appendChild(nameDiv);
 
       const inputPercent = document.createElement("input");
       inputPercent.type = "range";
@@ -906,7 +882,9 @@ function createNewScaleInputField(
       inputPercent.style.background = element?.raw_data?.percentBackground;
       inputPercent.style.webkitAppearance = "none";
       inputPercent.style.borderRadius = "10px";
+      inputPercent.setAttribute("data-index", i);
       conatainerDIV.appendChild(inputPercent);
+      // labelHold.appendChild(inputPercent);
 
       let percentChilds = document.createElement("div");
       percentChilds.style.display = "flex";
@@ -930,35 +908,78 @@ function createNewScaleInputField(
       percentChilds.appendChild(rightPercent);
 
       conatainerDIV.appendChild(percentChilds);
+      // labelHold.appendChild(percentChilds);
       if (!token) {
         return res.status(401).json({ error: "Unauthorized" });
       }
       let orientation = element?.raw_data?.orientation;
-      if (orientation === "vertical") {
+      if (orientation === "Vertical") {
+        const orientation = document.createElement("div");
+        orientation.className = "orientation";
+        orientation.textContent = "Vertical";
+        orientation.style.display = "none";
+        scaleHold.appendChild(orientation);
+
         scaleHold.style.display = "flex";
         scaleHold.style.flexDirection = "column";
         scaleHold.style.alignItems = "center";
         scaleHold.style.justifyContent = "center";
+
+        conatainerDIV.style.padding =
+          nameDiv.textContent.length < 9
+            ? "24px 39px 10px 14px"
+            : "24px 39px 37px 14px";
         conatainerDIV.style.width = "90%";
         conatainerDIV.style.position = "relative";
 
-        labelHold.style.width = "52%";
-        labelHold.style.height = "69%";
+        labelHold.style.width = "100%";
+        labelHold.style.height = "96%";
         labelHold.style.alignItems = "center";
         labelHold.style.transform = "rotate(270deg)";
 
         nameDiv.style.position = "absolute";
-        nameDiv.style.top = "7px";
+        nameDiv.style.top = nameDiv.textContent.length < 9 ? "23px" : "39px";
         nameDiv.style.right = "-2px";
-        nameDiv.style.left = "85%";
+        nameDiv.style.left = "70%";
+        nameDiv.style.width = "50%";
         nameDiv.style.transform = "rotate(90deg)";
 
         inputPercent.style.width = "100%";
       }
+
+      if (decoded.details.action === "document") {
+        inputPercent.disabled = "";
+        const scale = document.querySelector(".focussedd");
+
+        // ...
+
+        // Add an event listener to update centerPercent
+        const scaleId = element?.raw_data?.scaleID; // Replace with your scale identifier
+
+        // Generate a unique key for localStorage using scaleId and index
+        const localStorageKey = `inputPercent_${scaleId}_${i}`;
+
+        // Add an event listener to update centerPercent
+        inputPercent.addEventListener("input", function () {
+          centerPercent.textContent = `${inputPercent.value}%`;
+          if (scaleField?.parentElement?.classList.contains("holderDIV")) {
+            scaleField?.parentElement?.classList.add("element_updated");
+          }
+
+          // Store the current inputPercent value in localStorage using the unique key
+          localStorage.setItem(localStorageKey, inputPercent.value);
+        });
+
+        // Retrieve and set the value from localStorage if available using the unique key
+        const storedInputValue = localStorage.getItem(localStorageKey);
+        if (storedInputValue !== null) {
+          inputPercent.value = storedInputValue;
+          centerPercent.textContent = `${inputPercent.value}%`;
+        }
+      }
     }
   } else if (scaleTypeHolder.textContent === "percent_sum_scale") {
     let prodLength = element?.raw_data?.percentLabel;
-    // console.log(prodLength);
 
     for (let i = 0; i < prodLength; i++) {
       labelHold.style.display = "flex";
@@ -968,6 +989,7 @@ function createNewScaleInputField(
       labelHold.style.border = "none";
 
       let containerDiv = document.createElement("div");
+      containerDiv.className = "containerDIV";
       containerDiv.style.width = "95%";
       containerDiv.style.padding = "10px 39px 10px 10px";
       containerDiv.style.border = "1px solid gray";
@@ -1014,16 +1036,18 @@ function createNewScaleInputField(
       percentChilds.appendChild(rightPercent);
 
       containerDiv.appendChild(percentChilds);
+
       if (!token) {
         return res.status(401).json({ error: "Unauthorized" });
       }
+
       let orientation = element?.raw_data?.orientation;
       if (orientation === "Vertical") {
         const orientation = document.createElement("div");
         orientation.className = "orientation";
         orientation.textContent = "Vertical";
         orientation.style.display = "none";
-        labelHold.appendChild(orientation);
+        scaleHold.appendChild(orientation);
 
         scaleHold.style.display = "flex";
         scaleHold.style.flexDirection = "column";
@@ -1044,6 +1068,37 @@ function createNewScaleInputField(
         nameDiv.style.paddingBottom = prodLength > 6 ? "30px" : "0px";
         inputPercent.style.width = "100%";
         inputPercent.style.marginTop = "8px";
+      }
+
+      if (decoded.details.action === "document") {
+        inputPercent.disabled = "";
+        const scale = document.querySelector(".focussedd");
+
+        // ...
+
+        // Add an event listener to update centerPercent
+        const scaleId = element?.raw_data?.scaleID; // Replace with your scale identifier
+
+        // Generate a unique key for localStorage using scaleId and index
+        const localStorageKey = `inputPercent_${scaleId}_${i}`;
+
+        // Add an event listener to update centerPercent
+        inputPercent.addEventListener("input", function () {
+          centerPercent.textContent = `${inputPercent.value}%`;
+          if (scaleField?.parentElement?.classList.contains("holderDIV")) {
+            scaleField?.parentElement?.classList.add("element_updated");
+          }
+
+          // Store the current inputPercent value in localStorage using the unique key
+          localStorage.setItem(localStorageKey, inputPercent.value);
+        });
+
+        // Retrieve and set the value from localStorage if available using the unique key
+        const storedInputValue = localStorage.getItem(localStorageKey);
+        if (storedInputValue !== null) {
+          inputPercent.value = storedInputValue;
+          centerPercent.textContent = `${inputPercent.value}%`;
+        }
       }
     }
   }

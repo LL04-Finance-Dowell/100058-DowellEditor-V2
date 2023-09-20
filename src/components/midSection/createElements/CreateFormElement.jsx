@@ -22,6 +22,14 @@ function createFormInputElement(holderDIV, focuseddClassMaintain, handleClicked,
     buttonField.style.margin = "0 auto";
     buttonField.style.border = "1px solid #0000";
 
+    const emailC = document.getElementsByClassName("emailButton");
+    if (emailC.length) {
+      const e = emailC.length;
+        buttonField.id = `eml${e + 1}`;
+        } else {
+          buttonField.id = "eml1";
+        }
+
     // add form container to the document
     document.body.appendChild(buttonField);
 

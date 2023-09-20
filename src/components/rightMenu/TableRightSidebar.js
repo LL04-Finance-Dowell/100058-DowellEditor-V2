@@ -86,8 +86,12 @@ const TableRightSidebar = () => {
     // ) {
     if (typeOfOperation === "TEXT_INPUT") {
       let inputField = document.createElement("div");
+      const targetTable = e.target.parentElement.parentElement
+      const textId = targetTable.querySelectorAll(".textInput").length + 1
       //  inputField.setAttribute('draggable', true);
+      
       inputField.setAttribute("contenteditable", true);
+      inputField.id = `${targetTable.id}t${textId}`
       inputField.className = "textInput";
       inputField.innerHTML = "Enter text here";
       inputField.style.width = "100%";
@@ -115,9 +119,10 @@ const TableRightSidebar = () => {
       e.target.append(inputField);
     }
     else if (typeOfOperation === "IMAGE_INPUT") {
+      const targetTable = e.target.parentElement.parentElement
+      const imageId = targetTable.querySelectorAll(".textInput").length + 1
       let imageField = document.createElement("div");
 
-      const id = (Math.random() * 1782 * Math.random() * 879).toFixed(5);
       imageField.className = "imageInput";
       imageField.style.width = "100%";
       imageField.style.height = "100%";
@@ -127,7 +132,7 @@ const TableRightSidebar = () => {
       imageField.style.overflow = "overlay";
       imageField.innerHTML = "Image here";
       imageField.style.position = "relative";
-      imageField.id = id
+      imageField.id = `${targetTable.id}i${imageId}`
 
       imageField.onclick = (e) => {
         if (imageField) {
@@ -282,6 +287,9 @@ const TableRightSidebar = () => {
       //   // document.getElementsByClassName("dropp").item(0).append(signField);
       // }
       let signField = document.createElement("div");
+      const targetTable = e.target.parentElement.parentElement
+      console.log("TARGET TABLE ",targetTable);
+      const signId =`s${( targetTable.querySelectorAll(".signInput").length + 1)}`
       signField.className = "signInput";
       signField.style.width = "100%";
       signField.style.height = "100%";
@@ -293,6 +301,7 @@ const TableRightSidebar = () => {
       signField.style.position = "absolute";
       signField.style.top = 0;
       signField.style.left = 0;
+      signField.id = `${targetTable.id+signId}`;
 
       // signField.onchange = (event) => {
       //   event.preventDefault();
@@ -351,6 +360,8 @@ const TableRightSidebar = () => {
     }
     else if (typeOfOperation === "DATE_INPUT") {
       let dateField = document.createElement("div");
+      const targetTable = e.target.parentElement.parentElement
+      const dateId = targetTable.querySelectorAll(".dateInput").length + 1
       dateField.className = "dateInput";
       dateField.style.width = "100%";
       dateField.style.height = "100%";
@@ -359,6 +370,7 @@ const TableRightSidebar = () => {
       dateField.style.outline = "0px";
       dateField.style.overflow = "overlay";
       dateField.style.position = "relative";
+      dateField.id = `${targetTable.id}d${dateId}`;
 
       setStartDate(new Date());
       setMethod("select");
@@ -535,9 +547,11 @@ const TableRightSidebar = () => {
 
   function makeTable() {
     const focussedDiv = document.querySelector(".focussedd");
+    const dropArea = focussedDiv.parentElement
+    const tableID = dropArea.querySelectorAll('table').length
     var table = document.createElement("table");
     table.style.border = "2";
-    table.id = "table";
+    table.id = `T${(tableID + 1)}`;
     table.style.height = "100%"
     table.style.width = "100%"
     table.className = "droppable";

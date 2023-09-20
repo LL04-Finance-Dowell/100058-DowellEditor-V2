@@ -16,6 +16,7 @@ import EmailButton from "./buttons/EmailButton";
 import NewScaleButton from "./buttons/NewScaleButton";
 import CameraButton from "./buttons/CameraButton";
 import { useDraggableContext } from "../../contexts/DraggableContext";
+import PaymentButton from "./buttons/PaymentButton";
 
 const CustomButton = ({ children, style }) => (
   <button className={style} type="button">
@@ -49,6 +50,7 @@ const LeftMenu = ({ showSidebar }) => {
             <EmailButton customFunc={() => handleDrop("email")} />
             <NewScaleButton customFunc={() => handleDrop("newScale")} />
             <CameraButton customFunc={() => handleDrop("camera")} />
+            <PaymentButton customFunc={() => handleDrop("payment")} />
           </div>
         )
       ) : (
