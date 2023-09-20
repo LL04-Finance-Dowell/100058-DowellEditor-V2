@@ -15,6 +15,14 @@ function createSignInputElement(holderDIV, focuseddClassMaintain, handleClicked,
     signField.innerText = "Signature here";
     signField.style.position = "absolute";
 
+    const signIn = document.getElementsByClassName("signInput");
+      if (signIn.length) {
+        const h = signIn.length;
+        signField.id = `s${h + 1}`;
+        } else {
+          signField.id = "s1";
+        }
+
     signField.onchange = (event) => {
         event.preventDefault();
         setPostData({

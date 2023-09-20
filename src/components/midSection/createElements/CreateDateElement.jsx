@@ -14,6 +14,14 @@ function createDateInputElement(holderDIV, focuseddClassMaintain, handleClicked,
 
   dateField.style.position = "relative";
 
+  const date = document.getElementsByClassName("dateInput");
+    if (date.length) {
+      const h = date.length;
+      dateField.id = `d${h + 1}`;
+    } else {
+      dateField.id = "d1";
+      }
+
   dateField.onchange = (event) => {
     event.preventDefault();
     setPostData({

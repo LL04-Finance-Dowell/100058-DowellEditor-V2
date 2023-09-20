@@ -505,6 +505,16 @@ const ScaleRightSide = () => {
   const [selectedEmojis, setSelectedEmojis] = useState([]);
   const [activeEmojiPicker, setActiveEmojiPicker] = useState(null); // Track active emoji picker for text label type
 
+  useEffect(() => {
+    // Fetch saved data from storage (localStorage, sessionStorage, etc.)
+    const savedLabelScale = localStorage.getItem("labelScale");
+    const savedLabelTexts = JSON.parse(localStorage.getItem("labelTexts"));
+
+    // Set the initial state with fetched data
+    setLabelScale(savedLabelScale || ""); // Use empty string as a fallback
+    setLabelTexts(savedLabelTexts || []); // Use an empty array as a fallback
+  }, []);
+
   const handleLabelTypeChange = (event) => {
     const selectedValue = event.target.value;
     setLabelType(selectedValue);
@@ -552,7 +562,12 @@ const ScaleRightSide = () => {
   const handleLabelTextChange = (index, event) => {
     const updatedLabelTexts = [...labelTexts];
     updatedLabelTexts[index] = event.target.value;
+
+    // Update the state variable
     setLabelTexts(updatedLabelTexts);
+
+    // Save the updated data to storage
+    localStorage.setItem("labelTexts", JSON.stringify(updatedLabelTexts));
   };
 
   const areAllTextInputsFilled = labelTexts.every(
@@ -692,33 +707,6 @@ const ScaleRightSide = () => {
     }
     setInputFields(newInputFields);
   };
-
-  function scaleSubmit(e) {
-    console.log(selectedOptions);
-    console.log(selectedOptions[0]);
-    const scale = document.querySelector(".focussedd");
-    const idHolder = scale?.querySelector(".scaleId");
-    console.log("This is the scale Id", idHolder.textContent);
-    e.preventDefault();
-    setIsLoading(true);
-    Axios.post("https://100035.pythonanywhere.com/api/nps_custom_data/", {
-      template_id: decoded.details._id,
-      scale_id: idHolder.textContent,
-      custom_input_groupings: selectedOptions,
-      scale_label: scaleTitle,
-    })
-      .then((res) => {
-        if (res.status == 200) {
-          setIsLoading(false);
-          sendMessage();
-          console.log(res.data);
-        }
-      })
-      .catch((err) => {
-        setIsLoading(false);
-        console.log(err);
-      });
-  }
 
   console.log(scale);
 
@@ -1001,11 +989,13 @@ const ScaleRightSide = () => {
               circle.style.backgroundColor = btnUpdateButton.value;
               labelHold.appendChild(circle);
               if (selectedOption === "emoji" && emojiInp !== "") {
+                console.log(selectedOption);
                 // Set the text content of the div to the corresponding emoji
                 const emojiFormat = /(\p{Emoji}|\uFE0F)/gu;
                 const emojis = emojiInp
                   .split(emojiFormat)
                   .filter((emoji) => emoji !== "");
+                console.log(emojis);
                 circle.textContent = emojis[i % emojis.length];
                 circle.style.fontSize = "1.8vw";
               } else {
@@ -1082,7 +1072,7 @@ const ScaleRightSide = () => {
               buttonChildNeutral.textContent = btnUpdateCenter.value;
 
               for (let i = 0; i <= 10; i++) {
-                const selectedOption = optionSelect.value;
+                // const selectedOption = optionSelect.value;
                 const circle = document.createElement("div");
                 circle.className = "circle_label";
                 circle.textContent = i;
@@ -1096,12 +1086,14 @@ const ScaleRightSide = () => {
                 circle.style.alignItems = "center";
                 circle.style.backgroundColor = btnUpdateButton.value;
                 labelHold.appendChild(circle);
+                console.log(selectedOption);
                 if (selectedOption === "emoji" && emojiInp !== "") {
                   // Set the text content of the div to the corresponding emoji
                   const emojiFormat = /(\p{Emoji}|\uFE0F)/gu;
                   const emojis = emojiInp
                     .split(emojiFormat)
                     .filter((emoji) => emoji !== "");
+                  console.log(emojis);
                   circle.textContent = emojis[i % emojis.length];
                   circle.style.fontSize = "1.8vw";
                 } else {
@@ -1364,7 +1356,7 @@ const ScaleRightSide = () => {
             labelHold.appendChild(optionHolder);
             stapelScaleArray.textContent = res.data.data.settings.scale;
             labelHold.append(stapelScaleArray);
-            console.log("This is stapel", stapelScaleArray)
+            console.log("This is stapel", stapelScaleArray);
           })
           .catch((err) => {
             setIsLoading(false);
@@ -1572,7 +1564,7 @@ const ScaleRightSide = () => {
         setIsLoading(true);
         console.log("post req");
         Axios.post(
-          "https://100035.pythonanywhere.com/nps-lite/api/nps-lite-settings",
+          "https://100035.pythonanywhere.com/nps-lite/api/nps-lite-settings/",
           {
             user: "true",
             username: "NdoneAmbrose",
@@ -1709,7 +1701,7 @@ const ScaleRightSide = () => {
                 name,
                 fontcolor,
                 fontstyle,
-                custom_emoji_format
+                custom_emoji_format,
               } = res.data.data;
               const textValues = [left, center, right];
 
@@ -1833,7 +1825,7 @@ const ScaleRightSide = () => {
       const numColumns = Math.min(updatedLabelScale, 3);
 
       const likertScaleArray = document.createElement("div");
-      likertScaleArray.className = "likertScaleArray";
+      likertScaleArray.className = "likert_Scale_Array";
       likertScaleArray.textContent = updatedLabels;
       likertScaleArray.style.display = "none";
       labelHold.append(likertScaleArray);
@@ -1878,7 +1870,6 @@ const ScaleRightSide = () => {
         button.style.alignItems = "center";
         button.style.marginTop = "1%";
         button.style.marginLeft = "26%";
-        // circle.style.gap = "20px";
       }
 
       const basePayload = {
@@ -2078,7 +2069,7 @@ const ScaleRightSide = () => {
 
                 labelHold.appendChild(circle);
               }
-              console.log("This is it", likertScaleArray);
+              console.log("This is it+++++++______", likertScaleArray);
             }
           })
           .catch((err) => {
@@ -2187,8 +2178,6 @@ const ScaleRightSide = () => {
             const {
               name,
               orientation,
-              fontcolor,
-              fontstyle,
               scale_color,
               product_count,
               product_names,
@@ -2202,12 +2191,12 @@ const ScaleRightSide = () => {
               newLabelHold.innerHTML = "";
               newLabelHold.style = "";
 
-              newLabelHold.style.padding = "3px";
+              // newLabelHold.style.padding = "25px";
               newLabelHold.style.borderBottom = "1px solid gray";
 
-              newLabelHold.style.paddingRight = "35px";
-              newLabelHold.style.paddingLeft = "35px";
-              newLabelHold.style.borderBottom = "1px solid gray";
+              // newLabelHold.style.paddingRight = "50px";
+              // newLabelHold.style.paddingLeft = "35px";
+              // newLabelHold.style.borderBottom = "1px solid gray";
               newLabelHold.style.borderTop = "1px solid gray";
 
               let nameDiv = document.createElement("div");
@@ -2283,10 +2272,18 @@ const ScaleRightSide = () => {
                 orientation.style.display = "none";
                 button4.appendChild(orientation);
                 containerDiv.style.transform = "rotate(270deg)";
-                nameDiv.style.position = "absolute";
-                nameDiv.style.left = "93%";
-                nameDiv.style.top = "7px";
                 nameDiv.style.right = "-8px";
+                nameDiv.style.position = "absolute";
+                nameDiv.style.width = "50%";
+                nameDiv.style.left = "75%";
+                nameDiv.textContent.length < 9
+                  ? (nameDiv.style.top = "23px")
+                  : (nameDiv.style.top = "39px");
+
+                newLabelHold.style.padding =
+                  nameDiv.textContent.length < 9
+                    ? "0px 20px 10px 14px"
+                    : "0px 20px 37px 14px";
                 nameDiv.style.transform = "rotate(90deg)";
 
                 newLabelHold.style.position = "relative";
@@ -2338,8 +2335,6 @@ const ScaleRightSide = () => {
               const {
                 name,
                 orientation,
-                fontcolor,
-                fontstyle,
                 scale_color,
                 product_count,
                 product_names,
@@ -2352,11 +2347,10 @@ const ScaleRightSide = () => {
                 newLabelHold.innerHTML = "";
                 newLabelHold.style = "";
 
-                newLabelHold.style.padding = "3px";
                 newLabelHold.style.borderBottom = "1px solid gray";
 
-                newLabelHold.style.paddingRight = "35px";
-                newLabelHold.style.paddingLeft = "35px";
+                // newLabelHold.style.paddingRight = "35px";
+                // newLabelHold.style.paddingLeft = "35px";
                 newLabelHold.style.borderBottom = "1px solid gray";
                 newLabelHold.style.borderTop = "1px solid gray";
 
@@ -2434,8 +2428,16 @@ const ScaleRightSide = () => {
                   button4.appendChild(orientation);
                   containerDiv.style.transform = "rotate(270deg)";
                   nameDiv.style.position = "absolute";
-                  nameDiv.style.left = "93%";
-                  nameDiv.style.top = "7px";
+                  nameDiv.style.width = "50%";
+                  nameDiv.style.left = "75%";
+                  nameDiv.textContent.length < 9
+                    ? (nameDiv.style.top = "23px")
+                    : (nameDiv.style.top = "39px");
+
+                  newLabelHold.style.padding =
+                    nameDiv.textContent.length < 9
+                      ? "0px 20px 10px 14px"
+                      : "0px 20px 37px 14px";
                   nameDiv.style.right = "-8px";
                   nameDiv.style.transform = "rotate(90deg)";
 
@@ -2498,9 +2500,6 @@ const ScaleRightSide = () => {
 
       let labelHold = scale?.querySelector(".label_hold");
 
-      setTimeout(() => {
-        labelHold.style.flexDirection = "column";
-      }, 50);
       let tempText = scale?.querySelector(".tempText");
       tempText?.remove();
 
@@ -2517,17 +2516,11 @@ const ScaleRightSide = () => {
         "percent_sum_product_count"
       ).value;
 
+      const containerDiv = document.createElement("div");
+      containerDiv.className = "label_hold";
+
       let productNames = document.getElementById("product_count_label");
       let inputFields = productNames?.querySelectorAll("input");
-
-      const containerDiv = document.createElement("div");
-      containerDiv.className = "containerDIV";
-
-      const orientation = document.createElement("div");
-      orientation.className = "orientation";
-      orientation.textContent = option.value;
-      orientation.style.display = "none";
-      button4.appendChild(orientation);
 
       let productNameLabels = [];
       for (let i = 0; i < inputFields.length; i++) {
@@ -2583,6 +2576,8 @@ const ScaleRightSide = () => {
 
             for (let i = 0; i < product_count; i++) {
               let newLabelHold = labelHold.cloneNode(true);
+              newLabelHold.classList.add("containerDIV");
+              newLabelHold.classList.remove("label_hold");
               newLabelHold.innerHTML = "";
               newLabelHold.style = "";
               newLabelHold.style.padding = "3px";
@@ -2644,6 +2639,7 @@ const ScaleRightSide = () => {
               button4.appendChild(containerDiv);
 
               if (orientation === "Horizontal") {
+                scale?.querySelector(".orientation")?.remove();
                 button4.style.border = "block";
                 button4.style.textAlign = "center";
                 button.style.marginTop = "10px";
@@ -2656,6 +2652,12 @@ const ScaleRightSide = () => {
               }
 
               if (orientation === "Vertical") {
+                const orientation = document.createElement("h2");
+                orientation.className = "orientation";
+                orientation.textContent = "Vertical";
+                orientation.style.display = "none";
+                button4.appendChild(orientation);
+
                 containerDiv.style.transform = "rotate(270deg)";
                 containerDiv.style.marginTop = "80px";
                 containerDiv.style.width = "100%";
@@ -2747,6 +2749,8 @@ const ScaleRightSide = () => {
 
               for (let i = 0; i < product_count; i++) {
                 let newLabelHold = labelHold.cloneNode(true);
+                newLabelHold.classList.add("containerDIV");
+                newLabelHold.classList.remove("label_hold");
                 newLabelHold.innerHTML = "";
                 newLabelHold.style = "";
                 newLabelHold.style.padding = "3px";
@@ -2808,6 +2812,7 @@ const ScaleRightSide = () => {
                 button4.appendChild(containerDiv);
 
                 if (orientation === "Horizontal") {
+                  scale?.querySelector(".orientation")?.remove();
                   button4.style.border = "block";
                   button4.style.textAlign = "center";
                   button.style.marginTop = "10px";
@@ -2820,6 +2825,12 @@ const ScaleRightSide = () => {
                 }
 
                 if (orientation === "Vertical") {
+                  const orientation = document.createElement("h2");
+                  orientation.className = "orientation";
+                  orientation.textContent = "Vertical";
+                  orientation.style.display = "none";
+                  button4.appendChild(orientation);
+
                   containerDiv.style.transform = "rotate(270deg)";
                   containerDiv.style.marginTop = "80px";
                   containerDiv.style.width = "100%";
@@ -2940,6 +2951,19 @@ const ScaleRightSide = () => {
   // console.log(iframeSrc, "iframeSrc");
 
   function removeScale() {
+    let elementString = localStorage.getItem("elements");
+    let elementArray = [];
+    if (typeof elementString !== "undefined") {
+      elementArray = JSON.parse(elementString);
+    }
+    const otherComponent = scale?.querySelector(".otherComponent");
+    if(elementArray !== null) {
+      let elementIndex = elementArray.indexOf(otherComponent.textContent);
+      elementArray.splice(elementIndex, 1);
+      let string = JSON.stringify(elementArray);
+      localStorage.setItem("elements", string);
+    }
+
     const focusseddElmnt = document.querySelector(".focussedd");
     if (focusseddElmnt.classList.contains("holderDIV")) {
       document.querySelector(".focussedd").remove();
@@ -2965,7 +2989,7 @@ const ScaleRightSide = () => {
     "type",
     "NEW_SCALE_INPUT"
   );
-  // console.log(newArray);
+  console.log("Try this", newArray);
 
   const filteredArray = newArray?.filter((obj) => !customId.includes(obj.id));
   // console.log(filteredArray);
@@ -2974,6 +2998,93 @@ const ScaleRightSide = () => {
   for (let index = 0; index < elems.length; index++) {
     const element = elems[index];
     // console.log(element.children[0]);
+  }
+
+  const [selectedElementId, setSelectedElementId] = useState(null);
+  const [availableTextElements, setAvailableTextElements] = useState(newArray);
+
+  useEffect(() => {
+    // Save the availableTextElements state to local storage whenever it changes
+    localStorage.setItem(
+      "availableTextElements",
+      JSON.stringify(availableTextElements)
+    );
+  }, [availableTextElements]);
+
+  const removeSelectedOption = () => {
+    // if (selectedElementId) {
+    //   console.log(`Removing option with ID: ${selectedElementId}`);
+    //   setAvailableTextElements((prevOptions) =>
+    //     prevOptions.filter((element) => element.id !== selectedElementId)
+    //   );
+    //   setSelectedElementId(null);
+    //   console.log(`Updated availableTextElements:`, availableTextElements);
+    // }
+    let selectField = document.getElementById("select1");
+    var selectedValues = {};
+    const options = selectField.options;
+
+    for (let i = 0; i < options.length; i++) {
+      const option = options[i];
+      if (option.selected) {
+        selectedValues[option.value] = option.id;
+        console.log("This is option", option);
+      }
+    }
+
+    console.log(selectedValues);
+    setSelectedOptions(selectedValues);
+
+    let selectedOption = selectField.options[selectField.selectedIndex];
+    let selectedElementId = selectedOption.id;
+    console.log(selectedElementId, "selectedElementId");
+    const scale = document.querySelector(".focussedd");
+    const otherComponent = scale?.querySelector(".otherComponent");
+    otherComponent.textContent = selectedOption.value + " " + selectedOption.id;
+    console.log("Other Component", otherComponent.textContent);
+    let elementString = localStorage.getItem("elements");
+    let elemArray = [];
+    if (elementString !== null) {
+      elemArray = JSON.parse(elementString);
+    }
+    console.log(elemArray);
+    console.log(`"${selectedOption.value + " " + selectedOption.id}"`);
+    elemArray.push(selectedOption.value + " " + selectedOption.id);
+    let string = JSON.stringify(elemArray);
+    localStorage.setItem("elements", string);
+  };
+
+  function scaleSubmit(e) {
+    e.preventDefault();
+    console.log(selectedOptions);
+    console.log(selectedOptions[0]);
+    const scale = document.querySelector(".focussedd");
+    const idHolder = scale?.querySelector(".scaleId");
+    console.log("This is the scale Id", idHolder.textContent);
+    removeSelectedOption(); // Call this function to remove the selected option
+    console.log(
+      removeSelectedOption(),
+      "what shall I do@@@@@@@@@@@@@!!!!!!!!!!!!!!"
+    );
+    e.preventDefault();
+    setIsLoading(true);
+    Axios.post("https://100035.pythonanywhere.com/api/nps_custom_data/", {
+      template_id: decoded.details._id,
+      scale_id: idHolder.textContent,
+      custom_input_groupings: selectedOptions,
+      scale_label: scaleTitle,
+    })
+      .then((res) => {
+        if (res.status == 200) {
+          setIsLoading(false);
+          sendMessage();
+          console.log(res.data);
+        }
+      })
+      .catch((err) => {
+        setIsLoading(false);
+        console.log(err);
+      });
   }
 
   const handleSelect = (event) => {
@@ -2985,7 +3096,7 @@ const ScaleRightSide = () => {
       const option = options[i];
       if (option.selected) {
         selectedValues[option.value] = option.id;
-        console.log(option);
+        console.log("This is option", option);
       }
     }
 
@@ -2996,10 +3107,15 @@ const ScaleRightSide = () => {
     let selectedElementId = selectedOption.id;
     console.log(selectedElementId, "selectedElementId");
 
-    const selectedElements = myArray.find(
-      (element) => element.id === selectedElementId
-    );
+    // const selectedElements = myArray.find(
+    //   (element) => element.id === selectedElementId
+    // );
+
+    const selectedElements = document.getElementById(`${selectedElementId}`);
+
+    setSelectedElementId(selectedElements.id);
     console.log(selectedElements, "selectedElement");
+    console.log(selectedElementId, "dhhhhhhhhh+++++++++++@@@@@@!!!!!!!!!");
 
     let divElement = document.getElementById(selectedElements.id);
     console.log(divElement.id, "divElement");
@@ -3008,7 +3124,7 @@ const ScaleRightSide = () => {
     let previousOptionId = selectField.getAttribute("data-prev-option");
     if (previousOptionId) {
       let previousOptionDiv = document.getElementById(previousOptionId);
-      previousOptionDiv.parentElement.style.border = "none";
+      previousOptionDiv.parentElement.style.border = "doted";
     }
 
     // Add the green border to the currently selected option
@@ -3020,11 +3136,13 @@ const ScaleRightSide = () => {
     selectField.setAttribute("data-prev-option", selectedElements.id);
   };
 
-  const options = newArray?.map((element, index) => (
+  const options = availableTextElements.map((element, index) => (
     <option key={index} value={element.type} id={element.id}>
       {`${element.type} ${element.id}`}
     </option>
   ));
+
+  console.log(options, "ava++++++++++++++____");
 
   const handleBorderSizeChange = (e) => {
     setBorderSize(e.target.value);
@@ -3139,7 +3257,7 @@ const ScaleRightSide = () => {
               id="updateScale"
               className="py-2 bg-white border-none"
               // style={{"}}
-              onClick={showIframeDo}
+              // onClick={showIframe}
             >
               Appearance
             </button>
@@ -3152,7 +3270,7 @@ const ScaleRightSide = () => {
               id="setScale"
               className="py-2 bg-white border-none"
               // style={{ bordern: "none", outline: "none" }}
-              onClick={showSetting}
+              // onClick={showSetting}
             >
               Configurations
             </button>
@@ -3160,70 +3278,59 @@ const ScaleRightSide = () => {
           <div id="iframeRight">
             <div className="mb-4"></div>
           </div>
-          <div id="border">
-          <Row className="pt-4">
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <h6 style={{ marginRight: "10rem" }}>Border</h6>
-              <label className="switch">
-                <input
-                  type="checkbox"
-                  onClick={() => setShowSlider(!showSlider)}
-                />
-                <span className="slider round"></span>
-              </label>
-            </div>
-            {showSlider && (
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  backgroundColor: "#abab",
-                  gap: "10px",
-                  height: "40px",
-                  width: "90%",
-                }}
-              >
-                <input
-                  type="color"
-                  value={borderColor}
-                  onChange={handleBorderColorChange}
-                  id="color"
-                  style={{ border: "none", width: "10%", height: "15px" }}
-                />
-                <input
-                  type="range"
-                  min="-10"
-                  max="20"
-                  value={borderSize}
-                  onChange={handleBorderSizeChange}
-                  onBlur={handleRangeBlur}
-                  id="range"
-                  className="range-color"
-                />
-              </div>
-            )}
-          </Row>
-          <hr />
-        </div>
-        <div id="settingRight" style={{ display: "none" }}>
-          <h3>Configurations</h3>
-          <div id="settingSelect">
-            <select
-              onChange={handleSelect}
-              id="select1"
-              // onChange={handleDateMethod}
-              className="select border-0 bg-white rounded w-100 h-75 p-2"
-              //multiple
-              style={{ marginBottom: "40px" }}
-            >
-              <option value="select">Select Element</option>
-              {options}
-            </select>
-          </div>
-
-          {/* iframe */}
-          <div>
-            {/* <Form.Control
+          {showBorder === true ? (
+            <>
+              <hr />
+              <Row className="pt-4">
+                <div style={{ display: "flex", alignItems: "center" }}>
+                  <h6 style={{ marginRight: "10rem" }}>Border</h6>
+                  <label className="switch">
+                    <input
+                      type="checkbox"
+                      onClick={() => setShowSlider(!showSlider)}
+                    />
+                    <span className="slider round"></span>
+                  </label>
+                </div>
+                {showSlider && (
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      backgroundColor: "#abab",
+                      gap: "10px",
+                      height: "40px",
+                      width: "90%",
+                    }}
+                  >
+                    <input
+                      type="color"
+                      value={borderColor}
+                      onChange={handleBorderColorChange}
+                      id="color"
+                      style={{ border: "none", width: "10%", height: "15px" }}
+                    />
+                    <input
+                      type="range"
+                      min="-10"
+                      max="20"
+                      value={borderSize}
+                      onChange={handleBorderSizeChange}
+                      id="range"
+                      className="range-color"
+                    />
+                  </div>
+                )}
+              </Row>
+              <hr />
+            </>
+          ) : (
+            ""
+          )}
+          <div id="settingRight" style={{ display: "none" }}>
+            {/* iframe */}
+            <div>
+              {/* <Form.Control
           type="text"
           placeholder={`${decoded.details._id}_scl1`}
           disabled
@@ -3231,58 +3338,6 @@ const ScaleRightSide = () => {
         // id="iframe_src"
         // onChange={handleChange}
         /> */}
-          </div>
-          <div id="invisible">
-            <div
-              id="singleScale"
-              style={{ padding: "10px", gap: "10px" }}
-              className="select border-0 bg-white rounded w-100 h-75 p-2"
-            ></div>
-          </div>
-          <div className=" text-center pt-3">
-            <Button
-              variant="primary"
-              className="px-5"
-              onClick={refreshIframe}
-            >
-              refresh
-            </Button>
-          </div>
-          <div
-            className="text-center pt-3"
-            style={{ display: "flex", justifyContent: "center" }}
-          >
-            <Button
-              variant="primary"
-              className="px-5"
-              onClick={scaleSubmit}
-              style={{ marginRight: "10px" }}
-            >
-              Save
-            </Button>
-
-            <Button
-              variant="secondary"
-              disabled={isButtonDisabled}
-              className="remove_button"
-              // onClick={removeScale}
-            >
-              Remove Scale
-            </Button>
-          </div>
-          {/* iframe */}
-        </div>
-          <div id="settingRight" style={{ display: "none" }}>
-            {/* iframe */}
-            <div>
-              {/* <Form.Control
-            type="text"
-            placeholder={`${decoded.details._id}_scl1`}
-            disabled
-            className="mb-4"
-          id="iframe_src"
-          onChange={handleChange}
-          /> */}
             </div>
           </div>
         </>
@@ -3788,6 +3843,7 @@ const ScaleRightSide = () => {
                         display: "none",
                         flexDirection: "column",
                         gap: "2px",
+                        width: "90%"
                       }}
                       id="emoji"
                     >
@@ -3809,8 +3865,8 @@ const ScaleRightSide = () => {
                       >
                         <input
                           style={{
-                            width: "100px",
-                            height: "15px",
+                            width: "100%",
+                            height: "18px",
                             display: "flex",
                             backgroundColor: "transparent",
                             outline: "none",
@@ -3819,6 +3875,7 @@ const ScaleRightSide = () => {
                           }}
                           id="emojiInp"
                           value={inputStr}
+                          contentEditable
                           onChange={(e) => setInputStr(e.target.value)}
                         />
 
@@ -4868,6 +4925,7 @@ const ScaleRightSide = () => {
                         display: "none",
                         flexDirection: "column",
                         gap: "2px",
+                        width: "90%",
                       }}
                       id="emoji_stapel"
                     >
@@ -4890,7 +4948,7 @@ const ScaleRightSide = () => {
                         <input
                           style={{
                             width: "100px",
-                            height: "15px",
+                            height: "18px",
                             display: "flex",
                             backgroundColor: "transparent",
                             outline: "none",

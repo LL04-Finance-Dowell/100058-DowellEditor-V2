@@ -139,7 +139,7 @@ const MidSection = React.forwardRef((props, ref) => {
   const document_map_required = documnentsMap?.filter((item) => item.required);
   console.log("document_map_required", document_map_required);
   console.log("decode", decoded);
-  console.log("data", data);
+  console.log("data", data[1]);
 
   const documentsMap = documnentsMap;
   if (documnentsMap?.length > 0) {
@@ -2549,6 +2549,14 @@ const MidSection = React.forwardRef((props, ref) => {
           tableField.style.overflow = "overlay";
           // tableField.innerHTML = 'table';
           tableField.style.position = "absolute";
+
+          const tableF = document.getElementsByClassName("tableInput");
+            if (tableF.length) {
+              const t = tableF.length;
+              tableField.id = `tab${t + 1}`;
+            } else {
+              tableField.id = "tab1";
+            }
 
           tableField.onchange = (event) => {
             event.preventDefault();

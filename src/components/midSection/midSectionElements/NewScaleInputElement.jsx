@@ -48,6 +48,12 @@ function createNewScaleInputField(
   scaleText.style.borderRadius = "0px";
   scaleHold.append(scaleText);
 
+  const otherComponent = document.createElement("h6");
+  otherComponent.className = "otherComponent";
+  otherComponent.style.display = "none";
+  otherComponent.textContent = element?.raw_data?.otherComponent
+  scaleHold.appendChild(otherComponent);
+
   const scaleTypeHolder = document.createElement("h6");
   scaleTypeHolder.className = "scaleTypeHolder";
   scaleTypeHolder.textContent = element?.raw_data?.scaleType;
@@ -83,12 +89,6 @@ function createNewScaleInputField(
   npsLiteOptionHolder.textContent = element?.raw_data?.npsLiteOptionHolder;
   npsLiteOptionHolder.style.display = "none";
   scaleHold.append(npsLiteOptionHolder);
-
-  const likertScaleArray = document.createElement("div");
-  likertScaleArray.className = "likertScaleArray";
-  likertScaleArray.textContent = element?.raw_data?.likertScaleArray || "";
-  likertScaleArray.style.display = "none";
-  scaleHold.append(likertScaleArray);
 
   const optionHolderLikert = document.createElement("div");
   optionHolderLikert.className = "likert_Option_Holder";
@@ -632,7 +632,7 @@ function createNewScaleInputField(
               holdElem = document.createElement("div");
               holdElem.className = "holdElem";
               holdElem.style.display = "none";
-              holdElem.textContent = npsLiteText[i] === '' ? i : npsLiteText[i];
+              holdElem.textContent = npsLiteText[i] === "" ? i : npsLiteText[i];
               holding?.appendChild(holdElem);
               console.log("This is holdEle", holdElem.textContent);
               if (scaleField?.parentElement?.classList.contains("holderDIV")) {
@@ -656,6 +656,12 @@ function createNewScaleInputField(
       }
     }
   } else if (scaleTypeHolder.textContent === "likert") {
+    const likertScaleArray = document.createElement("div");
+    likertScaleArray.className = "likert_Scale_Array";
+    likertScaleArray.textContent = element?.raw_data?.likertScaleArray || "";
+    likertScaleArray.style.display = "none";
+    
+    scaleHold.append(likertScaleArray);
     const likertScale = likertScaleArray.textContent.split(",");
     const numRows = Math.ceil(likertScale / 3);
     const numColumns = Math.min(likertScale, 3);
@@ -836,7 +842,6 @@ function createNewScaleInputField(
     }
   } else if (scaleTypeHolder.textContent === "percent_scale") {
     let prodLength = element?.raw_data?.percentLabel;
-    let scale = document.querySelectorAll("newScaleInput");
     console.log(labelHold.children.length);
 
     for (let i = 0; i < prodLength; i++) {
@@ -877,6 +882,7 @@ function createNewScaleInputField(
       inputPercent.style.background = element?.raw_data?.percentBackground;
       inputPercent.style.webkitAppearance = "none";
       inputPercent.style.borderRadius = "10px";
+      inputPercent.setAttribute("data-index", i);
       conatainerDIV.appendChild(inputPercent);
       // labelHold.appendChild(inputPercent);
 
@@ -918,125 +924,62 @@ function createNewScaleInputField(
         scaleHold.style.flexDirection = "column";
         scaleHold.style.alignItems = "center";
         scaleHold.style.justifyContent = "center";
+
+        conatainerDIV.style.padding =
+          nameDiv.textContent.length < 9
+            ? "24px 39px 10px 14px"
+            : "24px 39px 37px 14px";
         conatainerDIV.style.width = "90%";
         conatainerDIV.style.position = "relative";
 
-        labelHold.style.width = "90%";
+        labelHold.style.width = "100%";
         labelHold.style.height = "96%";
         labelHold.style.alignItems = "center";
         labelHold.style.transform = "rotate(270deg)";
 
         nameDiv.style.position = "absolute";
-        nameDiv.style.top = "7px";
+        nameDiv.style.top = nameDiv.textContent.length < 9 ? "23px" : "39px";
         nameDiv.style.right = "-2px";
-        nameDiv.style.left = "85%";
+        nameDiv.style.left = "70%";
+        nameDiv.style.width = "50%";
         nameDiv.style.transform = "rotate(90deg)";
 
         inputPercent.style.width = "100%";
       }
+
+      if (decoded.details.action === "document") {
+        inputPercent.disabled = "";
+        const scale = document.querySelector(".focussedd");
+
+        // ...
+
+        // Add an event listener to update centerPercent
+        const scaleId = element?.raw_data?.scaleID; // Replace with your scale identifier
+
+        // Generate a unique key for localStorage using scaleId and index
+        const localStorageKey = `inputPercent_${scaleId}_${i}`;
+
+        // Add an event listener to update centerPercent
+        inputPercent.addEventListener("input", function () {
+          centerPercent.textContent = `${inputPercent.value}%`;
+          if (scaleField?.parentElement?.classList.contains("holderDIV")) {
+            scaleField?.parentElement?.classList.add("element_updated");
+          }
+
+          // Store the current inputPercent value in localStorage using the unique key
+          localStorage.setItem(localStorageKey, inputPercent.value);
+        });
+
+        // Retrieve and set the value from localStorage if available using the unique key
+        const storedInputValue = localStorage.getItem(localStorageKey);
+        if (storedInputValue !== null) {
+          inputPercent.value = storedInputValue;
+          centerPercent.textContent = `${inputPercent.value}%`;
+        }
+      }
     }
-
-    // if (decoded.details.action === "document") {
-    //   for (let i = 0; i < prodLength; i++) {
-    //     // let originalText = element?.raw_data?.percentCenter[i];
-    //     // let percentValue = originalText?.replace("%", "");
-    //     labelHold.style.display = "flex";
-    //     labelHold.style.justifyContent = "center";
-    //     labelHold.style.height = "100%";
-    //     labelHold.style.flexDirection = "column";
-    //     labelHold.style.border = "none";
-
-    //     let conatainerDIV = document.createElement("div");
-    //     conatainerDIV.className = "containerDIV";
-    //     conatainerDIV.style.width = "95%";
-    //     conatainerDIV.style.padding = "10px 39px 10px 10px";
-    //     conatainerDIV.style.border = "1px solid gray";
-    //     labelHold.append(conatainerDIV);
-    //     // conatainerDIV.append(labelHold);
-    //     // scaleHold.append(conatainerDIV)
-
-    //     let nameDiv = document.createElement("div");
-    //     nameDiv.className = "product_name";
-    //     nameDiv.style.textAlign = "center";
-    //     nameDiv.style.fontWeight = "700";
-    //     nameDiv.textContent = element?.raw_data?.percentProdName[i];
-    //     conatainerDIV.appendChild(nameDiv);
-    //     // labelHold.appendChild(nameDiv);
-
-    //     const inputPercent = document.createElement("input");
-    //     inputPercent.type = "range";
-    //     inputPercent.min = "0";
-    //     inputPercent.max = "100";
-    //     // inputPercent.value = percentValue;
-    //     inputPercent.disabled = "true";
-    //     inputPercent.className = "percent-slider";
-    //     inputPercent.style.width = "100%";
-    //     inputPercent.style.cursor = "pointer";
-    //     inputPercent.style.background = element?.raw_data?.percentBackground;
-    //     inputPercent.style.webkitAppearance = "none";
-    //     inputPercent.style.borderRadius = "10px";
-    //     conatainerDIV.appendChild(inputPercent);
-    //     // labelHold.appendChild(inputPercent);
-
-    //     let percentChilds = document.createElement("div");
-    //     percentChilds.style.display = "flex";
-    //     percentChilds.style.width = "100%";
-    //     percentChilds.style.alignItems = "center";
-    //     percentChilds.style.justifyContent = "space-between";
-
-    //     let leftPercent = document.createElement("div");
-    //     leftPercent.textContent = "0";
-    //     leftPercent.className = "left-percent";
-    //     percentChilds.appendChild(leftPercent);
-
-    //     let centerPercent = document.createElement("div");
-    //     // centerPercent.textContent = `${element?.raw_data?.percentCenter[i]}`;
-    //     centerPercent.className = "center-percent";
-    //     percentChilds.appendChild(centerPercent);
-
-    //     let rightPercent = document.createElement("div");
-    //     rightPercent.textContent = "100";
-    //     rightPercent.className = "right-percent";
-    //     percentChilds.appendChild(rightPercent);
-
-    //     conatainerDIV.appendChild(percentChilds);
-    //     // labelHold.appendChild(percentChilds);
-    //     if (!token) {
-    //       return res.status(401).json({ error: "Unauthorized" });
-    //     }
-    //     let orientation = element?.raw_data?.orientation;
-    //     if (orientation === "Vertical") {
-    //       const orientation = document.createElement("div");
-    //       orientation.className = "orientation";
-    //       orientation.textContent = "Vertical";
-    //       orientation.style.display = "none";
-    //       scaleHold.appendChild(orientation);
-
-    //       scaleHold.style.display = "flex";
-    //       scaleHold.style.flexDirection = "column";
-    //       scaleHold.style.alignItems = "center";
-    //       scaleHold.style.justifyContent = "center";
-    //       conatainerDIV.style.width = "90%";
-    //       conatainerDIV.style.position = "relative";
-
-    //       labelHold.style.width = "90%";
-    //       labelHold.style.height = "96%";
-    //       labelHold.style.alignItems = "center";
-    //       labelHold.style.transform = "rotate(270deg)";
-
-    //       nameDiv.style.position = "absolute";
-    //       nameDiv.style.top = "7px";
-    //       nameDiv.style.right = "-2px";
-    //       nameDiv.style.left = "85%";
-    //       nameDiv.style.transform = "rotate(90deg)";
-
-    //       inputPercent.style.width = "100%";
-    //     }
-    //   }
-    // }
   } else if (scaleTypeHolder.textContent === "percent_sum_scale") {
     let prodLength = element?.raw_data?.percentLabel;
-    console.log(prodLength);
 
     for (let i = 0; i < prodLength; i++) {
       labelHold.style.display = "flex";
@@ -1046,6 +989,7 @@ function createNewScaleInputField(
       labelHold.style.border = "none";
 
       let containerDiv = document.createElement("div");
+      containerDiv.className = "containerDIV";
       containerDiv.style.width = "95%";
       containerDiv.style.padding = "10px 39px 10px 10px";
       containerDiv.style.border = "1px solid gray";
@@ -1103,7 +1047,7 @@ function createNewScaleInputField(
         orientation.className = "orientation";
         orientation.textContent = "Vertical";
         orientation.style.display = "none";
-        labelHold.appendChild(orientation);
+        scaleHold.appendChild(orientation);
 
         scaleHold.style.display = "flex";
         scaleHold.style.flexDirection = "column";
@@ -1124,6 +1068,37 @@ function createNewScaleInputField(
         nameDiv.style.paddingBottom = prodLength > 6 ? "30px" : "0px";
         inputPercent.style.width = "100%";
         inputPercent.style.marginTop = "8px";
+      }
+
+      if (decoded.details.action === "document") {
+        inputPercent.disabled = "";
+        const scale = document.querySelector(".focussedd");
+
+        // ...
+
+        // Add an event listener to update centerPercent
+        const scaleId = element?.raw_data?.scaleID; // Replace with your scale identifier
+
+        // Generate a unique key for localStorage using scaleId and index
+        const localStorageKey = `inputPercent_${scaleId}_${i}`;
+
+        // Add an event listener to update centerPercent
+        inputPercent.addEventListener("input", function () {
+          centerPercent.textContent = `${inputPercent.value}%`;
+          if (scaleField?.parentElement?.classList.contains("holderDIV")) {
+            scaleField?.parentElement?.classList.add("element_updated");
+          }
+
+          // Store the current inputPercent value in localStorage using the unique key
+          localStorage.setItem(localStorageKey, inputPercent.value);
+        });
+
+        // Retrieve and set the value from localStorage if available using the unique key
+        const storedInputValue = localStorage.getItem(localStorageKey);
+        if (storedInputValue !== null) {
+          inputPercent.value = storedInputValue;
+          centerPercent.textContent = `${inputPercent.value}%`;
+        }
       }
     }
   }

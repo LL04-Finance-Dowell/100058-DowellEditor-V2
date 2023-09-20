@@ -14,6 +14,14 @@ function CreatePyamentElement (holderDIV, focuseddClassMaintain, handleClicked, 
     paymentField.style.position = "absolute";
     paymentField.textContent = "Pay";
 
+    const paymentInput = document.getElementsByClassName("paymentInput");
+    if (paymentInput.length) {
+      const p = paymentInput.length;
+      paymentField.id = `pay${p + 1}`;
+        } else {
+            paymentField.id = "pay1";
+        }
+
     paymentField.onclick = (e) => {
         e.stopPropagation();
         focuseddClassMaintain(e);
@@ -25,11 +33,11 @@ function CreatePyamentElement (holderDIV, focuseddClassMaintain, handleClicked, 
     };
 
     const linkHolder = document.createElement("div");
-    linkHolder.className = "link_holder";
+    linkHolder.className = "stripe_key";
     linkHolder.style.display = "none";
 
     const purposeHolder = document.createElement("div");
-    purposeHolder.className = "purpose_holder";
+    purposeHolder.className = "paypal_id";
     purposeHolder.style.display = "none";
 
     holderDIV.append(paymentField);

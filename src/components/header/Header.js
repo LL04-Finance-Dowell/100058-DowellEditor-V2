@@ -373,7 +373,7 @@ const Header = () => {
             data:
               sign[h].firstElementChild === null
                 ? // decoded.details.action === "document"
-                sign[h].innerHTML
+                  sign[h].innerHTML
                 : sign[h].firstElementChild.src,
             id: `s${h + 1}`,
           };
@@ -527,7 +527,7 @@ const Header = () => {
               childData.type = type;
               const imageData =
                 "imageInput" &&
-                  element?.firstElementChild?.style?.backgroundImage
+                element?.firstElementChild?.style?.backgroundImage
                   ? element.firstElementChild.style.backgroundImage
                   : element.firstElementChild?.innerHTML;
               if (type != "TEXT_INPUT") {
@@ -651,6 +651,7 @@ const Header = () => {
           let scaleType = newScales[b].querySelector(".scaleTypeHolder");
           let scaleID = newScales[b].querySelector(".scaleId");
           let orentation = newScales[b].querySelector(".nps_vertical");
+          let otherComponent = newScales[b].querySelector(".otherComponent");
           console.log(font);
 
           let buttonText = newScales[b].querySelectorAll(".circle_label");
@@ -688,7 +689,9 @@ const Header = () => {
           let likertScaleArray = "";
 
           if (scaleType.textContent === "likert") {
-            likertScaleArray = newScales[b].querySelector(".likertScaleArray");
+            likertScaleArray = newScales[b].querySelector(
+              ".likert_Scale_Array"
+            );
             orientation = newScales[b].querySelector(".orientation");
             console.log("This is likert", likertScaleArray.textContent);
           }
@@ -708,8 +711,6 @@ const Header = () => {
             percentBackground = newScales[b].querySelector(".percent-slider");
             percentLabel = newScales[b]?.querySelector(".label_hold").children;
             percentContainer = newScales[b]?.querySelectorAll(".containerDIV");
-            // percentLabel =
-            //   newScales[b]?.querySelector(".containerDIV").children;
             console.log(percentLabel);
 
             percentContainer.forEach((elem) => {
@@ -753,6 +754,7 @@ const Header = () => {
             orientation: orientation?.textContent,
             orentation: orentation?.textContent,
             stapelOrientation: stapelOrientation?.textContent,
+            otherComponent: otherComponent.textContent,
           };
           console.log(properties);
           elem = {
@@ -1077,7 +1079,7 @@ const Header = () => {
       documentResponses.push({ scale_id: scaleId, score: parseInt(holdElem) });
     });
 
-    console.log("This is stapel_res", documentResponses)
+    console.log("This is stapel_res", documentResponses);
 
     console.log(generateLoginUser());
     console.log(documentResponses);
@@ -1151,9 +1153,15 @@ const Header = () => {
       scaleId = scale?.querySelector(".scaleId")?.textContent;
       holdElem = scale?.querySelector(".holdElem")?.textContent;
 
-      documentResponses.push({ scale_id: scaleId, score: typeof holdElem === "number" || !isNaN(holdElem) ? parseInt(holdElem) : holdElem });
+      documentResponses.push({
+        scale_id: scaleId,
+        score:
+          typeof holdElem === "number" || !isNaN(holdElem)
+            ? parseInt(holdElem)
+            : holdElem,
+      });
     });
-    console.log("This is docresp", documentResponses)
+    console.log("This is docresp", documentResponses);
 
     const requestBody = {
       process_id: decoded.details.process_id,
@@ -1277,6 +1285,188 @@ const Header = () => {
       });
   }
 
+  function handleFinalizeButtonPercent() {
+    const username = decoded?.details?.authorized;
+    console.log(username);
+
+    function generateLoginUser() {
+      return "user_" + Math.random().toString(36).substring(7);
+      // return token;
+    }
+
+    function authorizedLogin() {
+      return username === undefined ? generateLoginUser() : username;
+    }
+
+    let scaleElements = document.querySelectorAll(".newScaleInput");
+
+    const documentResponses = new Set(); // Use a Set to store unique entries
+
+    scaleElements.forEach((scale) => {
+      const scaleIdElement = scale.querySelector(".scaleId");
+      const scaleId = scaleIdElement ? scaleIdElement.textContent : null;
+
+      if (scaleId !== null && !documentResponses.has(scaleId)) {
+        const centerTextElements = scale.querySelectorAll(".center-percent");
+        const centerTextArray = [];
+
+        centerTextElements.forEach((val) => {
+          const originalText = val.textContent;
+          const textWithoutPercent = originalText.replace("%", "");
+          centerTextArray.push(Number(textWithoutPercent));
+        });
+
+        documentResponses.add({
+          scale_id: scaleId,
+          score: centerTextArray,
+        });
+      }
+    });
+
+    // Convert the Set back to an array if needed
+    const documentResponsesArray = Array.from(documentResponses);
+    console.log(documentResponsesArray);
+
+    console.log(generateLoginUser());
+    console.log(documentResponses);
+
+    const requestBody = {
+      process_id: decoded.details.process_id,
+      instance_id: 1,
+      brand_name: "XYZ545",
+      product_name: "XYZ511",
+      username: authorizedLogin(),
+      document_responses: documentResponsesArray,
+
+      action: decoded.details.action,
+      authorized: decoded.details.authorized,
+      cluster: decoded.details.cluster,
+      collection: decoded.details.collection,
+      command: decoded.details.command,
+      database: decoded.details.database,
+      document: decoded.details.document,
+      document_flag: decoded.details.document_flag,
+      document_right: decoded.details.document_right,
+      field: decoded.details.field,
+      function_ID: decoded.details.function_ID,
+      metadata_id: decoded.details.metadata_id,
+      role: decoded.details.role,
+      team_member_ID: decoded.details.team_member_ID,
+      content: decoded.details.update_field.content,
+      document_name: decoded.details.update_field.document_name,
+      page: decoded.details.update_field.page,
+      user_type: decoded.details.user_type,
+      _id: decoded.details._id,
+    };
+
+    Axios.post(
+      "https://100035.pythonanywhere.com/percent/api/percent_responses_create/",
+      requestBody
+    )
+      .then((response) => {
+        if (response.status === 200) {
+          setIsLoading(false);
+          var responseData = response.data;
+          setScaleData(responseData);
+          console.log(response);
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
+  function handleFinalizeButtonPercentSum() {
+    const username = decoded?.details?.authorized;
+    console.log(username);
+
+    function generateLoginUser() {
+      return "user_" + Math.random().toString(36).substring(7);
+      // return token;
+    }
+
+    function authorizedLogin() {
+      return username === undefined ? generateLoginUser() : username;
+    }
+
+    let scaleElements = document.querySelectorAll(".newScaleInput");
+
+    const documentResponses = new Set(); // Use a Set to store unique entries
+
+    scaleElements.forEach((scale) => {
+      const scaleIdElement = scale.querySelector(".scaleId");
+      const scaleId = scaleIdElement ? scaleIdElement.textContent : null;
+
+      if (scaleId !== null && !documentResponses.has(scaleId)) {
+        const centerTextElements = scale.querySelectorAll(".center-percent");
+        const centerTextArray = [];
+
+        centerTextElements.forEach((val) => {
+          const originalText = val.textContent;
+          const textWithoutPercent = originalText.replace("%", "");
+          centerTextArray.push(Number(textWithoutPercent));
+        });
+
+        documentResponses.add({
+          scale_id: scaleId,
+          score: centerTextArray,
+        });
+      }
+    });
+
+    // Convert the Set back to an array if needed
+    const documentResponsesArray = Array.from(documentResponses);
+    console.log(documentResponsesArray);
+
+    console.log(generateLoginUser());
+    console.log(documentResponses);
+
+    const requestBody = {
+      process_id: decoded.details.process_id,
+      instance_id: 1,
+      brand_name: "XYZ545",
+      product_name: "XYZ511",
+      username: authorizedLogin(),
+      document_responses: documentResponsesArray,
+
+      action: decoded.details.action,
+      authorized: decoded.details.authorized,
+      cluster: decoded.details.cluster,
+      collection: decoded.details.collection,
+      command: decoded.details.command,
+      database: decoded.details.database,
+      document: decoded.details.document,
+      document_flag: decoded.details.document_flag,
+      document_right: decoded.details.document_right,
+      field: decoded.details.field,
+      function_ID: decoded.details.function_ID,
+      metadata_id: decoded.details.metadata_id,
+      role: decoded.details.role,
+      team_member_ID: decoded.details.team_member_ID,
+      content: decoded.details.update_field.content,
+      document_name: decoded.details.update_field.document_name,
+      page: decoded.details.update_field.page,
+      user_type: decoded.details.user_type,
+      _id: decoded.details._id,
+    };
+
+    Axios.post(
+      "https://100035.pythonanywhere.com/percent-sum/api/percent-sum-response-create/",
+      requestBody
+    )
+      .then((response) => {
+        if (response.status === 200) {
+          setIsLoading(false);
+          var responseData = response.data;
+          setScaleData(responseData);
+          console.log(response);
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
   function submit(e) {
     e.preventDefault();
     setIsLoading(true);
@@ -1355,6 +1545,10 @@ const Header = () => {
             handleFinalizeButtonNpsLite();
           } else if (scaleType.textContent === "likert") {
             handleFinalizeButtonLikert();
+          } else if (scaleType.textContent === "percent_scale") {
+            handleFinalizeButtonPercent();
+          }else if(scaleType.textContent === "percent_sum_scale") {
+            handleFinalizeButtonPercentSum() 
           }
           setIsDataSaved(true);
         }
@@ -1419,7 +1613,6 @@ const Header = () => {
         cluster: decoded.details.cluster,
         document: decoded.details.document,
         update_field: decoded.details.update_field,
-
       }
     )
       .then((res) => {
@@ -1555,7 +1748,7 @@ const Header = () => {
             const pageData = res.data.page;
             setItem(pageData);
             console.log(loadedData);
-            console.log(loadedData[0][0]);
+            console.log("Loaded Data ",loadedData[0][0]);
             setData(loadedData[0][0]);
             setFetchedData(loadedData[0][0]);
             setIsDataRetrieved(true);
@@ -1659,8 +1852,9 @@ const Header = () => {
 
   return (
     <div
-      className={`header ${actionName == "template" ? "header_bg_template" : "header_bg_document"
-        }`}
+      className={`header ${
+        actionName == "template" ? "header_bg_template" : "header_bg_document"
+      }`}
     >
       <Container fluid>
         <Row>
@@ -1670,8 +1864,9 @@ const Header = () => {
               {isMenuVisible && (
                 <div
                   ref={menuRef}
-                  className={`position-absolute bg-white d-flex flex-column p-4 bar-menu menu ${isMenuVisible ? "show" : ""
-                    }`}
+                  className={`position-absolute bg-white d-flex flex-column p-4 bar-menu menu ${
+                    isMenuVisible ? "show" : ""
+                  }`}
                 >
                   <div className="d-flex cursor_pointer" onClick={handleUndo}>
                     <ImUndo />
