@@ -2812,6 +2812,7 @@ const ScaleRightSide = () => {
                 button4.appendChild(containerDiv);
 
                 if (orientation === "Horizontal") {
+                  scale?.querySelector(".orientation")?.remove();
                   button4.style.border = "block";
                   button4.style.textAlign = "center";
                   button.style.marginTop = "10px";
@@ -2824,6 +2825,12 @@ const ScaleRightSide = () => {
                 }
 
                 if (orientation === "Vertical") {
+                  const orientation = document.createElement("h2");
+                  orientation.className = "orientation";
+                  orientation.textContent = "Vertical";
+                  orientation.style.display = "none";
+                  button4.appendChild(orientation);
+
                   containerDiv.style.transform = "rotate(270deg)";
                   containerDiv.style.marginTop = "80px";
                   containerDiv.style.width = "100%";
