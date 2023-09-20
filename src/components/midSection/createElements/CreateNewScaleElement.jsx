@@ -63,6 +63,12 @@ function createNewScaleInputElement(
   scaleText.style.borderRadius = "0px";
   scaleHold.append(scaleText);
 
+  const otherComponent = document.createElement("h6");
+  otherComponent.className = "otherComponent";
+  otherComponent.style.display = "none";
+  otherComponent.textContent = ""
+  scaleHold.appendChild(otherComponent);
+
   const labelHold = document.createElement("div");
   labelHold.className = "label_hold";
   labelHold.style.width = "100%";

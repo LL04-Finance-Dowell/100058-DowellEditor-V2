@@ -2660,7 +2660,7 @@ const MidSection = React.forwardRef((props, ref) => {
                     removeInput={handleRemoveInput}
                   />
                 )}
-                <Row>
+                <Row style={{height: isLoading ? "79%":"" }}>
                   <Col className="d-flex justify-content-end header_user">
                     <span>{index + 1}</span>
                     {isLoading && <Spinner />}
