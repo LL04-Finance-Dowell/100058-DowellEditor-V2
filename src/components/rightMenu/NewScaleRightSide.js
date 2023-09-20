@@ -505,6 +505,16 @@ const ScaleRightSide = () => {
   const [selectedEmojis, setSelectedEmojis] = useState([]);
   const [activeEmojiPicker, setActiveEmojiPicker] = useState(null); // Track active emoji picker for text label type
 
+  useEffect(() => {
+    // Fetch saved data from storage (localStorage, sessionStorage, etc.)
+    const savedLabelScale = localStorage.getItem("labelScale");
+    const savedLabelTexts = JSON.parse(localStorage.getItem("labelTexts"));
+
+    // Set the initial state with fetched data
+    setLabelScale(savedLabelScale || ""); // Use empty string as a fallback
+    setLabelTexts(savedLabelTexts || []); // Use an empty array as a fallback
+  }, []);
+
   const handleLabelTypeChange = (event) => {
     const selectedValue = event.target.value;
     setLabelType(selectedValue);
@@ -552,7 +562,12 @@ const ScaleRightSide = () => {
   const handleLabelTextChange = (index, event) => {
     const updatedLabelTexts = [...labelTexts];
     updatedLabelTexts[index] = event.target.value;
+
+    // Update the state variable
     setLabelTexts(updatedLabelTexts);
+
+    // Save the updated data to storage
+    localStorage.setItem("labelTexts", JSON.stringify(updatedLabelTexts));
   };
 
   const areAllTextInputsFilled = labelTexts.every(
@@ -692,7 +707,6 @@ const ScaleRightSide = () => {
     }
     setInputFields(newInputFields);
   };
-
 
   console.log(scale);
 
@@ -975,11 +989,13 @@ const ScaleRightSide = () => {
               circle.style.backgroundColor = btnUpdateButton.value;
               labelHold.appendChild(circle);
               if (selectedOption === "emoji" && emojiInp !== "") {
+                console.log(selectedOption);
                 // Set the text content of the div to the corresponding emoji
                 const emojiFormat = /(\p{Emoji}|\uFE0F)/gu;
                 const emojis = emojiInp
                   .split(emojiFormat)
                   .filter((emoji) => emoji !== "");
+                console.log(emojis);
                 circle.textContent = emojis[i % emojis.length];
                 circle.style.fontSize = "1.8vw";
               } else {
@@ -1056,7 +1072,7 @@ const ScaleRightSide = () => {
               buttonChildNeutral.textContent = btnUpdateCenter.value;
 
               for (let i = 0; i <= 10; i++) {
-                const selectedOption = optionSelect.value;
+                // const selectedOption = optionSelect.value;
                 const circle = document.createElement("div");
                 circle.className = "circle_label";
                 circle.textContent = i;
@@ -1070,12 +1086,14 @@ const ScaleRightSide = () => {
                 circle.style.alignItems = "center";
                 circle.style.backgroundColor = btnUpdateButton.value;
                 labelHold.appendChild(circle);
+                console.log(selectedOption);
                 if (selectedOption === "emoji" && emojiInp !== "") {
                   // Set the text content of the div to the corresponding emoji
                   const emojiFormat = /(\p{Emoji}|\uFE0F)/gu;
                   const emojis = emojiInp
                     .split(emojiFormat)
                     .filter((emoji) => emoji !== "");
+                  console.log(emojis);
                   circle.textContent = emojis[i % emojis.length];
                   circle.style.fontSize = "1.8vw";
                 } else {
@@ -1338,7 +1356,7 @@ const ScaleRightSide = () => {
             labelHold.appendChild(optionHolder);
             stapelScaleArray.textContent = res.data.data.settings.scale;
             labelHold.append(stapelScaleArray);
-            console.log("This is stapel", stapelScaleArray)
+            console.log("This is stapel", stapelScaleArray);
           })
           .catch((err) => {
             setIsLoading(false);
@@ -1546,7 +1564,7 @@ const ScaleRightSide = () => {
         setIsLoading(true);
         console.log("post req");
         Axios.post(
-          "https://100035.pythonanywhere.com/nps-lite/api/nps-lite-settings",
+          "https://100035.pythonanywhere.com/nps-lite/api/nps-lite-settings/",
           {
             user: "true",
             username: "NdoneAmbrose",
@@ -1683,7 +1701,7 @@ const ScaleRightSide = () => {
                 name,
                 fontcolor,
                 fontstyle,
-                custom_emoji_format
+                custom_emoji_format,
               } = res.data.data;
               const textValues = [left, center, right];
 
@@ -1807,7 +1825,7 @@ const ScaleRightSide = () => {
       const numColumns = Math.min(updatedLabelScale, 3);
 
       const likertScaleArray = document.createElement("div");
-      likertScaleArray.className = "likertScaleArray";
+      likertScaleArray.className = "likert_Scale_Array";
       likertScaleArray.textContent = updatedLabels;
       likertScaleArray.style.display = "none";
       labelHold.append(likertScaleArray);
@@ -1852,7 +1870,6 @@ const ScaleRightSide = () => {
         button.style.alignItems = "center";
         button.style.marginTop = "1%";
         button.style.marginLeft = "26%";
-        // circle.style.gap = "20px";
       }
 
       const basePayload = {
@@ -2052,7 +2069,7 @@ const ScaleRightSide = () => {
 
                 labelHold.appendChild(circle);
               }
-              console.log("This is it", likertScaleArray);
+              console.log("This is it+++++++______", likertScaleArray);
             }
           })
           .catch((err) => {
@@ -2161,8 +2178,6 @@ const ScaleRightSide = () => {
             const {
               name,
               orientation,
-              fontcolor,
-              fontstyle,
               scale_color,
               product_count,
               product_names,
@@ -2176,12 +2191,12 @@ const ScaleRightSide = () => {
               newLabelHold.innerHTML = "";
               newLabelHold.style = "";
 
-              newLabelHold.style.padding = "3px";
+              // newLabelHold.style.padding = "25px";
               newLabelHold.style.borderBottom = "1px solid gray";
 
-              newLabelHold.style.paddingRight = "35px";
-              newLabelHold.style.paddingLeft = "35px";
-              newLabelHold.style.borderBottom = "1px solid gray";
+              // newLabelHold.style.paddingRight = "50px";
+              // newLabelHold.style.paddingLeft = "35px";
+              // newLabelHold.style.borderBottom = "1px solid gray";
               newLabelHold.style.borderTop = "1px solid gray";
 
               let nameDiv = document.createElement("div");
@@ -2257,10 +2272,18 @@ const ScaleRightSide = () => {
                 orientation.style.display = "none";
                 button4.appendChild(orientation);
                 containerDiv.style.transform = "rotate(270deg)";
-                nameDiv.style.position = "absolute";
-                nameDiv.style.left = "93%";
-                nameDiv.style.top = "7px";
                 nameDiv.style.right = "-8px";
+                nameDiv.style.position = "absolute";
+                nameDiv.style.width = "50%";
+                nameDiv.style.left = "75%";
+                nameDiv.textContent.length < 9
+                  ? (nameDiv.style.top = "23px")
+                  : (nameDiv.style.top = "39px");
+
+                newLabelHold.style.padding =
+                  nameDiv.textContent.length < 9
+                    ? "0px 20px 10px 14px"
+                    : "0px 20px 37px 14px";
                 nameDiv.style.transform = "rotate(90deg)";
 
                 newLabelHold.style.position = "relative";
@@ -2312,8 +2335,6 @@ const ScaleRightSide = () => {
               const {
                 name,
                 orientation,
-                fontcolor,
-                fontstyle,
                 scale_color,
                 product_count,
                 product_names,
@@ -2326,11 +2347,10 @@ const ScaleRightSide = () => {
                 newLabelHold.innerHTML = "";
                 newLabelHold.style = "";
 
-                newLabelHold.style.padding = "3px";
                 newLabelHold.style.borderBottom = "1px solid gray";
 
-                newLabelHold.style.paddingRight = "35px";
-                newLabelHold.style.paddingLeft = "35px";
+                // newLabelHold.style.paddingRight = "35px";
+                // newLabelHold.style.paddingLeft = "35px";
                 newLabelHold.style.borderBottom = "1px solid gray";
                 newLabelHold.style.borderTop = "1px solid gray";
 
@@ -2408,8 +2428,16 @@ const ScaleRightSide = () => {
                   button4.appendChild(orientation);
                   containerDiv.style.transform = "rotate(270deg)";
                   nameDiv.style.position = "absolute";
-                  nameDiv.style.left = "93%";
-                  nameDiv.style.top = "7px";
+                  nameDiv.style.width = "50%";
+                  nameDiv.style.left = "75%";
+                  nameDiv.textContent.length < 9
+                    ? (nameDiv.style.top = "23px")
+                    : (nameDiv.style.top = "39px");
+
+                  newLabelHold.style.padding =
+                    nameDiv.textContent.length < 9
+                      ? "0px 20px 10px 14px"
+                      : "0px 20px 37px 14px";
                   nameDiv.style.right = "-8px";
                   nameDiv.style.transform = "rotate(90deg)";
 
@@ -2629,7 +2657,7 @@ const ScaleRightSide = () => {
                 orientation.textContent = "Vertical";
                 orientation.style.display = "none";
                 button4.appendChild(orientation);
-          
+
                 containerDiv.style.transform = "rotate(270deg)";
                 containerDiv.style.marginTop = "80px";
                 containerDiv.style.width = "100%";
@@ -2784,6 +2812,7 @@ const ScaleRightSide = () => {
                 button4.appendChild(containerDiv);
 
                 if (orientation === "Horizontal") {
+                  scale?.querySelector(".orientation")?.remove();
                   button4.style.border = "block";
                   button4.style.textAlign = "center";
                   button.style.marginTop = "10px";
@@ -2796,6 +2825,12 @@ const ScaleRightSide = () => {
                 }
 
                 if (orientation === "Vertical") {
+                  const orientation = document.createElement("h2");
+                  orientation.className = "orientation";
+                  orientation.textContent = "Vertical";
+                  orientation.style.display = "none";
+                  button4.appendChild(orientation);
+
                   containerDiv.style.transform = "rotate(270deg)";
                   containerDiv.style.marginTop = "80px";
                   containerDiv.style.width = "100%";
@@ -2916,6 +2951,19 @@ const ScaleRightSide = () => {
   // console.log(iframeSrc, "iframeSrc");
 
   function removeScale() {
+    let elementString = localStorage.getItem("elements");
+    let elementArray = [];
+    if (typeof elementString !== "undefined") {
+      elementArray = JSON.parse(elementString);
+    }
+    const otherComponent = scale?.querySelector(".otherComponent");
+    if(elementArray !== null) {
+      let elementIndex = elementArray.indexOf(otherComponent.textContent);
+      elementArray.splice(elementIndex, 1);
+      let string = JSON.stringify(elementArray);
+      localStorage.setItem("elements", string);
+    }
+
     const focusseddElmnt = document.querySelector(".focussedd");
     if (focusseddElmnt.classList.contains("holderDIV")) {
       document.querySelector(".focussedd").remove();
@@ -2941,7 +2989,7 @@ const ScaleRightSide = () => {
     "type",
     "NEW_SCALE_INPUT"
   );
-   console.log("Try this",newArray);
+  console.log("Try this", newArray);
 
   const filteredArray = newArray?.filter((obj) => !customId.includes(obj.id));
   // console.log(filteredArray);
@@ -2957,7 +3005,10 @@ const ScaleRightSide = () => {
 
   useEffect(() => {
     // Save the availableTextElements state to local storage whenever it changes
-    localStorage.setItem('availableTextElements', JSON.stringify(availableTextElements));
+    localStorage.setItem(
+      "availableTextElements",
+      JSON.stringify(availableTextElements)
+    );
   }, [availableTextElements]);
 
   const removeSelectedOption = () => {
@@ -2977,7 +3028,7 @@ const ScaleRightSide = () => {
       const option = options[i];
       if (option.selected) {
         selectedValues[option.value] = option.id;
-        console.log("This is option",option);
+        console.log("This is option", option);
       }
     }
 
@@ -2987,10 +3038,20 @@ const ScaleRightSide = () => {
     let selectedOption = selectField.options[selectField.selectedIndex];
     let selectedElementId = selectedOption.id;
     console.log(selectedElementId, "selectedElementId");
-    const scale = document.querySelector(".focussedd")
+    const scale = document.querySelector(".focussedd");
     const otherComponent = scale?.querySelector(".otherComponent");
-    otherComponent.textContent = selectedOption.value + " "+selectedOption.id
-    console.log("Other Component", otherComponent.textContent)
+    otherComponent.textContent = selectedOption.value + " " + selectedOption.id;
+    console.log("Other Component", otherComponent.textContent);
+    let elementString = localStorage.getItem("elements");
+    let elemArray = [];
+    if (elementString !== null) {
+      elemArray = JSON.parse(elementString);
+    }
+    console.log(elemArray);
+    console.log(`"${selectedOption.value + " " + selectedOption.id}"`);
+    elemArray.push(selectedOption.value + " " + selectedOption.id);
+    let string = JSON.stringify(elemArray);
+    localStorage.setItem("elements", string);
   };
 
   function scaleSubmit(e) {
@@ -3001,7 +3062,11 @@ const ScaleRightSide = () => {
     const idHolder = scale?.querySelector(".scaleId");
     console.log("This is the scale Id", idHolder.textContent);
     removeSelectedOption(); // Call this function to remove the selected option
-    console.log(removeSelectedOption(), "what shall I do@@@@@@@@@@@@@!!!!!!!!!!!!!!");
+    console.log(
+      removeSelectedOption(),
+      "what shall I do@@@@@@@@@@@@@!!!!!!!!!!!!!!"
+    );
+    e.preventDefault();
     setIsLoading(true);
     Axios.post("https://100035.pythonanywhere.com/api/nps_custom_data/", {
       template_id: decoded.details._id,
@@ -3031,7 +3096,7 @@ const ScaleRightSide = () => {
       const option = options[i];
       if (option.selected) {
         selectedValues[option.value] = option.id;
-        console.log("This is option",option);
+        console.log("This is option", option);
       }
     }
 
@@ -3046,7 +3111,7 @@ const ScaleRightSide = () => {
     //   (element) => element.id === selectedElementId
     // );
 
-    const selectedElements = document.getElementById(`${selectedElementId}`)
+    const selectedElements = document.getElementById(`${selectedElementId}`);
 
     setSelectedElementId(selectedElements.id);
     console.log(selectedElements, "selectedElement");
@@ -3070,113 +3135,14 @@ const ScaleRightSide = () => {
     // Store the ID of the currently selected option as the previous option
     selectField.setAttribute("data-prev-option", selectedElements.id);
   };
-  let optionArray = []
-  const createOptions = () => {
-  const imageCanva = document.getElementsByClassName("cameraInput")
-  if(imageCanva.length){
-    for(let i = 0; i<imageCanva.length; i++) {
-      optionArray.push("CAMERA_INPUT "+imageCanva[i].id)
-    }
-  }
 
-  const txt = document.getElementsByClassName("textInput");
-  if(txt.length){
-    for(let i = 0; i<txt.length; i++) {
-      optionArray.push("TEXT_INPUT "+txt[i].id)
-    }
-  }
-
-  const img = document.getElementsByClassName("imageInput");
-  if(img.length){
-    for(let i = 0; i<img.length; i++) {
-      optionArray.push("IMAGE_INPUT "+img[i].id)
-    }
-  }
-
-  const date = document.getElementsByClassName("dateInput");
-  if(date.length){
-    for(let i = 0; i<date.length; i++) {
-      optionArray.push("DATE_INPUT "+date[i].id)
-    }
-  }
-
-  const sign = document.getElementsByClassName("signInput");
-  if(sign.length){
-    for(let i = 0; i<sign.length; i++) {
-      optionArray.push("SIGN_INPUT "+sign[i].id)
-    }
-  }
-
-  const tables = document.getElementsByClassName("tableInput");
-  if(tables.length){
-    for(let i = 0; i<tables.length; i++) {
-      optionArray.push("TABLE_INPUT "+tables[i].id)
-    }
-  }
-
-  const containerElements = document.getElementsByClassName("containerInput");
-  if(containerElements.length){
-    for(let i = 0; i<containerElements.length; i++) {
-      optionArray.push("CONTAINER_INPUT "+containerElements[i].id)
-    }
-  }
-
-  const iframes = document.getElementsByClassName("iframeInput");
-  if(iframes.length){
-    for(let i = 0; i<iframes.length; i++) {
-      optionArray.push("IFRAME_INPUT "+iframes[i].id)
-    }
-  }
-
-  const buttons = document.getElementsByClassName("buttonInput");
-  if(buttons.length){
-    for(let i = 0; i<buttons.length; i++) {
-      optionArray.push("BUTTON_INPUT "+buttons[i].id)
-    }
-  }
-
-  const payments = document.getElementsByClassName("paymentInput");
-  if(payments.length){
-    for(let i = 0; i<payments.length; i++) {
-      optionArray.push("PAYMENT_INPUT "+payments[i].id)
-    }
-  }
-
-  const dropDowns = document.getElementsByClassName("dropdownInput");
-  if(dropDowns.length){
-    for(let i = 0; i<dropDowns.length; i++) {
-      optionArray.push("DROPDOWN_INPUT "+dropDowns[i].id)
-    }
-  }
-
-  const emails = document.getElementsByClassName("emailButton");
-  if(emails.length){
-    for(let i = 0; i<emails.length; i++) {
-      optionArray.push("FORM_INPUT "+emails[i].id)
-    }
-  }
-}
-
-createOptions()
-
-  console.log("This is optionArray",optionArray)
- 
-  // const options = availableTextElements.map((element, index) => (
-  //   <option key={index} value={element.type} id={element.id}>
-  //     {`${element.type} ${element.id}`}
-  //   </option>
-  // ));
-
-  const otherComponent = scale?.querySelector(".otherComponent");
-  const options = otherComponent.textContent === "" ? optionArray.map((element, index) => (
-    <option key={index} value={element.split(" ")[0]} id={element.split(" ")[1]}>
-      {`${element}`}
+  const options = availableTextElements.map((element, index) => (
+    <option key={index} value={element.type} id={element.id}>
+      {`${element.type} ${element.id}`}
     </option>
-  )) : <option key={0} selected value={otherComponent.textContent.split(" ")[0]} id={otherComponent.textContent.split(" ")[1]}>
-  {`${otherComponent.textContent}`}
-</option>;
+  ));
 
-  console.log(options,"ava++++++++++++++____")
+  console.log(options, "ava++++++++++++++____");
 
   const handleBorderSizeChange = (e) => {
     setBorderSize(e.target.value);
@@ -3272,99 +3238,99 @@ createOptions()
 
   return (
     <>
-    {decoded.details.action === "document" ? (
-      <>
-        <div
-          style={{
-            width: "100%",
-            display: "flex",
-            // borderRadius: "20px",
-            // backgroundColor: "red",
-          }}
-        >
-          <button
+      {decoded.details.action === "document" ? (
+        <>
+          <div
             style={{
               width: "100%",
-              border: "none",
-              fontWeight: "600",
+              display: "flex",
+              // borderRadius: "20px",
+              // backgroundColor: "red",
             }}
-            id="updateScale"
-            className="py-2 bg-white border-none"
-            // style={{"}}
-            // onClick={showIframe}
           >
-            Appearance
-          </button>
-          <button
-            style={{
-              width: "100%",
-              border: "none",
-              fontWeight: "600",
-            }}
-            id="setScale"
-            className="py-2 bg-white border-none"
-            // style={{ bordern: "none", outline: "none" }}
-            // onClick={showSetting}
-          >
-            Configurations
-          </button>
-        </div>
-        <div id="iframeRight">
-          <div className="mb-4"></div>
-        </div>
-        {showBorder === true ? (
-          <>
-            <hr />
-            <Row className="pt-4">
-              <div style={{ display: "flex", alignItems: "center" }}>
-                <h6 style={{ marginRight: "10rem" }}>Border</h6>
-                <label className="switch">
-                  <input
-                    type="checkbox"
-                    onClick={() => setShowSlider(!showSlider)}
-                  />
-                  <span className="slider round"></span>
-                </label>
-              </div>
-              {showSlider && (
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    backgroundColor: "#abab",
-                    gap: "10px",
-                    height: "40px",
-                    width: "90%",
-                  }}
-                >
-                  <input
-                    type="color"
-                    value={borderColor}
-                    onChange={handleBorderColorChange}
-                    id="color"
-                    style={{ border: "none", width: "10%", height: "15px" }}
-                  />
-                  <input
-                    type="range"
-                    min="-10"
-                    max="20"
-                    value={borderSize}
-                    onChange={handleBorderSizeChange}
-                    id="range"
-                    className="range-color"
-                  />
+            <button
+              style={{
+                width: "100%",
+                border: "none",
+                fontWeight: "600",
+              }}
+              id="updateScale"
+              className="py-2 bg-white border-none"
+              // style={{"}}
+              // onClick={showIframe}
+            >
+              Appearance
+            </button>
+            <button
+              style={{
+                width: "100%",
+                border: "none",
+                fontWeight: "600",
+              }}
+              id="setScale"
+              className="py-2 bg-white border-none"
+              // style={{ bordern: "none", outline: "none" }}
+              // onClick={showSetting}
+            >
+              Configurations
+            </button>
+          </div>
+          <div id="iframeRight">
+            <div className="mb-4"></div>
+          </div>
+          {showBorder === true ? (
+            <>
+              <hr />
+              <Row className="pt-4">
+                <div style={{ display: "flex", alignItems: "center" }}>
+                  <h6 style={{ marginRight: "10rem" }}>Border</h6>
+                  <label className="switch">
+                    <input
+                      type="checkbox"
+                      onClick={() => setShowSlider(!showSlider)}
+                    />
+                    <span className="slider round"></span>
+                  </label>
                 </div>
-              )}
-            </Row>
-            <hr />
-          </>
-        ) : (
-          ""
-        )}
-        <div id="settingRight" style={{ display: "none" }}>
-          {/* iframe */}
-          <div>
-            {/* <Form.Control
+                {showSlider && (
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      backgroundColor: "#abab",
+                      gap: "10px",
+                      height: "40px",
+                      width: "90%",
+                    }}
+                  >
+                    <input
+                      type="color"
+                      value={borderColor}
+                      onChange={handleBorderColorChange}
+                      id="color"
+                      style={{ border: "none", width: "10%", height: "15px" }}
+                    />
+                    <input
+                      type="range"
+                      min="-10"
+                      max="20"
+                      value={borderSize}
+                      onChange={handleBorderSizeChange}
+                      id="range"
+                      className="range-color"
+                    />
+                  </div>
+                )}
+              </Row>
+              <hr />
+            </>
+          ) : (
+            ""
+          )}
+          <div id="settingRight" style={{ display: "none" }}>
+            {/* iframe */}
+            <div>
+              {/* <Form.Control
           type="text"
           placeholder={`${decoded.details._id}_scl1`}
           disabled
@@ -3372,10 +3338,10 @@ createOptions()
         // id="iframe_src"
         // onChange={handleChange}
         /> */}
+            </div>
           </div>
-        </div>
-      </>
-    ) : (
+        </>
+      ) : (
         <>
           <div
             style={{
@@ -3877,6 +3843,7 @@ createOptions()
                         display: "none",
                         flexDirection: "column",
                         gap: "2px",
+                        width: "90%"
                       }}
                       id="emoji"
                     >
@@ -3898,8 +3865,8 @@ createOptions()
                       >
                         <input
                           style={{
-                            width: "100px",
-                            height: "15px",
+                            width: "100%",
+                            height: "18px",
                             display: "flex",
                             backgroundColor: "transparent",
                             outline: "none",
@@ -3908,6 +3875,7 @@ createOptions()
                           }}
                           id="emojiInp"
                           value={inputStr}
+                          contentEditable
                           onChange={(e) => setInputStr(e.target.value)}
                         />
 
@@ -4957,6 +4925,7 @@ createOptions()
                         display: "none",
                         flexDirection: "column",
                         gap: "2px",
+                        width: "90%",
                       }}
                       id="emoji_stapel"
                     >
@@ -4979,7 +4948,7 @@ createOptions()
                         <input
                           style={{
                             width: "100px",
-                            height: "15px",
+                            height: "18px",
                             display: "flex",
                             backgroundColor: "transparent",
                             outline: "none",
