@@ -981,7 +981,7 @@ const Header = () => {
   const document_map_required = docMap?.filter((item) => item.required);
 
   // ? This "if" condition is to prevent code from running, everytime Header.js renders
-  if (!docMapRequired?.length) setDocMapRequired(document_map_required)
+  // if (!docMapRequired?.length) setDocMapRequired(document_map_required)
 
 
   useEffect(() => {
