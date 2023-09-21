@@ -309,7 +309,8 @@ const Header = () => {
             left: tempPosn.left,
             type: "IMAGE_INPUT",
             data: dataName,
-            borderWidth: `${borderSize}px dotted ${borderColor}`,
+            border: `${borderSize}px dotted ${borderColor}`,
+            imgBorder:img[h].parentElement.style.border,
             id: `i${h + 1}`,
           };
 

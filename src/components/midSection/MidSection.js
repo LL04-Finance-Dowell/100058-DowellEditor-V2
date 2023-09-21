@@ -1911,7 +1911,7 @@ const MidSection = React.forwardRef((props, ref) => {
             border: element.borderWidths,
             auth_user: curr_user,
           };
-          console.log("getting text input value", measure.border);
+          console.log("getting text input values", measure.border);
 
           const idMatch = documnetMap?.filter((elmnt) => elmnt == element?.id);
           // console.log("element", element);
@@ -1930,7 +1930,7 @@ const MidSection = React.forwardRef((props, ref) => {
             height: element.height + "px",
             left: finding_percent(element, "left"),
             top: element.topp,
-            border: element.borderWidth,
+            border: element.imgBorder,
             auth_user: curr_user,
           };
           console.log("element", element);

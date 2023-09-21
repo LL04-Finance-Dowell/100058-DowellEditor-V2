@@ -319,6 +319,12 @@ const PaymentRightSide = () => {
                                                 loader ? "Wait...." : "Submit Info"
                                             }
                                         </button>
+
+                                        <button type="submit" className="btn btn-primary">
+                                            {
+                                                loader ? "Wait...." : "Pay With QR Code"
+                                            }
+                                        </button>
                                     </Form>
 
                                 </div> : <div>
