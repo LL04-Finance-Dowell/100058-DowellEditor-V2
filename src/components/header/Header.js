@@ -1451,6 +1451,7 @@ const Header = () => {
       _id: decoded.details._id,
     };
 
+    console.log("This is percent_sum payloaf", requestBody)
     Axios.post(
       "https://100035.pythonanywhere.com/percent-sum/api/percent-sum-response-create/",
       requestBody

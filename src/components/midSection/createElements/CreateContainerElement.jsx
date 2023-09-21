@@ -16,6 +16,13 @@ function createContainerInputElement(holderDIV, focuseddClassMaintain, handleCli
     containerField.style.overflow = "overlay";
     containerField.style.position = "absolute";
 
+    const container = document.getElementsByClassName("containerInput");
+    if (container.length) {
+      const h = container.length;
+      containerField.id = `c${h + 1}`;
+    } else {
+      containerField.id = "c1";
+      }
     containerField.onclick = (e) => {
       e.stopPropagation();
       focuseddClassMaintain(e);
