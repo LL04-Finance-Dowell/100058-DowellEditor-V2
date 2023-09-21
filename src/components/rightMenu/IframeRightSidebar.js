@@ -14,7 +14,7 @@ const IframeRightSidebar = () => {
   const token = searchParams.get("token");
 
   const isRequired =
-    docMapRequired.find(
+    docMapRequired?.find(
       (item) => document.querySelector(".focussed").id == item.content
     ) ? true : false;
 

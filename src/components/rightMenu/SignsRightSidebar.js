@@ -27,7 +27,7 @@ const SignsRightSidebar = () => {
   let data = "";
 
   const isRequired =
-    docMapRequired.find(
+    docMapRequired?.find(
       (item) => document.querySelector(".focussed").id == item.content
     ) ? true : false;
 
