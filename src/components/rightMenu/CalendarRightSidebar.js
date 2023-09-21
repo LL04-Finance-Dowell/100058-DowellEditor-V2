@@ -32,7 +32,7 @@ const CalendarRightSidebar = (props) => {
   const [showSlider, setShowSlider] = useState(false);
 
   const isRequired =
-    docMapRequired.find(
+    docMapRequired?.find(
       (item) => document.querySelector(".focussed").id == item.content
     ) ? true : false;
 
