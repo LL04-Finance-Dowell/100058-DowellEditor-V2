@@ -288,7 +288,7 @@ export const ContextProvider = ({ children }) => {
         const imageSignButton = document.createElement("div");
         imageSignButton.className = "addImageSignButton";
         imageSignButton.innerText = "Choose File";
-        imageSignButton.style.display = "none";
+        imageSignButton.style.display = "none"
 
         const signBtn = document.createElement("input");
         signBtn.className = "addSignButtonInput";
