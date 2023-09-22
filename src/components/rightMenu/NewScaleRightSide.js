@@ -3557,11 +3557,11 @@ const ScaleRightSide = () => {
                   justifyContent: "center",
                   gap: "15px",
                   width: "100%",
-                  overflowY: "auto",
-                  paddingTop: "5px",
-                  paddingBottom: "5px",
-                  paddingLeft: "12px",
-                  paddingRight: "12px",
+                  // overflowY: "auto",
+                  // paddingTop: "5px",
+                  // paddingBottom: "5px",
+                  // paddingLeft: "12px",
+                  // paddingRight: "12px",
                   marginTop: "15px",
                   fontSize: "10px",
                 }}
@@ -3975,10 +3975,10 @@ const ScaleRightSide = () => {
                             top: "100%",
                             left: "-140px",
                             zIndex: 1,
-                            maxWidth: "250px",
+                            maxWidth: "200%",
                             maxHeight: "300px",
-                            overflowY: "auto",
-                            padding: "5px",
+                            // overflowY: "auto",
+                            // padding: "5px",
                           }}
                         >
                           {showPicker && <Picker onEmojiClick={onEmojiClick} />}
@@ -4600,11 +4600,11 @@ const ScaleRightSide = () => {
                   justifyContent: "center",
                   gap: "15px",
                   width: "100%",
-                  overflowY: "auto",
-                  paddingTop: "5px",
-                  paddingBottom: "5px",
-                  paddingLeft: "12px",
-                  paddingRight: "12px",
+                  // overflowY: "auto",
+                  // paddingTop: "5px",
+                  // paddingBottom: "5px",
+                  // paddingLeft: "12px",
+                  // paddingRight: "12px",
                   marginTop: "15px",
                   fontSize: "10px",
                 }}
@@ -5028,16 +5028,16 @@ const ScaleRightSide = () => {
                           backgroundColor: "#e8e8e8",
                           padding: "3px 7px",
                           borderRadius: "7px",
-                          // height: "30px",
+                          //height: "30px",
                           width: "100%",
                           display: "flex",
-                          justifyContent: "center",
-                          alignItems: "center",
+                          // justifyContent: "center",
+                          // alignItems: "center",
                         }}
                       >
                         <input
                           style={{
-                            width: "100px",
+                            width: "100%",
                             height: "18px",
                             display: "flex",
                             backgroundColor: "transparent",
@@ -5053,13 +5053,13 @@ const ScaleRightSide = () => {
                         <div
                           style={{
                             position: "absolute",
-                            top: "100%",
+                            //top: "100%",
                             left: "-140px",
                             zIndex: 1,
-                            maxWidth: "250px",
+                            maxWidth: "200%",
                             maxHeight: "300px",
-                            overflowY: "auto",
-                            padding: "5px",
+                            //overflowY: "auto",
+                            //padding: "5px",
                           }}
                         >
                           {showPicker && <Picker onEmojiClick={onEmojiClick} />}
@@ -5450,11 +5450,11 @@ const ScaleRightSide = () => {
                   justifyContent: "center",
                   gap: "15px",
                   width: "100%",
-                  overflowY: "auto",
-                  paddingTop: "5px",
-                  paddingBottom: "5px",
-                  paddingLeft: "12px",
-                  paddingRight: "12px",
+                  // overflowY: "auto",
+                  // paddingTop: "5px",
+                  // paddingBottom: "5px",
+                  // paddingLeft: "12px",
+                  // paddingRight: "12px",
                   marginTop: "15px",
                   fontSize: "10px",
                 }}
@@ -5790,13 +5790,13 @@ const ScaleRightSide = () => {
                         <div
                           style={{
                             position: "absolute",
-                            top: "100%",
+                            // top: "100%",
                             left: "-140px",
                             zIndex: 1,
-                            maxWidth: "250px",
+                            maxWidth: "290px",
                             maxHeight: "300px",
-                            overflowY: "auto",
-                            padding: "5px",
+                            // overflowY: "auto",
+                            // padding: "5px",
                           }}
                         >
                           {showPicker && <Picker onEmojiClick={onEmojiClick} />}
