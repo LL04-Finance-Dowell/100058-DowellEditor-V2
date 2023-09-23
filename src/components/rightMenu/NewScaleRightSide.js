@@ -242,7 +242,9 @@ const ScaleRightSide = () => {
 
   if (scaleDisplay?.style.display !== "none") {
     if (format) {
-      format.selectedIndex = circleLabel?.indexOf("0") !== -1 ? 0 : 1;
+      if (format.value !== "emoji") {
+        format.selectedIndex = circleLabel?.indexOf("0") !== -1 ? 0 : 1;
+      }
     }
     if (npsLiteFormat) {
       npsLiteFormat.selectedIndex = withEmoji.test(circleLabel) ? 1 : 0;
@@ -2957,7 +2959,7 @@ const ScaleRightSide = () => {
       elementArray = JSON.parse(elementString);
     }
     const otherComponent = scale?.querySelector(".otherComponent");
-    if(elementArray !== null) {
+    if (elementArray !== null) {
       let elementIndex = elementArray.indexOf(otherComponent.textContent);
       elementArray.splice(elementIndex, 1);
       let string = JSON.stringify(elementArray);
@@ -3136,90 +3138,90 @@ const ScaleRightSide = () => {
     selectField.setAttribute("data-prev-option", selectedElements.id);
   };
 
-  let otherElementsArray = []
+  let otherElementsArray = [];
   const txt = document.getElementsByClassName("textInput");
-  for(let i = 0; i<txt.length; i++) {
-    otherElementsArray.push("TEXT_INPUT "+txt[i].id)
+  for (let i = 0; i < txt.length; i++) {
+    otherElementsArray.push("TEXT_INPUT " + txt[i].id);
   }
 
   const img = document.getElementsByClassName("imageInput");
-  for(let i = 0; i<img.length; i++) {
-    otherElementsArray.push("IMAGE_INPUT "+img[i].id)
+  for (let i = 0; i < img.length; i++) {
+    otherElementsArray.push("IMAGE_INPUT " + img[i].id);
   }
 
   const tables = document.getElementsByClassName("tableInput");
-  for(let i = 0; i<tables.length; i++) {
-    otherElementsArray.push("TABLE_INPUT "+tables[i].id)
+  for (let i = 0; i < tables.length; i++) {
+    otherElementsArray.push("TABLE_INPUT " + tables[i].id);
   }
 
   const containerElements = document.getElementsByClassName("containerInput");
-  for(let i = 0; i<containerElements.length; i++) {
-    otherElementsArray.push("CONTAINER_INPUT "+containerElements[i].id)
+  for (let i = 0; i < containerElements.length; i++) {
+    otherElementsArray.push("CONTAINER_INPUT " + containerElements[i].id);
   }
 
   const sign = document.getElementsByClassName("signInput");
-  for(let i = 0; i<sign.length; i++) {
-    otherElementsArray.push("SIGN_INPUT "+sign[i].id)
+  for (let i = 0; i < sign.length; i++) {
+    otherElementsArray.push("SIGN_INPUT " + sign[i].id);
   }
 
   const date = document.getElementsByClassName("dateInput");
-  for(let i = 0; i<date.length; i++) {
-    otherElementsArray.push("DATE_INPUT "+date[i].id)
+  for (let i = 0; i < date.length; i++) {
+    otherElementsArray.push("DATE_INPUT " + date[i].id);
   }
 
   const dropDowns = document.getElementsByClassName("dropdownInput");
-  for(let i = 0; i<dropDowns.length; i++) {
-    otherElementsArray.push("DROPDOWN_INPUT "+dropDowns[i].id)
+  for (let i = 0; i < dropDowns.length; i++) {
+    otherElementsArray.push("DROPDOWN_INPUT " + dropDowns[i].id);
   }
 
   const iframes = document.getElementsByClassName("iframeInput");
-  for(let i = 0; i<iframes.length; i++) {
-    otherElementsArray.push("IFRAME_INPUT "+iframes[i].id)
+  for (let i = 0; i < iframes.length; i++) {
+    otherElementsArray.push("IFRAME_INPUT " + iframes[i].id);
   }
 
   const buttons = document.getElementsByClassName("buttonInput");
-  for(let i = 0; i<buttons.length; i++) {
-    otherElementsArray.push("BUTTON_INPUT "+buttons[i].id)
+  for (let i = 0; i < buttons.length; i++) {
+    otherElementsArray.push("BUTTON_INPUT " + buttons[i].id);
   }
 
   const emails = document.getElementsByClassName("emailButton");
-  for(let i = 0; i<emails.length; i++) {
-    otherElementsArray.push("FORM "+emails[i].id)
+  for (let i = 0; i < emails.length; i++) {
+    otherElementsArray.push("FORM " + emails[i].id);
   }
 
   const imageCanva = document.getElementsByClassName("cameraInput");
-  for(let i = 0; i<imageCanva.length; i++) {
-    otherElementsArray.push("CAMERA_INPUT "+imageCanva[i].id)
+  for (let i = 0; i < imageCanva.length; i++) {
+    otherElementsArray.push("CAMERA_INPUT " + imageCanva[i].id);
   }
 
   const payments = document.getElementsByClassName("paymentInput");
-  for(let i = 0; i<payments.length; i++) {
-    otherElementsArray.push("PAYMENT_INPUT "+payments[i].id)
+  for (let i = 0; i < payments.length; i++) {
+    otherElementsArray.push("PAYMENT_INPUT " + payments[i].id);
   }
 
   let elementString = localStorage.getItem("elements");
-    let elemArray = [];
-    if (elementString !== null) {
-      elemArray = JSON.parse(elementString);
-    }
-    console.log(elemArray);
-    if(elemArray !== null) {
-      for(let i = 0; i<elemArray.length; i++) {
-        for(let j = 0; j<otherElementsArray.length; j++) {
-          if(elemArray[i] === otherElementsArray[j]) {
-            let storedIndex = otherElementsArray.indexOf(otherElementsArray[j])
-            otherElementsArray.splice(storedIndex, 1)
-          }
+  let elemArray = [];
+  if (elementString !== null) {
+    elemArray = JSON.parse(elementString);
+  }
+  console.log(elemArray);
+  if (elemArray !== null) {
+    for (let i = 0; i < elemArray.length; i++) {
+      for (let j = 0; j < otherElementsArray.length; j++) {
+        if (elemArray[i] === otherElementsArray[j]) {
+          let storedIndex = otherElementsArray.indexOf(otherElementsArray[j]);
+          otherElementsArray.splice(storedIndex, 1);
         }
       }
     }
-    // console.log(`"${selectedOption.value + " " + selectedOption.id}"`);
-    // elemArray.push(selectedOption.value + " " + selectedOption.id);
-    // let string = JSON.stringify(elemArray);
-    // localStorage.setItem("elements", string);
+  }
+  // console.log(`"${selectedOption.value + " " + selectedOption.id}"`);
+  // elemArray.push(selectedOption.value + " " + selectedOption.id);
+  // let string = JSON.stringify(elemArray);
+  // localStorage.setItem("elements", string);
 
-  console.log("The other elements",otherElementsArray)
-  
+  console.log("The other elements", otherElementsArray);
+
   const options = otherElementsArray.map((element, index) => (
     <option key={index} value={element} id={element.split(" ")[1]}>
       {element}
@@ -3933,7 +3935,7 @@ const ScaleRightSide = () => {
                         display: "none",
                         flexDirection: "column",
                         gap: "2px",
-                        width: "90%"
+                        width: "90%",
                       }}
                       id="emoji"
                     >
