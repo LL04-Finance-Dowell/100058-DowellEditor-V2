@@ -1775,7 +1775,7 @@ const MidSection = React.forwardRef((props, ref) => {
     holderDIV.style.overflow = "visible";
     holderDIV.style.display = "flex";
     holderDIV.style.cursor = "move";
-    holderDIV.style.zIndex = 1;
+    holderDIV.style.zIndex = 0;
     holderDIV.className = "holderDIV";
     holderDIV.setAttribute("id", "holderId");
     holderDIV.setAttribute("draggable", true);

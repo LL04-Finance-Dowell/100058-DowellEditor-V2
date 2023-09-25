@@ -1,8 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-// import successFulPayment from "./../../assets/paymentSuccessful.svg";
-// import successFulPayment from "./../../assets/paymentSuccessful.jpg";
-// import successFulPayment from "./../../assets/";
+import successFulPayment from "./../../assets/paymentSuccessful.svg";
 
 
 const ThankYouPage = () => {
@@ -15,12 +13,12 @@ const ThankYouPage = () => {
         <div className='shadow-lg p-3'>
         <div className="vh-100 d-flex justify-content-center align-items-center">
         <div>
-            {/* <div className="mb-4 text-center">
+            <div className="mb-4 text-center">
                 <img src={successFulPayment} alt='payment successful'/>
-            </div> */}
+            </div>
             <div className="text-center">
                 <h1>Thank You!</h1>
-                <p>Your payment was successful</p>
+                <p>your payment was successfull</p>
                 <button className="btn btn-primary" onClick={handleGoBack}>Back Home</button>
             </div>
         </div>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Row, Button, Form } from "react-bootstrap";
 import { useStateContext } from "../../contexts/contextProvider";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 import axios, * as others from 'axios';
 import { ToastContainer, toast } from "react-toastify";
@@ -29,6 +29,8 @@ const PaymentRightSide = () => {
     const [popupUrl, setPopupUrl] = useState(null);
     const [showSlider, setShowSlider] = useState(false);
     const [qrCode, setQrCode] = useState();
+    const [paypalQrCode, setPaypalQrCode] = useState();
+
 
 
 
@@ -36,6 +38,7 @@ const PaymentRightSide = () => {
     // const [stripeKey, setStripeKey] = useState("");
     const [paypalClientId, setPaypalClientId] = useState("");
     const [loader, setLoader] = useState(false);
+    const [qrLoader, setQrLoader] = useState(false);
     var decoded = jwt_decode(token);
 
 
@@ -111,7 +114,7 @@ const PaymentRightSide = () => {
     const handleSelectPayment = (e) => {
         setSelectPayment(e.target.value);
     }
- 
+
 
     const openPopup = (url) => {
         setPopupUrl(url);
@@ -123,8 +126,10 @@ const PaymentRightSide = () => {
 
 
 
+    const [stripeVerify, setStripeVerify] = useState();
+
     const handleStripePayment = async (e) => {
-        e.preventDefault();
+        // e.preventDefault();
         const stripeData = {
             // stripe_key: "sk_test_51LiKUnEJkGNthfbzNbTn7Up7EnVwyeqRWLcRX1UWyq7ABL7wn1VMmHsS4Aox3U9b2nh3HkHd32vsQRR7nItC8ybv00WChhFen4",
             stripe_key: link,
@@ -148,19 +153,35 @@ const PaymentRightSide = () => {
             e.preventDefault();
             setLoader(true)
             try {
+                // const res = await axios.post(endpoint, stripeData);
+                // const resQR = await axios.post(endpoint, stripeData);
                 const res = await axios.post("https://100088.pythonanywhere.com/api/workflow/stripe/initialize", stripeData);
-                const resQR = await axios.post("https://100088.pythonanywhere.com/api/workflow/stripe/initialize/qrcode", stripeData);
+                // const resQR = await axios.post("https://100088.pythonanywhere.com/api/workflow/stripe/initialize/qrcode", stripeData);
                 setStripePaymentData(res.data);
                 console.log("payment response", res.data);
-                setQrCode(res.data);
-                console.log("QR code response", resQR.data);
+                // setQrCode(resQR.data);
+                // console.log("QR code response", resQR.data);
                 setLoader(false)
                 toast.success("Successfully Submitted!")
-                openPopup(res.data.qr_image_url)
+                // openPopup(resQR.data.qr_image_url)
                 const timeout = setTimeout(() => {
                     window.open(res.data.approval_url, '_blank');
                 }, 2000); // Wait for 2 seconds
+
+
+                // const resVerify = await axios.post("https://100088.pythonanywhere.com/api/workflow/verify/payment/stripe", {
+                //     stripe_key: link,
+                //     id: res.data.payment_id
+                // });
+
+                // console.log("verify payment", resVerify.data);
+
+                
+
+
+
                 return () => clearTimeout(timeout);
+
             } catch (error) {
                 console.log(error)
                 setLoader(false)
@@ -169,9 +190,60 @@ const PaymentRightSide = () => {
         }
     }
 
+    const handleStripeQRPayment = async (e) => {
+        e.preventDefault();
+        const stripeData = {
+            // stripe_key: "sk_test_51LiKUnEJkGNthfbzNbTn7Up7EnVwyeqRWLcRX1UWyq7ABL7wn1VMmHsS4Aox3U9b2nh3HkHd32vsQRR7nItC8ybv00WChhFen4",
+            stripe_key: link,
+            template_id: decoded.details._id,
+            price: +price,
+            product: productName,
+            currency_code: currencyCode,
+            callback_url: "https://www.google.com/",
+        }
+        console.log("stripe data", stripeData);
+        const form = e.currentTarget;
+        if (form.checkValidity() === false) {
+            e.preventDefault();
+            e.stopPropagation();
+            setQrLoader(false)
+
+        }
+        setValidated(true);
+        // setLoader(true)
+        if (form.checkValidity() === true) {
+            e.preventDefault();
+            setQrLoader(true)
+            try {
+                // const res = await axios.post(endpoint, stripeData);
+                // const resQR = await axios.post(endpoint, stripeData);
+                // const res = await axios.post("https://100088.pythonanywhere.com/api/workflow/stripe/initialize", stripeData);
+                const resQR = await axios.post("https://100088.pythonanywhere.com/api/workflow/stripe/initialize/qrcode", stripeData);
+                // setStripePaymentData(res.data);
+                // console.log("payment response", res.data);
+                setQrCode(resQR.data);
+                console.log("QR code response", resQR.data);
+                setQrLoader(false)
+                toast.success("Successfully Submitted!")
+                openPopup(resQR.data.qr_image_url)
+                // const timeout = setTimeout(() => {
+                //     window.open(res.data.approval_url, '_blank');
+                // }, 2000); // Wait for 2 seconds
+                // return () => clearTimeout(timeout);
+
+            } catch (error) {
+                console.log(error)
+                setQrLoader(false)
+                toast.error(error.response.data.message);
+            }
+        }
+    }
+
     //paypal payment
 
     const handlePaypalPayment = async (e) => {
+
+        console.log("Paypal buttonb cliking..")
         e.preventDefault();
         const paypalData = {
             // paypal_client_id: "AVJXJddOEG7WGrLkTzg4_9ODsDNhIHrqT4ZL6gwXRz1ftQELliYtticZH-kLjoYaTZfNn_8y5onH_YP3",
@@ -204,6 +276,38 @@ const PaymentRightSide = () => {
             toast.error(error.data.error);
         }
     }
+
+
+    const handlePaypalQRPayment = async (e) => {
+        e.preventDefault();
+        const paypalData = {
+            // paypal_client_id: "AVJXJddOEG7WGrLkTzg4_9ODsDNhIHrqT4ZL6gwXRz1ftQELliYtticZH-kLjoYaTZfNn_8y5onH_YP3",
+            paypal_client_id: purpose,
+            paypal_secret_key: "ELsNyOGLDJVZCsfuuu5AhsFRmQbgBwxEVZteB-2XLZm8RLa8cPeS_cfNi35w7bJwkOKDHOnNxyHsJKu6",
+            template_id: decoded.details._id,
+            price: +price,
+            product: productName,
+            currency_code: currencyCode,
+            callback_url: "https://www.google.com/"
+        }
+        console.log("paypal data", paypalData);
+        setQrLoader(true)
+
+        try {
+            const res = await axios.post("https://100088.pythonanywhere.com/api/workflow/paypal/initialize/qrcode", paypalData)
+            setQrLoader(true)
+            setPaypalQrCode(res.data);
+            setQrLoader(false)
+            console.log("paypal data", res.data)
+            toast.success("Successfully Submitted!");
+            openPopup(res.data.qr_image_url);
+        } catch (error) {
+            console.log(error)
+            setQrLoader(false)
+            toast.error(error.data.error);
+        }
+    }
+
 
 
 
@@ -251,6 +355,11 @@ const PaymentRightSide = () => {
 
 
                             />
+                            <Link to={"/thanks"}>
+                                <button type="button" className="btn btn-primary">
+                                    Thank You
+                                </button>
+                            </Link>
                         </div> : <div>
                             <select
                                 onChange={handleSelectPayment}
@@ -265,7 +374,7 @@ const PaymentRightSide = () => {
 
                             {
                                 selectPayment == "paypal" ? <div>
-                                    <Form noValidate validated={validated} onSubmit={handlePaypalPayment}>
+                                    <Form noValidate validated={validated} >
                                         <Form.Label>Product Name</Form.Label>
                                         <Form.Control
                                             required
@@ -314,21 +423,25 @@ const PaymentRightSide = () => {
                                             onChange={(e) => setCallbackUrl(e.target.value)}
                                         /> */}
                                         <br />
-                                        <button type="submit" className="btn btn-primary">
-                                            {
-                                                loader ? "Wait...." : "Submit Info"
-                                            }
-                                        </button>
+                                        <Link to={"/thanks"}>
+                                            <button type="button" className="btn btn-primary" onClick={handlePaypalPayment}>
+                                                {
+                                                    loader ? "Wait...." : "Submit Info"
+                                                }
+                                            </button>
+                                        </Link>
 
-                                        <button type="submit" className="btn btn-primary">
+                                        <button type="button" className="btn btn-primary m-3" onClick={handlePaypalQRPayment}>
                                             {
-                                                loader ? "Wait...." : "Pay With QR Code"
+                                                qrLoader ? "Wait...." : "QR Code"
                                             }
                                         </button>
                                     </Form>
 
+
+
                                 </div> : <div>
-                                    <Form noValidate validated={validated} onSubmit={handleStripePayment}>
+                                    <Form noValidate validated={validated}>
                                         <Form.Label>Product Name</Form.Label>
                                         <Form.Control
                                             required
@@ -338,6 +451,7 @@ const PaymentRightSide = () => {
                                             value={productName}
                                             onChange={(e) => setProductName(e.target.value)}
                                         />
+
 
                                         <br />
 
@@ -377,9 +491,14 @@ const PaymentRightSide = () => {
                                             onChange={(e) => setCallbackUrl(e.target.value)}
                                         /> */}
                                         <br />
-                                        <button type="submit" className="btn btn-primary">
+                                        <button type="button" className="btn btn-primary" onClick={handleStripePayment}>
                                             {
                                                 loader ? "Wait...." : "Submit Info"
+                                            }
+                                        </button>
+                                        <button type="button" className="btn btn-primary m-3" onClick={handleStripeQRPayment}>
+                                            {
+                                                qrLoader ? "Wait...." : "QR code"
                                             }
                                         </button>
                                     </Form>
@@ -389,7 +508,7 @@ const PaymentRightSide = () => {
                         </div>
                 }
 
-            
+
             </div>
 
 
