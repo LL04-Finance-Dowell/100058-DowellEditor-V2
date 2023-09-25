@@ -194,6 +194,12 @@ function CameraRightSide() {
   };
 
   function removeCamera() {
+    let camera = document.querySelector(".focussedd");
+    let video = camera?.querySelector(".videoInput");
+    const mediaStream = video.srcObject;
+    const tracks = mediaStream.getTracks();
+    tracks[0].stop();
+    tracks[1].stop();
     const focusseddElmnt = document.querySelector(".focussedd");
     if (focusseddElmnt?.classList.contains("holderDIV")) {
       document.querySelector(".focussedd").remove();
