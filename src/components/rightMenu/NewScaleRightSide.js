@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-no-duplicate-props */
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Button, Form, Row } from "react-bootstrap";
 import { useStateContext } from "../../contexts/contextProvider";
 import Axios from "axios";
@@ -35,6 +35,8 @@ const ScaleRightSide = () => {
   } = useStateContext();
   const [selectedType, setSelectedType] = useState("");
   const [addedAns, setAddedAns] = useState([]);
+  const inputRef1 = useRef(null);
+  const inputRef2 = useRef(null);
 
   const [inputStr, setInputStr] = useState("");
   const [upperLimit, setUpperLimit] = useState("");
@@ -45,6 +47,7 @@ const ScaleRightSide = () => {
   const [showBorder, setShowBorder] = useState(true);
   const [holdText, setHoldText] = useState("");
   const [isEmojiFormat, setIsEmojiFormat] = useState(false);
+  const [cursorPosition, setCursorPosition] = useState(0);
 
   const [percentSumInputValue, setPercentSumInputValue] = useState("");
   const [percentSumLabelTexts, setPercentSumLabelTexts] = useState([]);
@@ -308,6 +311,10 @@ const ScaleRightSide = () => {
     percentSlider?.addEventListener("input", updateSliderValue);
   }
   // console.log(leftChild.innerHTML);
+
+  const handleNpsInputChange = (e) => {
+    setInputStr(e.target.value);
+  };
   const handleFormat = () => {
     const format = document.getElementById("format");
     const selectedValue = format.value;
@@ -631,15 +638,33 @@ const ScaleRightSide = () => {
       });
   };
 
-  const onEmojiClick = (emojiObject) => {
+  const onEmojiClick = (emojiObject, inputId) => {
     const emoji = emojiObject.emoji;
     if (inputStr.includes(emoji)) {
       alert("The emoji is already selected");
     } else {
-      setInputStr((prevInputStr) => prevInputStr + emoji);
+      const inputRefToUpdate = inputId === "emojiInp1" ? inputRef1 : inputRef2;
+
+      const start = inputRefToUpdate.current.selectionStart;
+      const end = inputRefToUpdate.current.selectionEnd;
+      const textBeforeCursor = inputStr.slice(0, start);
+      const textAfterCursor = inputStr.slice(end);
+
+      const newInputStr = textBeforeCursor + emoji + textAfterCursor;
+
+      setInputStr(newInputStr);
+
+      // Move the cursor position to after the inserted emoji
+      const newCursorPosition = start + emoji.length;
+      inputRefToUpdate.current.setSelectionRange(
+        newCursorPosition,
+        newCursorPosition
+      );
+
       setShowPicker(false);
     }
   };
+
   const [borderSize, setBorderSize] = useState(
     Number(localStorage.getItem("borderSize")) || 0
   );
@@ -3956,6 +3981,8 @@ const ScaleRightSide = () => {
                         }}
                       >
                         <input
+                          ref={inputRef1}
+                          data-input-id="emojiInp1"
                           style={{
                             width: "100%",
                             height: "18px",
@@ -3967,7 +3994,6 @@ const ScaleRightSide = () => {
                           }}
                           id="emojiInp"
                           value={inputStr}
-                          contentEditable
                           onChange={(e) => setInputStr(e.target.value)}
                         />
 
@@ -3979,11 +4005,15 @@ const ScaleRightSide = () => {
                             zIndex: 1,
                             maxWidth: "200%",
                             maxHeight: "300px",
-                            // overflowY: "auto",
-                            // padding: "5px",
                           }}
                         >
-                          {showPicker && <Picker onEmojiClick={onEmojiClick} />}
+                          {showPicker && (
+                            <Picker
+                              onEmojiClick={(emojiObject) =>
+                                onEmojiClick(emojiObject, "emojiInp1")
+                              }
+                            />
+                          )}
                         </div>
                         <GrEmoji
                           style={{
@@ -5038,6 +5068,8 @@ const ScaleRightSide = () => {
                         }}
                       >
                         <input
+                          ref={inputRef2}
+                          data-input-id="emojiInp2"
                           style={{
                             width: "100%",
                             height: "18px",
@@ -5064,7 +5096,13 @@ const ScaleRightSide = () => {
                             //padding: "5px",
                           }}
                         >
-                          {showPicker && <Picker onEmojiClick={onEmojiClick} />}
+                          {showPicker && (
+                            <Picker
+                              onEmojiClick={(emojiObject) =>
+                                onEmojiClick(emojiObject, "emojiInp2")
+                              }
+                            />
+                          )}
                         </div>
                         <GrEmoji
                           style={{
