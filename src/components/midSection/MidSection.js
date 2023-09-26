@@ -4,6 +4,7 @@
 /* eslint-disable no-redeclare */
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useRef, useState } from "react";
+import { handleCopyPaste } from "./cutMenuHook";
 import { Row, Col } from "react-bootstrap";
 import { useSearchParams } from "react-router-dom";
 import { Container } from "react-bootstrap";
@@ -15,7 +16,6 @@ import jwt_decode from "jwt-decode";
 import { table_dropdown_focuseddClassMaintain } from "../../utils/focusClassMaintain/focusClass";
 import { Print } from "react-easy-print";
 import RightContextMenu from "../contextMenu/RightContextMenu";
-import { getResizer } from "./GetResizerElement";
 import { dragElementOverPage } from "./DragElementOverPage";
 import { getHolderMenu } from "./GetHolderMenu";
 import copyInput from "./CopyInput";
@@ -48,6 +48,7 @@ import { finding_percent } from './../../utils/util_functions/finding_percent';
 import { CreateTableComponent } from "./midSectionElements/TableInputElement.jsx";
 import CreatePyamentElement from "./createElements/CreatePyamentElement.jsx";
 import createPaymentInputField from "./midSectionElements/PaymentInputElement.jsx";
+import { useCutMenuContext } from "./cutMenuHook";
 // tHIS IS FOR A TEST COMMIT
 
 const dummyData = {
@@ -74,11 +75,7 @@ const dummyData = {
   },
 };
 
-const initialContextMenu = {
-  show: false,
-  x: 0,
-  y: 0,
-};
+
 
 // const MidSection = ({showSidebar}) => {
 const MidSection = React.forwardRef((props, ref) => {
@@ -125,10 +122,11 @@ const MidSection = React.forwardRef((props, ref) => {
     setButtonPurpose,
   } = useStateContext();
 
+  const { contextMenu, setContextMenu } = useCutMenuContext()
+
   const [focusedElement, setFocusedElement] = useState(null);
   const [allPages, setAllPages] = useState([]);
   const [searchParams] = useSearchParams();
-  const [contextMenu, setContextMenu] = useState(initialContextMenu);
   const token = searchParams.get("token");
   var decoded = jwt_decode(token);
   const actionName = decoded?.details?.action;
@@ -210,6 +208,7 @@ const MidSection = React.forwardRef((props, ref) => {
           payment2: false,
         });
 
+        contextMenuClose()
         const divsArray = document.getElementsByClassName(
           "enable_pointer_event"
         );
@@ -261,17 +260,55 @@ const MidSection = React.forwardRef((props, ref) => {
   const defaultLeft = "0px";
 
   const [cutItem_value, setCutItem_value] = useState(null);
-
   const handleContextMenu = (e) => {
     e.preventDefault();
-
+    let x = e.clientX;
+    let y = e.clientY;
+    const foundElement = document.elementFromPoint(x, y)?.parentElement
     const midSec = document.getElementById("midSection_container");
 
     const midsectionRect = midSec.getBoundingClientRect();
     let clientX = e.clientX - midsectionRect.left;
     let clientY = e.clientY - midsectionRect.top;
 
-    setContextMenu({ show: true, x: clientX, y: clientY });
+    if (!foundElement.classList.contains('midSection')) {
+      const parent = foundElement.parentElement
+      const tableElements = ["td", "tr", "table"]
+      if (tableElements.includes(parent.tagName.toLowerCase())) {
+        switch (parent.tagName.toLowerCase()) {
+          case "td":
+            const tdHolderDiv = parent.parentElement.parentElement.parentElement.parentElement;
+            setContextMenu({ show: true, x: clientX, y: clientY, targetEl: tdHolderDiv });
+            break;
+
+          case "tr":
+            const trHolderDiv = parent.parentElement.parentElement.parentElement;
+            setContextMenu({ show: true, x: clientX, y: clientY, targetEl: trHolderDiv });
+
+            break;
+          case "table":
+            const tableHolderDiv = parent.parentElement.parentElement;
+            setContextMenu({ show: true, x: clientX, y: clientY, targetEl: tableHolderDiv });
+            break;
+
+          default:
+            break;
+        }
+      } else {
+
+        setContextMenu({ show: true, x: clientX, y: clientY, targetEl: foundElement });
+      }
+
+    } else {
+      setContextMenu(prev => {
+        return {
+          ...prev,
+          ['show']: true,
+          ['x']: clientX,
+          ['y']: clientY
+        }
+      })
+    }
 
     let midSec2 = null;
 
@@ -402,1370 +439,257 @@ const MidSection = React.forwardRef((props, ref) => {
 
   //colse context menu 
 
-  const contextMenuClose = () => setContextMenu(initialContextMenu);
-  document.addEventListener("click", () => {
-    setContextMenu(initialContextMenu);
+  const contextMenuClose = () => setContextMenu(prev => {
+    return {
+      ...prev,
+      ['show']: false
+    }
   });
-
-  const handlePaste = () => {
-    const midSec = document.getElementById("midSection_container");
-    // const element = JSON.parse(sessionStorage.getItem("cutItem"));
-    // // console.log("sessionStorage.getItem", JSON.parse(sessionStorage.getItem("cutItem")))
-    const element = JSON.parse(handleCutInputRef.current)
+  const handleCopyPaste = (targetElement, x, y) => {
+    const element = targetElement
     const curr_user = document.getElementById("current-user");
-    const copyData = sessionStorage.getItem("copyItem");
+    const midSection = document.getElementById("midSection_container");
 
     const measure = {
-      // width: element.width,
+      width: element.width,
       height: element.height,
-      left: element.left,
-      top: element.topp,
+      left: x + 'px',
+      top: y + 'px',
     };
 
     const holderDIV = getHolderDIV(measure);
-    if (handleCutInputRef.current) {
-      // console.log("getting cutItem");
-
-      if (element.type === "DATE_INPUT") {
-        const measure = {
-          width: element.width,
-          height: element.height,
-          left: element.left,
-          top: element.topp,
-        };
-        const holderDIV = getHolderDIV(measure);
-        const id = `${element.id}`;
-
-        let dateField = document.createElement("div");
-        dateField.className = "dateInput";
-        dateField.id = id;
-        dateField.style.width = "100%";
-        dateField.style.height = "100%";
-        dateField.style.backgroundColor = "#dedede";
-        dateField.style.borderRadius = "0px";
-        dateField.style.outline = "0px";
-        dateField.style.overflow = "overlay";
-        dateField.style.position = "relative";
-
-        function dateClick() {
-          document.getElementById("date_picker")?.click();
-        }
-
-        dateField.onclick = (e) => {
-          if (e.ctrlKey) {
-            copyInput("calendar2");
-          }
-          focuseddClassMaintain(e);
-          handleClicked("calendar2");
-          setRightSideDateMenu(false);
-
-          if (e.target.innerText != "mm/dd/yyyy") {
-            if (e.target.innerText.includes("/")) {
-              const setDate = new Date(e.target.innerText);
-
-              setMethod("first");
-              setStartDate(setDate);
-            } else {
-              if (e.target.innerText.includes("-")) {
-                setMethod("fourth");
-              } else {
-                setMethod("second");
-              }
-              const setDate = new Date(e.target.innerText);
-
-              setStartDate(setDate);
-            }
-          }
-          setSidebar(true);
-          setTimeout(dateClick, 0);
-        };
-        dateField.innerText = `${element.data}`;
-
-        holderDIV.append(dateField);
-
-        cutItem_value.append(holderDIV);
-        sessionStorage.clear();
-      } else if (element.type === "TEXT_INPUT") {
-        let inputField = document.createElement("div");
-
-        inputField.setAttribute("contenteditable", true);
-        inputField.className = "textInput";
-        inputField.innerHTML = "Enter text here";
-        inputField.style.width = "100%";
-        inputField.style.height = "100%";
-        inputField.style.resize = "none";
-        inputField.style.backgroundColor = "#0000";
-        inputField.style.borderRadius = "0px";
-        inputField.style.outline = "0px";
-        inputField.style.overflow = "overlay";
-        inputField.style.position = "relative";
-        inputField.style.cursor = "text";
-
-        const txt = document.getElementsByClassName("textInput");
-        if (txt.length) {
-          const h = txt.length;
-          inputField.id = `t${h + 1}`;
-        } else {
-          inputField.id = "t1";
-        }
-
-        if (inputField.innerHTML[0]) {
-          const editTextField = {
-            editTextField: {
-              value: inputField.innerHTML,
-              xcoordinate: getOffset(holderDIV).left,
-              ycoordinate: getOffset(holderDIV).top,
-            },
-          };
-        }
-
-        if (inputField.value !== "") {
-        }
-
-        inputField.onclick = (e) => {
-          e.stopPropagation();
-          focuseddClassMaintain(e);
-          if (e.ctrlKey) {
-            copyInput("align2");
-          }
-          handleClicked("align2", "container2");
-          setSidebar(true);
-        };
-        inputField.innerHTML = `${element.data}`;
-
-        holderDIV.append(inputField);
-        cutItem_value.append(holderDIV);
-        sessionStorage.clear();
-      } else if (element.type === "IMAGE_INPUT") {
-        let imageField = document.createElement("div");
-        imageField.className = "imageInput";
-        imageField.id = "inputImg";
-        imageField.style.width = "100%";
-        imageField.style.height = "100%";
-        imageField.style.backgroundColor = "#0000";
-        imageField.style.borderRadius = "0px";
-        imageField.style.outline = "0px";
-        imageField.style.overflow = "overlay";
-        imageField.innerText = "Choose Image";
-
-        imageField.style.position = "relative";
-
-        const img = document.getElementsByClassName("imageInput");
-        if (img.length) {
-          const h = img.length;
-          imageField.id = `i${h + 1}`;
-        } else {
-          imageField.id = "i1";
-        }
-
-        imageField.onclick = (e) => {
-          e.stopPropagation();
-          focuseddClassMaintain(e);
-
-          if (e.ctrlKey) {
-            copyInput("image2");
-          }
-
-          handleClicked("image2", "container2");
-
-          setSidebar(true);
-        };
-
-        const imageButton = document.createElement("div");
-        imageButton.className = "addImageButton";
-        imageButton.innerText = "Choose File";
-        imageButton.style.display = "none";
-        // imageButton.onclick = (e) => chooseFileClick(e);
-
-        const imgBtn = document.createElement("input");
-        imgBtn.className = "addImageButtonInput";
-        imgBtn.type = "file";
-        imgBtn.style.objectFit = "cover";
-        var uploadedImage = "";
-
-        imgBtn.addEventListener("input", () => {
-          const reader = new FileReader();
-
-          reader.addEventListener("load", () => {
-            uploadedImage = reader.result;
-            document.querySelector(
-              ".focussed"
-            ).style.backgroundImage = `url(${uploadedImage})`;
-          });
-          reader.readAsDataURL(imgBtn.files[0]);
-        });
-        imageField.outerHTML = `${element.data2}`;
-        // console.log("element data getting", `${element.data}`);
-
-        // imgBtn.style.width = "100%";
-        imageButton.append(imgBtn);
-        holderDIV.append(imageField);
-        holderDIV.append(imageButton);
-        cutItem_value.append(holderDIV);
-        sessionStorage.clear();
-      } else if (element.type === "IFRAME_INPUT") {
-        let iframeField = document.createElement("div");
-        iframeField.className = "iframeInput";
-        iframeField.style.width = "100%";
-        iframeField.style.height = "100%";
-        iframeField.style.backgroundColor = "#dedede";
-        iframeField.style.borderRadius = "0px";
-        iframeField.style.outline = "0px";
-        iframeField.style.overflow = "overlay";
-        // iframeField.innerHTML = "iframe";
-        iframeField.style.position = "absolute";
-        iframeField.innerText = "iFrame here";
-
-        const iframes = document.getElementsByClassName("iframeInput");
-        if (iframes.length) {
-          const i = iframes.length;
-          iframeField.id = `ifr${i + 1}`;
-        } else {
-          iframeField.id = "ifr1";
-        }
-
-        iframeField.onclick = (e) => {
-          // focuseddClassMaintain(e);
-          e.stopPropagation();
-          if (e.ctrlKey) {
-            copyInput("iframe2");
-          }
-          table_dropdown_focuseddClassMaintain(e);
-          // tableField.classList.add("focussed");
-          handleClicked("iframe2", "container2");
-          setSidebar(true);
-        };
-        iframeField.innerHTML = `${element.data}`;
-
-        holderDIV.append(iframeField);
-        cutItem_value.append(holderDIV);
-        sessionStorage.clear();
-      } else if (element.type === "SCALE_INPUT") {
-        setIsLoading(true);
-
-        let scaleField = document.createElement("div");
-        scaleField.className = "scaleInput";
-        scaleField.style.width = "100%";
-        scaleField.style.height = "100%";
-        scaleField.style.backgroundColor = "#dedede";
-        scaleField.style.borderRadius = "0px";
-        scaleField.style.outline = "0px";
-        scaleField.style.overflow = "overlay";
-        // scaleField.innerHTML = 'iframe';
-        scaleField.style.position = "absolute";
-        // scaleField.innerText = "scale here";
-
-        const scales = document.getElementsByClassName("scaleInput");
-        if (scales.length) {
-          const s = scales.length;
-          scaleField.id = `scl${s + 1}`;
-        } else {
-          scaleField.id = "scl1";
-        }
-
-        let scale = document.createElement("iframe");
-        scale.style.width = "90%";
-        scale.style.height = "90%";
-        const scaleIdHolder = document.createElement("div");
-        scaleIdHolder.className = "scaleId_holder";
-        scaleIdHolder.style.display = "none";
-
-        const labelHolder = document.createElement("div");
-        labelHolder.className = "label_holder";
-        labelHolder.style.display = "none";
-
-        scaleField.addEventListener("resize", () => {
-          scale.style.width = scaleField.clientWidth + "px";
-          scale.style.height = scaleField.clientHeight + "px";
-        });
-
-        scaleField.append(scale);
-        Axios.post(
-          "https://100035.pythonanywhere.com/api/nps_settings_create/",
-          {
-            username: "nake",
-            orientation: "horizontal",
-            scalecolor: "#8f1e1e",
-            roundcolor: "#938585",
-            fontcolor: "#000000",
-            fomat: "numbers",
-            time: "00",
-            name: `${title}_scale`,
-            left: "good",
-            right: "best",
-            center: "neutral",
-          }
-        )
-          .then((res) => {
-            setIsLoading(false);
-            // console.log(res.data, "scaleData");
-            setScaleData(res.data);
-            const success = res.data.success;
-            var successObj = JSON.parse(success);
-            const id = successObj.inserted_id;
-            // console.log(res.scale_urls, "stateScale");
-            if (id.length) {
-              // console.log(id, "id");
-              // setScaleId(id);
-              scaleIdHolder.innerHTML = id;
-            }
-            scale.src = res.data.scale_urls;
-          })
-          .catch((err) => {
-            setIsLoading(false);
-            // console.log(err);
-          });
-
-        scaleField.onclick = (e) => {
-          e.stopPropagation();
-          table_dropdown_focuseddClassMaintain(e);
-          if (e.ctrlKey) {
-            copyInput("scale2");
-          }
-          handleClicked("scale2");
-          setSidebar(true);
-        };
-
-        scaleField.innerHTML = `${element.data}`;
-
-        holderDIV.append(scaleField);
-        holderDIV.append(scaleIdHolder);
-        holderDIV.append(labelHolder);
-        cutItem_value.append(holderDIV);
-        sessionStorage.clear();
-      } else if (element.type === "NEW_SCALE_INPUT") {
-        setIsLoading(true);
-
-        let scaleField = document.createElement("div");
-        scaleField.className = "scaleInput";
-        scaleField.style.width = "100%";
-        scaleField.style.height = "100%";
-        scaleField.style.backgroundColor = "#dedede";
-        scaleField.style.borderRadius = "0px";
-        scaleField.style.outline = "0px";
-        scaleField.style.overflow = "overlay";
-        // scaleField.innerHTML = 'iframe';
-        scaleField.style.position = "absolute";
-        // scaleField.innerText = "scale here";
-
-        const scales = document.getElementsByClassName("newScaleInput");
-        if (scales.length) {
-          const s = scales.length;
-          scaleField.id = `scl${s + 1}`;
-        } else {
-          scaleField.id = "scl1";
-        }
-
-        let scale = document.createElement("iframe");
-        scale.style.width = "90%";
-        scale.style.height = "90%";
-        const scaleIdHolder = document.createElement("div");
-        scaleIdHolder.className = "scaleId_holder";
-        scaleIdHolder.style.display = "none";
-
-        const labelHolder = document.createElement("div");
-        labelHolder.className = "label_holder";
-        labelHolder.style.display = "none";
-
-        scaleField.addEventListener("resize", () => {
-          scale.style.width = scaleField.clientWidth + "px";
-          scale.style.height = scaleField.clientHeight + "px";
-        });
-
-        scaleField.append(scale);
-
-        scaleField.onclick = (e) => {
-          e.stopPropagation();
-          table_dropdown_focuseddClassMaintain(e);
-          if (e.ctrlKey) {
-            copyInput("newScale2");
-          }
-          handleClicked("newScale2");
-          setSidebar(true);
-        };
-
-        scaleField.innerHTML = `${element.data}`;
-
-        holderDIV.append(scaleField);
-        holderDIV.append(scaleIdHolder);
-        holderDIV.append(labelHolder);
-        cutItem_value.append(holderDIV);
-        sessionStorage.clear();
-      } else if (element.type === "SIGN_INPUT") {
-        let signField = document.createElement("div");
-        signField.className = "signInput";
-        signField.style.width = "100%";
-        signField.style.height = "100%";
-        signField.style.backgroundColor = "#0000";
-        signField.style.borderRadius = "0px";
-        signField.style.outline = "0px";
-        signField.style.overflow = "overlay";
-        // signField.innerHTML = 'Place your signature here';
-        signField.innerText = "Signature here";
-        signField.style.position = "absolute";
-
-        signField.onchange = (event) => {
-          event.preventDefault();
-          setPostData({
-            ...postData,
-            signField: {
-              value: event.target.value,
-              xcoordinate: getOffset(holderDIV).left,
-              ycoordinate: getOffset(holderDIV).top,
-            },
-          });
-        };
-
-        signField.onclick = (e) => {
-          e.stopPropagation();
-          focuseddClassMaintain(e);
-          // if (actionName = "template") {
-          // signField.classList.add("focussed");
-          if (e.ctrlKey) {
-            copyInput("signs2");
-          }
-          handleClicked("signs2", "container2");
-          setSidebar(true);
-        };
-        const imageSignButton = document.createElement("div");
-        imageSignButton.className = "addImageSignButton";
-        imageSignButton.innerText = "Choose File";
-        imageSignButton.style.display = "none";
-
-        const signBtn = document.createElement("input");
-        signBtn.className = "addSignButtonInput";
-        signBtn.type = "file";
-        signBtn.style.objectFit = "cover";
-        var uploadedImage = "";
-
-        signBtn.addEventListener("input", () => {
-          const reader = new FileReader();
-
-          reader.addEventListener("load", () => {
-            uploadedImage = reader.result;
-            const signImage = `<img src=${uploadedImage} width="100%" height="100%"/>`;
-            document.querySelector(".focussed").innerHTML = signImage;
-          });
-          reader.readAsDataURL(signBtn.files[0]);
-        });
-
-        imageSignButton.append(signBtn);
-
-        signField.innerText = `${element.data}`;
-        holderDIV.append(signField);
-        holderDIV.append(imageSignButton);
-        cutItem_value.append(holderDIV);
-        sessionStorage.clear();
-      } else if (element.type === "DROPDOWN_INPUT") {
-        let dropdownField = document.createElement("div");
-        dropdownField.className = "dropdownInput";
-        dropdownField.style.width = "100%";
-        dropdownField.style.height = "100%";
-        dropdownField.style.backgroundColor = "#0000";
-        dropdownField.style.borderRadius = "0px";
-        dropdownField.style.outline = "0px";
-        dropdownField.style.border = "1px solid gray";
-        dropdownField.style.overflow = "overlay";
-        // dropdownField.innerHTML = `<select><option>${postData.dropdownField.value}</option></select>`;
-        dropdownField.style.position = "absolute";
-
-        const selectElement = document.createElement("select");
-        selectElement.className = "select-element";
-        selectElement.style.width = "500";
-        selectElement.style.height = "auto";
-        selectElement.onclick = () => {
-          selectElement.parentElement.click();
-        };
-
-        dropdownField.onchange = (event) => {
-          event.preventDefault();
-          setPostData({
-            ...postData,
-            dropdownField: {
-              value: event.target.value,
-              xcoordinate: getOffset(holderDIV).left,
-              ycoordinate: getOffset(holderDIV).top,
-            },
-          });
-        };
-
-        if (dropdownField) {
-          const dropdownField = {
-            dropdownField: {
-              // value: event.target.value,
-              xcoordinate: getOffset(holderDIV).left,
-              ycoordinate: getOffset(holderDIV).top,
-            },
-          };
-        }
-
-        dropdownField.onclick = (e) => {
-          e.stopPropagation();
-          // focuseddClassMaintain(e);
-          table_dropdown_focuseddClassMaintain(e);
-          // dropdownField.classList.add("focussed");
-          if (e.ctrlKey) {
-            copyInput("dropdown2");
-          }
-          handleClicked("dropdown2", "container2");
-          setRightSideDropDown(false);
-          setSidebar(true);
-        };
-
-        const para = document.createElement("p");
-        para.innerHTML = " Dropdown Name";
-        para.className = "dropdownName";
-        para.onclick = () => {
-          para.parentElement.click();
-        };
-
-        dropdownField.innerHTML = `${element.data2}`;
-
-        // dropdownField.innerText = `${element.data}`
-        dropdownField.append(para);
-        dropdownField.append(selectElement);
-        holderDIV.append(dropdownField);
-        cutItem_value.append(holderDIV);
-        sessionStorage.clear();
-      } else if (element.type === "CONTAINER_INPUT") {
-        let containerField = document.createElement("div");
-        containerField.className = "containerInput";
-        containerField.id = "containerInput";
-        containerField.style.width = "100%";
-        containerField.style.height = "100%";
-        containerField.style.backgroundColor = "#0000";
-        containerField.style.borderRadius = "0px";
-        containerField.style.outline = "0px";
-        containerField.style.overflow = "overlay";
-        containerField.style.position = "absolute";
-
-        containerField.onclick = (e) => {
-          e.stopPropagation();
-          focuseddClassMaintain(e);
-          if (e.ctrlKey) {
-            copyInput("container2");
-          }
-          handleClicked("container2");
-          setSidebar(true);
-          // console.log("container field clicked");
-        };
-        containerField.ondragover = (e) => {
-          // console.log("console from container dragover", e.target);
-          if (e.ctrlKey) {
-            copyInput("container2");
-          }
-        };
-        containerField.ondrop = (event) => {
-          const container = event.target;
-          const containerRect = container.getBoundingClientRect();
-          const typeOfOperationContainer =
-            event.dataTransfer.getData("text/plain");
-
-          const measureContainer = {
-            width: "200px",
-            height: "80px",
-            left: event.clientX - containerRect.left + "px",
-            top: event.clientY - containerRect.top + "px",
-            auth_user: curr_user,
-          };
-
-          const holderDIVContainer = getHolderDIV(measureContainer);
-          if (typeOfOperationContainer === "DATE_INPUT") {
-            let dateFieldContainer = document.createElement("div");
-            dateFieldContainer.className = "dateInput";
-            dateFieldContainer.style.width = "100%";
-            dateFieldContainer.style.height = "100%";
-            dateFieldContainer.style.backgroundColor = "#0000";
-            dateFieldContainer.style.borderRadius = "0px";
-            dateFieldContainer.style.outline = "0px";
-            dateFieldContainer.style.overflow = "overlay";
-            dateFieldContainer.style.position = "relative";
-
-            dateFieldContainer.onchange = (event) => {
-              event.preventDefault();
-              setPostData({
-                ...postData,
-                calenderField: {
-                  value: event.target.value,
-                  xcoordinate: getOffset(holderDIVContainer).left,
-                  ycoordinate: getOffset(holderDIVContainer).top,
-                },
-              });
-            };
-            setStartDate(new Date());
-            setMethod("select");
-            function dateClick() {
-              document.getElementById("date_picker").click();
-              setRightSideDateMenu(false);
-            }
-            dateFieldContainer.onclick = (e) => {
-              e.stopPropagation();
-              focuseddClassMaintain(e);
-              if (e.ctrlKey) {
-                copyInput("calendar2");
-              }
-              handleClicked("calendar2", "container2");
-              setRightSideDateMenu(false);
-              if (e.target.innerText != "mm/dd/yyyy") {
-                if (e.target.innerText.includes("/")) {
-                  const setDate = new Date(e.target.innerText);
-                  setMethod("first");
-                  setStartDate(setDate);
-                } else {
-                  if (e.target.innerText.includes("-")) {
-                    setMethod("fourth");
-                  } else {
-                    setMethod("second");
-                  }
-                  const setDate = new Date(e.target.innerText);
-                  setStartDate(setDate);
-                }
-              }
-              setSidebar(true);
-              setTimeout(dateClick, 0);
-            };
-            dateFieldContainer.innerText = "mm/dd/yyyy";
-
-            holderDIVContainer.append(dateFieldContainer);
-          } else if (typeOfOperationContainer === "IMAGE_INPUT") {
-            let imageFieldContainer = document.createElement("div");
-            imageFieldContainer.className = "imageInput";
-            imageFieldContainer.style.width = "100%";
-            imageFieldContainer.style.height = "100%";
-            imageFieldContainer.style.backgroundColor = "#0000";
-            imageFieldContainer.style.borderRadius = "0px";
-            imageFieldContainer.style.outline = "0px";
-            imageFieldContainer.style.overflow = "overlay";
-            imageFieldContainer.innerText = "Choose Image";
-            imageFieldContainer.style.position = "relative";
-
-            imageFieldContainer.onclick = (e) => {
-              e.stopPropagation();
-              focuseddClassMaintain(e);
-              if (e.ctrlKey) {
-                copyInput("image2");
-              }
-              handleClicked("image2");
-              setSidebar(true);
-            };
-
-            const imageButtonContainer = document.createElement("div");
-            imageButtonContainer.className = "addImageButton";
-            imageButtonContainer.innerText = "Choose File";
-            imageButtonContainer.style.display = "none";
-
-            const imgBtnContainer = document.createElement("input");
-            imgBtnContainer.className = "addImageButtonInput";
-            imgBtnContainer.type = "file";
-            imgBtnContainer.style.objectFit = "cover";
-            var uploadedImage = "";
-
-            imgBtnContainer.addEventListener("input", () => {
-              const reader = new FileReader();
-
-              reader.addEventListener("load", () => {
-                uploadedImage = reader.result;
-                document.querySelector(
-                  ".focussed"
-                ).style.backgroundImage = `url(${uploadedImage})`;
-              });
-              reader.readAsDataURL(imgBtnContainer.files[0]);
-            });
-
-            imageButtonContainer.append(imgBtnContainer);
-            holderDIVContainer.append(imageFieldContainer);
-            holderDIVContainer.append(imageButtonContainer);
-          } else if (typeOfOperationContainer === "DROPDOWN_INPUT") {
-            let dropdownFieldContainer = document.createElement("div");
-            dropdownFieldContainer.className = "dropdownInput";
-            dropdownFieldContainer.style.width = "100%";
-            dropdownFieldContainer.style.height = "100%";
-            dropdownFieldContainer.style.backgroundColor = "#0000";
-            dropdownFieldContainer.style.borderRadius = "0px";
-            dropdownFieldContainer.style.outline = "0px";
-            dropdownFieldContainer.style.overflow = "overlay";
-            dropdownFieldContainer.style.position = "absolute";
-
-            const selectElement = document.createElement("select");
-            selectElement.className = "select-element";
-            selectElement.style.width = "500";
-            selectElement.style.height = "auto";
-            selectElement.onclick = () => {
-              selectElement.parentElement.click();
-            };
-
-            dropdownFieldContainer.onchange = (event) => {
-              event.preventDefault();
-              setPostData({
-                ...postData,
-                dropdownFieldContainer: {
-                  value: event.target.value,
-                  xcoordinate: getOffset(holderDIVContainer).left,
-                  ycoordinate: getOffset(holderDIVContainer).top,
-                },
-              });
-            };
-
-            dropdownFieldContainer.onclick = (e) => {
-              e.stopPropagation();
-              table_dropdown_focuseddClassMaintain(e);
-              if (e.ctrlKey) {
-                copyInput("dropdown2");
-              }
-              handleClicked("dropdown2");
-              setRightSideDropDown(false);
-              setSidebar(true);
-            };
-
-            const para = document.createElement("p");
-            para.innerHTML = " Dropdown Name";
-            para.className = "dropdownName";
-            para.onclick = () => {
-              para.parentElement.click();
-            };
-            dropdownFieldContainer.append(para);
-            dropdownFieldContainer.append(selectElement);
-            holderDIVContainer.append(dropdownFieldContainer);
-          } else if (typeOfOperationContainer === "TEXT_INPUT") {
-            let inputFieldContainer = document.createElement("div");
-
-            inputFieldContainer.setAttribute("contenteditable", true);
-            inputFieldContainer.className = "textInput";
-            inputFieldContainer.innerHTML = "Enter text here";
-            inputFieldContainer.style.width = "100%";
-            inputFieldContainer.style.height = "100%";
-            inputFieldContainer.style.resize = "none";
-            inputFieldContainer.style.backgroundColor = "#0000";
-            inputFieldContainer.style.borderRadius = "0px";
-            inputFieldContainer.style.outline = "0px";
-            inputFieldContainer.style.overflow = "overlay";
-            inputFieldContainer.style.position = "relative";
-            inputFieldContainer.style.cursor = "text";
-            if (inputFieldContainer.innerHTML[0]) {
-              const editTextField = {
-                editTextField: {
-                  value: inputFieldContainer.innerHTML,
-                  xcoordinate: getOffset(holderDIVContainer).left,
-                  ycoordinate: getOffset(holderDIVContainer).top,
-                },
-              };
-            }
-
-            if (inputFieldContainer.value !== "") {
-            }
-
-            inputFieldContainer.onclick = (e) => {
-              e.stopPropagation();
-              focuseddClassMaintain(e);
-              if (e.ctrlKey) {
-                copyInput("align2");
-              }
-              handleClicked("align2");
-              setSidebar(true);
-            };
-            holderDIVContainer.append(inputFieldContainer);
-          } else if (typeOfOperationContainer === "SIGN_INPUT") {
-            let signFieldContainer = document.createElement("div");
-            signFieldContainer.className = "signInput";
-            signFieldContainer.style.width = "100%";
-            signFieldContainer.style.height = "100%";
-            signFieldContainer.style.backgroundColor = "#0000";
-            signFieldContainer.style.borderRadius = "0px";
-            signFieldContainer.style.outline = "0px";
-            signFieldContainer.style.overflow = "overlay";
-            signFieldContainer.innerText = "Signature here";
-            signFieldContainer.style.position = "absolute";
-
-            signFieldContainer.onchange = (event) => {
-              event.preventDefault();
-              setPostData({
-                ...postData,
-                signFieldContainer: {
-                  value: event.target.value,
-                  xcoordinate: getOffset(holderDIVContainer).left,
-                  ycoordinate: getOffset(holderDIVContainer).top,
-                },
-              });
-            };
-
-            signFieldContainer.onclick = (e) => {
-              e.stopPropagation();
-              focuseddClassMaintain(e);
-              if (e.ctrlKey) {
-                copyInput("signs2");
-              }
-              handleClicked("signs2");
-              setSidebar(true);
-            };
-            const imageSignButton = document.createElement("div");
-            imageSignButton.className = "addImageSignButton";
-            imageSignButton.innerText = "Choose File";
-            imageSignButton.style.display = "none";
-
-            const signBtn = document.createElement("input");
-            signBtn.className = "addSignButtonInput";
-            signBtn.type = "file";
-            signBtn.style.objectFit = "cover";
-            var uploadedImage = "";
-
-            signBtn.addEventListener("input", () => {
-              const reader = new FileReader();
-
-              reader.addEventListener("load", () => {
-                uploadedImage = reader.result;
-                const signImage = `<img src=${uploadedImage} width="100%" height="100%"/>`;
-                document.querySelector(".focussed").innerHTML = signImage;
-              });
-              reader.readAsDataURL(signBtn.files[0]);
-            });
-
-            imageSignButton.append(signBtn);
-            holderDIVContainer.append(signFieldContainer);
-            holderDIVContainer.append(imageSignButton);
-          } else if (typeOfOperationContainer === "IFRAME_INPUT") {
-            let iframeFieldContainer = document.createElement("div");
-            iframeFieldContainer.className = "iframeInput";
-            iframeFieldContainer.style.width = "100%";
-            iframeFieldContainer.style.height = "100%";
-            iframeFieldContainer.style.backgroundColor = "#dedede";
-            iframeFieldContainer.style.borderRadius = "0px";
-            iframeFieldContainer.style.outline = "0px";
-            iframeFieldContainer.style.overflow = "overlay";
-            iframeFieldContainer.style.position = "absolute";
-            iframeFieldContainer.innerText = "iFrame here";
-
-            iframeFieldContainer.onclick = (e) => {
-              e.stopPropagation();
-              table_dropdown_focuseddClassMaintain(e);
-              if (e.ctrlKey) {
-                copyInput("iframe2");
-              }
-              handleClicked("iframe2");
-              setSidebar(true);
-            };
-
-            holderDIVContainer.append(iframeFieldContainer);
-          } else if (typeOfOperationContainer === "SCALE_INPUT") {
-            setIsLoading(true);
-
-            let scaleFieldContainer = document.createElement("div");
-            scaleFieldContainer.className = "scaleInput";
-            scaleFieldContainer.style.width = "100%";
-            scaleFieldContainer.style.height = "100%";
-            scaleFieldContainer.style.backgroundColor = "#dedede";
-            scaleFieldContainer.style.borderRadius = "0px";
-            scaleFieldContainer.style.outline = "0px";
-            scaleFieldContainer.style.overflow = "overlay";
-            // scaleFieldContainer.innerHTML = 'iframe';
-            scaleFieldContainer.style.position = "absolute";
-            // scaleFieldContainer.innerText = "scale here";
-
-            let scale = document.createElement("iframe");
-            scaleFieldContainer.append(scale);
-            Axios.post(
-              "https://100035.pythonanywhere.com/api/nps_settings_create/",
-              {
-                username: "nake",
-                orientation: "horizontal",
-                scalecolor: "#8f1e1e",
-                roundcolor: "#938585",
-                fontcolor: "#000000",
-                fomat: "numbers",
-                time: "00",
-                name: `${title}_scale`,
-                left: "good",
-                right: "best",
-                center: "neutral",
-              }
-            )
-              .then((res) => {
-                setIsLoading(false);
-                // console.log(res.data, "scaleData");
-                setScaleData(res.data);
-                const success = res.data.success;
-                var successObj = JSON.parse(success);
-                const id = successObj.inserted_id;
-                // console.log(res.scale_urls, "stateScale");
-                if (id.length) {
-                  // console.log(id, "id");
-                  setScaleId(id);
-                }
-                scale.src = res.data.scale_urls;
-              })
-              .catch((err) => {
-                setIsLoading(false);
-                // console.log(err);
-              });
-
-            scaleFieldContainer.onclick = (e) => {
-              e.stopPropagation();
-              focuseddClassMaintain(e);
-              if (e.ctrlKey) {
-                copyInput("scale2");
-              }
-              handleClicked("scale2");
-              setSidebar(true);
-            };
-
-            holderDIVContainer.append(scaleFieldContainer);
-          } else if (typeOfOperationContainer === "TABLE_INPUT") {
-            let tableFieldContainer = document.createElement("div");
-            tableFieldContainer.className = "tableInput";
-            tableFieldContainer.style.width = "100%";
-            tableFieldContainer.style.height = "100%";
-            tableFieldContainer.style.backgroundColor = "#dedede";
-            tableFieldContainer.style.borderRadius = "0px";
-            tableFieldContainer.style.outline = "0px";
-            tableFieldContainer.style.overflow = "overlay";
-            tableFieldContainer.style.position = "absolute";
-
-            tableFieldContainer.onchange = (event) => {
-              event.preventDefault();
-
-              setPostData({
-                ...postData,
-                tableFieldContainer: {
-                  value: event.target.value,
-                  xcoordinate: getOffset(holderDIVContainer).left,
-                  ycoordinate: getOffset(holderDIVContainer).top,
-                },
-              });
-            };
-
-            tableFieldContainer.onclick = (e) => {
-              e.stopPropagation();
-              table_dropdown_focuseddClassMaintain(e);
-              if (e.ctrlKey) {
-                copyInput("table2");
-              }
-              handleClicked("table2");
-              setSidebar(true);
-            };
-            holderDIVContainer.append(tableFieldContainer);
-          } else if (typeOfOperationContainer == "BUTTON_INPUT") {
-            let buttonField = document.createElement("button");
-            buttonField.className = "buttonInput";
-            buttonField.style.width = "100%";
-            buttonField.style.height = "100%";
-            buttonField.style.backgroundColor = "#0000";
-            buttonField.style.borderRadius = "0px";
-            buttonField.style.outline = "0px";
-            buttonField.style.overflow = "overlay";
-            buttonField.style.position = "absolute";
-            buttonField.textContent = "Button";
-
-            buttonField.onclick = (e) => {
-              e.stopPropagation();
-              focuseddClassMaintain(e);
-              if (e.ctrlKey) {
-                copyInput("button2");
-              }
-              handleClicked("button2", "container2");
-              setSidebar(true);
-            };
-
-            const linkHolder = document.createElement("div");
-            linkHolder.className = "link_holder";
-            linkHolder.style.display = "none";
-
-            const purposeHolder = document.createElement("div");
-            purposeHolder.className = "purpose_holder";
-            purposeHolder.style.display = "none";
-
-            holderDIVContainer.append(buttonField);
-            holderDIVContainer.append(linkHolder);
-            holderDIVContainer.append(purposeHolder);
-          }
-          if (typeOfOperationContainer !== "CONTAINER_INPUT")
-            containerField.append(holderDIVContainer);
-        };
-        containerField.innerHTML = `${element.data}`;
-
-        holderDIV.append(containerField);
-        cutItem_value.append(containerField);
-        sessionStorage.clear();
-      } else if (element.type === "BUTTON_INPUT") {
-        let buttonField = document.createElement("button");
-        buttonField.className = "buttonInput";
-        buttonField.style.width = "100%";
-        buttonField.style.height = "100%";
-        buttonField.style.backgroundColor = "#0000";
-        buttonField.style.borderRadius = "0px";
-        buttonField.style.outline = "0px";
-        buttonField.style.overflow = "overlay";
-        buttonField.style.position = "absolute";
-        buttonField.textContent = "Button";
-
-        buttonField.onclick = (e) => {
-          e.stopPropagation();
-          focuseddClassMaintain(e);
-          if (e.ctrlKey) {
-            copyInput("button2");
-          }
-          handleClicked("button2", "container2");
-          setSidebar(true);
-        };
-
-        const linkHolder = document.createElement("div");
-        linkHolder.className = "link_holder";
-        linkHolder.style.display = "none";
-
-        const purposeHolder = document.createElement("div");
-        purposeHolder.className = "purpose_holder";
-        purposeHolder.style.display = "none";
-
-        holderDIV.append(buttonField);
-        holderDIV.append(linkHolder);
-        holderDIV.append(purposeHolder);
+    if (element.type === "DATE_INPUT") {
+      const dateElement = createDateInputElement(holderDIV, focuseddClassMaintain, handleClicked, setSidebar, setRightSideDateMenu, setPostData, setStartDate, setMethod)
+      midSection.append(dateElement)
+    } else if (element.type === "TEXT_INPUT") {
+      const textElement = createTextElement(holderDIV, focuseddClassMaintain, handleClicked, setSidebar, getOffset);
+      midSection.append(textElement);
+    } else if (element.type === "IMAGE_INPUT") {
+      const imageInput = createImageElement(holderDIV, focuseddClassMaintain, handleClicked, setSidebar);
+      midSection.append(imageInput);
+    } else if (element.type === "IFRAME_INPUT") {
+      const iframeElement = createIframeElement(holderDIV, table_dropdown_focuseddClassMaintain, handleClicked, setSidebar);
+      midSection.append(iframeElement);
+    } else if (element.type === "SCALE_INPUT") {
+      const scaleInput = createScaleInputElement(holderDIV, focuseddClassMaintain, handleClicked, setSidebar, table_dropdown_focuseddClassMaintain, decoded);
+      midSection.append(scaleInput);
+    } else if (element.type === "NEW_SCALE_INPUT") {
+      const newScale = createNewScaleInputElement(holderDIV, focuseddClassMaintain, handleClicked, setSidebar, table_dropdown_focuseddClassMaintain, decoded, setIsLoading);
+      midSection.append(newScale);
+    } else if (element.type === "SIGN_INPUT") {
+      const signElement = createSignInputElement(holderDIV, focuseddClassMaintain, handleClicked, setSidebar, setPostData, getOffset);
+      midSection.append(signElement);
+    } else if (element.type === "DROPDOWN_INPUT") {
+      const dropDown = createDropDownInputElement(holderDIV, handleClicked, setSidebar, table_dropdown_focuseddClassMaintain, setRightSideDropDown, setPostData, getOffset);
+      midSection.append(dropDown);
+    } else if (element.type === "CONTAINER_INPUT") {
+      const containerInput = createContainerInputElement(holderDIV, focuseddClassMaintain, handleClicked, setSidebar, table_dropdown_focuseddClassMaintain, decoded, setPostData, postData, getHolderDIV, getOffset, setStartDate, setMethod, setRightSideDateMenu, title, curr_user);
+      midSection.append(containerInput);
+    } else if (element.type === "BUTTON_INPUT") {
+      const buttonElement = createButtonInputElement(holderDIV, focuseddClassMaintain, handleClicked, setSidebar);
+      midSection.append(buttonElement);
+    }
+    function getHolderDIV(measure, i, idMatch) {
+      const holderDIV = document.createElement("div");
+
+      holderDIV.style.position = "absolute";
+      holderDIV.style.overflow = "visible";
+      holderDIV.style.display = "flex";
+      holderDIV.style.cursor = "move";
+      holderDIV.style.zIndex = 1;
+      holderDIV.className = "holderDIV";
+      holderDIV.setAttribute("id", "holderId");
+      holderDIV.setAttribute("draggable", true);
+      holderDIV.setAttribute("data-idD", "INPUT_HOLDER");
+      // holderDIV.setAttribute("data-map_id", idMatch);
+      holderDIV.style.display = "flex";
+      holderDIV.style.flexDirection = "column";
+      // holderDIV.style.border = "2px dotted red";
+      holderDIV.tabIndex = "1";
+      // //// console.log("measure", measure);
+      holderDIV.style.width = measure.width;
+      holderDIV.style.height = measure.height;
+      holderDIV.style.left = measure.left;
+      holderDIV.style.top = measure.top;
+      holderDIV.style.border = measure.border;
+
+      holderDIV.classList.add(`page_${i}`);
+
+      if (idMatch?.length > 0) {
+        holderDIV.classList.add(`enable_pointer_event`);
+        holderDIV.style.border = "1px solid green !important";
+      } else if (idMatch?.length < 1 && actionName == "document") {
+        holderDIV.classList.add(`dotted_border`);
+        holderDIV.classList.add(`disable_pointer_event`);
+      } else {
+        holderDIV.classList.add(`dotted_border`);
       }
 
-      // console.log("data", element, "cutItem_value", cutItem_value);
-      // sessionStorage.clear();
-    }
-  };
-
-  const handleCutInput = () => {
-    // const cutItem = document.querySelector(".focussedd");
-    // const cutEle = cutItem.cloneNode(true);
-    let cutEle = null;
-
-    const cutItem = document.querySelector(".focussedd");
-    if (cutItem) {
-      cutEle = cutItem.cloneNode(true);
-      // Rest of the code for cloning and manipulation
-    } else {
-      // Handle the case when the element with class "focussedd" is not found
-      console.error("Element with class 'focussedd' not found.");
-    }
-
-    function getPosition(el) {
-      // console.log("element check", el);
-      const midSec = document.getElementById("midSection_container");
-      const rect = el.getBoundingClientRect();
-      const midsectionRect = midSec.getBoundingClientRect();
-      return {
-        top:
-          rect.top > 0
-            ? Math.abs(midsectionRect.top)
-            : rect.top - midsectionRect.top,
-        left: rect.left - midsectionRect.left,
-        bottom: rect.bottom,
-        right: rect.right,
-        width: rect.width,
-        height: rect.height,
+      holderDIV.addEventListener("dragstart", (event) => {
+        // console.log("dragStart fun called");
+      });
+      holderDIV.ondragstart = (e) => {
+        // console.log("dragStart fun called");
       };
+
+      // const resizerTL = getResizer("top", "left", decoded);
+      // const resizerTR = getResizer("top", "right", decoded);
+      // const resizerBL = getResizer("bottom", "left", decoded);
+      // const resizerBR = getResizer("bottom", "right", decoded);
+
+      const resizerTL = getResizer("top", "left");
+      const resizerTR = getResizer("top", "right");
+      const resizerBL = getResizer("bottom", "left");
+      const resizerBR = getResizer("bottom", "right");
+
+      const holderMenu = getHolderMenu(measure.auth_user);
+
+      // const holderMenu = getHolderMenu(measure.auth_user);
+
+      holderDIV.onmousedown = holderDIV.addEventListener(
+        "mousedown",
+        (event) => {
+          if (
+            event.target.className != "td-resizer" &&
+            event.target.className != "row-resizer"
+          ) {
+            dragElementOverPage(event, resizing);
+          }
+        },
+        false
+      );
+
+      holderDIV.onresize = (evntt) => { };
+
+      holderDIV.addEventListener("focus", (e) => {
+        holderDIV.classList.add("zIndex-two");
+        holderDIV.style.border = "2px solid orange";
+
+        holderDIV.append(resizerTL, resizerTR, resizerBL, resizerBR);
+      });
+
+      holderDIV.addEventListener("focusout", (e) => {
+        holderDIV.classList.remove("zIndex-two");
+
+        holderDIV.style.border = "3px dotted gray";
+
+        holderMenu.remove();
+        resizerTL.remove();
+        resizerTR.remove();
+        resizerBL.remove();
+        resizerBR.remove();
+      });
+
+      return holderDIV;
     }
-
-    let tempPosn = getPosition(cutEle);
-    const find_class_name = cutEle.firstElementChild?.className.split(" ")[0];
-    let type = "";
-    // // console.log("containerChildClassName", containerChildClassName);
-    switch (find_class_name) {
-      case "dateInput":
-        type = "DATE_INPUT";
-        break;
-      case "textInput":
-        type = "TEXT_INPUT";
-        break;
-      case "imageInput":
-        type = "IMAGE_INPUT";
-        break;
-      case "signInput":
-        type = "SIGN_INPUT";
-        break;
-      case "iframeInput":
-        type = "IFRAME_INPUT";
-        break;
-      case "scaleInput":
-        type = "SCALE_INPUT";
-        break;
-      case "newScaleInput":
-        type = "NEW_SCALE_INPUT";
-        break;
-      case "buttonInput":
-        type = "BUTTON_INPUT";
-        break;
-      case "dropdownInput":
-        type = "DROPDOWN_INPUT";
-        break;
-      case "containerInput":
-        type = "CONTAINER_INPUT";
-        break;
-      case "newScaleInput":
-        type = "NEW_SCALE_INPUT";
-        break;
-      case "cameraInput":
-        type = "CAMERA_INPUT";
-        break;
-      default:
-        type = "";
-    }
-
-    elem = {
-      width: cutEle.style.width,
-      height: cutEle.style.height,
-      top: cutEle.style.top,
-      topp: cutEle.style.top,
-      left: cutEle.style.left,
-      type: type,
-      data: cutEle.firstChild.innerHTML,
-      data2: cutEle.firstChild.outerHTML,
-      // id: `d${h + 1}`,
-    };
-
-    sessionStorage.setItem('cutItem', JSON.stringify(elem));
-    // console.log('session', sessionStorage.getItem("cutItem"));
-    handleCutInputRef.current = JSON.stringify(elem)
-    cutItem.remove();
-    // // console.log(sessionStorage);
   };
 
-  // const copyInput = (clickHandler) => {
+  const handlePaste = () => {
+    const midSec = document.getElementById("midSection_container");
+    if (contextMenu.targetEl) {
+      const pasteElement = contextMenu.targetEl
+      if (contextMenu.copy) {
+        handleCopyPaste(pasteElement, contextMenu.x, contextMenu.y);
+      } else {
+        pasteElement.style.top = contextMenu.y + "px"
+        pasteElement.style.left = contextMenu.x + "px"
+        midSec.append(pasteElement);
+      }
+    }
+  }
 
-  //   // const { setSidebar, handleClicked, focuseddClassMaintain } =
-  //   //   useStateContext();
+  const handleCutInput = (targetElement) => {
+    setContextMenu(prev => {
+      return {
+        ...prev,
+        ['copy']: false
+      }
+    })
+    targetElement.remove();
+  };
 
-  //   const element = document.querySelector(".focussedd");
 
-  //   let counter = 1;
-  //   const copyEle = element.cloneNode(true);
-  //   const rect = element.getBoundingClientRect();
-
-  //   const copyEleTop =
-  //     parseInt(copyEle.style.top.slice(0, -2)) +
-  //     parseInt(rect.height) +
-  //     20 +
-  //     "px";
-
-  //   copyEle.classList.remove("focussedd");
-  //   copyEle.firstChild.classList.remove("focussed");
-
-  //   copyEle.onfocus = () => {
-  //     copyEle.style.border = "1px solid rgb(255 191 0)";
-  //   };
-  //   copyEle.onblur = () => {
-  //     copyEle.style.border = "3px dotted gray";
-  //   };
-  //   if (copyEle) {
-  //     copyEle.style.top = copyEleTop;
-  //     copyEle.style.border = "3px dotted gray";
-  //     copyEle.classList.remove("resizeBtn");
-
-  //     copyEle.onmousedown = copyEle.addEventListener(
-  //       "mousedown",
-  //       (event) => {
-  //         dragElementOverPage(event);
-  //       },
-  //       false
-  //     );
-
-  //     // trying to remove resize btn
-
-  //     const resizeTags = copyEle.getElementsByClassName("resizeBtn");
-  //     while (resizeTags.length > 0) {
-  //       // console.log("resizeTags", resizeTags[0]);
-  //       resizeTags[0].remove();
-  //     }
-
-  //     const resizerTL = getResizer("top", "left", decoded);
-  //     const resizerTR = getResizer("top", "right", decoded);
-  //     const resizerBL = getResizer("bottom", "left", decoded);
-  //     const resizerBR = getResizer("bottom", "right", decoded);
-
-  //     copyEle.addEventListener("focus", function (e) {
-  //       copyEle.style.border = "2px solid orange";
-  //       copyEle.append(resizerTL, resizerTR, resizerBL, resizerBR);
-  //     });
-  //     copyEle.addEventListener("focusout", function (e) {
-  //       copyEle.classList.remove("zIndex-two");
-  //       copyEle.style.border = "3px dotted gray";
-
-  //       resizerTL.remove();
-  //       resizerTR.remove();
-  //       resizerBL.remove();
-  //       resizerBR.remove();
-  //     });
-  //     copyEle.addEventListener("click", (e) => {
-  //       e.stopPropagation();
-  //       focuseddClassMaintain(e);
-  //       // console.log("find classlist", e.target.classList[0]);
-  //       if (
-  //         e.target?.parentElement?.parentElement.classList.contains(
-  //           "containerInput"
-  //         )
-  //       ) {
-  //         let type = "";
-  //         const containerClassName = e.target.classList[0];
-  //         switch (containerClassName) {
-  //           case "dateInput":
-  //             type = "calendar2";
-  //             break;
-  //           case "textInput":
-  //             type = "align2";
-  //             break;
-  //           case "imageInput":
-  //             type = "image2";
-  //             break;
-  //           case "signInput":
-  //             type = "signs2";
-  //             break;
-  //           case "iframeInput":
-  //             type = "iframe2";
-  //             break;
-  //           case "scaleInput":
-  //             type = "scale2";
-  //             break;
-  //           case "buttonInput":
-  //             type = "button2";
-  //             break;
-  //           case "dropdownInput":
-  //             type = "dropdown2";
-  //             break;
-  //           case "emailButton":
-  //             type = "email2";
-  //             break;
-  //           default:
-  //             type = "";
-  //         }
-  //         handleClicked(type, "container2");
-  //         // console.log("inside if", type);
-  //       } else {
-  //         handleClicked(clickHandler);
-  //       }
-  //       setSidebar(true);
-  //     });
-  //   }
-
-  //   let midSec = null;
-  //   if (!midSec) {
-  //     let targetParent = element;
-  //     while (1) {
-  //       if (
-  //         targetParent.classList.contains("containerInput") ||
-  //         targetParent.classList.contains("midSection_container")
-  //       ) {
-  //         targetParent = targetParent;
-  //         break;
-  //       } else {
-  //         targetParent = targetParent.parentElement;
-  //         midSec = targetParent;
-  //       }
-  //     }
-  //   }
-
-  //   copyEle.id += counter;
-  //   if (
-  //     parseInt(copyEle.style.top.slice(0, -2)) +
-  //       parseInt(rect.height) +
-  //       parseInt(rect.height) +
-  //       20 <
-  //     1122
-  //   ) {
-  //     midSec.appendChild(copyEle);
-  //   }
-  //   copyEle.onclick = (clickHandler2) => {
-  //     if (clickHandler2.ctrlKey) {
-  //       copyInput(clickHandler);
-  //     }
-  //   };
-  // };
-
-  // const contextMenuClose = () => setContextMenu(initialContextMenu);
-  // document.addEventListener("click", () => {
-  //   setContextMenu(initialContextMenu);
-  // });
-
-  // handle copy input from context menu
 
   const handleCopyInput = () => {
-    const copyItem = document.querySelector(".focussedd");
-    const copyEle = copyItem.cloneNode(true);
+    if (contextMenu.targetEl) {
+      const targetElement = contextMenu.targetEl;
+      const find_class_name = true;
+      let type = "";
+      switch (find_class_name) {
+        case targetElement.querySelector(".tableInput") && true:
+          type = "TABLE_INPUT";
+          break;
+        case targetElement.querySelector(".dateInput") && true:
+          type = "DATE_INPUT";
+          break;
+        case targetElement.querySelector(".signInput") && true:
+          type = "SIGN_INPUT";
+          break;
+        case targetElement.querySelector(".textInput") && true:
+          type = "TEXT_INPUT";
+          break;
+        case targetElement.querySelector(".imageInput") && true:
+          type = "IMAGE_INPUT";
+          break;
+        case targetElement.querySelector(".iframeInput") && true:
+          type = "IFRAME_INPUT";
+          break;
+        case targetElement.querySelector(".scaleInput") && true:
+          type = "SCALE_INPUT";
+          break;
+        case targetElement.querySelector(".newScaleInput") && true:
+          type = "NEW_SCALE_INPUT";
+          break;
+        case targetElement.querySelector(".buttonInput") && true:
+          type = "BUTTON_INPUT";
+          break;
+        case targetElement.querySelector(".dropdownInput") && true:
+          type = "DROPDOWN_INPUT";
+          break;
+        case targetElement.querySelector(".containerInput") && true:
+          type = "CONTAINER_INPUT";
+          break;
+        case targetElement.querySelector(".newScaleInput") && true:
+          type = "NEW_SCALE_INPUT";
+          break;
+        case targetElement.querySelector(".cameraInput") && true:
+          type = "CAMERA_INPUT";
+          break;
+        default:
+          type = "";
+      }
 
-    function getPosition(el) {
-      // console.log("element check", el);
-      const midSec = document.getElementById("midSection_container");
-      const rect = el.getBoundingClientRect();
-      const midsectionRect = midSec.getBoundingClientRect();
-      return {
-        top:
-          rect.top > 0
-            ? Math.abs(midsectionRect.top)
-            : rect.top - midsectionRect.top,
-        left: rect.left - midsectionRect.left,
-        bottom: rect.bottom,
-        right: rect.right,
-        width: rect.width,
-        height: rect.height,
+      elem = {
+        width: targetElement.style.width,
+        height: targetElement.style.height,
+        topp: contextMenu.y + "px",
+        left: contextMenu.x + "px",
+        type: type,
+        data: targetElement.firstChild.innerHTML,
+        id: targetElement.id
       };
+      console.log("SAVED DATE: ", elem);
+      setContextMenu(prev => {
+        return {
+          ...prev,
+          ['targetEl']: elem,
+          ['copy']: true
+        }
+      })
     }
-
-    let tempPosn = getPosition(copyEle);
-    const find_class_name = copyEle.firstElementChild?.className.split(" ")[0];
-    let type = "";
-    switch (find_class_name) {
-      case "dateInput":
-        type = "DATE_INPUT";
-        break;
-      case "textInput":
-        type = "TEXT_INPUT";
-        break;
-      case "imageInput":
-        type = "IMAGE_INPUT";
-        break;
-      case "signInput":
-        type = "SIGN_INPUT";
-        break;
-      case "iframeInput":
-        type = "IFRAME_INPUT";
-        break;
-      case "scaleInput":
-        type = "SCALE_INPUT";
-        break;
-      case "newScaleInput":
-        type = "NEW_SCALE_INPUT";
-        break;
-      case "buttonInput":
-        type = "BUTTON_INPUT";
-        break;
-      case "dropdownInput":
-        type = "DROPDOWN_INPUT";
-        break;
-      case "containerInput":
-        type = "CONTAINER_INPUT";
-        break;
-      case "newScaleInput":
-        type = "NEW_SCALE_INPUT";
-        break;
-      case "cameraInput":
-        type = "CAMERA_INPUT";
-        break;
-      default:
-        type = "";
-    }
-
-    elem = {
-      width: copyEle.style.width,
-      height: copyEle.style.height,
-      top: copyEle.style.top,
-      topp: copyEle.style.top,
-      left: copyEle.style.left,
-      type: type,
-      data: copyEle.firstChild.innerHTML,
-      // id: `d${h + 1}`,
-    };
-    sessionStorage.setItem("copyItem", JSON.stringify(elem));
-    copyItemRef.current = copyItem;
-    // cutItem.remove();
   };
 
   // Remove Input
-  const handleRemoveInput = () => {
-    const selectInput = document.querySelector(".focussedd");
-    if (selectInput) {
-      selectInput.remove();
-    } else {
-      // console.log("It's not any input field")
-    }
+  const handleRemoveInput = (targetElement) => {
+    targetElement?.remove();
+    setContextMenu(prev => {
+      return {
+        ...prev,
+        ['copy']: false,
+        ['targetEl']: null
+      }
+    })
+
   };
 
   function getHolderDIV(measure, i, idMatch) {
@@ -2550,12 +1474,12 @@ const MidSection = React.forwardRef((props, ref) => {
           tableField.style.position = "absolute";
 
           const tableF = document.getElementsByClassName("tableInput");
-            if (tableF.length) {
-              const t = tableF.length;
-              tableField.id = `tab${t + 1}`;
-            } else {
-              tableField.id = "tab1";
-            }
+          if (tableF.length) {
+            const t = tableF.length;
+            tableField.id = `tab${t + 1}`;
+          } else {
+            tableField.id = "tab1";
+          }
 
           tableField.onchange = (event) => {
             event.preventDefault();
@@ -2614,7 +1538,7 @@ const MidSection = React.forwardRef((props, ref) => {
         } else if (
           typeOfOperation === "PAYMENT_INPUT" &&
           decoded.details.action === "template"
-        ){
+        ) {
           CreatePyamentElement(holderDIV, focuseddClassMaintain, handleClicked, setSidebar);
         }
         if (decoded.details.action === "template") {
@@ -2656,18 +1580,18 @@ const MidSection = React.forwardRef((props, ref) => {
                 onDrop={onDrop}
                 onContextMenu={handleContextMenu}
               >
-                {contextMenu.show && (
+                {(decoded.details.action === 'template' && contextMenu.show) && (
                   <RightContextMenu
                     x={contextMenu.x}
                     y={contextMenu.y}
                     closeContextMenu={contextMenuClose}
-                    cutInput={handleCutInput}
+                    cutInput={() => { handleCutInput(contextMenu.targetEl) }}
                     pasteInput={handlePaste}
-                    handleCopy={handleCopyInput}
-                    removeInput={handleRemoveInput}
+                    handleCopy={() => { handleCopyInput(contextMenu.targetEl) }}
+                    removeInput={() => { handleRemoveInput(contextMenu.targetEl) }}
                   />
                 )}
-                <Row style={{height: isLoading ? "79%":"" }}>
+                <Row style={{ height: isLoading ? "79%" : "" }}>
                   <Col className="d-flex justify-content-end header_user">
                     <span>{index + 1}</span>
                     {isLoading && <Spinner />}
