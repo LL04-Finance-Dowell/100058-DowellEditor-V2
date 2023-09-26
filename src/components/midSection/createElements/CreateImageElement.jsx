@@ -70,5 +70,6 @@ function createImageElement(holderDIV, focuseddClassMaintain, handleClicked, set
     imageButton.append(imgBtn);
     holderDIV.append(imageField);
     holderDIV.append(imageButton);
+    return holderDIV;
 }
 export default createImageElement;

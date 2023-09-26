@@ -460,5 +460,6 @@ function createContainerInputElement(holderDIV, focuseddClassMaintain, handleCli
       containerField.append(holderDIVContainer);
   };
   holderDIV.append(containerField);
+  return holderDIV;
 }
 export default createContainerInputElement;

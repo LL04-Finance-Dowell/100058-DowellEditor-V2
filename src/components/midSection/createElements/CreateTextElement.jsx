@@ -49,5 +49,6 @@ function createTextElement(holderDIV, focuseddClassMaintain, handleClicked, setS
           setSidebar(true);
         };
         holderDIV.append(inputField);
+        return holderDIV;
 }
 export default createTextElement;

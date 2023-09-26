@@ -74,5 +74,6 @@ function createDropDownInputElement(holderDIV, handleClicked, setSidebar, table_
         dropdownField.append(para);
         dropdownField.append(selectElement);
         holderDIV.append(dropdownField);
+        return holderDIV;
 }
 export default createDropDownInputElement;

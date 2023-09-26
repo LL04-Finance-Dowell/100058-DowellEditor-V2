@@ -90,5 +90,6 @@ function createSignInputElement(holderDIV, focuseddClassMaintain, handleClicked,
 
     holderDIV.append(signField);
     holderDIV.append(imageSignButton);
+    return holderDIV;
 }
 export default createSignInputElement;
