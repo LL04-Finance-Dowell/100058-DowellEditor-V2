@@ -2978,19 +2978,6 @@ const ScaleRightSide = () => {
   // console.log(iframeSrc, "iframeSrc");
 
   function removeScale() {
-    let elementString = localStorage.getItem("elements");
-    let elementArray = [];
-    if (typeof elementString !== "undefined") {
-      elementArray = JSON.parse(elementString);
-    }
-    const otherComponent = scale?.querySelector(".otherComponent");
-    if (elementArray !== null) {
-      let elementIndex = elementArray.indexOf(otherComponent.textContent);
-      elementArray.splice(elementIndex, 1);
-      let string = JSON.stringify(elementArray);
-      localStorage.setItem("elements", string);
-    }
-
     const focusseddElmnt = document.querySelector(".focussedd");
     if (focusseddElmnt.classList.contains("holderDIV")) {
       document.querySelector(".focussedd").remove();
@@ -3069,7 +3056,7 @@ const ScaleRightSide = () => {
     const otherComponent = scale?.querySelector(".otherComponent");
     otherComponent.textContent = selectedOption.value + " " + selectedOption.id;
     console.log("Other Component", otherComponent.textContent);
-    let elementString = localStorage.getItem("elements");
+    let elementString = sessionStorage.getItem("elements");
     let elemArray = [];
     if (elementString !== null) {
       elemArray = JSON.parse(elementString);
@@ -3078,7 +3065,7 @@ const ScaleRightSide = () => {
     console.log(`"${selectedOption.value}"`);
     elemArray.push(selectedOption.value);
     let string = JSON.stringify(elemArray);
-    localStorage.setItem("elements", string);
+    sessionStorage.setItem("elements", string);
   };
 
   function scaleSubmit(e) {
@@ -3224,7 +3211,7 @@ const ScaleRightSide = () => {
     otherElementsArray.push("PAYMENT_INPUT " + payments[i].id);
   }
 
-  let elementString = localStorage.getItem("elements");
+  let elementString = sessionStorage.getItem("elements");
   let elemArray = [];
   if (elementString !== null) {
     elemArray = JSON.parse(elementString);
