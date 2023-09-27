@@ -26,7 +26,7 @@ function createImageElement(holderDIV, focuseddClassMaintain, handleClicked, set
     }
 
     imageField.addEventListener("onclick", () => {
-        console.log("imgData clicked");
+        // console.log("imgData clicked");
     });
 
     imageField.onclick = (e) => {

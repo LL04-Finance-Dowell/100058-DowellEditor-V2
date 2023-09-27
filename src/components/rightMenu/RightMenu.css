@@ -72,3 +72,28 @@ select option {
 .react-datepicker-popper[data-placement^='bottom'] .react-datepicker__triangle {
   display: none !important;
 }
+
+#move_icon {
+  position: sticky;
+  top: 0;
+  margin-left: calc(100% - 20px);
+  color: #000;
+  background-color: #fff;
+  padding: 5px;
+  border-radius: 5px;
+  font-size: 1.3rem;
+  z-index: 10;
+  cursor: grab;
+}
+
+#move_icon:active {
+  cursor: grabbing;
+}
+
+#move_icon svg {
+  pointer-events: none;
+  width: initial !important;
+  height: initial;
+  color: initial;
+  margin-right: 0;
+}
