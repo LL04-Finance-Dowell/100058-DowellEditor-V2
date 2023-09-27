@@ -90,8 +90,9 @@ function createCameraInputField(id, p, holderDIV, handleClicked, setSidebar, tab
             };
           } else if (decoded.details.action === "document") {
             let videoField = document.createElement("video");
+            console.log("This is the camera link", videoLinkHolder)
             const videoLinkHolder1 = document.createElement("h1");
-            if (videoLinkHolder === "video_link") {
+            if (videoLinkHolder === "video_link" || videoLinkHolder === "") {
               videoField.className = "videoInput";
               videoField.src = videoLinkHolder;
               videoField.style.width = "100%";
@@ -119,8 +120,9 @@ function createCameraInputField(id, p, holderDIV, handleClicked, setSidebar, tab
               videoField.muted = true;
               videoField.autoplay = true;
               videoField.loop = true;
+              videoField.controls = true
               cameraField.append(videoField);
-
+              
               let cameraImageInput = document.createElement("canvas");
               cameraImageInput.className = "cameraImageInput";
               cameraImageInput.style.display = "none";
