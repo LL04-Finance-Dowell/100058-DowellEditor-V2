@@ -12,16 +12,20 @@ const TextButton = ({ customFunc }) => {
   };
 
   return (
-    <button
-      type="button"
-      title="Text"
-      draggable="true"
-      onDragStart={dragStartFunc}
-      id="draggable"
-      onDragEnd={customFunc}
-    >
-      <BiText />
-    </button>
+    <div className="btn_wrapper">
+      <button
+        type="button"
+        title="Text"
+        draggable="true"
+        onDragStart={dragStartFunc}
+        id="draggable"
+        onDragEnd={customFunc}
+      >
+        <BiText />
+      </button>
+
+      <p className="btn_tag">Text</p>
+    </div>
   );
 };
 

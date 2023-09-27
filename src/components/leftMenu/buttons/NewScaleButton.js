@@ -7,22 +7,26 @@ const NewScaleButton = ({ customFunc }) => {
 
   const dragStartNewScale = (e) => {
     e.dataTransfer.setData("text/plain", "NEW_SCALE_INPUT");
-    setDraggedItemType("NEW_SCALE_INPUT"); 
+    setDraggedItemType("NEW_SCALE_INPUT");
     if (document.querySelector(".drop_zone")) {
       document.querySelector(".drop_zone").classList.remove("drop_zone");
     }
   };
 
   return (
-    <button
-      type="button"
-      title="NewScale"
-      draggable="true"
-      onDragStart={dragStartNewScale}
-      onClick={customFunc}
-    >
-      <IoScale />
-    </button>
+    <div className="btn_wrapper">
+      <button
+        type="button"
+        title="NewScale"
+        draggable="true"
+        onDragStart={dragStartNewScale}
+        onClick={customFunc}
+      >
+        <IoScale />
+      </button>
+
+      <p className="btn_tag">Scale</p>
+    </div>
   );
 };
 

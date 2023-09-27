@@ -22,9 +22,22 @@
   border: 2px dotted gray;
 }
 
+.textInput.empty:after {
+  content: 'T';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 7rem;
+  font-family: courier;
+  font-weight: 500;
+  color: #e3eeff;
+  z-index: -1;
+}
+
 /*
 .midSection_container{
-    background-color: #ffffff;
+    background-color: #ffffff;q
     width: 216mm;
     height: 297mm;
     position: relative;
