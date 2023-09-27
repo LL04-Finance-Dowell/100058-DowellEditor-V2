@@ -58,13 +58,32 @@ function createSignInputElement(holderDIV, focuseddClassMaintain, handleClicked,
 
     signBtn.addEventListener("input", () => {
         const reader = new FileReader();
+        try {
+            reader.addEventListener("load", () => {
+                if(!reader.result){
+                    setSidebar(false);
+                    return;
+                }
+                uploadedImage = reader.result;
+                const signImage = `<img src=${uploadedImage} width="100%" height="100%"/>`;
+                if (document.querySelector(".focussed")) {
+                    document.querySelector(".focussed").innerHTML = signImage
+                } else if (document.querySelector(".focussedd")) {
+                    const target = document.querySelector(".focussedd");
+                    if (target.classList.contains('signInput')) {
+                        target.innerHTML = signImage
+                    }
+                };
+                setSidebar(true);
+            });
+            reader.readAsDataURL(signBtn.files[0]);
 
-        reader.addEventListener("load", () => {
-            uploadedImage = reader.result;
-            const signImage = `<img src=${uploadedImage} width="100%" height="100%"/>`;
-            document.querySelector(".focussed").innerHTML = signImage;
-        });
-        reader.readAsDataURL(signBtn.files[0]);
+        } catch (error) {
+            console.log("FAILED TO UPLOAD:", error);
+            setSidebar(true);
+
+        }
+
     });
 
     imageSignButton.append(signBtn);

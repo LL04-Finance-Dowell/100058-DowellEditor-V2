@@ -58,7 +58,7 @@ const AlignRightSide = () => {
     const userSelection = window.getSelection();
     const selectedTextRange = userSelection.getRangeAt(0);
 
-    //console.log(selectedTextRange);
+    //// console.log(selectedTextRange);
     selectedTextRange.style.fontFamily = `${ev.target.value}`;
   };
 
@@ -113,8 +113,8 @@ const AlignRightSide = () => {
   let currentFontSize = 16;
   const handleIncreaseSize = () => {
     var sel = document.getElementsByClassName("focussed")[0];
-      currentFontSize += 2;
-      sel.style.fontSize = currentFontSize + "px";
+    currentFontSize += 2;
+    sel.style.fontSize = currentFontSize + "px";
 
   };
 
@@ -126,7 +126,7 @@ const AlignRightSide = () => {
     currentFontSize -= 2;
     sel.style.fontSize = currentFontSize + "px";
 
-    
+
   };
 
   function handleSizing(event) {
@@ -193,7 +193,7 @@ const AlignRightSide = () => {
 
   function showColorInput() {
     const fontColor = document.getElementById("colorInputColor");
-    //console.log(fontColor);
+    //// console.log(fontColor);
     if (fontColor.style.diplay === "none") {
       fontColor.style.display = "block";
     } else {
@@ -650,22 +650,22 @@ const AlignRightSide = () => {
               </Button>
             </Col>
             <Col className="mx-0 p-0">
-              <Button onClick={() => {}} variant="white">
+              <Button onClick={() => { }} variant="white">
                 <FaIndent color="gray" size={20} />
               </Button>
             </Col>
             <Col className="mx-0 p-0">
-              <Button onClick={() => {}} variant="white">
+              <Button onClick={() => { }} variant="white">
                 <FaIndent color="gray" size={20} />
               </Button>
             </Col>
             <Col className="mx-0 p-0">
-              <Button onClick={() => {}} variant="white">
+              <Button onClick={() => { }} variant="white">
                 <FaIndent color="gray" size={20} />
               </Button>
             </Col>
             <Col className="mx-0 p-0">
-              <Button onClick={() => {}} variant="white">
+              <Button onClick={() => { }} variant="white">
                 <FaIndent color="gray" size={20} />
               </Button>
             </Col>

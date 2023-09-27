@@ -18,6 +18,7 @@ import { AiFillPrinter } from "react-icons/ai";
 import { downloadPDF } from "../../utils/genratePDF.js";
 
 import generateImage from "../../utils/generateImage.js";
+import RejectionModal from "../modals/RejectionModal.jsx";
 
 const Header = () => {
   const inputRef = useRef(null);
@@ -104,9 +105,12 @@ const Header = () => {
     setContainerBorderSize,
     containerBorderColor,
     setContainerBorderColor,
+    docMapRequired, setDocMapRequired
   } = useStateContext();
 
   const [printContent, setPrintContent] = useState(false);
+  const [rejectionMsg, setRejectionMsg] = useState('');
+  const [isOpenRejectionModal, setIsOpenRejectionModal] = useState(false)
 
   const handleOptions = () => {
     setIsMenuVisible(!isMenuVisible);
@@ -182,17 +186,21 @@ const Header = () => {
     const midSec = document.getElementById("midSection_container");
 
     const rect = el.getBoundingClientRect();
+    console.log("rect position from header", rect);
     const midsectionRect = midSec.getBoundingClientRect();
+    console.log("midsectionRect position from header", midsectionRect);
+
 
     return {
       top:
         rect.top > 0
           ? Math.abs(midsectionRect.top)
           : rect.top - midsectionRect.top,
-      left: rect.left - midsectionRect.left,
+      left: window.innerWidth<993 ? (((rect.left*794)/midsectionRect.width) - midsectionRect.left) : rect.left - midsectionRect.left,
+      // left:rect.left - midsectionRect.left,
       bottom: rect.bottom,
       right: rect.right,
-      width: rect.width,
+      width: window.innerWidth<993 ? ((rect.width*794)/midsectionRect.width) : rect.width,
       height: rect.height,
     };
   }
@@ -258,7 +266,7 @@ const Header = () => {
         ) {
           let tempElem = txt[h].parentElement;
           let tempPosn = getPosition(tempElem);
-          console.log("element position in header js", tempPosn);
+          // console.log("element position in header js", tempPosn);
           elem = {
             width: tempPosn.width,
             height: tempPosn.height,
@@ -292,14 +300,14 @@ const Header = () => {
           const reader = new FileReader();
           let tempElem = img[h].parentElement;
           let tempPosn = getPosition(tempElem);
-          console.log(
-            "img[h].style.backgroundImage",
-            img[h].style.backgroundImage
-          );
+          // console.log(
+          //   "img[h].style.backgroundImage",
+          //   img[h].style.backgroundImage
+          // );
           const dataName = img[h].style.backgroundImage
             ? img[h].style.backgroundImage
             : img[h].innerText;
-          console.log("dataName", dataName);
+          // console.log("dataName", dataName);
 
           elem = {
             width: tempPosn.width,
@@ -373,7 +381,7 @@ const Header = () => {
             data:
               sign[h].firstElementChild === null
                 ? // decoded.details.action === "document"
-                  sign[h].innerHTML
+                sign[h].innerHTML
                 : sign[h].firstElementChild.src,
             id: `s${h + 1}`,
           };
@@ -405,16 +413,13 @@ const Header = () => {
               for (let j = 0; j < tableChildren[i].children.length; j++) {
                 // const element = tableChildren[i];
 
-                const childNodes = tableChildren[i].children[j]?.childNodes;
-                const tdElement = [];
-                childNodes.forEach((child) => {
-                  if (
-                    !child.classList.contains("row-resizer") &&
-                    !child.classList.contains("td-resizer")
-                  ) {
+                const childNodes = tableChildren[i].children[j]?.childNodes
+                const tdElement = []
+                childNodes.forEach(child => {
+                  if (!child.classList.contains("row-resizer") && !child.classList.contains("td-resizer")) {
                     tdElement.push(child);
                   }
-                });
+                })
                 const TdDivClassName = tdElement[0]?.className.split(" ")[0];
                 const trChild = {
                   td: {
@@ -427,9 +432,11 @@ const Header = () => {
                     data:
                       TdDivClassName == "imageInput"
                         ? tableChildren[i].children[j]?.firstElementChild.style
-                            .backgroundImage
+                          .backgroundImage
                         : tdElement[0]?.innerHTML,
-                    id: `tableTd${j + 1}`,
+                    id: TdDivClassName == "imageInput"
+                      ? tableChildren[i].children[j]?.id
+                      : tdElement[0]?.id,
                   },
                 };
                 newTableTR.push(trChild);
@@ -450,7 +457,7 @@ const Header = () => {
             data: getChildData(),
             border: `${tableBorderSize} dotted ${tableBorderColor}`,
             tableBorder: tables[t].parentElement.style.border,
-            id: `tab${t + 1}`,
+            id: tables[t].firstElementChild.id,
           };
           const pageNum = findPaageNum(tables[t]);
           page[0][pageNum].push(elem);
@@ -528,7 +535,7 @@ const Header = () => {
               childData.type = type;
               const imageData =
                 "imageInput" &&
-                element?.firstElementChild?.style?.backgroundImage
+                  element?.firstElementChild?.style?.backgroundImage
                   ? element.firstElementChild.style.backgroundImage
                   : element.firstElementChild?.innerHTML;
               if (type != "TEXT_INPUT") {
@@ -605,7 +612,7 @@ const Header = () => {
         ) {
           let tempElem = scales[s].parentElement;
           let tempPosn = getPosition(tempElem);
-          console.log(scales[s].firstElementChild);
+          // console.log(scales[s].firstElementChild);
           elem = {
             width: tempPosn.width,
             height: tempPosn.height,
@@ -641,7 +648,7 @@ const Header = () => {
         ) {
           let tempElem = newScales[b].parentElement;
           let tempPosn = getPosition(tempElem);
-          console.log(newScales[b]);
+          // console.log(newScales[b]);
           let circles = newScales[b].querySelector(".circle_label");
           let scaleBg = newScales[b].querySelector(".label_hold");
           let leftChild = newScales[b].querySelector(".left_child");
@@ -656,7 +663,7 @@ const Header = () => {
           console.log(font);
 
           let buttonText = newScales[b].querySelectorAll(".circle_label");
-          console.log(buttonText);
+          // console.log(buttonText);
 
           let emojiArr = [];
 
@@ -731,8 +738,8 @@ const Header = () => {
                   ? elem.querySelector("center-percent")?.textContent
                   : 1
               );
-              console.log(prodName);
-              console.log(percentCenter);
+              // console.log(prodName);
+              // console.log(percentCenter);
             });
             percentLeft = newScales[b].querySelector(".left-percent");
             percentRight = document.querySelector(".right-percent");
@@ -767,7 +774,7 @@ const Header = () => {
             stapelOrientation: stapelOrientation?.textContent,
             otherComponent: otherComponent.textContent,
           };
-          console.log(properties);
+          // console.log(properties);
           elem = {
             width: tempPosn.width,
             height: tempPosn.height,
@@ -787,7 +794,7 @@ const Header = () => {
             //     : "Template scale",
           };
 
-          console.log(elem);
+          // console.log(elem);
           const pageNum = findPaageNum(newScales[b]);
           page[0][pageNum].push(elem);
         }
@@ -805,7 +812,7 @@ const Header = () => {
           let tempElem = imageCanva[b].parentElement;
 
           let tempPosn = getPosition(tempElem);
-          console.log(imageCanva[b]);
+          // console.log(imageCanva[b]);
           let imageLinkHolder = imageCanva[b].querySelector(".imageLinkHolder");
           let videoLinkHolder = imageCanva[b].querySelector(".videoLinkHolder");
 
@@ -813,7 +820,7 @@ const Header = () => {
             imageLinkHolder: imageLinkHolder.textContent,
             videoLinkHolder: videoLinkHolder.textContent,
           };
-          console.log(properties);
+          // console.log(properties);
           elem = {
             width: tempPosn.width,
             height: tempPosn.height,
@@ -824,7 +831,7 @@ const Header = () => {
             raw_data: properties,
             id: `cam1${b + 1}`,
           };
-          console.log(elem);
+          // console.log(elem);
           const pageNum = findPaageNum(imageCanva[b]);
           page[0][pageNum].push(elem);
         }
@@ -974,10 +981,18 @@ const Header = () => {
   const documentFlag = decoded?.details?.document_flag;
   const titleName = decoded?.details?.name;
   const finalDocName = decoded?.details?.update_field.document_name;
+  const docRight = decoded?.details?.document_right;
+
+
+
 
   const element_updated_length =
     document.getElementsByClassName("element_updated")?.length;
   const document_map_required = docMap?.filter((item) => item.required);
+
+  // ? This "if" condition is to prevent code from running, everytime Header.js renders
+  // if (!docMapRequired?.length) setDocMapRequired(document_map_required)
+
 
   useEffect(() => {
     if (document_map_required?.length > 0) {
@@ -1461,6 +1476,7 @@ const Header = () => {
       _id: decoded.details._id,
     };
 
+    console.log("This is percent_sum payloaf", requestBody)
     Axios.post(
       "https://100035.pythonanywhere.com/percent-sum/api/percent-sum-response-create/",
       requestBody
@@ -1497,7 +1513,8 @@ const Header = () => {
         content: JSON.stringify(dataa),
         page: item,
       };
-    } else if (decoded.details.action === "document") {
+    }
+    else if (decoded.details.action === "document") {
       updateField = {
         document_name: titleName,
         content: JSON.stringify(dataa),
@@ -1628,7 +1645,7 @@ const Header = () => {
       .then((res) => {
         // Handling title
         const loadedDataT = res.data;
-        // console.log(res.data.content, "loaded");
+        // // console.log(res.data.content, "loaded");
 
         if (decoded.details.action === "template") {
           setTitle(loadedDataT.template_name);
@@ -1654,22 +1671,22 @@ const Header = () => {
       })
       .catch((err) => {
         setIsLoading(false);
-        console.log(err);
+        // console.log(err);
       });
   };
 
   const npsCustomData = () => {
-    console.log(decoded.details._id);
+    // console.log(decoded.details._id);
     Axios.post("https://100035.pythonanywhere.com/api/nps_custom_data_all", {
       template_id: decoded.details._id,
     })
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         const data = res.data.data;
         setCustomId(data);
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
       });
   };
 
@@ -1727,7 +1744,7 @@ const Header = () => {
     var tokenn = prompt("Paste your token here");
     if (tokenn != null) {
       const decodedTok = jwt_decode(tokenn);
-      console.log("tokkkkkkennn", tokenn);
+      // console.log("tokkkkkkennn", tokenn);
       const getPostData = async () => {
         const response = await Axios.post(
           "https://100058.pythonanywhere.com/api/get-data-from-collection/",
@@ -1745,7 +1762,7 @@ const Header = () => {
           .then((res) => {
             // Handling title
             const loadedDataT = res.data;
-            console.log(res);
+            // console.log(res);
 
             if (decoded.details.action === "template") {
               setTitle("Untitle-File");
@@ -1768,14 +1785,14 @@ const Header = () => {
           })
           .catch((err) => {
             setIsLoading(false);
-            console.log(err);
+            // console.log(err);
           });
       };
       getPostData();
     }
   }
 
-  // console.log('page count check', item);
+  // // console.log('page count check', item);
   const linkId = decoded.details.link_id;
 
   function handleFinalize() {
@@ -1797,7 +1814,7 @@ const Header = () => {
       }
     )
       .then((res) => {
-        console.log("This is my response", res);
+        // console.log("This is my response", res);
         setIsLoading(false);
         toast.success(res?.data);
         finalize.style.visibility = "hidden";
@@ -1805,7 +1822,7 @@ const Header = () => {
       })
       .catch((err) => {
         setIsLoading(false);
-        console.log(err);
+        // console.log(err);
         toast.error(err);
         // alert(err?.message);
       });
@@ -1862,9 +1879,8 @@ const Header = () => {
 
   return (
     <div
-      className={`header ${
-        actionName == "template" ? "header_bg_template" : "header_bg_document"
-      }`}
+      className={`header ${actionName == "template" ? "header_bg_template" : "header_bg_document"
+        }`}
     >
       <Container fluid>
         <Row>
@@ -1874,9 +1890,8 @@ const Header = () => {
               {isMenuVisible && (
                 <div
                   ref={menuRef}
-                  className={`position-absolute bg-white d-flex flex-column p-4 bar-menu menu ${
-                    isMenuVisible ? "show" : ""
-                  }`}
+                  className={`position-absolute bg-white d-flex flex-column p-4 bar-menu menu ${isMenuVisible ? "show" : ""
+                    }`}
                 >
                   <div className="d-flex cursor_pointer" onClick={handleUndo}>
                     <ImUndo />
@@ -1949,8 +1964,8 @@ const Header = () => {
                 className="title-name px-3"
                 contentEditable={true}
                 style={{
-                  fontSize: 15,
-                  height: "50px",
+                  fontSize: 18,
+                  height: window.innerWidth<993 ? "75px": "50px",
                   overflowY: "auto",
                   padding: "10px",
                 }}
@@ -2024,7 +2039,7 @@ const Header = () => {
                 </div>
               </div>
 
-              {actionName == "document" && docMap && data != "" && (
+              {actionName == "document" && docMap && data != "" && docRight !== 'view' && (
                 <>
                   <div className="mt-2 text-center mb-2 px-2">
                     <Button
@@ -2049,7 +2064,9 @@ const Header = () => {
                       size="md"
                       className="rounded px-4"
                       id="reject-button"
-                      onClick={handleReject}
+                      onClick={
+                        () => setIsOpenRejectionModal(true)
+                      }
                       style={{
                         visibility:
                           documentFlag == "processing" ? "visible" : "hidden",
@@ -2065,6 +2082,8 @@ const Header = () => {
           </Col>
         </Row>
       </Container>
+
+      {isOpenRejectionModal && <RejectionModal openModal={setIsOpenRejectionModal} handleReject={handleReject} msg={rejectionMsg} setMsg={setRejectionMsg} />}
     </div>
   );
 };
