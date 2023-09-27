@@ -148,7 +148,7 @@ function createNewScaleInputField(
         let newImg = document.createElement("img");
         newImg.className = "images_label";
         newImg.src = buttonImage[i];
-        console.log(buttonImage[i]);
+        // console.log(buttonImage[i]);
         circle.appendChild(newImg);
       }
 
@@ -156,12 +156,12 @@ function createNewScaleInputField(
         const buttonText = element.raw_data.buttonText;
         if (Array.isArray(buttonText) && buttonText.length > 0) {
           circle.textContent = buttonText[i % buttonText.length];
-          console.log("EMOJIIIIIIIIIII");
+          // console.log("EMOJIIIIIIIIIII");
         } else {
-          console.log("Empty buttonText array");
+          // console.log("Empty buttonText array");
         }
       } else {
-        console.log("NUMBERRRRRRRRRRRRRR");
+        // console.log("NUMBERRRRRRRRRRRRRR");
         circle.textContent = i;
       }
       labelHold.append(circle);
@@ -195,7 +195,7 @@ function createNewScaleInputField(
 
         setTimeout(() => {
           let scales = document.querySelectorAll(".newScaleInput");
-          console.log(scales);
+          // console.log(scales);
           scales.forEach((scale) => {
             const scaleID = scale?.querySelector(".scaleId").textContent;
             const circlesInScale = scale.querySelectorAll(".circle_label");
@@ -296,8 +296,8 @@ function createNewScaleInputField(
   } else if (scaleTypeHolder.textContent === "snipte") {
     const stapelScale = stapelScaleArray.textContent.split(",");
     const selectedOption = stapelOptionHolder.textContent;
-    console.log("This is the stapel", stapelScale);
-    console.log("This is option", selectedOption);
+    // console.log("This is the stapel", stapelScale);
+    // console.log("This is option", selectedOption);
     for (let i = 0; i < stapelScale.length; i++) {
       const circle = document.createElement("div");
       circle.className = "circle_label";
@@ -366,7 +366,7 @@ function createNewScaleInputField(
         let circleBgColor = circle.style.backgroundColor;
         setTimeout(() => {
           let scales = document.querySelectorAll(".newScaleInput");
-          console.log(scales);
+          // console.log(scales);
           scales.forEach((scale) => {
             const scaleID = scale?.querySelector(".scaleId").textContent;
             const circlesInScale = scale.querySelectorAll(".circle_label");
@@ -402,7 +402,7 @@ function createNewScaleInputField(
               ? scale.querySelectorAll(".circle_label")
               : [];
 
-            console.log("This is the background color", holdingParentEl);
+            // console.log("This is the background color", holdingParentEl);
             function componentToHex(c) {
               var hex = c.toString(16);
               return hex.length == 1 ? "0" + hex : hex;
@@ -495,7 +495,7 @@ function createNewScaleInputField(
         if (Array.isArray(buttonText) && buttonText.length > 0) {
           circle.textContent = buttonText[i % buttonText.length];
         } else {
-          console.log("Empty buttonText array");
+          // console.log("Empty buttonText array");
         }
       } else {
         circle.textContent = i;
@@ -551,7 +551,7 @@ function createNewScaleInputField(
 
         setTimeout(() => {
           let scales = document.querySelectorAll(".newScaleInput");
-          console.log(scales);
+          // console.log(scales);
           scales.forEach((scale) => {
             const scaleID = scale?.querySelector(".scaleId").textContent;
             const circlesInScale = scale.querySelectorAll(".circle_label");
@@ -665,7 +665,7 @@ function createNewScaleInputField(
     const likertScale = likertScaleArray.textContent.split(",");
     const numRows = Math.ceil(likertScale / 3);
     const numColumns = Math.min(likertScale, 3);
-    console.log("This is the likertjddddddd++++!!!!!!!!!", likertScale);
+    // console.log("This is the likertjddddddd++++!!!!!!!!!", likertScale);
 
     for (let i = 0; i < likertScale.length; i++) {
       const circle = document.createElement("div");
@@ -736,7 +736,7 @@ function createNewScaleInputField(
 
         setTimeout(() => {
           let scales = document.querySelectorAll(".newScaleInput");
-          console.log(scales);
+          // console.log(scales);
           scales.forEach((scale) => {
             const scaleID = scale?.querySelector(".scaleId").textContent;
             const circlesInScale = scale.querySelectorAll(".circle_label");
@@ -1285,15 +1285,15 @@ function createNewScaleInputField(
     // )
     //   .then((res) => {
     //     setIsLoading(false);
-    //     console.log(res, "scaleData");
+    //     // console.log(res, "scaleData");
     //     const lastInstance = res.data.response.instances.slice(-1)[0];
     //     const lastValue = Object.values(lastInstance)[0];
     //     iframe.src = lastValue;
-    //     console.log(lastValue);
+    //     // console.log(lastValue);
     //   })
     //   .catch((err) => {
     //     setIsLoading(false);
-    //     console.log(err);
+    //     // console.log(err);
     //   });
 
     const scaleHold = document.createElement("div");
@@ -1418,16 +1418,16 @@ function createNewScaleInputField(
     table_dropdown_focuseddClassMaintain(e);
     handleClicked("newScale2");
     setSidebar(true);
-    console.log("This is the scale type", scaleTypeHolder.textContent);
+    // console.log("This is the scale type", scaleTypeHolder.textContent);
   };
-  console.log(element);
+  // console.log(element);
   holderDIV.append(scaleField);
   holderDIV.append(scaleIdHolder);
   holderDIV.append(labelHolder);
 
   document
     .getElementsByClassName("midSection_container")
-    [p - 1] // ?.item(0)
+  [p - 1] // ?.item(0)
     ?.append(holderDIV);
 }
 export default createNewScaleInputField;

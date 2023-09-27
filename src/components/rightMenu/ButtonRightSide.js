@@ -57,7 +57,7 @@ const ButtonRightSide = () => {
     } else if (selectedOption.value !== "custom") {
       setButtonLink("");
     } else {
-      console.log("No option selected");
+      // console.log("No option selected");
     }
   };
 
@@ -90,7 +90,7 @@ const ButtonRightSide = () => {
           type="text"
           placeholder="Button name"
           id="button_name"
-          onChange={() => {}}
+          onChange={() => { }}
         />
       </div>
       <select
@@ -115,7 +115,7 @@ const ButtonRightSide = () => {
           type="text"
           placeholder="Website link"
           id="link"
-          onChange={() => {}}
+          onChange={() => { }}
         />
       </div>
       <hr />
