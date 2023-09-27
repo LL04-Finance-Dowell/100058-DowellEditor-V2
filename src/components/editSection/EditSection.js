@@ -63,6 +63,7 @@ const EditSection = () => {
             as="div"
             className="editSec_rightMenu"
           >
+
             <RightMenu />
           </Col>
         </Row>

@@ -17,6 +17,7 @@ function createDateInputField(id, element, document_map_required, p, holderDIV, 
 
     function dateClick() {
         document.getElementById("date_picker")?.click();
+
     }
 
     dateField.onclick = (e) => {
@@ -41,7 +42,7 @@ function createDateInputField(id, element, document_map_required, p, holderDIV, 
                     setMethod("second");
                 }
                 const setDate = new Date(e.target.innerText);
-                //console.log("Second from Midsection", setDate);
+                //// console.log("Second from Midsection", setDate);
 
                 setStartDate(setDate);
             }

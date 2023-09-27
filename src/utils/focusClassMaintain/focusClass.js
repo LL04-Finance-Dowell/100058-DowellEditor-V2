@@ -1,5 +1,5 @@
 export function table_dropdown_focuseddClassMaintain(e) {
-  console.log("tabletargettest", e.target);
+  // console.log("tabletargettest", e.target);
 
   if (
     !e.target?.classList?.contains("addImageButtonInput") &&

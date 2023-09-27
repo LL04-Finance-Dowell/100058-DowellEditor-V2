@@ -45,7 +45,7 @@ const copyInput = (clickHandler) => {
 
     const resizeTags = copyEle.getElementsByClassName("resizeBtn");
     while (resizeTags.length > 0) {
-      console.log("resizeTags", resizeTags[0]);
+      // console.log("resizeTags", resizeTags[0]);
       resizeTags[0].remove();
     }
 
@@ -70,7 +70,7 @@ const copyInput = (clickHandler) => {
     copyEle.addEventListener("click", (e) => {
       e.stopPropagation();
       focuseddClassMaintain(e);
-      console.log("find classlist", e.target.classList[0]);
+      // console.log("find classlist", e.target.classList[0]);
       if (
         e.target?.parentElement?.parentElement.classList.contains(
           "containerInput"
@@ -110,7 +110,7 @@ const copyInput = (clickHandler) => {
             type = "";
         }
         handleClicked(type, "container2");
-        console.log("inside if", type);
+        // console.log("inside if", type);
       } else {
         handleClicked(clickHandler);
       }
@@ -138,9 +138,9 @@ const copyInput = (clickHandler) => {
   copyEle.id += counter;
   if (
     parseInt(copyEle.style.top.slice(0, -2)) +
-      parseInt(rect.height) +
-      parseInt(rect.height) +
-      20 <
+    parseInt(rect.height) +
+    parseInt(rect.height) +
+    20 <
     1122
   ) {
     midSec.appendChild(copyEle);
