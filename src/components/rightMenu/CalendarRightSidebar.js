@@ -23,7 +23,8 @@ const CalendarRightSidebar = (props) => {
     calendarBorderColor,
     setCalendarBorderColor,
     setConfirmRemove,
-    confirmRemove
+    confirmRemove,
+    docMapRequired
   } = useStateContext();
   const [selectedType, setSelectedType] = useState('')
   const [searchParams] = useSearchParams();
@@ -35,6 +36,12 @@ const CalendarRightSidebar = (props) => {
   const date = document.querySelector(".focussed");
   const [showSlider, setShowSlider] = useState(false);
   const { addedAns, setAddedAns } = useSelectedAnswer()
+
+
+  const isRequired =
+    docMapRequired?.find(
+      (item) => document.querySelector(".focussed").id == item.content
+    ) ? true : false;
 
 
   if (date?.parentElement?.classList?.contains("focussedd")) {
@@ -51,10 +58,10 @@ const CalendarRightSidebar = (props) => {
           date.innerHTML = `${localDateArray[1]}/${localDateArray[0]}/${localDateArray[2]}`;
         }
       } else if (method == "second") {
-        //console.log("second", startDate);
+        //// console.log("second", startDate);
         date.innerHTML = startDate && new Date(startDate)?.toDateString();
       } else if (method == "fourth") {
-        //console.log("fourth", startDate);
+        //// console.log("fourth", startDate);
         date.innerHTML =
           startDate && new Date(startDate)?.toISOString().split("T")[0];
       }
@@ -85,13 +92,13 @@ const CalendarRightSidebar = (props) => {
     setCalendarBorderSize(parseInt(e.target.value));
 
     const box = document.getElementsByClassName("focussedd")[0];
-    box.style.borderWidth = `${calendarBorderSize}px`;
+    box.style.borderWidth = `${e.target.value}px`;
 
   };
   const handleBorderColorChange = (e) => {
     setCalendarBorderColor(e.target.value);
     const box = document.getElementsByClassName("focussedd")[0];
-    box.style.borderColor = `${calendarBorderColor}`;
+    box.style.borderColor = `${e.target.value}`;
   };
   const handleRangeBlur = (e) => {
     e.target.focus();
@@ -145,7 +152,7 @@ const CalendarRightSidebar = (props) => {
               if (date != startDate) {
 
                 var dateDiv = document.querySelector(".focussed");
-                if (dateDiv.parentElement.classList.contains("holderDIV")) {
+                if (dateDiv.parentElement.classList.contains("holderDIV") && isRequired) {
                   dateDiv.parentElement.classList.add("element_updated");
                 }
               }
@@ -201,7 +208,7 @@ const CalendarRightSidebar = (props) => {
             />
             <input
               type="range"
-              min="-10"
+              min="0"
               max="20"
               value={calendarBorderSize}
               onChange={handleBorderSizeChange}

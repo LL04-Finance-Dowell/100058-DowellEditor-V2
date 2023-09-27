@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import copyInput from '../CopyInput';
 
-// Regular JavaScript function to create a text input field
+// Regular JavaScript function to create text input field
 function createButtonInputField(id, element, p, holderDIV, focuseddClassMaintain, handleClicked, setSidebar, finalizeButton, rejectButton, decoded, document_map_required) {
+    let isAnyRequiredElementEdited = false;
     let buttonField = document.createElement("button");
     buttonField.className = "buttonInput";
     buttonField.id = id;
@@ -56,7 +57,8 @@ function createButtonInputField(id, element, p, holderDIV, focuseddClassMaintain
         if (isAnyRequiredElementEdited) {
             finalizeButton?.click();
         } else {
-            finalizeButton.disabled = true;
+            // ? This was commented because it always runs when there is no required component
+            // finalizeButton.disabled = true;
         }
     }
 
@@ -82,7 +84,7 @@ function createButtonInputField(id, element, p, holderDIV, focuseddClassMaintain
     holderDIV.append(buttonField);
     holderDIV.append(linkHolder);
     holderDIV.append(purposeHolder);
-    console.log(element);
+    // console.log(element);
     document
         .getElementsByClassName("midSection_container")
     [p - 1] // ?.item(0)

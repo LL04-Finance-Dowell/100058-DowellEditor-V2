@@ -15,6 +15,12 @@ const IframeRightSidebar = () => {
 
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token");
+
+  const isRequired =
+    docMapRequired?.find(
+      (item) => document.querySelector(".focussed").id == item.content
+    ) ? true : false;
+
   var decoded = jwt_decode(token);
 
 
@@ -35,9 +41,9 @@ const IframeRightSidebar = () => {
 
     iframeDiv.appendChild(iframe);
     //setIsFinializeDisabled(false)
-    if (iframeDiv.parentElement.classList.contains('holderDIV')) {
+    if (iframeDiv.parentElement.classList.contains('holderDIV') && isRequired) {
       iframeDiv.parentElement.classList.add('element_updated');
-      // console.log('iframe.parentElement', iframeDiv.parentElement);
+      // // console.log('iframe.parentElement', iframeDiv.parentElement);
     }
   };
   function handleChange() {
@@ -52,14 +58,14 @@ const IframeRightSidebar = () => {
     setIframeBorderSize(e.target.value);
 
     const box = document.getElementsByClassName("focussedd")[0];
-    box.style.borderWidth = `${iframeBorderSize}px`;
+    box.style.borderWidth = `${e.target.value}px`;
 
   };
 
   const handleBorderColorChange = (e) => {
     setIframeBorderColor(e.target.value);
     const box = document.getElementsByClassName("focussedd")[0];
-    box.style.borderColor = `${iframeBorderColor}`;
+    box.style.borderColor = `${e.target.value}`;
 
   };
   const handleRangeBlur = (e) => {
@@ -122,7 +128,7 @@ const IframeRightSidebar = () => {
             />
             <input
               type="range"
-              min="-10"
+              min="0"
               max="20"
               value={iframeBorderSize}
               onChange={handleBorderSizeChange}

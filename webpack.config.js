@@ -9,6 +9,7 @@ module.exports = {
   output: {
     path: path.join(__dirname, "/dist"),
     filename: "bundle.js",
+    publicPath: '/100058-DowellEditor-V2/'
   },
   devServer: {
     port: 3000,
@@ -29,12 +30,18 @@ module.exports = {
         },
       },
       {
-        test: /\.(png|jpe?g|gif)$/i,
+        test: /\.(png|jpe?g|gif|svg)$/i,
         use: [
           {
             loader: "file-loader",
           },
         ],
+      },
+      {
+        test: /\.(png|jpg)$/,
+        use: {
+          loader: 'url-loader',
+        },
       },
     ],
   },

@@ -3,6 +3,8 @@ import copyInput from '../CopyInput';
 
 // Regular JavaScript function to create a text input field
 function createDropDownInputField(id, element, p, holderDIV, focuseddClassMaintain, handleClicked, setSidebar, table_dropdown_focuseddClassMaintain, decoded, setRightSideDropDown, setDropdownName) {
+    let isAnyRequiredElementEdited = false;
+    
     let dropdownField = document.createElement("div");
     dropdownField.className = "dropdownInput";
     dropdownField.id = id;
@@ -17,7 +19,8 @@ function createDropDownInputField(id, element, p, holderDIV, focuseddClassMainta
 
     const selectElement = document.createElement("select");
     selectElement.className = "select-element";
-
+    selectElement.innerHTML = element.data2;
+    
     dropdownField.onclick = (e) => {
         // focuseddClassMaintain(e);
         table_dropdown_focuseddClassMaintain(e);

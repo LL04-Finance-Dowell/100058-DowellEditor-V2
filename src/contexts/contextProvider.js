@@ -17,6 +17,7 @@ const initialState = {
   email: false,
   newScale: false,
   camera: false,
+  payment: false,
 };
 const initialState2 = {
   align2: false,
@@ -33,6 +34,7 @@ const initialState2 = {
   email2: false,
   newScale2: false,
   camera2: false,
+  payment2: false,
 };
 
 export const ContextProvider = ({ children }) => {
@@ -52,6 +54,7 @@ export const ContextProvider = ({ children }) => {
 
   //nps scale custom data
   const [customId, setCustomId] = useState([]);
+  const [scaleTypeContent, setScaleTypeContent] = useState("");
 
   //Right Sidebar context
   const [signState, setSignState] = React.useState({ trimmedDataURL: null }); // Signature
@@ -64,7 +67,9 @@ export const ContextProvider = ({ children }) => {
   const [dropdownOptions, setDropdownOptions] = useState(["Enter List Items"]);
 
   const [buttonLink, setButtonLink] = useState("");
+  const [paymentKey, setPaymentKey] = useState("");
   const [buttonPurpose, setButtonPurpose] = useState("");
+  const [paypalId, setPaypalId] = useState("");
 
   const [fontPlus, setFontPlus] = useState(false);
   const [fontMinus, setFontMinus] = useState(false);
@@ -81,8 +86,8 @@ export const ContextProvider = ({ children }) => {
   const handleClicked = (clicked, tableRighMenu) => {
     setIsClicked({ ...initialState2, [clicked]: true, [tableRighMenu]: false });
   };
-  // console.log("");
-  console.log("isClicked", isClicked, "initialState2", initialState2);
+  // // console.log("");
+  // console.log("isClicked", isClicked, "initialState2", initialState2);
   const [newToken, setNewToken] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [isFlipClicked, setIsFlipClicked] = useState(true);
@@ -99,7 +104,7 @@ export const ContextProvider = ({ children }) => {
 
   const [item, setItem] = useState(["div_1"]);
 
-  //   //console.log("item check", item);
+  //   //// console.log("item check", item);
 
   // Scale id
   const [scaleId, setScaleId] = useState("id");
@@ -133,6 +138,8 @@ export const ContextProvider = ({ children }) => {
   const [containerBorderColor, setContainerBorderColor] = useState("gray");
   const [formBorderSize, setFormBorderSize] = useState(2);
   const [formBorderColor, setFormBorderColor] = useState("gray");
+  const [docMapRequired, setDocMapRequired] = useState([]);
+
 
   //Company id
   const [companyId, setCompanyId] = useState("");
@@ -154,8 +161,8 @@ export const ContextProvider = ({ children }) => {
       e.target.style.border = "none";
     }
     const typeOfOperation = e.dataTransfer.getData("text/plain");
-    console.log("cell has been dropped on " + typeOfOperation);
-    // console.log("e.target", e.target, e.target.hasChildNodes());
+    // console.log("cell has been dropped on " + typeOfOperation);
+    // // console.log("e.target", e.target, e.target.hasChildNodes());
     if (
       e.target.childNodes.length < 2 &&
       !e.target.classList.contains("imageInput")
@@ -286,7 +293,7 @@ export const ContextProvider = ({ children }) => {
         const imageSignButton = document.createElement("div");
         imageSignButton.className = "addImageSignButton";
         imageSignButton.innerText = "Choose File";
-        imageSignButton.style.display = "none";
+        imageSignButton.style.display = "none"
 
         const signBtn = document.createElement("input");
         signBtn.className = "addSignButtonInput";
@@ -309,8 +316,7 @@ export const ContextProvider = ({ children }) => {
 
         e.target.append(signField);
         e.target.append(imageSignButton);
-        e.target.style.width = signField.style.width;
-        e.target.style.height = signField.style.height;
+
       } else if (typeOfOperation === "DATE_INPUT") {
         let dateField = document.createElement("div");
         dateField.className = "dateInput";
@@ -384,6 +390,153 @@ export const ContextProvider = ({ children }) => {
     width:"",
     height:""
   })
+
+  const copyInput = (clickHandler) => {
+
+    const element = document.querySelector(".focussedd");
+
+    let counter = 1;
+    const copyEle = element.cloneNode(true);
+    const rect = element.getBoundingClientRect();
+
+    const copyEleTop =
+      parseInt(copyEle.style.top.slice(0, -2)) +
+      parseInt(rect.height) +
+      20 +
+      "px";
+
+    copyEle.classList.remove("focussedd");
+    copyEle.firstChild.classList.remove("focussed");
+
+    copyEle.onfocus = () => {
+      copyEle.style.border = "1px solid rgb(255 191 0)";
+    };
+    copyEle.onblur = () => {
+      copyEle.style.border = "3px dotted gray";
+    };
+    if (copyEle) {
+      copyEle.style.top = copyEleTop;
+      copyEle.style.border = "3px dotted gray";
+      copyEle.classList.remove("resizeBtn");
+
+      copyEle.onmousedown = copyEle.addEventListener(
+        "mousedown",
+        (event) => {
+          dragElementOverPage(event);
+        },
+        false
+      );
+
+      // trying to remove resize btn
+
+      const resizeTags = copyEle.getElementsByClassName("resizeBtn");
+      while (resizeTags.length > 0) {
+        // console.log("resizeTags", resizeTags[0]);
+        resizeTags[0].remove();
+      }
+
+      const resizerTL = getResizer("top", "left", decoded);
+      const resizerTR = getResizer("top", "right", decoded);
+      const resizerBL = getResizer("bottom", "left", decoded);
+      const resizerBR = getResizer("bottom", "right", decoded);
+
+      copyEle.addEventListener("focus", function (e) {
+        copyEle.style.border = "2px solid orange";
+        copyEle.append(resizerTL, resizerTR, resizerBL, resizerBR);
+      });
+      copyEle.addEventListener("focusout", function (e) {
+        copyEle.classList.remove("zIndex-two");
+        copyEle.style.border = "3px dotted gray";
+
+        resizerTL.remove();
+        resizerTR.remove();
+        resizerBL.remove();
+        resizerBR.remove();
+      });
+      copyEle.addEventListener("click", (e) => {
+        e.stopPropagation();
+        focuseddClassMaintain(e);
+        // console.log("find classlist", e.target.classList[0]);
+        if (
+          e.target?.parentElement?.parentElement.classList.contains(
+            "containerInput"
+          )
+        ) {
+          let type = "";
+          const containerClassName = e.target.classList[0];
+          switch (containerClassName) {
+            case "dateInput":
+              type = "calendar2";
+              break;
+            case "textInput":
+              type = "align2";
+              break;
+            case "imageInput":
+              type = "image2";
+              break;
+            case "signInput":
+              type = "signs2";
+              break;
+            case "iframeInput":
+              type = "iframe2";
+              break;
+            case "scaleInput":
+              type = "scale2";
+              break;
+            case "buttonInput":
+              type = "button2";
+              break;
+            case "dropdownInput":
+              type = "dropdown2";
+              break;
+            case "emailButton":
+              type = "email2";
+              break;
+            default:
+              type = "";
+          }
+          handleClicked(type, "container2");
+          // console.log("inside if", type);
+        } else {
+          handleClicked(clickHandler);
+        }
+        setSidebar(true);
+      });
+    }
+
+    let midSec = null;
+    if (!midSec) {
+      let targetParent = element;
+      while (1) {
+        if (
+          targetParent.classList.contains("containerInput") ||
+          targetParent.classList.contains("midSection_container")
+        ) {
+          targetParent = targetParent;
+          break;
+        } else {
+          targetParent = targetParent.parentElement;
+          midSec = targetParent;
+        }
+      }
+    }
+
+    copyEle.id += counter;
+    if (
+      parseInt(copyEle.style.top.slice(0, -2)) +
+      parseInt(rect.height) +
+      parseInt(rect.height) +
+      20 <
+      1122
+    ) {
+      midSec.appendChild(copyEle);
+    }
+    copyEle.onclick = (clickHandler2) => {
+      if (clickHandler2.ctrlKey) {
+        copyInput(clickHandler);
+      }
+    };
+  };
 
   return (
     <StateContext.Provider
@@ -488,6 +641,8 @@ export const ContextProvider = ({ children }) => {
         setCalendarBorderColor,
         buttonBorderSize,
         setButtonBorderSize,
+        scaleTypeContent,
+        setScaleTypeContent,
         dropdownBorderColor,
         setDropdownBorderColor,
         dropdownBorderSize,
@@ -521,7 +676,12 @@ export const ContextProvider = ({ children }) => {
         questionAndAnswerGroupedData,
         setQuestionAndAnsGroupedData,
         confirmRemove, setConfirmRemove,
-        allowHighlight, setAllowHighlight
+        allowHighlight, setAllowHighlight,
+        copyInput,
+        paymentKey, 
+        setPaymentKey,
+        paypalId, 
+        setPaypalId,
       }}
     >
       {children}

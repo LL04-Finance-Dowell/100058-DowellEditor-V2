@@ -64,7 +64,7 @@ const AlignRightSide = () => {
     const userSelection = window.getSelection();
     const selectedTextRange = userSelection.getRangeAt(0);
 
-    //console.log(selectedTextRange);
+    //// console.log(selectedTextRange);
     selectedTextRange.style.fontFamily = `${ev.target.value}`;
   };
 
@@ -111,11 +111,30 @@ const AlignRightSide = () => {
     document.execCommand("indent");
   };
 
+  // const handleIncreaseSize = () => {
+  //   document.execCommand("increaseFontSize");
+  // };
+  // const handleDecreaseSize = () => {
+  //   document.execCommand("decreaseFontSize");
+  // };
+
+  let currentFontSize = 16;
   const handleIncreaseSize = () => {
-    document.execCommand("increaseFontSize");
+    var sel = document.getElementsByClassName("focussed")[0];
+    currentFontSize += 2;
+    sel.style.fontSize = currentFontSize + "px";
+
   };
+
+
   const handleDecreaseSize = () => {
-    document.execCommand("decreaseFontSize");
+    // document.execCommand("decreaseFontSize");
+
+    var sel = document.getElementsByClassName("focussed")[0];
+    currentFontSize -= 2;
+    sel.style.fontSize = currentFontSize + "px";
+
+
   };
 
   function handleSizing(event) {
@@ -182,7 +201,7 @@ const AlignRightSide = () => {
 
   function showColorInput() {
     const fontColor = document.getElementById("colorInputColor");
-    //console.log(fontColor);
+    //// console.log(fontColor);
     if (fontColor.style.diplay === "none") {
       fontColor.style.display = "block";
     } else {
@@ -225,7 +244,7 @@ const AlignRightSide = () => {
     setInputBorderSize(e.target.value);
 
     const box = document.getElementsByClassName("focussedd")[0];
-    box.style.borderWidth = `${inputBorderSize}px`;
+    box.style.borderWidth = `${e.target.value}px`;
   };
 
   const handleRangeBlur = (e) => {
@@ -234,7 +253,7 @@ const AlignRightSide = () => {
   const handleBorderColorChange = (e) => {
     setInputBorderColor(e.target.value);
     const box = document.getElementsByClassName("focussedd")[0];
-    box.style.borderColor = `${inputBorderColor}`;
+    box.style.borderColor = `${e.target.value}`;
   };
 
   useEffect(() => {
@@ -513,13 +532,13 @@ const AlignRightSide = () => {
               />
               <input
                 type="range"
-                min="-10"
+                min="0"
                 max="20"
                 value={inputBorderSize}
                 onChange={handleBorderSizeChange}
                 onBlur={handleRangeBlur}
                 id="range"
-                className="range-color"
+                className="form-range"
               />
             </div>
           )}

@@ -3,6 +3,9 @@ import copyInput from '../CopyInput';
 
 // Regular JavaScript function to create a text input field
 function createFormInputField(id, element, p, holderDIV, focuseddClassMaintain, handleClicked, setSidebar) {
+  let isAnyRequiredElementEdited = false;
+  
+  let buttonField = document.createElement("button");
     buttonField.className = "emailButton";
     buttonField.id = id;
     buttonField.style.width = "100%";

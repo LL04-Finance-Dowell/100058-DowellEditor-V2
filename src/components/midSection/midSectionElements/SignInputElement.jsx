@@ -4,6 +4,8 @@ import copyInput from '../CopyInput';
 // Regular JavaScript function to create a text input field
 function createSignInputField(id, element, p, holderDIV, focuseddClassMaintain, handleClicked, setSidebar) {
 
+    let isAnyRequiredElementEdited = false;
+    
     let signField = document.createElement("div");
     signField.className = "signInput";
     signField.id = id;
@@ -44,12 +46,29 @@ function createSignInputField(id, element, p, holderDIV, focuseddClassMaintain, 
     signBtn.addEventListener("input", () => {
         const reader = new FileReader();
 
-        reader.addEventListener("load", () => {
-            uploadedImage = reader.result;
-            const signImage = `<img src=${uploadedImage} width="100%" height="100%"/>`;
-            document.querySelector(".focussed").innerHTML = signImage;
-        });
-        reader.readAsDataURL(signBtn.files[0]);
+        try {
+            reader.addEventListener("load", () => {
+                reader.addEventListener("load", () => {
+                    uploadedImage = reader.result;
+                    if(!reader.result){
+                        setSidebar(false);
+                        return;
+                    }
+                    const signImage = `<img src=${uploadedImage} width="100%" height="100%"/>`;
+                    document.querySelector(".focussed").innerHTML = signImage;
+                });
+                reader.readAsDataURL(signBtn.files[0]);
+                setSidebar(true);
+            });
+            reader.readAsDataURL(signBtn.files[0]);
+
+        } catch (error) {
+            console.log("FAILED TO UPLOAD:", error);
+            setSidebar(true);
+
+        }
+
+       
     });
 
     imageSignButton.append(signBtn);

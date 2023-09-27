@@ -19,7 +19,9 @@ const SignsRightSidebar = () => {
     setSignBorderSize,
     signBorderColor,
     setSignBorderColor,
-    setConfirmRemove, confirmRemove
+    setConfirmRemove, confirmRemove,
+    docMapRequired,
+    currentSignElId
   } = useStateContext();
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token");
@@ -31,8 +33,24 @@ const SignsRightSidebar = () => {
   let sigPad = useRef({});
   let data = "";
 
+  const isRequired =
+    docMapRequired?.find(
+      (item) => document.querySelector(".focussed").id == item.content
+    ) ? true : false;
+
   const clear = () => {
-    sigPad.current.clear();
+    const targetDiv = document.querySelector(".focussed") ||  document.querySelector(".focussedd");
+    console.log('SIGN DIV BEFORE: ',targetDiv);
+    if(targetDiv){
+    if(targetDiv.tagName.toLowerCase() === 'img'){
+      targetDiv.remove();
+    }else if(targetDiv?.querySelector('img')){
+      targetDiv.querySelector('img').remove();
+    }
+  }
+  console.log('SIGN DIV AFTER: ',targetDiv);
+  sigPad.current.clear();
+    
   };
 
   const save = () => {
@@ -42,25 +60,34 @@ const SignsRightSidebar = () => {
 
     const signImage = `<img src=${data} />`;
 
-    const sign = document.querySelector(".focussed");
-    if (sign.parentElement.classList.contains("focussedd")) {
+    const sign = document.querySelector(".focussed") 
+    if (sign?.parentElement.classList.contains("focussedd")) {
+      console.log("target: ", sign);
       if (document.querySelector(".focussed").innerHTML != signImage) {
         if (sign.parentElement.classList.contains("holderDIV")) {
-          sign.parentElement.classList.add("element_updated");
+          sign.parentElement.classList.add("element_updated")
         }
+        
       }
-      console.log("sign data", data);
-      document.querySelector(".focussed").innerHTML = signImage;
+      sign.innerHTML=signImage;
+    }else{
+      const newFocussedDiv = document.querySelector(".focussedd")
+       if(newFocussedDiv?.innerHTML != signImage){
+        if(newFocussedDiv.classList.contains('signInput')){
+          newFocussedDiv.innerHTML=signImage
+      }
+       }
     }
   };
 
   //clicked choose file button
   const chooseFileClick = () => {
-    const addImageButtonInput =
-      document.getElementsByClassName("addSignButtonInput");
-    addImageButtonInput.item(0).click();
-    handleClicked("sign2", "table2");
+  const addImageButtonInput = document.getElementsByClassName("addSignButtonInput");
+  addImageButtonInput.item(0).click();
+  handleClicked("sign2", "table2");
+
   };
+
 
   function removeSign() {
     if (document.querySelector(".focussedd").classList.contains("dropp")) {
@@ -87,13 +114,13 @@ const SignsRightSidebar = () => {
     setSignBorderSize(e.target.value);
 
     const box = document.getElementsByClassName("focussedd")[0];
-    box.style.borderWidth = `${signBorderSize}px`;
+    box.style.borderWidth = `${e.target.value}px`;
   };
 
   const handleBorderColorChange = (e) => {
     setSignBorderColor(e.target.value);
     const box = document.getElementsByClassName("focussedd")[0];
-    box.style.borderColor = `${signBorderColor}`;
+    box.style.borderColor = `${e.target.value}`;
   };
   const handleRangeBlur = (e) => {
     e.target.focus();
@@ -167,7 +194,7 @@ const SignsRightSidebar = () => {
             />
             <input
               type="range"
-              min="-10"
+              min="0"
               max="20"
               value={signBorderSize}
               onChange={handleBorderSizeChange}

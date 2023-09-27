@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 
 export const getResizer = (attr1, attr2, decoded) => {
+
+  // resposive width 
+ const wWidth = window.innerWidth
   const resizer = document.createElement("span");
     resizer.style.width = "5px";
     resizer.style.height = "5px";
@@ -69,21 +72,37 @@ export const getResizer = (attr1, attr2, decoded) => {
           ev.screenX < midsectionRect.right
         ) {
           if (attr1 == "bottom" && attr2 == "right") {
+            if (wWidth < 993) {
+              holder.style.width = ev.screenX - initX + ((holderSize.width/wWidth) * 100)/2 + "vw";
+            }else{
             holder.style.width = ev.screenX - initX + holderSize.width + "px";
+            }
             holder.style.height = ev.screenY - initY + holderSize.height + "px";
           } else if (attr1 == "bottom" && attr2 == "left") {
             holder.style.left = holderSize.left + (ev.screenX - initX) + "px";
-            holder.style.width = holderSize.width - (ev.screenX - initX) + "px";
+            if (wWidth < 993) {
+              holder.style.width = ((holderSize.width - (ev.screenX - initX))/wWidth * 100)/2 + "vw";
+            }else{
+              holder.style.width = holderSize.width - (ev.screenX - initX) + "px";
+            }
             holder.style.height = ev.screenY - initY + holderSize.height + "px";
           } else if (attr1 == "top" && attr2 == "left") {
             holder.style.top = holderSize.top + (ev.screenY - initY) + "px";
             holder.style.left = holderSize.left + (ev.screenX - initX) + "px";
-            holder.style.width = holderSize.width - (ev.screenX - initX) + "px";
+            if (wWidth < 993) {
+              holder.style.width = ((holderSize.width - (ev.screenX - initX))/wWidth * 100)/2 + "vw";
+            }else{
+              holder.style.width = holderSize.width - (ev.screenX - initX) + "px";
+            }
             holder.style.height =
               holderSize.height - (ev.screenY - initY) + "px";
           } else if (attr1 == "top" && attr2 == "right") {
             holder.style.top = holderSize.top + (ev.screenY - initY) + "px";
-            holder.style.width = holderSize.width + (ev.screenX - initX) + "px";
+            if (wWidth < 993) {
+              holder.style.width = ((holderSize.width - (ev.screenX - initX))/wWidth * 100)/2 + "vw";
+            }else{
+              holder.style.width = holderSize.width - (ev.screenX - initX) + "px";
+            }
             holder.style.height =
               holderSize.height - (ev.screenY - initY) + "px";
           }

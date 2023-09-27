@@ -14,6 +14,14 @@ function createDropDownInputElement(holderDIV, handleClicked, setSidebar, table_
 
         dropdownField.style.position = "absolute";
 
+        const dropD = document.getElementsByClassName("dropdownInput");
+        if (dropD .length) {
+        const d = dropD .length;
+        dropdownField.id = `dd${d + 1}`;
+        } else {
+          dropdownField.id = "dd1";
+        }
+
         const selectElement = document.createElement("select");
         selectElement.className = "select-element";
         selectElement.style.width = "500";

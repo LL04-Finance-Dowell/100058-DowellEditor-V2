@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import copyInput from '../CopyInput';
 
 // Regular JavaScript function to create a text input field
-function createDateInputField(id, element, document_map_required, p, holderDIV, focuseddClassMaintain, handleClicked, setSidebar, setRightSideDateMenu) {
+function createDateInputField(id, element, document_map_required, p, holderDIV, focuseddClassMaintain, handleClicked, setSidebar, setRightSideDateMenu, setMethod, setStartDate) {
+    let isAnyRequiredElementEdited = false;
     let dateField = document.createElement("div");
     dateField.className = "dateInput";
     dateField.id = id;
@@ -16,6 +17,7 @@ function createDateInputField(id, element, document_map_required, p, holderDIV, 
 
     function dateClick() {
         document.getElementById("date_picker")?.click();
+
     }
 
     dateField.onclick = (e) => {
@@ -26,20 +28,21 @@ function createDateInputField(id, element, document_map_required, p, holderDIV, 
         handleClicked("calendar2");
         setRightSideDateMenu(false);
         //console.log("innerText", e.target.innerText);
-        if (e.target.innerText != "mm/dd/yyyy") {
-            if (e.target.innerText.includes("/")) {
-                const setDate = new Date(e.target.innerText);
+        const date = e.target.innerText
+        if (date != "mm/dd/yyyy") {
+            if (date.includes("/")) {
+                const setDate = new Date(parseInt(date));
                 //console.log("First from Midsection", setDate);
                 setMethod("first");
                 setStartDate(setDate);
             } else {
-                if (e.target.innerText.includes("-")) {
+                if (date.includes("-")) {
                     setMethod("fourth");
                 } else {
                     setMethod("second");
                 }
                 const setDate = new Date(e.target.innerText);
-                //console.log("Second from Midsection", setDate);
+                //// console.log("Second from Midsection", setDate);
 
                 setStartDate(setDate);
             }

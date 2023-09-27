@@ -99,13 +99,13 @@ const ImageRightSidebar = () => {
     setBorderSize(e.target.value);
 
     const box = document.getElementsByClassName("focussedd")[0];
-    box.style.borderWidth = `${borderSize}px`;
+    box.style.borderWidth = `${e.target.value}px`;
   };
 
   const handleBorderColorChange = (e) => {
     setBorderColor(e.target.value);
     const box = document.getElementsByClassName("focussedd")[0];
-    box.style.borderColor = `${borderColor}`;
+    box.style.borderColor = `${e.target.value}`;
   };
   const handleRangeBlur = (e) => {
     e.target.focus();
@@ -152,7 +152,7 @@ const ImageRightSidebar = () => {
             />
             <input
               type="range"
-              min="-10"
+              min="0"
               max="20"
               value={borderSize}
               onChange={handleBorderSizeChange}

@@ -18,6 +18,7 @@ import { AiFillPrinter } from "react-icons/ai";
 import { downloadPDF } from "../../utils/genratePDF.js";
 
 import generateImage from "../../utils/generateImage.js";
+import RejectionModal from "../modals/RejectionModal.jsx";
 
 const Header = () => {
   const inputRef = useRef(null);
@@ -105,10 +106,13 @@ const Header = () => {
     containerBorderColor,
     setContainerBorderColor,
     questionAndAnswerGroupedData,
-    allowHighlight, setAllowHighlight
+    allowHighlight, setAllowHighlight,
+    docMapRequired, setDocMapRequired
   } = useStateContext();
 
   const [printContent, setPrintContent] = useState(false);
+  const [rejectionMsg, setRejectionMsg] = useState('');
+  const [isOpenRejectionModal, setIsOpenRejectionModal] = useState(false)
 
   const handleOptions = () => {
     setIsMenuVisible(!isMenuVisible);
@@ -184,17 +188,21 @@ const Header = () => {
     const midSec = document.getElementById("midSection_container");
 
     const rect = el.getBoundingClientRect();
+    console.log("rect position from header", rect);
     const midsectionRect = midSec.getBoundingClientRect();
+    console.log("midsectionRect position from header", midsectionRect);
+
 
     return {
       top:
         rect.top > 0
           ? Math.abs(midsectionRect.top)
           : rect.top - midsectionRect.top,
-      left: rect.left - midsectionRect.left,
+      left: window.innerWidth<993 ? (((rect.left*794)/midsectionRect.width) - midsectionRect.left) : rect.left - midsectionRect.left,
+      // left:rect.left - midsectionRect.left,
       bottom: rect.bottom,
       right: rect.right,
-      width: rect.width,
+      width: window.innerWidth<993 ? ((rect.width*794)/midsectionRect.width) : rect.width,
       height: rect.height,
     };
   }
@@ -260,7 +268,7 @@ const Header = () => {
         ) {
           let tempElem = txt[h].parentElement;
           let tempPosn = getPosition(tempElem);
-
+          // console.log("element position in header js", tempPosn);
           elem = {
             width: tempPosn.width,
             height: tempPosn.height,
@@ -294,14 +302,14 @@ const Header = () => {
           const reader = new FileReader();
           let tempElem = img[h].parentElement;
           let tempPosn = getPosition(tempElem);
-          console.log(
-            "img[h].style.backgroundImage",
-            img[h].style.backgroundImage
-          );
+          // console.log(
+          //   "img[h].style.backgroundImage",
+          //   img[h].style.backgroundImage
+          // );
           const dataName = img[h].style.backgroundImage
             ? img[h].style.backgroundImage
             : img[h].innerText;
-          console.log("dataName", dataName);
+          // console.log("dataName", dataName);
 
           elem = {
             width: tempPosn.width,
@@ -398,7 +406,6 @@ const Header = () => {
         ) {
           let tempElem = tables[t].parentElement;
           let tempPosn = getPosition(tempElem);
-
           function getChildData() {
             const allTableCCells = [];
             const tableChildren = tables[t].firstElementChild.children;
@@ -408,11 +415,14 @@ const Header = () => {
               for (let j = 0; j < tableChildren[i].children.length; j++) {
                 // const element = tableChildren[i];
 
-                const TdDivClassName =
-                  tableChildren[i].children[
-                    j
-                  ]?.firstElementChild?.className.split(" ")[0];
-
+                const childNodes = tableChildren[i].children[j]?.childNodes
+                const tdElement = []
+                childNodes.forEach(child => {
+                  if (!child.classList.contains("row-resizer") && !child.classList.contains("td-resizer")) {
+                    tdElement.push(child);
+                  }
+                })
+                const TdDivClassName = tdElement[0]?.className.split(" ")[0];
                 const trChild = {
                   td: {
                     type:
@@ -425,12 +435,12 @@ const Header = () => {
                       TdDivClassName == "imageInput"
                         ? tableChildren[i].children[j]?.firstElementChild.style
                           .backgroundImage
-                        : tableChildren[i].children[j]?.firstElementChild
-                          ?.innerHTML,
-                    id: `tableTd${j + 1}`,
+                        : tdElement[0]?.innerHTML,
+                    id: TdDivClassName == "imageInput"
+                      ? tableChildren[i].children[j]?.id
+                      : tdElement[0]?.id,
                   },
                 };
-
                 newTableTR.push(trChild);
               }
               tableTR.tr = newTableTR;
@@ -446,14 +456,11 @@ const Header = () => {
             topp: tables[t].parentElement.style.top,
             left: tempPosn.left,
             type: "TABLE_INPUT",
-            // start work here
-            // data: tables[t].firstElementChild.innerHTML,
             data: getChildData(),
             border: `${tableBorderSize} dotted ${tableBorderColor}`,
             tableBorder: tables[t].parentElement.style.border,
-            id: `tab${t + 1}`,
+            id: tables[t].firstElementChild.id,
           };
-          // dataInsertWithPage(tempPosn, elem);
           const pageNum = findPaageNum(tables[t]);
           page[0][pageNum].push(elem);
         }
@@ -519,6 +526,9 @@ const Header = () => {
                   break;
                 case "cameraInput":
                   type = "CAMERA_INPUT";
+                  break;
+                case "paymentInput":
+                  type = "PAYMENT_INPUT";
                   break;
                 default:
                   type = "";
@@ -604,7 +614,7 @@ const Header = () => {
         ) {
           let tempElem = scales[s].parentElement;
           let tempPosn = getPosition(tempElem);
-          console.log(scales[s].firstElementChild);
+          // console.log(scales[s].firstElementChild);
           elem = {
             width: tempPosn.width,
             height: tempPosn.height,
@@ -639,20 +649,95 @@ const Header = () => {
           )
         ) {
           let tempElem = newScales[b].parentElement;
-
           let tempPosn = getPosition(tempElem);
-          console.log(newScales[b]);
+          // console.log(newScales[b]);
           let circles = newScales[b].querySelector(".circle_label");
           let scaleBg = newScales[b].querySelector(".label_hold");
           let leftChild = newScales[b].querySelector(".left_child");
           let neutralChild = newScales[b].querySelector(".neutral_child");
           let rightChild = newScales[b].querySelector(".right_child");
           let scaleText = newScales[b].querySelector(".scale_text");
-
           let font = newScales[b].querySelector(".scool_input");
+          let scaleType = newScales[b].querySelector(".scaleTypeHolder");
           let scaleID = newScales[b].querySelector(".scaleId");
+          let orentation = newScales[b].querySelector(".nps_vertical");
+          let otherComponent = newScales[b].querySelector(".otherComponent");
           console.log(font);
 
+          let buttonText = newScales[b].querySelectorAll(".circle_label");
+          // console.log(buttonText);
+
+          let emojiArr = [];
+
+          if (buttonText.length !== 0) {
+            for (let i = 0; i < buttonText.length; i++) {
+              emojiArr.push(buttonText[i].textContent);
+            }
+          }
+
+          let stapelOptionHolder = "";
+          let stapelScaleArray = "";
+          let stapelOrientation = "";
+
+          if (scaleType.textContent === "snipte") {
+            stapelOrientation = newScales[b].querySelector(".stapel_vertical");
+            stapelOptionHolder = newScales[b].querySelector(
+              ".stapelOptionHolder"
+            );
+            stapelScaleArray = newScales[b].querySelector(".stapelScaleArray");
+            console.log("This is the saved stapel", stapelScaleArray);
+          }
+
+          let npsLiteTextArray = "";
+          let orientation = "";
+
+          if (scaleType.textContent === "nps_lite") {
+            npsLiteTextArray = newScales[b].querySelector(".nps_lite_text");
+            orientation = newScales[b].querySelector(".orientation");
+          }
+
+          let likertScaleArray = "";
+
+          if (scaleType.textContent === "likert") {
+            likertScaleArray = newScales[b].querySelector(
+              ".likert_Scale_Array"
+            );
+            orientation = newScales[b].querySelector(".orientation");
+            console.log("This is likert", likertScaleArray.textContent);
+          }
+
+          let percentBackground = "";
+          let percentLabel = "";
+          let percentContainer = "";
+          let percentLeft = "";
+          let percentCenter = [];
+          let percentRight = "";
+          let prodName = [];
+
+          if (
+            scaleType.textContent === "percent_scale" ||
+            scaleType.textContent === "percent_sum_scale"
+          ) {
+            percentBackground = newScales[b].querySelector(".percent-slider");
+            percentLabel = newScales[b]?.querySelector(".label_hold").children;
+            percentContainer = newScales[b]?.querySelectorAll(".containerDIV");
+            console.log(percentLabel);
+
+            percentContainer.forEach((elem) => {
+              prodName.push(elem.querySelector(".product_name")?.textContent);
+              percentCenter.push(
+                elem.querySelector("center-percent")?.textContent
+                  ? elem.querySelector("center-percent")?.textContent
+                  : 1
+              );
+              // console.log(prodName);
+              // console.log(percentCenter);
+            });
+            percentLeft = newScales[b].querySelector(".left-percent");
+            percentRight = document.querySelector(".right-percent");
+
+            orientation = newScales[b].querySelector(".orientation");
+          }
           let properties = {
             scaleBgColor: scaleBg.style.backgroundColor,
             fontColor: font.style.color,
@@ -660,11 +745,28 @@ const Header = () => {
             left: leftChild.textContent,
             center: neutralChild.textContent,
             right: rightChild.textContent,
-            buttonColor: circles.style.backgroundColor,
+            buttonColor: circles?.style?.backgroundColor,
             scaleID: scaleID.textContent,
             scaleText: scaleText.textContent,
+            buttonText: emojiArr,
+            scaleType: scaleType.textContent,
+            stapelOptionHolder: stapelOptionHolder.textContent,
+            stapelScaleArray: stapelScaleArray.textContent,
+            npsLiteTextArray: npsLiteTextArray.textContent,
+            likertScaleArray: likertScaleArray.textContent,
+            percentProdName: prodName,
+            percentBackground: percentBackground?.style?.background,
+            percentLabel: percentLabel?.length,
+            percentLeft: percentLeft?.textContent,
+            percentCenter: percentCenter?.textContent,
+            percentRight: percentRight?.textContent,
+            percentContainer: percentContainer?.length,
+            orientation: orientation?.textContent,
+            orentation: orentation?.textContent,
+            stapelOrientation: stapelOrientation?.textContent,
+            otherComponent: otherComponent.textContent,
           };
-          console.log(properties);
+          // console.log(properties);
           elem = {
             width: tempPosn.width,
             height: tempPosn.height,
@@ -673,12 +775,18 @@ const Header = () => {
             left: tempPosn.left,
             type: "NEW_SCALE_INPUT",
             data: `${title}_scale_${b + 1}`,
-
+            // raw_data: tempElem.children[1].innerHTML,
             raw_data: properties,
-
+            // purpose: tempElem.children[2].innerHTML,
             id: `scl${b + 1}`,
+            // newScaleId = scale
+            // details:
+            //   decoded.details.action === "document"
+            //     ? "Document instance"
+            //     : "Template scale",
           };
-          console.log(elem);
+
+          // console.log(elem);
           const pageNum = findPaageNum(newScales[b]);
           page[0][pageNum].push(elem);
         }
@@ -696,7 +804,7 @@ const Header = () => {
           let tempElem = imageCanva[b].parentElement;
 
           let tempPosn = getPosition(tempElem);
-          console.log(imageCanva[b]);
+          // console.log(imageCanva[b]);
           let imageLinkHolder = imageCanva[b].querySelector(".imageLinkHolder");
           let videoLinkHolder = imageCanva[b].querySelector(".videoLinkHolder");
 
@@ -704,7 +812,7 @@ const Header = () => {
             imageLinkHolder: imageLinkHolder.textContent,
             videoLinkHolder: videoLinkHolder.textContent,
           };
-          console.log(properties);
+          // console.log(properties);
           elem = {
             width: tempPosn.width,
             height: tempPosn.height,
@@ -715,7 +823,7 @@ const Header = () => {
             raw_data: properties,
             id: `cam1${b + 1}`,
           };
-          console.log(elem);
+          // console.log(elem);
           const pageNum = findPaageNum(imageCanva[b]);
           page[0][pageNum].push(elem);
         }
@@ -749,6 +857,38 @@ const Header = () => {
           };
 
           const pageNum = findPaageNum(buttons[b]);
+          page[0][pageNum].push(elem);
+        }
+      }
+    }
+    const payments = document.getElementsByClassName("paymentInput");
+    if (payments.length) {
+      for (let p = 0; p < payments.length; p++) {
+        if (
+          !buttons[p]?.parentElement?.parentElement?.classList?.contains(
+            "containerInput"
+          )
+        ) {
+          let tempElem = payments[p].parentElement;
+          let tempPosn = getPosition(tempElem);
+          const link = buttonLink;
+
+          elem = {
+            width: tempPosn.width,
+            height: tempPosn.height,
+            top: tempPosn.top,
+            topp: payments[p].parentElement.style.top,
+            left: tempPosn.left,
+            type: "PAYMENT_INPUT",
+            buttonBorder: `${buttonBorderSize}px dotted ${buttonBorderColor}`,
+            data: payments[p].textContent,
+            raw_data: tempElem.children[1].innerHTML,
+            purpose: tempElem.children[2].innerHTML,
+            id: `pay${p + 1}`,
+          };
+
+          console.log("raw_data", elem.raw_data);
+          const pageNum = findPaageNum(payments[p]);
           page[0][pageNum].push(elem);
         }
       }
@@ -833,10 +973,18 @@ const Header = () => {
   const documentFlag = decoded?.details?.document_flag;
   const titleName = decoded?.details?.name;
   const finalDocName = decoded?.details?.update_field.document_name;
+  const docRight = decoded?.details?.document_right;
+
+
+
 
   const element_updated_length =
     document.getElementsByClassName("element_updated")?.length;
   const document_map_required = docMap?.filter((item) => item.required);
+
+  // ? This "if" condition is to prevent code from running, everytime Header.js renders
+  // if (!docMapRequired?.length) setDocMapRequired(document_map_required)
+
 
   useEffect(() => {
     if (document_map_required?.length > 0) {
@@ -847,6 +995,496 @@ const Header = () => {
       setIsFinializeDisabled(false);
     }
   }, [element_updated_length]);
+
+  function handleFinalizeButton() {
+    const username = decoded?.details?.authorized;
+    console.log(username);
+
+    function generateLoginUser() {
+      return "user_" + Math.random().toString(36).substring(7);
+      // return token;
+    }
+
+    function authorizedLogin() {
+      return username === undefined ? generateLoginUser() : username;
+    }
+
+    let scaleElements = document.querySelectorAll(".newScaleInput");
+
+    const documentResponses = [];
+    console.log(scaleElements);
+
+    scaleElements.forEach((scale) => {
+      console.log(scale);
+      const scaleId = scale?.querySelector(".scaleId")?.textContent;
+      const holdElem = scale?.querySelector(".holdElem")?.textContent;
+
+      documentResponses.push({ scale_id: scaleId, score: holdElem });
+    });
+
+    console.log(generateLoginUser());
+    console.log(documentResponses);
+
+    const requestBody = {
+      process_id: decoded.details.process_id,
+      instance_id: 1,
+      brand_name: "XYZ545",
+      product_name: "XYZ511",
+      username: authorizedLogin(),
+      document_responses: documentResponses,
+
+      action: decoded.details.action,
+      authorized: decoded.details.authorized,
+      cluster: decoded.details.cluster,
+      collection: decoded.details.collection,
+      command: decoded.details.command,
+      database: decoded.details.database,
+      document: decoded.details.document,
+      document_flag: decoded.details.document_flag,
+      document_right: decoded.details.document_right,
+      field: decoded.details.field,
+      function_ID: decoded.details.function_ID,
+      metadata_id: decoded.details.metadata_id,
+      role: decoded.details.role,
+      team_member_ID: decoded.details.team_member_ID,
+      content: decoded.details.update_field.content,
+      document_name: decoded.details.update_field.document_name,
+      page: decoded.details.update_field.page,
+      user_type: decoded.details.user_type,
+      _id: decoded.details._id,
+    };
+
+    Axios.post(
+      "https://100035.pythonanywhere.com/api/nps_responses_create",
+      requestBody
+    )
+      .then((response) => {
+        if (response.status === 200) {
+          setIsLoading(false);
+          var responseData = response.data;
+          setScaleData(responseData);
+          console.log(response);
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
+  function handleFinalizeButtonStapel() {
+    const username = decoded?.details?.authorized;
+    console.log(username);
+
+    function generateLoginUser() {
+      return "user_" + Math.random().toString(36).substring(7);
+      // return token;
+    }
+
+    function authorizedLogin() {
+      return username === undefined ? generateLoginUser() : username;
+    }
+
+    let scaleElements = document.querySelectorAll(".newScaleInput");
+
+    const documentResponses = [];
+    console.log(scaleElements);
+
+    scaleElements.forEach((scale) => {
+      console.log(scale);
+      const scaleId = scale?.querySelector(".scaleId")?.textContent;
+      const holdElem = scale?.querySelector(".holdElem")?.textContent;
+
+      documentResponses.push({ scale_id: scaleId, score: parseInt(holdElem) });
+    });
+
+    console.log("This is stapel_res", documentResponses);
+
+    console.log(generateLoginUser());
+    console.log(documentResponses);
+
+    const requestBody = {
+      process_id: decoded.details.process_id,
+      instance_id: 1,
+      brand_name: "XYZ545",
+      product_name: "XYZ511",
+      username: authorizedLogin(),
+      document_responses: documentResponses,
+      action: decoded.details.action,
+      authorized: decoded.details.authorized,
+      cluster: decoded.details.cluster,
+      collection: decoded.details.collection,
+      command: decoded.details.command,
+      database: decoded.details.database,
+      document: decoded.details.document,
+      document_flag: decoded.details.document_flag,
+      document_right: decoded.details.document_right,
+      field: decoded.details.field,
+      function_ID: decoded.details.function_ID,
+      metadata_id: decoded.details.metadata_id,
+      role: decoded.details.role,
+      team_member_ID: decoded.details.team_member_ID,
+      content: decoded.details.update_field.content,
+      document_name: decoded.details.update_field.document_name,
+      page: decoded.details.update_field.page,
+      user_type: decoded.details.user_type,
+      _id: decoded.details._id,
+    };
+
+    Axios.post(
+      "https://100035.pythonanywhere.com/stapel/api/stapel_responses_create/",
+      requestBody
+    )
+      .then((response) => {
+        if (response.status === 200) {
+          setIsLoading(false);
+          var responseData = response.data;
+          setScaleData(responseData);
+          console.log(response);
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
+  function handleFinalizeButtonNpsLite() {
+    const username = decoded?.details?.authorized;
+    console.log(username);
+
+    function generateLoginUser() {
+      return "user_" + Math.random().toString(36).substring(7);
+      // return token;
+    }
+
+    function authorizedLogin() {
+      return username === undefined ? generateLoginUser() : username;
+    }
+
+    let scaleElements = document.querySelectorAll(".newScaleInput");
+
+    let scaleId;
+    let holdElem;
+    let documentResponses = [];
+
+    scaleElements.forEach((scale) => {
+      console.log(scale);
+      scaleId = scale?.querySelector(".scaleId")?.textContent;
+      holdElem = scale?.querySelector(".holdElem")?.textContent;
+
+      documentResponses.push({
+        scale_id: scaleId,
+        score:
+          typeof holdElem === "number" || !isNaN(holdElem)
+            ? parseInt(holdElem)
+            : holdElem,
+      });
+    });
+    console.log("This is docresp", documentResponses);
+
+    const requestBody = {
+      process_id: decoded.details.process_id,
+      instance_id: 1,
+      brand_name: "XYZ545",
+      product_name: "XYZ511",
+      username: authorizedLogin(),
+      document_responses: documentResponses,
+      action: decoded.details.action,
+      authorized: decoded.details.authorized,
+      cluster: decoded.details.cluster,
+      collection: decoded.details.collection,
+      command: decoded.details.command,
+      database: decoded.details.database,
+      document: decoded.details.document,
+      document_flag: decoded.details.document_flag,
+      document_right: decoded.details.document_right,
+      field: decoded.details.field,
+      function_ID: decoded.details.function_ID,
+      metadata_id: decoded.details.metadata_id,
+      role: decoded.details.role,
+      team_member_ID: decoded.details.team_member_ID,
+      content: decoded.details.update_field.content,
+      document_name: decoded.details.update_field.document_name,
+      page: decoded.details.update_field.page,
+      user_type: decoded.details.user_type,
+      _id: decoded.details._id,
+    };
+
+    Axios.post(
+      "https://100035.pythonanywhere.com/nps-lite/api/nps-lite-response",
+      requestBody
+    )
+      .then((response) => {
+        if (response.status === 200) {
+          setIsLoading(false);
+          var responseData = response.data;
+          setScaleData(responseData);
+          console.log(response);
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
+  function handleFinalizeButtonLikert() {
+    localStorage.setItem("hideFinalizeButton", "true");
+    const username = decoded?.details?.authorized;
+    console.log(username);
+
+    function generateLoginUser() {
+      return "user_" + Math.random().toString(36).substring(7);
+      // return token;
+    }
+
+    function authorizedLogin() {
+      return username === undefined ? generateLoginUser() : username;
+    }
+
+    let scaleElements = document.querySelectorAll(".newScaleInput");
+
+    let scaleId;
+    let holdElem;
+    let documentResponses = [];
+    console.log(scaleElements);
+
+    scaleElements.forEach((scale) => {
+      console.log(scale);
+      scaleId = scale?.querySelector(".scaleId")?.textContent;
+      holdElem = scale?.querySelector(".holdElem")?.textContent;
+
+      documentResponses.push({ scale_id: scaleId, score: holdElem });
+    });
+
+    console.log(generateLoginUser());
+    console.log(documentResponses);
+
+    const requestBody = {
+      process_id: decoded.details.process_id,
+      instance_id: 1,
+      brand_name: "XYZ545",
+      product_name: "XYZ511",
+      username: authorizedLogin(),
+      document_responses: documentResponses,
+      action: decoded.details.action,
+      authorized: decoded.details.authorized,
+      cluster: decoded.details.cluster,
+      collection: decoded.details.collection,
+      command: decoded.details.command,
+      database: decoded.details.database,
+      document: decoded.details.document,
+      document_flag: decoded.details.document_flag,
+      document_right: decoded.details.document_right,
+      field: decoded.details.field,
+      function_ID: decoded.details.function_ID,
+      metadata_id: decoded.details.metadata_id,
+      role: decoded.details.role,
+      team_member_ID: decoded.details.team_member_ID,
+      content: decoded.details.update_field.content,
+      document_name: decoded.details.update_field.document_name,
+      page: decoded.details.update_field.page,
+      user_type: decoded.details.user_type,
+      _id: decoded.details._id,
+    };
+
+    Axios.post(
+      "https://100035.pythonanywhere.com/likert/likert-scale_response/",
+      requestBody
+    )
+      .then((response) => {
+        if (response.status === 200) {
+          setIsLoading(false);
+          var responseData = response.data;
+          setScaleData(responseData);
+          console.log(response);
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
+  function handleFinalizeButtonPercent() {
+    const username = decoded?.details?.authorized;
+    console.log(username);
+
+    function generateLoginUser() {
+      return "user_" + Math.random().toString(36).substring(7);
+      // return token;
+    }
+
+    function authorizedLogin() {
+      return username === undefined ? generateLoginUser() : username;
+    }
+
+    let scaleElements = document.querySelectorAll(".newScaleInput");
+
+    const documentResponses = new Set(); // Use a Set to store unique entries
+
+    scaleElements.forEach((scale) => {
+      const scaleIdElement = scale.querySelector(".scaleId");
+      const scaleId = scaleIdElement ? scaleIdElement.textContent : null;
+
+      if (scaleId !== null && !documentResponses.has(scaleId)) {
+        const centerTextElements = scale.querySelectorAll(".center-percent");
+        const centerTextArray = [];
+
+        centerTextElements.forEach((val) => {
+          const originalText = val.textContent;
+          const textWithoutPercent = originalText.replace("%", "");
+          centerTextArray.push(Number(textWithoutPercent));
+        });
+
+        documentResponses.add({
+          scale_id: scaleId,
+          score: centerTextArray,
+        });
+      }
+    });
+
+    // Convert the Set back to an array if needed
+    const documentResponsesArray = Array.from(documentResponses);
+    console.log(documentResponsesArray);
+
+    console.log(generateLoginUser());
+    console.log(documentResponses);
+
+    const requestBody = {
+      process_id: decoded.details.process_id,
+      instance_id: 1,
+      brand_name: "XYZ545",
+      product_name: "XYZ511",
+      username: authorizedLogin(),
+      document_responses: documentResponsesArray,
+
+      action: decoded.details.action,
+      authorized: decoded.details.authorized,
+      cluster: decoded.details.cluster,
+      collection: decoded.details.collection,
+      command: decoded.details.command,
+      database: decoded.details.database,
+      document: decoded.details.document,
+      document_flag: decoded.details.document_flag,
+      document_right: decoded.details.document_right,
+      field: decoded.details.field,
+      function_ID: decoded.details.function_ID,
+      metadata_id: decoded.details.metadata_id,
+      role: decoded.details.role,
+      team_member_ID: decoded.details.team_member_ID,
+      content: decoded.details.update_field.content,
+      document_name: decoded.details.update_field.document_name,
+      page: decoded.details.update_field.page,
+      user_type: decoded.details.user_type,
+      _id: decoded.details._id,
+    };
+
+    Axios.post(
+      "https://100035.pythonanywhere.com/percent/api/percent_responses_create/",
+      requestBody
+    )
+      .then((response) => {
+        if (response.status === 200) {
+          setIsLoading(false);
+          var responseData = response.data;
+          setScaleData(responseData);
+          console.log(response);
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
+  function handleFinalizeButtonPercentSum() {
+    const username = decoded?.details?.authorized;
+    console.log(username);
+
+    function generateLoginUser() {
+      return "user_" + Math.random().toString(36).substring(7);
+      // return token;
+    }
+
+    function authorizedLogin() {
+      return username === undefined ? generateLoginUser() : username;
+    }
+
+    let scaleElements = document.querySelectorAll(".newScaleInput");
+
+    const documentResponses = new Set(); // Use a Set to store unique entries
+
+    scaleElements.forEach((scale) => {
+      const scaleIdElement = scale.querySelector(".scaleId");
+      const scaleId = scaleIdElement ? scaleIdElement.textContent : null;
+
+      if (scaleId !== null && !documentResponses.has(scaleId)) {
+        const centerTextElements = scale.querySelectorAll(".center-percent");
+        const centerTextArray = [];
+
+        centerTextElements.forEach((val) => {
+          const originalText = val.textContent;
+          const textWithoutPercent = originalText.replace("%", "");
+          centerTextArray.push(Number(textWithoutPercent));
+        });
+
+        documentResponses.add({
+          scale_id: scaleId,
+          score: centerTextArray,
+        });
+      }
+    });
+
+    // Convert the Set back to an array if needed
+    const documentResponsesArray = Array.from(documentResponses);
+    console.log(documentResponsesArray);
+
+    console.log(generateLoginUser());
+    console.log(documentResponses);
+
+    const requestBody = {
+      process_id: decoded.details.process_id,
+      instance_id: 1,
+      brand_name: "XYZ545",
+      product_name: "XYZ511",
+      username: authorizedLogin(),
+      document_responses: documentResponsesArray,
+
+      action: decoded.details.action,
+      authorized: decoded.details.authorized,
+      cluster: decoded.details.cluster,
+      collection: decoded.details.collection,
+      command: decoded.details.command,
+      database: decoded.details.database,
+      document: decoded.details.document,
+      document_flag: decoded.details.document_flag,
+      document_right: decoded.details.document_right,
+      field: decoded.details.field,
+      function_ID: decoded.details.function_ID,
+      metadata_id: decoded.details.metadata_id,
+      role: decoded.details.role,
+      team_member_ID: decoded.details.team_member_ID,
+      content: decoded.details.update_field.content,
+      document_name: decoded.details.update_field.document_name,
+      page: decoded.details.update_field.page,
+      user_type: decoded.details.user_type,
+      _id: decoded.details._id,
+    };
+
+    console.log("This is percent_sum payloaf", requestBody)
+    Axios.post(
+      "https://100035.pythonanywhere.com/percent-sum/api/percent-sum-response-create/",
+      requestBody
+    )
+      .then((response) => {
+        if (response.status === 200) {
+          setIsLoading(false);
+          var responseData = response.data;
+          setScaleData(responseData);
+          console.log(response);
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
 
   function submit(e) {
     e.preventDefault();
@@ -867,7 +1505,8 @@ const Header = () => {
         content: JSON.stringify(dataa),
         page: item,
       };
-    } else if (decoded.details.action === "document") {
+    }
+    else if (decoded.details.action === "document") {
       updateField = {
         document_name: titleName,
         content: JSON.stringify(dataa),
@@ -875,7 +1514,7 @@ const Header = () => {
       };
     }
 
-    console.log(updateField);
+    console.log(updateField.content);
 
     <iframe src="http://localhost:5500/"></iframe>;
 
@@ -905,6 +1544,8 @@ const Header = () => {
         company_id: companyId,
         type: decoded.details.action,
         questionAndAns: questionAndAnswerGroupedData,
+        action: decoded.details.action,
+        metadata_id: decoded.details.metadata_id,
       }
     )
       .then((res) => {
@@ -913,6 +1554,21 @@ const Header = () => {
           setIsLoading(false);
           if (finalize) {
             handleFinalize();
+          }
+
+          let scaleType = document.querySelector(".scaleTypeHolder");
+          if (scaleType.textContent === "nps") {
+            handleFinalizeButton();
+          } else if (scaleType.textContent === "snipte") {
+            handleFinalizeButtonStapel();
+          } else if (scaleType.textContent === "nps_lite") {
+            handleFinalizeButtonNpsLite();
+          } else if (scaleType.textContent === "likert") {
+            handleFinalizeButtonLikert();
+          } else if (scaleType.textContent === "percent_scale") {
+            handleFinalizeButtonPercent();
+          }else if(scaleType.textContent === "percent_sum_scale") {
+            handleFinalizeButtonPercentSum() 
           }
           setIsDataSaved(true);
         }
@@ -947,8 +1603,15 @@ const Header = () => {
 
   var dataa = {
     document_id: decoded.details._id,
-    action: actionName,
+    action: decoded.details.action,
+    database: decoded.details.database,
+    collection: decoded.details.collection,
+    team_member_ID: decoded.details.team_member_ID,
+    function_ID: decoded.details.function_ID,
+    cluster: decoded.details.cluster,
+    document: decoded.details.document,
   };
+  console.log("here is new data for export", dataa);
 
   var stringifiedData = CryptoJS.enc.Utf8.parse(JSON.stringify(dataa));
   var encodedData = base64url(stringifiedData);
@@ -969,12 +1632,13 @@ const Header = () => {
         function_ID: decoded.details.function_ID,
         cluster: decoded.details.cluster,
         document: decoded.details.document,
+        update_field: decoded.details.update_field,
       }
     )
       .then((res) => {
         // Handling title
         const loadedDataT = res.data;
-        // console.log(res.data.content, "loaded");
+        // // console.log(res.data.content, "loaded");
 
         if (decoded.details.action === "template") {
           setTitle(loadedDataT.template_name);
@@ -1000,22 +1664,22 @@ const Header = () => {
       })
       .catch((err) => {
         setIsLoading(false);
-        console.log(err);
+        // console.log(err);
       });
   };
 
   const npsCustomData = () => {
-    console.log(decoded.details._id);
+    // console.log(decoded.details._id);
     Axios.post("https://100035.pythonanywhere.com/api/nps_custom_data_all", {
       template_id: decoded.details._id,
     })
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         const data = res.data.data;
         setCustomId(data);
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
       });
   };
 
@@ -1073,19 +1737,25 @@ const Header = () => {
     var tokenn = prompt("Paste your token here");
     if (tokenn != null) {
       const decodedTok = jwt_decode(tokenn);
-      console.log("tokkkkkkennn", tokenn);
+      // console.log("tokkkkkkennn", tokenn);
       const getPostData = async () => {
         const response = await Axios.post(
           "https://100058.pythonanywhere.com/api/get-data-from-collection/",
           {
             document_id: decodedTok.document_id,
             action: decodedTok.action,
+            database: decodedTok.database,
+            collection: decodedTok.collection,
+            team_member_ID: decodedTok.team_member_ID,
+            function_ID: decodedTok.function_ID,
+            cluster: decodedTok.cluster,
+            document: decodedTok.document,
           }
         )
           .then((res) => {
             // Handling title
             const loadedDataT = res.data;
-            console.log(res);
+            // console.log(res);
 
             if (decoded.details.action === "template") {
               setTitle("Untitle-File");
@@ -1098,7 +1768,7 @@ const Header = () => {
             const pageData = res.data.page;
             setItem(pageData);
             console.log(loadedData);
-            console.log(loadedData[0][0]);
+            console.log("Loaded Data ",loadedData[0][0]);
             setData(loadedData[0][0]);
             setFetchedData(loadedData[0][0]);
             setIsDataRetrieved(true);
@@ -1108,14 +1778,14 @@ const Header = () => {
           })
           .catch((err) => {
             setIsLoading(false);
-            console.log(err);
+            // console.log(err);
           });
       };
       getPostData();
     }
   }
 
-  // console.log('page count check', item);
+  // // console.log('page count check', item);
   const linkId = decoded.details.link_id;
 
   function handleFinalize() {
@@ -1129,17 +1799,15 @@ const Header = () => {
         user_type: user_type,
         link_id: link_idd,
         action: "finalized",
-
         authorized: authorized,
-
-        item_type: action,
+        item_type: "clone",
         item_id: _id,
         company_id: companyId,
         role: role,
       }
     )
       .then((res) => {
-        console.log("This is my response", res);
+        // console.log("This is my response", res);
         setIsLoading(false);
         toast.success(res?.data);
         finalize.style.visibility = "hidden";
@@ -1147,7 +1815,7 @@ const Header = () => {
       })
       .catch((err) => {
         setIsLoading(false);
-        console.log(err);
+        // console.log(err);
         toast.error(err);
         // alert(err?.message);
       });
@@ -1163,7 +1831,7 @@ const Header = () => {
         // item_id: process_id,
         authorized: authorized,
         // document_id: _id,
-        item_type: action,
+        item_type: "clone",
         item_id: _id,
         company_id: companyId,
         role: role,
@@ -1288,7 +1956,12 @@ const Header = () => {
               <div
                 className="title-name px-3"
                 contentEditable={true}
-                style={{ fontSize: 24 }}
+                style={{
+                  fontSize: 18,
+                  height: window.innerWidth<993 ? "75px": "50px",
+                  overflowY: "auto",
+                  padding: "10px",
+                }}
                 spellCheck="false"
                 ref={inputRef}
               >
@@ -1363,7 +2036,7 @@ const Header = () => {
                 </div>
               </div>
 
-              {actionName == "document" && docMap && data != "" && (
+              {actionName == "document" && docMap && data != "" && docRight !== 'view' && (
                 <>
                   <div className="mt-2 text-center mb-2 px-2">
                     <Button
@@ -1388,7 +2061,9 @@ const Header = () => {
                       size="md"
                       className="rounded px-4"
                       id="reject-button"
-                      onClick={handleReject}
+                      onClick={
+                        () => setIsOpenRejectionModal(true)
+                      }
                       style={{
                         visibility:
                           documentFlag == "processing" ? "visible" : "hidden",
@@ -1404,6 +2079,8 @@ const Header = () => {
           </Col>
         </Row>
       </Container>
+
+      {isOpenRejectionModal && <RejectionModal openModal={setIsOpenRejectionModal} handleReject={handleReject} msg={rejectionMsg} setMsg={setRejectionMsg} />}
     </div>
   );
 };

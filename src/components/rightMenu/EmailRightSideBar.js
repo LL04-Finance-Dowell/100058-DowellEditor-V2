@@ -55,13 +55,13 @@ const EmailRightSideBar = () => {
     setFormBorderSize(e.target.value);
 
     const box = document.getElementsByClassName("focussedd")[0];
-    box.style.borderWidth = `${formBorderSize}px`;
+    box.style.borderWidth = `${e.target.value}px`;
   };
 
   const handleBorderColorChange = (e) => {
     setFormBorderColor(e.target.value);
     const box = document.getElementsByClassName("focussedd")[0];
-    box.style.borderColor = `${formBorderColor}`;
+    box.style.borderColor = `${e.target.value}`;
   };
   const handleRangeBlur = (e) => {
     e.target.focus();
@@ -83,13 +83,13 @@ const EmailRightSideBar = () => {
     axios
       .post("https://100085.pythonanywhere.com/api/editor-component/", formData)
       .then((response) => {
-        console.log(response);
+        // console.log(response);
         mailBtn.textContent = "Sent";
         mailBtn.style.backgroundColor = "green";
         toast.success("Email has been sent");
       });
     //alert("Mail sent!");
-    console.log(formData);
+    // console.log(formData);
 
     setMessage("");
     setSubject("");
@@ -241,7 +241,7 @@ const EmailRightSideBar = () => {
             />
             <input
               type="range"
-              min="-10"
+              min="0"
               max="20"
               value={formBorderSize}
               onChange={handleBorderSizeChange}
