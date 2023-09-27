@@ -1842,7 +1842,7 @@ const MidSection = React.forwardRef((props, ref) => {
 
     holderDIV.addEventListener("focus", (e) => {
       holderDIV.classList.add("zIndex-two");
-      holderDIV.style.border = "2px solid orange";
+      holderDIV.style.border = "2px solid #25c7a3";
 
       holderDIV.append(resizerTL, resizerTR, resizerBL, resizerBR);
     });
