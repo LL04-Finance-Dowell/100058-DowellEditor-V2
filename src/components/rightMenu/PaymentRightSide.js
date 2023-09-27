@@ -165,16 +165,25 @@ const PaymentRightSide = () => {
                 toast.success("Successfully Submitted!")
                 // openPopup(resQR.data.qr_image_url)
                 const timeout = setTimeout(() => {
-                    window.open(res.data.approval_url, '_blank');
+                    window.open(res.data.approval_url, "_blank");
+                    // openPopup(res.data.approval_url);
                 }, 2000); // Wait for 2 seconds
 
 
-                // const resVerify = await axios.post("https://100088.pythonanywhere.com/api/workflow/verify/payment/stripe", {
-                //     stripe_key: link,
-                //     id: res.data.payment_id
-                // });
+                const resVerify = await axios.post("https://100088.pythonanywhere.com/api/workflow/verify/payment/stripe", {
+                    stripe_key: link,
+                    id: res.data.payment_id
+                });
 
-                // console.log("verify payment", resVerify.data);
+                if(resVerify.data.status == "succeeded"){
+                    setTimeout(function() {
+                        window.location.href = "/thanks";
+                    }, 2000);
+                } else {
+                    console.log("Your Stripe Payment Not verified");
+                }
+
+                console.log("verify payment", resVerify.data);
 
                 
 
@@ -231,6 +240,21 @@ const PaymentRightSide = () => {
                 // }, 2000); // Wait for 2 seconds
                 // return () => clearTimeout(timeout);
 
+
+                const resVerify = await axios.post("https://100088.pythonanywhere.com/api/workflow/verify/payment/stripe", {
+                    stripe_key: link,
+                    id: res.data.payment_id
+                });
+
+                if(resVerify.data.status == "succeeded"){
+                    setTimeout(function() {
+                        window.location.href = "/thanks";
+                    }, 2000);
+                } else {
+                    console.log("Your Stripe Payment Not verified");
+                    toast.error("Your Payment Not Successfull!");
+                }
+
             } catch (error) {
                 console.log(error)
                 setQrLoader(false)
@@ -265,7 +289,7 @@ const PaymentRightSide = () => {
             setLoader(false)
             console.log("paypal data", res.data)
             const timeout = setTimeout(() => {
-                window.open(res.data.approval_url, '_blank');
+                window.open(res.data.approval_url, '_self');
                 // openPopup(res.data.approval_url);
             }, 2000); // Wait for 2 seconds
             toast.success("Successfully Submitted!");
