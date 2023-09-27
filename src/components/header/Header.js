@@ -697,6 +697,16 @@ const Header = () => {
             console.log("This is likert", likertScaleArray.textContent);
           }
 
+          let pairedScaleArray = "";
+
+          if (scaleType.textContent === "comparison_paired_scale") {
+            likertScaleArray = newScales[b].querySelector(
+              ".paired_Scale_Array"
+            );
+            orientation = newScales[b].querySelector(".orientation");
+            console.log("This is likert", pairedScaleArray.textContent);
+          }
+
           let percentBackground = "";
           let percentLabel = "";
           let percentContainer = "";
