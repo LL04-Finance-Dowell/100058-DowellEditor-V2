@@ -51,7 +51,7 @@ function createNewScaleInputField(
   const otherComponent = document.createElement("h6");
   otherComponent.className = "otherComponent";
   otherComponent.style.display = "none";
-  otherComponent.textContent = element?.raw_data?.otherComponent
+  otherComponent.textContent = element?.raw_data?.otherComponent;
   scaleHold.appendChild(otherComponent);
 
   const scaleTypeHolder = document.createElement("h6");
@@ -660,7 +660,7 @@ function createNewScaleInputField(
     likertScaleArray.className = "likert_Scale_Array";
     likertScaleArray.textContent = element?.raw_data?.likertScaleArray || "";
     likertScaleArray.style.display = "none";
-    
+
     scaleHold.append(likertScaleArray);
     const likertScale = likertScaleArray.textContent.split(",");
     const numRows = Math.ceil(likertScale / 3);
@@ -1101,12 +1101,12 @@ function createNewScaleInputField(
         }
       }
     }
-  } else if (scaleTypeHolder.textContent === "paired") {
+  } else if (scaleTypeHolder.textContent === "comparison_paired_scale") {
     const pairedScaleArray = document.createElement("div");
     pairedScaleArray.className = "paired_Scale_Array";
     pairedScaleArray.textContent = element?.raw_data?.pairedScaleArray || "";
     pairedScaleArray.style.display = "none";
-    
+
     scaleHold.append(pairedScaleArray);
     const pairedScale = pairedScaleArray.textContent.split(",");
     console.log("This is the d++++!!!!!!!!!", pairedScale);
@@ -1600,7 +1600,7 @@ function createNewScaleInputField(
 
   document
     .getElementsByClassName("midSection_container")
-  [p - 1] // ?.item(0)
+    [p - 1] // ?.item(0)
     ?.append(holderDIV);
 }
 export default createNewScaleInputField;

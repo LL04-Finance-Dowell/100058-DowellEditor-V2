@@ -3102,7 +3102,7 @@ const ScaleRightSide = () => {
             fontcolor: btnUpdateFontColor.value,
             fontstyle: btnUpdateScaleFont.value,
             item_count: numberOfItemsToPair,
-            "item list": itemList,
+            item_list: itemList,
             user: "yes",
           }
         )
@@ -3120,13 +3120,13 @@ const ScaleRightSide = () => {
               idHolder.textContent = id && id;
             }
             console.log(res);
-
             const settings = res.data.data.settings;
+            console.log(settings);
             if (settings.name) {
-              scaleText.textContent = settings.scale_name;
+              scaleText.textContent = settings.name;
             }
 
-            if (settings.font_color) {
+            if (settings.fontcolor) {
               button4.style.color = settings.fontcolor;
             }
 
@@ -3136,29 +3136,55 @@ const ScaleRightSide = () => {
 
             button4.style.display = "block";
 
-            for (let i = 0; i < updatedPairedLabels; i++) {
-              const circle = document.createElement("div");
-              circle.className = "circle_label";
-              circle.style.width = "80%";
-              circle.style.height = "55%";
-              circle.style.borderRadius = "25px";
-              circle.style.padding = "12px 20px";
-              circle.style.backgroundColor = settings.roundcolor;
-              circle.style.display = "flex";
-              circle.style.justifyContent = "center";
-              circle.style.alignItems = "center";
-              circle.style.marginLeft = "5px";
-              circle.style.marginRight = "5px";
+            labelHold.style.justifyContent = "center";
+            labelHold.style.flexWrap = "wrap";
+            for (let i = 0; i < updatedPairedLabels.length - 1; i++) {
+              for (let j = i + 1; j < updatedPairedLabels.length; j++) {
+                const circle = document.createElement("div");
+                circle.className = "circle_label";
+                circle.style.width = "127px";
+                circle.style.height = "45%";
+                circle.style.borderRadius = "25px";
+                circle.style.padding = "12px 20px";
+                circle.style.backgroundColor = settings.scalecolor;
+                circle.style.display = "flex";
+                circle.style.flexDirection = "column";
+                circle.style.justifyContent = "center";
+                circle.style.alignItems = "center";
+                circle.style.marginLeft = "5px";
+                circle.style.marginRight = "5px";
+                circle.style.gap = "7px";
 
-              // Set the text content to the appropriate label (either text or emoji)
-              circle.textContent = updatedPairedLabels[i] || "";
+                const smallBox1 = document.createElement("div");
+                smallBox1.textContent = updatedPairedLabels[i];
+                const smallBox2 = document.createElement("div");
+                smallBox2.textContent = updatedPairedLabels[j];
 
-              if (option.value === "Vertical") {
-                circle.style.margin = "5px 0";
-                circle.style.padding = "6px 12px";
+                smallBox1.style.width = "95%";
+                smallBox2.style.width = "95%";
+                smallBox1.style.background = settings.roundcolor;
+                smallBox2.style.background = settings.roundcolor;
+                smallBox1.style.height = "50%";
+                smallBox2.style.height = "50%";
+                smallBox1.style.display = "flex";
+                smallBox2.style.display = "flex";
+                smallBox1.style.justifyContent = "center";
+                smallBox2.style.justifyContent = "center";
+                smallBox1.style.alignItems = "center";
+                smallBox2.style.alignItems = "center";
+                smallBox1.style.fontWeight = "12px";
+                smallBox2.style.fontWeight = "12px";
+
+                circle.appendChild(smallBox1);
+                circle.appendChild(smallBox2);
+
+                if (option.value === "Vertical") {
+                  circle.style.margin = "5px 0";
+                  circle.style.padding = "6px 12px";
+                }
+
+                labelHold.appendChild(circle);
               }
-
-              labelHold.appendChild(circle);
             }
           })
           .catch((err) => {
@@ -3174,6 +3200,9 @@ const ScaleRightSide = () => {
           {
             scale_id: idHolder.textContent,
             username: "pfactorial",
+            roundcolor: btnUpdateScale.value,
+            scalecolor: btnUpdateScaleColor.value,
+            fontcolor: btnUpdateFontColor.value,
             fontstyle: btnUpdateScaleFont.value,
             item_count: numberOfItemsToPair,
             item_list: itemList,
@@ -3189,8 +3218,72 @@ const ScaleRightSide = () => {
               console.log(res);
               console.log("This is the still scale", scale);
 
-              scaleText.textContent = name;
-              button4.style.fontFamily = fontstyle;
+              const settings = res.data.data;
+              console.log(settings);
+              if (settings.name) {
+                scaleText.textContent = settings.name;
+              }
+
+              if (settings.fontcolor) {
+                button4.style.color = settings.fontcolor;
+              }
+
+              if (settings.fontstyle) {
+                button4.style.fontFamily = settings.fontstyle;
+              }
+
+              button4.style.display = "block";
+
+              labelHold.style.justifyContent = "center";
+              labelHold.style.flexWrap = "wrap";
+              for (let i = 0; i < settings.item_list.length - 1; i++) {
+                for (let j = i + 1; j < settings.item_list.length; j++) {
+                  const circle = document.createElement("div");
+                  circle.className = "circle_label";
+                  circle.style.width = "127px";
+                  circle.style.height = "45%";
+                  circle.style.borderRadius = "25px";
+                  circle.style.padding = "12px 20px";
+                  circle.style.backgroundColor = settings.scalecolor;
+                  circle.style.display = "flex";
+                  circle.style.flexDirection = "column";
+                  circle.style.justifyContent = "center";
+                  circle.style.alignItems = "center";
+                  circle.style.marginLeft = "5px";
+                  circle.style.marginRight = "5px";
+                  circle.style.gap = "7px";
+
+                  const smallBox1 = document.createElement("div");
+                  smallBox1.textContent = settings.item_list[i];
+                  const smallBox2 = document.createElement("div");
+                  smallBox2.textContent = settings.item_list[j];
+
+                  smallBox1.style.width = "95%";
+                  smallBox2.style.width = "95%";
+                  smallBox1.style.background = settings.roundcolor;
+                  smallBox2.style.background = settings.roundcolor;
+                  smallBox1.style.height = "50%";
+                  smallBox2.style.height = "50%";
+                  smallBox1.style.display = "flex";
+                  smallBox2.style.display = "flex";
+                  smallBox1.style.justifyContent = "center";
+                  smallBox2.style.justifyContent = "center";
+                  smallBox1.style.alignItems = "center";
+                  smallBox2.style.alignItems = "center";
+                  smallBox1.style.fontWeight = "12px";
+                  smallBox2.style.fontWeight = "12px";
+
+                  circle.appendChild(smallBox1);
+                  circle.appendChild(smallBox2);
+
+                  if (option.value === "Vertical") {
+                    circle.style.margin = "5px 0";
+                    circle.style.padding = "6px 12px";
+                  }
+
+                  labelHold.appendChild(circle);
+                }
+              }
             }
           })
           .catch((err) => {
