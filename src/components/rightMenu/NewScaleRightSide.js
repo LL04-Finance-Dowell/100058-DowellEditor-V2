@@ -1037,11 +1037,11 @@ const ScaleRightSide = () => {
             setIsLoading(false);
 
             sendMessage();
-            setScaleData(res.data);
-            const success = res.data.success;
-            var successObj = JSON.parse(success);
-            const id = successObj.inserted_id;
-            // console.log(id);
+            setScaleData(res.data.data.scale_id);
+            const id = res.data.data.scale_id;
+            // var successObj = JSON.parse(success);
+            // const id = successObj.inserted_id;
+            console.log("This is the scale id", id);
             if (id.length) {
               setScaleId(id && id);
               const idHolder = scale?.querySelector(".scaleId");
@@ -1399,10 +1399,10 @@ const ScaleRightSide = () => {
           .then((res) => {
             setIsLoading(false);
             sendMessage();
-            setScaleData(res.data);
-            const success = res.data.success;
-            var successObj = JSON.parse(success);
-            const id = successObj.inserted_id;
+            setScaleData(res.data.data.scale_id);
+            const id = res.data.data.scale_id;
+            // var successObj = JSON.parse(success);
+            // const id = successObj.inserted_id;
             // console.log(id);
             if (id.length) {
               setScaleId(id && id);
@@ -1689,7 +1689,7 @@ const ScaleRightSide = () => {
             sendMessage();
             setScaleData(res.data);
             const id = res.data.data.scale_id;
-            console.log(id);
+            console.log("This is the id",id);
             if (id.length) {
               setScaleId(id && id);
               const idHolder = scale?.querySelector(".scaleId");
