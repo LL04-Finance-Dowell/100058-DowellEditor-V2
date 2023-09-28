@@ -4,6 +4,11 @@ import Axios from 'axios';
 
 // Regular JavaScript function to create a text input field
 function createContainerInputField(id, element, p, holderDIV, focuseddClassMaintain, handleClicked, setSidebar, table_dropdown_focuseddClassMaintain, decoded, setPostData, postData, getHolderDIV, getOffset, setStartDate, setMethod, setRightSideDateMenu, title, curr_user) {
+    const documnentsMap = decoded?.details?.document_map;
+    var documnetMap = documnentsMap?.map?.((item) => item.content);
+    const document_map_required = documnentsMap?.filter((item) => item.required);
+
+
     let isAnyRequiredElementEdited = false;
     let containerField = document.createElement("div");
     containerField.className = "containerInput";
@@ -23,6 +28,7 @@ function createContainerInputField(id, element, p, holderDIV, focuseddClassMaint
         handleClicked("container2");
         setSidebar(true);
     };
+
     // console.log("element.data container input retrieve", element.data);
     for (let p = 0; p < element.data.length; p++) {
         const containerElement = element.data[p];
@@ -528,6 +534,113 @@ function createContainerInputField(id, element, p, holderDIV, focuseddClassMaint
             holderDIVContainer.append(buttonFieldContainer);
             holderDIVContainer.append(linkHolder);
             holderDIVContainer.append(purposeHolder);
+        } else if (typeOfOperationContainer == "PAYMENT_INPUT") {
+            const id = `${element.id}`;
+            const finalizeButton = document.getElementById("finalize-button");
+            const rejectButton = document.getElementById("reject-button");
+            let paymentContainerField = document.createElement("button");
+            paymentContainerField.className = "paymentInput";
+            paymentContainerField.id = id;
+            paymentContainerField.style.width = "100%";
+            paymentContainerField.style.height = "100%";
+            paymentContainerField.style.backgroundColor = "#0000";
+            paymentContainerField.style.borderRadius = "0px";
+            paymentContainerField.style.outline = "0px";
+            paymentContainerField.style.overflow = "overlay";
+            paymentContainerField.style.position = "absolute";
+            paymentContainerField.textContent = "Pay";
+
+            if (decoded.details.action === "template") {
+                paymentContainerField.onclick = (e) => {
+                    focuseddClassMaintain(e);
+                    if (e.ctrlKey) {
+                        copyInput("payment2");
+                    }
+                    handleClicked("payment2");
+                    setSidebar(true);
+                };
+            }
+
+            if (decoded.details.action === "document") {
+                paymentContainerField.onclick = (e) => {
+                    focuseddClassMaintain(e);
+                    if (e.ctrlKey) {
+                        copyInput("payment2");
+                    }
+                    handleClicked("payment2");
+                    setSidebar(true);
+                };
+            }
+
+            paymentContainerField.onmouseover = (e) => {
+                // if (paymentContainerField?.parentElement?.classList.contains("holderDIV")) {
+                //   buttopaymentContainerField?.parentElement?.classList.add("element_updated");
+                // }
+
+                const required_map_document = document_map_required?.filter(
+                    (item) => element.id == item.content
+                );
+                if (
+                    paymentContainerField.parentElement.classList.contains("holderDIV") &&
+                    required_map_document?.length > 0
+                ) {
+                    paymentContainerField.parentElement.classList.add("element_updated");
+                }
+                if (element.required) {
+                    isAnyRequiredElementEdited = true;
+                }
+            };
+
+            if (
+                decoded.details.action === "document" &&
+                element.purpose == "custom" &&
+                element.raw_data !== ""
+            ) {
+                paymentContainerField.onclick = (e) => {
+                    window.open(element.raw_data, "_blank");
+                };
+            }
+
+            if (finalizeButton) {
+                if (isAnyRequiredElementEdited) {
+                    finalizeButton?.click();
+                } else {
+                    finalizeButton.disabled = true;
+                }
+            }
+
+            // if (
+            //   decoded.details.action === "document" &&
+            //   element.purpose == "finalize"
+            // ) {
+            //   buttonField.onclick = (e) => {
+            //     finalizeButton?.click();
+            //   };
+            // }
+            if (
+                decoded.details.action === "document" &&
+                element.purpose == "reject"
+            ) {
+                paymentContainerField.onclick = (e) => {
+                    rejectButton?.click();
+                };
+            }
+
+            const linkHolder = document.createElement("div");
+            // linkHolder.className = "link_holder";
+            linkHolder.className = "stripe_key";
+            linkHolder.innerHTML = element.raw_data;
+            linkHolder.style.display = "none";
+
+            const purposeHolder = document.createElement("div");
+            // purposeHolder.className = "purpose_holder";
+            purposeHolder.className = "paypal_id";
+            purposeHolder.innerHTML = element.purpose;
+            purposeHolder.style.display = "none";
+
+            holderDIVContainer.append(paymentContainerField);
+            holderDIVContainer.append(linkHolder);
+            holderDIVContainer.append(purposeHolder);
         }
         if (typeOfOperationContainer !== "CONTAINER_INPUT")
             containerField.append(holderDIVContainer);
@@ -951,6 +1064,39 @@ function createContainerInputField(id, element, p, holderDIV, focuseddClassMaint
 
             // holderDIVContainer.append(dateFieldContainer);
             holderDIVContainer.append(buttonField);
+            holderDIVContainer.append(linkHolder);
+            holderDIVContainer.append(purposeHolder);
+        } else if (typeOfOperationContainer == "PAYMENT_INPUT") {
+            let paymentField = document.createElement("button");
+            paymentField.className = "paymentInput";
+            paymentField.style.width = "100%";
+            paymentField.style.height = "100%";
+            paymentField.style.backgroundColor = "#0000";
+            paymentField.style.borderRadius = "0px";
+            paymentField.style.outline = "0px";
+            paymentField.style.overflow = "overlay";
+            paymentField.style.position = "absolute";
+            paymentField.textContent = "Pay";
+
+            paymentField.onclick = (e) => {
+                e.stopPropagation();
+                focuseddClassMaintain(e);
+                if (e.ctrlKey) {
+                    copyInput("payment2");
+                }
+                handleClicked("payment2");
+                setSidebar(true);
+            };
+
+            const linkHolder = document.createElement("div");
+            linkHolder.className = "stripe_key";
+            linkHolder.style.display = "none";
+
+            const purposeHolder = document.createElement("div");
+            purposeHolder.className = "paypal_id";
+            purposeHolder.style.display = "none";
+
+            holderDIVContainer.append(paymentField);
             holderDIVContainer.append(linkHolder);
             holderDIVContainer.append(purposeHolder);
         }

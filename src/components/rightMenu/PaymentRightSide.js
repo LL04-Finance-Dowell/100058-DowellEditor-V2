@@ -240,26 +240,30 @@ const PaymentRightSide = () => {
                 // }, 2000); // Wait for 2 seconds
                 // return () => clearTimeout(timeout);
 
+                console.log("QR code Response", resQR)
 
-                const resVerify = await axios.post("https://100088.pythonanywhere.com/api/workflow/verify/payment/stripe", {
-                    stripe_key: link,
-                    id: res.data.payment_id
-                });
-
-                if(resVerify.data.status == "succeeded"){
-                    setTimeout(function() {
-                        window.location.href = "/thanks";
-                    }, 2000);
-                } else {
-                    console.log("Your Stripe Payment Not verified");
-                    toast.error("Your Payment Not Successfull!");
-                }
 
             } catch (error) {
                 console.log(error)
                 setQrLoader(false)
                 toast.error(error.response.data.message);
             }
+        }
+        
+
+        
+        const resVerify = await axios.post("https://100088.pythonanywhere.com/api/workflow/verify/payment/stripe", {
+            stripe_key: link,
+            id: qrCode.data.payment_id
+        });
+
+        if(resVerify.data.status == "succeeded"){
+            setTimeout(function() {
+                window.location.href = "/thanks";
+            }, 2000);
+        } else {
+            console.log("Your Stripe Payment Not verified");
+            toast.error("Your Payment Not Successfull!");
         }
     }
 
@@ -379,11 +383,11 @@ const PaymentRightSide = () => {
 
 
                             />
-                            <Link to={"/thanks"}>
+                            {/* <Link to={"/thanks"}>
                                 <button type="button" className="btn btn-primary">
                                     Thank You
                                 </button>
-                            </Link>
+                            </Link> */}
                         </div> : <div>
                             <select
                                 onChange={handleSelectPayment}

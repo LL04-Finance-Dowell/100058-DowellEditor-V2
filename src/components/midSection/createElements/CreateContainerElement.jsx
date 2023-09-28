@@ -485,9 +485,9 @@ function createContainerInputElement(holderDIV, focuseddClassMaintain, handleCli
     purposeHolder.className = "paypal_id";
     purposeHolder.style.display = "none";
 
-    holderDIV.append(paymentField);
-    holderDIV.append(linkHolder);
-    holderDIV.append(purposeHolder);
+    holderDIVContainer.append(paymentField);
+    holderDIVContainer.append(linkHolder);
+    holderDIVContainer.append(purposeHolder);
       }
       if (typeOfOperationContainer !== "CONTAINER_INPUT")
         containerField.append(holderDIVContainer);
