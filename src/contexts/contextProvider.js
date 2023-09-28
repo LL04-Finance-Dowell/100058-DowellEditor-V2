@@ -94,6 +94,8 @@ export const ContextProvider = ({ children }) => {
   const [sidebar, setSidebar] = useState(false);
   const [rightSideDatemenu, setRightSideDateMenu] = useState(false);
   const [rightSideDropDown, setRightSideDropDown] = useState(false);
+  const [savedSripeKey, setSavedSripeKey] = useState(null);
+  const [savedPaypalKey, setSavedPaypalKey] = useState(null);
   // handling date format
   const [method, setMethod] = useState("first");
   // handling page delete
@@ -664,6 +666,10 @@ export const ContextProvider = ({ children }) => {
         setPaymentKey,
         paypalId, 
         setPaypalId,
+        savedSripeKey, 
+        setSavedSripeKey,
+        savedPaypalKey, 
+        setSavedPaypalKey,
       }}
     >
       {children}

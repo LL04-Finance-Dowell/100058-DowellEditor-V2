@@ -18,9 +18,7 @@ root.render(
           <Router basename={window.location.pathname || ""}>
             <Routes>
               <Route path="/" element={<App />} />
-            </Routes>
-            <Routes>
-              <Route path="/thanks" element={<ThankYouPage />} />
+              <Route path="/status" element={<ThankYouPage />} />
             </Routes>
           </Router>
         </React.StrictMode>

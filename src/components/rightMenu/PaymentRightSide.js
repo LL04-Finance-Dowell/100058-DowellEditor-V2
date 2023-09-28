@@ -11,7 +11,8 @@ import PaymentPopup from "../../utils/redirectPages/PaymentPopup";
 
 const PaymentRightSide = () => {
     const { buttonLink, setButtonLink, buttonPurpose, setButtonPurpose, buttonBorderSize, setButtonBorderSize, buttonBorderColor, setButtonBorderColor, setConfirmRemove, confirmRemove, setIsLoading, isLoading, paymentKey, setPaymentKey, data, pageNum, paypalId,
-        setPaypalId, } =
+        setPaypalId, savedSripeKey, 
+        setSavedSripeKey, savedPaypalKey, setSavedPaypalKey,} =
         useStateContext();
     const [selectedType, setSelectedType] = useState('')
     const [addedAns, setAddedAns] = useState([])
@@ -60,10 +61,12 @@ const PaymentRightSide = () => {
         const purpose = document.getElementById("link2").value;
         if (link.value != "") {
             setPaymentKey(link);
+            setSavedSripeKey(link);
             holderDIV.children[1].innerHTML = link;
         }
         if (purpose.value != "") {
             setPaypalId(purpose);
+            setSavedPaypalKey(purpose);
             holderDIV.children[2].innerHTML = purpose;
         }
 
@@ -125,8 +128,8 @@ const PaymentRightSide = () => {
     };
 
 
+    const Base_URL = window.location.origin + "/" + "100058-DowellEditor-V2"
 
-    const [stripeVerify, setStripeVerify] = useState();
 
     const handleStripePayment = async (e) => {
         // e.preventDefault();
@@ -137,7 +140,7 @@ const PaymentRightSide = () => {
             price: +price,
             product: productName,
             currency_code: currencyCode,
-            callback_url: "https://www.google.com/",
+            callback_url: Base_URL + "/thanks",
         }
         console.log("stripe data", stripeData);
         const form = e.currentTarget;
@@ -175,9 +178,9 @@ const PaymentRightSide = () => {
                     id: res.data.payment_id
                 });
 
-                if(resVerify.data.status == "succeeded"){
-                    setTimeout(function() {
-                        window.location.href = "/thanks";
+                if (resVerify.data.status == "succeeded") {
+                    setTimeout(function () {
+                        window.location.href = res.callbackUrl;
                     }, 2000);
                 } else {
                     console.log("Your Stripe Payment Not verified");
@@ -185,7 +188,7 @@ const PaymentRightSide = () => {
 
                 console.log("verify payment", resVerify.data);
 
-                
+
 
 
 
@@ -208,7 +211,7 @@ const PaymentRightSide = () => {
             price: +price,
             product: productName,
             currency_code: currencyCode,
-            callback_url: "https://www.google.com/",
+            callback_url: Base_URL+"/thanks",
         }
         console.log("stripe data", stripeData);
         const form = e.currentTarget;
@@ -242,6 +245,21 @@ const PaymentRightSide = () => {
 
                 console.log("QR code Response", resQR)
 
+                
+        const resVerify = await axios.post("https://100088.pythonanywhere.com/api/workflow/verify/payment/stripe", {
+            stripe_key: link,
+            id: resQR.data.payment_id
+        });
+
+        if (resVerify.data.status == "succeeded") {
+            setTimeout(function () {
+                window.location.href = Base_URL+"/thanks";  
+            }, 2000);
+        } else if(resVerify.data.status == "failed") {
+            console.log("Your Stripe Payment Not verified");
+            toast.error("Your Payment Not Successfull!");
+        }
+
 
             } catch (error) {
                 console.log(error)
@@ -249,29 +267,14 @@ const PaymentRightSide = () => {
                 toast.error(error.response.data.message);
             }
         }
-        
 
-        
-        const resVerify = await axios.post("https://100088.pythonanywhere.com/api/workflow/verify/payment/stripe", {
-            stripe_key: link,
-            id: qrCode.data.payment_id
-        });
 
-        if(resVerify.data.status == "succeeded"){
-            setTimeout(function() {
-                window.location.href = "/thanks";
-            }, 2000);
-        } else {
-            console.log("Your Stripe Payment Not verified");
-            toast.error("Your Payment Not Successfull!");
-        }
+
     }
 
     //paypal payment
 
     const handlePaypalPayment = async (e) => {
-
-        console.log("Paypal buttonb cliking..")
         e.preventDefault();
         const paypalData = {
             // paypal_client_id: "AVJXJddOEG7WGrLkTzg4_9ODsDNhIHrqT4ZL6gwXRz1ftQELliYtticZH-kLjoYaTZfNn_8y5onH_YP3",
@@ -281,7 +284,7 @@ const PaymentRightSide = () => {
             price: +price,
             product: productName,
             currency_code: currencyCode,
-            callback_url: "https://www.google.com/"
+            callback_url: Base_URL+"/thanks",
         }
         console.log("paypal data", paypalData);
         setLoader(true)
@@ -316,7 +319,7 @@ const PaymentRightSide = () => {
             price: +price,
             product: productName,
             currency_code: currencyCode,
-            callback_url: "https://www.google.com/"
+            callback_url: Base_URL+"/thanks",
         }
         console.log("paypal data", paypalData);
         setQrLoader(true)
@@ -343,16 +346,6 @@ const PaymentRightSide = () => {
         <>
             <div className="mt-2 mb-3 w-100">
                 <h3>Payment Settings</h3>
-                {/* <select
-                    onChange={handleSelectPayment}
-                    id="selectt"
-                    // onChange={handleDateMethod}
-
-                    className="select border-0 bg-white rounded w-100 h-75 p-2"
-                >
-                    <option value="stripe">Stripe</option>
-                    <option value="paypal">Paypal</option>
-                </select> */}
                 <br />
 
                 {
@@ -509,6 +502,11 @@ const PaymentRightSide = () => {
                                             <option value="aoa">AOA</option>
                                         </select>
                                         <br />
+                                        <Link to={"/thanks"}>
+                                <button type="button" className="btn btn-primary">
+                                    Thank You
+                                </button>
+                            </Link>
                                         {/* <Form.Label>Callback URL</Form.Label>
                                         <Form.Control
                                             required
