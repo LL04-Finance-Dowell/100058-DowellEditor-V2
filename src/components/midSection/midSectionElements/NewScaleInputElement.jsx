@@ -51,7 +51,7 @@ function createNewScaleInputField(
   const otherComponent = document.createElement("h6");
   otherComponent.className = "otherComponent";
   otherComponent.style.display = "none";
-  otherComponent.textContent = element?.raw_data?.otherComponent
+  otherComponent.textContent = element?.raw_data?.otherComponent;
   scaleHold.appendChild(otherComponent);
 
   const scaleTypeHolder = document.createElement("h6");
@@ -660,7 +660,7 @@ function createNewScaleInputField(
     likertScaleArray.className = "likert_Scale_Array";
     likertScaleArray.textContent = element?.raw_data?.likertScaleArray || "";
     likertScaleArray.style.display = "none";
-    
+
     scaleHold.append(likertScaleArray);
     const likertScale = likertScaleArray.textContent.split(",");
     const numRows = Math.ceil(likertScale / 3);
@@ -1053,21 +1053,24 @@ function createNewScaleInputField(
         scaleHold.style.flexDirection = "column";
         scaleHold.style.alignItems = "center";
         scaleHold.style.justifyContent = "center";
+        containerDiv.style.padding =
+        nameDiv.textContent.length < 9
+          ? "24px 39px 10px 14px"
+          : "24px 39px 37px 14px";
         containerDiv.style.width = "90%";
         containerDiv.style.position = "relative";
-        labelHold.style.width = "80%";
-        labelHold.style.height = "69%";
+        labelHold.style.width = "100%";
+        labelHold.style.height = "96%";
         labelHold.style.alignItems = "center";
         labelHold.style.transform = "rotate(270deg)";
         nameDiv.style.position = "absolute";
-        nameDiv.style.top = "7px";
+        nameDiv.style.top = nameDiv.textContent.length < 9 ? "23px" : "39px";
         nameDiv.style.right = "-2px";
-        nameDiv.style.left = "85%";
+        nameDiv.style.left = "70%";
+        nameDiv.style.width = "50%";
         nameDiv.style.transform = "rotate(90deg)";
-        nameDiv.style.paddingLeft = "6px";
         nameDiv.style.paddingBottom = prodLength > 6 ? "30px" : "0px";
         inputPercent.style.width = "100%";
-        inputPercent.style.marginTop = "8px";
       }
 
       if (decoded.details.action === "document") {
@@ -1101,12 +1104,12 @@ function createNewScaleInputField(
         }
       }
     }
-  } else if (scaleTypeHolder.textContent === "paired") {
+  } else if (scaleTypeHolder.textContent === "comparison_paired_scale") {
     const pairedScaleArray = document.createElement("div");
     pairedScaleArray.className = "paired_Scale_Array";
     pairedScaleArray.textContent = element?.raw_data?.pairedScaleArray || "";
     pairedScaleArray.style.display = "none";
-    
+
     scaleHold.append(pairedScaleArray);
     const pairedScale = pairedScaleArray.textContent.split(",");
     console.log("This is the d++++!!!!!!!!!", pairedScale);
@@ -1600,7 +1603,7 @@ function createNewScaleInputField(
 
   document
     .getElementsByClassName("midSection_container")
-  [p - 1] // ?.item(0)
+    [p - 1] // ?.item(0)
     ?.append(holderDIV);
 }
 export default createNewScaleInputField;
