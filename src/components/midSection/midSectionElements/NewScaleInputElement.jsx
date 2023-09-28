@@ -1053,21 +1053,24 @@ function createNewScaleInputField(
         scaleHold.style.flexDirection = "column";
         scaleHold.style.alignItems = "center";
         scaleHold.style.justifyContent = "center";
+        containerDiv.style.padding =
+        nameDiv.textContent.length < 9
+          ? "24px 39px 10px 14px"
+          : "24px 39px 37px 14px";
         containerDiv.style.width = "90%";
         containerDiv.style.position = "relative";
-        labelHold.style.width = "80%";
-        labelHold.style.height = "69%";
+        labelHold.style.width = "100%";
+        labelHold.style.height = "96%";
         labelHold.style.alignItems = "center";
         labelHold.style.transform = "rotate(270deg)";
         nameDiv.style.position = "absolute";
-        nameDiv.style.top = "7px";
+        nameDiv.style.top = nameDiv.textContent.length < 9 ? "23px" : "39px";
         nameDiv.style.right = "-2px";
-        nameDiv.style.left = "85%";
+        nameDiv.style.left = "70%";
+        nameDiv.style.width = "50%";
         nameDiv.style.transform = "rotate(90deg)";
-        nameDiv.style.paddingLeft = "6px";
         nameDiv.style.paddingBottom = prodLength > 6 ? "30px" : "0px";
         inputPercent.style.width = "100%";
-        inputPercent.style.marginTop = "8px";
       }
 
       if (decoded.details.action === "document") {

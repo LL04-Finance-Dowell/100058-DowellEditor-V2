@@ -2764,11 +2764,23 @@ const ScaleRightSide = () => {
                 containerDiv.style.width = "100%";
                 inputPercent.style.marginTop = "20px";
                 nameDiv.style.position = "absolute";
-                nameDiv.style.left = "93%";
-                nameDiv.style.top = "7px";
-                nameDiv.style.right = "-8px";
+                if ( nameDiv.textContent.length < 10) {
+                  nameDiv.style.top = "20px"
+                  nameDiv.style.left = "93%";
+                  nameDiv.style.right = "-17px";
+                } else {
+                  // nameDiv.style.left = "98%";
+                  // nameDiv.style.top = "-6px";
+                  // nameDiv.style.right = "-20px";
+                  nameDiv.style.left = "103%";
+                  nameDiv.style.top = "-15px";
+                  nameDiv.style.right = "-20px";
+                }
+              newLabelHold.style.padding =
+                nameDiv.textContent.length < 9
+                  ? "0px 20px 10px 14px"
+                  : "0px 17px 37px 14px";
                 nameDiv.style.transform = "rotate(90deg)";
-                nameDiv.style.paddingLeft = "8px";
                 newLabelHold.style.position = "relative";
                 newLabelHold.style.width = "85%";
                 percentChilds.style.alignItems = "start";
@@ -2937,11 +2949,20 @@ const ScaleRightSide = () => {
                   containerDiv.style.width = "100%";
                   inputPercent.style.marginTop = "20px";
                   nameDiv.style.position = "absolute";
+                  if ( nameDiv.textContent.length < 10) {
+                  nameDiv.style.top = "20px"
                   nameDiv.style.left = "93%";
-                  nameDiv.style.top = "7px";
-                  nameDiv.style.right = "-8px";
+                  nameDiv.style.right = "-17px";
+                } else {
+                  nameDiv.style.left = "103%";
+                  nameDiv.style.top = "-15px";
+                  nameDiv.style.right = "-20px";
+                }
+                newLabelHold.style.padding =
+                  nameDiv.textContent.length < 9
+                    ? "0px 20px 10px 14px"
+                    : "0px 17px 37px 14px";
                   nameDiv.style.transform = "rotate(90deg)";
-                  nameDiv.style.paddingLeft = "8px";
                   newLabelHold.style.position = "relative";
                   newLabelHold.style.width = "85%";
                   percentChilds.style.alignItems = "start";
