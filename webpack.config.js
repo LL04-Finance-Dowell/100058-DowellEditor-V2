@@ -1,7 +1,7 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
-module.exports = {
+module.exports = { 
   //This property defines where the application starts
   entry: "./src/index.js",
 
@@ -13,8 +13,10 @@ module.exports = {
   },
   devServer: {
     port: 3000,
+    historyApiFallback: {
+      index: 'index.html'
+    }
   },
-
   //Setup loaders
   module: {
     rules: [

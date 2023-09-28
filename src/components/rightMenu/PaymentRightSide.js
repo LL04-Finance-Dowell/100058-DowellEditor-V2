@@ -11,8 +11,8 @@ import PaymentPopup from "../../utils/redirectPages/PaymentPopup";
 
 const PaymentRightSide = () => {
     const { buttonLink, setButtonLink, buttonPurpose, setButtonPurpose, buttonBorderSize, setButtonBorderSize, buttonBorderColor, setButtonBorderColor, setConfirmRemove, confirmRemove, setIsLoading, isLoading, paymentKey, setPaymentKey, data, pageNum, paypalId,
-        setPaypalId, savedSripeKey, 
-        setSavedSripeKey, savedPaypalKey, setSavedPaypalKey,} =
+        setPaypalId, savedSripeKey,
+        setSavedSripeKey, savedPaypalKey, setSavedPaypalKey, } =
         useStateContext();
     const [selectedType, setSelectedType] = useState('')
     const [addedAns, setAddedAns] = useState([])
@@ -32,8 +32,7 @@ const PaymentRightSide = () => {
     const [qrCode, setQrCode] = useState();
     const [paypalQrCode, setPaypalQrCode] = useState();
 
-
-
+  
 
 
     // const [stripeKey, setStripeKey] = useState("");
@@ -61,18 +60,28 @@ const PaymentRightSide = () => {
         const purpose = document.getElementById("link2").value;
         if (link.value != "") {
             setPaymentKey(link);
-            setSavedSripeKey(link);
+            setSavedSripeKey(prev => {
+                return {
+                    ...prev,
+                    ['key']: link
+                }
+            });
             holderDIV.children[1].innerHTML = link;
         }
         if (purpose.value != "") {
-            setPaypalId(purpose);
+            setPaypalId(prev => {
+                return {
+                    ...prev,
+                    ['key']: purpose
+                }
+            });
+
             setSavedPaypalKey(purpose);
             holderDIV.children[2].innerHTML = purpose;
         }
 
 
     };
-
 
     const handleSelect = (event) => {
         let selectField = document.getElementById("selectt");
@@ -140,7 +149,7 @@ const PaymentRightSide = () => {
             price: +price,
             product: productName,
             currency_code: currencyCode,
-            callback_url: Base_URL + "/thanks",
+            callback_url: Base_URL + "/status",
         }
         console.log("stripe data", stripeData);
         const form = e.currentTarget;
@@ -161,6 +170,12 @@ const PaymentRightSide = () => {
                 const res = await axios.post("https://100088.pythonanywhere.com/api/workflow/stripe/initialize", stripeData);
                 // const resQR = await axios.post("https://100088.pythonanywhere.com/api/workflow/stripe/initialize/qrcode", stripeData);
                 setStripePaymentData(res.data);
+                setSavedSripeKey(prev => {
+                    return {
+                        ...prev,
+                        ['payment_id']: res.data.payment_id
+                    }
+                })
                 console.log("payment response", res.data);
                 // setQrCode(resQR.data);
                 // console.log("QR code response", resQR.data);
@@ -211,7 +226,7 @@ const PaymentRightSide = () => {
             price: +price,
             product: productName,
             currency_code: currencyCode,
-            callback_url: Base_URL+"/thanks",
+            callback_url: Base_URL + "/status",
         }
         console.log("stripe data", stripeData);
         const form = e.currentTarget;
@@ -245,20 +260,20 @@ const PaymentRightSide = () => {
 
                 console.log("QR code Response", resQR)
 
-                
-        const resVerify = await axios.post("https://100088.pythonanywhere.com/api/workflow/verify/payment/stripe", {
-            stripe_key: link,
-            id: resQR.data.payment_id
-        });
 
-        if (resVerify.data.status == "succeeded") {
-            setTimeout(function () {
-                window.location.href = Base_URL+"/thanks";  
-            }, 2000);
-        } else if(resVerify.data.status == "failed") {
-            console.log("Your Stripe Payment Not verified");
-            toast.error("Your Payment Not Successfull!");
-        }
+                const resVerify = await axios.post("https://100088.pythonanywhere.com/api/workflow/verify/payment/stripe", {
+                    stripe_key: link,
+                    id: resQR.data.payment_id
+                });
+
+                if (resVerify.data.status == "succeeded") {
+                    setTimeout(function () {
+                        window.location.href = Base_URL + "/status";
+                    }, 2000);
+                } else if (resVerify.data.status == "failed") {
+                    console.log("Your Stripe Payment Not verified");
+                    toast.error("Your Payment Not Successfull!");
+                }
 
 
             } catch (error) {
@@ -284,7 +299,7 @@ const PaymentRightSide = () => {
             price: +price,
             product: productName,
             currency_code: currencyCode,
-            callback_url: Base_URL+"/thanks",
+            callback_url: Base_URL + "/status",
         }
         console.log("paypal data", paypalData);
         setLoader(true)
@@ -295,6 +310,13 @@ const PaymentRightSide = () => {
             setPaypalPaymentData(res.data);
             setLoader(false)
             console.log("paypal data", res.data)
+            setPaypalId(prev => {
+                return {
+                    ...prev,
+                    ['payment_id']: res.data.payment_id
+                }
+            })
+
             const timeout = setTimeout(() => {
                 window.open(res.data.approval_url, '_self');
                 // openPopup(res.data.approval_url);
@@ -319,7 +341,7 @@ const PaymentRightSide = () => {
             price: +price,
             product: productName,
             currency_code: currencyCode,
-            callback_url: Base_URL+"/thanks",
+            callback_url: Base_URL + "/status",
         }
         console.log("paypal data", paypalData);
         setQrLoader(true)
@@ -376,7 +398,7 @@ const PaymentRightSide = () => {
 
 
                             />
-                            {/* <Link to={"/thanks"}>
+                            {/* <Link to={"/status"}>
                                 <button type="button" className="btn btn-primary">
                                     Thank You
                                 </button>
@@ -444,7 +466,7 @@ const PaymentRightSide = () => {
                                             onChange={(e) => setCallbackUrl(e.target.value)}
                                         /> */}
                                         <br />
-                                        <Link to={"/thanks"}>
+                                        <Link to={"/status"}>
                                             <button type="button" className="btn btn-primary" onClick={handlePaypalPayment}>
                                                 {
                                                     loader ? "Wait...." : "Submit Info"
@@ -502,11 +524,11 @@ const PaymentRightSide = () => {
                                             <option value="aoa">AOA</option>
                                         </select>
                                         <br />
-                                        <Link to={"/thanks"}>
-                                <button type="button" className="btn btn-primary">
-                                    Thank You
-                                </button>
-                            </Link>
+                                        <Link to={"/status"}>
+                                            <button type="button" className="btn btn-primary">
+                                                Thank You
+                                            </button>
+                                        </Link>
                                         {/* <Form.Label>Callback URL</Form.Label>
                                         <Form.Control
                                             required

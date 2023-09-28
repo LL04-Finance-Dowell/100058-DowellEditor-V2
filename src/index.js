@@ -16,10 +16,7 @@ root.render(
       <DraggableProvider>
         <React.StrictMode>
           <Router basename={window.location.pathname || ""}>
-            <Routes>
-              <Route path="/" element={<App />} />
-              <Route path="/status" element={<ThankYouPage />} />
-            </Routes>
+            <App/>
           </Router>
         </React.StrictMode>
       </DraggableProvider>
