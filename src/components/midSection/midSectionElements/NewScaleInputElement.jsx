@@ -273,7 +273,16 @@ function createNewScaleInputField(
               holdElem.textContent = i;
               holding?.appendChild(holdElem);
               console.log("This is holdEle", holdElem.textContent);
-              if (scaleField?.parentElement?.classList.contains("holderDIV")) {
+              // if (scaleField?.parentElement?.classList.contains("holderDIV")) {
+              //   scaleField?.parentElement?.classList.add("element_updated");
+              // }
+              const required_map_document = document_map_required?.filter(
+                (item) => element?.id == item?.content
+              );
+              if (
+                scaleField?.parentElement?.classList.contains("holderDIV") &&
+                required_map_document?.length > 0
+              ) {
                 scaleField?.parentElement?.classList.add("element_updated");
               }
             }
@@ -445,18 +454,21 @@ function createNewScaleInputField(
               holdElem.textContent = stapelScale[i];
               holding?.appendChild(holdElem);
               console.log("This is holdEle", holdElem.textContent);
-              // const required_map_document = document_map_required?.filter(
-              //   (item) => element?.id == item?.content
-              // );
-              // if (
-              //   scaleField?.parentElement?.classList.contains("holderDIV") &&
-              //   required_map_document.length > 0
-              // ) {
-              //   scaleField?.parentElement?.classList.add("element_updated");
-              // }
-              if (scaleField?.parentElement?.classList.contains("holderDIV")) {
+              const required_map_document = document_map_required?.filter(
+                (item) => element?.id == item?.content
+              );
+              if (
+                scaleField?.parentElement?.classList.contains("holderDIV") &&
+                required_map_document?.length > 0
+              ) {
                 scaleField?.parentElement?.classList.add("element_updated");
               }
+              if (element.required) {
+                isAnyRequiredElementEdited = true;
+              }
+              // if (scaleField?.parentElement?.classList.contains("holderDIV")) {
+              //   scaleField?.parentElement?.classList.add("element_updated");
+              // }
             }
             const scaleID = scale?.querySelector(".scaleId")?.textContent;
             setClickedCircleBackgroundColor(
@@ -635,9 +647,21 @@ function createNewScaleInputField(
               holdElem.textContent = npsLiteText[i] === "" ? i : npsLiteText[i];
               holding?.appendChild(holdElem);
               console.log("This is holdEle", holdElem.textContent);
-              if (scaleField?.parentElement?.classList.contains("holderDIV")) {
+              const required_map_document = document_map_required?.filter(
+                (item) => element?.id == item?.content
+              );
+              if (
+                scaleField?.parentElement?.classList.contains("holderDIV") &&
+                required_map_document?.length > 0
+              ) {
                 scaleField?.parentElement?.classList.add("element_updated");
               }
+              if (element.required) {
+                isAnyRequiredElementEdited = true;
+              }
+              // if (scaleField?.parentElement?.classList.contains("holderDIV")) {
+              //   scaleField?.parentElement?.classList.add("element_updated");
+              // }
             }
 
             const scaleID = scale?.querySelector(".scaleId")?.textContent;
