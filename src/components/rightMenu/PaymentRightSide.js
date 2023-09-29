@@ -53,7 +53,13 @@ const PaymentRightSide = () => {
     const link = holderDIV?.children[1]?.innerHTML;
 
 
+    // useEffect(() => {
+    //     localStorage.removeItem("stripeKey");
+    //     localStorage.removeItem("stripePaymentId");
+    // }, [])
 
+    const MainURL = window.location.href;
+    localStorage.setItem("MainURL", MainURL);
     const handleUpdate = () => {
 
         const link = document.getElementById("link").value;
@@ -66,22 +72,56 @@ const PaymentRightSide = () => {
                     ['key']: link
                 }
             });
+           
             holderDIV.children[1].innerHTML = link;
         }
         if (purpose.value != "") {
-            setPaypalId(prev => {
+            setPaypalId(purpose);
+
+            setSavedPaypalKey(prev => {
                 return {
                     ...prev,
                     ['key']: purpose
                 }
             });
-
-            setSavedPaypalKey(purpose);
             holderDIV.children[2].innerHTML = purpose;
         }
 
 
     };
+    // if(decoded.details.action === "document"){
+        // handleUpdate();
+        // const Stripelink = document.querySelector(".stripe_key").innerHTML;
+        // const Paypalpurpose = document.querySelector(".paypal_id").innerHTML;
+        // if (Stripelink != "") {
+        //     // setPaymentKey(link);
+        //     setSavedSripeKey(prev => {
+        //         console.log("Stripe link......")
+        //         return {
+        //             ...prev,
+        //             ['key']: Stripelink
+        //         }
+        //     });
+           
+        //     // holderDIV.children[1].innerHTML = Stripelink;
+        // }
+        // if (Paypalpurpose!= "") {
+        //     // setPaypalId(purpose);
+
+        //     setSavedPaypalKey(prev => {
+        //         return {
+        //             ...prev,
+        //             ['key']: Paypalpurpose
+        //         }
+        //     });
+        //     // holderDIV.children[2].innerHTML = Paypalpurpose;
+        // }
+
+    // }
+
+   
+
+
 
     const handleSelect = (event) => {
         let selectField = document.getElementById("selectt");
@@ -141,6 +181,8 @@ const PaymentRightSide = () => {
 
 
     const handleStripePayment = async (e) => {
+        localStorage.removeItem("stripeKey");
+        localStorage.removeItem("stripePaymentId");
         // e.preventDefault();
         const stripeData = {
             // stripe_key: "sk_test_51LiKUnEJkGNthfbzNbTn7Up7EnVwyeqRWLcRX1UWyq7ABL7wn1VMmHsS4Aox3U9b2nh3HkHd32vsQRR7nItC8ybv00WChhFen4",
@@ -188,20 +230,53 @@ const PaymentRightSide = () => {
                 }, 2000); // Wait for 2 seconds
 
 
-                const resVerify = await axios.post("https://100088.pythonanywhere.com/api/workflow/verify/payment/stripe", {
-                    stripe_key: link,
-                    id: res.data.payment_id
-                });
-
-                if (resVerify.data.status == "succeeded") {
-                    setTimeout(function () {
-                        window.location.href = res.callbackUrl;
-                    }, 2000);
-                } else {
-                    console.log("Your Stripe Payment Not verified");
+                localStorage.setItem("stripePaymentId", res.data.payment_id);
+                localStorage.setItem("stripeKey", link);
+                const Stripelink = document.querySelector(".stripe_key").innerHTML;
+                const Paypalpurpose = document.querySelector(".paypal_id").innerHTML;
+                if (Stripelink != "") {
+                    // setPaymentKey(link);
+                    setSavedSripeKey(prev => {
+                        console.log("Stripe link......")
+                        return {
+                            ...prev,
+                            ['key']: Stripelink
+                        }
+                    });
+                   
+                    // holderDIV.children[1].innerHTML = Stripelink;
+                }
+                if (Paypalpurpose!= "") {
+                    // setPaypalId(purpose);
+        
+                    setSavedPaypalKey(prev => {
+                        return {
+                            ...prev,
+                            ['key']: Paypalpurpose
+                        }
+                    });
+                    // holderDIV.children[2].innerHTML = Paypalpurpose;
                 }
 
-                console.log("verify payment", resVerify.data);
+
+
+
+
+
+                // const resVerify = await axios.post("https://100088.pythonanywhere.com/api/workflow/verify/payment/stripe", {
+                //     stripe_key: link,
+                //     id: res.data.payment_id
+                // });
+
+                // if (resVerify.data.status == "succeeded") {
+                //     setTimeout(function () {
+                //         window.location.href = res.callbackUrl;
+                //     }, 2000);
+                // } else {
+                //     console.log("Your Stripe Payment Not verified");
+                // }
+
+                // console.log("verify payment", resVerify.data);
 
 
 
@@ -260,20 +335,47 @@ const PaymentRightSide = () => {
 
                 console.log("QR code Response", resQR)
 
-
-                const resVerify = await axios.post("https://100088.pythonanywhere.com/api/workflow/verify/payment/stripe", {
-                    stripe_key: link,
-                    id: resQR.data.payment_id
-                });
-
-                if (resVerify.data.status == "succeeded") {
-                    setTimeout(function () {
-                        window.location.href = Base_URL + "/status";
-                    }, 2000);
-                } else if (resVerify.data.status == "failed") {
-                    console.log("Your Stripe Payment Not verified");
-                    toast.error("Your Payment Not Successfull!");
+                
+                const Stripelink = document.querySelector(".stripe_key").innerHTML;
+                const Paypalpurpose = document.querySelector(".paypal_id").innerHTML;
+                if (Stripelink != "") {
+                    // setPaymentKey(link);
+                    setSavedSripeKey(prev => {
+                        console.log("Stripe link......")
+                        return {
+                            ...prev,
+                            ['key']: Stripelink
+                        }
+                    });
+                   
+                    // holderDIV.children[1].innerHTML = Stripelink;
                 }
+                if (Paypalpurpose!= "") {
+                    // setPaypalId(purpose);
+        
+                    setSavedPaypalKey(prev => {
+                        return {
+                            ...prev,
+                            ['key']: Paypalpurpose
+                        }
+                    });
+                    // holderDIV.children[2].innerHTML = Paypalpurpose;
+                }
+
+
+                // const resVerify = await axios.post("https://100088.pythonanywhere.com/api/workflow/verify/payment/stripe", {
+                //     stripe_key: link,
+                //     id: resQR.data.payment_id
+                // });
+
+                // if (resVerify.data.status == "succeeded") {
+                //     setTimeout(function () {
+                //         window.location.href = Base_URL + "/status";
+                //     }, 2000);
+                // } else if (resVerify.data.status == "failed") {
+                //     console.log("Your Stripe Payment Not verified");
+                //     toast.error("Your Payment Not Successfull!");
+                // }
 
 
             } catch (error) {
@@ -318,10 +420,46 @@ const PaymentRightSide = () => {
             })
 
             const timeout = setTimeout(() => {
-                window.open(res.data.approval_url, '_self');
+                window.open(res.data.approval_url, '_blank');
                 // openPopup(res.data.approval_url);
             }, 2000); // Wait for 2 seconds
             toast.success("Successfully Submitted!");
+
+
+            // localStorage.setItem("stripePaymentId", res.data.payment_id);
+            // localStorage.setItem("paypalClientId", purpose);
+
+
+            const Stripelink = document.querySelector(".stripe_key").innerHTML;
+            const Paypalpurpose = document.querySelector(".paypal_id").innerHTML;
+            if (Stripelink != "") {
+                // setPaymentKey(link);
+                setSavedSripeKey(prev => {
+                    console.log("Stripe link......")
+                    return {
+                        ...prev,
+                        ['key']: Stripelink
+                    }
+                });
+               
+                // holderDIV.children[1].innerHTML = Stripelink;
+            }
+            if (Paypalpurpose!= "") {
+                // setPaypalId(purpose);
+    
+                setSavedPaypalKey(prev => {
+                    return {
+                        ...prev,
+                        ['key']: Paypalpurpose
+                    }
+                });
+                // holderDIV.children[2].innerHTML = Paypalpurpose;
+            }
+
+
+
+
+
             return () => clearTimeout(timeout);
         } catch (error) {
             console.log(error)
@@ -466,13 +604,19 @@ const PaymentRightSide = () => {
                                             onChange={(e) => setCallbackUrl(e.target.value)}
                                         /> */}
                                         <br />
+
                                         <Link to={"/status"}>
+                                            <button type="button" className="btn btn-primary">
+                                                Thank You
+                                            </button>
+                                        </Link>
+                                        {/* <Link to={"/status"}> */}
                                             <button type="button" className="btn btn-primary" onClick={handlePaypalPayment}>
                                                 {
                                                     loader ? "Wait...." : "Submit Info"
                                                 }
                                             </button>
-                                        </Link>
+                                        {/* </Link> */}
 
                                         <button type="button" className="btn btn-primary m-3" onClick={handlePaypalQRPayment}>
                                             {
@@ -524,7 +668,7 @@ const PaymentRightSide = () => {
                                             <option value="aoa">AOA</option>
                                         </select>
                                         <br />
-                                        <Link to={"/status"}>
+                                        <Link to={"/100058-DowellEditor-V2/status"}>
                                             <button type="button" className="btn btn-primary">
                                                 Thank You
                                             </button>

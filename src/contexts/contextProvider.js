@@ -96,11 +96,11 @@ export const ContextProvider = ({ children }) => {
   const [rightSideDropDown, setRightSideDropDown] = useState(false);
   const [savedSripeKey, setSavedSripeKey] = useState({
     payment_id:null,
-    key:''
+    key:null
   });
   const [savedPaypalKey, setSavedPaypalKey] = useState({
     payment_id:null,
-    key:''
+    key:null
   });
   // handling date format
   const [method, setMethod] = useState("first");

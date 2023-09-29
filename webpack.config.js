@@ -9,13 +9,11 @@ module.exports = {
   output: {
     path: path.join(__dirname, "/dist"),
     filename: "bundle.js",
-    publicPath: '/100058-DowellEditor-V2/'
+    publicPath: '/'
   },
   devServer: {
     port: 3000,
-    historyApiFallback: {
-      index: 'index.html'
-    }
+    historyApiFallback: true,
   },
   //Setup loaders
   module: {

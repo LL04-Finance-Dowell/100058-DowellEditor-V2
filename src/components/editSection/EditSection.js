@@ -1,6 +1,6 @@
 import React from "react";
 import { Container, Row, Col } from "react-bootstrap";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 import LeftMenu from "../leftMenu/LeftMenu";
 import MidSection from "../midSection/MidSection.js";
@@ -31,6 +31,7 @@ const EditSection = () => {
   const newPageButton = document.querySelector(".new-page-btn");
   const actionName = decoded?.details?.action;
   const docMap = decoded?.details?.document_map;
+
 
   return (
     <div className="editSec">

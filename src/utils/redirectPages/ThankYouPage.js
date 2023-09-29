@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import successFulPayment from "./../../assets/paymentSuccessful.svg";
+import failurePayment from "./../../assets/failure.svg"
 import { useStateContext } from '../../contexts/contextProvider';
 import axios from 'axios';
 
@@ -9,33 +10,76 @@ const ThankYouPage = () => {
     const { savedSripeKey, savedPaypalKey } = useStateContext()
     const [successful, setSuccessful] = useState(null)
     const navigate = useNavigate();
+    const MainURL = localStorage.getItem("MainURL")
 
     const handleGoBack = () => {
-        navigate(-1); // This will navigate back to the previous route
+        window.close();// This will navigate back to the previous route
     };
     useEffect(() => {
-        console.log("saved stripe", savedSripeKey);
+       const savedStripeKey = localStorage.getItem("stripeKey");
+       const savedStripePaymentID = localStorage.getItem("stripePaymentId");
+        
+        console.log("saved stripe", savedStripeKey);
         console.log("saved paypal", savedPaypalKey);
-        if (savedSripeKey.payment_id !== null && savedPaypalKey.payment_id === null) {
-            const resVerify = axios.post("https://100088.pythonanywhere.com/api/workflow/verify/payment/stripe", {
-                stripe_key: savedSripeKey.key,
-                id: savedSripeKey.payment_id
-            });
-            console.log(resVerify);
 
-            if (resVerify.data.status == "succeeded") {
-                setSuccessful(true);
-            } else {
+        if (savedStripePaymentID !== null ) {
+            const resVerify = axios.post("https://100088.pythonanywhere.com/api/workflow/verify/payment/stripe", {
+                stripe_key: savedStripeKey,
+                id: savedStripePaymentID
+            }).then(data =>{
+                if(data.status == 200){
+                    setSuccessful(true);
+                } else {
+                    setSuccessful(false);
+                    console.log(data);
+                }
+            }) .catch(err =>  {
                 setSuccessful(false);
-                console.log("Your Stripe Payment Not verified");
-            }
+                console.log(err);
+            })
+            console.log("verify payment", resVerify);
+
+            
+            // if (resVerify.data.status == "succeeded") {
+            //     setSuccessful(true);
+            // } else {
+            //     setSuccessful(false);
+            //     console.log("Your Stripe Payment Not verified");
+            // }
+        }
+
+        if (savedPaypalKey.payment_id !== null ) {
+            const paypalVerify = axios.post("https://100088.pythonanywhere.com/api/workflow/verify/payment/paypal", {
+                paypal_client_id: savedPaypalKey.key,
+                paypal_secret_key: "ELsNyOGLDJVZCsfuuu5AhsFRmQbgBwxEVZteB-2XLZm8RLa8cPeS_cfNi35w7bJwkOKDHOnNxyHsJKu6",
+                id: savedPaypalKey.payment_id
+            }).then(data =>{
+                if(data.status == 200){
+                    setSuccessful(true);
+                } else {
+                    setSuccessful(false);
+                    console.log(data);
+                }
+            }) .catch(err =>  {
+                setSuccessful(false);
+                console.log(err);
+            })
+            console.log("verify payment", paypalVerify);
+            
+            // if (resVerify.data.status == "succeeded") {
+            //     setSuccessful(true);
+            // } else {
+            //     setSuccessful(false);
+            //     console.log("Your Stripe Payment Not verified");
+            // }
         }
 
     }, [])
+    
     return (
         <div className='shadow-lg p-3'>
             <div className="vh-100 d-flex justify-content-center align-items-center">
-                <h1>HELLO</h1>
+                {/* <h1>Hello</h1> */}
                 <div>
                     {
                         (successful != null) && (successful ? (<>
@@ -50,7 +94,7 @@ const ThankYouPage = () => {
                         </>) : 
                         (<>
                             <div className="mb-4 text-center">
-                                <img src={successFulPayment} alt='payment successful' />
+                                <img src={failurePayment} alt='payment successful' />
                             </div>
                             <div className="text-center">
                                 <h1>Sorry</h1>

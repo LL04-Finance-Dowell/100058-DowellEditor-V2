@@ -15,7 +15,7 @@ root.render(
     <PrintProvider>
       <DraggableProvider>
         <React.StrictMode>
-          <Router basename={window.location.pathname || ""}>
+          <Router>
             <App/>
           </Router>
         </React.StrictMode>

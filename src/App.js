@@ -8,8 +8,8 @@ function App() {
   return (
     <div className="app">
       <Routes>  
-              <Route path="/status" element={<ThankYouPage />} />
-              <Route exact path="/" element={<HomePage />} />
+              <Route path="/100058-DowellEditor-V2/status" element={<ThankYouPage />} />
+              <Route exact path="/100058-DowellEditor-V2/" element={<HomePage />} />
        </Routes>
     </div>
   );
