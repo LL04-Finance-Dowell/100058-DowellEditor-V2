@@ -7,7 +7,10 @@ import jwt_decode from "jwt-decode";
 import { useSearchParams } from "react-router-dom";
 import { GrEmoji } from "react-icons/gr";
 import Picker from "emoji-picker-react";
-// import SelectAnsAndQuestion from "../selectAnsAndQuestion";
+import SelectAnsAndQuestion from "../selectAnsAndQuestion";
+import useSelectedAnswer from '../../customHooks/useSelectedAnswers';
+
+
 
 const ScaleRightSide = () => {
   const {
@@ -33,11 +36,14 @@ const ScaleRightSide = () => {
     setConfirmRemove,
     confirmRemove,
   } = useStateContext();
-  const [selectedType, setSelectedType] = useState("");
-  const [addedAns, setAddedAns] = useState([]);
+  // const [selectedType, setSelectedType] = useState("");
+  // const [addedAns, setAddedAns] = useState([]);
   const inputRef1 = useRef(null);
   const inputRef2 = useRef(null);
 
+  const [selectedType, setSelectedType] = useState('')
+  // const [addedAns, setAddedAns] = useState([])
+  const { addedAns, setAddedAns } = useSelectedAnswer()
   const [inputStr, setInputStr] = useState("");
   const [upperLimit, setUpperLimit] = useState("");
   const [space, setSpace] = useState("");
@@ -8787,7 +8793,8 @@ const ScaleRightSide = () => {
                 variant="secondary"
                 // className="remove_button"
                 className="remove_button"
-                onClick={removeScale}
+                // onClick={removeScale}
+                onClick={() => setConfirmRemove(!confirmRemove)}
               >
                 Remove Scale
               </Button>
