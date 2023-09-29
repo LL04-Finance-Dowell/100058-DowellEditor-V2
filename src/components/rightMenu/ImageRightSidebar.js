@@ -64,11 +64,13 @@ const ImageRightSidebar = () => {
     }
   };
 
+  // TODO Implement name change, once user sets custom name
+
   const handleUpdate = () => {
     const imageName = document.getElementById("image_name");
-    const button = document.querySelector(".focussed");
+    const imgFieldSpan = document.querySelector(".focussed .img_text");
     if (imageName.value != "") {
-      button.textContent = imageName.value;
+      imgFieldSpan.textContent = imageName.value;
     }
   };
 
@@ -110,7 +112,7 @@ const ImageRightSidebar = () => {
           type="text"
           placeholder="Image Place Holder"
           id="image_name"
-          onChange={() => {}}
+          onChange={() => { }}
         />
       </div>
       <hr />
