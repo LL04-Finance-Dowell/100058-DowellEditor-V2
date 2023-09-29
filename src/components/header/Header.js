@@ -105,6 +105,8 @@ const Header = () => {
     setContainerBorderSize,
     containerBorderColor,
     setContainerBorderColor,
+    questionAndAnswerGroupedData,
+    allowHighlight, setAllowHighlight,
     docMapRequired, setDocMapRequired
   } = useStateContext();
 
@@ -1551,6 +1553,7 @@ const Header = () => {
         // scale_url: `${scaleData}`,
         company_id: companyId,
         type: decoded.details.action,
+        questionAndAns: questionAndAnswerGroupedData,
         action: decoded.details.action,
         metadata_id: decoded.details.metadata_id,
       }
@@ -1981,6 +1984,10 @@ const Header = () => {
           <Col>
             <div className="right_header">
               <div className={docMap ? "header_btn" : "savee"}>
+                <div style={{ marginRight: "20px" }}>
+                  <input type="checkbox" onChange={() => setAllowHighlight(!allowHighlight)} />{"  "}
+                  <label>Allow Highlight</label>
+                </div>
                 <Button
                   size="md"
                   className="rounded"

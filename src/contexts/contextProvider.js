@@ -146,6 +146,9 @@ export const ContextProvider = ({ children }) => {
   const [isMenuVisible, setIsMenuVisible] = useState(false);
   // handle drop event for table and retrieve midsection
 
+
+  const [allowHighlight, setAllowHighlight] = useState(false)
+
   const handleDropp = (e) => {
     e.preventDefault();
     if (
@@ -378,6 +381,15 @@ export const ContextProvider = ({ children }) => {
     e.target.classList.add("focussed");
   }
 
+  const [questionAndAnswerGroupedData,
+    setQuestionAndAnsGroupedData] = useState([])
+
+
+  const [confirmRemove, setConfirmRemove] = useState(false)
+  const [iframeSize,setIframeSize] = useState({
+    width:"",
+    height:""
+  })
 
   const copyInput = (clickHandler) => {
 
@@ -661,6 +673,10 @@ export const ContextProvider = ({ children }) => {
         setFormBorderSize,
         formBorderColor,
         setFormBorderColor,
+        questionAndAnswerGroupedData,
+        setQuestionAndAnsGroupedData,
+        confirmRemove, setConfirmRemove,
+        allowHighlight, setAllowHighlight,
         copyInput,
         paymentKey, 
         setPaymentKey,
