@@ -35,6 +35,25 @@
   z-index: -1;
 }
 
+.icon_wrapper img {
+  object-fit: cover;
+  width: 100%;
+  height: auto;
+}
+
+.icon_wrapper {
+  width: 50px;
+  display: inline-block;
+}
+
+.signInput .icon_wrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 70px;
+}
+
 /*
 .midSection_container{
     background-color: #ffffff;q
