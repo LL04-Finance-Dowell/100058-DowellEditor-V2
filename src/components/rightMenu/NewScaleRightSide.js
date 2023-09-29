@@ -36,8 +36,8 @@ const ScaleRightSide = () => {
     setConfirmRemove,
     confirmRemove,
   } = useStateContext();
-  const [selectedType, setSelectedType] = useState("");
-  const [addedAns, setAddedAns] = useState([]);
+  // const [selectedType, setSelectedType] = useState("");
+  // const [addedAns, setAddedAns] = useState([]);
   const inputRef1 = useRef(null);
   const inputRef2 = useRef(null);
 
