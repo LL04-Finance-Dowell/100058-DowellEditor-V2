@@ -69,7 +69,8 @@ const ImageRightSidebar = () => {
   const handleUpdate = () => {
     const imageName = document.getElementById("image_name");
     const imgFieldSpan = document.querySelector(".focussed .img_text");
-    if (imageName.value != "") {
+    console.log(imgFieldSpan);
+    if (imageName.value != "" && imgFieldSpan) {
       imgFieldSpan.textContent = imageName.value;
     }
   };

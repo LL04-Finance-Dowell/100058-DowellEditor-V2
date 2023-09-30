@@ -98,7 +98,7 @@ const SignsRightSidebar = () => {
   const handleUpdate = () => {
     const imageName = document.getElementById("image_name");
     const signFieldSpan = document.querySelector(".focussed .sign_text");
-    if (imageName.value != "") {
+    if (imageName.value != "" && signFieldSpan) {
       signFieldSpan.textContent = imageName.value;
     }
   };
