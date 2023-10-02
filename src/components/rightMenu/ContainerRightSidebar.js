@@ -3,6 +3,9 @@ import { Row, Button } from "react-bootstrap";
 import { useStateContext } from "../../contexts/contextProvider";
 import { useSearchParams } from "react-router-dom";
 import jwt_decode from "jwt-decode";
+import useSelectedAnswer from "../../customHooks/useSelectedAnswers";
+import SelectAnsAndQuestion from "../selectAnsAndQuestion";
+
 
 const ContainerRigntSideBar = () => {
   const [searchParams] = useSearchParams();
@@ -14,8 +17,11 @@ const ContainerRigntSideBar = () => {
     setContainerBorderSize,
     containerBorderColor,
     setContainerBorderColor,
+    setConfirmRemove, confirmRemove
   } = useStateContext();
   const [showSlider, setShowSlider] = useState(false);
+  const [selectedType, setSelectedType] = useState('')
+  const { addedAns, setAddedAns } = useSelectedAnswer()
   function removeContainer() {
     if (document.querySelector(".focussedd").classList.contains("dropp")) {
       if (document.querySelector(".focussedd").hasChildNodes()) {
@@ -51,7 +57,8 @@ const ContainerRigntSideBar = () => {
         <hr />
         <Button
           variant="primary"
-          onClick={removeContainer}
+          // onClick={removeContainer}
+          onClick={() => setConfirmRemove(!confirmRemove)}
           className={
             decoded.details.action === "template"
               ? "remove_container text-center mt-5"
@@ -70,6 +77,12 @@ const ContainerRigntSideBar = () => {
             <span className="slider round"></span>
           </label>
         </div>
+        <SelectAnsAndQuestion
+          selectedType={selectedType}
+          setSelectedType={setSelectedType}
+          addedAns={addedAns}
+          setAddedAns={setAddedAns}
+        />
         {showSlider && (
           <div
             style={{

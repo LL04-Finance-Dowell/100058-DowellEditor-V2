@@ -14,6 +14,7 @@
   height: 100px;
   position: absolute;
 }
+
 textarea {
   height: 100px;
   width: 100%;
@@ -30,7 +31,8 @@ textarea {
 .resizers .resizer {
   width: 10px;
   height: 10px;
-  border-radius: 50%; /*magic to turn square into circle*/
+  border-radius: 50%;
+  /*magic to turn square into circle*/
   background: white;
   border: 3px solid #dbd9d9;
   position: absolute;
@@ -41,16 +43,19 @@ textarea {
   left: -5px;
   cursor: nw-resize;
 }
+
 .resizers .resizer.ne {
   top: -5px;
   right: -5px;
   cursor: ne-resize;
 }
+
 .resizers .resizer.sw {
   bottom: -5px;
   left: -5px;
   cursor: sw-resize;
 }
+
 .resizers .resizer.se {
   bottom: -5px;
   right: -5px;
@@ -204,6 +209,7 @@ tr:nth-child(even) {
   opacity: 0.5;
   pointer-events: none;
 }
+
 .modal-body {
   overflow: auto;
 }
@@ -214,9 +220,11 @@ tr:nth-child(even) {
     padding: 0;
     visibility: hidden;
   }
+
   .print_container * {
     visibility: visible;
   }
+
   .midSection {
     height: 290mm;
     margin-top: -175px;
@@ -237,11 +245,13 @@ tr:nth-child(even) {
 .cells_menu {
   position: relative;
 }
+
 .cells_menu:hover .icon_div {
   display: block !important;
 }
+
 .over_flow_maintainer {
-  overflow: inherit !important ;
+  overflow: inherit !important;
 }
 
 .left_menu_wrapper {
@@ -262,10 +272,27 @@ tr:nth-child(even) {
   height: 5px;
   width: 5px;
 }
+
 ::-webkit-scrollbar-thumb:horizontal {
   border-radius: 5px;
   background-color: rgb(184, 177, 177);
 }
+
 .document_left_col {
   background: #e3eeff;
+}
+
+
+/* delete modal styles don't touch */
+.modal-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 100;
 }

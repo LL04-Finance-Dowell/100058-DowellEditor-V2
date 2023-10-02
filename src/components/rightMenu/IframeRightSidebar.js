@@ -5,9 +5,12 @@ import { useStateContext } from '../../contexts/contextProvider';
 
 import { useSearchParams } from "react-router-dom";
 import jwt_decode from "jwt-decode";
+import SelectAnsAndQuestion from '../selectAnsAndQuestion';
+import useSelectedAnswer from '../../customHooks/useSelectedAnswers';
+
 
 const IframeRightSidebar = () => {
-  const { setSidebar, handleClicked, setIsFinializeDisabled, iframeBorderSize, setIframeBorderSize, iframeBorderColor, setIframeBorderColor, docMapRequired } =
+  const { setSidebar, handleClicked, setIsFinializeDisabled, iframeBorderSize, setIframeBorderSize, iframeBorderColor, setIframeBorderColor, setConfirmRemove, confirmRemove } =
     useStateContext();
 
   const [searchParams] = useSearchParams();
@@ -22,14 +25,19 @@ const IframeRightSidebar = () => {
 
 
   const [showSlider, setShowSlider] = useState(false);
+  const [selectedType, setSelectedType] = useState('')
+  // const [addedAns, setAddedAns] = useState([])
+  const { addedAns, setAddedAns } = useSelectedAnswer()
 
   const makeIframe = () => {
     var iframeDiv = document.querySelector('.focussed');
     var iframe = document.createElement('iframe');
+    const height = document.getElementById('iframe_height').value;
+    const width = document.getElementById('iframe_width').value;
     iframe.id = 'iframe';
     iframe.src = document.getElementById('iframe_src').value;
-    iframe.height = document.getElementById('iframe_height').value;
-    iframe.width = document.getElementById('iframe_width').value;
+    iframe.height = height ? height : "100%";
+    iframe.width = width ? width : "100%";
 
     iframeDiv.appendChild(iframe);
     //setIsFinializeDisabled(false)
@@ -82,6 +90,7 @@ const IframeRightSidebar = () => {
         <Form.Label>Enter Height</Form.Label>
         <Form.Control
           type="number"
+          disabled
           placeholder=""
           min="1"
           id="iframe_height"
@@ -93,6 +102,7 @@ const IframeRightSidebar = () => {
         <Form.Control
           type="number"
           placeholder=""
+          disabled
           min="1"
           id="iframe_width"
           className="shadow bg-white rounded mb-4"
@@ -132,6 +142,12 @@ const IframeRightSidebar = () => {
         )}
       </Row>
       <hr />
+      <SelectAnsAndQuestion
+        selectedType={selectedType}
+        setSelectedType={setSelectedType}
+        setAddedAns={setAddedAns}
+        addedAns={addedAns} />
+      <hr />
       <div className="mt-2 text-center pt-5">
         <Button variant="secondary" className="px-5" onClick={makeIframe}>
           Create Iframe
@@ -143,7 +159,8 @@ const IframeRightSidebar = () => {
           variant="primary"
 
           className={decoded.details.action === "template" ? "px-5 remove_button" : "px-5 remove_button disable_button"}
-          onClick={removeIframe}
+          // onClick={removeIframe}
+          onClick={() => setConfirmRemove(!confirmRemove)}
         >
           Remove Iframe
         </Button>

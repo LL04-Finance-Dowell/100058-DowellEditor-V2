@@ -16,27 +16,34 @@ function createContainerInputElement(holderDIV, focuseddClassMaintain, handleCli
   containerField.style.overflow = "overlay";
   containerField.style.position = "absolute";
 
-  containerField.onclick = (e) => {
-    e.stopPropagation();
-    focuseddClassMaintain(e);
-    if (e.ctrlKey) {
-      copyInput("container2");
-    }
-    handleClicked("container2");
-    setSidebar(true);
-    // console.log("container field clicked");
-  };
-  containerField.ondragover = (e) => {
-    // console.log("console from container dragover", e.target);
-    if (e.ctrlKey) {
-      copyInput("container2");
-    }
-  };
-  containerField.ondrop = (event) => {
-    const container = event.target;
-    const containerRect = container.getBoundingClientRect();
-    const typeOfOperationContainer =
-      event.dataTransfer.getData("text/plain");
+    const container = document.getElementsByClassName("containerInput");
+    if (container.length) {
+      const h = container.length;
+      containerField.id = `c${h + 1}`;
+    } else {
+      containerField.id = "c1";
+      }
+    containerField.onclick = (e) => {
+      e.stopPropagation();
+      focuseddClassMaintain(e);
+      if (e.ctrlKey) {
+        copyInput("container2");
+      }
+      handleClicked("container2");
+      setSidebar(true);
+      console.log("container field clicked");
+    };
+    containerField.ondragover = (e) => {
+      console.log("console from container dragover", e.target);
+      if (e.ctrlKey) {
+        copyInput("container2");
+      }
+    };
+    containerField.ondrop = (event) => {
+      const container = event.target;
+      const containerRect = container.getBoundingClientRect();
+      const typeOfOperationContainer =
+        event.dataTransfer.getData("text/plain");
 
     const measureContainer = {
       width: "200px",
