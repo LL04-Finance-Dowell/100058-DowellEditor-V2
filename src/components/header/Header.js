@@ -1984,10 +1984,10 @@ const Header = () => {
           <Col>
             <div className="right_header">
               <div className={docMap ? "header_btn" : "savee"}>
-                <div style={{ marginRight: "20px" }}>
+                {/* <div style={{ marginRight: "20px" }}>
                   <input type="checkbox" onChange={() => setAllowHighlight(!allowHighlight)} />{"  "}
                   <label>Allow Highlight</label>
-                </div>
+                </div> */}
                 <Button
                   size="md"
                   className="rounded"
