@@ -11,11 +11,20 @@
   z-index: 10;
 }
 
+.popup-style {
+  /* margin-top: 400px; */
+margin-bottom: 200px;
+width: 500px;
+height: 60vh;
+}
+
 .popup-content {
   background-color: white;
-  width: 80%; /* Adjust the width as needed for different screen sizes */
-  max-width: 600px; /* Set a maximum width for larger screens */
-  height: auto; /* Let the height adjust based on content */
+  width: 90%; 
+  /* max-width: 600px;  */
+  top: 30%;
+  bottom: 30%;
+  /* height: auto; */
   display: flex;
   flex-direction: column;
   justify-content: center;

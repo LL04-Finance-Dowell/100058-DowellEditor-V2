@@ -18,9 +18,12 @@ const ThankYouPage = () => {
     useEffect(() => {
        const savedStripeKey = localStorage.getItem("stripeKey");
        const savedStripePaymentID = localStorage.getItem("stripePaymentId");
+       const savedPaypalSecretKey = localStorage.getItem("paypalClientSecret");
+       const savedPaypalPaymentId = localStorage.getItem("paypalPaymentId");
+       const savedPaypalClientId = localStorage.getItem("paypalClientId");
         
-        console.log("saved stripe", savedStripeKey);
-        console.log("saved paypal", savedPaypalKey);
+        console.log("saved stripe", savedSripeKey);
+        console.log("saved paypal", savedStripePaymentID);
 
         if (savedStripePaymentID !== null ) {
             const resVerify = axios.post("https://100088.pythonanywhere.com/api/workflow/verify/payment/stripe", {
@@ -37,22 +40,14 @@ const ThankYouPage = () => {
                 setSuccessful(false);
                 console.log(err);
             })
-            console.log("verify payment", resVerify);
 
-            
-            // if (resVerify.data.status == "succeeded") {
-            //     setSuccessful(true);
-            // } else {
-            //     setSuccessful(false);
-            //     console.log("Your Stripe Payment Not verified");
-            // }
         }
 
-        if (savedPaypalKey.payment_id !== null ) {
+        if (savedPaypalPaymentId !== null ) {
             const paypalVerify = axios.post("https://100088.pythonanywhere.com/api/workflow/verify/payment/paypal", {
-                paypal_client_id: savedPaypalKey.key,
-                paypal_secret_key: "ELsNyOGLDJVZCsfuuu5AhsFRmQbgBwxEVZteB-2XLZm8RLa8cPeS_cfNi35w7bJwkOKDHOnNxyHsJKu6",
-                id: savedPaypalKey.payment_id
+                paypal_client_id: savedPaypalClientId,
+                paypal_secret_key: savedPaypalSecretKey,
+                id: savedPaypalPaymentId
             }).then(data =>{
                 if(data.status == 200){
                     setSuccessful(true);
@@ -64,7 +59,6 @@ const ThankYouPage = () => {
                 setSuccessful(false);
                 console.log(err);
             })
-            console.log("verify payment", paypalVerify);
             
             // if (resVerify.data.status == "succeeded") {
             //     setSuccessful(true);

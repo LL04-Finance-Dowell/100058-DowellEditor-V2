@@ -32,7 +32,7 @@ const PaymentRightSide = () => {
     const [qrCode, setQrCode] = useState();
     const [paypalQrCode, setPaypalQrCode] = useState();
 
-  
+
 
 
     // const [stripeKey, setStripeKey] = useState("");
@@ -72,7 +72,7 @@ const PaymentRightSide = () => {
                     ['key']: link
                 }
             });
-           
+
             holderDIV.children[1].innerHTML = link;
         }
         if (purpose.value != "") {
@@ -81,7 +81,7 @@ const PaymentRightSide = () => {
             setSavedPaypalKey(prev => {
                 return {
                     ...prev,
-                    ['key']: purpose
+                    ['key']: purpose,
                 }
             });
             holderDIV.children[2].innerHTML = purpose;
@@ -90,36 +90,36 @@ const PaymentRightSide = () => {
 
     };
     // if(decoded.details.action === "document"){
-        // handleUpdate();
-        // const Stripelink = document.querySelector(".stripe_key").innerHTML;
-        // const Paypalpurpose = document.querySelector(".paypal_id").innerHTML;
-        // if (Stripelink != "") {
-        //     // setPaymentKey(link);
-        //     setSavedSripeKey(prev => {
-        //         console.log("Stripe link......")
-        //         return {
-        //             ...prev,
-        //             ['key']: Stripelink
-        //         }
-        //     });
-           
-        //     // holderDIV.children[1].innerHTML = Stripelink;
-        // }
-        // if (Paypalpurpose!= "") {
-        //     // setPaypalId(purpose);
+    // handleUpdate();
+    // const Stripelink = document.querySelector(".stripe_key").innerHTML;
+    // const Paypalpurpose = document.querySelector(".paypal_id").innerHTML;
+    // if (Stripelink != "") {
+    //     // setPaymentKey(link);
+    //     setSavedSripeKey(prev => {
+    //         console.log("Stripe link......")
+    //         return {
+    //             ...prev,
+    //             ['key']: Stripelink
+    //         }
+    //     });
 
-        //     setSavedPaypalKey(prev => {
-        //         return {
-        //             ...prev,
-        //             ['key']: Paypalpurpose
-        //         }
-        //     });
-        //     // holderDIV.children[2].innerHTML = Paypalpurpose;
-        // }
+    //     // holderDIV.children[1].innerHTML = Stripelink;
+    // }
+    // if (Paypalpurpose!= "") {
+    //     // setPaypalId(purpose);
+
+    //     setSavedPaypalKey(prev => {
+    //         return {
+    //             ...prev,
+    //             ['key']: Paypalpurpose
+    //         }
+    //     });
+    //     // holderDIV.children[2].innerHTML = Paypalpurpose;
+    // }
 
     // }
 
-   
+
 
 
 
@@ -207,10 +207,7 @@ const PaymentRightSide = () => {
             e.preventDefault();
             setLoader(true)
             try {
-                // const res = await axios.post(endpoint, stripeData);
-                // const resQR = await axios.post(endpoint, stripeData);
                 const res = await axios.post("https://100088.pythonanywhere.com/api/workflow/stripe/initialize", stripeData);
-                // const resQR = await axios.post("https://100088.pythonanywhere.com/api/workflow/stripe/initialize/qrcode", stripeData);
                 setStripePaymentData(res.data);
                 setSavedSripeKey(prev => {
                     return {
@@ -243,12 +240,12 @@ const PaymentRightSide = () => {
                             ['key']: Stripelink
                         }
                     });
-                   
+
                     // holderDIV.children[1].innerHTML = Stripelink;
                 }
-                if (Paypalpurpose!= "") {
+                if (Paypalpurpose != "") {
                     // setPaypalId(purpose);
-        
+
                     setSavedPaypalKey(prev => {
                         return {
                             ...prev,
@@ -335,7 +332,9 @@ const PaymentRightSide = () => {
 
                 console.log("QR code Response", resQR)
 
-                
+
+                localStorage.setItem("stripePaymentId", resQR.data.payment_id);
+                localStorage.setItem("stripeKey", link);
                 const Stripelink = document.querySelector(".stripe_key").innerHTML;
                 const Paypalpurpose = document.querySelector(".paypal_id").innerHTML;
                 if (Stripelink != "") {
@@ -347,12 +346,12 @@ const PaymentRightSide = () => {
                             ['key']: Stripelink
                         }
                     });
-                   
+
                     // holderDIV.children[1].innerHTML = Stripelink;
                 }
-                if (Paypalpurpose!= "") {
+                if (Paypalpurpose != "") {
                     // setPaypalId(purpose);
-        
+
                     setSavedPaypalKey(prev => {
                         return {
                             ...prev,
@@ -426,8 +425,9 @@ const PaymentRightSide = () => {
             toast.success("Successfully Submitted!");
 
 
-            // localStorage.setItem("stripePaymentId", res.data.payment_id);
-            // localStorage.setItem("paypalClientId", purpose);
+            localStorage.setItem("paypalPaymentId", res.data.payment_id);
+            localStorage.setItem("paypalClientId", purpose);
+            localStorage.setItem("paypalClientSecret", paypalData.paypal_secret_key);
 
 
             const Stripelink = document.querySelector(".stripe_key").innerHTML;
@@ -441,16 +441,17 @@ const PaymentRightSide = () => {
                         ['key']: Stripelink
                     }
                 });
-               
+
                 // holderDIV.children[1].innerHTML = Stripelink;
             }
-            if (Paypalpurpose!= "") {
+            if (Paypalpurpose != "") {
                 // setPaypalId(purpose);
-    
+
                 setSavedPaypalKey(prev => {
                     return {
                         ...prev,
-                        ['key']: Paypalpurpose
+                        ['key']: Paypalpurpose,
+                        // ['secret_key']: "ELsNyOGLDJVZCsfuuu5AhsFRmQbgBwxEVZteB-2XLZm8RLa8cPeS_cfNi35w7bJwkOKDHOnNxyHsJKu6"
                     }
                 });
                 // holderDIV.children[2].innerHTML = Paypalpurpose;
@@ -464,12 +465,16 @@ const PaymentRightSide = () => {
         } catch (error) {
             console.log(error)
             setLoader(false)
-            toast.error(error.data.error);
+            // toast.error(error.data.error);
         }
     }
 
 
     const handlePaypalQRPayment = async (e) => {
+
+        localStorage.removeItem("paypalPaymentId");
+        localStorage.removeItem("paypalClientId");
+        localStorage.removeItem("paypalClientSecret");
         e.preventDefault();
         const paypalData = {
             // paypal_client_id: "AVJXJddOEG7WGrLkTzg4_9ODsDNhIHrqT4ZL6gwXRz1ftQELliYtticZH-kLjoYaTZfNn_8y5onH_YP3",
@@ -492,10 +497,42 @@ const PaymentRightSide = () => {
             console.log("paypal data", res.data)
             toast.success("Successfully Submitted!");
             openPopup(res.data.qr_image_url);
+
+            localStorage.setItem("paypalPaymentId", res.data.payment_id);
+            localStorage.setItem("paypalClientId", purpose);
+            localStorage.setItem("paypalClientSecret", paypalData.paypal_secret_key);
+
+
+            const Stripelink = document.querySelector(".stripe_key").innerHTML;
+            const Paypalpurpose = document.querySelector(".paypal_id").innerHTML;
+            if (Stripelink != "") {
+                // setPaymentKey(link);
+                setSavedSripeKey(prev => {
+                    console.log("Stripe link......")
+                    return {
+                        ...prev,
+                        ['key']: Stripelink
+                    }
+                });
+
+                // holderDIV.children[1].innerHTML = Stripelink;
+            }
+            if (Paypalpurpose != "") {
+                // setPaypalId(purpose);
+
+                setSavedPaypalKey(prev => {
+                    return {
+                        ...prev,
+                        ['key']: Paypalpurpose
+                    }
+                });
+                // holderDIV.children[2].innerHTML = Paypalpurpose;
+            }
+
         } catch (error) {
             console.log(error)
             setQrLoader(false)
-            toast.error(error.data.error);
+            // toast.error(error.data.error);
         }
     }
 
@@ -536,11 +573,6 @@ const PaymentRightSide = () => {
 
 
                             />
-                            {/* <Link to={"/status"}>
-                                <button type="button" className="btn btn-primary">
-                                    Thank You
-                                </button>
-                            </Link> */}
                         </div> : <div>
                             <select
                                 onChange={handleSelectPayment}
@@ -594,29 +626,17 @@ const PaymentRightSide = () => {
                                             <option value="aoa">AOA</option>
                                         </select>
                                         <br />
-                                        {/* <Form.Label>Callback URL</Form.Label>
-                                        <Form.Control
-                                            required
-                                            type="url"
-                                            placeholder="Callback URL"
-                                            // id="button_name"
-                                            value={callbackUrl}
-                                            onChange={(e) => setCallbackUrl(e.target.value)}
-                                        /> */}
-                                        <br />
 
-                                        <Link to={"/status"}>
+                                        {/* <Link to={"/100058-DowellEditor-V2/status"}>
                                             <button type="button" className="btn btn-primary">
                                                 Thank You
                                             </button>
-                                        </Link>
-                                        {/* <Link to={"/status"}> */}
-                                            <button type="button" className="btn btn-primary" onClick={handlePaypalPayment}>
-                                                {
-                                                    loader ? "Wait...." : "Submit Info"
-                                                }
-                                            </button>
-                                        {/* </Link> */}
+                                        </Link> */}
+                                        <button type="button" className="btn btn-primary" onClick={handlePaypalPayment}>
+                                            {
+                                                loader ? "Wait...." : "Submit Info"
+                                            }
+                                        </button>
 
                                         <button type="button" className="btn btn-primary m-3" onClick={handlePaypalQRPayment}>
                                             {

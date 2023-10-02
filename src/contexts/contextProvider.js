@@ -100,6 +100,7 @@ export const ContextProvider = ({ children }) => {
   });
   const [savedPaypalKey, setSavedPaypalKey] = useState({
     payment_id:null,
+    secret_key: null,
     key:null
   });
   // handling date format
