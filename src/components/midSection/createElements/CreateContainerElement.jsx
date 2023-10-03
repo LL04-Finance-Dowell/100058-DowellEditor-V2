@@ -31,6 +31,13 @@ function createContainerInputElement(holderDIV, focuseddClassMaintain, handleCli
   mutationObserver.observe(containerField, mutationConfig)
 
 
+  const container = document.getElementsByClassName("containerInput");
+  if (container.length) {
+    const h = container.length;
+    containerField.id = `c${h + 1}`;
+  } else {
+    containerField.id = "c1";
+  }
   containerField.onclick = (e) => {
     e.stopPropagation();
     focuseddClassMaintain(e);
@@ -39,18 +46,16 @@ function createContainerInputElement(holderDIV, focuseddClassMaintain, handleCli
     }
     handleClicked("container2");
     setSidebar(true);
-    // console.log("container field clicked");
+    console.log("container field clicked");
   };
   containerField.ondragover = (e) => {
-    // console.log("console from container dragover", e.target);
+    console.log("console from container dragover", e.target);
     if (e.ctrlKey) {
       copyInput("container2");
     }
   };
   containerField.ondrop = (event) => {
-    if (containerField.children[0]?.classList.contains('placeholder') && containerField.children?.length === 1) {
-      containerField.removeChild(containerField.children[0])
-    }
+    if (containerField.children[0].classList.contains('placeholder')) containerField.removeChild(containerField.children[0])
 
     const container = event.target;
     const containerRect = container.getBoundingClientRect();
