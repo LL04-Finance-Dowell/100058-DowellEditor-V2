@@ -2715,7 +2715,7 @@ const MidSection = React.forwardRef((props, ref) => {
           tableField.style.borderRadius = "0px";
           tableField.style.outline = "0px";
           tableField.style.overflow = "overlay";
-          // tableField.innerHTML = 'table';
+          tableField.innerHTML = 'table';
           tableField.style.position = "absolute";
 
           const tableF = document.getElementsByClassName("tableInput");
