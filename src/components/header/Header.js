@@ -105,6 +105,8 @@ const Header = () => {
     setContainerBorderSize,
     containerBorderColor,
     setContainerBorderColor,
+    questionAndAnswerGroupedData,
+    allowHighlight, setAllowHighlight,
     docMapRequired, setDocMapRequired
   } = useStateContext();
 
@@ -317,7 +319,8 @@ const Header = () => {
             left: tempPosn.left,
             type: "IMAGE_INPUT",
             data: dataName,
-            borderWidth: `${borderSize}px dotted ${borderColor}`,
+            border: `${borderSize}px dotted ${borderColor}`,
+            imgBorder:img[h].parentElement.style.border,
             id: `i${h + 1}`,
           };
 
@@ -702,6 +705,16 @@ const Header = () => {
             );
             orientation = newScales[b].querySelector(".orientation");
             console.log("This is likert", likertScaleArray.textContent);
+          }
+
+          let pairedScaleArray = "";
+
+          if (scaleType.textContent === "comparison_paired_scale") {
+            likertScaleArray = newScales[b].querySelector(
+              ".paired_Scale_Array"
+            );
+            orientation = newScales[b].querySelector(".orientation");
+            console.log("This is likert", pairedScaleArray.textContent);
           }
 
           let percentBackground = "";
@@ -1466,6 +1479,7 @@ const Header = () => {
       _id: decoded.details._id,
     };
 
+    console.log("This is percent_sum payloaf", requestBody)
     Axios.post(
       "https://100035.pythonanywhere.com/percent-sum/api/percent-sum-response-create/",
       requestBody
@@ -1540,6 +1554,7 @@ const Header = () => {
         // scale_url: `${scaleData}`,
         company_id: companyId,
         type: decoded.details.action,
+        questionAndAns: questionAndAnswerGroupedData,
         action: decoded.details.action,
         metadata_id: decoded.details.metadata_id,
       }
@@ -1970,6 +1985,10 @@ const Header = () => {
           <Col>
             <div className="right_header">
               <div className={docMap ? "header_btn" : "savee"}>
+                {/* <div style={{ marginRight: "20px" }}>
+                  <input type="checkbox" onChange={() => setAllowHighlight(!allowHighlight)} />{"  "}
+                  <label>Allow Highlight</label>
+                </div> */}
                 <Button
                   size="md"
                   className="rounded"

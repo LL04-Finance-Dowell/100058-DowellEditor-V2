@@ -5,6 +5,8 @@ import jwt_decode from "jwt-decode";
 import DatePicker from "react-datepicker";
 import { useStateContext } from "../../contexts/contextProvider";
 import { useSearchParams } from "react-router-dom";
+import SelectAnsAndQuestion from "../selectAnsAndQuestion";
+import useSelectedAnswer from "../../customHooks/useSelectedAnswers";
 
 const CalendarRightSidebar = (props) => {
   const {
@@ -20,8 +22,11 @@ const CalendarRightSidebar = (props) => {
     setCalendarBorderSize,
     calendarBorderColor,
     setCalendarBorderColor,
+    setConfirmRemove,
+    confirmRemove,
     docMapRequired
   } = useStateContext();
+  const [selectedType, setSelectedType] = useState('')
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token");
   var decoded = jwt_decode(token);
@@ -30,6 +35,8 @@ const CalendarRightSidebar = (props) => {
   const [datePickerMargin, setDatePickerMargin] = useState("");
   const date = document.querySelector(".focussed");
   const [showSlider, setShowSlider] = useState(false);
+  const { addedAns, setAddedAns } = useSelectedAnswer()
+
 
   const isRequired =
     docMapRequired?.find(
@@ -172,6 +179,15 @@ const CalendarRightSidebar = (props) => {
           </Button>
         </div>
       )}
+      <hr />
+
+      <SelectAnsAndQuestion
+        selectedType={selectedType}
+        setSelectedType={setSelectedType}
+        addedAns={addedAns}
+        setAddedAns={setAddedAns}
+      />
+
       <hr />
       <Row className="pt-4">
         <div style={{ display: "flex", alignItems: "center" }}>

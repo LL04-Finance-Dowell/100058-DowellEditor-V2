@@ -78,17 +78,17 @@ function createDropDownInputElement(
     selectElement.parentElement.click();
   };
 
-  dropdownField.onchange = (event) => {
-    event.preventDefault();
-    setPostData({
-      ...postData,
-      dropdownField: {
-        value: event.target.value,
-        xcoordinate: getOffset(holderDIV).left,
-        ycoordinate: getOffset(holderDIV).top,
-      },
-    });
-  };
+  // dropdownField.onchange = (event) => {
+  //   event.preventDefault();
+  //   setPostData({
+  //     ...postData,
+  //     dropdownField: {
+  //       value: event.target.value,
+  //       xcoordinate: getOffset(holderDIV).left,
+  //       ycoordinate: getOffset(holderDIV).top,
+  //     },
+  //   });
+  // };
 
   if (dropdownField) {
     const dropdownField = {
