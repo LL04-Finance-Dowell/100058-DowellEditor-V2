@@ -2770,17 +2770,15 @@ const ScaleRightSide = () => {
                 containerDiv.style.width = "100%";
                 inputPercent.style.marginTop = "20px";
                 nameDiv.style.position = "absolute";
+                nameDiv.style.lineHeight = "0.85";
                 if ( nameDiv.textContent.length < 10) {
                   nameDiv.style.top = "20px"
                   nameDiv.style.left = "93%";
                   nameDiv.style.right = "-17px";
                 } else {
-                  // nameDiv.style.left = "98%";
-                  // nameDiv.style.top = "-6px";
-                  // nameDiv.style.right = "-20px";
-                  nameDiv.style.left = "103%";
-                  nameDiv.style.top = "-15px";
-                  nameDiv.style.right = "-20px";
+                  nameDiv.style.left = "101%";
+                  nameDiv.style.top = "4px";
+                  nameDiv.style.right = "-22px";
                 }
               newLabelHold.style.padding =
                 nameDiv.textContent.length < 9
@@ -2955,14 +2953,15 @@ const ScaleRightSide = () => {
                   containerDiv.style.width = "100%";
                   inputPercent.style.marginTop = "20px";
                   nameDiv.style.position = "absolute";
+                  nameDiv.style.lineHeight = "0.85";
                   if ( nameDiv.textContent.length < 10) {
                   nameDiv.style.top = "20px"
                   nameDiv.style.left = "93%";
                   nameDiv.style.right = "-17px";
                 } else {
-                  nameDiv.style.left = "103%";
-                  nameDiv.style.top = "-15px";
-                  nameDiv.style.right = "-20px";
+                  nameDiv.style.left = "101%";
+                  nameDiv.style.top = "4px";
+                  nameDiv.style.right = "-22px"
                 }
                 newLabelHold.style.padding =
                   nameDiv.textContent.length < 9
