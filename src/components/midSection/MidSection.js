@@ -49,6 +49,8 @@ import { finding_percent } from './../../utils/util_functions/finding_percent';
 import { CreateTableComponent } from "./midSectionElements/TableInputElement.jsx";
 import CreatePyamentElement from "./createElements/CreatePyamentElement.jsx";
 import createPaymentInputField from "./midSectionElements/PaymentInputElement.jsx";
+import axios from "axios";
+import { toast } from "react-toastify";
 // tHIS IS FOR A TEST COMMIT
 
 const dummyData = {
@@ -2311,7 +2313,29 @@ const MidSection = React.forwardRef((props, ref) => {
   //     .append(holderDIV);
   // };
 
-  const onParagraphPost = () => {
+  const onParagraphPost = async () => {
+    const response = await axios.post("http://uxlivinglab.pythonanywhere.com/", {
+      "cluster": "socialmedia",
+      "database": "socialmedia",
+      "collection": "step3_data",
+      "document": "step3_data",
+      "team_member_ID": "34567897799",
+      "function_ID": "ABCDE",
+      "field":{"_id": "64e367eb3bc140afab90b3ec"},
+      "command": "fetch",
+      "update_field": {
+        "order_nos": 21
+      },
+      "platform": "bangalore"
+  })
+
+  if(!response.data) {
+    toast.error("Something went wrong while fetching data!")
+    return;
+  }
+
+  console.log(JSON.parse(response.data))
+  const {title,image,paragraph} = JSON.parse(response.data)?.data[0]
     const curr_user = document.getElementById("curr_user");
 
     const measure = {
@@ -2328,6 +2352,7 @@ const MidSection = React.forwardRef((props, ref) => {
     //  inputField.setAttribute('draggable', true);
     titleField.setAttribute("contenteditable", true);
     titleField.className = "textInput";
+    titleField.innerText = title;
     titleField.style.width = "100%";
     titleField.style.height = "100%";
     titleField.style.resize = "none";
@@ -2344,7 +2369,7 @@ const MidSection = React.forwardRef((props, ref) => {
       titleField.parentElement.focus();
     };
 
-    titleField.innerText = `Text Inpiut`;
+    // titleField.innerText = `Text Input`;
     // paragraphField.innerHTML = `${data.normal.data[0][0].paragraph}`;
 
     holderDIV1.append(titleField);
@@ -2377,7 +2402,7 @@ const MidSection = React.forwardRef((props, ref) => {
     };
     holderDIV2.append(descriptionField);
 
-    descriptionField.innerText = `Description`;
+    descriptionField.innerText = paragraph;
 
     document
       .getElementById("midSection_container")
@@ -2401,6 +2426,9 @@ const MidSection = React.forwardRef((props, ref) => {
     imageField.style.overflow = "overlay";
     imageField.innerText = "Choose Image";
     imageField.style.position = "relative";
+    if(image){
+      imageField.style.backgroundImage = `url(${image})`;
+    }
 
 
     const measure3 = {
@@ -2445,6 +2473,7 @@ const MidSection = React.forwardRef((props, ref) => {
     imgBtn.type = "file";
     imgBtn.style.objectFit = "cover";
     var uploadedImage = "";
+ 
 
     imgBtn.addEventListener("input", () => {
       const reader = new FileReader();
