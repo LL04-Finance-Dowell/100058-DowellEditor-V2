@@ -15,16 +15,20 @@ const ImageButton = ({ customFunc }) => {
   };
 
   return (
-    <button
-      type="button"
-      title="Image"
-      draggable="true"
-      onDragStart={dragStartImage}
-      onDragEnd={dragEndFunc}
-      onClick={customFunc}
-    >
-      <BiImage />
-    </button>
+    <div className="btn_wrapper">
+      <button
+        type="button"
+        title="Image"
+        draggable="true"
+        onDragStart={dragStartImage}
+        onDragEnd={dragEndFunc}
+        onClick={customFunc}
+      >
+        <BiImage />
+      </button>
+
+      <p className="btn_tag">Image</p>
+    </div>
   );
 };
 

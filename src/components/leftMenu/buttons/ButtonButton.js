@@ -14,15 +14,19 @@ const ButtonButton = ({ customFunc }) => {
   };
 
   return (
-    <button
-      type="button"
-      title="Button"
-      draggable="true"
-      onDragStart={dragStartButton}
-      onClick={customFunc}
-    >
-      <SiBigbluebutton />
-    </button>
+    <div className="btn_wrapper">
+      <button
+        type="button"
+        title="Button"
+        draggable="true"
+        onDragStart={dragStartButton}
+        onClick={customFunc}
+      >
+        <SiBigbluebutton />
+      </button>
+
+      <p className="btn_tag">Button</p>
+    </div>
   );
 };
 

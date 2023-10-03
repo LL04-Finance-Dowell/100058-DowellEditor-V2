@@ -81,17 +81,19 @@ textarea {
   height: 30px;
   width: 300px;
 }
-table, th, td {
+table,
+th,
+td {
   border-collapse: collapse;
   padding: 5px;
 }
 
-table{
+table {
   width: 100%;
   height: 100%;
 }
 
-td{
+td {
   min-height: 2rem;
   position: relative;
   min-width: 2.5rem;
@@ -108,7 +110,7 @@ td{
   z-index: 20;
 }
 
-.row-resizer{
+.row-resizer {
   position: absolute;
   bottom: 0;
   left: 0;
@@ -119,28 +121,26 @@ td{
 }
 .td-resizer:hover,
 .resizing {
-    border-right: 2px solid blue;
+  border-right: 2px solid blue;
 }
 .row-resizer:hover,
 .resizing {
-    border-top: 2px solid blue;
+  border-top: 2px solid blue;
 }
-.row_col_add_div{
+.row_col_add_div {
   border: none;
 }
 
 tr:nth-child(even) {
   background-color: #dddddd;
 }
-.tableInput{
+.tableInput {
   overflow: visible !important;
 }
-.target-el img{
-  height: clamp(0.5rem,1.5rem,2.5rem);
-  width: clamp(0.5rem, 2rem,3rem);
+.target-el img {
+  height: clamp(0.5rem, 1.5rem, 2.5rem);
+  width: clamp(0.5rem, 2rem, 3rem);
 }
-
-
 
 .addImageButtonInput {
   display: none;
@@ -195,6 +195,14 @@ tr:nth-child(even) {
 
 .select-element {
   min-width: 180px;
+  /* border:none; */
+  outline: none;
+  /* appearance: none; */
+  /* appearance: none; */
+  border: 2px solid black;
+  padding: 2px 0px 2px 0;
+  /* margin: 0 -1px; */
+  padding-right: 5px;
 }
 
 .disable_button {
@@ -249,9 +257,8 @@ tr:nth-child(even) {
 .left_menu_wrapper {
   height: 95%;
   position: fixed;
-
   overflow: auto;
-  padding: 0px 30px;
+  padding: 20px 30px;
   margin-left: -12px;
   padding-bottom: 40px;
 }
@@ -275,7 +282,6 @@ tr:nth-child(even) {
   background: #e3eeff;
 }
 
-
 /* delete modal styles don't touch */
 .modal-container {
   position: fixed;
@@ -287,5 +293,5 @@ tr:nth-child(even) {
   align-items: center;
   justify-content: center;
   background-color: rgba(0, 0, 0, 0.5);
-  z-index: 100;
+  z-index: 1100;
 }

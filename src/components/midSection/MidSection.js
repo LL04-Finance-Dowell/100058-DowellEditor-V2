@@ -141,9 +141,9 @@ const MidSection = React.forwardRef((props, ref) => {
   const divList = documnentsMap?.map?.((item) => item.page);
   var documnetMap = documnentsMap?.map?.((item) => item.content);
   const document_map_required = documnentsMap?.filter((item) => item.required);
-  console.log("document_map_required", document_map_required);
-  console.log("decode", decoded);
-  console.log("data", data[1]);
+  // console.log("document_map_required", document_map_required);
+  // console.log("decode", decoded);
+  // console.log("data", data[1]);
 
   const documentsMap = documnentsMap;
   if (documnentsMap?.length > 0) {
@@ -411,7 +411,7 @@ const MidSection = React.forwardRef((props, ref) => {
     return resizer;
   }
 
-  //colse context menu 
+  //colse context menu
 
   const contextMenuClose = () => setContextMenu(initialContextMenu);
   document.addEventListener("click", () => {
@@ -1332,6 +1332,7 @@ const MidSection = React.forwardRef((props, ref) => {
             tableFieldContainer.style.overflow = "overlay";
             tableFieldContainer.style.position = "absolute";
 
+
             tableFieldContainer.onchange = (event) => {
               event.preventDefault();
 
@@ -1788,7 +1789,7 @@ const MidSection = React.forwardRef((props, ref) => {
     holderDIV.style.overflow = "visible";
     holderDIV.style.display = "flex";
     holderDIV.style.cursor = "move";
-    holderDIV.style.zIndex = 1;
+    holderDIV.style.zIndex = 0;
     holderDIV.className = "holderDIV";
     holderDIV.setAttribute("id", "holderId");
     holderDIV.setAttribute("draggable", true);
@@ -1855,7 +1856,7 @@ const MidSection = React.forwardRef((props, ref) => {
 
     holderDIV.addEventListener("focus", (e) => {
       holderDIV.classList.add("zIndex-two");
-      holderDIV.style.border = "2px solid orange";
+      holderDIV.style.border = "2px solid #25c7a3";
 
       holderDIV.append(resizerTL, resizerTR, resizerBL, resizerBR);
     });
@@ -1943,7 +1944,7 @@ const MidSection = React.forwardRef((props, ref) => {
             height: element.height + "px",
             left: finding_percent(element, "left"),
             top: element.topp,
-            border: element.borderWidth,
+            border: element.imgBorder,
             auth_user: curr_user,
           };
           // console.log("element", element);
@@ -1998,6 +1999,9 @@ const MidSection = React.forwardRef((props, ref) => {
           const idMatch = documnetMap?.filter((elmnt) => elmnt == element?.id);
           const holderDIV = getHolderDIV(measure, pageNo, idMatch);
           const id = element.id;
+          console.log('Create Table Component');
+
+
           CreateTableComponent(
             holderDIV,
             id,
@@ -2747,13 +2751,20 @@ const MidSection = React.forwardRef((props, ref) => {
           // tableField.innerHTML = 'table';
           tableField.style.position = "absolute";
 
+
+
+          const placeholder = document.createElement('p');
+          placeholder.className = 'placeholder'
+          placeholder.textContent = 'Insert Table';
+          tableField.append(placeholder);
+
           const tableF = document.getElementsByClassName("tableInput");
-            if (tableF.length) {
-              const t = tableF.length;
-              tableField.id = `tab${t + 1}`;
-            } else {
-              tableField.id = "tab1";
-            }
+          if (tableF.length) {
+            const t = tableF.length;
+            tableField.id = `tab${t + 1}`;
+          } else {
+            tableField.id = "tab1";
+          }
 
           tableField.onchange = (event) => {
             event.preventDefault();
@@ -2812,7 +2823,7 @@ const MidSection = React.forwardRef((props, ref) => {
         } else if (
           typeOfOperation === "PAYMENT_INPUT" &&
           decoded.details.action === "template"
-        ){
+        ) {
           CreatePyamentElement(holderDIV, focuseddClassMaintain, handleClicked, setSidebar);
         }
         if (decoded.details.action === "template") {
@@ -2867,7 +2878,7 @@ const MidSection = React.forwardRef((props, ref) => {
                     removeInput={handleRemoveInput}
                   />
                 )}
-                <Row style={{height: isLoading ? "79%":"" }}>
+                <Row style={{ height: isLoading ? "79%" : "" }}>
                   <Col className="d-flex justify-content-end header_user">
                     <span>{index + 1}</span>
                     {isLoading && <Spinner />}
