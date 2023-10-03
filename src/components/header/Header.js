@@ -196,11 +196,11 @@ const Header = () => {
         rect.top > 0
           ? Math.abs(midsectionRect.top)
           : rect.top - midsectionRect.top,
-      left: window.innerWidth<993 ? (((rect.left*794)/midsectionRect.width) - midsectionRect.left) : rect.left - midsectionRect.left,
+      left: window.innerWidth < 993 ? (((rect.left * 794) / midsectionRect.width) - midsectionRect.left) : rect.left - midsectionRect.left,
       // left:rect.left - midsectionRect.left,
       bottom: rect.bottom,
       right: rect.right,
-      width: window.innerWidth<993 ? ((rect.width*794)/midsectionRect.width) : rect.width,
+      width: window.innerWidth < 993 ? ((rect.width * 794) / midsectionRect.width) : rect.width,
       height: rect.height,
     };
   }
@@ -1563,8 +1563,8 @@ const Header = () => {
             handleFinalizeButtonLikert();
           } else if (scaleType.textContent === "percent_scale") {
             handleFinalizeButtonPercent();
-          }else if(scaleType.textContent === "percent_sum_scale") {
-            handleFinalizeButtonPercentSum() 
+          } else if (scaleType.textContent === "percent_sum_scale") {
+            handleFinalizeButtonPercentSum()
           }
           setIsDataSaved(true);
         }
@@ -1607,7 +1607,7 @@ const Header = () => {
     cluster: decoded.details.cluster,
     document: decoded.details.document,
   };
-  console.log("here is new data for export", dataa);
+  // console.log("here is new data for export", dataa);
 
   var stringifiedData = CryptoJS.enc.Utf8.parse(JSON.stringify(dataa));
   var encodedData = base64url(stringifiedData);
@@ -1764,7 +1764,7 @@ const Header = () => {
             const pageData = res.data.page;
             setItem(pageData);
             console.log(loadedData);
-            console.log("Loaded Data ",loadedData[0][0]);
+            console.log("Loaded Data ", loadedData[0][0]);
             setData(loadedData[0][0]);
             setFetchedData(loadedData[0][0]);
             setIsDataRetrieved(true);
@@ -1954,7 +1954,7 @@ const Header = () => {
                 contentEditable={true}
                 style={{
                   fontSize: 18,
-                  height: window.innerWidth<993 ? "75px": "50px",
+                  height: window.innerWidth < 993 ? "75px" : "50px",
                   overflowY: "auto",
                   padding: "10px",
                 }}

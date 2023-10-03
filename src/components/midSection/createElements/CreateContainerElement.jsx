@@ -16,6 +16,21 @@ function createContainerInputElement(holderDIV, focuseddClassMaintain, handleCli
   containerField.style.overflow = "overlay";
   containerField.style.position = "absolute";
 
+  const placeholder = document.createElement('p');
+  placeholder.className = 'placeholder'
+  placeholder.textContent = 'Container';
+  containerField.append(placeholder);
+
+  const mutationConfig = { childList: true };
+
+  const mutationObserver = new MutationObserver(entries => {
+    if (entries[entries.length - 1].removedNodes.length && !entries[0].target.children.length)
+      containerField.append(placeholder);
+  })
+
+  mutationObserver.observe(containerField, mutationConfig)
+
+
   containerField.onclick = (e) => {
     e.stopPropagation();
     focuseddClassMaintain(e);
@@ -33,6 +48,10 @@ function createContainerInputElement(holderDIV, focuseddClassMaintain, handleCli
     }
   };
   containerField.ondrop = (event) => {
+    if (containerField.children[0]?.classList.contains('placeholder') && containerField.children?.length === 1) {
+      containerField.removeChild(containerField.children[0])
+    }
+
     const container = event.target;
     const containerRect = container.getBoundingClientRect();
     const typeOfOperationContainer =

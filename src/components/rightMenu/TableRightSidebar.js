@@ -51,7 +51,7 @@ const TableRightSidebar = () => {
 
   useEffect(() => {
     const focusseddDiv = document.querySelector(".focussedd");
-    if (focusseddDiv?.firstChild?.hasChildNodes()) {
+    if (focusseddDiv?.firstChild?.hasChildNodes() && !(focusseddDiv?.firstChild?.children[0].classList.contains('placeholder') && focusseddDiv?.firstChild?.children.length === 1)) {
       setIsCreateTableBtnDisabled(true);
     } else {
       setIsCreateTableBtnDisabled(false);
@@ -89,7 +89,7 @@ const TableRightSidebar = () => {
       const targetTable = e.target.parentElement.parentElement
       const textId = targetTable.querySelectorAll(".textInput").length + 1
       //  inputField.setAttribute('draggable', true);
-      
+
       inputField.setAttribute("contenteditable", true);
       inputField.id = `${targetTable.id}t${textId}`
       inputField.className = "textInput";
@@ -288,8 +288,8 @@ const TableRightSidebar = () => {
       // }
       let signField = document.createElement("div");
       const targetTable = e.target.parentElement.parentElement
-      console.log("TARGET TABLE ",targetTable);
-      const signId =`s${( targetTable.querySelectorAll(".signInput").length + 1)}`
+      console.log("TARGET TABLE ", targetTable);
+      const signId = `s${(targetTable.querySelectorAll(".signInput").length + 1)}`
       signField.className = "signInput";
       signField.style.width = "100%";
       signField.style.height = "100%";
@@ -301,7 +301,7 @@ const TableRightSidebar = () => {
       signField.style.position = "absolute";
       signField.style.top = 0;
       signField.style.left = 0;
-      signField.id = `${targetTable.id+signId}`;
+      signField.id = `${targetTable.id + signId}`;
 
       // signField.onchange = (event) => {
       //   event.preventDefault();
@@ -560,6 +560,11 @@ const TableRightSidebar = () => {
 
     var tableDiv = document.querySelector(".focussed");
     tableDiv.style.overflow = 'visible'
+
+    // * This removes the placholder on the table element
+    if (tableDiv.children[0].classList.contains('placeholder') && tableDiv.children.length === 1)
+      tableDiv.removeChild(tableDiv.children[0])
+
 
     for (var rowIndex = 0; rowIndex < row; rowIndex++) {
       var tr = document.createElement("tr");
