@@ -1,5 +1,5 @@
 import Axios from "axios";
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "react-bootstrap";
 import { useSearchParams } from "react-router-dom";
 import jwt_decode from "jwt-decode";
@@ -84,9 +84,9 @@ function CameraRightSide() {
         dataArr[n] = dataStr.charCodeAt(n);
       }
       let file = new File([dataArr], `'${decoded.details.update_field.document_name}'.jpg`, { type: mime });
-      console.log(file);
+      // console.log(file);
       return file;
-      //console.log(data)
+      //// console.log(data)
     };
 
     let imageFile = urlToFile(dataURI);
@@ -97,8 +97,8 @@ function CameraRightSide() {
       formData
     )
       .then((res) => {
-        console.log(res);
-        console.log(res.data.file_url);
+        // console.log(res);
+        // console.log(res.data.file_url);
         canvas.remove();
         imageHolder.src = `${res.data.file_url}`;
         imageHolder.style.display = "block";
@@ -114,7 +114,7 @@ function CameraRightSide() {
         }
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
       });
   };
 
@@ -157,7 +157,7 @@ function CameraRightSide() {
       let file = new File([vidUrl], `'${decoded.details.update_field.document_name}'.mp4`, {
         type: "video/webm;codecs=vp9,opus",
       });
-      console.log(file);
+      // console.log(file);
       const formData = new FormData();
       formData.append("video", file);
       Axios.post(
@@ -165,8 +165,8 @@ function CameraRightSide() {
         formData
       )
         .then((res) => {
-          console.log(res);
-          console.log(res.data.file_url);
+          // console.log(res);
+          // console.log(res.data.file_url);
           videoLinkHolder.textContent = res.data.file_url;
           video.src = "";
           video.src = res.data.file_url;
@@ -178,7 +178,7 @@ function CameraRightSide() {
           imageLinkHolder.textContent = "image_link"
         })
         .catch((err) => {
-          console.log(err);
+          // console.log(err);
         });
     }
   };
@@ -194,6 +194,12 @@ function CameraRightSide() {
   };
 
   function removeCamera() {
+    let camera = document.querySelector(".focussedd");
+    let video = camera?.querySelector(".videoInput");
+    const mediaStream = video.srcObject;
+    const tracks = mediaStream.getTracks();
+    tracks[0].stop();
+    tracks[1].stop();
     const focusseddElmnt = document.querySelector(".focussedd");
     if (focusseddElmnt?.classList.contains("holderDIV")) {
       document.querySelector(".focussedd").remove();
@@ -210,50 +216,50 @@ function CameraRightSide() {
           justifyContent: "center",
         }}
       >
-        {isCameraOn ? 
-         <Button
-         variant="primary"
-         className="px-5"
-         style={{ marginBottom: "30px" }}
-         onClick={snap}
-       >
-         Capture
-       </Button>:
-      <Button
-        variant="primary"
-        className="px-5"
-        style={{ marginBottom: "30px" }}
-        onClick={photo}
-        disabled = {decoded.details.action === "template" ? true : false}
-        >
-          Photo
-        </Button>}
-        { isCameraOn ? 
-        <Button
-        id="recordBtn"
-        variant="primary"
-        className="px-5"
-        style={{ marginBottom: "30px" }}
-        onClick={handleRecord}
-      >
-        Record
-      </Button> : 
-      <Button
-      id="recordBtn"
-      variant="primary"
-      className="px-5"
-      style={{ marginBottom: "30px" }}
-      onClick={video}
-      disabled = {decoded.details.action === "template" ? true : false}
-    >
-      Video
-    </Button>}
+        {isCameraOn ?
+          <Button
+            variant="primary"
+            className="px-5"
+            style={{ marginBottom: "30px" }}
+            onClick={snap}
+          >
+            Capture
+          </Button> :
+          <Button
+            variant="primary"
+            className="px-5"
+            style={{ marginBottom: "30px" }}
+            onClick={photo}
+            disabled={decoded.details.action === "template" ? true : false}
+          >
+            Photo
+          </Button>}
+        {isCameraOn ?
+          <Button
+            id="recordBtn"
+            variant="primary"
+            className="px-5"
+            style={{ marginBottom: "30px" }}
+            onClick={handleRecord}
+          >
+            Record
+          </Button> :
+          <Button
+            id="recordBtn"
+            variant="primary"
+            className="px-5"
+            style={{ marginBottom: "30px" }}
+            onClick={video}
+            disabled={decoded.details.action === "template" ? true : false}
+          >
+            Video
+          </Button>}
         <Button
           variant="secondary"
           // className="remove_button"
           className="remove_button"
           onClick={removeCamera}
-          disabled = {decoded.details.action === "document" ? true : false}
+          disabled={decoded.details.action === "document" ? true : false}
         >
           Remove Camera
         </Button>

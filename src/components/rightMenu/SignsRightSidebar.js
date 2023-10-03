@@ -4,6 +4,9 @@ import { Row, Button, Form } from "react-bootstrap";
 import { useStateContext } from "../../contexts/contextProvider";
 import { useSearchParams } from "react-router-dom";
 import jwt_decode from "jwt-decode";
+import SelectAnsAndQuestion from "../selectAnsAndQuestion";
+import useSelectedAnswer from '../../customHooks/useSelectedAnswers';
+
 
 const SignsRightSidebar = () => {
   const [showSlider, setShowSlider] = useState(false);
@@ -16,21 +19,38 @@ const SignsRightSidebar = () => {
     setSignBorderSize,
     signBorderColor,
     setSignBorderColor,
+    setConfirmRemove, confirmRemove,
+    docMapRequired,
+    currentSignElId
   } = useStateContext();
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token");
   var decoded = jwt_decode(token);
+  const [selectedType, setSelectedType] = useState('')
+  // const [addedAns, setAddedAns] = useState([])
+  const { addedAns, setAddedAns } = useSelectedAnswer()
 
   let sigPad = useRef({});
   let data = "";
 
+  const isRequired =
+    docMapRequired?.find(
+      (item) => document.querySelector(".focussed").id == item.content
+    ) ? true : false;
+
   const clear = () => {
-    sigPad.current.clear();
-    const targetDiv = document.querySelector(".focussedd")
-    if(targetDiv?.querySelector('img')){
-      targetDiv.querySelector('img').remove();
+    const targetDiv = document.querySelector(".focussed") || document.querySelector(".focussedd");
+    console.log('SIGN DIV BEFORE: ', targetDiv);
+    if (targetDiv) {
+      if (targetDiv.tagName.toLowerCase() === 'img') {
+        targetDiv.remove();
+      } else if (targetDiv?.querySelector('img')) {
+        targetDiv.querySelector('img').remove();
+      }
     }
-    const prevHTML = targetDiv.innerHTML
+    console.log('SIGN DIV AFTER: ', targetDiv);
+    sigPad.current.clear();
+
   };
 
   const save = () => {
@@ -40,26 +60,34 @@ const SignsRightSidebar = () => {
 
     const signImage = `<img src=${data} />`;
 
-    const sign = document.querySelector(".focussed");
-    if (sign.parentElement.classList.contains("focussedd")) {
+    const sign = document.querySelector(".focussed")
+    if (sign?.parentElement.classList.contains("focussedd")) {
+      console.log("target: ", sign);
       if (document.querySelector(".focussed").innerHTML != signImage) {
-        if (sign.parentElement.classList.contains("holderDIV")) {
-          sign.parentElement.classList.add("element_updated");
+        if (sign.parentElement.classList.contains("holderDIV") && isRequired) {
+          sign.parentElement.classList.add("element_updated")
         }
-        
+
       }
-      console.log("sign data", data);
-      document.querySelector(".focussed").innerHTML = signImage;
+      sign.innerHTML = signImage;
+    } else {
+      const newFocussedDiv = document.querySelector(".focussedd")
+      if (newFocussedDiv?.innerHTML != signImage) {
+        if (newFocussedDiv.classList.contains('signInput')) {
+          newFocussedDiv.innerHTML = signImage
+        }
+      }
     }
   };
 
   //clicked choose file button
   const chooseFileClick = () => {
-    const addImageButtonInput =
-      document.getElementsByClassName("addSignButtonInput");
+    const addImageButtonInput = document.getElementsByClassName("addSignButtonInput");
     addImageButtonInput.item(0).click();
     handleClicked("sign2", "table2");
+
   };
+
 
   function removeSign() {
     if (document.querySelector(".focussedd").classList.contains("dropp")) {
@@ -76,9 +104,9 @@ const SignsRightSidebar = () => {
   }
   const handleUpdate = () => {
     const imageName = document.getElementById("image_name");
-    const button = document.querySelector(".focussed");
-    if (imageName.value != "") {
-      button.textContent = imageName.value;
+    const signFieldSpan = document.querySelector(".focussed .sign_text");
+    if (imageName.value != "" && signFieldSpan) {
+      signFieldSpan.textContent = imageName.value;
     }
   };
 
@@ -185,7 +213,7 @@ const SignsRightSidebar = () => {
           type="text"
           placeholder="Signature Place Holder"
           id="image_name"
-          onChange={() => {}}
+          onChange={() => { }}
         />
       </div>
       <div className="mt-2 text-center pt-5">
@@ -194,11 +222,18 @@ const SignsRightSidebar = () => {
         </Button>
       </div>
       <hr />
+      <SelectAnsAndQuestion
+        selectedType={selectedType}
+        setSelectedType={setSelectedType}
+        setAddedAns={setAddedAns}
+        addedAns={addedAns} />
+      <hr />
 
       <div className="mt-5 text-center">
         <Button
           variant="primary"
-          onClick={removeSign}
+          // onClick={removeSign}
+          onClick={() => setConfirmRemove(!confirmRemove)}
           className={
             decoded.details.action === "template"
               ? "remove_button"

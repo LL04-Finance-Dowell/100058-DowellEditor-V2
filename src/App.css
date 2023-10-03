@@ -14,6 +14,7 @@
   height: 100px;
   position: absolute;
 }
+
 textarea {
   height: 100px;
   width: 100%;
@@ -30,7 +31,8 @@ textarea {
 .resizers .resizer {
   width: 10px;
   height: 10px;
-  border-radius: 50%; /*magic to turn square into circle*/
+  border-radius: 50%;
+  /*magic to turn square into circle*/
   background: white;
   border: 3px solid #dbd9d9;
   position: absolute;
@@ -41,16 +43,19 @@ textarea {
   left: -5px;
   cursor: nw-resize;
 }
+
 .resizers .resizer.ne {
   top: -5px;
   right: -5px;
   cursor: ne-resize;
 }
+
 .resizers .resizer.sw {
   bottom: -5px;
   left: -5px;
   cursor: sw-resize;
 }
+
 .resizers .resizer.se {
   bottom: -5px;
   right: -5px;
@@ -76,17 +81,19 @@ textarea {
   height: 30px;
   width: 300px;
 }
-table, th, td {
+table,
+th,
+td {
   border-collapse: collapse;
   padding: 5px;
 }
 
-table{
+table {
   width: 100%;
   height: 100%;
 }
 
-td{
+td {
   min-height: 2rem;
   position: relative;
   min-width: 2.5rem;
@@ -103,7 +110,7 @@ td{
   z-index: 20;
 }
 
-.row-resizer{
+.row-resizer {
   position: absolute;
   bottom: 0;
   left: 0;
@@ -114,28 +121,26 @@ td{
 }
 .td-resizer:hover,
 .resizing {
-    border-right: 2px solid blue;
+  border-right: 2px solid blue;
 }
 .row-resizer:hover,
 .resizing {
-    border-top: 2px solid blue;
+  border-top: 2px solid blue;
 }
-.row_col_add_div{
+.row_col_add_div {
   border: none;
 }
 
 tr:nth-child(even) {
   background-color: #dddddd;
 }
-.tableInput{
+.tableInput {
   overflow: visible !important;
 }
-.target-el img{
-  height: clamp(0.5rem,1.5rem,2.5rem);
-  width: clamp(0.5rem, 2rem,3rem);
+.target-el img {
+  height: clamp(0.5rem, 1.5rem, 2.5rem);
+  width: clamp(0.5rem, 2rem, 3rem);
 }
-
-
 
 .addImageButtonInput {
   display: none;
@@ -190,12 +195,21 @@ tr:nth-child(even) {
 
 .select-element {
   min-width: 180px;
+  /* border:none; */
+  outline: none;
+  /* appearance: none; */
+  /* appearance: none; */
+  border: 2px solid black;
+  padding: 2px 0px 2px 0;
+  /* margin: 0 -1px; */
+  padding-right: 5px;
 }
 
 .disable_button {
   opacity: 0.5;
   pointer-events: none;
 }
+
 .modal-body {
   overflow: auto;
 }
@@ -206,9 +220,11 @@ tr:nth-child(even) {
     padding: 0;
     visibility: hidden;
   }
+
   .print_container * {
     visibility: visible;
   }
+
   .midSection {
     height: 290mm;
     margin-top: -175px;
@@ -229,19 +245,20 @@ tr:nth-child(even) {
 .cells_menu {
   position: relative;
 }
+
 .cells_menu:hover .icon_div {
   display: block !important;
 }
+
 .over_flow_maintainer {
-  overflow: inherit !important ;
+  overflow: inherit !important;
 }
 
 .left_menu_wrapper {
   height: 95%;
   position: fixed;
-
   overflow: auto;
-  padding: 0px 30px;
+  padding: 20px 30px;
   margin-left: -12px;
   padding-bottom: 40px;
 }
@@ -255,10 +272,27 @@ tr:nth-child(even) {
   height: 5px;
   width: 5px;
 }
+
 ::-webkit-scrollbar-thumb:horizontal {
   border-radius: 5px;
   background-color: rgb(184, 177, 177);
 }
+
 .document_left_col {
   background: #e3eeff;
+}
+
+
+/* delete modal styles don't touch */
+.modal-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 100;
 }

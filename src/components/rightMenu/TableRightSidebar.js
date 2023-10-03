@@ -11,7 +11,10 @@ import { Row, Button, Form, DropdownButton, Dropdown } from "react-bootstrap";
 
 import { useStateContext } from "../../contexts/contextProvider";
 import { table_dropdown_focuseddClassMaintain } from "../../utils/focusClassMaintain/focusClass";
-// import { CgMenuCheese } from "react-icons/cg";
+import SelectAnsAndQuestion from "../selectAnsAndQuestion";
+import useSelectedAnswer from '../../customHooks/useSelectedAnswers';
+
+
 
 const TableRightSidebar = () => {
   const {
@@ -40,6 +43,10 @@ const TableRightSidebar = () => {
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token");
   var decoded = jwt_decode(token);
+
+  const [selectedType, setSelectedType] = useState('')
+  // const [addedAns, setAddedAns] = useState([])
+  const { addedAns, setAddedAns } = useSelectedAnswer();
 
   // const [borderSize, setBorderSize] = useState(1);
   // const [borderColor, setBorderColor] = useState("#000000");
@@ -78,16 +85,20 @@ const TableRightSidebar = () => {
       e.target.style.border = "none";
     }
     const typeOfOperation = e.dataTransfer.getData("text/plain");
-    console.log("cell has been dropped on " + typeOfOperation);
-    // console.log("e.target", e.target, e.target.hasChildNodes());
+    // console.log("cell has been dropped on " + typeOfOperation);
+    // // console.log("e.target", e.target, e.target.hasChildNodes());
     // if (
     //   e.target.childNodes.length < 2 &&
     //   !e.target.classList.contains("imageInput")
     // ) {
     if (typeOfOperation === "TEXT_INPUT") {
       let inputField = document.createElement("div");
+      const targetTable = e.target.parentElement.parentElement
+      const textId = targetTable.querySelectorAll(".textInput").length + 1
       //  inputField.setAttribute('draggable', true);
+      
       inputField.setAttribute("contenteditable", true);
+      inputField.id = `${targetTable.id}t${textId}`
       inputField.className = "textInput";
       inputField.innerHTML = "Enter text here";
       inputField.style.width = "100%";
@@ -115,9 +126,10 @@ const TableRightSidebar = () => {
       e.target.append(inputField);
     }
     else if (typeOfOperation === "IMAGE_INPUT") {
+      const targetTable = e.target.parentElement.parentElement
+      const imageId = targetTable.querySelectorAll(".textInput").length + 1
       let imageField = document.createElement("div");
 
-      const id = (Math.random() * 1782 * Math.random() * 879).toFixed(5);
       imageField.className = "imageInput";
       imageField.style.width = "100%";
       imageField.style.height = "100%";
@@ -127,7 +139,7 @@ const TableRightSidebar = () => {
       imageField.style.overflow = "overlay";
       imageField.innerHTML = "Image here";
       imageField.style.position = "relative";
-      imageField.id = id
+      imageField.id = `${targetTable.id}i${imageId}`
 
       imageField.onclick = (e) => {
         if (imageField) {
@@ -153,7 +165,7 @@ const TableRightSidebar = () => {
       imgBtnContainer.addEventListener("input", (e) => {
         const reader = new FileReader();
         const targetId = e.target.id;
-        console.log("from input:", targetId);
+        // console.log("from input:", targetId);
 
         reader.addEventListener("load", () => {
           const uploadedImage = reader.result;
@@ -193,7 +205,7 @@ const TableRightSidebar = () => {
     //     handleClicked("image2", "table2");
     //     // handleClicked("image2");
     //     setSidebar(true);
-    //     // console.log("imageclick test", e.target);
+    //     // // console.log("imageclick test", e.target);
     //     e.stopPropagation();
     //   };
 
@@ -219,12 +231,12 @@ const TableRightSidebar = () => {
     //       ).style.backgroundImage = `url(${uploadedImage})`;
     //     });
     //     reader.readAsDataURL(imgBtn.files[0]);
-    //     // console.log("baprebap", document.querySelector(".focussed"));
+    //     // // console.log("baprebap", document.querySelector(".focussed"));
     //     // document.querySelector(".focussed").innerHTML = null;
     //   });
 
     //   // if (uploadedImage) {
-    //   // console.log("imageField", imageField, uploadedImage);
+    //   // // console.log("imageField", imageField, uploadedImage);
     //   // }
     //   // imgBtn.style.width = "100%";
     //   imageButton.append(imgBtn);
@@ -282,6 +294,9 @@ const TableRightSidebar = () => {
       //   // document.getElementsByClassName("dropp").item(0).append(signField);
       // }
       let signField = document.createElement("div");
+      const targetTable = e.target.parentElement.parentElement
+      console.log("TARGET TABLE ",targetTable);
+      const signId =`s${( targetTable.querySelectorAll(".signInput").length + 1)}`
       signField.className = "signInput";
       signField.style.width = "100%";
       signField.style.height = "100%";
@@ -293,6 +308,7 @@ const TableRightSidebar = () => {
       signField.style.position = "absolute";
       signField.style.top = 0;
       signField.style.left = 0;
+      signField.id = `${targetTable.id+signId}`;
 
       // signField.onchange = (event) => {
       //   event.preventDefault();
@@ -351,6 +367,8 @@ const TableRightSidebar = () => {
     }
     else if (typeOfOperation === "DATE_INPUT") {
       let dateField = document.createElement("div");
+      const targetTable = e.target.parentElement.parentElement
+      const dateId = targetTable.querySelectorAll(".dateInput").length + 1
       dateField.className = "dateInput";
       dateField.style.width = "100%";
       dateField.style.height = "100%";
@@ -359,6 +377,7 @@ const TableRightSidebar = () => {
       dateField.style.outline = "0px";
       dateField.style.overflow = "overlay";
       dateField.style.position = "relative";
+      dateField.id = `${targetTable.id}d${dateId}`;
 
       setStartDate(new Date());
       setMethod("select");
@@ -394,7 +413,7 @@ const TableRightSidebar = () => {
 
       // dateField.append(para)
       e.target.append(dateField);
-      //console.log(para);
+      //// console.log(para);
     }
     // }
   };
@@ -433,7 +452,7 @@ const TableRightSidebar = () => {
         break;
       }
     }
-    // console.log("onmouse leave", notes, cells_menu.childNodes.length);
+    // // console.log("onmouse leave", notes, cells_menu.childNodes.length);
     if (!notes) {
       focussedDiv.style.border = "none";
       editableTable.parentElement.classList.add("over_flow_maintainer");
@@ -535,9 +554,11 @@ const TableRightSidebar = () => {
 
   function makeTable() {
     const focussedDiv = document.querySelector(".focussedd");
+    const dropArea = focussedDiv.parentElement
+    const tableID = dropArea.querySelectorAll('table').length
     var table = document.createElement("table");
     table.style.border = "2";
-    table.id = "table";
+    table.id = `T${(tableID + 1)}`;
     table.style.height = "100%"
     table.style.width = "100%"
     table.className = "droppable";
@@ -580,14 +601,14 @@ const TableRightSidebar = () => {
 
       const resizeObserver = new ResizeObserver(entries => {
         entries.forEach(entry => {
-          // console.log("Observing: ",entry.target);
+          // // console.log("Observing: ",entry.target);
           const width = entry.contentRect.width;
           const height = entry.contentRect.height;
           const table = entry.target
           const holderDIV = table.parentElement.parentElement
 
           setColRowSize(table, width, height, holderDIV)
-          //  console.log("called setcolrowsize");
+          //  // console.log("called setcolrowsize");
         })
       })
       resizeObserver.observe(table)
@@ -646,7 +667,7 @@ const TableRightSidebar = () => {
           }
         };
 
-        // console.log("cells[i]", cells[i].classList.contains("dropp"));
+        // // console.log("cells[i]", cells[i].classList.contains("dropp"));
 
         cells[i].ondrop = handleDropp;
         document.getElementById("rows").value = "";
@@ -667,7 +688,7 @@ const TableRightSidebar = () => {
     for (const resizer of col_resizers) {
       if (height) {
         resizer.style.height = `${height}px`
-        // console.log("set height: ",height);
+        // // console.log("set height: ",height);
       } else {
         resizer.style.height = `${table.offsetHeight}px`
 
@@ -676,7 +697,7 @@ const TableRightSidebar = () => {
     for (const resizer of row_resizers) {
       if (width) {
         resizer.style.width = `${width}px`
-        // console.log("set witdh: ",width);
+        // // console.log("set witdh: ",width);
       } else {
         resizer.style.width = `${table.offsetWidth}px`
       }
@@ -780,12 +801,12 @@ const TableRightSidebar = () => {
       }
       var tablee = focusseddDiv?.firstElementChild?.firstElementChild;
       var cells = tablee.getElementsByTagName("td");
-      // console.log("cells", tablee, cells);
+      // // console.log("cells", tablee, cells);
       for (let i = 0; i < cells.length; i++) {
-        // console.log("cells", cells[i]);
+        // // console.log("cells", cells[i]);
         cells[i].onmouseover = function (e) {
 
-          // console.log("mouseOver", e.target);
+          // // console.log("mouseOver", e.target);
         };
         cells[i].ondragover = function (e) {
           e.preventDefault();
@@ -924,7 +945,7 @@ const TableRightSidebar = () => {
             td.appendChild(rowDeleteBtn);
             // }
           }
-          // console.log("child element check", focusseddDiv?.firstElementChild);
+          // // console.log("child element check", focusseddDiv?.firstElementChild);
           focusseddDiv?.firstElementChild?.children[1].childNodes[
             rowIndex
           ].appendChild(td);
@@ -950,7 +971,7 @@ const TableRightSidebar = () => {
     focusseddDiv.style.overflow = 'visible';
     focusseddDiv.style.borderWidth = "0px";
     focusseddDiv.querySelector('.tableInput').style.backgroundColor = "#fff";
-    console.log(focusseddDiv.style.border)
+    // console.log(focusseddDiv.style.border)
     focusseddDiv.classList.remove('.dotted_border')
     const isUpdating = document.querySelector(".table_update_save_div"); // check if user is already editing
     if (isUpdating) return; //do nothing if user is editing
@@ -969,7 +990,7 @@ const TableRightSidebar = () => {
     for (var rowIndex = 0; rowIndex < 1; rowIndex++) {
       var tr = document.createElement("tr");
       for (var colIndex = 1; colIndex < numOfCol; colIndex++) {
-        // console.log("numOfCol", numOfTr, numOfTd, numOfCol);
+        // // console.log("numOfCol", numOfTr, numOfTd, numOfCol);
         var td = document.createElement("td");
         td.className = "dropp";
 
@@ -1044,7 +1065,7 @@ const TableRightSidebar = () => {
     for (var rowIndex = 0; rowIndex < 1; rowIndex++) {
       var tr = document.createElement("tr");
       for (var colIndex = 0; colIndex < numOfCol; colIndex++) {
-        // console.log("numOfCol", numOfTr, numOfTd, numOfCol);
+        // // console.log("numOfCol", numOfTr, numOfTd, numOfCol);
         var td = document.createElement("td");
         td.className = "dropp";
         const iconMenu = createIconMenu();
@@ -1101,7 +1122,7 @@ const TableRightSidebar = () => {
           }
         };
 
-        // console.log("td", td.classList.contains("dropp"));
+        // // console.log("td", td.classList.contains("dropp"));
         td.ondrop = handleDropp;
         e.target.parentElement.prepend(td);
         tr.prepend(td);
@@ -1189,7 +1210,7 @@ const TableRightSidebar = () => {
     const numOfTd = numOfTdElement.length;
     const numOfCol = numOfTd / numOfTr;
 
-    // console.log("numOfTr", numOfTr, "numOfTd", numOfTd, "numOfCol", numOfCol);
+    // // console.log("numOfTr", numOfTr, "numOfTd", numOfTd, "numOfCol", numOfCol);
     const AllTrOfEditableTable = editableTable.querySelectorAll("tr");
 
     const index = Array.from(
@@ -1239,7 +1260,7 @@ const TableRightSidebar = () => {
         }
       };
 
-      // console.log("td", td.classList.contains("dropp"));
+      // // console.log("td", td.classList.contains("dropp"));
       td.ondrop = handleDropp;
       AllTrOfEditableTable[i].insertBefore(
         td,
@@ -1317,7 +1338,7 @@ const TableRightSidebar = () => {
     }
     e.stopPropagation();
   }
-  // console.log("isCreateTableBtnDisabled", isCreateTableBtnDisabled);
+  // // console.log("isCreateTableBtnDisabled", isCreateTableBtnDisabled);
 
   const handleBorderSizeChange = (e) => {
     setTableBorderSize(e.target.value);
@@ -1344,7 +1365,7 @@ const TableRightSidebar = () => {
           targets[i].remove()
         }
       }
-         } else {
+    } else {
       targetEl.remove()
       setSidebar(true)
     }
@@ -1401,21 +1422,23 @@ const TableRightSidebar = () => {
         </Button>
       </div>
 
-      {/* <div className='dropdown pt-4'>
-        <h6>User permissions</h6>
-        <select className='shadow bg-white rounded w-100 h-75'>
-          <option value="Nothing Selected" selected="selected">Nothing Selected</option>
-          <option value="Action">Action</option>
-          <option value="Another action">Another action</option>
-          <option value="Something else">Something else</option>
-        </select>
-      </div> */}
+      <hr />
+      <SelectAnsAndQuestion
+        selectedType={selectedType}
+        setSelectedType={setSelectedType}
+        setAddedAns={setAddedAns}
+        addedAns={addedAns} />
+      <hr />
 
       <div className="mt-2 text-center pt-5">
         <Button
           variant="primary"
-          className={decoded.details.action === "template" ? "px-5 remove_button" : "px-5 remove_button disable_button"}
-          onClick={() => removeTableElements()}
+          className={
+            decoded.details.action === "template"
+              ? "px-5 remove_button"
+              : "px-5 remove_button disable_button"
+          }
+          onClick={() => setConfirmRemove(!confirmRemove)}
         >
           Remove Table
         </Button>

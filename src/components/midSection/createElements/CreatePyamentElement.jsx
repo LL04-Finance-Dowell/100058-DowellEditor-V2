@@ -14,6 +14,14 @@ function CreatePyamentElement (holderDIV, focuseddClassMaintain, handleClicked, 
     paymentField.style.position = "absolute";
     paymentField.textContent = "Pay";
 
+    const paymentInput = document.getElementsByClassName("paymentInput");
+    if (paymentInput.length) {
+      const p = paymentInput.length;
+      paymentField.id = `pay${p + 1}`;
+        } else {
+            paymentField.id = "pay1";
+        }
+
     paymentField.onclick = (e) => {
         e.stopPropagation();
         focuseddClassMaintain(e);

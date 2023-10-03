@@ -4,7 +4,7 @@ import copyInput from '../CopyInput';
 // Regular JavaScript function to create a text input field
 function createFormInputElement(holderDIV, focuseddClassMaintain, handleClicked, setSidebar) {
     let buttonField = document.createElement("button");
-    console.log("button field");
+    // console.log("button field");
     buttonField.className = "emailButton";
     buttonField.style.width = "100%";
     buttonField.style.height = "100%";
@@ -21,6 +21,14 @@ function createFormInputElement(holderDIV, focuseddClassMaintain, handleClicked,
     buttonField.style.padding = "10px 20px";
     buttonField.style.margin = "0 auto";
     buttonField.style.border = "1px solid #0000";
+
+    const emailC = document.getElementsByClassName("emailButton");
+    if (emailC.length) {
+      const e = emailC.length;
+        buttonField.id = `eml${e + 1}`;
+        } else {
+          buttonField.id = "eml1";
+        }
 
     // add form container to the document
     document.body.appendChild(buttonField);

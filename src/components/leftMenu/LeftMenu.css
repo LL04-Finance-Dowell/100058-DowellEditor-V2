@@ -6,14 +6,32 @@
   gap: 1rem;
 }
 
-.leftMenu > button {
+.leftMenu .btn_wrapper {
+  text-align: center;
+}
+
+.leftMenu button:hover + .btn_tag {
+  color: #25c7a3;
+}
+
+.btn_wrapper .btn_tag {
+  margin: 0;
+  color: #fff;
+  font-size: 0.8rem;
+  margin-top: 5px;
+  transition: all ease 0.3s;
+  pointer-events: none;
+}
+
+.leftMenu .btn_wrapper > button {
   outline: transparent;
   border: none;
   background-color: #394869;
   padding: 0.6rem 0.8rem;
   border-radius: 6px;
+  transition: all ease 0.3s;
 }
-.leftMenu > button:hover {
+.leftMenu .btn_wrapper > button:hover {
   background-color: #25c7a3;
 }
 
@@ -25,7 +43,7 @@
   cursor: pointer;
 }
 
-.leftMenu > button > svg {
+.leftMenu .btn_wrapper button svg {
   color: #fff;
   width: 1.4rem !important;
   margin: 0;
@@ -68,7 +86,7 @@
   padding: 5px 15px;
 }
 
-@media screen and (max-width: 992px) {
+/* @media screen and (max-width: 992px) {
   .leftMenu {
     background-color: #ffffff;
     min-height: 8vh;
@@ -83,6 +101,26 @@
   .left_menu_wrapper{
     height: auto;
     z-index: 999;
+    width: 100%;
+    padding-top: 5px;
+    padding-bottom: 5px;
+  }
+} */
+@media screen and (max-width: 992px) {
+  .leftMenu {
+    background-color: #ffffff;
+    min-height: 8vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin-top: 0px;
+    flex-wrap: wrap;
+    padding: 5px 2px;
+  }
+  .left_menu_wrapper {
+    height: auto;
+    z-index: 99;
     width: 100%;
     padding-top: 5px;
     padding-bottom: 5px;

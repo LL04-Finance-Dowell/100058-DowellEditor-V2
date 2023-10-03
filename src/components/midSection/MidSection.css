@@ -22,9 +22,47 @@
   border: 2px dotted gray;
 }
 
+.textInput.empty:after {
+  content: 'T';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 7rem;
+  font-family: courier;
+  font-weight: 500;
+  color: #e3eeff;
+  z-index: -1;
+}
+
+.sign_text,
+.img_text {
+  pointer-events: none;
+}
+
+.icon_wrapper img {
+  object-fit: cover;
+  width: 100%;
+  height: auto;
+}
+
+.icon_wrapper {
+  width: 50px;
+  display: inline-block;
+  pointer-events: none;
+}
+
+.signInput .icon_wrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 70px;
+}
+
 /*
 .midSection_container{
-    background-color: #ffffff;
+    background-color: #ffffff;q
     width: 216mm;
     height: 297mm;
     position: relative;

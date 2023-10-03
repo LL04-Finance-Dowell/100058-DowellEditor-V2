@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
 import copyInput from '../CopyInput';
+import icon from '../../../assets/icons/sign.svg'
+
 
 // Regular JavaScript function to create a text input field
 function createSignInputElement(holderDIV, focuseddClassMaintain, handleClicked, setSidebar, setPostData, getOffset) {
+    holderDIV.style.height = '110px'
+
     let signField = document.createElement("div");
     signField.className = "signInput";
     signField.style.width = "100%";
@@ -12,8 +16,27 @@ function createSignInputElement(holderDIV, focuseddClassMaintain, handleClicked,
     signField.style.outline = "0px";
     signField.style.overflow = "overlay";
 
-    signField.innerText = "Signature here";
+    // signField.innerText = "";
     signField.style.position = "absolute";
+
+    const span2 = document.createElement('span');
+    span2.className = 'sign_text';
+    span2.textContent = "Signature here";
+    span2.style.color = '#737272';
+
+    const span = document.createElement('span');
+    span.className = 'icon_wrapper';
+    span.innerHTML = `<img src='${icon}'/>`;
+
+    signField.append(span2)
+    signField.append(span)
+    const signIn = document.getElementsByClassName("signInput");
+    if (signIn.length) {
+        const h = signIn.length;
+        signField.id = `s${h + 1}`;
+    } else {
+        signField.id = "s1";
+    }
 
     signField.onchange = (event) => {
         event.preventDefault();
@@ -50,13 +73,32 @@ function createSignInputElement(holderDIV, focuseddClassMaintain, handleClicked,
 
     signBtn.addEventListener("input", () => {
         const reader = new FileReader();
+        try {
+            reader.addEventListener("load", () => {
+                if (!reader.result) {
+                    setSidebar(false);
+                    return;
+                }
+                uploadedImage = reader.result;
+                const signImage = `<img src=${uploadedImage} width="100%" height="100%"/>`;
+                if (document.querySelector(".focussed")) {
+                    document.querySelector(".focussed").innerHTML = signImage
+                } else if (document.querySelector(".focussedd")) {
+                    const target = document.querySelector(".focussedd");
+                    if (target.classList.contains('signInput')) {
+                        target.innerHTML = signImage
+                    }
+                };
+                setSidebar(true);
+            });
+            reader.readAsDataURL(signBtn.files[0]);
 
-        reader.addEventListener("load", () => {
-            uploadedImage = reader.result;
-            const signImage = `<img src=${uploadedImage} width="100%" height="100%"/>`;
-            document.querySelector(".focussed").innerHTML = signImage;
-        });
-        reader.readAsDataURL(signBtn.files[0]);
+        } catch (error) {
+            console.log("FAILED TO UPLOAD:", error);
+            setSidebar(true);
+
+        }
+
     });
 
     imageSignButton.append(signBtn);

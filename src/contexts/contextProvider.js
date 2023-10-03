@@ -86,8 +86,8 @@ export const ContextProvider = ({ children }) => {
   const handleClicked = (clicked, tableRighMenu) => {
     setIsClicked({ ...initialState2, [clicked]: true, [tableRighMenu]: false });
   };
-  // console.log("");
-  console.log("isClicked", isClicked, "initialState2", initialState2);
+  // // console.log("");
+  // console.log("isClicked", isClicked, "initialState2", initialState2);
   const [newToken, setNewToken] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [isFlipClicked, setIsFlipClicked] = useState(true);
@@ -113,7 +113,7 @@ export const ContextProvider = ({ children }) => {
 
   const [item, setItem] = useState(["div_1"]);
 
-  //   //console.log("item check", item);
+  //   //// console.log("item check", item);
 
   // Scale id
   const [scaleId, setScaleId] = useState("id");
@@ -147,11 +147,16 @@ export const ContextProvider = ({ children }) => {
   const [containerBorderColor, setContainerBorderColor] = useState("gray");
   const [formBorderSize, setFormBorderSize] = useState(2);
   const [formBorderColor, setFormBorderColor] = useState("gray");
+  const [docMapRequired, setDocMapRequired] = useState([]);
+
 
   //Company id
   const [companyId, setCompanyId] = useState("");
   const [isMenuVisible, setIsMenuVisible] = useState(false);
   // handle drop event for table and retrieve midsection
+
+
+  const [allowHighlight, setAllowHighlight] = useState(false)
 
   const handleDropp = (e) => {
     e.preventDefault();
@@ -165,8 +170,8 @@ export const ContextProvider = ({ children }) => {
       e.target.style.border = "none";
     }
     const typeOfOperation = e.dataTransfer.getData("text/plain");
-    console.log("cell has been dropped on " + typeOfOperation);
-    // console.log("e.target", e.target, e.target.hasChildNodes());
+    // console.log("cell has been dropped on " + typeOfOperation);
+    // // console.log("e.target", e.target, e.target.hasChildNodes());
     if (
       e.target.childNodes.length < 2 &&
       !e.target.classList.contains("imageInput")
@@ -385,24 +390,33 @@ export const ContextProvider = ({ children }) => {
     e.target.classList.add("focussed");
   }
 
+  const [questionAndAnswerGroupedData,
+    setQuestionAndAnsGroupedData] = useState([])
+
+
+  const [confirmRemove, setConfirmRemove] = useState(false)
+  const [iframeSize,setIframeSize] = useState({
+    width:"",
+    height:""
+  })
 
   const copyInput = (clickHandler) => {
-  
+
     const element = document.querySelector(".focussedd");
-  
+
     let counter = 1;
     const copyEle = element.cloneNode(true);
     const rect = element.getBoundingClientRect();
-  
+
     const copyEleTop =
       parseInt(copyEle.style.top.slice(0, -2)) +
       parseInt(rect.height) +
       20 +
       "px";
-  
+
     copyEle.classList.remove("focussedd");
     copyEle.firstChild.classList.remove("focussed");
-  
+
     copyEle.onfocus = () => {
       copyEle.style.border = "1px solid rgb(255 191 0)";
     };
@@ -413,7 +427,7 @@ export const ContextProvider = ({ children }) => {
       copyEle.style.top = copyEleTop;
       copyEle.style.border = "3px dotted gray";
       copyEle.classList.remove("resizeBtn");
-  
+
       copyEle.onmousedown = copyEle.addEventListener(
         "mousedown",
         (event) => {
@@ -421,20 +435,20 @@ export const ContextProvider = ({ children }) => {
         },
         false
       );
-  
+
       // trying to remove resize btn
-  
+
       const resizeTags = copyEle.getElementsByClassName("resizeBtn");
       while (resizeTags.length > 0) {
-        console.log("resizeTags", resizeTags[0]);
+        // console.log("resizeTags", resizeTags[0]);
         resizeTags[0].remove();
       }
-  
+
       const resizerTL = getResizer("top", "left", decoded);
       const resizerTR = getResizer("top", "right", decoded);
       const resizerBL = getResizer("bottom", "left", decoded);
       const resizerBR = getResizer("bottom", "right", decoded);
-  
+
       copyEle.addEventListener("focus", function (e) {
         copyEle.style.border = "2px solid orange";
         copyEle.append(resizerTL, resizerTR, resizerBL, resizerBR);
@@ -442,7 +456,7 @@ export const ContextProvider = ({ children }) => {
       copyEle.addEventListener("focusout", function (e) {
         copyEle.classList.remove("zIndex-two");
         copyEle.style.border = "3px dotted gray";
-  
+
         resizerTL.remove();
         resizerTR.remove();
         resizerBL.remove();
@@ -451,7 +465,7 @@ export const ContextProvider = ({ children }) => {
       copyEle.addEventListener("click", (e) => {
         e.stopPropagation();
         focuseddClassMaintain(e);
-        console.log("find classlist", e.target.classList[0]);
+        // console.log("find classlist", e.target.classList[0]);
         if (
           e.target?.parentElement?.parentElement.classList.contains(
             "containerInput"
@@ -491,14 +505,14 @@ export const ContextProvider = ({ children }) => {
               type = "";
           }
           handleClicked(type, "container2");
-          console.log("inside if", type);
+          // console.log("inside if", type);
         } else {
           handleClicked(clickHandler);
         }
         setSidebar(true);
       });
     }
-  
+
     let midSec = null;
     if (!midSec) {
       let targetParent = element;
@@ -515,13 +529,13 @@ export const ContextProvider = ({ children }) => {
         }
       }
     }
-  
+
     copyEle.id += counter;
     if (
       parseInt(copyEle.style.top.slice(0, -2)) +
-        parseInt(rect.height) +
-        parseInt(rect.height) +
-        20 <
+      parseInt(rect.height) +
+      parseInt(rect.height) +
+      20 <
       1122
     ) {
       midSec.appendChild(copyEle);
@@ -668,6 +682,10 @@ export const ContextProvider = ({ children }) => {
         setFormBorderSize,
         formBorderColor,
         setFormBorderColor,
+        questionAndAnswerGroupedData,
+        setQuestionAndAnsGroupedData,
+        confirmRemove, setConfirmRemove,
+        allowHighlight, setAllowHighlight,
         copyInput,
         paymentKey, 
         setPaymentKey,

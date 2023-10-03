@@ -6,6 +6,8 @@ import { ToastContainer, toast } from "react-toastify";
 import { useSearchParams } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 import { useStateContext } from "../../contexts/contextProvider";
+import SelectAnsAndQuestion from "../selectAnsAndQuestion";
+import useSelectedAnswer from "../../customHooks/useSelectedAnswers";
 
 const EmailRightSideBar = () => {
   const [searchParams] = useSearchParams();
@@ -20,7 +22,11 @@ const EmailRightSideBar = () => {
     setFormBorderSize,
     formBorderColor,
     setFormBorderColor,
-  } = useStateContext();
+    setConfirmRemove, confirmRemove
+  } = useStateContext()
+  const [selectedType, setSelectedType] = useState('')
+  // const [addedAns, setAddedAns] = useState([])
+  const { addedAns, setAddedAns } = useSelectedAnswer()
 
   const [showSlider, setShowSlider] = useState(false);
   const [fromEmail, setFromEmail] = useState("");
@@ -77,13 +83,13 @@ const EmailRightSideBar = () => {
     axios
       .post("https://100085.pythonanywhere.com/api/editor-component/", formData)
       .then((response) => {
-        console.log(response);
+        // console.log(response);
         mailBtn.textContent = "Sent";
         mailBtn.style.backgroundColor = "green";
         toast.success("Email has been sent");
       });
     //alert("Mail sent!");
-    console.log(formData);
+    // console.log(formData);
 
     setMessage("");
     setSubject("");
@@ -247,10 +253,17 @@ const EmailRightSideBar = () => {
         )}
       </Row>
       <hr />
+      <SelectAnsAndQuestion
+        selectedType={selectedType}
+        setSelectedType={setSelectedType}
+        setAddedAns={setAddedAns}
+        addedAns={addedAns} />
+      <hr />
       <div className="d-flex justify-content-center">
         <Button
           variant="primary"
-          onClick={removeContainer}
+          // onClick={removeContainer}
+          onClick={() => setConfirmRemove(!confirmRemove)}
           className="remove_container text-center mt-5"
         >
           Remove Container

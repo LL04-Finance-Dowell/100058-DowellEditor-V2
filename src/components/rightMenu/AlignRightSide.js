@@ -27,6 +27,8 @@ import {
 import { useStateContext } from "../../contexts/contextProvider";
 import { useSearchParams } from "react-router-dom";
 import jwt_decode from "jwt-decode";
+import SelectAnsAndQuestion from "../selectAnsAndQuestion";
+import useSelectedAnswer from "../../customHooks/useSelectedAnswers";
 
 const AlignRightSide = () => {
   const {
@@ -44,6 +46,7 @@ const AlignRightSide = () => {
     setInputBorderColor,
     inputBorderSize,
     setInputBorderSize,
+    confirmRemove, setConfirmRemove,
   } = useStateContext();
 
   const [searchParams] = useSearchParams();
@@ -53,14 +56,19 @@ const AlignRightSide = () => {
   const [isWindowHightSmall, setIsWindowHightSmall] = useState(false);
 
   const [showSlider, setShowSlider] = useState(false);
+  const [selectedType, setSelectedType] = useState("")
+
+  const { addedAns, setAddedAns } = useSelectedAnswer()
 
   var changeFontFamily = (ev) => {
     const userSelection = window.getSelection();
     const selectedTextRange = userSelection.getRangeAt(0);
 
-    //console.log(selectedTextRange);
+    //// console.log(selectedTextRange);
     selectedTextRange.style.fontFamily = `${ev.target.value}`;
   };
+
+
 
   const handleBold = () => {
     setBold(!bold);
@@ -113,8 +121,8 @@ const AlignRightSide = () => {
   let currentFontSize = 16;
   const handleIncreaseSize = () => {
     var sel = document.getElementsByClassName("focussed")[0];
-      currentFontSize += 2;
-      sel.style.fontSize = currentFontSize + "px";
+    currentFontSize += 2;
+    sel.style.fontSize = currentFontSize + "px";
 
   };
 
@@ -126,7 +134,7 @@ const AlignRightSide = () => {
     currentFontSize -= 2;
     sel.style.fontSize = currentFontSize + "px";
 
-    
+
   };
 
   function handleSizing(event) {
@@ -193,7 +201,7 @@ const AlignRightSide = () => {
 
   function showColorInput() {
     const fontColor = document.getElementById("colorInputColor");
-    //console.log(fontColor);
+    //// console.log(fontColor);
     if (fontColor.style.diplay === "none") {
       fontColor.style.display = "block";
     } else {
@@ -312,9 +320,9 @@ const AlignRightSide = () => {
           </Col>
         </Row>
 
-        <Row className="pt-4">
+        <Row className="pt-4 me-3">
           <h6 className="my-3">Font Size</h6>
-          <Col className="">
+          <Col className="col-lg-4 font_size_formatting">
             <select
               onChange={handleSizing}
               className="select border-0 bg-white rounded font-sizing"
@@ -471,7 +479,7 @@ const AlignRightSide = () => {
               <option value="300">300</option>
             </select>
           </Col>
-          <Col>
+          <Col className="col-lg-4 font_size_formatting">
             <Button
               variant="white"
               onClick={handleIncreaseSize}
@@ -481,7 +489,7 @@ const AlignRightSide = () => {
               <AiOutlineArrowUp color="gray" />
             </Button>
           </Col>
-          <Col>
+          <Col className="col-lg-4 font_size_formatting">
             <Button
               variant="white"
               onClick={handleDecreaseSize}
@@ -541,37 +549,37 @@ const AlignRightSide = () => {
         <Row className="pt-0">
           <h6>Text Formatting</h6>
           <Col>
-            <Button onClick={handleBold} variant="white">
+            <Button className="text_formatting_btn" onClick={handleBold} variant="white">
               <FaBold color="gray" />
             </Button>
           </Col>
 
           <Col>
-            <Button onClick={handleItalic} variant="white">
+            <Button className="text_formatting_btn" onClick={handleItalic} variant="white">
               <FaItalic color="gray" size={20} />
             </Button>
           </Col>
 
           <Col>
-            <Button onClick={handleUnderline} variant="white">
+            <Button className="text_formatting_btn" onClick={handleUnderline} variant="white">
               <FaUnderline color="gray" size={20} />
             </Button>
           </Col>
 
           <Col>
-            <Button onClick={handleStrikethrough} variant="white">
+            <Button className="text_formatting_btn text_formatting_btn" onClick={handleStrikethrough} variant="white">
               <FaStrikethrough color="gray" size={20} />
             </Button>
           </Col>
         </Row>
-        {/* <hr /> */}
+        <hr />
 
         {/* Text color */}
         <Row className="pt-0">
-          {/* <h6>Text Color</h6> */}
+          <h6>Text Color</h6>
           <Col className="col-lg-4">
-            <Button variant="white" onClick={showColorInput}>
-              <AiOutlineFontColors color="purple" size={40} />
+            <Button className="text_formatting_btn" variant="white" onClick={showColorInput}>
+              <AiOutlineFontColors className="text_color_formatting" color="purple" size={40} />
             </Button>
             <input
               type="color"
@@ -582,7 +590,7 @@ const AlignRightSide = () => {
           </Col>
 
           <Col className="col-lg-4">
-            <Button variant="white" onClick={showTBgColorInput}>
+            <Button className="text_color_formatting text_formatting_btn" variant="white" onClick={showTBgColorInput}>
               <MdBorderColor color="green" size={30} />
             </Button>
             <input
@@ -594,7 +602,7 @@ const AlignRightSide = () => {
           </Col>
 
           <Col className="col-lg-4">
-            <Button variant="white" onClick={showBgColorInput}>
+            <Button className="text_color_formatting text_formatting_btn" variant="white" onClick={showBgColorInput}>
               <MdFormatColorFill color="blue" size={30} />
             </Button>
             <input
@@ -612,60 +620,60 @@ const AlignRightSide = () => {
         <Row className="pt-0">
           <h6>Text Alignment</h6>
           <Row className="pt-0 ms-1">
-            <Col className="mx-0 p-0 ">
+            <Col className="mx-0 p-0 col-lg-2">
               <Button onClick={handleLeftAlign} variant="white">
                 <BiAlignLeft color="gray" size={20} />
               </Button>
             </Col>
 
-            <Col className="mx-0 p-0">
+            <Col className="mx-0 p-0 col-lg-2">
               <Button onClick={handleMiddleAlign} variant="white">
                 <BiAlignMiddle color="gray" size={20} />
               </Button>
             </Col>
 
-            <Col className="mx-0 p-0">
+            <Col className="mx-0 p-0 col-lg-2">
               <Button onClick={handleRightAlign} variant="white">
                 <BiAlignRight color="gray" size={20} />
               </Button>
             </Col>
-            <Col className="mx-0 p-0">
+            <Col className="mx-0 p-0 col-lg-2">
               <Button onClick={handleOutdent} variant="white">
                 <FaOutdent color="gray" size={20} />
               </Button>
             </Col>
-            <Col className="mx-0 p-0">
+            <Col className="mx-0 p-0 col-lg-2">
               <Button onClick={handleIndent} variant="white">
                 <FaIndent color="gray" size={20} />
               </Button>
             </Col>
-            <Col className="mx-0 p-0">
+            <Col className="mx-0 p-0 col-lg-2">
               <Button onClick={handleUnorderedList} variant="white">
                 <FaListUl color="gray" size={20} />
               </Button>
             </Col>
-            <Col className="mx-0 p-0">
+            <Col className="mx-0 p-0 col-lg-2">
               <Button onClick={handleOrderedList} variant="white">
                 <FaListOl color="gray" size={20} />
               </Button>
             </Col>
-            <Col className="mx-0 p-0">
-              <Button onClick={() => {}} variant="white">
+            <Col className="mx-0 p-0 col-lg-2">
+              <Button onClick={() => { }} variant="white">
                 <FaIndent color="gray" size={20} />
               </Button>
             </Col>
-            <Col className="mx-0 p-0">
-              <Button onClick={() => {}} variant="white">
+            <Col className="mx-0 p-0 col-lg-2">
+              <Button onClick={() => { }} variant="white">
                 <FaIndent color="gray" size={20} />
               </Button>
             </Col>
-            <Col className="mx-0 p-0">
-              <Button onClick={() => {}} variant="white">
+            <Col className="mx-0 p-0 col-lg-2">
+              <Button onClick={() => { }} variant="white">
                 <FaIndent color="gray" size={20} />
               </Button>
             </Col>
-            <Col className="mx-0 p-0">
-              <Button onClick={() => {}} variant="white">
+            <Col className="mx-0 p-0 col-lg-2">
+              <Button onClick={() => { }} variant="white">
                 <FaIndent color="gray" size={20} />
               </Button>
             </Col>
@@ -674,11 +682,20 @@ const AlignRightSide = () => {
 
         <hr />
 
+        <SelectAnsAndQuestion
+          selectedType={selectedType}
+          setSelectedType={setSelectedType}
+          setAddedAns={setAddedAns}
+          addedAns={addedAns}
+        />
+        <hr />
+
         <Row className="pt-0">
           <div className="mt-3 text-center">
             <Button
               variant="primary"
-              onClick={removeTextBox}
+              // onClick={removeTextBox}
+              onClick={() => setConfirmRemove(!confirmRemove)}
               className={
                 decoded.details.action === "template"
                   ? "remove_button"

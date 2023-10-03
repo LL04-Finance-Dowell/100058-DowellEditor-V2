@@ -4,6 +4,9 @@ import { useStateContext } from "../../contexts/contextProvider";
 import Axios from "axios";
 import jwt_decode from "jwt-decode";
 import { useSearchParams } from "react-router-dom";
+import SelectAnsAndQuestion from "../selectAnsAndQuestion";
+import useSelectedAnswer from '../../customHooks/useSelectedAnswers';
+
 
 const ScaleRightSide = () => {
   const {
@@ -25,7 +28,12 @@ const ScaleRightSide = () => {
     setScaleBorderSize,
     scaleBorderColor,
     setScaleBorderColor,
+    setConfirmRemove, confirmRemove
   } = useStateContext();
+
+  const [selectedType, setSelectedType] = useState('')
+  // const [addedAns, setAddedAns] = useState([])
+  const { addedAns, setAddedAns } = useSelectedAnswer()
 
   const [showSlider, setShowSlider] = useState(false);
   const [showBorder, setShowBorder] = useState(true);
@@ -35,8 +43,8 @@ const ScaleRightSide = () => {
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token");
   var decoded = jwt_decode(token);
-  console.log(data, "data");
-  console.log(companyId);
+  // console.log(data, "data");
+  // console.log(companyId);
 
   const holderDIV = document.querySelector(".focussedd");
   const scaleId = holderDIV?.children[1].innerHTML;
@@ -61,8 +69,8 @@ const ScaleRightSide = () => {
     iframe?.contentWindow?.postMessage(message, "*");
   }
   function scaleSubmit(e) {
-    console.log(selectedOptions);
-    console.log(selectedOptions[0]);
+    // console.log(selectedOptions);
+    // console.log(selectedOptions[0]);
     e.preventDefault();
     setIsLoading(true);
     Axios.post("https://100035.pythonanywhere.com/api/nps_custom_data/", {
@@ -75,12 +83,12 @@ const ScaleRightSide = () => {
         if (res.status == 200) {
           setIsLoading(false);
           sendMessage();
-          console.log(res, "kk");
+          // console.log(res, "kk");
         }
       })
       .catch((err) => {
         setIsLoading(false);
-        console.log(err);
+        // console.log(err);
       });
   }
 
@@ -100,7 +108,7 @@ const ScaleRightSide = () => {
   }
 
   const iframeSrc = `https://100035.pythonanywhere.com/nps-editor/settings/${scaleId}`;
-  console.log(iframeSrc, "iframeSrc");
+  // console.log(iframeSrc, "iframeSrc");
 
   function removeScale() {
     const focusseddElmnt = document.querySelector(".focussedd");
@@ -123,15 +131,15 @@ const ScaleRightSide = () => {
     "type",
     "SCALE_INPUT"
   );
-  console.log(newArray);
+  // console.log(newArray);
 
   const filteredArray = newArray?.filter((obj) => !customId.includes(obj.id));
-  console.log(filteredArray);
+  // console.log(filteredArray);
 
   const elems = document.getElementsByClassName("holderDIV");
   for (let index = 0; index < elems.length; index++) {
     const element = elems[index];
-    // console.log(element.children[0]);
+    // // console.log(element.children[0]);
   }
 
   const handleSelect = (event) => {
@@ -143,23 +151,23 @@ const ScaleRightSide = () => {
       const option = options[i];
       if (option.selected) {
         selectedValues[option.value] = option.id;
-        console.log(option);
+        // console.log(option);
       }
     }
-    console.log(selectedValues);
+    // console.log(selectedValues);
     setSelectedOptions(selectedValues);
 
     let selectedOption = selectField.options[selectField.selectedIndex];
     let selectedElementId = selectedOption.id;
-    console.log(selectedElementId, "selectedElementId");
+    // console.log(selectedElementId, "selectedElementId");
 
     const selectedElements = myArray.find(
       (element) => element.id === selectedElementId
     );
-    console.log(selectedElements, "selectedElement");
+    // console.log(selectedElements, "selectedElement");
 
     let divElement = document.getElementById(selectedElements.id);
-    console.log(divElement.id, "divElement");
+    // console.log(divElement.id, "divElement");
     divElement.parentElement.style.border = "2px solid green";
     divElement.focus();
   };
@@ -336,6 +344,12 @@ const ScaleRightSide = () => {
             )}
           </Row>
           <hr />
+          <SelectAnsAndQuestion
+            selectedType={selectedType}
+            setSelectedType={setSelectedType}
+            setAddedAns={setAddedAns}
+            addedAns={addedAns} />
+          <hr />
           <div id="settingRight" style={{ display: "none" }}>
             <h3>Configurations</h3>
             {/* iframe */}
@@ -345,7 +359,7 @@ const ScaleRightSide = () => {
                 id="select"
                 // onChange={handleDateMethod}
                 className="select border-0 bg-white rounded w-100 h-75 p-2 "
-                //multiple
+              //multiple
               >
                 <option value="select">Select Element</option>
                 {options}
@@ -388,7 +402,8 @@ const ScaleRightSide = () => {
                     ? "remove_button"
                     : "remove_button disable_button"
                 }
-                onClick={removeScale}
+                // onClick={removeScale}
+                onClick={() => setConfirmRemove(!confirmRemove)}
               >
                 Remove Scale
               </Button>

@@ -78,11 +78,11 @@
 
 .header_icons > img,
 svg {
-  width: 1rem !important;
+  width: 2rem !important;
   height: 22px;
   color: #1c2b48;
   /* margin-left: 33.9px; */
-  margin-right: 20px;
+  /* margin-right: 20px; */
   cursor: pointer;
 }
 
@@ -145,7 +145,7 @@ svg {
   color: #fff !important;
   background-color: #fff;
 }
-@media screen and (max-width: 992px) {
+/* @media screen and (max-width: 992px) {
   .title-name{
     font-size: 2rem;
   }
@@ -165,4 +165,30 @@ svg {
     margin-top: 21px;
     max-width: 50%;
   }
+} */
+@media screen and (max-width: 992px) {
+  .title-name {
+    font-size: 2rem;
+    margin-left: 0px;
+  }
+  #reject-button, #finalize-button {
+    /* margin-left: -440%; */
+    font-size: 12px;
+  }
+  /* #finalize-button {
+    margin-left: -380%;
+    font-size: 12px;
+  } */
+  .header_icons {
+    margin-left: -30px !important;
+  }
+  .header_icons > img,
+  svg:not(#move_icon svg) {
+    width: 2rem !important;
+  }
+  /* .header_p {
+    margin-left: -50px;
+    margin-top: 21px;
+    max-width: 50%;
+  } */
 }

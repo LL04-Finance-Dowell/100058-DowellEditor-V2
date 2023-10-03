@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import jwt_decode from "jwt-decode";
@@ -21,6 +21,8 @@ const EditSection = () => {
     setIsLoading,
     data,
     setIsMenuVisible,
+    questionAndAnswerGroupedData,
+    allowHighlight
   } = useStateContext();
 
   const [searchParams] = useSearchParams();
@@ -32,7 +34,94 @@ const EditSection = () => {
   const actionName = decoded?.details?.action;
   const docMap = decoded?.details?.document_map;
 
+  const [prevSelectedElement, setPrevSelectedElement] = useState(null);
+  const [prevSelElmAns, setPrevSelElmAns] = useState([])
 
+  const selectedElement = document.querySelector('.focussedd div')?.id;
+
+  useEffect(() => {
+    const borderStyles = "2px solid red";
+
+    if (!selectedElement || !allowHighlight) return;
+
+    const questions = new Set();
+    const answers = new Set();
+
+    const updateAnsElmBorder = (items, border) => {
+      items.forEach(item => {
+        if (!item) return;
+        // if (!answers.has(item)) return;
+        const element = document.getElementById(item);
+        element.style.border = border;
+      });
+    };
+
+    const data = [...questionAndAnswerGroupedData].map(elm => {
+      questions.add(elm.question);
+      elm?.answers?.forEach(ans => answers.add(ans));
+      return elm;
+    });
+
+    const element = document.getElementById(selectedElement);
+    if (!element) return;
+    element.style.border = borderStyles;
+
+    if (prevSelectedElement && prevSelectedElement !== selectedElement) {
+      const prevElement = document.getElementById(prevSelectedElement);
+      if (!prevElement) return;
+      prevElement.style.border = "none";
+      updateAnsElmBorder(prevSelElmAns, "none");
+    }
+
+    setPrevSelectedElement(selectedElement);
+    const result = data.find(item => item?.question === selectedElement);
+    console.log("result?.answers -1", result?.answers)
+    setPrevSelElmAns(result?.answers || []);
+
+    if (questions.has(selectedElement)) {
+      console.log("result?.answers -2", result?.answers)
+      updateAnsElmBorder(result?.answers, borderStyles);
+    }
+  }, [questionAndAnswerGroupedData, selectedElement]);
+  // }, [prevSelElmAns, prevSelectedElement, questionAndAnswerGroupedData, selectedElement]);
+
+
+  useEffect(() => {
+    console.log("prevSelElmAns", prevSelElmAns)
+    if (!selectedElement) return;
+    const elements = [
+      ...document.querySelectorAll(".textInput"),
+      ...document.querySelectorAll(".imageInput"),
+      ...document.querySelectorAll(`.dateInput`),
+      ...document.querySelectorAll(`.signInput`),
+      ...document.querySelectorAll(`.tableInput`),
+      ...document.querySelectorAll(`.containerInput`),
+      ...document.querySelectorAll(`.iframeInput`),
+      ...document.querySelectorAll(`.scaleInput`),
+      ...document.querySelectorAll(`.newScaleInput`),
+      ...document.querySelectorAll(`.cameraInput`),
+      ...document.querySelectorAll(`.buttonInput`),
+      ...document.querySelectorAll(`.dropdownInput`),
+      ...document.querySelectorAll(`.emailButton`),
+    ];
+
+    elements.forEach(element => {
+      console.log(element.id)
+      if (prevSelElmAns.indexOf(element.id) === -1 && element.id !== selectedElement && !allowHighlight) {
+        element.style.border = "none"
+        if (selectedElement) {
+          document.getElementById(selectedElement).style.border = "1ps solid red"
+        }
+      }
+      else {
+        if (selectedElement) {
+          document.getElementById(selectedElement).style.border = "1ps solid red"
+        }
+        return
+      }
+    })
+
+  }, [prevSelElmAns, selectedElement])
   return (
     <div className="editSec">
       <Container fluid>
@@ -64,6 +153,7 @@ const EditSection = () => {
             as="div"
             className="editSec_rightMenu"
           >
+
             <RightMenu />
           </Col>
         </Row>

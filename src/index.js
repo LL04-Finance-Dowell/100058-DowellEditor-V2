@@ -14,11 +14,13 @@ root.render(
   <ContextProvider>
     <PrintProvider>
       <DraggableProvider>
-        <React.StrictMode>
-          <Router>
-            <App/>
-          </Router>
-        </React.StrictMode>
+        {/* <React.StrictMode> */}
+        <Router basename={window.location.pathname || ""}>
+          <Routes>
+            <Route path="/" element={<App />} />
+          </Routes>
+        </Router>
+        {/* </React.StrictMode> */}
       </DraggableProvider>
     </PrintProvider>
   </ContextProvider>
@@ -27,4 +29,4 @@ root.render(
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+// reportWebVitals();
