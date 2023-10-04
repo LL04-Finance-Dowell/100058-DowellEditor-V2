@@ -2379,23 +2379,28 @@ const ScaleRightSide = () => {
                 orientation.style.display = "none";
                 button4.appendChild(orientation);
                 containerDiv.style.transform = "rotate(270deg)";
-                nameDiv.style.right = "-8px";
+
+                containerDiv.style.marginTop = "80px";
+                containerDiv.style.width = "100%";
+                inputPercent.style.marginTop = "20px";
                 nameDiv.style.position = "absolute";
-                nameDiv.style.width = "50%";
-                nameDiv.style.left = "75%";
+                nameDiv.style.lineHeight = "0.85";
+                if ( nameDiv.textContent.length < 10) {
+                  nameDiv.style.top = "20px"
+                  nameDiv.style.left = "93%";
+                  nameDiv.style.right = "-17px";
+                } else {
+                  nameDiv.style.left = "101%";
+                  nameDiv.style.top = "4px";
+                  nameDiv.style.right = "-22px";
+                }
+              newLabelHold.style.padding =
                 nameDiv.textContent.length < 9
-                  ? (nameDiv.style.top = "23px")
-                  : (nameDiv.style.top = "39px");
-
-                newLabelHold.style.padding =
-                  nameDiv.textContent.length < 9
-                    ? "0px 20px 10px 14px"
-                    : "0px 20px 37px 14px";
+                  ? "0px 20px 10px 14px"
+                  : "0px 17px 37px 14px";
                 nameDiv.style.transform = "rotate(90deg)";
-
                 newLabelHold.style.position = "relative";
-                newLabelHold.style.width = "80%";
-                newLabelHold.style.paddingTop = "24px";
+                newLabelHold.style.width = "85%";
                 percentChilds.style.alignItems = "start";
                 percentChilds.style.height = "100%";
               }
@@ -2534,23 +2539,27 @@ const ScaleRightSide = () => {
                   orientation.style.display = "none";
                   button4.appendChild(orientation);
                   containerDiv.style.transform = "rotate(270deg)";
+                  containerDiv.style.marginTop = "80px";
+                  containerDiv.style.width = "100%";
+                  inputPercent.style.marginTop = "20px";
                   nameDiv.style.position = "absolute";
-                  nameDiv.style.width = "50%";
-                  nameDiv.style.left = "75%";
+                  nameDiv.style.lineHeight = "0.85";
+                  if ( nameDiv.textContent.length < 10) {
+                  nameDiv.style.top = "20px"
+                  nameDiv.style.left = "93%";
+                  nameDiv.style.right = "-17px";
+                } else {
+                  nameDiv.style.left = "101%";
+                  nameDiv.style.top = "4px";
+                  nameDiv.style.right = "-22px"
+                }
+                newLabelHold.style.padding =
                   nameDiv.textContent.length < 9
-                    ? (nameDiv.style.top = "23px")
-                    : (nameDiv.style.top = "39px");
-
-                  newLabelHold.style.padding =
-                    nameDiv.textContent.length < 9
-                      ? "0px 20px 10px 14px"
-                      : "0px 20px 37px 14px";
-                  nameDiv.style.right = "-8px";
+                    ? "0px 20px 10px 14px"
+                    : "0px 17px 37px 14px";
                   nameDiv.style.transform = "rotate(90deg)";
-
                   newLabelHold.style.position = "relative";
-                  newLabelHold.style.width = "80%";
-                  newLabelHold.style.paddingTop = "24px";
+                  newLabelHold.style.width = "85%";
                   percentChilds.style.alignItems = "start";
                   percentChilds.style.height = "100%";
                 }
