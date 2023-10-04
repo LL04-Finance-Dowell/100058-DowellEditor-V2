@@ -93,5 +93,7 @@ function createScaleInputElement(holderDIV, handleClicked, setSidebar, table_dro
   holderDIV.append(scaleField);
   holderDIV.append(scaleIdHolder);
   holderDIV.append(labelHolder);
+
+  return holderDIV;
 }
 export default createScaleInputElement;

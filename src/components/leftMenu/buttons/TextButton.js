@@ -1,6 +1,8 @@
 // components/buttons/TextButton.js
 import React from "react";
 import { BiText } from "react-icons/bi";
+// import { BiSolidDownArrow } from "react-icons/bi";
+
 import { useDraggableContext } from "../../../contexts/DraggableContext";
 
 const TextButton = ({ customFunc }) => {
@@ -12,16 +14,20 @@ const TextButton = ({ customFunc }) => {
   };
 
   return (
-    <button
-      type="button"
-      title="Text"
-      draggable="true"
-      onDragStart={dragStartFunc}
-      id="draggable"
-      onDragEnd={customFunc}
-    >
-      <BiText />
-    </button>
+    <div className="btn_wrapper">
+      <button
+        type="button"
+        title="Text"
+        draggable="true"
+        onDragStart={dragStartFunc}
+        id="draggable"
+        onDragEnd={customFunc}
+      >
+        <BiText />
+      </button>
+
+      <p className="btn_tag">Text</p>
+    </div>
   );
 };
 

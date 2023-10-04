@@ -74,5 +74,6 @@ function createDateInputElement(holderDIV, focuseddClassMaintain, handleClicked,
   dateField.innerText = "mm/dd/yyyy";
 
   holderDIV.append(dateField);
+  return holderDIV
 }
 export default createDateInputElement;

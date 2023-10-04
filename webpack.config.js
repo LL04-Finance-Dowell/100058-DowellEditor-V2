@@ -1,7 +1,7 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
-module.exports = {
+module.exports = { 
   //This property defines where the application starts
   entry: "./src/index.js",
 
@@ -9,12 +9,12 @@ module.exports = {
   output: {
     path: path.join(__dirname, "/dist"),
     filename: "bundle.js",
-    publicPath: '/100058-DowellEditor-V2/'
+    publicPath: '/'
   },
   devServer: {
     port: 3000,
+    historyApiFallback: true,
   },
-
   //Setup loaders
   module: {
     rules: [
