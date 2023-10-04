@@ -3451,12 +3451,13 @@ const ScaleRightSide = () => {
       const option = options[i];
       if (option.selected) {
         selectedValues[option.value] = option.id;
-        console.log("This is option", option);
+        console.log("This is option 2", option);
       }
     }
 
-    console.log(selectedValues);
+    console.log("This is the selected value",selectedValues);
     setSelectedOptions(selectedValues);
+    console.log("This is the selected options",selectedOptions);
 
     let selectedOption = selectField.options[selectField.selectedIndex];
     let selectedElementId = selectedOption.id;
@@ -3644,7 +3645,7 @@ const ScaleRightSide = () => {
   console.log("The other elements", otherElementsArray);
 
   const options = otherElementsArray.map((element, index) => (
-    <option key={index} value={element} id={element.split(" ")[1]}>
+    <option key={index} value={element.split(" ")[0]} id={element.split(" ")[1]}>
       {element}
     </option>
   ));
