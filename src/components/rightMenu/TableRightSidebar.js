@@ -11,7 +11,10 @@ import { Row, Button, Form, DropdownButton, Dropdown } from "react-bootstrap";
 
 import { useStateContext } from "../../contexts/contextProvider";
 import { table_dropdown_focuseddClassMaintain } from "../../utils/focusClassMaintain/focusClass";
-// import { CgMenuCheese } from "react-icons/cg";
+import SelectAnsAndQuestion from "../selectAnsAndQuestion";
+import useSelectedAnswer from '../../customHooks/useSelectedAnswers';
+
+
 
 const TableRightSidebar = () => {
   const {
@@ -41,6 +44,10 @@ const TableRightSidebar = () => {
   const token = searchParams.get("token");
   var decoded = jwt_decode(token);
 
+  const [selectedType, setSelectedType] = useState('')
+  // const [addedAns, setAddedAns] = useState([])
+  const { addedAns, setAddedAns } = useSelectedAnswer();
+
   // const [borderSize, setBorderSize] = useState(1);
   // const [borderColor, setBorderColor] = useState("#000000");
   const [showSlider, setShowSlider] = useState(false);
@@ -51,7 +58,7 @@ const TableRightSidebar = () => {
 
   useEffect(() => {
     const focusseddDiv = document.querySelector(".focussedd");
-    if (focusseddDiv?.firstChild?.hasChildNodes()) {
+    if (focusseddDiv?.firstChild?.hasChildNodes() && !(focusseddDiv?.firstChild?.children[0].classList.contains('placeholder') && focusseddDiv?.firstChild?.children.length === 1)) {
       setIsCreateTableBtnDisabled(true);
     } else {
       setIsCreateTableBtnDisabled(false);
@@ -89,7 +96,7 @@ const TableRightSidebar = () => {
       const targetTable = e.target.parentElement.parentElement
       const textId = targetTable.querySelectorAll(".textInput").length + 1
       //  inputField.setAttribute('draggable', true);
-      
+
       inputField.setAttribute("contenteditable", true);
       inputField.id = `${targetTable.id}t${textId}`
       inputField.className = "textInput";
@@ -288,8 +295,8 @@ const TableRightSidebar = () => {
       // }
       let signField = document.createElement("div");
       const targetTable = e.target.parentElement.parentElement
-      console.log("TARGET TABLE ",targetTable);
-      const signId =`s${( targetTable.querySelectorAll(".signInput").length + 1)}`
+      console.log("TARGET TABLE ", targetTable);
+      const signId = `s${(targetTable.querySelectorAll(".signInput").length + 1)}`
       signField.className = "signInput";
       signField.style.width = "100%";
       signField.style.height = "100%";
@@ -301,7 +308,7 @@ const TableRightSidebar = () => {
       signField.style.position = "absolute";
       signField.style.top = 0;
       signField.style.left = 0;
-      signField.id = `${targetTable.id+signId}`;
+      signField.id = `${targetTable.id + signId}`;
 
       // signField.onchange = (event) => {
       //   event.preventDefault();
@@ -560,6 +567,11 @@ const TableRightSidebar = () => {
 
     var tableDiv = document.querySelector(".focussed");
     tableDiv.style.overflow = 'visible'
+
+    // * This removes the placholder on the table element
+    if (tableDiv.children[0].classList.contains('placeholder') && tableDiv.children.length === 1)
+      tableDiv.removeChild(tableDiv.children[0])
+
 
     for (var rowIndex = 0; rowIndex < row; rowIndex++) {
       var tr = document.createElement("tr");
@@ -1415,21 +1427,23 @@ const TableRightSidebar = () => {
         </Button>
       </div>
 
-      {/* <div className='dropdown pt-4'>
-        <h6>User permissions</h6>
-        <select className='shadow bg-white rounded w-100 h-75'>
-          <option value="Nothing Selected" selected="selected">Nothing Selected</option>
-          <option value="Action">Action</option>
-          <option value="Another action">Another action</option>
-          <option value="Something else">Something else</option>
-        </select>
-      </div> */}
+      <hr />
+      <SelectAnsAndQuestion
+        selectedType={selectedType}
+        setSelectedType={setSelectedType}
+        setAddedAns={setAddedAns}
+        addedAns={addedAns} />
+      <hr />
 
       <div className="mt-2 text-center pt-5">
         <Button
           variant="primary"
-          className={decoded.details.action === "template" ? "px-5 remove_button" : "px-5 remove_button disable_button"}
-          onClick={() => removeTableElements()}
+          className={
+            decoded.details.action === "template"
+              ? "px-5 remove_button"
+              : "px-5 remove_button disable_button"
+          }
+          onClick={() => setConfirmRemove(!confirmRemove)}
         >
           Remove Table
         </Button>
