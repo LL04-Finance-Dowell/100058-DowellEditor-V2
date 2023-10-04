@@ -21,7 +21,7 @@ function createContainerInputField(
   setMethod,
   setRightSideDateMenu,
   title,
-  curr_user
+  curr_user, documnetMap, document_map_required
 ) {
   let isAnyRequiredElementEdited = false;
   let containerField = document.createElement("div");
@@ -549,6 +549,124 @@ function createContainerInputField(
       holderDIVContainer.append(buttonFieldContainer);
       holderDIVContainer.append(linkHolder);
       holderDIVContainer.append(purposeHolder);
+    } else if (typeOfOperationContainer == "PAYMENT_INPUT") {
+      const measure = {
+        width: element.width + "px",
+        height: element.height + "px",
+        left: element.left + "px",
+        top: element.topp,
+        auth_user: curr_user,
+      };
+
+      const idMatch = documnetMap?.filter((elmnt) => elmnt == element?.id);
+      // const holderDIV = getHolderDIV(measure, pageNo);
+      const id = `${element.id}`;
+      const finalizeButton = document.getElementById("finalize-button");
+      const rejectButton = document.getElementById("reject-button");
+
+      let paymentField = document.createElement("button");
+      paymentField.className = "paymentInput";
+      paymentField.id = id;
+      paymentField.style.width = "100%";
+      paymentField.style.height = "100%";
+      paymentField.style.backgroundColor = "#0000";
+      paymentField.style.borderRadius = "0px";
+      paymentField.style.outline = "0px";
+      paymentField.style.overflow = "overlay";
+      paymentField.style.position = "absolute";
+      paymentField.textContent = "Payment";
+  
+      if (decoded.details.action === "template") {
+          paymentField.onclick = (e) => {
+              focuseddClassMaintain(e);
+              if (e.ctrlKey) {
+                  copyInput("payment2");
+              }
+              handleClicked("payment2");
+              setSidebar(true);
+          };
+      }
+  
+      if (decoded.details.action === "document") {
+          paymentField.onclick = (e) => {
+              focuseddClassMaintain(e);
+              if (e.ctrlKey) {
+                  copyInput("payment2");
+              }
+              handleClicked("payment2", "table2");
+              setSidebar(true);
+          };
+      }
+  
+      paymentField.onmouseover = (e) => {
+          // if (buttonField?.parentElement?.classList.contains("holderDIV")) {
+          //   buttonField?.parentElement?.classList.add("element_updated");
+          // }
+  
+          const required_map_document = document_map_required?.filter(
+              (item) => element.id == item.content
+          );
+          if (
+              paymentField.parentElement.classList.contains("holderDIV") &&
+              required_map_document?.length > 0
+          ) {
+              paymentField.parentElement.classList.add("element_updated");
+          }
+          if (element.required) {
+              isAnyRequiredElementEdited = true;
+          }
+      };
+  
+      if (
+          decoded.details.action === "document" &&
+          element.purpose == "custom" &&
+          element.raw_data !== ""
+      ) {
+          paymentField.onclick = (e) => {
+              window.open(element.raw_data, "_blank");
+          };
+      }
+  
+      if (finalizeButton) {
+          if (isAnyRequiredElementEdited) {
+              finalizeButton?.click();
+          } else {
+              finalizeButton.disabled = true;
+          }
+      }
+  
+      // if (
+      //   decoded.details.action === "document" &&
+      //   element.purpose == "finalize"
+      // ) {
+      //   buttonField.onclick = (e) => {
+      //     finalizeButton?.click();
+      //   };
+      // }
+      if (
+          decoded.details.action === "document" &&
+          element.purpose == "reject"
+      ) {
+          paymentField.onclick = (e) => {
+              rejectButton?.click();
+          };
+      }
+  
+      const linkHolder = document.createElement("div");
+      // linkHolder.className = "link_holder";
+      linkHolder.className = "stripe_key";
+      linkHolder.innerHTML = element.raw_data;
+      linkHolder.style.display = "none";
+  
+      const purposeHolder = document.createElement("div");
+      // purposeHolder.className = "purpose_holder";
+      purposeHolder.className = "paypal_id";
+      purposeHolder.innerHTML = element.purpose;
+      purposeHolder.style.display = "none";
+  
+      holderDIVContainer.append(paymentField);
+      holderDIVContainer.append(linkHolder);
+      holderDIVContainer.append(purposeHolder);
     }
     if (typeOfOperationContainer !== "CONTAINER_INPUT")
       containerField.append(holderDIVContainer);
@@ -968,6 +1086,47 @@ function createContainerInputField(
 
       // holderDIVContainer.append(dateFieldContainer);
       holderDIVContainer.append(buttonField);
+      holderDIVContainer.append(linkHolder);
+      holderDIVContainer.append(purposeHolder);
+    } else if (typeOfOperationContainer == "PAYMENT_INPUT") {
+      let paymentField = document.createElement("button");
+      paymentField.className = "paymentInput";
+      paymentField.style.width = "100%";
+      paymentField.style.height = "100%";
+      paymentField.style.backgroundColor = "#0000";
+      paymentField.style.borderRadius = "0px";
+      paymentField.style.outline = "0px";
+      paymentField.style.overflow = "overlay";
+      paymentField.style.position = "absolute";
+      paymentField.textContent = "Pay";
+  
+      const paymentInput = document.getElementsByClassName("paymentInput");
+      if (paymentInput.length) {
+        const p = paymentInput.length;
+        paymentField.id = `pay${p + 1}`;
+          } else {
+              paymentField.id = "pay1";
+          }
+  
+      paymentField.onclick = (e) => {
+          e.stopPropagation();
+          focuseddClassMaintain(e);
+          if (e.ctrlKey) {
+              copyInput("payment2");
+          }
+          handleClicked("payment2", "container2");
+          setSidebar(true);
+      };
+  
+      const linkHolder = document.createElement("div");
+      linkHolder.className = "stripe_key";
+      linkHolder.style.display = "none";
+  
+      const purposeHolder = document.createElement("div");
+      purposeHolder.className = "paypal_id";
+      purposeHolder.style.display = "none";
+  
+      holderDIVContainer.append(paymentField);
       holderDIVContainer.append(linkHolder);
       holderDIVContainer.append(purposeHolder);
     }

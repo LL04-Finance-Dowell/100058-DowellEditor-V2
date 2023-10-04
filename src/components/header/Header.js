@@ -876,7 +876,7 @@ const Header = () => {
     if (payments.length) {
       for (let p = 0; p < payments.length; p++) {
         if (
-          !buttons[p]?.parentElement?.parentElement?.classList?.contains(
+          !payments[p]?.parentElement?.parentElement?.classList?.contains(
             "containerInput"
           )
         ) {
