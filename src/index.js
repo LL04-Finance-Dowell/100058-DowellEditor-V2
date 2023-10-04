@@ -8,16 +8,15 @@ import { ContextProvider } from "./contexts/contextProvider";
 
 import PrintProvider from "react-easy-print";
 import { DraggableProvider } from "./contexts/DraggableContext";
+import ThankYouPage from "./utils/redirectPages/ThankYouPage";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <ContextProvider>
     <PrintProvider>
       <DraggableProvider>
         <React.StrictMode>
-          <Router basename={window.location.pathname || ""}>
-            <Routes>
-              <Route path="/" element={<App />} />
-            </Routes>
+          <Router>
+            <App/>
           </Router>
         </React.StrictMode>
       </DraggableProvider>

@@ -3,6 +3,9 @@ import { Row, Button, Form } from "react-bootstrap";
 import { useStateContext } from "../../contexts/contextProvider";
 import { useSearchParams } from "react-router-dom";
 import jwt_decode from "jwt-decode";
+import useSelectedAnswer from "../../customHooks/useSelectedAnswers";
+import SelectAnsAndQuestion from "../selectAnsAndQuestion";
+
 
 const DropDownRightSide = () => {
   const {
@@ -20,8 +23,12 @@ const DropDownRightSide = () => {
     setDropdownBorderSize,
     dropdownBorderColor,
     setDropdownBorderColor,
+    setConfirmRemove,
+    confirmRemove
   } = useStateContext();
+  const { addedAns, setAddedAns } = useSelectedAnswer()
 
+  const [selectedType, setSelectedType] = useState('')
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token");
   var decoded = jwt_decode(token);
@@ -154,11 +161,17 @@ const DropDownRightSide = () => {
       </Row>
 
       <hr />
+      <SelectAnsAndQuestion
+        selectedType={selectedType}
+        setSelectedType={setSelectedType}
+        setAddedAns={setAddedAns}
+        addedAns={addedAns} />
 
       <div />
       <div>
         <Button
-          onClick={removeDropdown}
+          // onClick={removeDropdown}
+          onClick={() => setConfirmRemove(!confirmRemove)}
           variant="primary"
           className={
             decoded.details.action === "template"

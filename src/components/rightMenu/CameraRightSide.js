@@ -1,5 +1,5 @@
 import Axios from "axios";
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "react-bootstrap";
 import { useSearchParams } from "react-router-dom";
 import jwt_decode from "jwt-decode";
@@ -194,6 +194,12 @@ function CameraRightSide() {
   };
 
   function removeCamera() {
+    let camera = document.querySelector(".focussedd");
+    let video = camera?.querySelector(".videoInput");
+    const mediaStream = video.srcObject;
+    const tracks = mediaStream.getTracks();
+    tracks[0].stop();
+    tracks[1].stop();
     const focusseddElmnt = document.querySelector(".focussedd");
     if (focusseddElmnt?.classList.contains("holderDIV")) {
       document.querySelector(".focussedd").remove();
