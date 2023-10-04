@@ -1083,18 +1083,26 @@ function createNewScaleInputField(
           : "24px 39px 37px 14px";
         containerDiv.style.width = "90%";
         containerDiv.style.position = "relative";
+        containerDiv.style.borderRight = "none";
         labelHold.style.width = "100%";
         labelHold.style.height = "96%";
         labelHold.style.alignItems = "center";
         labelHold.style.transform = "rotate(270deg)";
         nameDiv.style.position = "absolute";
-        nameDiv.style.top = nameDiv.textContent.length < 9 ? "23px" : "39px";
-        nameDiv.style.right = "-2px";
-        nameDiv.style.left = "70%";
-        nameDiv.style.width = "50%";
+        nameDiv.style.lineHeight = "0.95";
+        if ( nameDiv.textContent.length < 10) {
+          nameDiv.style.top = "20px"
+          nameDiv.style.left = "93%";
+          nameDiv.style.right = "2px";
+        } else {
+          nameDiv.style.left = "98%";
+          nameDiv.style.top = "-1px";
+          nameDiv.style.right = "-7px";
+        }
         nameDiv.style.transform = "rotate(90deg)";
         nameDiv.style.paddingBottom = prodLength > 6 ? "30px" : "0px";
         inputPercent.style.width = "100%";
+        scaleText.style.marginBottom = "65px";
       }
 
       if (decoded.details.action === "document") {
