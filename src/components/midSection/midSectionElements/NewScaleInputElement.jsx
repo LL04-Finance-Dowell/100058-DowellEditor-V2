@@ -986,9 +986,21 @@ function createNewScaleInputField(
         // Add an event listener to update centerPercent
         inputPercent.addEventListener("input", function () {
           centerPercent.textContent = `${inputPercent.value}%`;
-          if (scaleField?.parentElement?.classList.contains("holderDIV")) {
+          const required_map_document = document_map_required?.filter(
+            (item) => element?.id == item?.content
+          );
+          if (
+            scaleField?.parentElement?.classList.contains("holderDIV") &&
+            required_map_document?.length > 0
+          ) {
             scaleField?.parentElement?.classList.add("element_updated");
           }
+          if (element.required) {
+            isAnyRequiredElementEdited = true;
+          }
+          // if (scaleField?.parentElement?.classList.contains("holderDIV")) {
+          //   scaleField?.parentElement?.classList.add("element_updated");
+          // }
 
           // Store the current inputPercent value in localStorage using the unique key
           localStorage.setItem(localStorageKey, inputPercent.value);
@@ -1120,9 +1132,21 @@ function createNewScaleInputField(
         // Add an event listener to update centerPercent
         inputPercent.addEventListener("input", function () {
           centerPercent.textContent = `${inputPercent.value}%`;
-          if (scaleField?.parentElement?.classList.contains("holderDIV")) {
+          const required_map_document = document_map_required?.filter(
+            (item) => element?.id == item?.content
+          );
+          if (
+            scaleField?.parentElement?.classList.contains("holderDIV") &&
+            required_map_document?.length > 0
+          ) {
             scaleField?.parentElement?.classList.add("element_updated");
           }
+          if (element.required) {
+            isAnyRequiredElementEdited = true;
+          }
+          // if (scaleField?.parentElement?.classList.contains("holderDIV")) {
+          //   scaleField?.parentElement?.classList.add("element_updated");
+          // }
 
           // Store the current inputPercent value in localStorage using the unique key
           localStorage.setItem(localStorageKey, inputPercent.value);
