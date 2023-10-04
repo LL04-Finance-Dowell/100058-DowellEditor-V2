@@ -166,12 +166,14 @@ function createContainerInputElement(holderDIV, focuseddClassMaintain, handleCli
         const reader = new FileReader();
 
         reader.addEventListener("load", () => {
+          console.log('INSIDE CONTAINER FILE READER');
+          imageFieldContainer.innerText = ''
           uploadedImage = reader.result;
           document.querySelector(
             ".focussed"
           ).style.backgroundImage = `url(${uploadedImage})`;
         });
-        reader.readAsDataURL(imgBtnContainer.files[0]);
+        imgBtnContainer.files[0] && reader.readAsDataURL(imgBtnContainer.files[0]);
       });
 
       // imgBtnContainer.style.width = "100%";
