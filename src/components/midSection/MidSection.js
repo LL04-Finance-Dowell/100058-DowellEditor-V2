@@ -277,7 +277,7 @@ const MidSection = React.forwardRef((props, ref) => {
     let y = e.clientY;
     const foundElement = document.elementFromPoint(x, y)?.parentElement
     const midSec = document.getElementById("midSection_container");
-
+    if(foundElement.classList.contains('midSection_container'))return;    
     const midsectionRect = midSec.getBoundingClientRect();
     let clientX = e.clientX - midsectionRect.left;
     let clientY = e.clientY - midsectionRect.top;
@@ -305,8 +305,9 @@ const MidSection = React.forwardRef((props, ref) => {
           default:
             break;
         }
+      } else if (foundElement.classList.contains("dropdownInput")) {
+        setContextMenu({ show: true, x: clientX, y: clientY, targetEl: foundElement.parentElement });
       } else {
-
         setContextMenu({ show: true, x: clientX, y: clientY, targetEl: foundElement });
       }
 
@@ -474,10 +475,10 @@ const MidSection = React.forwardRef((props, ref) => {
       const textElement = createTextElement(holderDIV, focuseddClassMaintain, handleClicked, setSidebar, getOffset, element.data);
       midSection.append(textElement);
     } else if (element.type === "IMAGE_INPUT") {
-      const imageInput = createImageElement(holderDIV, focuseddClassMaintain, handleClicked, setSidebar,element.data);
+      const imageInput = createImageElement(holderDIV, focuseddClassMaintain, handleClicked, setSidebar, element.data);
       midSection.append(imageInput);
     } else if (element.type === "IFRAME_INPUT") {
-      const iframeElement = createIframeElement(holderDIV, table_dropdown_focuseddClassMaintain, handleClicked, setSidebar);
+      const iframeElement = createIframeElement(holderDIV, table_dropdown_focuseddClassMaintain, handleClicked, setSidebar,element.data);
       midSection.append(iframeElement);
     } else if (element.type === "SCALE_INPUT") {
       const scaleInput = createScaleInputElement(holderDIV, focuseddClassMaintain, handleClicked, setSidebar, table_dropdown_focuseddClassMaintain, decoded);
@@ -486,10 +487,10 @@ const MidSection = React.forwardRef((props, ref) => {
       const newScale = createNewScaleInputElement(holderDIV, focuseddClassMaintain, handleClicked, setSidebar, table_dropdown_focuseddClassMaintain, decoded, setIsLoading);
       midSection.append(newScale);
     } else if (element.type === "SIGN_INPUT") {
-      const signElement = createSignInputElement(holderDIV, focuseddClassMaintain, handleClicked, setSidebar, setPostData, getOffset,element.data);
+      const signElement = createSignInputElement(holderDIV, focuseddClassMaintain, handleClicked, setSidebar, setPostData, getOffset, element.data);
       midSection.append(signElement);
     } else if (element.type === "DROPDOWN_INPUT") {
-      const dropDown = createDropDownInputElement(holderDIV, handleClicked, setSidebar, table_dropdown_focuseddClassMaintain, setRightSideDropDown, setPostData, getOffset);
+      const dropDown = createDropDownInputElement(holderDIV, handleClicked, setSidebar, table_dropdown_focuseddClassMaintain, setRightSideDropDown, getOffset, element.data);
       midSection.append(dropDown);
     } else if (element.type === "CONTAINER_INPUT") {
       const containerInput = createContainerInputElement(holderDIV, focuseddClassMaintain, handleClicked, setSidebar, table_dropdown_focuseddClassMaintain, decoded, setPostData, postData, getHolderDIV, getOffset, setStartDate, setMethod, setRightSideDateMenu, title, curr_user);
@@ -681,7 +682,8 @@ const MidSection = React.forwardRef((props, ref) => {
         case targetElement.querySelector(".dropdownInput") && true:
           type = "DROPDOWN_INPUT";
           elem.type = type;
-          elem.data = targetElement.firstChild.innerHTML;
+          elem.data = targetElement.querySelector(".dropdownInput").innerHTML;
+
           break;
         case targetElement.querySelector(".containerInput") && true:
           type = "CONTAINER_INPUT";
@@ -703,7 +705,8 @@ const MidSection = React.forwardRef((props, ref) => {
       }
 
 
-      console.log("SAVED DATE: ", elem);
+      console.log("SAVED DATA: ", elem);
+      console.log("FROM: ", targetElement);
       setContextMenu(prev => {
         return {
           ...prev,
@@ -1270,21 +1273,21 @@ const MidSection = React.forwardRef((props, ref) => {
       "document": "step3_data",
       "team_member_ID": "34567897799",
       "function_ID": "ABCDE",
-      "field":{"_id": "64e367eb3bc140afab90b3ec"},
+      "field": { "_id": "64e367eb3bc140afab90b3ec" },
       "command": "fetch",
       "update_field": {
         "order_nos": 21
       },
       "platform": "bangalore"
-  })
+    })
 
-  if(!response.data) {
-    toast.error("Something went wrong while fetching data!")
-    return;
-  }
+    if (!response.data) {
+      toast.error("Something went wrong while fetching data!")
+      return;
+    }
 
-  console.log(JSON.parse(response.data))
-  const {title,image,paragraph} = JSON.parse(response.data)?.data[0]
+    console.log(JSON.parse(response.data))
+    const { title, image, paragraph } = JSON.parse(response.data)?.data[0]
     const curr_user = document.getElementById("curr_user");
 
     const measure = {
@@ -1375,7 +1378,7 @@ const MidSection = React.forwardRef((props, ref) => {
     imageField.style.overflow = "overlay";
     imageField.innerText = "Choose Image";
     imageField.style.position = "relative";
-    if(image){
+    if (image) {
       imageField.style.backgroundImage = `url(${image})`;
     }
 
@@ -1422,7 +1425,7 @@ const MidSection = React.forwardRef((props, ref) => {
     imgBtn.type = "file";
     imgBtn.style.objectFit = "cover";
     var uploadedImage = "";
- 
+
 
     imgBtn.addEventListener("input", () => {
       const reader = new FileReader();
@@ -1749,7 +1752,7 @@ const MidSection = React.forwardRef((props, ref) => {
           typeOfOperation === "DROPDOWN_INPUT" &&
           decoded.details.action === "template"
         ) {
-          createDropDownInputElement(holderDIV, handleClicked, setSidebar, table_dropdown_focuseddClassMaintain, setRightSideDropDown, setPostData, getOffset)
+          createDropDownInputElement(holderDIV, handleClicked, setSidebar, table_dropdown_focuseddClassMaintain, setRightSideDropDown, getOffset)
         } else if (
           typeOfOperation === "BUTTON_INPUT" &&
           decoded.details.action === "template"
