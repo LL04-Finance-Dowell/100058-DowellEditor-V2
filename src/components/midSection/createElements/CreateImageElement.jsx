@@ -72,7 +72,13 @@ function createImageElement(holderDIV, focuseddClassMaintain, handleClicked, set
     imgBtn.style.objectFit = "cover";
     var uploadedImage = "";
 
-    imgBtn.addEventListener("input", () => {
+    imgBtn.addEventListener("change", () => {
+        if (imageField.children.length) {
+            imageField.removeChild(span1)
+            imageField.removeChild(span2)
+        }
+        imageField.innerText = ''
+
         const reader = new FileReader();
 
         reader.addEventListener("load", () => {
@@ -81,7 +87,8 @@ function createImageElement(holderDIV, focuseddClassMaintain, handleClicked, set
                 ".focussed"
             ).style.backgroundImage = `url(${uploadedImage})`;
         });
-        reader.readAsDataURL(imgBtn.files[0]);
+
+        imgBtn.files[0] && reader.readAsDataURL(imgBtn.files[0]);
     });
 
     // imgBtn.style.width = "100%";

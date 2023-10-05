@@ -6,8 +6,13 @@ const ImageButton = ({ customFunc }) => {
   const { setDraggedItemType } = useDraggableContext();
 
   const dragStartImage = (e) => {
+    const element = document.getElementById("draggable");
     e.dataTransfer.setData("text/plain", "IMAGE_INPUT");
     setDraggedItemType("IMAGE_INPUT");
+    element.classList.add("dragging");
+    if (document.querySelector(".drop_zone")) {
+      document.querySelector(".drop_zone").classList.remove("drop_zone");
+    }
   };
 
   const dragEndFunc = () => {

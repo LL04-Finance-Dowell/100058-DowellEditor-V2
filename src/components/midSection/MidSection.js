@@ -1429,6 +1429,7 @@ const MidSection = React.forwardRef((props, ref) => {
 
     imgBtn.addEventListener("input", () => {
       const reader = new FileReader();
+      imageField.innerText = '';
 
       reader.addEventListener("load", () => {
         uploadedImage = reader.result;
@@ -1532,7 +1533,7 @@ const MidSection = React.forwardRef((props, ref) => {
 
       const midSec = document.querySelector(".drop_zone");
       const midsectionRect = midSec.getBoundingClientRect();
-
+      console.log("typeOfOperation from midsection",typeOfOperation, midSec, curr_user, midsectionRect );
       const measure = {
         width: "200px",
         height: "80px",
