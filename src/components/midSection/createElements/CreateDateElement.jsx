@@ -72,8 +72,8 @@ function createDateInputElement(holderDIV, focuseddClassMaintain, handleClicked,
     setTimeout(dateClick, 0);
   };
 
-  if(copy_data){
-    dateField.innerText = data;
+  if(copy_data && copy_data != "mm/dd/yyyy"){
+    dateField.innerText = copy_data;
   }else{
     dateField.innerText = "mm/dd/yyyy";
   }
