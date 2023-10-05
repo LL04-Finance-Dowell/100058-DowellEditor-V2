@@ -7,6 +7,7 @@ import axios, * as others from 'axios';
 import { ToastContainer, toast } from "react-toastify";
 import ThankYouPage from "../../utils/redirectPages/ThankYouPage";
 import PaymentPopup from "../../utils/redirectPages/PaymentPopup";
+import { stripeCurrencyCodes, paypalCurrencyCodes } from "../../data/data";
 
 
 const PaymentRightSide = () => {
@@ -361,22 +362,6 @@ const PaymentRightSide = () => {
                     // holderDIV.children[2].innerHTML = Paypalpurpose;
                 }
 
-
-                // const resVerify = await axios.post("https://100088.pythonanywhere.com/api/workflow/verify/payment/stripe", {
-                //     stripe_key: link,
-                //     id: resQR.data.payment_id
-                // });
-
-                // if (resVerify.data.status == "succeeded") {
-                //     setTimeout(function () {
-                //         window.location.href = Base_URL + "/status";
-                //     }, 2000);
-                // } else if (resVerify.data.status == "failed") {
-                //     console.log("Your Stripe Payment Not verified");
-                //     toast.error("Your Payment Not Successfull!");
-                // }
-
-
             } catch (error) {
                 console.log(error)
                 setQrLoader(false)
@@ -618,12 +603,11 @@ const PaymentRightSide = () => {
                                             className="select border-0 bg-white rounded w-100 h-75 p-2"
                                         >
                                             <option value="">Select Currency</option>
-                                            <option value="usd">USD</option>
-                                            <option value="aed">AED</option>
-                                            <option value="afn">AFN</option>
-                                            <option value="amd">AMD</option>
-                                            <option value="ang">ANG</option>
-                                            <option value="aoa">AOA</option>
+                                            {
+                                                paypalCurrencyCodes.map(code => 
+                                                    <option value={code.code}>{code.currency}</option>
+                                                    )
+                                            }
                                         </select>
                                         <br />
 
@@ -640,7 +624,7 @@ const PaymentRightSide = () => {
 
                                         <button type="button" className="btn btn-primary m-3" onClick={handlePaypalQRPayment}>
                                             {
-                                                qrLoader ? "Wait...." : "QR Code"
+                                                qrLoader ? "Wait...." : "QR code"
                                             }
                                         </button>
                                     </Form>
@@ -680,19 +664,12 @@ const PaymentRightSide = () => {
                                             className="select border-0 bg-white rounded w-100 h-75 p-2"
                                         >
                                             <option value="">Select Currency</option>
-                                            <option value="usd">USD</option>
-                                            <option value="aed">AED</option>
-                                            <option value="afn">AFN</option>
-                                            <option value="amd">AMD</option>
-                                            <option value="ang">ANG</option>
-                                            <option value="aoa">AOA</option>
+                                            {
+                                                stripeCurrencyCodes.map(code => 
+                                                    <option value={code.code}>{code.currency}</option>
+                                                    )
+                                            }
                                         </select>
-                                        <br />
-                                        <Link to={"/100058-DowellEditor-V2/status"}>
-                                            <button type="button" className="btn btn-primary">
-                                                Thank You
-                                            </button>
-                                        </Link>
                                         {/* <Form.Label>Callback URL</Form.Label>
                                         <Form.Control
                                             required
