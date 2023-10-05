@@ -594,6 +594,7 @@ const MidSection = React.forwardRef((props, ref) => {
 
         imgBtn.addEventListener("input", () => {
           const reader = new FileReader();
+          imageField.innerText = ''
 
           reader.addEventListener("load", () => {
             uploadedImage = reader.result;
@@ -1076,6 +1077,8 @@ const MidSection = React.forwardRef((props, ref) => {
 
               reader.addEventListener("load", () => {
                 uploadedImage = reader.result;
+                imageFieldContainer.innerText = ''
+
                 document.querySelector(
                   ".focussed"
                 ).style.backgroundImage = `url(${uploadedImage})`;
@@ -2452,6 +2455,7 @@ const MidSection = React.forwardRef((props, ref) => {
 
     imgBtn.addEventListener("input", () => {
       const reader = new FileReader();
+      imageField.innerText = '';
 
       reader.addEventListener("load", () => {
         uploadedImage = reader.result;
