@@ -3,6 +3,7 @@ import "./RightContextMenu.css";
 import { BiCut,BiCopy } from "react-icons/bi";
 import { ImPaste } from "react-icons/im";
 import { CgPlayListRemove } from "react-icons/cg";
+import { useStateContext } from '../../contexts/contextProvider';
 
 const RightContextMenu = ({
   x,
@@ -13,6 +14,7 @@ const RightContextMenu = ({
   handleCopy,
   removeInput,
 }) => {
+  const { confirmRemove, setConfirmRemove } = useStateContext()
   return (
     <div
       onClick={() => closeContextMenu()}
@@ -30,10 +32,11 @@ const RightContextMenu = ({
           <ImPaste />
           Paste
         </li>
-        <li onClick={removeInput}>
+        {/* <li onClick={removeInput}>
           <CgPlayListRemove />
           Remove
-        </li>
+        </li> */}
+        <li onClick={() => setConfirmRemove(!confirmRemove)}><CgPlayListRemove />Remove</li>
       </ul>
     </div>
   );

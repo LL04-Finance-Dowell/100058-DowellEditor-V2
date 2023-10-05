@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-no-duplicate-props */
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Button, Form, Row } from "react-bootstrap";
 import { useStateContext } from "../../contexts/contextProvider";
 import Axios from "axios";
@@ -7,7 +7,10 @@ import jwt_decode from "jwt-decode";
 import { useSearchParams } from "react-router-dom";
 import { GrEmoji } from "react-icons/gr";
 import Picker from "emoji-picker-react";
-// import SelectAnsAndQuestion from "../selectAnsAndQuestion";
+import SelectAnsAndQuestion from "../selectAnsAndQuestion";
+import useSelectedAnswer from '../../customHooks/useSelectedAnswers';
+
+
 
 const ScaleRightSide = () => {
   const {
@@ -33,9 +36,14 @@ const ScaleRightSide = () => {
     setConfirmRemove,
     confirmRemove,
   } = useStateContext();
-  const [selectedType, setSelectedType] = useState("");
-  const [addedAns, setAddedAns] = useState([]);
+  // const [selectedType, setSelectedType] = useState("");
+  // const [addedAns, setAddedAns] = useState([]);
+  const inputRef1 = useRef(null);
+  const inputRef2 = useRef(null);
 
+  const [selectedType, setSelectedType] = useState('')
+  // const [addedAns, setAddedAns] = useState([])
+  const { addedAns, setAddedAns } = useSelectedAnswer()
   const [inputStr, setInputStr] = useState("");
   const [upperLimit, setUpperLimit] = useState("");
   const [space, setSpace] = useState("");
@@ -45,6 +53,7 @@ const ScaleRightSide = () => {
   const [showBorder, setShowBorder] = useState(true);
   const [holdText, setHoldText] = useState("");
   const [isEmojiFormat, setIsEmojiFormat] = useState(false);
+  const [cursorPosition, setCursorPosition] = useState(0);
 
   const [percentSumInputValue, setPercentSumInputValue] = useState("");
   const [percentSumLabelTexts, setPercentSumLabelTexts] = useState([]);
@@ -307,7 +316,7 @@ const ScaleRightSide = () => {
     }
     percentSlider?.addEventListener("input", updateSliderValue);
   }
-  // // console.log(leftChild.innerHTML);
+  // console.log(leftChild.innerHTML);
   const handleFormat = () => {
     const format = document.getElementById("format");
     const selectedValue = format.value;
@@ -335,6 +344,7 @@ const ScaleRightSide = () => {
       document.getElementById("percentScaleForm").style.display = "none";
       document.getElementById("percentSumScaleForm").style.display = "none";
       document.getElementById("likertScaleForm").style.display = "none";
+      document.getElementById("comparisonScaleForm").style.display = "none";
     } else if (format === "nps") {
       document.getElementById("snippScaleForm").style.display = "none";
       document.getElementById("npsScaleForm").style.display = "flex";
@@ -342,6 +352,7 @@ const ScaleRightSide = () => {
       document.getElementById("percentScaleForm").style.display = "none";
       document.getElementById("percentSumScaleForm").style.display = "none";
       document.getElementById("likertScaleForm").style.display = "none";
+      document.getElementById("comparisonScaleForm").style.display = "none";
     } else if (format === "nps_lite") {
       document.getElementById("snippScaleForm").style.display = "none";
       document.getElementById("npsScaleForm").style.display = "none";
@@ -349,6 +360,7 @@ const ScaleRightSide = () => {
       document.getElementById("likertScaleForm").style.display = "none";
       document.getElementById("percentScaleForm").style.display = "none";
       document.getElementById("percentSumScaleForm").style.display = "none";
+      document.getElementById("comparisonScaleForm").style.display = "none";
     } else if (format === "likert") {
       document.getElementById("snippScaleForm").style.display = "none";
       document.getElementById("npsScaleForm").style.display = "none";
@@ -356,6 +368,7 @@ const ScaleRightSide = () => {
       document.getElementById("likertScaleForm").style.display = "flex";
       document.getElementById("percentScaleForm").style.display = "none";
       document.getElementById("percentSumScaleForm").style.display = "none";
+      document.getElementById("comparisonScaleForm").style.display = "none";
     } else if (format === "percent_scale") {
       document.getElementById("snippScaleForm").style.display = "none";
       document.getElementById("npsScaleForm").style.display = "none";
@@ -363,6 +376,7 @@ const ScaleRightSide = () => {
       document.getElementById("npsLiteScaleForm").style.display = "none";
       document.getElementById("percentScaleForm").style.display = "flex";
       document.getElementById("percentSumScaleForm").style.display = "none";
+      document.getElementById("comparisonScaleForm").style.display = "none";
     } else if (format === "percent_sum_scale") {
       document.getElementById("snippScaleForm").style.display = "none";
       document.getElementById("npsScaleForm").style.display = "none";
@@ -370,6 +384,15 @@ const ScaleRightSide = () => {
       document.getElementById("npsLiteScaleForm").style.display = "none";
       document.getElementById("percentScaleForm").style.display = "none";
       document.getElementById("percentSumScaleForm").style.display = "flex";
+      document.getElementById("comparisonScaleForm").style.display = "none";
+    } else if (format === "comparison_paired_scale") {
+      document.getElementById("snippScaleForm").style.display = "none";
+      document.getElementById("npsScaleForm").style.display = "none";
+      document.getElementById("likertScaleForm").style.display = "none";
+      document.getElementById("npsLiteScaleForm").style.display = "none";
+      document.getElementById("percentScaleForm").style.display = "none";
+      document.getElementById("percentSumScaleForm").style.display = "none";
+      document.getElementById("comparisonScaleForm").style.display = "flex";
     }
   };
 
@@ -431,6 +454,7 @@ const ScaleRightSide = () => {
         document.getElementById("likertScaleForm").style.display = "none";
         document.getElementById("percentScaleForm").style.display = "none";
         document.getElementById("percentSumScaleForm").style.display = "none";
+        document.getElementById("comparisonScaleForm").style.display = "none";
       } else if (
         (scaleTypeContent === "" || scaleTypeContent === "nps") &&
         (scaleTypeHolder?.textContent === "nps" ||
@@ -442,6 +466,7 @@ const ScaleRightSide = () => {
         document.getElementById("likertScaleForm").style.display = "none";
         document.getElementById("percentScaleForm").style.display = "none";
         document.getElementById("percentSumScaleForm").style.display = "none";
+        document.getElementById("comparisonScaleForm").style.display = "none";
       } else if (
         (scaleTypeContent === "" || scaleTypeContent === "snipte") &&
         (scaleTypeHolder?.textContent === "snipte" ||
@@ -453,6 +478,7 @@ const ScaleRightSide = () => {
         document.getElementById("likertScaleForm").style.display = "none";
         document.getElementById("percentScaleForm").style.display = "none";
         document.getElementById("percentSumScaleForm").style.display = "none";
+        document.getElementById("comparisonScaleForm").style.display = "none";
       } else if (
         (scaleTypeContent === "" || scaleTypeContent === "nps_lite") &&
         (scaleTypeHolder?.textContent === "nps_lite" ||
@@ -464,6 +490,7 @@ const ScaleRightSide = () => {
         document.getElementById("likertScaleForm").style.display = "none";
         document.getElementById("percentScaleForm").style.display = "none";
         document.getElementById("percentSumScaleForm").style.display = "none";
+        document.getElementById("comparisonScaleForm").style.display = "none";
       } else if (
         (scaleTypeContent === "" || scaleTypeContent === "likert") &&
         (scaleTypeHolder?.textContent === "likert" ||
@@ -475,6 +502,7 @@ const ScaleRightSide = () => {
         document.getElementById("npsLiteScaleForm").style.display = "none";
         document.getElementById("percentScaleForm").style.display = "none";
         document.getElementById("percentSumScaleForm").style.display = "none";
+        document.getElementById("comparisonScaleForm").style.display = "none";
       } else if (
         (scaleTypeContent === "" || scaleTypeContent === "percent_scale") &&
         (scaleTypeHolder?.textContent === "percent_scale" ||
@@ -485,6 +513,7 @@ const ScaleRightSide = () => {
         document.getElementById("snippScaleForm").style.display = "none";
         document.getElementById("npsLiteScaleForm").style.display = "none";
         document.getElementById("percentScaleForm").style.display = "flex";
+        document.getElementById("comparisonScaleForm").style.display = "none";
         document.getElementById("percentSumScaleForm").style.display = "none";
       } else if (
         (scaleTypeContent === "" || scaleTypeContent === "percent_sum_scale") &&
@@ -496,7 +525,21 @@ const ScaleRightSide = () => {
         document.getElementById("snippScaleForm").style.display = "none";
         document.getElementById("npsLiteScaleForm").style.display = "none";
         document.getElementById("percentScaleForm").style.display = "none";
+        document.getElementById("comparisonScaleForm").style.display = "none";
         document.getElementById("percentSumScaleForm").style.display = "flex";
+      } else if (
+        (scaleTypeContent === "" ||
+          scaleTypeContent === "comparison_paired_scale") &&
+        (scaleTypeHolder?.textContent === "comparison_paired_scale" ||
+          scaleTypeHolder?.textContent === "")
+      ) {
+        document.getElementById("likertScaleForm").style.display = "none";
+        document.getElementById("npsScaleForm").style.display = "none";
+        document.getElementById("snippScaleForm").style.display = "none";
+        document.getElementById("npsLiteScaleForm").style.display = "none";
+        document.getElementById("percentScaleForm").style.display = "none";
+        document.getElementById("percentSumScaleForm").style.display = "none";
+        document.getElementById("comparisonScaleForm").style.display = "flex";
       }
     }
   }, []);
@@ -631,15 +674,33 @@ const ScaleRightSide = () => {
       });
   };
 
-  const onEmojiClick = (emojiObject) => {
+  const onEmojiClick = (emojiObject, inputId) => {
     const emoji = emojiObject.emoji;
     if (inputStr.includes(emoji)) {
       alert("The emoji is already selected");
     } else {
-      setInputStr((prevInputStr) => prevInputStr + emoji);
+      const inputRefToUpdate = inputId === "emojiInp1" ? inputRef1 : inputRef2;
+
+      const start = inputRefToUpdate.current.selectionStart;
+      const end = inputRefToUpdate.current.selectionEnd;
+      const textBeforeCursor = inputStr.slice(0, start);
+      const textAfterCursor = inputStr.slice(end);
+
+      const newInputStr = textBeforeCursor + emoji + textAfterCursor;
+
+      setInputStr(newInputStr);
+
+      // Move the cursor position to after the inserted emoji
+      const newCursorPosition = start + emoji.length;
+      inputRefToUpdate.current.setSelectionRange(
+        newCursorPosition,
+        newCursorPosition
+      );
+
       setShowPicker(false);
     }
   };
+
   const [borderSize, setBorderSize] = useState(
     Number(localStorage.getItem("borderSize")) || 0
   );
@@ -752,6 +813,50 @@ const ScaleRightSide = () => {
       setIsSubmitDisabled(true);
     }
   };
+  // paired_comparison scale
+  const [pairedInputValue, setPairedInputValue] = useState("");
+  const [pairedLabelTexts, setPairedLabelTexts] = useState([]);
+
+  const handlePairedInputChange = (event) => {
+    const selectedValue = event.target.value;
+    setPairedInputValue(selectedValue);
+    if (selectedValue == "") {
+      setPairedInputValue([]);
+    }
+  };
+
+  const handlePairedKeyDownPress = (event) => {
+    if (event.key === "Enter") {
+      const selectedValue = event.target.value;
+      if (Number(selectedValue) >= 2 && Number(selectedValue) <= 100) {
+        setPairedLabelTexts(
+          Array.from({ length: Number(selectedValue) }, (_, index) => "")
+        );
+      } else {
+        alert(
+          `You entered ${selectedValue}. Item Count value should be between 2 to 100 only`
+        );
+        setPercentSumInputValue("");
+      }
+    }
+  };
+
+  const handlePairedLabelTextChange = (index, event) => {
+    const updatedLabelTexts = [...pairedLabelTexts];
+    updatedLabelTexts[index] = event.target.value;
+    setPairedLabelTexts(updatedLabelTexts);
+
+    let ItemNames = document.getElementById("item_count_label");
+    let inputFields = ItemNames?.querySelectorAll("input");
+    const hasInputValues = [...inputFields].every(
+      (inputField) => inputField.value != ""
+    );
+    if (hasInputValues) {
+      setIsSubmitDisabled(false);
+    } else {
+      setIsSubmitDisabled(true);
+    }
+  };
 
   const handleUpdates = () => {
     const scaleType = document.getElementById("scaleType");
@@ -793,7 +898,7 @@ const ScaleRightSide = () => {
       const optionSelect = document.getElementById("format");
       const option =
         document.querySelector("#orientationId").options[
-        document.querySelector("#orientationId").selectedIndex
+          document.querySelector("#orientationId").selectedIndex
         ];
 
       // console.log(idHolder);
@@ -938,11 +1043,11 @@ const ScaleRightSide = () => {
             setIsLoading(false);
 
             sendMessage();
-            setScaleData(res.data);
-            const success = res.data.success;
-            var successObj = JSON.parse(success);
-            const id = successObj.inserted_id;
-            // console.log(id);
+            setScaleData(res.data.data.scale_id);
+            const id = res.data.data.scale_id;
+            // var successObj = JSON.parse(success);
+            // const id = successObj.inserted_id;
+            console.log("This is the scale id", id);
             if (id.length) {
               setScaleId(id && id);
               const idHolder = scale?.querySelector(".scaleId");
@@ -1114,7 +1219,7 @@ const ScaleRightSide = () => {
       scaleType
         ? scaleType.value === "snipte" || scaleTypeContent === "snipte"
         : scaleTypeContent === "snipte" ||
-        scaleTypeHolder?.textContent === "snipte"
+          scaleTypeHolder?.textContent === "snipte"
     ) {
       const scale = document.querySelector(".focussedd");
       // console.log(scale);
@@ -1300,10 +1405,10 @@ const ScaleRightSide = () => {
           .then((res) => {
             setIsLoading(false);
             sendMessage();
-            setScaleData(res.data);
-            const success = res.data.success;
-            var successObj = JSON.parse(success);
-            const id = successObj.inserted_id;
+            setScaleData(res.data.data.scale_id);
+            const id = res.data.data.scale_id;
+            // var successObj = JSON.parse(success);
+            // const id = successObj.inserted_id;
             // console.log(id);
             if (id.length) {
               setScaleId(id && id);
@@ -1461,7 +1566,7 @@ const ScaleRightSide = () => {
       scaleType
         ? scaleType.value === "nps_lite" || scaleTypeContent === "nps_lite"
         : scaleTypeContent === "nps_lite" ||
-        scaleTypeHolder?.textContent === "nps_lite"
+          scaleTypeHolder?.textContent === "nps_lite"
     ) {
       const btnUpdateScale = document.getElementById("scale_color_nps_lite");
       const btnUpdateFontColor = document.getElementById("font_color_nps_lite");
@@ -1590,7 +1695,7 @@ const ScaleRightSide = () => {
             sendMessage();
             setScaleData(res.data);
             const id = res.data.data.scale_id;
-            console.log(id);
+            console.log("This is the id",id);
             if (id.length) {
               setScaleId(id && id);
               const idHolder = scale?.querySelector(".scaleId");
@@ -1758,7 +1863,7 @@ const ScaleRightSide = () => {
       scaleType
         ? scaleType.value === "likert" || scaleTypeContent === "likert"
         : scaleTypeContent === "likert" ||
-        scaleTypeHolder?.textContent === "likert"
+          scaleTypeHolder?.textContent === "likert"
     ) {
       const scale = document.querySelector(".focussedd");
       // console.log(scale);
@@ -2082,9 +2187,9 @@ const ScaleRightSide = () => {
     } else if (
       scaleType
         ? scaleType.value === "percent_scale" ||
-        scaleTypeContent === "percent_scale"
+          scaleTypeContent === "percent_scale"
         : scaleTypeContent === "percent_scale" ||
-        scaleTypeHolder?.textContent === "percent_scale"
+          scaleTypeHolder?.textContent === "percent_scale"
     ) {
       const scale = document.querySelector(".focussedd");
       const btnUpdateScale = document.getElementById(
@@ -2274,23 +2379,28 @@ const ScaleRightSide = () => {
                 orientation.style.display = "none";
                 button4.appendChild(orientation);
                 containerDiv.style.transform = "rotate(270deg)";
-                nameDiv.style.right = "-8px";
+
+                containerDiv.style.marginTop = "80px";
+                containerDiv.style.width = "100%";
+                inputPercent.style.marginTop = "20px";
                 nameDiv.style.position = "absolute";
-                nameDiv.style.width = "50%";
-                nameDiv.style.left = "75%";
+                nameDiv.style.lineHeight = "0.85";
+                if ( nameDiv.textContent.length < 10) {
+                  nameDiv.style.top = "20px"
+                  nameDiv.style.left = "93%";
+                  nameDiv.style.right = "-17px";
+                } else {
+                  nameDiv.style.left = "101%";
+                  nameDiv.style.top = "4px";
+                  nameDiv.style.right = "-22px";
+                }
+              newLabelHold.style.padding =
                 nameDiv.textContent.length < 9
-                  ? (nameDiv.style.top = "23px")
-                  : (nameDiv.style.top = "39px");
-
-                newLabelHold.style.padding =
-                  nameDiv.textContent.length < 9
-                    ? "0px 20px 10px 14px"
-                    : "0px 20px 37px 14px";
+                  ? "0px 20px 10px 14px"
+                  : "0px 17px 37px 14px";
                 nameDiv.style.transform = "rotate(90deg)";
-
                 newLabelHold.style.position = "relative";
-                newLabelHold.style.width = "80%";
-                newLabelHold.style.paddingTop = "24px";
+                newLabelHold.style.width = "85%";
                 percentChilds.style.alignItems = "start";
                 percentChilds.style.height = "100%";
               }
@@ -2429,23 +2539,27 @@ const ScaleRightSide = () => {
                   orientation.style.display = "none";
                   button4.appendChild(orientation);
                   containerDiv.style.transform = "rotate(270deg)";
+                  containerDiv.style.marginTop = "80px";
+                  containerDiv.style.width = "100%";
+                  inputPercent.style.marginTop = "20px";
                   nameDiv.style.position = "absolute";
-                  nameDiv.style.width = "50%";
-                  nameDiv.style.left = "75%";
+                  nameDiv.style.lineHeight = "0.85";
+                  if ( nameDiv.textContent.length < 10) {
+                  nameDiv.style.top = "20px"
+                  nameDiv.style.left = "93%";
+                  nameDiv.style.right = "-17px";
+                } else {
+                  nameDiv.style.left = "101%";
+                  nameDiv.style.top = "4px";
+                  nameDiv.style.right = "-22px"
+                }
+                newLabelHold.style.padding =
                   nameDiv.textContent.length < 9
-                    ? (nameDiv.style.top = "23px")
-                    : (nameDiv.style.top = "39px");
-
-                  newLabelHold.style.padding =
-                    nameDiv.textContent.length < 9
-                      ? "0px 20px 10px 14px"
-                      : "0px 20px 37px 14px";
-                  nameDiv.style.right = "-8px";
+                    ? "0px 20px 10px 14px"
+                    : "0px 17px 37px 14px";
                   nameDiv.style.transform = "rotate(90deg)";
-
                   newLabelHold.style.position = "relative";
-                  newLabelHold.style.width = "80%";
-                  newLabelHold.style.paddingTop = "24px";
+                  newLabelHold.style.width = "85%";
                   percentChilds.style.alignItems = "start";
                   percentChilds.style.height = "100%";
                 }
@@ -2466,9 +2580,9 @@ const ScaleRightSide = () => {
     } else if (
       scaleType
         ? scaleType.value === "percent_sum_scale" ||
-        scaleTypeContent === "percent_sum_scale"
+          scaleTypeContent === "percent_sum_scale"
         : scaleTypeContent === "percent_sum_scale" ||
-        scaleTypeHolder?.textContent === "percent_sum_scale"
+          scaleTypeHolder?.textContent === "percent_sum_scale"
     ) {
       const scale = document.querySelector(".focussedd");
       const btnUpdateScale = document.getElementById(
@@ -2665,11 +2779,21 @@ const ScaleRightSide = () => {
                 containerDiv.style.width = "100%";
                 inputPercent.style.marginTop = "20px";
                 nameDiv.style.position = "absolute";
-                nameDiv.style.left = "93%";
-                nameDiv.style.top = "7px";
-                nameDiv.style.right = "-8px";
+                nameDiv.style.lineHeight = "0.85";
+                if ( nameDiv.textContent.length < 10) {
+                  nameDiv.style.top = "20px"
+                  nameDiv.style.left = "93%";
+                  nameDiv.style.right = "-17px";
+                } else {
+                  nameDiv.style.left = "101%";
+                  nameDiv.style.top = "4px";
+                  nameDiv.style.right = "-22px";
+                }
+              newLabelHold.style.padding =
+                nameDiv.textContent.length < 9
+                  ? "0px 20px 10px 14px"
+                  : "0px 17px 37px 14px";
                 nameDiv.style.transform = "rotate(90deg)";
-                nameDiv.style.paddingLeft = "8px";
                 newLabelHold.style.position = "relative";
                 newLabelHold.style.width = "85%";
                 percentChilds.style.alignItems = "start";
@@ -2838,11 +2962,21 @@ const ScaleRightSide = () => {
                   containerDiv.style.width = "100%";
                   inputPercent.style.marginTop = "20px";
                   nameDiv.style.position = "absolute";
+                  nameDiv.style.lineHeight = "0.85";
+                  if ( nameDiv.textContent.length < 10) {
+                  nameDiv.style.top = "20px"
                   nameDiv.style.left = "93%";
-                  nameDiv.style.top = "7px";
-                  nameDiv.style.right = "-8px";
+                  nameDiv.style.right = "-17px";
+                } else {
+                  nameDiv.style.left = "101%";
+                  nameDiv.style.top = "4px";
+                  nameDiv.style.right = "-22px"
+                }
+                newLabelHold.style.padding =
+                  nameDiv.textContent.length < 9
+                    ? "0px 20px 10px 14px"
+                    : "0px 17px 37px 14px";
                   nameDiv.style.transform = "rotate(90deg)";
-                  nameDiv.style.paddingLeft = "8px";
                   newLabelHold.style.position = "relative";
                   newLabelHold.style.width = "85%";
                   percentChilds.style.alignItems = "start";
@@ -2884,11 +3018,319 @@ const ScaleRightSide = () => {
             // console.log(err.message);
           });
       }
+    } else if (
+      scaleType
+        ? scaleType.value === "comparison_paired_scale" ||
+          scaleTypeContent === "comparison_paired_scale"
+        : scaleTypeContent === "comparison_paired_scale" ||
+          scaleTypeHolder?.textContent === "comparison_paired_scale"
+    ) {
+      const scale = document.querySelector(".focussedd");
+      const btnUpdateScaleColor = document.getElementById(
+        "scale_color_Comparison"
+      );
+      const btnUpdateScale = document.getElementById("button_color_Comparison");
+      const btnUpdateFontColor = document.getElementById(
+        "font_color_comparison"
+      );
+      const btnUpdateScaleFont = document.getElementById(
+        "font_style_comparison"
+      );
+      const beNametnUpdateScal = document.getElementById(
+        "scale_label_Comparison"
+      );
+
+      const button = scale?.querySelector(".label_hold");
+      const scaleText = scale?.querySelector(".scale_text");
+      const button4 = scale?.querySelector(".scool_input");
+      const numberOfItemsToPair = parseInt(pairedInputValue);
+      const updatedPairedLabels = pairedLabelTexts.filter(
+        (label) => label.trim() !== ""
+      );
+      // Check if there are at least 2 items to create pairs
+      if (updatedPairedLabels.length < 2) {
+        alert("You need at least 2 paired items.");
+        return; // Don't proceed if there are less than 2 items
+      }
+
+      // Construct the item_list array dynamically based on the input values
+      const itemList = pairedLabelTexts;
+
+      button4.style.display = "block";
+      const buttonChildLeft = scale?.querySelector(".left_child");
+      const buttonChildRight = scale?.querySelector(".right_child");
+      const buttonChildNeutral = scale?.querySelector(".neutral_child");
+
+      const option = document.querySelector("#orientationIdComaprison").options[
+        document.querySelector("#orientationIdComaprison").selectedIndex
+      ];
+
+      let time = document.getElementById("time_comparison");
+
+      let labelHold = scale?.querySelector(".label_hold");
+
+      let tempText = scale?.querySelector(".tempText");
+      tempText?.remove();
+
+      buttonChildLeft.textContent = "";
+      buttonChildNeutral.textContent = "";
+      buttonChildRight.textContent = "";
+
+      labelHold.innerHTML = "";
+
+      const pairedScaleArray = document.createElement("div");
+      pairedScaleArray.className = "paired_Scale_Array";
+      pairedScaleArray.textContent = updatedPairedLabels;
+      pairedScaleArray.style.display = "none";
+      labelHold.append(pairedScaleArray);
+
+      // Update circles with new labels
+
+      if (option.value === "Horizontal") {
+        button4.style.border = "block";
+        button4.style.textAlign = "center";
+        button.style.display = "flex";
+        button.style.flexDirection = "row";
+        // button.style.marginTop = "5%";
+        button.style.alignItems = "center";
+        // buttonCircle.style.flexDirection = "row";
+        button.style.height = "85%";
+        button.style.width = "100%";
+        button.style.flexDirection = "row";
+        button.style.position = "relative";
+        button.style.marginLeft = "0px";
+      }
+
+      if (option.value === "Vertical") {
+        let orientation = document.createElement("h2");
+        orientation.className = "orientation";
+        orientation.textContent = "vertical";
+        orientation.style.display = "none";
+        button4.appendChild(orientation);
+        button4.style.border = "none";
+        button4.style.textAlign = "center";
+        button.style.height = "80%";
+        button.style.width = "50%";
+        button.style.position = "absolute";
+        button.style.display = "flex";
+        button.style.flexDirection = "column";
+        button.style.alignItems = "center";
+        button.style.marginTop = "1%";
+        button.style.marginLeft = "26%";
+      }
+
+      if (
+        idHolder.textContent === "scale Id" ||
+        idHolder.textContent === "id"
+      ) {
+        setIsLoading(true);
+        console.log("post req");
+        Axios.post(
+          "https://100035.pythonanywhere.com/paired-comparison/paired-comparison-settings/",
+          {
+            username: "pfactorial",
+            time: time.value,
+            scale_name: beNametnUpdateScal.value,
+            orientation: option.value,
+            roundcolor: btnUpdateScale.value,
+            scalecolor: btnUpdateScaleColor.value,
+            fontcolor: btnUpdateFontColor.value,
+            fontstyle: btnUpdateScaleFont.value,
+            item_count: numberOfItemsToPair,
+            item_list: itemList,
+            user: "yes",
+          }
+        )
+          .then((res) => {
+            setIsLoading(false);
+            sendMessage();
+            setScaleData(res.data);
+            const success = res.data.success;
+            var successObj = JSON.parse(success);
+            const id = successObj.inserted_id;
+            console.log(id);
+            if (id.length) {
+              setScaleId(id && id);
+              const idHolder = scale?.querySelector(".scaleId");
+              idHolder.textContent = id && id;
+            }
+            console.log(res);
+            const settings = res.data.data.settings;
+            console.log(settings);
+            if (settings.name) {
+              scaleText.textContent = settings.name;
+            }
+
+            if (settings.fontcolor) {
+              button4.style.color = settings.fontcolor;
+            }
+
+            if (settings.fontstyle) {
+              button4.style.fontFamily = settings.fontstyle;
+            }
+
+            button4.style.display = "block";
+
+            labelHold.style.justifyContent = "center";
+            labelHold.style.flexWrap = "wrap";
+            for (let i = 0; i < updatedPairedLabels.length - 1; i++) {
+              for (let j = i + 1; j < updatedPairedLabels.length; j++) {
+                const circle = document.createElement("div");
+                circle.className = "circle_label";
+                circle.style.width = "127px";
+                circle.style.height = "45%";
+                circle.style.borderRadius = "25px";
+                circle.style.padding = "12px 20px";
+                circle.style.backgroundColor = settings.scalecolor;
+                circle.style.display = "flex";
+                circle.style.flexDirection = "column";
+                circle.style.justifyContent = "center";
+                circle.style.alignItems = "center";
+                circle.style.marginLeft = "5px";
+                circle.style.marginRight = "5px";
+                circle.style.gap = "7px";
+
+                const smallBox1 = document.createElement("div");
+                smallBox1.textContent = updatedPairedLabels[i];
+                const smallBox2 = document.createElement("div");
+                smallBox2.textContent = updatedPairedLabels[j];
+
+                smallBox1.style.width = "95%";
+                smallBox2.style.width = "95%";
+                smallBox1.style.background = settings.roundcolor;
+                smallBox2.style.background = settings.roundcolor;
+                smallBox1.style.height = "50%";
+                smallBox2.style.height = "50%";
+                smallBox1.style.display = "flex";
+                smallBox2.style.display = "flex";
+                smallBox1.style.justifyContent = "center";
+                smallBox2.style.justifyContent = "center";
+                smallBox1.style.alignItems = "center";
+                smallBox2.style.alignItems = "center";
+                smallBox1.style.fontWeight = "12px";
+                smallBox2.style.fontWeight = "12px";
+
+                circle.appendChild(smallBox1);
+                circle.appendChild(smallBox2);
+
+                if (option.value === "Vertical") {
+                  circle.style.margin = "5px 0";
+                  circle.style.padding = "6px 12px";
+                }
+
+                labelHold.appendChild(circle);
+              }
+            }
+          })
+          .catch((err) => {
+            setIsLoading(false);
+            console.log(err);
+          });
+      } else {
+        setIsLoading(true);
+        console.log("PUT req");
+        console.log(idHolder.textContent);
+        Axios.put(
+          "https://100035.pythonanywhere.com/paired-comparison/paired-comparison-settings",
+          {
+            scale_id: idHolder.textContent,
+            username: "pfactorial",
+            roundcolor: btnUpdateScale.value,
+            scalecolor: btnUpdateScaleColor.value,
+            fontcolor: btnUpdateFontColor.value,
+            fontstyle: btnUpdateScaleFont.value,
+            item_count: numberOfItemsToPair,
+            item_list: itemList,
+            user: "yes",
+          }
+        )
+          .then((res) => {
+            if (res.status == 200) {
+              setIsLoading(false);
+              sendMessage();
+              setScaleData(res.data);
+              setScaleId(scaleId);
+              console.log(res);
+              console.log("This is the still scale", scale);
+
+              const settings = res.data.data;
+              console.log(settings);
+              if (settings.name) {
+                scaleText.textContent = settings.name;
+              }
+
+              if (settings.fontcolor) {
+                button4.style.color = settings.fontcolor;
+              }
+
+              if (settings.fontstyle) {
+                button4.style.fontFamily = settings.fontstyle;
+              }
+
+              button4.style.display = "block";
+
+              labelHold.style.justifyContent = "center";
+              labelHold.style.flexWrap = "wrap";
+              for (let i = 0; i < settings.item_list.length - 1; i++) {
+                for (let j = i + 1; j < settings.item_list.length; j++) {
+                  const circle = document.createElement("div");
+                  circle.className = "circle_label";
+                  circle.style.width = "127px";
+                  circle.style.height = "45%";
+                  circle.style.borderRadius = "25px";
+                  circle.style.padding = "12px 20px";
+                  circle.style.backgroundColor = settings.scalecolor;
+                  circle.style.display = "flex";
+                  circle.style.flexDirection = "column";
+                  circle.style.justifyContent = "center";
+                  circle.style.alignItems = "center";
+                  circle.style.marginLeft = "5px";
+                  circle.style.marginRight = "5px";
+                  circle.style.gap = "7px";
+
+                  const smallBox1 = document.createElement("div");
+                  smallBox1.textContent = settings.item_list[i];
+                  const smallBox2 = document.createElement("div");
+                  smallBox2.textContent = settings.item_list[j];
+
+                  smallBox1.style.width = "95%";
+                  smallBox2.style.width = "95%";
+                  smallBox1.style.background = settings.roundcolor;
+                  smallBox2.style.background = settings.roundcolor;
+                  smallBox1.style.height = "50%";
+                  smallBox2.style.height = "50%";
+                  smallBox1.style.display = "flex";
+                  smallBox2.style.display = "flex";
+                  smallBox1.style.justifyContent = "center";
+                  smallBox2.style.justifyContent = "center";
+                  smallBox1.style.alignItems = "center";
+                  smallBox2.style.alignItems = "center";
+                  smallBox1.style.fontWeight = "12px";
+                  smallBox2.style.fontWeight = "12px";
+
+                  circle.appendChild(smallBox1);
+                  circle.appendChild(smallBox2);
+
+                  if (option.value === "Vertical") {
+                    circle.style.margin = "5px 0";
+                    circle.style.padding = "6px 12px";
+                  }
+
+                  labelHold.appendChild(circle);
+                }
+              }
+            }
+          })
+          .catch((err) => {
+            setIsLoading(false);
+            console.log(err.message);
+          });
+      }
     }
   };
   const idHolder = scale?.querySelector(".scaleId");
-  // console.log(idHolder);
-  // console.log(scaleId);
+  console.log(idHolder);
+  console.log(scaleId);
   function showIframe() {
     const divIframeRight = document.getElementById("iframeRight");
     const divSettingRight = document.getElementById("settingRight");
@@ -3017,12 +3459,13 @@ const ScaleRightSide = () => {
       const option = options[i];
       if (option.selected) {
         selectedValues[option.value] = option.id;
-        console.log("This is option", option);
+        console.log("This is option 2", option);
       }
     }
 
-    console.log(selectedValues);
+    console.log("This is the selected value",selectedValues);
     setSelectedOptions(selectedValues);
+    console.log("This is the selected options",selectedOptions);
 
     let selectedOption = selectField.options[selectField.selectedIndex];
     let selectedElementId = selectedOption.id;
@@ -3210,7 +3653,7 @@ const ScaleRightSide = () => {
   console.log("The other elements", otherElementsArray);
 
   const options = otherElementsArray.map((element, index) => (
-    <option key={index} value={element} id={element.split(" ")[1]}>
+    <option key={index} value={element.split(" ")[0]} id={element.split(" ")[1]}>
       {element}
     </option>
   ));
@@ -3306,6 +3749,14 @@ const ScaleRightSide = () => {
       timeId.style.display = "none";
     }
   };
+  const onTimeChangeComparison = (e) => {
+    let timeId = document.getElementById("timeId_comparison");
+    if (e.target.checked) {
+      timeId.style.display = "flex";
+    } else {
+      timeId.style.display = "none";
+    }
+  };
 
   // const upperVal = Math.min(10, parseInt(document.getElementById('upperVal').value, 10));
   // if (upperVal !==null) {
@@ -3335,8 +3786,8 @@ const ScaleRightSide = () => {
               }}
               id="updateScale"
               className="py-2 bg-white border-none"
-            // style={{"}}
-            // onClick={showIframe}
+              // style={{"}}
+              // onClick={showIframe}
             >
               Appearance
             </button>
@@ -3348,8 +3799,8 @@ const ScaleRightSide = () => {
               }}
               id="setScale"
               className="py-2 bg-white border-none"
-            // style={{ bordern: "none", outline: "none" }}
-            // onClick={showSetting}
+              // style={{ bordern: "none", outline: "none" }}
+              // onClick={showSetting}
             >
               Configurations
             </button>
@@ -3480,7 +3931,7 @@ const ScaleRightSide = () => {
             >
               <div>
                 {scaleTypeHolder?.textContent === "" &&
-                  scaleTypeContent === "" ? (
+                scaleTypeContent === "" ? (
                   <div>
                     <div
                       style={{
@@ -3511,6 +3962,9 @@ const ScaleRightSide = () => {
                           <option value="percent_scale">Percent Scale</option>
                           <option value="percent_sum_scale">
                             Percent-Sum Scale
+                          </option>
+                          <option value="comparison_paired_scale">
+                            Paired Comparison Scale
                           </option>
                         </select>
                       </div>
@@ -3943,6 +4397,8 @@ const ScaleRightSide = () => {
                         }}
                       >
                         <input
+                          ref={inputRef1}
+                          data-input-id="emojiInp1"
                           style={{
                             width: "100%",
                             height: "18px",
@@ -3954,7 +4410,6 @@ const ScaleRightSide = () => {
                           }}
                           id="emojiInp"
                           value={inputStr}
-                          contentEditable
                           onChange={(e) => setInputStr(e.target.value)}
                         />
 
@@ -3966,11 +4421,15 @@ const ScaleRightSide = () => {
                             zIndex: 1,
                             maxWidth: "200%",
                             maxHeight: "300px",
-                            // overflowY: "auto",
-                            // padding: "5px",
                           }}
                         >
-                          {showPicker && <Picker onEmojiClick={onEmojiClick} />}
+                          {showPicker && (
+                            <Picker
+                              onEmojiClick={(emojiObject) =>
+                                onEmojiClick(emojiObject, "emojiInp1")
+                              }
+                            />
+                          )}
                         </div>
                         <GrEmoji
                           style={{
@@ -4109,7 +4568,7 @@ const ScaleRightSide = () => {
                           id="left"
                           disabled={
                             isEmojiFormat === true &&
-                              (inputStr.length < 22 || inputStr.length > 22)
+                            (inputStr.length < 22 || inputStr.length > 22)
                               ? true
                               : false
                           }
@@ -4156,7 +4615,7 @@ const ScaleRightSide = () => {
                           id="centre"
                           disabled={
                             isEmojiFormat === true &&
-                              (inputStr.length < 22 || inputStr.length > 22)
+                            (inputStr.length < 22 || inputStr.length > 22)
                               ? true
                               : false
                           }
@@ -4212,7 +4671,7 @@ const ScaleRightSide = () => {
                           id="right"
                           disabled={
                             isEmojiFormat === true &&
-                              (inputStr.length < 22 || inputStr.length > 22)
+                            (inputStr.length < 22 || inputStr.length > 22)
                               ? true
                               : false
                           }
@@ -4266,7 +4725,7 @@ const ScaleRightSide = () => {
                           id="scaleLabel"
                           disabled={
                             isEmojiFormat === true &&
-                              (inputStr.length < 22 || inputStr.length > 22)
+                            (inputStr.length < 22 || inputStr.length > 22)
                               ? true
                               : false
                           }
@@ -4569,7 +5028,7 @@ const ScaleRightSide = () => {
                         onClick={handleUpdates}
                         disabled={
                           isEmojiFormat === true &&
-                            (inputStr.length < 22 || inputStr.length > 22)
+                          (inputStr.length < 22 || inputStr.length > 22)
                             ? true
                             : false
                         }
@@ -4708,7 +5167,7 @@ const ScaleRightSide = () => {
                         id="upperVal"
                         onChange={(e) => setUpperLimit(e.target.value)}
 
-                      // onChange={upperValueChange}
+                        // onChange={upperValueChange}
                       />
                     </div>
                   </div>
@@ -4747,7 +5206,7 @@ const ScaleRightSide = () => {
                         }}
                         id="spacing"
                         onChange={(e) => setSpace(e.target.value)}
-                      // value={-upperVal}
+                        // value={-upperVal}
                       />
                     </div>
                   </div>
@@ -5025,6 +5484,8 @@ const ScaleRightSide = () => {
                         }}
                       >
                         <input
+                          ref={inputRef2}
+                          data-input-id="emojiInp2"
                           style={{
                             width: "100%",
                             height: "18px",
@@ -5051,7 +5512,13 @@ const ScaleRightSide = () => {
                             //padding: "5px",
                           }}
                         >
-                          {showPicker && <Picker onEmojiClick={onEmojiClick} />}
+                          {showPicker && (
+                            <Picker
+                              onEmojiClick={(emojiObject) =>
+                                onEmojiClick(emojiObject, "emojiInp2")
+                              }
+                            />
+                          )}
                         </div>
                         <GrEmoji
                           style={{
@@ -5063,7 +5530,7 @@ const ScaleRightSide = () => {
                           }}
                           onClick={() =>
                             inputStr.length ===
-                              Math.floor(upperLimit / space) * 2 * 2
+                            Math.floor(upperLimit / space) * 2 * 2
                               ? ""
                               : setShowPicker(!showPicker)
                           }
@@ -5071,7 +5538,7 @@ const ScaleRightSide = () => {
                       </div>
                       {inputStr.length <
                         Math.floor(upperLimit / space) * 2 * 2 ||
-                        inputStr.length >
+                      inputStr.length >
                         Math.floor(upperLimit / space) * 2 * 2 ? (
                         <p style={{ fontSize: "small", color: "red" }}>
                           select {Math.floor(upperLimit / space) * 2} emojis
@@ -5184,9 +5651,9 @@ const ScaleRightSide = () => {
                           id="leftStapel"
                           disabled={
                             isEmojiFormat === true &&
-                              (inputStr.length <
-                                Math.floor(upperLimit / space) * 2 * 2 ||
-                                inputStr.length >
+                            (inputStr.length <
+                              Math.floor(upperLimit / space) * 2 * 2 ||
+                              inputStr.length >
                                 Math.floor(upperLimit / space) * 2 * 2)
                               ? true
                               : false
@@ -5234,9 +5701,9 @@ const ScaleRightSide = () => {
                           id="rightStapel"
                           disabled={
                             isEmojiFormat === true &&
-                              (inputStr.length <
-                                Math.floor(upperLimit / space) * 2 * 2 ||
-                                inputStr.length >
+                            (inputStr.length <
+                              Math.floor(upperLimit / space) * 2 * 2 ||
+                              inputStr.length >
                                 Math.floor(upperLimit / space) * 2 * 2)
                               ? true
                               : false
@@ -5283,9 +5750,9 @@ const ScaleRightSide = () => {
                         id="scaleLabel_stapel"
                         disabled={
                           isEmojiFormat === true &&
-                            (inputStr.length <
-                              Math.floor(upperLimit / space) * 2 * 2 ||
-                              inputStr.length >
+                          (inputStr.length <
+                            Math.floor(upperLimit / space) * 2 * 2 ||
+                            inputStr.length >
                               Math.floor(upperLimit / space) * 2 * 2)
                             ? true
                             : false
@@ -5416,9 +5883,9 @@ const ScaleRightSide = () => {
                         onClick={handleUpdates}
                         disabled={
                           isEmojiFormat === true &&
-                            (inputStr.length <
-                              Math.floor(upperLimit / space) * 2 * 2 ||
-                              inputStr.length >
+                          (inputStr.length <
+                            Math.floor(upperLimit / space) * 2 * 2 ||
+                            inputStr.length >
                               Math.floor(upperLimit / space) * 2 * 2)
                             ? true
                             : false
@@ -6727,6 +7194,566 @@ const ScaleRightSide = () => {
                 </div>
               </form>
             </div>
+            <div id="comparisonScaleForm">
+              <form
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  gap: "15px",
+                  width: "100%",
+                  overflowY: "auto",
+                  paddingTop: "5px",
+                  paddingBottom: "5px",
+                  paddingLeft: "12px",
+                  paddingRight: "12px",
+                  marginTop: "15px",
+                  fontSize: "10px",
+                }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    margin: "0",
+                    padding: "0",
+                    flexDirection: "column",
+                    // gap: "5px",
+                    alignItems: "start",
+                  }}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "2px",
+                      marginLeft: "auto",
+                      marginRight: "auto",
+                    }}
+                  >
+                    <h1
+                      id="headerText"
+                      style={{ margin: "auto 0", fontSize: "15px" }}
+                    >
+                      Edit {scaleTitle}
+                    </h1>
+                  </div>
+                  <h6 style={{ fontSize: "12px" }}>Orientation</h6>
+                  <div
+                    style={{
+                      backgroundColor: "#e8e8e8",
+                      // padding: "5px 10px",
+                      borderRadius: "10px",
+                      padding: "5px 7px",
+                      width: "100%",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <select
+                      style={{
+                        width: "100%",
+                        backgroundColor: "transparent",
+                        // borderRadius: "10px",
+                        // padding: "3px 10px",
+                        height: "15px",
+                        border: "none",
+                        justifyContent: "center",
+                        outline: "none",
+                        display: "flex",
+                        alignItems: "center",
+                        fontSize: "12px",
+                        margin: "0 auto",
+                      }}
+                      className="bg-gray-800"
+                      id="orientationIdComaprison"
+                    >
+                      <option style={{ color: "black" }}>Chosse..</option>
+                      <option value="Horizontal" style={{ color: "black" }}>
+                        Horizontal
+                      </option>
+                      <option value="Vertical" style={{ color: "black" }}>
+                        Vertical
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "7px",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "2px",
+                    }}
+                  >
+                    <h6 style={{ margin: "auto 0", fontSize: "12px" }}>
+                      Name of Scale
+                    </h6>
+                    <div
+                      style={{
+                        backgroundColor: "#e8e8e8",
+                        padding: "5px 7px",
+                        borderRadius: "7px",
+                        // height: "30px",
+                        width: "100%",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      <input
+                        type="text"
+                        onChange={(e) => setScaleTitle(e.target.value)}
+                        defaultValue={scaleT ? scaleT.innerHTML : ""}
+                        style={{
+                          width: "82px",
+                          height: "12px",
+                          display: "flex",
+                          backgroundColor: "transparent",
+                          border: "none",
+                          outline: "none",
+                          alignItems: "center",
+                        }}
+                        id="scale_label_Comparison"
+                      />
+                    </div>
+                  </div>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "2px",
+                    }}
+                  >
+                    <h6 style={{ margin: "auto 0", fontSize: "12px" }}>
+                      Number of Scale
+                    </h6>
+                    <div
+                      style={{
+                        backgroundColor: "#e8e8e8",
+                        padding: "3px 7px",
+                        borderRadius: "7px",
+                        // height: "30px",
+                        width: "100%",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      <input
+                        type="text"
+                        placeholder="1"
+                        style={{
+                          width: "100px",
+                          height: "12px",
+                          display: "flex",
+                          backgroundColor: "transparent",
+                          border: "none",
+                          outline: "none",
+                          alignItems: "center",
+                        }}
+                        id="Comparison_no_scale"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "space-between",
+                    gap: "10px",
+                    marginTop: "10px",
+                    // alignItems: "center",
+                  }}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "7px",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "2px",
+                      }}
+                    >
+                      <h6 style={{ margin: "auto 0", fontSize: "12px" }}>
+                        Scale Color
+                      </h6>
+                      <div
+                        style={{
+                          backgroundColor: "#e8e8e8",
+                          padding: "5px 7px",
+                          borderRadius: "7px",
+                          // height: "30px",
+                          width: "100%",
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                      >
+                        <input
+                          type="color"
+                          style={{
+                            width: "100px",
+                            height: "12px",
+                            display: "flex",
+                            alignItems: "center",
+                          }}
+                          id="scale_color_Comparison"
+                        />
+                      </div>
+                    </div>
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "2px",
+                      }}
+                    >
+                      <h6 style={{ margin: "auto 0", fontSize: "12px" }}>
+                        Round Color
+                      </h6>
+                      <div
+                        style={{
+                          backgroundColor: "#e8e8e8",
+                          padding: "5px 7px",
+                          borderRadius: "7px",
+                          // height: "30px",
+                          width: "100%",
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                      >
+                        <input
+                          type="color"
+                          style={{
+                            width: "100px",
+                            height: "12px",
+                            display: "flex",
+                            alignItems: "center",
+                          }}
+                          id="button_color_Comparison"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "7px",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "2px",
+                      }}
+                    >
+                      <h6 style={{ margin: "auto 0", fontSize: "12px" }}>
+                        Font Color
+                      </h6>
+                      <div
+                        style={{
+                          backgroundColor: "#e8e8e8",
+                          padding: "5px 7px",
+                          borderRadius: "7px",
+                          // height: "30px",
+                          width: "100%",
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                      >
+                        <input
+                          type="color"
+                          style={{
+                            width: "100px",
+                            height: "12px",
+                            display: "flex",
+                            alignItems: "center",
+                          }}
+                          id="font_color_comparison"
+                        />
+                      </div>
+                    </div>
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "2px",
+                      }}
+                    >
+                      <h6 style={{ margin: "auto 0", fontSize: "12px" }}>
+                        Font Style
+                      </h6>
+                      <div
+                        style={{
+                          backgroundColor: "#e8e8e8",
+                          padding: "3px 7px",
+                          borderRadius: "7px",
+                          // height: "30px",
+                          width: "100%",
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                      >
+                        <select
+                          style={{
+                            width: "100px",
+                            height: "15px",
+                            display: "flex",
+                            backgroundColor: "transparent",
+                            outline: "none",
+                            border: "none",
+                            alignItems: "center",
+                          }}
+                          id="font_style_comparison"
+                          defaultValue={
+                            // !scaleDisplay ? undefined ? scaleDisplay="none" ? undefined : scaleBg
+                            fontFamlity
+                              ? fontFamlity.style.fontFamily
+                              : "Select"
+                          }
+                        >
+                          <option style={{ fontSize: "11px" }}>Select</option>
+                          {fontStyles.map((fontStyle, index) => (
+                            <option key={index} value={fontStyle}>
+                              {fontStyle}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "2px",
+                    }}
+                  >
+                    <h6 style={{ margin: "auto 0", fontSize: "12px" }}>
+                      Number of Item
+                    </h6>
+                  </div>
+                  <div
+                    style={{
+                      backgroundColor: "#e8e8e8",
+                      padding: "3px 7px",
+                      borderRadius: "7px",
+                      width: "100%",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <input
+                      type="text"
+                      value={pairedInputValue}
+                      onChange={handlePairedInputChange}
+                      onKeyDown={handlePairedKeyDownPress}
+                      placeholder="0"
+                      style={{
+                        width: "100%",
+                        height: "15px",
+                        display: "flex",
+                        backgroundColor: "transparent",
+                        border: "none",
+                        outline: "none",
+                        alignItems: "center",
+                      }}
+                      id="paired_item_count"
+                    />
+                  </div>
+                  {pairedInputValue &&
+                    Number(pairedInputValue) >= 2 &&
+                    Number(pairedInputValue) <= 100 && (
+                      <div
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: "7px",
+                        }}
+                        id="item_count_label"
+                      >
+                        {pairedLabelTexts.map((pairedLabelText, index) => (
+                          <div
+                            key={index}
+                            style={{
+                              display: "flex",
+                              gap: "7px",
+                              alignItems: "center",
+                            }}
+                          >
+                            <div
+                              style={{
+                                width: "150px",
+                                height: "20px",
+                                backgroundColor: "#e8e8e8",
+                                borderRadius: "5px",
+                                display: "flex",
+                                alignItems: "center",
+                                paddingLeft: "5px",
+                              }}
+                            >
+                              <input
+                                type="text"
+                                value={pairedLabelText}
+                                onChange={(event) =>
+                                  handlePairedLabelTextChange(index, event)
+                                }
+                                placeholder={`Paired ${index + 1}`}
+                                style={{
+                                  backgroundColor: "transparent",
+                                  border: "none",
+                                  outline: "none",
+                                }}
+                                id="paired_item_${index}"
+                              />
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  <div
+                    style={{
+                      display: "flex",
+                      // gap: "2px",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <h6 style={{ fontSize: "12px" }}>Time(sec)</h6>
+
+                    <div class="form-check form-switch">
+                      <input
+                        style={{ cursor: "pointer" }}
+                        class="form-check-input"
+                        type="checkbox"
+                        role="switch"
+                        id="flexSwitchCheckDefault"
+                        // onChange={(e) => setIsSwitchEnabled(e.target.checked)}
+                        onChange={onTimeChangeComparison}
+                      />
+                    </div>
+                  </div>
+                  <div
+                    style={{
+                      display: "none",
+                      flexDirection: "column",
+                      gap: "2px",
+                      marginTop: "-10px",
+                    }}
+                    id="timeId_comparison"
+                  >
+                    <div
+                      style={{
+                        backgroundColor: "#e8e8e8",
+                        padding: "3px 7px",
+                        borderRadius: "7px",
+                        // height: "30px",
+                        width: "100%",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      <input
+                        type="text"
+                        placeholder="1"
+                        style={{
+                          width: "100%",
+                          height: "15px",
+                          display: "flex",
+                          backgroundColor: "transparent",
+                          border: "none",
+                          outline: "none",
+                          alignItems: "center",
+                        }}
+                        id="time_comparison"
+                      />
+                    </div>
+                  </div>
+                  <div
+                    style={{
+                      display: "none",
+                      flexDirection: "column",
+                      gap: "2px",
+                      marginTop: "-10px",
+                    }}
+                    id="scoreInput"
+                  >
+                    <div
+                      style={{
+                        backgroundColor: "#e8e8e8",
+                        padding: "3px 7px",
+                        borderRadius: "7px",
+                        width: "100%",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      <input
+                        type="text"
+                        placeholder="1"
+                        style={{
+                          width: "100%",
+                          height: "15px",
+                          display: "flex",
+                          backgroundColor: "transparent",
+                          border: "none",
+                          outline: "none",
+                          alignItems: "center",
+                        }}
+                        id="score"
+                      />
+                    </div>
+                  </div>
+                  {/* // )} */}
+                </div>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    width: "100%",
+                    padding: "0 5px",
+                    gap: "10px",
+                  }}
+                >
+                  <div>
+                    <Button
+                      id="button_id"
+                      type="button"
+                      width="50%"
+                      marginTop="60px"
+                      disabled={isSubmitDisabled}
+                      onClick={handleUpdates}
+                    >
+                      Update
+                    </Button>
+                  </div>
+                </div>
+              </form>
+            </div>
             <div id="percentScaleForm">
               <form
                 style={{
@@ -7775,7 +8802,8 @@ const ScaleRightSide = () => {
                 variant="secondary"
                 // className="remove_button"
                 className="remove_button"
-                onClick={removeScale}
+                // onClick={removeScale}
+                onClick={() => setConfirmRemove(!confirmRemove)}
               >
                 Remove Scale
               </Button>

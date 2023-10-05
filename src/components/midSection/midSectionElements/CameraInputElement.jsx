@@ -91,7 +91,7 @@ function createCameraInputField(id, p, holderDIV, handleClicked, setSidebar, tab
   } else if (decoded.details.action === "document") {
     let videoField = document.createElement("video");
     const videoLinkHolder1 = document.createElement("h1");
-    if (videoLinkHolder === "video_link") {
+    if (videoLinkHolder === "video_link" || videoLinkHolder === "") {
       videoField.className = "videoInput";
       videoField.src = videoLinkHolder;
       videoField.style.width = "100%";
@@ -116,9 +116,9 @@ function createCameraInputField(id, p, holderDIV, handleClicked, setSidebar, tab
       videoField.src = videoLinkHolder;
       videoField.style.width = "100%";
       videoField.style.height = "100%";
-      videoField.muted = true;
       videoField.autoplay = true;
       videoField.loop = true;
+      videoField.controls = true
       cameraField.append(videoField);
 
       let cameraImageInput = document.createElement("canvas");
@@ -135,7 +135,7 @@ function createCameraInputField(id, p, holderDIV, handleClicked, setSidebar, tab
     let imgHolder = document.createElement("img");
     const imageLinkHolder1 = document.createElement("h1");
 
-    if (imageLinkHolder === "image_link") {
+    if (imageLinkHolder === "image_link" || imageLinkHolder === "") {
       imgHolder.className = "imageHolder";
       imgHolder.style.height = "100%";
       imgHolder.style.width = "100%";

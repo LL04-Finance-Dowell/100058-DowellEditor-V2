@@ -78,11 +78,11 @@
 
 .header_icons > img,
 svg {
-  width: 1rem !important;
+  width: 2rem !important;
   height: 22px;
   color: #1c2b48;
   /* margin-left: 33.9px; */
-  margin-right: 20px;
+  /* margin-right: 20px; */
   cursor: pointer;
 }
 
