@@ -474,7 +474,6 @@ const MidSection = React.forwardRef((props, ref) => {
       const textElement = createTextElement(holderDIV, focuseddClassMaintain, handleClicked, setSidebar, getOffset, element.data);
       midSection.append(textElement);
     } else if (element.type === "IMAGE_INPUT") {
-      console.log(element.data);
       const imageInput = createImageElement(holderDIV, focuseddClassMaintain, handleClicked, setSidebar,element.data);
       midSection.append(imageInput);
     } else if (element.type === "IFRAME_INPUT") {
@@ -487,7 +486,7 @@ const MidSection = React.forwardRef((props, ref) => {
       const newScale = createNewScaleInputElement(holderDIV, focuseddClassMaintain, handleClicked, setSidebar, table_dropdown_focuseddClassMaintain, decoded, setIsLoading);
       midSection.append(newScale);
     } else if (element.type === "SIGN_INPUT") {
-      const signElement = createSignInputElement(holderDIV, focuseddClassMaintain, handleClicked, setSidebar, setPostData, getOffset);
+      const signElement = createSignInputElement(holderDIV, focuseddClassMaintain, handleClicked, setSidebar, setPostData, getOffset,element.data);
       midSection.append(signElement);
     } else if (element.type === "DROPDOWN_INPUT") {
       const dropDown = createDropDownInputElement(holderDIV, handleClicked, setSidebar, table_dropdown_focuseddClassMaintain, setRightSideDropDown, setPostData, getOffset);
@@ -648,7 +647,7 @@ const MidSection = React.forwardRef((props, ref) => {
         case targetElement.querySelector(".signInput") && true:
           type = "SIGN_INPUT";
           elem.type = type;
-          elem.data = targetElement.firstChild.style.backgroundImage;
+          elem.data = targetElement.firstChild.innerText;
           break;
         case targetElement.querySelector(".textInput") && true:
           type = "TEXT_INPUT";
