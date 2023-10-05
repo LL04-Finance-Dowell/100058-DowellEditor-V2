@@ -273,7 +273,16 @@ function createNewScaleInputField(
               holdElem.textContent = i;
               holding?.appendChild(holdElem);
               console.log("This is holdEle", holdElem.textContent);
-              if (scaleField?.parentElement?.classList.contains("holderDIV")) {
+              // if (scaleField?.parentElement?.classList.contains("holderDIV")) {
+              //   scaleField?.parentElement?.classList.add("element_updated");
+              // }
+              const required_map_document = document_map_required?.filter(
+                (item) => element?.id == item?.content
+              );
+              if (
+                scaleField?.parentElement?.classList.contains("holderDIV") &&
+                required_map_document?.length > 0
+              ) {
                 scaleField?.parentElement?.classList.add("element_updated");
               }
             }
@@ -445,18 +454,21 @@ function createNewScaleInputField(
               holdElem.textContent = stapelScale[i];
               holding?.appendChild(holdElem);
               console.log("This is holdEle", holdElem.textContent);
-              // const required_map_document = document_map_required?.filter(
-              //   (item) => element?.id == item?.content
-              // );
-              // if (
-              //   scaleField?.parentElement?.classList.contains("holderDIV") &&
-              //   required_map_document.length > 0
-              // ) {
-              //   scaleField?.parentElement?.classList.add("element_updated");
-              // }
-              if (scaleField?.parentElement?.classList.contains("holderDIV")) {
+              const required_map_document = document_map_required?.filter(
+                (item) => element?.id == item?.content
+              );
+              if (
+                scaleField?.parentElement?.classList.contains("holderDIV") &&
+                required_map_document?.length > 0
+              ) {
                 scaleField?.parentElement?.classList.add("element_updated");
               }
+              if (element.required) {
+                isAnyRequiredElementEdited = true;
+              }
+              // if (scaleField?.parentElement?.classList.contains("holderDIV")) {
+              //   scaleField?.parentElement?.classList.add("element_updated");
+              // }
             }
             const scaleID = scale?.querySelector(".scaleId")?.textContent;
             setClickedCircleBackgroundColor(
@@ -635,9 +647,21 @@ function createNewScaleInputField(
               holdElem.textContent = npsLiteText[i] === "" ? i : npsLiteText[i];
               holding?.appendChild(holdElem);
               console.log("This is holdEle", holdElem.textContent);
-              if (scaleField?.parentElement?.classList.contains("holderDIV")) {
+              const required_map_document = document_map_required?.filter(
+                (item) => element?.id == item?.content
+              );
+              if (
+                scaleField?.parentElement?.classList.contains("holderDIV") &&
+                required_map_document?.length > 0
+              ) {
                 scaleField?.parentElement?.classList.add("element_updated");
               }
+              if (element.required) {
+                isAnyRequiredElementEdited = true;
+              }
+              // if (scaleField?.parentElement?.classList.contains("holderDIV")) {
+              //   scaleField?.parentElement?.classList.add("element_updated");
+              // }
             }
 
             const scaleID = scale?.querySelector(".scaleId")?.textContent;
@@ -845,8 +869,6 @@ function createNewScaleInputField(
     console.log(labelHold.children.length);
 
     for (let i = 0; i < prodLength; i++) {
-      // let originalText = element?.raw_data?.percentCenter[i];
-      // let percentValue = originalText?.replace("%", "");
       labelHold.style.display = "flex";
       labelHold.style.justifyContent = "center";
       labelHold.style.height = "100%";
@@ -859,22 +881,18 @@ function createNewScaleInputField(
       conatainerDIV.style.padding = "10px 39px 10px 10px";
       conatainerDIV.style.border = "1px solid gray";
       labelHold.append(conatainerDIV);
-      // conatainerDIV.append(labelHold);
-      // scaleHold.append(conatainerDIV)
-
+      
       let nameDiv = document.createElement("div");
       nameDiv.className = "product_name";
       nameDiv.style.textAlign = "center";
       nameDiv.style.fontWeight = "700";
       nameDiv.textContent = element?.raw_data?.percentProdName[i];
       conatainerDIV.appendChild(nameDiv);
-      // labelHold.appendChild(nameDiv);
 
       const inputPercent = document.createElement("input");
       inputPercent.type = "range";
       inputPercent.min = "0";
       inputPercent.max = "100";
-      // inputPercent.value = percentValue;
       inputPercent.disabled = "true";
       inputPercent.className = "percent-slider";
       inputPercent.style.width = "100%";
@@ -884,12 +902,10 @@ function createNewScaleInputField(
       inputPercent.style.borderRadius = "10px";
       inputPercent.setAttribute("data-index", i);
       conatainerDIV.appendChild(inputPercent);
-      // labelHold.appendChild(inputPercent);
 
       let percentChilds = document.createElement("div");
       percentChilds.style.display = "flex";
       percentChilds.style.width = "100%";
-      percentChilds.style.alignItems = "center";
       percentChilds.style.justifyContent = "space-between";
 
       let leftPercent = document.createElement("div");
@@ -898,7 +914,6 @@ function createNewScaleInputField(
       percentChilds.appendChild(leftPercent);
 
       let centerPercent = document.createElement("div");
-      // centerPercent.textContent = `${element?.raw_data?.percentCenter[i]}`;
       centerPercent.className = "center-percent";
       percentChilds.appendChild(centerPercent);
 
@@ -908,7 +923,6 @@ function createNewScaleInputField(
       percentChilds.appendChild(rightPercent);
 
       conatainerDIV.appendChild(percentChilds);
-      // labelHold.appendChild(percentChilds);
       if (!token) {
         return res.status(401).json({ error: "Unauthorized" });
       }
@@ -931,6 +945,7 @@ function createNewScaleInputField(
             : "24px 39px 37px 14px";
         conatainerDIV.style.width = "90%";
         conatainerDIV.style.position = "relative";
+        conatainerDIV.style.borderRight = "none";
 
         labelHold.style.width = "100%";
         labelHold.style.height = "96%";
@@ -938,13 +953,20 @@ function createNewScaleInputField(
         labelHold.style.transform = "rotate(270deg)";
 
         nameDiv.style.position = "absolute";
-        nameDiv.style.top = nameDiv.textContent.length < 9 ? "23px" : "39px";
-        nameDiv.style.right = "-2px";
-        nameDiv.style.left = "70%";
-        nameDiv.style.width = "50%";
+        nameDiv.style.lineHeight = "0.95";
+        if ( nameDiv.textContent.length < 10) {
+          nameDiv.style.top = "20px"
+          nameDiv.style.left = "93%";
+          nameDiv.style.right = "2px";
+        } else {
+          nameDiv.style.left = "98%";
+          nameDiv.style.top = "-1px";
+          nameDiv.style.right = "-7px";
+        }
         nameDiv.style.transform = "rotate(90deg)";
-
+        nameDiv.style.paddingBottom = prodLength > 6 ? "30px" : "0px";
         inputPercent.style.width = "100%";
+        scaleText.style.marginBottom = "65px";
       }
 
       if (decoded.details.action === "document") {
@@ -962,9 +984,21 @@ function createNewScaleInputField(
         // Add an event listener to update centerPercent
         inputPercent.addEventListener("input", function () {
           centerPercent.textContent = `${inputPercent.value}%`;
-          if (scaleField?.parentElement?.classList.contains("holderDIV")) {
+          const required_map_document = document_map_required?.filter(
+            (item) => element?.id == item?.content
+          );
+          if (
+            scaleField?.parentElement?.classList.contains("holderDIV") &&
+            required_map_document?.length > 0
+          ) {
             scaleField?.parentElement?.classList.add("element_updated");
           }
+          if (element.required) {
+            isAnyRequiredElementEdited = true;
+          }
+          // if (scaleField?.parentElement?.classList.contains("holderDIV")) {
+          //   scaleField?.parentElement?.classList.add("element_updated");
+          // }
 
           // Store the current inputPercent value in localStorage using the unique key
           localStorage.setItem(localStorageKey, inputPercent.value);
@@ -1059,18 +1093,26 @@ function createNewScaleInputField(
           : "24px 39px 37px 14px";
         containerDiv.style.width = "90%";
         containerDiv.style.position = "relative";
+        containerDiv.style.borderRight = "none";
         labelHold.style.width = "100%";
         labelHold.style.height = "96%";
         labelHold.style.alignItems = "center";
         labelHold.style.transform = "rotate(270deg)";
         nameDiv.style.position = "absolute";
-        nameDiv.style.top = nameDiv.textContent.length < 9 ? "23px" : "39px";
-        nameDiv.style.right = "-2px";
-        nameDiv.style.left = "70%";
-        nameDiv.style.width = "50%";
+        nameDiv.style.lineHeight = "0.95";
+        if ( nameDiv.textContent.length < 10) {
+          nameDiv.style.top = "20px"
+          nameDiv.style.left = "93%";
+          nameDiv.style.right = "2px";
+        } else {
+          nameDiv.style.left = "98%";
+          nameDiv.style.top = "-1px";
+          nameDiv.style.right = "-7px";
+        }
         nameDiv.style.transform = "rotate(90deg)";
         nameDiv.style.paddingBottom = prodLength > 6 ? "30px" : "0px";
         inputPercent.style.width = "100%";
+        scaleText.style.marginBottom = "65px";
       }
 
       if (decoded.details.action === "document") {
@@ -1088,9 +1130,21 @@ function createNewScaleInputField(
         // Add an event listener to update centerPercent
         inputPercent.addEventListener("input", function () {
           centerPercent.textContent = `${inputPercent.value}%`;
-          if (scaleField?.parentElement?.classList.contains("holderDIV")) {
+          const required_map_document = document_map_required?.filter(
+            (item) => element?.id == item?.content
+          );
+          if (
+            scaleField?.parentElement?.classList.contains("holderDIV") &&
+            required_map_document?.length > 0
+          ) {
             scaleField?.parentElement?.classList.add("element_updated");
           }
+          if (element.required) {
+            isAnyRequiredElementEdited = true;
+          }
+          // if (scaleField?.parentElement?.classList.contains("holderDIV")) {
+          //   scaleField?.parentElement?.classList.add("element_updated");
+          // }
 
           // Store the current inputPercent value in localStorage using the unique key
           localStorage.setItem(localStorageKey, inputPercent.value);
