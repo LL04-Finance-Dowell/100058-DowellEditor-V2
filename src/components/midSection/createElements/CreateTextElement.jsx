@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import copyInput from '../CopyInput';
 
 // Regular JavaScript function to create a text input field
-function createTextElement(holderDIV, focuseddClassMaintain, handleClicked, setSidebar, getOffset) {
+function createTextElement(holderDIV, focuseddClassMaintain, handleClicked, setSidebar, getOffset,copy_data=false) {
     let inputField = document.createElement("div");
         //  inputField.setAttribute('draggable', true);
         inputField.setAttribute("contenteditable", true);
@@ -35,10 +35,10 @@ function createTextElement(holderDIV, focuseddClassMaintain, handleClicked, setS
             },
           };
         }
-
-        if (inputField.value !== "") {
+         
+        if(copy_data){
+          inputField.innerText = copy_data
         }
-
         inputField.onclick = (e) => {
           e.stopPropagation();
           focuseddClassMaintain(e);

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import copyInput from '../CopyInput';
 
 // Regular JavaScript function to create a text input field
-function createImageElement(holderDIV, focuseddClassMaintain, handleClicked, setSidebar) {
+function createImageElement(holderDIV, focuseddClassMaintain, handleClicked, setSidebar,copy_data=false) {
     let imageField = document.createElement("div");
     imageField.className = "imageInput";
     imageField.id = "inputImg";
@@ -13,10 +13,13 @@ function createImageElement(holderDIV, focuseddClassMaintain, handleClicked, set
     imageField.style.outline = "none";
     // imageField.style.border = "none";
     imageField.style.overflow = "overlay";
-    imageField.innerText = "Choose Image";
     // imageField.innerHTML = `<img src="${postData.imageField.value}" alt="">`;
     imageField.style.position = "relative";
-
+    if(copy_data && copy_data != "Choose Image"){
+        imageField.style.backgroundImage =copy_data;
+    }else{
+        imageField.innerText = "Choose Image";
+    }
     const img = document.getElementsByClassName("imageInput");
     if (img.length) {
         const h = img.length;
