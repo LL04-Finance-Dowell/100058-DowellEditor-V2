@@ -82,7 +82,7 @@ export const ContextProvider = ({ children }) => {
   const handleDrop = (dropped) => {
     setIsDropped({ ...isDropped, [dropped]: true });
   };
-
+  
   const handleClicked = (clicked, tableRighMenu) => {
     setIsClicked({ ...initialState2, [clicked]: true, [tableRighMenu]: false });
   };
@@ -94,6 +94,15 @@ export const ContextProvider = ({ children }) => {
   const [sidebar, setSidebar] = useState(false);
   const [rightSideDatemenu, setRightSideDateMenu] = useState(false);
   const [rightSideDropDown, setRightSideDropDown] = useState(false);
+  const [savedSripeKey, setSavedSripeKey] = useState({
+    payment_id:null,
+    key:null
+  });
+  const [savedPaypalKey, setSavedPaypalKey] = useState({
+    payment_id:null,
+    secret_key: null,
+    key:null
+  });
   // handling date format
   const [method, setMethod] = useState("first");
   // handling page delete
@@ -682,6 +691,10 @@ export const ContextProvider = ({ children }) => {
         setPaymentKey,
         paypalId, 
         setPaypalId,
+        savedSripeKey, 
+        setSavedSripeKey,
+        savedPaypalKey, 
+        setSavedPaypalKey,
       }}
     >
       {children}
