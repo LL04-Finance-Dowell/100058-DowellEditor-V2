@@ -253,28 +253,7 @@ const PaymentRightSide = () => {
                             ['key']: Paypalpurpose
                         }
                     });
-                    // holderDIV.children[2].innerHTML = Paypalpurpose;
                 }
-
-
-
-
-
-
-                // const resVerify = await axios.post("https://100088.pythonanywhere.com/api/workflow/verify/payment/stripe", {
-                //     stripe_key: link,
-                //     id: res.data.payment_id
-                // });
-
-                // if (resVerify.data.status == "succeeded") {
-                //     setTimeout(function () {
-                //         window.location.href = res.callbackUrl;
-                //     }, 2000);
-                // } else {
-                //     console.log("Your Stripe Payment Not verified");
-                // }
-
-                // console.log("verify payment", resVerify.data);
 
 
 
@@ -310,17 +289,11 @@ const PaymentRightSide = () => {
 
         }
         setValidated(true);
-        // setLoader(true)
         if (form.checkValidity() === true) {
             e.preventDefault();
             setQrLoader(true)
             try {
-                // const res = await axios.post(endpoint, stripeData);
-                // const resQR = await axios.post(endpoint, stripeData);
-                // const res = await axios.post("https://100088.pythonanywhere.com/api/workflow/stripe/initialize", stripeData);
                 const resQR = await axios.post("https://100088.pythonanywhere.com/api/workflow/stripe/initialize/qrcode", stripeData);
-                // setStripePaymentData(res.data);
-                // console.log("payment response", res.data);
                 setQrCode(resQR.data);
                 console.log("QR code response", resQR.data);
                 setQrLoader(false)
@@ -339,7 +312,6 @@ const PaymentRightSide = () => {
                 const Stripelink = document.querySelector(".stripe_key").innerHTML;
                 const Paypalpurpose = document.querySelector(".paypal_id").innerHTML;
                 if (Stripelink != "") {
-                    // setPaymentKey(link);
                     setSavedSripeKey(prev => {
                         console.log("Stripe link......")
                         return {
@@ -348,10 +320,8 @@ const PaymentRightSide = () => {
                         }
                     });
 
-                    // holderDIV.children[1].innerHTML = Stripelink;
                 }
                 if (Paypalpurpose != "") {
-                    // setPaypalId(purpose);
 
                     setSavedPaypalKey(prev => {
                         return {
@@ -359,7 +329,6 @@ const PaymentRightSide = () => {
                             ['key']: Paypalpurpose
                         }
                     });
-                    // holderDIV.children[2].innerHTML = Paypalpurpose;
                 }
 
             } catch (error) {
@@ -562,8 +531,6 @@ const PaymentRightSide = () => {
                             <select
                                 onChange={handleSelectPayment}
                                 id="selectt"
-                                // onChange={handleDateMethod}
-
                                 className="select border-0 bg-white rounded w-100 h-75 p-2"
                             >
                                 <option value="stripe">Stripe</option>
@@ -611,11 +578,6 @@ const PaymentRightSide = () => {
                                         </select>
                                         <br />
 
-                                        {/* <Link to={"/100058-DowellEditor-V2/status"}>
-                                            <button type="button" className="btn btn-primary">
-                                                Thank You
-                                            </button>
-                                        </Link> */}
                                         <button type="button" className="btn btn-primary" onClick={handlePaypalPayment}>
                                             {
                                                 loader ? "Wait...." : "Submit Info"

@@ -13,6 +13,7 @@ function createPaymentInputField(id, element, p, holderDIV, focuseddClassMaintai
     paymentField.style.outline = "0px";
     paymentField.style.overflow = "overlay";
     paymentField.style.position = "absolute";
+    paymentField.style.border = "none";
     paymentField.textContent = element.data;
 
     if (decoded.details.action === "template") {

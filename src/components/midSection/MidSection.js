@@ -556,7 +556,6 @@ const MidSection = React.forwardRef((props, ref) => {
         imageField.style.outline = "0px";
         imageField.style.overflow = "overlay";
         imageField.innerText = "Choose Image";
-
         imageField.style.position = "relative";
 
         const img = document.getElementsByClassName("imageInput");
