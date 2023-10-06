@@ -549,7 +549,7 @@ const ScaleRightSide = () => {
   const [labelTexts, setLabelTexts] = useState([]);
   const [selectedEmojis, setSelectedEmojis] = useState([]);
   const [activeEmojiPicker, setActiveEmojiPicker] = useState(null); // Track active emoji picker for text label type
-
+  const userDetails = JSON.parse(sessionStorage.getItem('userDetail'))
   useEffect(() => {
     // Fetch saved data from storage (localStorage, sessionStorage, etc.)
     const savedLabelScale = localStorage.getItem("labelScale");
@@ -1021,7 +1021,7 @@ const ScaleRightSide = () => {
         // console.log("post req");
         Axios.post("https://100035.pythonanywhere.com/api/nps_create/", {
           user: "true",
-          username: "NdoneAmbrose",
+          username: userDetails === null ? " " : userDetails.userinfo.username,
           orientation: option?.value,
           scalecolor: btnUpdateScale.value,
           roundcolor: btnUpdateButton.value,
@@ -1124,7 +1124,7 @@ const ScaleRightSide = () => {
         Axios.put("https://100035.pythonanywhere.com/api/nps_create/", {
           user: "true",
           scale_id: idHolder.textContent,
-          username: "NdoneAmbrose",
+          username: userDetails === null ? " " : userDetails.userinfo.username,
           orientation: option?.value,
           scalecolor: btnUpdateScale.value,
           roundcolor: btnUpdateButton.value,
@@ -3481,7 +3481,7 @@ const ScaleRightSide = () => {
     }
     console.log(elemArray);
     console.log(`"${selectedOption.value}"`);
-    elemArray.push(selectedOption.value);
+    elemArray.push(selectedOption.value + " " + selectedOption.id);
     let string = JSON.stringify(elemArray);
     sessionStorage.setItem("elements", string);
   };
