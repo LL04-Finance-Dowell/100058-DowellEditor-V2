@@ -844,8 +844,17 @@ function createNewScaleInputField(
               holdElem.textContent = likertScale[i];
               holding?.appendChild(holdElem);
               console.log("This is holdEle", holdElem.textContent);
-              if (scaleField?.parentElement?.classList.contains("holderDIV")) {
+              const required_map_document = document_map_required?.filter(
+                (item) => element?.id == item?.content
+              );
+              if (
+                scaleField?.parentElement?.classList.contains("holderDIV") &&
+                required_map_document?.length > 0
+              ) {
                 scaleField?.parentElement?.classList.add("element_updated");
+              }
+              if (element.required) {
+                isAnyRequiredElementEdited = true;
               }
             }
 
@@ -951,7 +960,6 @@ function createNewScaleInputField(
         labelHold.style.height = "96%";
         labelHold.style.alignItems = "center";
         labelHold.style.transform = "rotate(270deg)";
-
         nameDiv.style.position = "absolute";
         nameDiv.style.lineHeight = "0.95";
         if ( nameDiv.textContent.length < 10) {

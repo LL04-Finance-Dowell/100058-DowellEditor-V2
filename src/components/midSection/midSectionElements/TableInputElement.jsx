@@ -110,6 +110,7 @@ export const CreateTableComponent = (
   setMethod,
   setRightSideDateMenu
 ) => {
+  console.log('Creating Table Component');
 
   let isAnyRequiredElementEdited = false;
   let tableField = document.createElement("div");
@@ -122,6 +123,9 @@ export const CreateTableComponent = (
   tableField.style.overflow = "overlay";
   // tableField.innerHTML = 'table';
   tableField.style.position = "absolute";
+
+  tableField.textContent = 'Table'
+
   tableField.oninput = (e) => {
     //setIsFinializeDisabled(false);
   };

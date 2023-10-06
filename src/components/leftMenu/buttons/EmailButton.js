@@ -14,15 +14,19 @@ const EmailButton = ({ customFunc }) => {
   };
 
   return (
-    <button
-      type="button"
-      title="Email"
-      draggable="true"
-      onDragStart={dragStartEmail}
-      onClick={customFunc}
-    >
-      <AiOutlineMail />
-    </button>
+    <div className="btn_wrapper">
+      <button
+        type="button"
+        title="Email"
+        draggable="true"
+        onDragStart={dragStartEmail}
+        onClick={customFunc}
+      >
+        <AiOutlineMail />
+      </button>
+
+      <p className="btn_tag">Email</p>
+    </div>
   );
 };
 

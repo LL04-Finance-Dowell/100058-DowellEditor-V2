@@ -32,7 +32,7 @@ function createPaymentInputField(id, element, p, holderDIV, focuseddClassMaintai
             if (e.ctrlKey) {
                 copyInput("payment2");
             }
-            handleClicked("payment2");
+            handleClicked("payment2", "table2");
             setSidebar(true);
         };
     }

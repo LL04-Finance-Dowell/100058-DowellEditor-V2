@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Container, Row, Col } from "react-bootstrap";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 import LeftMenu from "../leftMenu/LeftMenu";
 import MidSection from "../midSection/MidSection.js";

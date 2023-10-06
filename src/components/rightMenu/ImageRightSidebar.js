@@ -74,11 +74,14 @@ const ImageRightSidebar = () => {
     }
   };
 
+  // TODO Implement name change, once user sets custom name
+
   const handleUpdate = () => {
     const imageName = document.getElementById("image_name");
-    const button = document.querySelector(".focussed");
-    if (imageName.value != "") {
-      button.textContent = imageName.value;
+    const imgFieldSpan = document.querySelector(".focussed .img_text");
+    console.log(imgFieldSpan);
+    if (imageName.value != "" && imgFieldSpan) {
+      imgFieldSpan.textContent = imageName.value;
     }
   };
 
