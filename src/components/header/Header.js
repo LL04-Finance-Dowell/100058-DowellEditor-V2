@@ -113,6 +113,7 @@ const Header = () => {
   const [printContent, setPrintContent] = useState(false);
   const [rejectionMsg, setRejectionMsg] = useState('');
   const [isOpenRejectionModal, setIsOpenRejectionModal] = useState(false)
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false)
 
   const handleOptions = () => {
     setIsMenuVisible(!isMenuVisible);
@@ -1500,6 +1501,7 @@ const Header = () => {
   function submit(e) {
     e.preventDefault();
     setIsLoading(true);
+    setIsButtonDisabled(true)
     const dataa = saveDocument();
 
     const finalize = document.getElementById("finalize-button");
@@ -1563,6 +1565,7 @@ const Header = () => {
         if (res) {
           toast.success("Saved successfully");
           setIsLoading(false);
+          setIsButtonDisabled(false)
           if (finalize) {
             handleFinalize();
           }
@@ -1586,6 +1589,7 @@ const Header = () => {
       })
       .catch((err) => {
         setIsLoading(false);
+        setIsButtonDisabled(false)
       });
   }
 
@@ -1997,6 +2001,7 @@ const Header = () => {
                   style={{
                     visibility: documentFlag && "hidden",
                   }}
+                  disabled={isButtonDisabled}
                 >
                   Save <FaSave color="white" />
                 </Button>
@@ -2049,7 +2054,8 @@ const Header = () => {
 
               {actionName == "document" && docMap && data != "" && docRight !== 'view' && (
                 <>
-                  <div className="mt-2 text-center mb-2 px-2">
+                  {/* <div className={`mt-2 text-center mb-2 px-2 ${isFinializeDisabled ? disable_pointer_event : enable_pointer_event}`}> */}
+                  <div className={`mt-2 text-center mb-2 px-2`}>
                     <Button
                       variant="success"
                       size="md"
