@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import copyInput from '../CopyInput';
 
 // Regular JavaScript function to create a text input field
@@ -36,5 +35,6 @@ function createIframeElement( holderDIV, table_dropdown_focuseddClassMaintain, h
         };
 
         holderDIV.append(iframeField);
+        return holderDIV;
 }
 export default createIframeElement;

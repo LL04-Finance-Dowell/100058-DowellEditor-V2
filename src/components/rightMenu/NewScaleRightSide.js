@@ -2379,23 +2379,28 @@ const ScaleRightSide = () => {
                 orientation.style.display = "none";
                 button4.appendChild(orientation);
                 containerDiv.style.transform = "rotate(270deg)";
-                nameDiv.style.right = "-8px";
+
+                containerDiv.style.marginTop = "80px";
+                containerDiv.style.width = "100%";
+                inputPercent.style.marginTop = "20px";
                 nameDiv.style.position = "absolute";
-                nameDiv.style.width = "50%";
-                nameDiv.style.left = "75%";
+                nameDiv.style.lineHeight = "0.85";
+                if ( nameDiv.textContent.length < 10) {
+                  nameDiv.style.top = "20px"
+                  nameDiv.style.left = "93%";
+                  nameDiv.style.right = "-17px";
+                } else {
+                  nameDiv.style.left = "101%";
+                  nameDiv.style.top = "4px";
+                  nameDiv.style.right = "-22px";
+                }
+              newLabelHold.style.padding =
                 nameDiv.textContent.length < 9
-                  ? (nameDiv.style.top = "23px")
-                  : (nameDiv.style.top = "39px");
-
-                newLabelHold.style.padding =
-                  nameDiv.textContent.length < 9
-                    ? "0px 20px 10px 14px"
-                    : "0px 20px 37px 14px";
+                  ? "0px 20px 10px 14px"
+                  : "0px 17px 37px 14px";
                 nameDiv.style.transform = "rotate(90deg)";
-
                 newLabelHold.style.position = "relative";
-                newLabelHold.style.width = "80%";
-                newLabelHold.style.paddingTop = "24px";
+                newLabelHold.style.width = "85%";
                 percentChilds.style.alignItems = "start";
                 percentChilds.style.height = "100%";
               }
@@ -2534,23 +2539,27 @@ const ScaleRightSide = () => {
                   orientation.style.display = "none";
                   button4.appendChild(orientation);
                   containerDiv.style.transform = "rotate(270deg)";
+                  containerDiv.style.marginTop = "80px";
+                  containerDiv.style.width = "100%";
+                  inputPercent.style.marginTop = "20px";
                   nameDiv.style.position = "absolute";
-                  nameDiv.style.width = "50%";
-                  nameDiv.style.left = "75%";
+                  nameDiv.style.lineHeight = "0.85";
+                  if ( nameDiv.textContent.length < 10) {
+                  nameDiv.style.top = "20px"
+                  nameDiv.style.left = "93%";
+                  nameDiv.style.right = "-17px";
+                } else {
+                  nameDiv.style.left = "101%";
+                  nameDiv.style.top = "4px";
+                  nameDiv.style.right = "-22px"
+                }
+                newLabelHold.style.padding =
                   nameDiv.textContent.length < 9
-                    ? (nameDiv.style.top = "23px")
-                    : (nameDiv.style.top = "39px");
-
-                  newLabelHold.style.padding =
-                    nameDiv.textContent.length < 9
-                      ? "0px 20px 10px 14px"
-                      : "0px 20px 37px 14px";
-                  nameDiv.style.right = "-8px";
+                    ? "0px 20px 10px 14px"
+                    : "0px 17px 37px 14px";
                   nameDiv.style.transform = "rotate(90deg)";
-
                   newLabelHold.style.position = "relative";
-                  newLabelHold.style.width = "80%";
-                  newLabelHold.style.paddingTop = "24px";
+                  newLabelHold.style.width = "85%";
                   percentChilds.style.alignItems = "start";
                   percentChilds.style.height = "100%";
                 }
@@ -2770,17 +2779,15 @@ const ScaleRightSide = () => {
                 containerDiv.style.width = "100%";
                 inputPercent.style.marginTop = "20px";
                 nameDiv.style.position = "absolute";
+                nameDiv.style.lineHeight = "0.85";
                 if ( nameDiv.textContent.length < 10) {
                   nameDiv.style.top = "20px"
                   nameDiv.style.left = "93%";
                   nameDiv.style.right = "-17px";
                 } else {
-                  // nameDiv.style.left = "98%";
-                  // nameDiv.style.top = "-6px";
-                  // nameDiv.style.right = "-20px";
-                  nameDiv.style.left = "103%";
-                  nameDiv.style.top = "-15px";
-                  nameDiv.style.right = "-20px";
+                  nameDiv.style.left = "101%";
+                  nameDiv.style.top = "4px";
+                  nameDiv.style.right = "-22px";
                 }
               newLabelHold.style.padding =
                 nameDiv.textContent.length < 9
@@ -2955,14 +2962,15 @@ const ScaleRightSide = () => {
                   containerDiv.style.width = "100%";
                   inputPercent.style.marginTop = "20px";
                   nameDiv.style.position = "absolute";
+                  nameDiv.style.lineHeight = "0.85";
                   if ( nameDiv.textContent.length < 10) {
                   nameDiv.style.top = "20px"
                   nameDiv.style.left = "93%";
                   nameDiv.style.right = "-17px";
                 } else {
-                  nameDiv.style.left = "103%";
-                  nameDiv.style.top = "-15px";
-                  nameDiv.style.right = "-20px";
+                  nameDiv.style.left = "101%";
+                  nameDiv.style.top = "4px";
+                  nameDiv.style.right = "-22px"
                 }
                 newLabelHold.style.padding =
                   nameDiv.textContent.length < 9
@@ -3451,12 +3459,13 @@ const ScaleRightSide = () => {
       const option = options[i];
       if (option.selected) {
         selectedValues[option.value] = option.id;
-        console.log("This is option", option);
+        console.log("This is option 2", option);
       }
     }
 
-    console.log(selectedValues);
+    console.log("This is the selected value",selectedValues);
     setSelectedOptions(selectedValues);
+    console.log("This is the selected options",selectedOptions);
 
     let selectedOption = selectField.options[selectField.selectedIndex];
     let selectedElementId = selectedOption.id;
@@ -3644,7 +3653,7 @@ const ScaleRightSide = () => {
   console.log("The other elements", otherElementsArray);
 
   const options = otherElementsArray.map((element, index) => (
-    <option key={index} value={element} id={element.split(" ")[1]}>
+    <option key={index} value={element.split(" ")[0]} id={element.split(" ")[1]}>
       {element}
     </option>
   ));
