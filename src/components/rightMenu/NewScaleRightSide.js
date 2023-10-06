@@ -1385,7 +1385,7 @@ const ScaleRightSide = () => {
           "https://100035.pythonanywhere.com/stapel/api/stapel_settings_create/",
           {
             user: "true",
-            username: "TadesseJemal",
+            username: userDetails === null ? " " : userDetails.userinfo.username,
             orientation: option?.value,
             spacing_unit: spacing,
             scale_upper_limit: upperVal,
@@ -1674,7 +1674,7 @@ const ScaleRightSide = () => {
           "https://100035.pythonanywhere.com/nps-lite/api/nps-lite-settings/",
           {
             user: "true",
-            username: "NdoneAmbrose",
+            username: userDetails === null ? " " : userDetails.userinfo.username,
             orientation: option?.value,
             scalecolor: btnUpdateScale.value,
             fontcolor: btnUpdateFontColor.value,
@@ -1772,7 +1772,7 @@ const ScaleRightSide = () => {
           {
             scale_id: idHolder.textContent,
             user: "true",
-            username: "NdoneAmbrose",
+            username: userDetails === null ? " " : userDetails.userinfo.username,
             orientation: option?.value,
             scalecolor: btnUpdateScale.value,
             fontcolor: btnUpdateFontColor.value,
@@ -1981,7 +1981,7 @@ const ScaleRightSide = () => {
 
       const basePayload = {
         user: "yes",
-        username: "TadesseJemal",
+        username: userDetails === null ? " " : userDetails.userinfo.username,
         instance_id: "2",
         orientation: option?.value,
         fontstyle: btnUpdateScaleFontLinkert.value,
@@ -2012,7 +2012,7 @@ const ScaleRightSide = () => {
         scale_id: idHolder.textContent,
         user: "yes",
         instance_id: "2",
-        username: "TadesseJemal",
+        username: userDetails === null ? " " : userDetails.userinfo.username,
         fontstyle: btnUpdateScaleFontLinkert.value,
         orientation: option?.value,
         scale_name: beNametnUpdateScal.value,
@@ -2257,7 +2257,7 @@ const ScaleRightSide = () => {
         Axios.post(
           "https://100035.pythonanywhere.com/percent/api/percent_settings_create/",
           {
-            username: "pfactorial",
+            username: userDetails === null ? " " : userDetails.userinfo.username,
             time: time.value,
             scale_name: beNametnUpdateScal.value,
             no_of_scale: 1,
@@ -2424,7 +2424,7 @@ const ScaleRightSide = () => {
           "https://100035.pythonanywhere.com/percent/api/percent_settings_create/",
           {
             scale_id: idHolder.textContent,
-            username: "pfactorial",
+            username: userDetails === null ? " " : userDetails.userinfo.username,
             time: time.value,
             scale_name: beNametnUpdateScal.value,
             no_of_scale: 1,
@@ -2652,7 +2652,7 @@ const ScaleRightSide = () => {
         Axios.post(
           "https://100035.pythonanywhere.com/percent-sum/percent-sum-settings",
           {
-            username: "pfactorial",
+            username: userDetails === null ? " " : userDetails.userinfo.username,
             time: time.value,
             scale_name: beNametnUpdateScal.value,
             no_of_scale: 1,
@@ -2841,7 +2841,7 @@ const ScaleRightSide = () => {
           "https://100035.pythonanywhere.com/percent-sum/percent-sum-settings",
           {
             scale_id: idHolder.textContent,
-            username: "pfactorial",
+            username: userDetails === null ? " " : userDetails.userinfo.username,
             time: time.value,
             scale_name: beNametnUpdateScal.value,
             no_of_scale: 1,
