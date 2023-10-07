@@ -28,7 +28,7 @@ function createSignInputField(id, element, p, holderDIV, focuseddClassMaintain, 
         setSidebar(true);
     };
 
-    element.data.startsWith("url(" && "data")
+    element.data?.startsWith("url(" && "data")
         ? (signField.innerHTML = `<img src=${element.data} />`)
         : (signField.innerHTML = `${element.data}`);
 
