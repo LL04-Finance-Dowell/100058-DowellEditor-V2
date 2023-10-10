@@ -321,7 +321,7 @@ const Header = () => {
             type: "IMAGE_INPUT",
             data: dataName,
             border: `${borderSize}px dotted ${borderColor}`,
-            imgBorder:img[h].parentElement.style.border,
+            imgBorder: img[h].parentElement.style.border,
             id: `i${h + 1}`,
           };
 
@@ -1927,14 +1927,13 @@ const Header = () => {
                     className="d-flex cursor_pointer"
                     onClick={() => handlePDFPrint()}
                   >
-                    <p>
-                      <AiFillPrinter /> Print
-                    </p>
+                    <AiFillPrinter />
+                    <p>Print</p>
                   </div>
 
                   {actionName == "template" && (
                     <button
-                      className="page_btn p-0 d-flex"
+                      className="page_btn p-0 d-flex cursor_pointer"
                       onClick={() => createNewPage()}
                     >
                       <MdOutlinePostAdd />
@@ -1943,19 +1942,19 @@ const Header = () => {
                   )}
                   {actionName == "template" && (
                     <button
-                      className="page_btn p-0 d-flex"
+                      className="page_btn p-0 d-flex cursor_pointer"
                       onClick={() => removePage()}
                     >
                       <CgPlayListRemove />
                       <p>Remove Page</p>
                     </button>
                   )}
-                  <button className="page_btn p-0 d-flex" onClick={handleToken}>
+                  <button className="page_btn p-0 d-flex cursor_pointer" onClick={handleToken}>
                     <BiImport />
                     <p>Import</p>
                   </button>
                   <button
-                    className="d-flex page_btn p-0"
+                    className="d-flex page_btn p-0 cursor_pointer"
                     id="saving-button"
                     data-bs-toggle="modal"
                     data-bs-target="#exampleModal"
