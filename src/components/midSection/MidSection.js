@@ -886,13 +886,14 @@ const MidSection = React.forwardRef((props, ref) => {
           const measure = {
             // width: element.width + "px",
             width: finding_percent(element, "width"),
-            height: element.height + "px",
+            // height: element.height + "px",
+            height: ((finding_percent(element, "width")?.split("%")[0]/ (element?.width/element?.height) )* window.innerWidth)/1123 + "%",
             left: finding_percent(element, "left"),
             top: element.topp,
             border: element.imgBorder,
             auth_user: curr_user,
           };
-          // console.log("element", element);
+          console.log("element", element, "measure", measure);
           const idMatch = documnetMap?.filter((elmnt) => elmnt === element?.id);
           const holderDIV = getHolderDIV(measure, pageNo, idMatch);
           const id = `${element.id}`;

@@ -122,6 +122,8 @@ const EditSection = () => {
     })
 
   }, [prevSelElmAns, selectedElement])
+  const left_menu_size = document.getElementsByClassName('left_menu_wrapper')[0]?.getBoundingClientRect()
+  console.log("left_menu_size", left_menu_size);
   return (
     <div className="editSec">
       <Container fluid>
@@ -143,7 +145,7 @@ const EditSection = () => {
               </div>
             )}
           </Col>
-          <Col lg={sidebar ? 8 : 11} as="div" className="editSec_midSec">
+          <Col style={{marginTop:left_menu_size?.height}} lg={sidebar ? 8 : 11} as="div" className="editSec_midSec">
             <MidSection />
           </Col>
 
