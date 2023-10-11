@@ -1528,8 +1528,8 @@ const MidSection = React.forwardRef((props, ref) => {
   const onDrop = (event) => {
     event.preventDefault();
 
-    var data = event.dataTransfer.getData("text");
-    if (data == "rightMenuDragStart") {
+    var dataFound = event.dataTransfer.getData("text");
+    if (dataFound == "rightMenuDragStart") {
 
       // console.log('right menu drag');
 
