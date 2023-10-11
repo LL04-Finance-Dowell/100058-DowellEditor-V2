@@ -277,7 +277,7 @@ const MidSection = React.forwardRef((props, ref) => {
     let y = e.clientY;
     const foundElement = document.elementFromPoint(x, y)?.parentElement
     const midSec = document.getElementById("midSection_container");
-    if(foundElement.classList.contains('midSection_container'))return;    
+    if (foundElement.classList.contains('midSection_container')) return;
     const midsectionRect = midSec.getBoundingClientRect();
     let clientX = e.clientX - midsectionRect.left;
     let clientY = e.clientY - midsectionRect.top;
@@ -478,7 +478,7 @@ const MidSection = React.forwardRef((props, ref) => {
       const imageInput = createImageElement(holderDIV, focuseddClassMaintain, handleClicked, setSidebar, element.data);
       midSection.append(imageInput);
     } else if (element.type === "IFRAME_INPUT") {
-      const iframeElement = createIframeElement(holderDIV, table_dropdown_focuseddClassMaintain, handleClicked, setSidebar,element.data);
+      const iframeElement = createIframeElement(holderDIV, table_dropdown_focuseddClassMaintain, handleClicked, setSidebar, element.data);
       midSection.append(iframeElement);
     } else if (element.type === "SCALE_INPUT") {
       const scaleInput = createScaleInputElement(holderDIV, focuseddClassMaintain, handleClicked, setSidebar, table_dropdown_focuseddClassMaintain, decoded);
@@ -493,11 +493,31 @@ const MidSection = React.forwardRef((props, ref) => {
       const dropDown = createDropDownInputElement(holderDIV, handleClicked, setSidebar, table_dropdown_focuseddClassMaintain, setRightSideDropDown, getOffset, element.data);
       midSection.append(dropDown);
     } else if (element.type === "CONTAINER_INPUT") {
-      const containerInput = createContainerInputElement(holderDIV, focuseddClassMaintain, handleClicked, setSidebar, table_dropdown_focuseddClassMaintain, decoded, setPostData, postData, getHolderDIV, getOffset, setStartDate, setMethod, setRightSideDateMenu, title, curr_user);
+      
+      const containerInput = createContainerInputField(targetElement.id, element, false, holderDIV, focuseddClassMaintain, handleClicked, setSidebar, table_dropdown_focuseddClassMaintain, decoded, setPostData, postData, getHolderDIV, getOffset, setStartDate, setMethod, setRightSideDateMenu, title, curr_user,element.data.data)
+    
       midSection.append(containerInput);
     } else if (element.type === "BUTTON_INPUT") {
       const buttonElement = createButtonInputElement(holderDIV, focuseddClassMaintain, handleClicked, setSidebar);
       midSection.append(buttonElement);
+    }
+    else if (element.type === "TABLE_INPUT") {
+      const tableElement = CreateTableComponent(
+        holderDIV,
+        targetElement.id,
+        element,
+        handleDropp,
+        false,
+        table_dropdown_focuseddClassMaintain
+        , focuseddClassMaintain,
+        handleClicked,
+        setSidebar,
+        setStartDate,
+        setMethod,
+        setRightSideDateMenu,
+        element.data.data
+      );
+      midSection.append(tableElement);
     }
     function getHolderDIV(measure, i, idMatch) {
       const holderDIV = document.createElement("div");
@@ -638,7 +658,146 @@ const MidSection = React.forwardRef((props, ref) => {
         case targetElement.querySelector(".tableInput") && true:
           type = "TABLE_INPUT";
           elem.type = type;
-          elem.data = targetElement.firstChild.innerHTML;
+          function getChildData(tempElem) {
+            const allTableCCells = [];
+            const tableChildren = tempElem.firstElementChild.firstElementChild.children;
+            for (let i = 0; i < tableChildren.length; i++) {
+              const tableTR = { tr: null };
+              const newTableTR = [];
+              for (let j = 0; j < tableChildren[i].children.length; j++) {
+                // const element = tableChildren[i];
+
+                const childNodes = tableChildren[i].children[j]?.childNodes
+                const tdElement = []
+                childNodes.forEach(child => {
+                  if (!child.classList.contains("row-resizer") && !child.classList.contains("td-resizer")) {
+                    tdElement.push(child);
+                  }
+                })
+                const TdDivClassName = tdElement[0]?.className.split(" ")[0];
+                let tdId = tdElement[0]?.id.split('');
+                let newId;
+                if (tdId) {
+                  tdId[1] = +tdId[1] + 1;
+                  newId = tdId.join("");
+                }
+                const trChild = {
+                  td: {
+                    type:
+                      (TdDivClassName == "dateInput" && "DATE_INPUT") ||
+                      (TdDivClassName == "textInput" && "TEXT_INPUT") ||
+                      (TdDivClassName == "imageInput" && "IMAGE_INPUT") ||
+                      (TdDivClassName == "signInput" && "SIGN_INPUT"),
+                    // if(){
+                    data:
+                      TdDivClassName == "imageInput"
+                        ? tableChildren[i].children[j]?.firstElementChild.style
+                          .backgroundImage
+                        : tdElement[0]?.innerHTML,
+                    id: TdDivClassName == "imageInput"
+                      ? tableChildren[i].children[j]?.id
+                      : newId
+                  },
+                };
+                newTableTR.push(trChild);
+              }
+              tableTR.tr = newTableTR;
+              allTableCCells.push(tableTR);
+            }
+            return allTableCCells;
+          }
+          elem.data = {
+            type: "TABLE_INPUT",
+            data: getChildData(targetElement),
+            border: targetElement.style.border,
+            tableBorder: targetElement.firstChild.firstElementChild.style.border,
+          };
+          elem.id = "T" + (parseInt(targetElement.querySelector("table").id[1]) + 1);
+          break;
+        case targetElement.querySelector(".containerInput") && true:
+          elem.type = "CONTAINER_INPUT";    
+
+          function getContainerChildData() {
+            const allContainerChildren = [];
+            const containerChildren = targetElement.querySelector(".containerInput").children;
+            for (let i = 0; i < containerChildren.length; i++) {
+              const element = containerChildren[i];
+              let tempPosnChild = getPosition(element,true);
+              const containerChildClassName =containerChildren[i].firstElementChild?.className.split(" ")[0];
+              const childData = {};
+              childData.width =+element.style.width.split('px')[0];
+              childData.height = +element.style.height.split('px')[0];
+              childData.top = element.style.top;
+              childData.topp = element.style.top;
+              childData.left = element.style.left;
+
+              let type = "";
+
+              switch (containerChildClassName) {
+                case "dateInput":
+                  type = "DATE_INPUT";
+                  break;
+                case "textInput":
+                  type = "TEXT_INPUT";
+                  break;
+                case "imageInput":
+                  type = "IMAGE_INPUT";
+                  break;
+                case "signInput":
+                  type = "SIGN_INPUT";
+                  break;
+                case "iframeInput":
+                  type = "IFRAME_INPUT";
+                  break;
+                case "scaleInput":
+                  type = "SCALE_INPUT";
+                  break;
+                case "newScaleInput":
+                  type = "NEW_SCALE_INPUT";
+                  break;
+                case "buttonInput":
+                  type = "BUTTON_INPUT";
+                  break;
+                case "dropdownInput":
+                  type = "DROPDOWN_INPUT";
+                  break;
+                case "cameraInput":
+                  type = "CAMERA_INPUT";
+                  break;
+                case "paymentInput":
+                  type = "PAYMENT_INPUT";
+                  break;
+                default:
+                  type = "";
+              }
+
+              childData.type = type;
+              const imageData =
+                "imageInput" &&
+                  element?.firstElementChild?.style?.backgroundImage
+                  ? element.firstElementChild.style.backgroundImage
+                  : element.firstElementChild?.innerHTML;
+              if (type != "TEXT_INPUT") {
+                childData.data = imageData;
+              }
+              if (type == "TEXT_INPUT") {
+                childData.data = element.firstElementChild?.innerText;
+                childData.raw_data = element.firstElementChild?.innerHTML;
+              }
+
+              childData.id = `${containerChildClassName[0]}`;
+              allContainerChildren.push(childData);
+            }
+
+            return allContainerChildren;
+          }
+          elem.data = {   
+            border: targetElement.querySelector(".containerInput")?.style.border,
+            containerBorder: targetElement?.style.border,
+            data: getContainerChildData(),
+            id: `c1`,
+          };
+        
           break;
         case targetElement.querySelector(".dateInput") && true:
           type = "DATE_INPUT";
@@ -705,8 +864,8 @@ const MidSection = React.forwardRef((props, ref) => {
       }
 
 
-      console.log("SAVED DATA: ", elem);
-      console.log("FROM: ", targetElement);
+      console.log("\n>>>>>>>>>>>>>>>\nSAVED DATA: ", elem);
+      console.log("\n>>>>>>>>>>>>>>>\nFROM: ", targetElement);
       setContextMenu(prev => {
         return {
           ...prev,
@@ -947,8 +1106,7 @@ const MidSection = React.forwardRef((props, ref) => {
           const idMatch = documnetMap?.filter((elmnt) => elmnt == element?.id);
           const holderDIV = getHolderDIV(measure, pageNo, idMatch);
           const id = element.id;
-          console.log('Create Table Component');
-
+          console.log('\n>>>>>>>>>>>>\n TABLE DATA', element, '\n>>>>>>>>>>>>>\n');
 
           CreateTableComponent(
             holderDIV,
@@ -1215,7 +1373,7 @@ const MidSection = React.forwardRef((props, ref) => {
           const holderDIV = getHolderDIV(measure, pageNo, idMatch);
           const id = `${element.id}`;
           // const holderDIV = getHolderDIV(measure, pageNo);
-
+          console.log("\n>>>>>>>>>>>>\nCoNTAINER DATA\n",element,"\n>>>>>>>>>>>>\n")
           createContainerInputField(id, element, p, holderDIV, focuseddClassMaintain, handleClicked, setSidebar, table_dropdown_focuseddClassMaintain, decoded, setPostData, postData, getHolderDIV, getOffset, setStartDate, setMethod, setRightSideDateMenu, title, curr_user)
         }
       });
@@ -1464,8 +1622,13 @@ const MidSection = React.forwardRef((props, ref) => {
     };
   }
 
-  function getPosition(el) {
-    const rect = el[0].getBoundingClientRect();
+  function getPosition(el,isContainerEL=false) {
+    let rect;
+    if(isContainerEL){
+      rect = el.getBoundingClientRect();
+    }else{
+      rect = el[0].getBoundingClientRect();
+    }
 
     return {
       top: rect.top,
@@ -1533,7 +1696,7 @@ const MidSection = React.forwardRef((props, ref) => {
 
       const midSec = document.querySelector(".drop_zone");
       const midsectionRect = midSec.getBoundingClientRect();
-      console.log("typeOfOperation from midsection",typeOfOperation, midSec, curr_user, midsectionRect );
+      console.log("typeOfOperation from midsection", typeOfOperation, midSec, curr_user, midsectionRect);
       const measure = {
         width: "200px",
         height: "80px",
