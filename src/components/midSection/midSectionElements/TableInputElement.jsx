@@ -108,7 +108,8 @@ export const CreateTableComponent = (
   setSidebar,
   setStartDate,
   setMethod,
-  setRightSideDateMenu
+  setRightSideDateMenu,
+  copy_data = false
 ) => {
   console.log('Creating Table Component');
 
@@ -145,7 +146,12 @@ export const CreateTableComponent = (
   tabb.id = id;
 
   // tabb.innerHTML = element.data;
-  const tableData = element?.data;
+  let tableData = element?.data;
+  if (copy_data) {
+    tableData = copy_data;
+  } else {
+    tableData = element?.data;
+  }
   // console.log("tableData", tableData);
   for (let i = 0; i < tableData.length; i++) {
     const tabbTR = document.createElement("tr");
@@ -331,8 +337,13 @@ export const CreateTableComponent = (
   resizeObserver.observe(tabb);
   tableField.append(tabb);
   holderDIV.append(tableField);
-  document
-    .getElementsByClassName("midSection_container")
-  [p - 1] // ?.item(0)
-    ?.append(holderDIV);
+  if (copy_data) {
+    return holderDIV;
+  } else {
+    document
+      .getElementsByClassName("midSection_container")
+    [p - 1] // ?.item(0)
+      ?.append(holderDIV);
+  }
+
 }
