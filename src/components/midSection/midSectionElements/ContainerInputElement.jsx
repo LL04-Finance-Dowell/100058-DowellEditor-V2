@@ -21,7 +21,8 @@ function createContainerInputField(
   setMethod,
   setRightSideDateMenu,
   title,
-  curr_user
+  curr_user,
+  copy_data =false
 ) {
   let isAnyRequiredElementEdited = false;
   let containerField = document.createElement("div");
@@ -43,8 +44,13 @@ function createContainerInputField(
     setSidebar(true);
   };
   // // console.log("element.data container input retrieve", element.data);
+  let elementData =element;
+  if(copy_data){
+    element.data =copy_data;
+  }
   for (let p = 0; p < element.data.length; p++) {
     const containerElement = element.data[p];
+       console.log('\n>>>>>Container Data\n',containerElement,'\n>>>>>>>>>>>ELEMENT\n',element);
 
     const measureContainer = {
       width: containerElement.width + "px",
@@ -54,6 +60,9 @@ function createContainerInputField(
       // top: containerElement.top - element.top + "px",
       auth_user: curr_user,
     };
+ if(copy_data){
+  measureContainer.left =containerElement.left
+ }
     const typeOfOperationContainer = containerElement.type;
     const holderDIVContainer = getHolderDIV(measureContainer);
     if (typeOfOperationContainer === "DATE_INPUT") {
@@ -183,14 +192,14 @@ function createContainerInputField(
       selectElement.className = "select-element";
       selectElement.style.width = "500";
       selectElement.style.height = "auto";
-    //   var opt = document.createElement("option");
-    //   opt.value = "i";
-    //   opt.innerHTML = "hello";
-    //   console.log("opt", opt);
-    //   selectElement.appendChild(opt);
+      //   var opt = document.createElement("option");
+      //   opt.value = "i";
+      //   opt.innerHTML = "hello";
+      //   console.log("opt", opt);
+      //   selectElement.appendChild(opt);
 
-    //   const option = new Option(element, 1, false, false);
-    //   console.log("option", option);
+      //   const option = new Option(element, 1, false, false);
+      //   console.log("option", option);
       selectElement.onclick = () => {
         selectElement.parentElement.click();
       };
@@ -976,9 +985,13 @@ function createContainerInputField(
   };
 
   holderDIV.append(containerField);
-  document
-    .getElementsByClassName("midSection_container")
+  if (copy_data) {
+    return holderDIV;
+  } else {
+    document
+      .getElementsByClassName("midSection_container")
     [p - 1] // ?.item(0)
-    ?.append(holderDIV);
+      ?.append(holderDIV);
+  }
 }
 export default createContainerInputField;
