@@ -887,7 +887,7 @@ const MidSection = React.forwardRef((props, ref) => {
             // width: element.width + "px",
             width: finding_percent(element, "width"),
             // height: element.height + "px",
-            height: ((finding_percent(element, "width")?.split("%")[0]/ (element?.width/element?.height) )* window.innerWidth)/1123 + "%",
+            height: window.innerWidth> 992 ?  element.height + "px" : ((finding_percent(element, "width")?.split("%")[0]/ (element?.width/element?.height) )* window.innerWidth)/1123 + "%",
             left: finding_percent(element, "left"),
             top: element.topp,
             border: element.imgBorder,

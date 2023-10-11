@@ -205,6 +205,7 @@ const Header = () => {
       right: rect.right,
       width: window.innerWidth < 993 ? ((rect.width * 794) / midsectionRect.width) : rect.width,
       height: rect.height,
+      // height:window.innerWidth < 993 ? ((rect.height * 1123) / midsectionRect.width) : rect.height
     };
   }
 
