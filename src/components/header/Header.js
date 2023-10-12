@@ -1747,7 +1747,7 @@ const Header = () => {
     var tokenn = prompt("Paste your token here");
     if (tokenn != null) {
       const decodedTok = jwt_decode(tokenn);
-      // console.log("tokkkkkkennn", tokenn);
+      console.log("tokkkkkkennn", decodedTok);
       const getPostData = async () => {
         const response = await Axios.post(
           "https://100058.pythonanywhere.com/api/get-data-from-collection/",

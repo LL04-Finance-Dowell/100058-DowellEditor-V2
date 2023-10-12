@@ -2335,7 +2335,8 @@ const MidSection = React.forwardRef((props, ref) => {
   }
 
   console.log(JSON.parse(response.data))
-  const {title,image,paragraph} = JSON.parse(response.data)?.data[0]
+  const {title,image,paragraph} = JSON.parse(response.data)?.data[0] //title field
+  // console.log("social image", image);
     const curr_user = document.getElementById("curr_user");
 
     const measure = {
@@ -2352,7 +2353,7 @@ const MidSection = React.forwardRef((props, ref) => {
     //  inputField.setAttribute('draggable', true);
     titleField.setAttribute("contenteditable", true);
     titleField.className = "textInput";
-    titleField.innerText = title;
+    titleField.innerText = `Title: \n ${title}`;
     titleField.style.width = "100%";
     titleField.style.height = "100%";
     titleField.style.resize = "none";
@@ -2375,8 +2376,8 @@ const MidSection = React.forwardRef((props, ref) => {
     holderDIV1.append(titleField);
 
     const measure2 = {
-      width: "300px",
-      height: "100px",
+      width: "94%",
+      height: "150px",
       top: "220px",
       auth_user: curr_user,
     };
@@ -2384,6 +2385,7 @@ const MidSection = React.forwardRef((props, ref) => {
     const holderDIV2 = getHolderDIV(measure2);
 
     let descriptionField = document.createElement("div")
+    descriptionField.setAttribute("contenteditable", true);
     descriptionField.className = "textInput";
     descriptionField.style.width = "100%";
     descriptionField.style.height = "100%";
@@ -2402,7 +2404,7 @@ const MidSection = React.forwardRef((props, ref) => {
     };
     holderDIV2.append(descriptionField);
 
-    descriptionField.innerText = paragraph;
+    descriptionField.innerText = "Paragraph: " + paragraph;
 
     document
       .getElementById("midSection_container")
