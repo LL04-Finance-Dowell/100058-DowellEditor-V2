@@ -894,7 +894,7 @@ const MidSection = React.forwardRef((props, ref) => {
             border: element.imgBorder,
             auth_user: curr_user,
           };
-          console.log("element", element, "measure", measure);
+          // console.log("element", element, "measure", measure);
           const idMatch = documnetMap?.filter((elmnt) => elmnt === element?.id);
           const holderDIV = getHolderDIV(measure, pageNo, idMatch);
           const id = `${element.id}`;

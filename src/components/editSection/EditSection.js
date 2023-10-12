@@ -123,7 +123,7 @@ const EditSection = () => {
 
   }, [prevSelElmAns, selectedElement])
   const left_menu_size = document.getElementsByClassName('left_menu_wrapper')[0]?.getBoundingClientRect()
-  console.log("left_menu_size", left_menu_size);
+  // console.log("left_menu_size", left_menu_size);
   return (
     <div className="editSec">
       <Container fluid>
