@@ -460,23 +460,21 @@ const MidSection = React.forwardRef((props, ref) => {
     const element = targetElement
     const curr_user = document.getElementById("current-user");
     const midSection = document.getElementById("midSection_container");
-
     const measure = {
       width: element.width,
       height: element.height,
       left: x + 'px',
       top: y + 'px',
     };
-
     const holderDIV = getHolderDIV(measure);
     if (element.type === "DATE_INPUT") {
-      const dateElement = createDateInputElement(holderDIV, focuseddClassMaintain, handleClicked, setSidebar, setRightSideDateMenu, setPostData, setStartDate, setMethod)
+      const dateElement = createDateInputElement(holderDIV, focuseddClassMaintain, handleClicked, setSidebar, setRightSideDateMenu, setPostData, setStartDate, setMethod, element.data)
       midSection.append(dateElement)
     } else if (element.type === "TEXT_INPUT") {
-      const textElement = createTextElement(holderDIV, focuseddClassMaintain, handleClicked, setSidebar, getOffset);
+      const textElement = createTextElement(holderDIV, focuseddClassMaintain, handleClicked, setSidebar, getOffset, element.data);
       midSection.append(textElement);
     } else if (element.type === "IMAGE_INPUT") {
-      const imageInput = createImageElement(holderDIV, focuseddClassMaintain, handleClicked, setSidebar);
+      const imageInput = createImageElement(holderDIV, focuseddClassMaintain, handleClicked, setSidebar,element.data);
       midSection.append(imageInput);
     } else if (element.type === "IFRAME_INPUT") {
       const iframeElement = createIframeElement(holderDIV, table_dropdown_focuseddClassMaintain, handleClicked, setSidebar);
@@ -488,7 +486,7 @@ const MidSection = React.forwardRef((props, ref) => {
       const newScale = createNewScaleInputElement(holderDIV, focuseddClassMaintain, handleClicked, setSidebar, table_dropdown_focuseddClassMaintain, decoded, setIsLoading);
       midSection.append(newScale);
     } else if (element.type === "SIGN_INPUT") {
-      const signElement = createSignInputElement(holderDIV, focuseddClassMaintain, handleClicked, setSidebar, setPostData, getOffset);
+      const signElement = createSignInputElement(holderDIV, focuseddClassMaintain, handleClicked, setSidebar, setPostData, getOffset,element.data);
       midSection.append(signElement);
     } else if (element.type === "DROPDOWN_INPUT") {
       const dropDown = createDropDownInputElement(holderDIV, handleClicked, setSidebar, table_dropdown_focuseddClassMaintain, setRightSideDropDown, setPostData, getOffset);
@@ -626,50 +624,6 @@ const MidSection = React.forwardRef((props, ref) => {
       const targetElement = contextMenu.targetEl;
       const find_class_name = true;
       let type = "";
-      switch (find_class_name) {
-        case targetElement.querySelector(".tableInput") && true:
-          type = "TABLE_INPUT";
-          break;
-        case targetElement.querySelector(".dateInput") && true:
-          type = "DATE_INPUT";
-          break;
-        case targetElement.querySelector(".signInput") && true:
-          type = "SIGN_INPUT";
-          break;
-        case targetElement.querySelector(".textInput") && true:
-          type = "TEXT_INPUT";
-          break;
-        case targetElement.querySelector(".imageInput") && true:
-          type = "IMAGE_INPUT";
-          break;
-        case targetElement.querySelector(".iframeInput") && true:
-          type = "IFRAME_INPUT";
-          break;
-        case targetElement.querySelector(".scaleInput") && true:
-          type = "SCALE_INPUT";
-          break;
-        case targetElement.querySelector(".newScaleInput") && true:
-          type = "NEW_SCALE_INPUT";
-          break;
-        case targetElement.querySelector(".buttonInput") && true:
-          type = "BUTTON_INPUT";
-          break;
-        case targetElement.querySelector(".dropdownInput") && true:
-          type = "DROPDOWN_INPUT";
-          break;
-        case targetElement.querySelector(".containerInput") && true:
-          type = "CONTAINER_INPUT";
-          break;
-        case targetElement.querySelector(".newScaleInput") && true:
-          type = "NEW_SCALE_INPUT";
-          break;
-        case targetElement.querySelector(".cameraInput") && true:
-          type = "CAMERA_INPUT";
-          break;
-        default:
-          type = "";
-      }
-
       elem = {
         width: targetElement.style.width,
         height: targetElement.style.height,
@@ -679,6 +633,76 @@ const MidSection = React.forwardRef((props, ref) => {
         data: targetElement.firstChild.innerHTML,
         id: targetElement.id
       };
+      switch (find_class_name) {
+        case targetElement.querySelector(".tableInput") && true:
+          type = "TABLE_INPUT";
+          elem.type = type;
+          elem.data = targetElement.firstChild.innerHTML;
+          break;
+        case targetElement.querySelector(".dateInput") && true:
+          type = "DATE_INPUT";
+          elem.type = type;
+          elem.data = targetElement.firstChild.innerHTML;
+          break;
+        case targetElement.querySelector(".signInput") && true:
+          type = "SIGN_INPUT";
+          elem.type = type;
+          elem.data = targetElement.firstChild.innerText;
+          break;
+        case targetElement.querySelector(".textInput") && true:
+          type = "TEXT_INPUT";
+          elem.type = type;
+          break;
+        case targetElement.querySelector(".imageInput") && true:
+          type = "IMAGE_INPUT";
+          elem.type = type;
+          elem.data = targetElement.firstChild.style.backgroundImage;
+          break;
+        case targetElement.querySelector(".iframeInput") && true:
+          type = "IFRAME_INPUT";
+          elem.type = type;
+          elem.data = targetElement.firstChild.innerHTML;
+          break;
+        case targetElement.querySelector(".scaleInput") && true:
+          type = "SCALE_INPUT";
+          elem.type = type;
+          elem.data = targetElement.firstChild.innerHTML;
+          break;
+        case targetElement.querySelector(".newScaleInput") && true:
+          type = "NEW_SCALE_INPUT";
+          elem.type = type;
+          elem.data = targetElement.firstChild.innerHTML;
+          break;
+        case targetElement.querySelector(".buttonInput") && true:
+          type = "BUTTON_INPUT";
+          elem.type = type;
+          elem.data = targetElement.firstChild.innerHTML;
+          break;
+        case targetElement.querySelector(".dropdownInput") && true:
+          type = "DROPDOWN_INPUT";
+          elem.type = type;
+          elem.data = targetElement.firstChild.innerHTML;
+          break;
+        case targetElement.querySelector(".containerInput") && true:
+          type = "CONTAINER_INPUT";
+          elem.type = type;
+          elem.data = targetElement.firstChild.innerHTML;
+          break;
+        case targetElement.querySelector(".newScaleInput") && true:
+          type = "NEW_SCALE_INPUT";
+          elem.type = type;
+          elem.data = targetElement.firstChild.innerHTML;
+          break;
+        case targetElement.querySelector(".cameraInput") && true:
+          type = "CAMERA_INPUT";
+          elem.type = type;
+          elem.data = targetElement.firstChild.innerHTML;
+          break;
+        default:
+          type = "";
+      }
+
+
       console.log("SAVED DATE: ", elem);
       setContextMenu(prev => {
         return {
@@ -1402,6 +1426,7 @@ const MidSection = React.forwardRef((props, ref) => {
 
     imgBtn.addEventListener("input", () => {
       const reader = new FileReader();
+      imageField.innerText = '';
 
       reader.addEventListener("load", () => {
         uploadedImage = reader.result;
@@ -1505,7 +1530,7 @@ const MidSection = React.forwardRef((props, ref) => {
 
       const midSec = document.querySelector(".drop_zone");
       const midsectionRect = midSec.getBoundingClientRect();
-
+      console.log("typeOfOperation from midsection",typeOfOperation, midSec, curr_user, midsectionRect );
       const measure = {
         width: "200px",
         height: "80px",

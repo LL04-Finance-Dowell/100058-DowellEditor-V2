@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import copyInput from '../CopyInput';
 
 // Regular JavaScript function to create a text input field
-function createDateInputElement(holderDIV, focuseddClassMaintain, handleClicked, setSidebar, setRightSideDateMenu, setPostData, setStartDate, setMethod) {
+function createDateInputElement(holderDIV, focuseddClassMaintain, handleClicked, setSidebar, setRightSideDateMenu, setPostData, setStartDate, setMethod,copy_data=false) {
   let dateField = document.createElement("div");
   dateField.className = "dateInput";
   dateField.style.width = "100%";
@@ -48,7 +48,8 @@ function createDateInputElement(holderDIV, focuseddClassMaintain, handleClicked,
     }
     handleClicked("calendar2", "container2");
     setRightSideDateMenu(false);
-    const date = e.target.innerText
+    let date = e.target.innerText;
+    
     if (date != "mm/dd/yyyy") {
       if (date.includes("/")) {
         const setDate = new Date(parseInt(date));
@@ -71,7 +72,11 @@ function createDateInputElement(holderDIV, focuseddClassMaintain, handleClicked,
     setTimeout(dateClick, 0);
   };
 
-  dateField.innerText = "mm/dd/yyyy";
+  if(copy_data && copy_data != "mm/dd/yyyy"){
+    dateField.innerText = copy_data;
+  }else{
+    dateField.innerText = "mm/dd/yyyy";
+  }
 
   holderDIV.append(dateField);
   return holderDIV

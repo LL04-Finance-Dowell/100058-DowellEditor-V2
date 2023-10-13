@@ -4,7 +4,7 @@ import icon from '../../../assets/icons/sign.svg'
 
 
 // Regular JavaScript function to create a text input field
-function createSignInputElement(holderDIV, focuseddClassMaintain, handleClicked, setSidebar, setPostData, getOffset) {
+function createSignInputElement(holderDIV, focuseddClassMaintain, handleClicked, setSidebar, setPostData, getOffset, copy_data=false) {
     holderDIV.style.height = '110px'
 
     let signField = document.createElement("div");
@@ -21,7 +21,11 @@ function createSignInputElement(holderDIV, focuseddClassMaintain, handleClicked,
 
     const span2 = document.createElement('span');
     span2.className = 'sign_text';
-    span2.textContent = "Signature here";
+    if(copy_data){
+        span2.textContent = copy_data;
+    }else{
+        span2.textContent = "Signature here";
+    }
     span2.style.color = '#737272';
 
     const span = document.createElement('span');

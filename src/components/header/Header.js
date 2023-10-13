@@ -1566,7 +1566,7 @@ const Header = () => {
           if (finalize) {
             handleFinalize();
           }
-
+          if(decoded.details.action === "document") {
           let scaleType = document.querySelector(".scaleTypeHolder");
           if (scaleType.textContent === "nps") {
             handleFinalizeButton();
@@ -1581,6 +1581,7 @@ const Header = () => {
           } else if (scaleType.textContent === "percent_sum_scale") {
             handleFinalizeButtonPercentSum()
           }
+        }
           setIsDataSaved(true);
         }
       })

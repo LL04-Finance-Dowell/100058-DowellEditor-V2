@@ -1706,7 +1706,11 @@ function createNewScaleInputField(
     focuseddClassMaintain(e);
     table_dropdown_focuseddClassMaintain(e);
     handleClicked("newScale2");
-    setSidebar(true);
+    if(decoded.details.action === "template") {
+      setSidebar(true);
+    } else {
+      setSidebar(false);
+    }
     // console.log("This is the scale type", scaleTypeHolder.textContent);
   };
   // console.log(element);
