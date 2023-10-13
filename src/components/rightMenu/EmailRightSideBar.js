@@ -22,7 +22,8 @@ const EmailRightSideBar = () => {
     setFormBorderSize,
     formBorderColor,
     setFormBorderColor,
-    setConfirmRemove, confirmRemove
+    setConfirmRemove, confirmRemove,
+    genSelOpt, setGenSelOpt,
   } = useStateContext()
   const [selectedType, setSelectedType] = useState('')
   // const [addedAns, setAddedAns] = useState([])
@@ -101,6 +102,13 @@ const EmailRightSideBar = () => {
 
   return (
     <>
+      <select className='gen_btn_sel' defaultValue={genSelOpt} onChange={e => setGenSelOpt(e.target.value)}>
+        <option value="" disabled>Select type</option>
+        <option value="cta">CTA</option>
+        <option value="pay">Pay</option>
+        <option value="email">Email</option>
+      </select>
+
       <div
         style={{
           display: "flex",

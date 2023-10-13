@@ -47,10 +47,10 @@ const LeftMenu = ({ showSidebar }) => {
             <IframeButton customFunc={() => handleDrop("iframe")} />
             {/* <ScaleButton customFunc={() => handleDrop("scale")} /> */}
             <ButtonButton customFunc={() => handleDrop("button")} />
-            <EmailButton customFunc={() => handleDrop("email")} />
+            {/* <EmailButton customFunc={() => handleDrop("email")} /> */}
             <NewScaleButton customFunc={() => handleDrop("newScale")} />
             <CameraButton customFunc={() => handleDrop("camera")} />
-            <PaymentButton customFunc={() => handleDrop("payment")} />
+            {/* <PaymentButton customFunc={() => handleDrop("payment")} /> */}
           </div>
         )
       ) : (

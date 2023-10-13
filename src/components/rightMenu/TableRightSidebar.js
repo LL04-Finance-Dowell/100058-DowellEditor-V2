@@ -971,6 +971,7 @@ const TableRightSidebar = () => {
 
   const updateTable = (e) => {
     const focusseddDiv = document.querySelector(".focussedd");
+    const tableDiv = focusseddDiv.querySelector('.tableInput')
     const currentTable = focusseddDiv.querySelector('table');
     focusseddDiv.querySelector('.tableInput').style.backgroundColor = 'white !important'
     focusseddDiv.style.overflow = 'visible';
@@ -978,10 +979,17 @@ const TableRightSidebar = () => {
     focusseddDiv.querySelector('.tableInput').style.backgroundColor = "#fff";
     // console.log(focusseddDiv.style.border)
     focusseddDiv.classList.remove('.dotted_border')
+
+    // * This removes the placholder on the table element
+    if (tableDiv.children[0].classList.contains('placeholder'))
+      tableDiv.removeChild(tableDiv.children[0])
+
     const isUpdating = document.querySelector(".table_update_save_div"); // check if user is already editing
     if (isUpdating) return; //do nothing if user is editing
     addTableButtons(focusseddDiv, currentTable)
     setIsDisableTableRightMenu(true);
+
+
   };
 
   const handleAddRowBelow = (e) => {

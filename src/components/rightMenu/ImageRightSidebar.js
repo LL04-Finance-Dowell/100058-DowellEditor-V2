@@ -42,7 +42,7 @@ const ImageRightSidebar = () => {
     e.stopPropagation();
     const imageDiv = document.querySelector(".focussedd");
 
-    console.log('imageDiv: ', imageDiv);
+    // console.log('imageDiv: ', imageDiv);
 
     if (imageDiv) {
       const addImageButtonInput = imageDiv.getElementsByClassName(
@@ -76,12 +76,11 @@ const ImageRightSidebar = () => {
     }
   };
 
-  // TODO Implement name change, once user sets custom name
 
   const handleUpdate = () => {
     const imageName = document.getElementById("image_name");
     const imgFieldSpan = document.querySelector(".focussed .img_text");
-    console.log(imgFieldSpan);
+    // console.log(imgFieldSpan);
     if (imageName.value != "" && imgFieldSpan) {
       imgFieldSpan.textContent = imageName.value;
     }
