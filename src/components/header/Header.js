@@ -663,6 +663,7 @@ const Header = () => {
           let scaleID = newScales[b].querySelector(".scaleId");
           let orentation = newScales[b].querySelector(".nps_vertical");
           let otherComponent = newScales[b].querySelector(".otherComponent");
+          let smallBox = newScales[b].querySelector(".small_box");
           console.log(font);
 
           let buttonText = newScales[b].querySelectorAll(".circle_label");
@@ -710,7 +711,7 @@ const Header = () => {
           let pairedScaleArray = "";
 
           if (scaleType.textContent === "comparison_paired_scale") {
-            likertScaleArray = newScales[b].querySelector(
+            pairedScaleArray = newScales[b].querySelector(
               ".paired_Scale_Array"
             );
             orientation = newScales[b].querySelector(".orientation");
@@ -765,6 +766,7 @@ const Header = () => {
             stapelScaleArray: stapelScaleArray.textContent,
             npsLiteTextArray: npsLiteTextArray.textContent,
             likertScaleArray: likertScaleArray.textContent,
+            pairedScaleArray: pairedScaleArray.textContent,
             percentProdName: prodName,
             percentBackground: percentBackground?.style?.background,
             percentLabel: percentLabel?.length,
@@ -776,6 +778,7 @@ const Header = () => {
             orentation: orentation?.textContent,
             stapelOrientation: stapelOrientation?.textContent,
             otherComponent: otherComponent.textContent,
+            smallBoxBgColor: smallBox?.style?.backgroundColor
           };
           // console.log(properties);
           elem = {

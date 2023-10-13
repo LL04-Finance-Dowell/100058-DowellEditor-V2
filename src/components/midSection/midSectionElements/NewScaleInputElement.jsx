@@ -1227,41 +1227,120 @@ function createNewScaleInputField(
     const pairedScale = pairedScaleArray.textContent.split(",");
     console.log("This is the d++++!!!!!!!!!", pairedScale);
 
-    for (let i = 0; i < pairedScale.length; i++) {
-      const circle = document.createElement("div");
-      circle.className = "circle_label";
-      circle.textContent = pairedScale[i];
-      circle.style.width = "80%";
-      circle.style.height = "55%";
-      circle.style.borderRadius = "25px";
-      circle.style.padding = "12px 10px";
-      circle.style.marginLeft = "5px";
-      circle.style.marginRight = "5px";
-      circle.style.backgroundColor = element?.raw_data?.buttonColor;
-      circle.style.display = "flex";
-      circle.style.justifyContent = "center";
-      circle.style.alignItems = "center";
-      labelHold.style.display = "grid";
-      labelHold.appendChild(circle);
+    for (let i = 0; i < pairedScale.length - 1; i++) {
+      for (let j = i + 1; j < pairedScale.length; j++) {
+        const circle = document.createElement("div");
+        circle.className = "circle_label";
+        circle.style.width = "127px";
+        circle.style.height = "45%";
+        circle.style.borderRadius = "25px";
+        circle.style.padding = "12px 20px";
+        circle.style.backgroundColor = element?.raw_data?.buttonColor;
+        circle.style.display = "flex";
+        circle.style.flexDirection = "column";
+        circle.style.justifyContent = "center";
+        circle.style.alignItems = "center";
+        circle.style.marginLeft = "5px";
+        circle.style.marginRight = "5px";
+        circle.style.gap = "7px";
 
-      let orientation = element?.raw_data?.orientation;
-      if (orientation === "vertical") {
-        const orientation = document.createElement("div");
-        orientation.className = "orientation";
-        orientation.textContent = "vertical";
-        orientation.style.display = "none";
-        labelHold.appendChild(orientation);
-        labelHold.style.position = "absolute";
-        circle.style.margin = "5px 0";
-        circle.style.padding = "6px 12px";
-        labelHold.style.height = "80%";
-        labelHold.style.width = "50%";
-        labelHold.style.display = "flex";
-        labelHold.style.flexDirection = "column";
-        labelHold.style.alignItems = "center";
-        labelHold.style.marginTop = "1%";
-        labelHold.style.marginLeft = "26%";
+        const smallBox1 = document.createElement("div");
+        smallBox1.className = "small_box"
+        smallBox1.textContent = pairedScale[i];
+        const smallBox2 = document.createElement("div");
+        smallBox2.className = "small_box"
+        smallBox2.textContent = pairedScale[j];
+
+        smallBox1.style.width = "95%";
+        smallBox2.style.width = "95%";
+        smallBox1.style.background = element?.raw_data?.smallBoxBgColor;
+        smallBox1.style.color = element?.raw_data?.fontColor
+        smallBox2.style.background = element?.raw_data?.smallBoxBgColor;
+        smallBox2.style.color = element?.raw_data?.fontColor
+        smallBox1.style.height = "50%";
+        smallBox2.style.height = "50%";
+        smallBox1.style.display = "flex";
+        smallBox2.style.display = "flex";
+        smallBox1.style.justifyContent = "center";
+        smallBox2.style.justifyContent = "center";
+        smallBox1.style.alignItems = "center";
+        smallBox2.style.alignItems = "center";
+        smallBox1.style.fontWeight = "12px";
+        smallBox2.style.fontWeight = "12px";
+
+        function componentToHex(c) {
+          var hex = c.toString(16);
+          return hex.length == 1 ? "0" + hex : hex;
+        }
+
+        function rgbToHex(r, g, b) {
+          return (
+            "#" + componentToHex(r) + componentToHex(g) + componentToHex(b)
+          );
+        }
+
+        function invert(rgb) {
+          rgb = [].slice
+            .call(arguments)
+            .join(",")
+            .replace(/rgb\(|\)|rgba\(|\)|\s/gi, "")
+            .split(",");
+          for (var i = 0; i < rgb.length; i++)
+            rgb[i] = (i === 3 ? 1 : 255) - rgb[i];
+          return rgbToHex(rgb[0], rgb[1], rgb[2]);
+        }
+
+        const smallBoxBgColor = smallBox1.style.backgroundColor
+        const smallBoxColor = smallBox1.style.color
+
+        smallBox1.addEventListener("mouseover", () => {
+          smallBox1.style.backgroundColor = invert(smallBoxBgColor); 
+          smallBox1.style.color = invert(smallBoxColor);
+        });
+        smallBox1.addEventListener("mouseout", () => {
+          smallBox1.style.backgroundColor = element?.raw_data?.smallBoxBgColor;
+          smallBox1.style.color = element?.raw_data?.fontColor; 
+        });
+
+        smallBox2.addEventListener("mouseover", () => {
+          smallBox2.style.backgroundColor = invert(smallBoxBgColor);
+          smallBox2.style.color = invert(smallBoxColor);
+        });
+        smallBox2.addEventListener("mouseout", () => {
+          smallBox2.style.backgroundColor = element?.raw_data?.smallBoxBgColor;
+          smallBox2.style.color = element?.raw_data?.fontColor;
+        });
+
+        circle.appendChild(smallBox1);
+        circle.appendChild(smallBox2);
+
+        scaleHold.style.textAlign = "center";
+
+        labelHold.style.justifyContent = "center";
+        labelHold.style.position = "relative";
+        labelHold.style.marginLeft = "0px"
+        labelHold.appendChild(circle)
+
+        let orientation = element?.raw_data?.orientation;
+        if (orientation === "vertical") {
+          const orientation = document.createElement("div");
+          orientation.className = "orientation";
+          orientation.textContent = "vertical";
+          orientation.style.display = "none";
+          labelHold.appendChild(orientation);
+          labelHold.style.position = "absolute";
+          circle.style.margin = "5px 0";
+          circle.style.padding = "6px 12px";
+          labelHold.style.height = "80%";
+          labelHold.style.width = "50%";
+          labelHold.style.display = "flex";
+          labelHold.style.flexDirection = "column";
+          labelHold.style.alignItems = "center";
+          labelHold.style.marginTop = "1%";
+          labelHold.style.marginLeft = "26%";
+        }
       }
+
       if (decoded.details.action === "document") {
         let isClicked = false;
         const shouldHideFinalizeButton =
