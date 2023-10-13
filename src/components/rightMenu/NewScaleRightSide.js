@@ -1237,8 +1237,9 @@ const ScaleRightSide = () => {
       // // console.log(value?.value);
       // // console.log(value);
 
+      const scaleField = scale?.querySelector(".newScaleInput");
       const button = scale?.querySelector(".label_hold");
-      const scaleText = scale?.querySelector(".scale_text");
+      //const scaleText = scale?.querySelector(".scale_text");
       const button4 = scale?.querySelector(".scool_input");
       const font = scale?.querySelector(".newScaleInput");
       const savedStapelScaleArr = scale?.querySelector(".stapelScaleArray");
@@ -1258,18 +1259,16 @@ const ScaleRightSide = () => {
       const option = document.querySelector("#orientationIdStapel").options[
         document.querySelector("#orientationIdStapel").selectedIndex
       ];
-      buttonChildNeutral.textContent = "";
       let timeId = document.getElementById("timeId_stapel");
       let time = document.getElementById("time_stapel");
       const emojiInp = document.getElementById("emojiInp_stapel").value;
-      let tempText = scale?.querySelector(".tempText");
-      const labelHold = scale?.querySelector(".label_hold");
+      //const labelHold = scale?.querySelector(".label_hold");
       const upperVal = Math.min(
         10,
         parseInt(document.getElementById("upperVal").value, 10)
       );
       const spacing = parseInt(document.getElementById("spacing").value, 10);
-      tempText?.remove();
+      //tempText?.remove();
 
       // for (let i = 0; i < buttonCircle.length; i++) {
       //   if (btnUpdateButton.value !== "") {
@@ -1281,6 +1280,22 @@ const ScaleRightSide = () => {
       //   // console.log(scaleText);
       //   scaleText.innerHTML = "Stapel scale";
       // }
+
+      const scaleTypeHolder = document.createElement("h6");
+      scaleTypeHolder.className = "scaleTypeHolder";
+      scaleTypeHolder.textContent = scaleTypeContent ||
+        scaleTypeHolder?.textContent;
+      scaleTypeHolder.style.display = "none";
+
+      const scaleText = document.createElement("div");
+      scaleText.className = "scale_text";
+      scaleText.textContent = "Untitled-file_scale";
+      scaleText.style.display = "none";
+
+      const idHolder = document.createElement("h6");
+      idHolder.className = "scaleId";
+      idHolder.textContent = "scale Id";
+      idHolder.style.display = "none";
 
       const stapelScaleArray = document.createElement("div");
       stapelScaleArray.className = "stapelScaleArray";
@@ -1320,60 +1335,60 @@ const ScaleRightSide = () => {
       const emojiLabels = prepareEmojiLabels();
       // console.log("These are emoji labels", emojiLabels);
 
-      if (option.value === "Horizontal") {
-        button4.style.border = "block";
-        button4.style.textAlign = "center";
-        button.style.display = "flex";
-        button.style.flexDirection = "row";
-        // button.style.marginTop = "5%";
-        button.style.alignItems = "center";
-        // buttonCircle.style.flexDirection = "row";
-        button.style.height = "85%";
-        button.style.width = "100%";
-        button.style.flexDirection = "row";
-        buttonChildRight.style.marginTop = "0px";
-        buttonChildNeutral.style.marginTop = "0px";
-        buttonChild.style.flexDirection = "row";
-        buttonChild.style.justifyContent = "space-between";
-        buttonChild.style.alignItems = "center";
-        button.style.position = "relative";
-        buttonChild.style.marginLeft = "0px";
-        button.style.marginLeft = "0px";
+      // if (option.value === "Horizontal") {
+      //   button4.style.border = "block";
+      //   button4.style.textAlign = "center";
+      //   button.style.display = "flex";
+      //   button.style.flexDirection = "row";
+      //   // button.style.marginTop = "5%";
+      //   button.style.alignItems = "center";
+      //   // buttonCircle.style.flexDirection = "row";
+      //   button.style.height = "85%";
+      //   button.style.width = "100%";
+      //   button.style.flexDirection = "row";
+      //   buttonChildRight.style.marginTop = "0px";
+      //   buttonChildNeutral.style.marginTop = "0px";
+      //   buttonChild.style.flexDirection = "row";
+      //   buttonChild.style.justifyContent = "space-between";
+      //   buttonChild.style.alignItems = "center";
+      //   button.style.position = "relative";
+      //   buttonChild.style.marginLeft = "0px";
+      //   button.style.marginLeft = "0px";
 
-        labelHold.style.position = "";
-        labelHold.style.transform = "";
+      //   // labelHold.style.position = "";
+      //   // labelHold.style.transform = "";
 
-        buttonChild.style = "";
-        buttonChild.style.display = "flex";
-        buttonChild.style.justifyContent = "space-between";
-      }
+      //   buttonChild.style = "";
+      //   buttonChild.style.display = "flex";
+      //   buttonChild.style.justifyContent = "space-between";
+      // }
 
-      if (option.value === "Vertical") {
-        const stapel_vertical = document.createElement("h2");
-        stapel_vertical.className = "stapel_vertical";
-        stapel_vertical.style.display = "none";
-        stapel_vertical.textContent = "stapel_vertical";
-        button4.appendChild(stapel_vertical);
-        labelHold.style.height = "82%";
+      // if (option.value === "Vertical") {
+      //   const stapel_vertical = document.createElement("h2");
+      //   stapel_vertical.className = "stapel_vertical";
+      //   stapel_vertical.style.display = "none";
+      //   stapel_vertical.textContent = "stapel_vertical";
+      //   button4.appendChild(stapel_vertical);
+      //   // labelHold.style.height = "82%";
 
-        labelHold.style.top = "54%";
-        labelHold.style.left = "50%";
-        labelHold.style.transform = "translate(-50%, -50%)";
-        button4.style.border = "none";
-        button4.style.textAlign = "center";
-        button.style.width = "30%";
-        button.style.position = "absolute";
-        button.style.flexDirection = "column";
-        button.style.alignItems = "center";
-        buttonChild.style.display = "flex";
-        buttonChild.style.flexDirection = "column";
-        buttonChild.style.justifyContent = "space-between";
+      //   // labelHold.style.top = "54%";
+      //   // labelHold.style.left = "50%";
+      //   // labelHold.style.transform = "translate(-50%, -50%)";
+      //   button4.style.border = "none";
+      //   button4.style.textAlign = "center";
+      //   button.style.width = "30%";
+      //   button.style.position = "absolute";
+      //   button.style.flexDirection = "column";
+      //   button.style.alignItems = "center";
+      //   buttonChild.style.display = "flex";
+      //   buttonChild.style.flexDirection = "column";
+      //   buttonChild.style.justifyContent = "space-between";
 
-        buttonChild.style.alignItems = "flex-start";
-        buttonChild.style.width = "32%";
-        buttonChild.style.marginLeft = "auto";
-        buttonChild.style.height = "98%";
-      }
+      //   buttonChild.style.alignItems = "flex-start";
+      //   buttonChild.style.width = "32%";
+      //   buttonChild.style.marginLeft = "auto";
+      //   buttonChild.style.height = "98%";
+      // }
 
       if (
         idHolder.textContent === "scale Id" ||
@@ -1407,16 +1422,12 @@ const ScaleRightSide = () => {
             sendMessage();
             setScaleData(res.data.data.scale_id);
             const id = res.data.data.scale_id;
-            // var successObj = JSON.parse(success);
-            // const id = successObj.inserted_id;
-            // console.log(id);
+            
             if (id.length) {
               setScaleId(id && id);
-              const idHolder = scale?.querySelector(".scaleId");
               idHolder.textContent = id && id;
             }
 
-            // console.log("This is the stapel  scale response", res.data.data);
             console.log(
               "This is scale type holder",
               scaleTypeHolder?.textContent
@@ -1427,15 +1438,16 @@ const ScaleRightSide = () => {
             button4.style.display = "block";
 
             // Clear existing values
-            labelHold.innerHTML = "";
+            // labelHold.innerHTML = "";
+            scaleField.innerHTML = "";
 
             for (let i = 0; i < scaleArr.length; i++) {
               const circle = document.createElement("div");
               circle.className = "circle_label";
               circle.textContent = scaleArr[i];
-              labelHold.appendChild(circle);
-              circle.style.width = "35%";
-              circle.style.height = "35%";
+              scaleField.append(circle);
+              circle.style.width = "35px";
+              circle.style.height = "35px";
               circle.style.borderRadius = "50%";
               circle.style.display = "flex";
               circle.style.justifyContent = "center";
@@ -1451,18 +1463,68 @@ const ScaleRightSide = () => {
                 // Set the text content of the div to the number
                 circle.textContent = scaleArr[i];
               }
+              if(i === 0) {
+                var left = document.createElement('span')
+                left.innerHTML = res.data.data.settings.left;
+                left.style.visibility = "hidden"
+                left.style.position = "absolute"
+                left.style.zIndex = "1"
+                left.style.bottom = "3px"
+                left.style.left ="5%"
+                left.style.fontSize ="small"
+                left.style.backgroundColor = "#555"
+                left.style.color = "white"
+                circle.append(left)
+                circle.onmouseover = function() {
+                left.style.visibility = "visible"
+                }
+
+                circle.onmouseout = function() {
+                  left.style.visibility = "hidden"
+                  }
+              }else if(i === scaleArr.length - 1) {
+                var right = document.createElement('span')
+                right.innerHTML = res.data.data.settings.right;
+                right.style.visibility = "hidden"
+                right.style.position = "absolute"
+                right.style.zIndex = "1"
+                right.style.bottom = "3px"
+                right.style.right ="5%"
+                right.style.backgroundColor = "#555"
+                right.style.color = "white"
+                right.style.fontSize ="small"
+                circle.append(right)
+                circle.onmouseover = function() {
+                right.style.visibility = "visible"
+                }
+
+                circle.onmouseout = function() {
+                  right.style.visibility = "hidden"
+                  }
+              }
             }
 
-            button.style.backgroundColor = res.data.data.settings.scalecolor;
-            button4.style.color = res.data.data.settings.fontcolor;
+            scaleField.style.backgroundColor = res.data.data.settings.scalecolor;
+            scaleField.style.color = res.data.data.settings.fontcolor;
             scaleText.textContent = res.data.data.settings.name;
-            buttonChildLeft.textContent = res.data.data.settings.left;
             buttonChildRight.textContent = res.data.data.settings.right;
             optionHolder.textContent = res.data.data.settings.fomat;
             button4.style.fontFamily = res.data.data.settings.fontstyle;
-            labelHold.appendChild(optionHolder);
+            scaleField.appendChild(optionHolder);
             stapelScaleArray.textContent = res.data.data.settings.scale;
-            labelHold.append(stapelScaleArray);
+            scaleField.append(stapelScaleArray);
+            scaleField.append(scaleTypeHolder);
+            scaleField.append(scaleText);
+            scaleField.append(idHolder);
+
+            if (option.value === "Horizontal") {
+              scaleField.style.display = "flex"
+              scaleField.style.flexDirection = "row"
+              scaleField.style.alignItems = "center"
+              scaleField.style.justifyContent = "center"
+            }else if(option.value === "Vertical") {
+
+            }
             console.log("This is stapel", stapelScaleArray);
           })
           .catch((err) => {
@@ -1510,15 +1572,16 @@ const ScaleRightSide = () => {
               button4.style.display = "block";
 
               // Clear existing values
-              labelHold.innerHTML = "";
+              //labelHold.innerHTML = "";
+              scaleField.innerHTML = "";
 
               for (let i = 0; i < scaleArr.length; i++) {
                 const circle = document.createElement("div");
                 circle.className = "circle_label";
                 circle.textContent = scaleArr[i];
                 labelHold.appendChild(circle);
-                circle.style.width = "35%";
-                circle.style.height = "35%";
+                circle.style.width = "35px";
+                circle.style.height = "35px";
                 circle.style.borderRadius = "50%";
                 circle.style.display = "flex";
                 circle.style.justifyContent = "center";
@@ -1535,17 +1598,59 @@ const ScaleRightSide = () => {
                   // Set the text content of the div to the number
                   circle.textContent = scaleArr[i];
                 }
+                if(i === 0) {
+                  var left = document.createElement('span')
+                  left.innerHTML = res.data.data.settings.left;
+                  left.style.visibility = "hidden"
+                  left.style.position = "absolute"
+                  left.style.zIndex = "1"
+                  left.style.bottom = "3px"
+                  left.style.left ="5%"
+                  left.style.fontSize ="small"
+                  left.style.backgroundColor = "#555"
+                  left.style.color = "white"
+                  circle.append(left)
+                  circle.onmouseover = function() {
+                  left.style.visibility = "visible"
+                  }
+  
+                  circle.onmouseout = function() {
+                    left.style.visibility = "hidden"
+                    }
+                }else if(i === scaleArr.length - 1) {
+                  var right = document.createElement('span')
+                  right.innerHTML = res.data.data.settings.right;
+                  right.style.visibility = "hidden"
+                  right.style.position = "absolute"
+                  right.style.zIndex = "1"
+                  right.style.bottom = "3px"
+                  right.style.right ="5%"
+                  right.style.backgroundColor = "#555"
+                  right.style.color = "white"
+                  right.style.fontSize ="small"
+                  circle.append(right)
+                  circle.onmouseover = function() {
+                  right.style.visibility = "visible"
+                  }
+  
+                  circle.onmouseout = function() {
+                    right.style.visibility = "hidden"
+                    }
+                }
               }
 
-              button.style.backgroundColor = res.data.data.settings.scalecolor;
-              button4.style.color = res.data.data.settings.fontcolor;
-              scaleText.textContent = res.data.data.settings.name;
-              buttonChildLeft.textContent = res.data.data.settings.left;
-              buttonChildRight.textContent = res.data.data.settings.right;
-              optionHolder.textContent = res.data.data.settings.fomat;
-              labelHold.appendChild(optionHolder);
-              stapelScaleArray.textContent = res.data.data.settings.scale;
-              labelHold.append(stapelScaleArray);
+            scaleField.style.backgroundColor = res.data.data.settings.scalecolor;
+            scaleField.style.color = res.data.data.settings.fontcolor;
+            scaleText.textContent = res.data.data.settings.name;
+            buttonChildRight.textContent = res.data.data.settings.right;
+            optionHolder.textContent = res.data.data.settings.fomat;
+            button4.style.fontFamily = res.data.data.settings.fontstyle;
+            scaleField.appendChild(optionHolder);
+            stapelScaleArray.textContent = res.data.data.settings.scale;
+            scaleField.append(stapelScaleArray);
+            scaleField.append(scaleTypeHolder);
+            scaleField.append(scaleText);
+            scaleField.append(idHolder);
             }
           })
           .catch((err) => {
