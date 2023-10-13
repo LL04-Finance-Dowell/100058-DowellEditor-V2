@@ -52,6 +52,8 @@ const PaymentRightSide = () => {
     const purpose = holderDIV?.children[2]?.innerHTML;
     const link = holderDIV?.children[1]?.innerHTML;
 
+    const [isJustEntered, setIsJustEntered] = useState(true);
+
 
     // useEffect(() => {
     //     localStorage.removeItem("stripeKey");
@@ -536,13 +538,16 @@ const PaymentRightSide = () => {
         }
     }
 
-
-
+    // *This is to preserve default btn select value
+    useEffect(() => {
+        setIsJustEntered(false);
+        setGenSelOpt('');
+    }, [])
 
     return (
         <>
             <div className="mt-2 mb-3 w-100">
-                <select className='gen_btn_sel' defaultValue={genSelOpt} onChange={e => setGenSelOpt(e.target.value)} style={{ marginBottom: '10px' }}>
+                <select className='gen_btn_sel' defaultValue={isJustEntered ? 'pay' : genSelOpt} onChange={e => setGenSelOpt(e.target.value)} style={{ marginBottom: '10px' }}>
                     <option value="" disabled>Select type</option>
                     <option value="cta">CTA</option>
                     <option value="pay">Pay</option>

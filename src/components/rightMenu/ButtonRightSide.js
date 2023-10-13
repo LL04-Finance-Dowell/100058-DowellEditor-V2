@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Row, Button, Form } from "react-bootstrap";
 import { useStateContext } from "../../contexts/contextProvider";
 import { useSearchParams } from "react-router-dom";
@@ -86,10 +86,18 @@ const ButtonRightSide = () => {
     e.target.focus();
   };
   const { addedAns, setAddedAns } = useSelectedAnswer()
+
+  const [isJustEntered, setIsJustEntered] = useState(true);
+
+  // *This is to preserve default btn select value
+  useEffect(() => {
+    setIsJustEntered(false);
+    setGenSelOpt('cta');
+  }, [])
   return (
     <>
       <div className="mt-2 mb-3 w-100">
-        <select className='gen_btn_sel' defaultValue={genSelOpt} onChange={e => setGenSelOpt(e.target.value)} style={{ marginBottom: '10px' }}>
+        <select className='gen_btn_sel' defaultValue={isJustEntered ? 'cta' : genSelOpt} onChange={e => setGenSelOpt(e.target.value)} style={{ marginBottom: '10px' }}>
           <option value="" disabled>Select type</option>
           <option value="cta">CTA</option>
           <option value="pay">Pay</option>

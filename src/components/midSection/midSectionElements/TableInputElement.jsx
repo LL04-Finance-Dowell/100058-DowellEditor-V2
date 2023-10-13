@@ -127,6 +127,7 @@ export const CreateTableComponent = (
   const placeholder = document.createElement('p');
   placeholder.className = 'placeholder'
   placeholder.textContent = 'Insert Table';
+  placeholder.style.zIndex = '-1';
   tableField.append(placeholder);
   // tableField.textContent = 'Table'
 

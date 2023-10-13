@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Row, Button } from "react-bootstrap";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
@@ -36,6 +36,9 @@ const EmailRightSideBar = () => {
   const [toEmail, setToEmail] = useState("");
   const [subject, setSubject] = useState("");
   const [message, setMessage] = useState("");
+
+  const [isJustEntered, setIsJustEntered] = useState(true);
+
 
   const [isChecked, setIsChecked] = useState(false);
 
@@ -100,9 +103,15 @@ const EmailRightSideBar = () => {
     setFromEmail("");
   };
 
+  // *This is to preserve default btn select value
+  useEffect(() => {
+    setIsJustEntered(false);
+    setGenSelOpt('');
+  }, [])
+
   return (
     <>
-      <select className='gen_btn_sel' defaultValue={genSelOpt} onChange={e => setGenSelOpt(e.target.value)}>
+      <select className='gen_btn_sel' defaultValue={isJustEntered ? 'email' : genSelOpt} onChange={e => setGenSelOpt(e.target.value)}>
         <option value="" disabled>Select type</option>
         <option value="cta">CTA</option>
         <option value="pay">Pay</option>
