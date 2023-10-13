@@ -1023,6 +1023,11 @@ function createNewScaleInputField(
   } else if (scaleTypeHolder.textContent === "percent_sum_scale") {
     let prodLength = element?.raw_data?.percentLabel;
 
+    let inputPercentArray = []; // Create an array to store all inputPercent elements
+    let rightPercentArray = []; 
+    let centerPercentArray = [];
+    let currentProductIndex = 0;
+
     for (let i = 0; i < prodLength; i++) {
       labelHold.style.display = "flex";
       labelHold.style.justifyContent = "center";
@@ -1076,9 +1081,55 @@ function createNewScaleInputField(
       rightPercent.textContent = "100";
       rightPercent.className = "right-percent";
       percentChilds.appendChild(rightPercent);
-
       containerDiv.appendChild(percentChilds);
 
+      inputPercentArray.push(inputPercent);
+      rightPercentArray.push(rightPercent);
+      centerPercentArray.push(centerPercent);
+
+      // let rateValue = document.createElement("button");
+      // rateValue.className = "rate_name";
+      // rateValue.textContent = "Rate";
+      // rateValue.style.marginLeft = "45%";
+      // rateValue.style.border = "1px solid green"; // Add a border
+      // rateValue.style.borderRadius = "5px"; // Add border radius
+      // containerDiv.appendChild(rateValue);
+  
+      // Add event listener to the "Rate" button
+      inputPercentArray.forEach((inputPercent, i) => {
+        console.log(`i = ${i}, inputPercent.disabled = ${inputPercent.disabled}`);
+        // Disable the input initially for all but the first product
+        if (i > 0) {
+          inputPercent.disabled = true;
+        }
+
+        // if (i !== prodLength - 1) {
+        //   inputPercent.disabled = false;
+        // } else {
+        //   // Disable the input for the last product
+        //   inputPercent.disabled = true;
+        // }
+      
+        inputPercent.addEventListener("input", function () {
+          if (i < prodLength - 1) {
+            const totalCenterPercent = inputPercentArray
+              .slice(0, i + 1)
+              .reduce((total, input) => total + parseInt(input.value), 0);
+            const remainingPercentage = 100 - totalCenterPercent;
+            // Enable the input for the next product if the previous product has a value selected
+            if (centerPercentArray[i].textContent !== "Please select a value") {
+              centerPercentArray[i + 1].textContent = "";
+              rightPercentArray[i + 1].textContent = `${remainingPercentage}%`;
+              inputPercentArray[i + 1].max = `${remainingPercentage}`;
+              inputPercentArray[i + 1].disabled = false;
+            } else {
+              // Disable the input for the next product if the previous product has no value selected
+              inputPercentArray[i + 1].disabled = true;
+            }
+          }
+        });
+      });
+      
       if (!token) {
         return res.status(401).json({ error: "Unauthorized" });
       }
