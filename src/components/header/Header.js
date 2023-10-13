@@ -1612,7 +1612,7 @@ const Header = () => {
   var encodedHeader = base64url(stringifiedHeader);
 
   var dataa = {
-    document_id: decoded.details._id,
+    document_id: decoded.details.document_id,
     action: decoded.details.action,
     database: decoded.details.database,
     collection: decoded.details.collection,
