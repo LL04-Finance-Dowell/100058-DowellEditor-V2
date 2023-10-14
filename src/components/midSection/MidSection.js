@@ -2381,15 +2381,16 @@ const MidSection = React.forwardRef((props, ref) => {
     titleLevel.onclick = () => {
       handleClicked("align2");
       setSidebar(true);
-      titleLevel.parentElement.focus();
+      // titleLevel.parentElement.focus();
     };
 
-    let titleField = document.createElement("span");
+    let titleField = document.createElement("div");
 
-    //  inputField.setAttribute('draggable', true);
+    titleField.contentEditable = true;
     titleField.className = "socialInnerText";
     titleField.innerText = title;
     titleField.style.border = "none";
+    titleField.style.outline = "none";
     titleField.style.fontWeight =400;
    
 
@@ -2406,7 +2407,6 @@ const MidSection = React.forwardRef((props, ref) => {
     const holderDIV2 = getHolderDIV(measure2);
 
     let descriptionLevel = document.createElement("div")
-    // descriptionField.setAttribute("contenteditable", true);
     descriptionLevel.className = "textInput";
     descriptionLevel.style.width = "100%";
     descriptionLevel.innerText = "Paragraph: ";
@@ -2423,14 +2423,16 @@ const MidSection = React.forwardRef((props, ref) => {
     descriptionLevel.onclick = () => {
       handleClicked("align2");
       setSidebar(true);
-      descriptionLevel.parentElement.focus();
+      // descriptionLevel.parentElement.focus();
     };
     
 
-    let descriptionField = document.createElement("span");
+    let descriptionField = document.createElement("div");
+    descriptionField.contentEditable = true;
     descriptionField.className = "socialDescriptionText";
     descriptionField.innerText = paragraph;
     descriptionField.style.border = "none";
+    descriptionField.style.outline = "none";
     descriptionField.style.fontWeight = 400;
 
 
