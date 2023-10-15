@@ -664,6 +664,9 @@ const Header = () => {
           let orentation = newScales[b].querySelector(".nps_vertical");
           let otherComponent = newScales[b].querySelector(".otherComponent");
           let smallBox = newScales[b].querySelector(".small_box");
+          let leftLableStapel = newScales[b].querySelector(".leftToolTip");
+          let rightLableStapel = newScales[b].querySelector(".rightTooltip");
+          // let stapelScaleField = newScales[b].querySelector(".newScaleInput");
           console.log(font);
 
           let buttonText = newScales[b].querySelectorAll(".circle_label");
@@ -751,12 +754,12 @@ const Header = () => {
             orientation = newScales[b].querySelector(".orientation");
           }
           let properties = {
-            scaleBgColor: scaleBg.style.backgroundColor,
-            fontColor: font.style.color,
-            fontFamily: font.style.fontFamily,
-            left: leftChild.textContent,
-            center: neutralChild.textContent,
-            right: rightChild.textContent,
+            scaleBgColor: scaleBg ? scaleBg.style.backgroundColor : newScales[0].style.backgroundColor,
+            fontColor: font ? font.style.color : newScales[0].style.color,
+            fontFamily: font ? font.style.fontFamily : newScales[0].style.fontFamily,
+            left: leftChild ? leftChild.textContent : leftLableStapel.textContent,
+            center: neutralChild ? neutralChild.textContent : "",
+            right: rightChild ? rightChild.textContent : rightLableStapel.textContent,
             buttonColor: circles?.style?.backgroundColor,
             scaleID: scaleID.textContent,
             scaleText: scaleText.textContent,
@@ -777,7 +780,7 @@ const Header = () => {
             orientation: orientation?.textContent,
             orentation: orentation?.textContent,
             stapelOrientation: stapelOrientation?.textContent,
-            otherComponent: otherComponent.textContent,
+            otherComponent: otherComponent ? otherComponent.textContent : "",
             smallBoxBgColor: smallBox?.style?.backgroundColor
           };
           // console.log(properties);

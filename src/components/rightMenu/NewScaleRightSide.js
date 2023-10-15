@@ -41,7 +41,6 @@ const ScaleRightSide = () => {
   const inputRef1 = useRef(null);
   const inputRef2 = useRef(null);
 
-  const [formData, setFormData] = useState(new FormData());
   const [selectedType, setSelectedType] = useState('')
   // const [addedAns, setAddedAns] = useState([])
   const { addedAns, setAddedAns } = useSelectedAnswer()
@@ -66,11 +65,6 @@ const ScaleRightSide = () => {
     <input key={0} type="text" placeholder="Product 1" required />,
   ]);
 
-  const handlePairedScaleInputChange = (e) => {
-    const { name, value } = e.target;
-    formData.set(name, value);
-  };
-
   const fontStyles = [
     "Arial",
     "Helvetica",
@@ -86,7 +80,6 @@ const ScaleRightSide = () => {
   let circles = scale?.querySelector(".circle_label");
   let scaleBg = scale?.querySelector(".label_hold");
   let percentSliderBg = scale?.querySelector(".percent-slider");
-  let smallBoxBg = scale?.querySelector(".small_box");
   // <<<<<<< HEAD
   let fontColor = scale?.querySelector(".scool_input");
   // =======
@@ -161,22 +154,6 @@ const ScaleRightSide = () => {
         .map((value) => parseInt(value).toString(16).padStart(2, "0"))
         .join("");
   }
-
-  if (smallBoxBg) {
-    // Get the computed background color in RGB format
-    const rgbColor = getComputedStyle(smallBoxBg).backgroundColor;
-
-    // Extract the RGB values
-    const rgbValues = rgbColor.match(/\d+/g);
-
-    // Convert each RGB value to hexadecimal
-    smallBoxBg =
-      "#" +
-      rgbValues
-        .map((value) => parseInt(value).toString(16).padStart(2, "0"))
-        .join("");
-  }
-
   // // console.log(scaleDisplay);
 
   const leftChild = scale?.querySelector(".left_child");
@@ -318,21 +295,6 @@ const ScaleRightSide = () => {
   var percentSumFontColor = document.getElementById("font_color_percent_sum");
   if (percentSumFontColor) {
     percentSumFontColor.defaultValue = fontColor;
-  }
-
-  var pairedComparisonFontColor = document.getElementById("font_color_comparison");
-  if (pairedComparisonFontColor) {
-    pairedComparisonFontColor.defaultValue = fontColor;
-  }
-
-  var pairedComparisonRoundColor = document.getElementById("button_color_Comparison");
-  if (pairedComparisonRoundColor) {
-    pairedComparisonRoundColor.defaultValue = smallBoxBg;
-  }
-
-  var pairedComparisonScaleColor = document.getElementById("scale_color_Comparison");
-  if (pairedComparisonScaleColor) {
-    pairedComparisonScaleColor.defaultValue = circles;
   }
 
   if (scaleTypeHolder?.textContent === "percent_scale") {
@@ -863,16 +825,6 @@ const ScaleRightSide = () => {
     }
   };
 
-  const itemCountcombinedOnChange = (event) => {
-    handlePairedInputChange(event);
-    handlePairedScaleInputChange(event);
-  }
-
-  const scaleNameCombinedOnChange = (event) => {
-    setScaleTitle(event.target.value)
-    handlePairedScaleInputChange(event)
-  }
-
   const handlePairedKeyDownPress = (event) => {
     if (event.key === "Enter") {
       const selectedValue = event.target.value;
@@ -908,6 +860,7 @@ const ScaleRightSide = () => {
 
   const handleUpdates = () => {
     const scaleType = document.getElementById("scaleType");
+    console.log("Content prop", scaleTypeContent)
     setScaleTypeContent(scaleType ? scaleType.value : scaleTypeContent);
     const scaleTypeHolder = scale?.querySelector(".scaleTypeHolder");
     scaleTypeHolder.textContent = scaleType
@@ -1271,7 +1224,8 @@ const ScaleRightSide = () => {
     ) {
       const scale = document.querySelector(".focussedd");
       // console.log(scale);
-
+      
+      const stapelId = scale?.querySelector(".scaleId");
       const btnUpdateScale = document.getElementById("scale_color_stapel");
       const btnUpdateFontColor = document.getElementById("font_color_stapel");
       const btnUpdateButton = document.getElementById("button_color_stapel");
@@ -1307,6 +1261,7 @@ const ScaleRightSide = () => {
       const option = document.querySelector("#orientationIdStapel").options[
         document.querySelector("#orientationIdStapel").selectedIndex
       ];
+      //buttonChildNeutral.textContent = "";
       let timeId = document.getElementById("timeId_stapel");
       let time = document.getElementById("time_stapel");
       const emojiInp = document.getElementById("emojiInp_stapel").value;
@@ -1331,19 +1286,13 @@ const ScaleRightSide = () => {
 
       const scaleTypeHolder = document.createElement("h6");
       scaleTypeHolder.className = "scaleTypeHolder";
-      scaleTypeHolder.textContent = scaleTypeContent ||
-        scaleTypeHolder?.textContent;
+      scaleTypeHolder.textContent = scaleType ? scaleType.value : scaleTypeContent
       scaleTypeHolder.style.display = "none";
-
+      
       const scaleText = document.createElement("div");
       scaleText.className = "scale_text";
       scaleText.textContent = "Untitled-file_scale";
       scaleText.style.display = "none";
-
-      const idHolder = document.createElement("h6");
-      idHolder.className = "scaleId";
-      idHolder.textContent = "scale Id";
-      idHolder.style.display = "none";
 
       const stapelScaleArray = document.createElement("div");
       stapelScaleArray.className = "stapelScaleArray";
@@ -1473,6 +1422,7 @@ const ScaleRightSide = () => {
             
             if (id.length) {
               setScaleId(id && id);
+              const idHolder = scale?.querySelector(".scaleId");
               idHolder.textContent = id && id;
             }
 
@@ -1482,8 +1432,6 @@ const ScaleRightSide = () => {
             );
             const scaleArr = res.data.data.settings.scale;
             const fomart = res.data.data.settings.fomat;
-
-            button4.style.display = "block";
 
             // Clear existing values
             // labelHold.innerHTML = "";
@@ -1500,7 +1448,7 @@ const ScaleRightSide = () => {
               circle.style.display = "flex";
               circle.style.justifyContent = "center";
               circle.style.alignItems = "center";
-              circle.style.margin = "0 2px";
+              circle.style.margin = "0 2px 2px 0";
               circle.style.backgroundColor = res.data.data.settings.roundcolor;
               if (fomart === "emoji") {
                 // Set the text content of the div to the corresponding emoji
@@ -1513,13 +1461,17 @@ const ScaleRightSide = () => {
               }
               if(i === 0) {
                 var left = document.createElement('span')
+                left.className = "leftToolTip"
                 left.innerHTML = res.data.data.settings.left;
                 left.style.visibility = "hidden"
                 left.style.position = "absolute"
                 left.style.zIndex = "1"
-                left.style.bottom = "3px"
-                left.style.left ="5%"
-                left.style.fontSize ="small"
+                left.style.bottom = option.value === "Vertical" ? " " : "3px"
+                left.style.top = option.value === "Vertical" ? "5%" : ""
+                left.style.left = option.value === "Vertical" ? "":"5%"
+                left.style.right = option.value === "Vertical" ? "5%":""
+                left.style.fontSize ="medium"
+                left.style.writingMode = option.value === "Vertical" ? "tb-rl" : ""
                 left.style.backgroundColor = "#555"
                 left.style.color = "white"
                 circle.append(left)
@@ -1532,22 +1484,24 @@ const ScaleRightSide = () => {
                   }
               }else if(i === scaleArr.length - 1) {
                 var right = document.createElement('span')
+                right.className = "rightTooltip"
                 right.innerHTML = res.data.data.settings.right;
-                right.style.visibility = "hidden"
+                right.style.display = "none"
                 right.style.position = "absolute"
                 right.style.zIndex = "1"
                 right.style.bottom = "3px"
                 right.style.right ="5%"
                 right.style.backgroundColor = "#555"
                 right.style.color = "white"
-                right.style.fontSize ="small"
+                right.style.fontSize ="medium"
+                right.style.writingMode = option.value === "Vertical" ? "tb-rl" : ""
                 circle.append(right)
                 circle.onmouseover = function() {
-                right.style.visibility = "visible"
+                right.style.display = "block"
                 }
 
                 circle.onmouseout = function() {
-                  right.style.visibility = "hidden"
+                  right.style.display = "none"
                   }
               }
             }
@@ -1555,14 +1509,19 @@ const ScaleRightSide = () => {
             scaleField.style.backgroundColor = res.data.data.settings.scalecolor;
             scaleField.style.color = res.data.data.settings.fontcolor;
             scaleText.textContent = res.data.data.settings.name;
-            buttonChildRight.textContent = res.data.data.settings.right;
+            scaleField.style.fontFamily = res.data.data.settings.fontstyle;
+            //buttonChildRight.textContent = res.data.data.settings.right;
             optionHolder.textContent = res.data.data.settings.fomat;
-            button4.style.fontFamily = res.data.data.settings.fontstyle;
+            //button4.style.fontFamily = res.data.data.settings.fontstyle;
             scaleField.appendChild(optionHolder);
             stapelScaleArray.textContent = res.data.data.settings.scale;
             scaleField.append(stapelScaleArray);
             scaleField.append(scaleTypeHolder);
             scaleField.append(scaleText);
+            const idHolder = document.createElement("h6");
+            idHolder.className = "scaleId";
+            idHolder.textContent = id && id;
+            idHolder.style.display = "none";
             scaleField.append(idHolder);
 
             if (option.value === "Horizontal") {
@@ -1571,7 +1530,15 @@ const ScaleRightSide = () => {
               scaleField.style.alignItems = "center"
               scaleField.style.justifyContent = "center"
             }else if(option.value === "Vertical") {
-
+              const stapel_vertical = document.createElement("h2");
+              stapel_vertical.className = "stapel_vertical";
+              stapel_vertical.style.display = "none";
+              stapel_vertical.textContent = "stapel_vertical";
+              scaleField.appendChild(stapel_vertical);
+              scaleField.style.display = "flex"
+              scaleField.style.flexDirection = "column"
+              scaleField.style.alignItems = "center"
+              scaleField.style.justifyContent = "center"
             }
             console.log("This is stapel", stapelScaleArray);
           })
@@ -1608,7 +1575,7 @@ const ScaleRightSide = () => {
               sendMessage();
               setScaleData(res.data);
               setScaleId(scaleId);
-              // console.log(res);
+              console.log("This is the data",res.data.data.settings);
               // console.log("This is the still scale", scale);
               savedStapelScaleArr.textContent = res.data.data.settings.scale;
               savedOptionHolder.textContent = res.data.data.settings.fomat;
@@ -1617,24 +1584,23 @@ const ScaleRightSide = () => {
               const scaleArr = res.data.data.settings.scale;
               const fomart = res.data.data.settings.fomat;
               // console.log(savedStapelScaleArr);
-              button4.style.display = "block";
-
+              //button4.style.display = "block";
+    
               // Clear existing values
               //labelHold.innerHTML = "";
               scaleField.innerHTML = "";
-
               for (let i = 0; i < scaleArr.length; i++) {
                 const circle = document.createElement("div");
                 circle.className = "circle_label";
                 circle.textContent = scaleArr[i];
-                labelHold.appendChild(circle);
+                scaleField.append(circle);
                 circle.style.width = "35px";
                 circle.style.height = "35px";
                 circle.style.borderRadius = "50%";
                 circle.style.display = "flex";
                 circle.style.justifyContent = "center";
                 circle.style.alignItems = "center";
-                circle.style.margin = "0 2px";
+                circle.style.margin = "0 2px 2px 0";
                 circle.style.backgroundColor =
                   res.data.data.settings.roundcolor;
                 if (fomart === "emoji") {
@@ -1647,59 +1613,92 @@ const ScaleRightSide = () => {
                   circle.textContent = scaleArr[i];
                 }
                 if(i === 0) {
-                  var left = document.createElement('span')
-                  left.innerHTML = res.data.data.settings.left;
+                var left = document.createElement('span')
+                left.className = "leftToolTip"
+                left.innerHTML = res.data.data.settings.left;
+                left.style.visibility = "hidden"
+                left.style.position = "absolute"
+                left.style.zIndex = "1"
+                left.style.bottom = option.value === "Vertical" ? " " : "3px"
+                left.style.top = option.value === "Vertical" ? "5%" : ""
+                left.style.left = option.value === "Vertical" ? "":"5%"
+                left.style.right = option.value === "Vertical" ? "5%":""
+                left.style.fontSize ="medium"
+                left.style.writingMode = option.value === "Vertical" ? "tb-rl" : ""
+                left.style.backgroundColor = "#555"
+                left.style.color = "white"
+                circle.append(left)
+                circle.onmouseover = function() {
+                left.style.visibility = "visible"
+                }
+
+                circle.onmouseout = function() {
                   left.style.visibility = "hidden"
-                  left.style.position = "absolute"
-                  left.style.zIndex = "1"
-                  left.style.bottom = "3px"
-                  left.style.left ="5%"
-                  left.style.fontSize ="small"
-                  left.style.backgroundColor = "#555"
-                  left.style.color = "white"
-                  circle.append(left)
-                  circle.onmouseover = function() {
-                  left.style.visibility = "visible"
                   }
-  
-                  circle.onmouseout = function() {
-                    left.style.visibility = "hidden"
-                    }
                 }else if(i === scaleArr.length - 1) {
-                  var right = document.createElement('span')
-                  right.innerHTML = res.data.data.settings.right;
-                  right.style.visibility = "hidden"
-                  right.style.position = "absolute"
-                  right.style.zIndex = "1"
-                  right.style.bottom = "3px"
-                  right.style.right ="5%"
-                  right.style.backgroundColor = "#555"
-                  right.style.color = "white"
-                  right.style.fontSize ="small"
-                  circle.append(right)
-                  circle.onmouseover = function() {
-                  right.style.visibility = "visible"
+                var right = document.createElement('span')
+                right.className = "rightTooltip"
+                right.innerHTML = res.data.data.settings.right;
+                right.style.display = "none"
+                right.style.position = "absolute"
+                right.style.zIndex = "1"
+                right.style.bottom = "3px"
+                right.style.right ="5%"
+                right.style.backgroundColor = "#555"
+                right.style.color = "white"
+                right.style.fontSize ="medium"
+                right.style.writingMode = option.value === "Vertical" ? "tb-rl" : ""
+                circle.append(right)
+                circle.onmouseover = function() {
+                right.style.display = "block"
+                }
+
+                circle.onmouseout = function() {
+                  right.style.display = "none"
                   }
-  
-                  circle.onmouseout = function() {
-                    right.style.visibility = "hidden"
-                    }
                 }
               }
 
             scaleField.style.backgroundColor = res.data.data.settings.scalecolor;
             scaleField.style.color = res.data.data.settings.fontcolor;
+            scaleField.style.fontFamily = res.data.data.settings.fontstyle;
             scaleText.textContent = res.data.data.settings.name;
-            buttonChildRight.textContent = res.data.data.settings.right;
+            //buttonChildRight.textContent = res.data.data.settings.right;
+            //button4.style.fontFamily = res.data.data.settings.fontstyle;
             optionHolder.textContent = res.data.data.settings.fomat;
-            button4.style.fontFamily = res.data.data.settings.fontstyle;
             scaleField.appendChild(optionHolder);
             stapelScaleArray.textContent = res.data.data.settings.scale;
             scaleField.append(stapelScaleArray);
             scaleField.append(scaleTypeHolder);
             scaleField.append(scaleText);
+            const idHolder = document.createElement("h6");
+            idHolder.className = "scaleId";
+            idHolder.textContent = stapelId.textContent;
+            idHolder.style.display = "none";
             scaleField.append(idHolder);
+
+            if (option.value === "Horizontal") {
+              scaleField.style.display = "flex"
+              scaleField.style.flexDirection = "row"
+              scaleField.style.alignItems = "center"
+              scaleField.style.justifyContent = "center"
+            }else if(option.value === "Vertical") {
+              const stapel_vertical = document.createElement("h2");
+              stapel_vertical.className = "stapel_vertical";
+              stapel_vertical.style.display = "none";
+              stapel_vertical.textContent = "stapel_vertical";
+              scaleField.appendChild(stapel_vertical);
+              scaleField.style.display = "flex"
+              scaleField.style.flexDirection = "column"
+              scaleField.style.alignItems = "center"
+              scaleField.style.justifyContent = "center"
             }
+            }
+
+            console.log("scaleConet", scaleTypeContent)
+
+            console.log("scaleConet", scaleTypeHolder?.textContent)
+            console.log("Scalefield", scaleField)
           })
           .catch((err) => {
             setIsLoading(false);
@@ -3276,18 +3275,23 @@ const ScaleRightSide = () => {
         idHolder.textContent === "scale Id" ||
         idHolder.textContent === "id"
       ) {
-        formData.delete('item_list');
-        const updatedLabelTexts = [...pairedLabelTexts];
-        for (const updatedLabelText of updatedLabelTexts) {
-          formData.append("item_list", updatedLabelText);
-        }
-        formData.append('username', 'pfactorial')
-        formData.append('user', 'yes')
         setIsLoading(true);
         console.log("post req");
         Axios.post(
           "https://100035.pythonanywhere.com/paired-comparison/paired-comparison-settings/",
-          formData
+          {
+            username: "pfactorial",
+            time: time.value,
+            scale_name: beNametnUpdateScal.value,
+            orientation: option.value,
+            roundcolor: btnUpdateScale.value,
+            scalecolor: btnUpdateScaleColor.value,
+            fontcolor: btnUpdateFontColor.value,
+            fontstyle: btnUpdateScaleFont.value,
+            item_count: numberOfItemsToPair,
+            item_list: itemList,
+            user: "yes",
+          }
         )
           .then((res) => {
             setIsLoading(false);
@@ -3321,8 +3325,8 @@ const ScaleRightSide = () => {
 
             labelHold.style.justifyContent = "center";
             labelHold.style.flexWrap = "wrap";
-            for (let i = 0; i < settings.item_list.length - 1; i++) {
-              for (let j = i + 1; j < settings.item_list.length; j++) {
+            for (let i = 0; i < updatedPairedLabels.length - 1; i++) {
+              for (let j = i + 1; j < updatedPairedLabels.length; j++) {
                 const circle = document.createElement("div");
                 circle.className = "circle_label";
                 circle.style.width = "127px";
@@ -3337,19 +3341,16 @@ const ScaleRightSide = () => {
                 circle.style.marginLeft = "5px";
                 circle.style.marginRight = "5px";
                 circle.style.gap = "7px";
-               
+
                 const smallBox1 = document.createElement("div");
-                smallBox1.className = "small_box"
-                smallBox1.textContent = settings.item_list[i];
+                smallBox1.textContent = updatedPairedLabels[i];
                 const smallBox2 = document.createElement("div");
-                smallBox2.className = "small_box"
-                smallBox2.textContent = settings.item_list[j];
+                smallBox2.textContent = updatedPairedLabels[j];
+
                 smallBox1.style.width = "95%";
                 smallBox2.style.width = "95%";
-                smallBox1.style.backgroundColor = settings.roundcolor;
-                smallBox1.style.color = settings.fontcolor;
-                smallBox2.style.backgroundColor = settings.roundcolor;
-                smallBox2.style.color = settings.fontcolor;
+                smallBox1.style.background = settings.roundcolor;
+                smallBox2.style.background = settings.roundcolor;
                 smallBox1.style.height = "50%";
                 smallBox2.style.height = "50%";
                 smallBox1.style.display = "flex";
@@ -3360,49 +3361,6 @@ const ScaleRightSide = () => {
                 smallBox2.style.alignItems = "center";
                 smallBox1.style.fontWeight = "12px";
                 smallBox2.style.fontWeight = "12px";
-
-                function componentToHex(c) {
-                  var hex = c.toString(16);
-                  return hex.length == 1 ? "0" + hex : hex;
-                }
-
-                function rgbToHex(r, g, b) {
-                  return (
-                    "#" + componentToHex(r) + componentToHex(g) + componentToHex(b)
-                  );
-                }
-    
-                function invert(rgb) {
-                  rgb = [].slice
-                    .call(arguments)
-                    .join(",")
-                    .replace(/rgb\(|\)|rgba\(|\)|\s/gi, "")
-                    .split(",");
-                  for (var i = 0; i < rgb.length; i++)
-                    rgb[i] = (i === 3 ? 1 : 255) - rgb[i];
-                  return rgbToHex(rgb[0], rgb[1], rgb[2]);
-                }
-
-                const smallBoxBgColor = smallBox1.style.backgroundColor
-                const smallBoxColor = smallBox1.style.color
-
-                smallBox1.addEventListener("mouseover", () => {
-                  smallBox1.style.backgroundColor = invert(smallBoxBgColor); 
-                  smallBox1.style.color = invert(smallBoxColor);
-                });
-                smallBox1.addEventListener("mouseout", () => {
-                  smallBox1.style.backgroundColor = settings.roundcolor; 
-                  smallBox1.style.color = settings.fontcolor;
-                });
-
-                smallBox2.addEventListener("mouseover", () => {
-                  smallBox2.style.backgroundColor = invert(smallBoxBgColor);
-                  smallBox2.style.color = invert(smallBoxColor);
-                });
-                smallBox2.addEventListener("mouseout", () => {
-                  smallBox2.style.backgroundColor = settings.roundcolor; 
-                  smallBox2.style.color = settings.fontcolor;
-                });
 
                 circle.appendChild(smallBox1);
                 circle.appendChild(smallBox2);
@@ -3417,28 +3375,26 @@ const ScaleRightSide = () => {
             }
           })
           .catch((err) => {
-            if (err) {
-              let message = err.response.data.error;
-              alert(`${message[0].toUpperCase() + message.slice(1)}. All fields are required.`)
-            }
             setIsLoading(false);
             console.log(err);
           });
       } else {
-        formData.delete('item_list');
-        const updatedLabelTexts = [...pairedLabelTexts];
-        for (const updatedLabelText of updatedLabelTexts) {
-          formData.append("item_list", updatedLabelText);
-        }
-        formData.append('scale_id', idHolder.textContent)
-        formData.append('username', 'pfactorial')
-        formData.append('user', 'yes')
         setIsLoading(true);
         console.log("PUT req");
         console.log(idHolder.textContent);
         Axios.put(
           "https://100035.pythonanywhere.com/paired-comparison/paired-comparison-settings",
-          formData
+          {
+            scale_id: idHolder.textContent,
+            username: "pfactorial",
+            roundcolor: btnUpdateScale.value,
+            scalecolor: btnUpdateScaleColor.value,
+            fontcolor: btnUpdateFontColor.value,
+            fontstyle: btnUpdateScaleFont.value,
+            item_count: numberOfItemsToPair,
+            item_list: itemList,
+            user: "yes",
+          }
         )
           .then((res) => {
             if (res.status == 200) {
@@ -3485,17 +3441,14 @@ const ScaleRightSide = () => {
                   circle.style.gap = "7px";
 
                   const smallBox1 = document.createElement("div");
-                  smallBox1.className = "small_box"
                   smallBox1.textContent = settings.item_list[i];
                   const smallBox2 = document.createElement("div");
-                  smallBox2.className = "small_box"
                   smallBox2.textContent = settings.item_list[j];
+
                   smallBox1.style.width = "95%";
                   smallBox2.style.width = "95%";
                   smallBox1.style.background = settings.roundcolor;
-                  smallBox1.style.color = settings.fontcolor;
                   smallBox2.style.background = settings.roundcolor;
-                  smallBox2.style.color = settings.fontcolor;
                   smallBox1.style.height = "50%";
                   smallBox2.style.height = "50%";
                   smallBox1.style.display = "flex";
@@ -3506,49 +3459,6 @@ const ScaleRightSide = () => {
                   smallBox2.style.alignItems = "center";
                   smallBox1.style.fontWeight = "12px";
                   smallBox2.style.fontWeight = "12px";
-
-                  function componentToHex(c) {
-                    var hex = c.toString(16);
-                    return hex.length == 1 ? "0" + hex : hex;
-                  }
-  
-                  function rgbToHex(r, g, b) {
-                    return (
-                      "#" + componentToHex(r) + componentToHex(g) + componentToHex(b)
-                    );
-                  }
-      
-                  function invert(rgb) {
-                    rgb = [].slice
-                      .call(arguments)
-                      .join(",")
-                      .replace(/rgb\(|\)|rgba\(|\)|\s/gi, "")
-                      .split(",");
-                    for (var i = 0; i < rgb.length; i++)
-                      rgb[i] = (i === 3 ? 1 : 255) - rgb[i];
-                    return rgbToHex(rgb[0], rgb[1], rgb[2]);
-                  }
-  
-                  const smallBoxBgColor = smallBox1.style.backgroundColor
-                  const smallBoxColor = smallBox1.style.color
-  
-                  smallBox1.addEventListener("mouseover", () => {
-                    smallBox1.style.backgroundColor = invert(smallBoxBgColor);
-                    smallBox1.style.color = invert(smallBoxColor);
-                  });
-                  smallBox1.addEventListener("mouseout", () => {
-                    smallBox1.style.backgroundColor = settings.roundcolor;
-                    smallBox1.style.color = settings.fontcolor;
-                  });
-  
-                  smallBox2.addEventListener("mouseover", () => {
-                    smallBox2.style.backgroundColor = invert(smallBoxBgColor);
-                    smallBox2.style.color = invert(smallBoxColor);
-                  });
-                  smallBox2.addEventListener("mouseout", () => {
-                    smallBox2.style.backgroundColor = settings.roundcolor;
-                    smallBox2.style.color = settings.fontcolor;
-                  });
 
                   circle.appendChild(smallBox1);
                   circle.appendChild(smallBox2);
@@ -3999,11 +3909,6 @@ const ScaleRightSide = () => {
       timeId.style.display = "none";
     }
   };
-
-  const timecombinedOnChange = (event) => {
-    onTimeChangeComparison(event);
-    handlePairedScaleInputChange(event);
-  }
 
   // const upperVal = Math.min(10, parseInt(document.getElementById('upperVal').value, 10));
   // if (upperVal !==null) {
@@ -6860,7 +6765,7 @@ const ScaleRightSide = () => {
                       className="bg-gray-800"
                       id="orientationIdLinkert"
                     >
-                      <option style={{ color: "black" }}>Choose..</option>
+                      <option style={{ color: "black" }}>Chosse..</option>
                       <option value="Horizontal" style={{ color: "black" }}>
                         Horizontal
                       </option>
@@ -7512,12 +7417,10 @@ const ScaleRightSide = () => {
                         fontSize: "12px",
                         margin: "0 auto",
                       }}
-                      name="orientation"
-                      onChange={handlePairedScaleInputChange}
                       className="bg-gray-800"
                       id="orientationIdComaprison"
                     >
-                      <option style={{ color: "black" }}>Choose..</option>
+                      <option style={{ color: "black" }}>Chosse..</option>
                       <option value="Horizontal" style={{ color: "black" }}>
                         Horizontal
                       </option>
@@ -7559,8 +7462,7 @@ const ScaleRightSide = () => {
                     >
                       <input
                         type="text"
-                        name="scale_name"
-                        onChange={scaleNameCombinedOnChange}
+                        onChange={(e) => setScaleTitle(e.target.value)}
                         defaultValue={scaleT ? scaleT.innerHTML : ""}
                         style={{
                           width: "82px",
@@ -7662,8 +7564,6 @@ const ScaleRightSide = () => {
                             display: "flex",
                             alignItems: "center",
                           }}
-                          name="scalecolor"
-                          onChange={handlePairedScaleInputChange}
                           id="scale_color_Comparison"
                         />
                       </div>
@@ -7698,8 +7598,6 @@ const ScaleRightSide = () => {
                             display: "flex",
                             alignItems: "center",
                           }}
-                          name="roundcolor"
-                          onChange={handlePairedScaleInputChange}
                           id="button_color_Comparison"
                         />
                       </div>
@@ -7743,8 +7641,6 @@ const ScaleRightSide = () => {
                             display: "flex",
                             alignItems: "center",
                           }}
-                          name="fontcolor"
-                          onChange={handlePairedScaleInputChange}
                           id="font_color_comparison"
                         />
                       </div>
@@ -7781,8 +7677,6 @@ const ScaleRightSide = () => {
                             border: "none",
                             alignItems: "center",
                           }}
-                          name="fontstyle"
-                          onChange={handlePairedScaleInputChange}
                           id="font_style_comparison"
                           defaultValue={
                             // !scaleDisplay ? undefined ? scaleDisplay="none" ? undefined : scaleBg
@@ -7826,8 +7720,7 @@ const ScaleRightSide = () => {
                     <input
                       type="text"
                       value={pairedInputValue}
-                      name="item_count"
-                      onChange={itemCountcombinedOnChange}
+                      onChange={handlePairedInputChange}
                       onKeyDown={handlePairedKeyDownPress}
                       placeholder="0"
                       style={{
@@ -7947,8 +7840,6 @@ const ScaleRightSide = () => {
                           outline: "none",
                           alignItems: "center",
                         }}
-                        name="time"
-                        onChange={handlePairedScaleInputChange}
                         id="time_comparison"
                       />
                     </div>
@@ -7985,7 +7876,6 @@ const ScaleRightSide = () => {
                           outline: "none",
                           alignItems: "center",
                         }}
-                        onChange={handlePairedScaleInputChange}
                         id="score"
                       />
                     </div>

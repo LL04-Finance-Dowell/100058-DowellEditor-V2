@@ -305,40 +305,99 @@ function createNewScaleInputField(
   } else if (scaleTypeHolder.textContent === "snipte") {
     const stapelScale = stapelScaleArray.textContent.split(",");
     const selectedOption = stapelOptionHolder.textContent;
+    const stapelOrientation = element?.raw_data?.stapelOrientation;
     // console.log("This is the stapel", stapelScale);
     // console.log("This is option", selectedOption);
+    //clear scaleField values
+    labelHold.style.display = "none"
+    scaleHold.style.display = "none"
+    scaleField.style.display = "flex"
+    scaleField.style.backgroundColor = element?.raw_data?.scaleBgColor;
+    scaleField.style.flexDirection = "row"
+    scaleField.style.alignItems = "center"
+    scaleField.style.justifyContent = "center"
     for (let i = 0; i < stapelScale.length; i++) {
       const circle = document.createElement("div");
       circle.className = "circle_label";
       circle.textContent = stapelScale[i];
-      labelHold.appendChild(circle);
-      circle.style.width = "35%";
-      circle.style.height = "35%";
+      scaleField.appendChild(circle);
+      circle.style.width = "35px";
+      circle.style.height = "35px";
       circle.style.borderRadius = "50%";
       circle.style.display = "flex";
       circle.style.justifyContent = "center";
       circle.style.alignItems = "center";
-      circle.style.margin = "0 2px";
+      circle.style.margin = "0 2px 2px 0";
       circle.style.backgroundColor = element?.raw_data?.buttonColor;
-      const stapelOrientation = element?.raw_data?.stapelOrientation;
+
+      if(i === 0) {
+        var left = document.createElement('span')
+        left.className = "leftToolTip"
+        left.innerHTML = element?.raw_data?.left;
+        left.style.visibility = "hidden"
+        left.style.position = "absolute"
+        left.style.zIndex = "1"
+        left.style.bottom = stapelOrientation === "stapel_vertical" ? " " : "3px"
+        left.style.top = stapelOrientation === "stapel_vertical" ? "5%" : ""
+        left.style.left = stapelOrientation === "stapel_vertical" ? "":"5%"
+        left.style.right = stapelOrientation === "stapel_vertical" ? "5%":""
+        left.style.fontSize ="medium"
+        left.style.writingMode = stapelOrientation === "stapel_vertical" ? "tb-rl" : ""
+        left.style.backgroundColor = "#555"
+        left.style.color = "white"
+        circle.append(left)
+        circle.onmouseover = function() {
+        left.style.visibility = "visible"
+        }
+
+        circle.onmouseout = function() {
+          left.style.visibility = "hidden"
+          }
+        }else if(i === stapelScale.length - 1) {
+        var right = document.createElement('span')
+        right.className = "rightTooltip"
+        right.innerHTML = element?.raw_data?.right;
+        right.style.display = "none"
+        right.style.position = "absolute"
+        right.style.zIndex = "1"
+        right.style.bottom = "3px"
+        right.style.right ="5%"
+        right.style.backgroundColor = "#555"
+        right.style.color = "white"
+        right.style.fontSize ="medium"
+        right.style.writingMode = stapelOrientation === "stapel_vertical" ? "tb-rl" : ""
+        circle.append(right)
+        circle.onmouseover = function() {
+        right.style.display = "block"
+        }
+
+        circle.onmouseout = function() {
+          right.style.display = "none"
+          }
+        }
+
       if (stapelOrientation === "stapel_vertical") {
         const stapel_vertical = document.createElement("h2");
         stapel_vertical.className = "stapel_vertical";
         stapel_vertical.style.display = "none";
         stapel_vertical.textContent = "stapel_vertical";
-        labelHold.appendChild(stapel_vertical);
+        scaleField.appendChild(stapel_vertical);
 
-        labelHold.style.height = "82%";
-        labelHold.style.top = "54%";
-        labelHold.style.left = "50%";
-        labelHold.style.transform = "translate(-50%, -50%)";
-        scaleHold.style.border = "none";
-        scaleHold.style.textAlign = "center";
-        labelHold.style.width = "30%";
-        labelHold.style.position = "absolute";
-        labelHold.style.flexDirection = "column";
-        labelHold.style.alignItems = "center";
-        labelHold.style.marginTop = "0";
+        // labelHold.style.height = "82%";
+        // labelHold.style.top = "54%";
+        // labelHold.style.left = "50%";
+        // labelHold.style.transform = "translate(-50%, -50%)";
+        // scaleHold.style.border = "none";
+        // scaleHold.style.textAlign = "center";
+        // labelHold.style.width = "30%";
+        // labelHold.style.position = "absolute";
+        // labelHold.style.flexDirection = "column";
+        // labelHold.style.alignItems = "center";
+        // labelHold.style.marginTop = "0";
+        scaleField.style.display = "flex"
+        scaleField.style.flexDirection = "column"
+        scaleField.style.alignItems = "center"
+        scaleField.style.justifyContent = "center"
       }
       if (selectedOption === "emoji") {
         const buttonText = element.raw_data.buttonText;
