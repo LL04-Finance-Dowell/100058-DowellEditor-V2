@@ -124,7 +124,12 @@ export const CreateTableComponent = (
   // tableField.innerHTML = 'table';
   tableField.style.position = "absolute";
 
-  tableField.textContent = 'Table'
+  const placeholder = document.createElement('p');
+  placeholder.className = 'placeholder'
+  placeholder.textContent = 'Insert Table';
+  placeholder.style.zIndex = '-1';
+  tableField.append(placeholder);
+  // tableField.textContent = 'Table'
 
   tableField.oninput = (e) => {
     //setIsFinializeDisabled(false);

@@ -1,4 +1,7 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
+import createButtonInputElement from "../components/midSection/createElements/CreateButtonElement.jsx";
+import CreatePyamentElement from "../components/midSection/createElements/CreatePyamentElement.jsx";
+import createFormInputElement from "../components/midSection/createElements/CreateFormElement.jsx";
 
 const StateContext = createContext();
 
@@ -79,10 +82,12 @@ export const ContextProvider = ({ children }) => {
   const [strikethrough, setStrikethrough] = useState(false);
   const [iframek, setIframek] = useState(0);
 
+  const [genSelOpt, setGenSelOpt] = useState('');
+
   const handleDrop = (dropped) => {
     setIsDropped({ ...isDropped, [dropped]: true });
   };
-  
+
   const handleClicked = (clicked, tableRighMenu) => {
     setIsClicked({ ...initialState2, [clicked]: true, [tableRighMenu]: false });
   };
@@ -95,13 +100,13 @@ export const ContextProvider = ({ children }) => {
   const [rightSideDatemenu, setRightSideDateMenu] = useState(false);
   const [rightSideDropDown, setRightSideDropDown] = useState(false);
   const [savedSripeKey, setSavedSripeKey] = useState({
-    payment_id:null,
-    key:null
+    payment_id: null,
+    key: null
   });
   const [savedPaypalKey, setSavedPaypalKey] = useState({
-    payment_id:null,
+    payment_id: null,
     secret_key: null,
-    key:null
+    key: null
   });
   // handling date format
   const [method, setMethod] = useState("first");
@@ -395,9 +400,9 @@ export const ContextProvider = ({ children }) => {
 
 
   const [confirmRemove, setConfirmRemove] = useState(false)
-  const [iframeSize,setIframeSize] = useState({
-    width:"",
-    height:""
+  const [iframeSize, setIframeSize] = useState({
+    width: "",
+    height: ""
   })
 
   const copyInput = (clickHandler) => {
@@ -547,6 +552,26 @@ export const ContextProvider = ({ children }) => {
     };
   };
 
+  useEffect(() => {
+    if (genSelOpt) {
+      const holderDiv = document.querySelector('.focussedd');
+      holderDiv.textContent = '';
+      switch (genSelOpt) {
+        case 'cta':
+          createButtonInputElement(holderDiv, focuseddClassMaintain, handleClicked, setSidebar);
+          break;
+        case 'pay':
+          CreatePyamentElement(holderDiv, focuseddClassMaintain, handleClicked, setSidebar);
+          break;
+        case 'email':
+          createFormInputElement(holderDiv, focuseddClassMaintain, handleClicked, setSidebar);
+          break;
+        default:
+          return;
+      }
+    }
+  }, [genSelOpt])
+
   return (
     <StateContext.Provider
       value={{
@@ -687,14 +712,16 @@ export const ContextProvider = ({ children }) => {
         confirmRemove, setConfirmRemove,
         allowHighlight, setAllowHighlight,
         copyInput,
-        paymentKey, 
+        paymentKey,
         setPaymentKey,
-        paypalId, 
+        paypalId,
         setPaypalId,
-        savedSripeKey, 
+        savedSripeKey,
         setSavedSripeKey,
-        savedPaypalKey, 
+        savedPaypalKey,
         setSavedPaypalKey,
+        genSelOpt,
+        setGenSelOpt
       }}
     >
       {children}

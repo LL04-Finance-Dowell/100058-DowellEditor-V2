@@ -15,12 +15,12 @@ function createButtonInputElement(holderDIV, focuseddClassMaintain, handleClicke
     buttonField.textContent = "Button";
 
     const buttonIn = document.getElementsByClassName("buttonInput");
-        if (buttonIn.length) {
+    if (buttonIn.length) {
         const d = buttonIn.length;
         buttonField.id = `btn${d + 1}`;
-        } else {
-          buttonField.id = "btn1";
-        }
+    } else {
+        buttonField.id = "btn1";
+    }
 
     buttonField.onclick = (e) => {
         e.stopPropagation();
@@ -31,6 +31,8 @@ function createButtonInputElement(holderDIV, focuseddClassMaintain, handleClicke
         handleClicked("button2", "container2");
         setSidebar(true);
     };
+
+
 
     const linkHolder = document.createElement("div");
     linkHolder.className = "link_holder";
@@ -43,6 +45,13 @@ function createButtonInputElement(holderDIV, focuseddClassMaintain, handleClicke
     holderDIV.append(buttonField);
     holderDIV.append(linkHolder);
     holderDIV.append(purposeHolder);
+
+    // * This loop is to trigger rightside bar to update to the recently selected btn type
+    let x = true;
+    while (x) {
+        buttonField.click();
+        x = false;
+    }
     return holderDIV
 }
 export default createButtonInputElement;

@@ -2,7 +2,7 @@ import React from 'react';
 import copyInput from '../CopyInput';
 
 
-function CreatePyamentElement (holderDIV, focuseddClassMaintain, handleClicked, setSidebar) {
+function CreatePyamentElement(holderDIV, focuseddClassMaintain, handleClicked, setSidebar) {
     let paymentField = document.createElement("button");
     paymentField.className = "paymentInput";
     paymentField.style.width = "100%";
@@ -16,11 +16,11 @@ function CreatePyamentElement (holderDIV, focuseddClassMaintain, handleClicked, 
 
     const paymentInput = document.getElementsByClassName("paymentInput");
     if (paymentInput.length) {
-      const p = paymentInput.length;
-      paymentField.id = `pay${p + 1}`;
-        } else {
-            paymentField.id = "pay1";
-        }
+        const p = paymentInput.length;
+        paymentField.id = `pay${p + 1}`;
+    } else {
+        paymentField.id = "pay1";
+    }
 
     paymentField.onclick = (e) => {
         e.stopPropagation();
@@ -43,6 +43,13 @@ function CreatePyamentElement (holderDIV, focuseddClassMaintain, handleClicked, 
     holderDIV.append(paymentField);
     holderDIV.append(linkHolder);
     holderDIV.append(purposeHolder);
+
+    // * This loop is to trigger rightside bar to update to the recently selected btn type
+    let x = true;
+    while (x) {
+        paymentField.click();
+        x = false;
+    }
 };
 
 export default CreatePyamentElement;
