@@ -47,6 +47,7 @@ function createContainerInputField(
   let elementData =element;
   if(copy_data){
     element.data =copy_data;
+    containerField.id = `c`+ (parseInt(id[1]) + 1)
   }
   for (let p = 0; p < element.data.length; p++) {
     const containerElement = element.data[p];
@@ -68,6 +69,7 @@ function createContainerInputField(
     if (typeOfOperationContainer === "DATE_INPUT") {
       let dateFieldContainer = document.createElement("div");
       dateFieldContainer.className = "dateInput";
+      dateFieldContainer.id=containerElement.id;
       dateFieldContainer.style.width = "100%";
       dateFieldContainer.style.height = "100%";
       dateFieldContainer.style.backgroundColor = "#0000";
@@ -126,6 +128,7 @@ function createContainerInputField(
     } else if (typeOfOperationContainer === "IMAGE_INPUT") {
       let imageFieldContainer = document.createElement("div");
       imageFieldContainer.className = "imageInput";
+      imageFieldContainer.id=containerElement.id;
       imageFieldContainer.style.width = "100%";
       imageFieldContainer.style.height = "100%";
       imageFieldContainer.style.backgroundColor = "#0000";
@@ -180,6 +183,7 @@ function createContainerInputField(
     } else if (typeOfOperationContainer === "DROPDOWN_INPUT") {
       let dropdownFieldContainer = document.createElement("div");
       dropdownFieldContainer.className = "dropdownInput";
+      dropdownFieldContainer.id=containerElement.id;
       dropdownFieldContainer.style.width = "100%";
       dropdownFieldContainer.style.height = "100%";
       dropdownFieldContainer.style.backgroundColor = "#0000";
@@ -248,7 +252,7 @@ function createContainerInputField(
       inputFieldContainer.setAttribute("contenteditable", true);
       //  inputFieldContainer.setAttribute('draggable', true);
       inputFieldContainer.className = "textInput";
-      inputFieldContainer.id = id;
+      inputFieldContainer.id=containerElement.id;
       inputFieldContainer.style.width = "100%";
       inputFieldContainer.style.height = "100%";
       inputFieldContainer.style.resize = "none";
@@ -290,6 +294,7 @@ function createContainerInputField(
     } else if (typeOfOperationContainer === "SIGN_INPUT") {
       let signFieldContainer = document.createElement("div");
       signFieldContainer.className = "signInput";
+      signFieldContainer.id=containerElement.id;
       signFieldContainer.style.width = "100%";
       signFieldContainer.style.height = "100%";
       signFieldContainer.style.backgroundColor = "#0000";
@@ -348,6 +353,7 @@ function createContainerInputField(
     } else if (typeOfOperationContainer === "IFRAME_INPUT") {
       let iframeFieldContainer = document.createElement("div");
       iframeFieldContainer.className = "iframeInput";
+      iframeFieldContainer.id=containerElement.id;
       iframeFieldContainer.style.width = "100%";
       iframeFieldContainer.style.height = "100%";
       iframeFieldContainer.style.backgroundColor = "#dedede";
@@ -373,6 +379,7 @@ function createContainerInputField(
 
       let scaleFieldContainer = document.createElement("div");
       scaleFieldContainer.className = "scaleInput";
+      scaleFieldContainer.id=containerElement.id;
       scaleFieldContainer.style.width = "100%";
       scaleFieldContainer.style.height = "100%";
       scaleFieldContainer.style.backgroundColor = "transparent";
