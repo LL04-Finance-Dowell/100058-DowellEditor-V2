@@ -281,7 +281,7 @@ const MidSection = React.forwardRef((props, ref) => {
 
     const midsectionRect = midSec.getBoundingClientRect();
     let clientX = e.clientX - midsectionRect.left;
-    let clientY = e.clientY - midsectionRect.top;
+    let clientY = e.clientY - midsectionRect;
 
     if (!foundElement.classList.contains('midSection')) {
       const parent = foundElement.parentElement

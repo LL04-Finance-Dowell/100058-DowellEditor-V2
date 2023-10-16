@@ -18,7 +18,10 @@ function createTextElement(holderDIV, focuseddClassMaintain, handleClicked, setS
   inputField.style.position = "relative";
   inputField.style.cursor = "text";
 
-  holderDIV.style.height = '180px';
+  inputField.textContent = 'Enter text here!';
+  inputField.classList.add('empty')
+
+  // holderDIV.style.height = '130px';
   if (copy_data) {
     inputField.innerText = copy_data
   }
