@@ -41,6 +41,7 @@ const ScaleRightSide = () => {
   const inputRef1 = useRef(null);
   const inputRef2 = useRef(null);
 
+  const [formData, setFormData] = useState(new FormData());
   const [selectedType, setSelectedType] = useState('')
   // const [addedAns, setAddedAns] = useState([])
   const { addedAns, setAddedAns } = useSelectedAnswer()
@@ -65,6 +66,11 @@ const ScaleRightSide = () => {
     <input key={0} type="text" placeholder="Product 1" required />,
   ]);
 
+  const handlePairedScaleInputChange = (e) => {
+    const { name, value } = e.target;
+    formData.set(name, value);
+  };
+
   const fontStyles = [
     "Arial",
     "Helvetica",
@@ -80,6 +86,7 @@ const ScaleRightSide = () => {
   let circles = scale?.querySelector(".circle_label");
   let scaleBg = scale?.querySelector(".label_hold");
   let percentSliderBg = scale?.querySelector(".percent-slider");
+  let smallBoxBg = scale?.querySelector(".small_box");
   // <<<<<<< HEAD
   let fontColor = scale?.querySelector(".scool_input");
   // =======
@@ -154,6 +161,22 @@ const ScaleRightSide = () => {
         .map((value) => parseInt(value).toString(16).padStart(2, "0"))
         .join("");
   }
+
+  if (smallBoxBg) {
+    // Get the computed background color in RGB format
+    const rgbColor = getComputedStyle(smallBoxBg).backgroundColor;
+
+    // Extract the RGB values
+    const rgbValues = rgbColor.match(/\d+/g);
+
+    // Convert each RGB value to hexadecimal
+    smallBoxBg =
+      "#" +
+      rgbValues
+        .map((value) => parseInt(value).toString(16).padStart(2, "0"))
+        .join("");
+  }
+
   // // console.log(scaleDisplay);
 
   const leftChild = scale?.querySelector(".left_child");
@@ -295,6 +318,21 @@ const ScaleRightSide = () => {
   var percentSumFontColor = document.getElementById("font_color_percent_sum");
   if (percentSumFontColor) {
     percentSumFontColor.defaultValue = fontColor;
+  }
+
+  var pairedComparisonFontColor = document.getElementById("font_color_comparison");
+  if (pairedComparisonFontColor) {
+    pairedComparisonFontColor.defaultValue = fontColor;
+  }
+
+  var pairedComparisonRoundColor = document.getElementById("button_color_Comparison");
+  if (pairedComparisonRoundColor) {
+    pairedComparisonRoundColor.defaultValue = smallBoxBg;
+  }
+
+  var pairedComparisonScaleColor = document.getElementById("scale_color_Comparison");
+  if (pairedComparisonScaleColor) {
+    pairedComparisonScaleColor.defaultValue = circles;
   }
 
   if (scaleTypeHolder?.textContent === "percent_scale") {
@@ -824,6 +862,16 @@ const ScaleRightSide = () => {
       setPairedInputValue([]);
     }
   };
+
+  const itemCountcombinedOnChange = (event) => {
+    handlePairedInputChange(event);
+    handlePairedScaleInputChange(event);
+  }
+
+  const scaleNameCombinedOnChange = (event) => {
+    setScaleTitle(event.target.value)
+    handlePairedScaleInputChange(event)
+  }
 
   const handlePairedKeyDownPress = (event) => {
     if (event.key === "Enter") {
@@ -3275,23 +3323,18 @@ const ScaleRightSide = () => {
         idHolder.textContent === "scale Id" ||
         idHolder.textContent === "id"
       ) {
+        formData.delete('item_list');
+        const updatedLabelTexts = [...pairedLabelTexts];
+        for (const updatedLabelText of updatedLabelTexts) {
+          formData.append("item_list", updatedLabelText);
+        }
+        formData.append('username', 'pfactorial')
+        formData.append('user', 'yes')
         setIsLoading(true);
         console.log("post req");
         Axios.post(
           "https://100035.pythonanywhere.com/paired-comparison/paired-comparison-settings/",
-          {
-            username: "pfactorial",
-            time: time.value,
-            scale_name: beNametnUpdateScal.value,
-            orientation: option.value,
-            roundcolor: btnUpdateScale.value,
-            scalecolor: btnUpdateScaleColor.value,
-            fontcolor: btnUpdateFontColor.value,
-            fontstyle: btnUpdateScaleFont.value,
-            item_count: numberOfItemsToPair,
-            item_list: itemList,
-            user: "yes",
-          }
+          formData
         )
           .then((res) => {
             setIsLoading(false);
@@ -3325,8 +3368,8 @@ const ScaleRightSide = () => {
 
             labelHold.style.justifyContent = "center";
             labelHold.style.flexWrap = "wrap";
-            for (let i = 0; i < updatedPairedLabels.length - 1; i++) {
-              for (let j = i + 1; j < updatedPairedLabels.length; j++) {
+            for (let i = 0; i < settings.item_list.length - 1; i++) {
+              for (let j = i + 1; j < settings.item_list.length; j++) {
                 const circle = document.createElement("div");
                 circle.className = "circle_label";
                 circle.style.width = "127px";
@@ -3343,14 +3386,17 @@ const ScaleRightSide = () => {
                 circle.style.gap = "7px";
 
                 const smallBox1 = document.createElement("div");
-                smallBox1.textContent = updatedPairedLabels[i];
+                smallBox1.className = "small_box"
+                smallBox1.textContent = settings.item_list[i];
                 const smallBox2 = document.createElement("div");
-                smallBox2.textContent = updatedPairedLabels[j];
-
+                smallBox2.className = "small_box"
+                smallBox2.textContent = settings.item_list[j];
                 smallBox1.style.width = "95%";
                 smallBox2.style.width = "95%";
-                smallBox1.style.background = settings.roundcolor;
-                smallBox2.style.background = settings.roundcolor;
+                smallBox1.style.backgroundColor = settings.roundcolor;
+                smallBox1.style.color = settings.fontcolor;
+                smallBox2.style.backgroundColor = settings.roundcolor;
+                smallBox2.style.color = settings.fontcolor;
                 smallBox1.style.height = "50%";
                 smallBox2.style.height = "50%";
                 smallBox1.style.display = "flex";
@@ -3361,6 +3407,49 @@ const ScaleRightSide = () => {
                 smallBox2.style.alignItems = "center";
                 smallBox1.style.fontWeight = "12px";
                 smallBox2.style.fontWeight = "12px";
+
+                function componentToHex(c) {
+                  var hex = c.toString(16);
+                  return hex.length == 1 ? "0" + hex : hex;
+                }
+
+                function rgbToHex(r, g, b) {
+                  return (
+                    "#" + componentToHex(r) + componentToHex(g) + componentToHex(b)
+                  );
+                }
+    
+                function invert(rgb) {
+                  rgb = [].slice
+                    .call(arguments)
+                    .join(",")
+                    .replace(/rgb\(|\)|rgba\(|\)|\s/gi, "")
+                    .split(",");
+                  for (var i = 0; i < rgb.length; i++)
+                    rgb[i] = (i === 3 ? 1 : 255) - rgb[i];
+                  return rgbToHex(rgb[0], rgb[1], rgb[2]);
+                }
+
+                const smallBoxBgColor = smallBox1.style.backgroundColor
+                const smallBoxColor = smallBox1.style.color
+
+                smallBox1.addEventListener("mouseover", () => {
+                  smallBox1.style.backgroundColor = invert(smallBoxBgColor);
+                  smallBox1.style.color = invert(smallBoxColor);
+                });
+                smallBox1.addEventListener("mouseout", () => {
+                  smallBox1.style.backgroundColor = settings.roundcolor;
+                  smallBox1.style.color = settings.fontcolor;
+                });
+
+                smallBox2.addEventListener("mouseover", () => {
+                  smallBox2.style.backgroundColor = invert(smallBoxBgColor);
+                  smallBox2.style.color = invert(smallBoxColor);
+                });
+                smallBox2.addEventListener("mouseout", () => {
+                  smallBox2.style.backgroundColor = settings.roundcolor;
+                  smallBox2.style.color = settings.fontcolor;
+                });
 
                 circle.appendChild(smallBox1);
                 circle.appendChild(smallBox2);
@@ -3375,26 +3464,28 @@ const ScaleRightSide = () => {
             }
           })
           .catch((err) => {
+            if (err) {
+              let message = err.response.data.error;
+              alert(`${message[0].toUpperCase() + message.slice(1)}. All fields are required.`)
+            }
             setIsLoading(false);
             console.log(err);
           });
       } else {
+        formData.delete('item_list');
+        const updatedLabelTexts = [...pairedLabelTexts];
+        for (const updatedLabelText of updatedLabelTexts) {
+          formData.append("item_list", updatedLabelText);
+        }
+        formData.append('scale_id', idHolder.textContent)
+        formData.append('username', 'pfactorial')
+        formData.append('user', 'yes')
         setIsLoading(true);
         console.log("PUT req");
         console.log(idHolder.textContent);
         Axios.put(
           "https://100035.pythonanywhere.com/paired-comparison/paired-comparison-settings",
-          {
-            scale_id: idHolder.textContent,
-            username: "pfactorial",
-            roundcolor: btnUpdateScale.value,
-            scalecolor: btnUpdateScaleColor.value,
-            fontcolor: btnUpdateFontColor.value,
-            fontstyle: btnUpdateScaleFont.value,
-            item_count: numberOfItemsToPair,
-            item_list: itemList,
-            user: "yes",
-          }
+          formData
         )
           .then((res) => {
             if (res.status == 200) {
@@ -3441,14 +3532,18 @@ const ScaleRightSide = () => {
                   circle.style.gap = "7px";
 
                   const smallBox1 = document.createElement("div");
+                  smallBox1.className = "small_box"
                   smallBox1.textContent = settings.item_list[i];
                   const smallBox2 = document.createElement("div");
+                  smallBox2.className = "small_box"
                   smallBox2.textContent = settings.item_list[j];
 
                   smallBox1.style.width = "95%";
                   smallBox2.style.width = "95%";
                   smallBox1.style.background = settings.roundcolor;
+                  smallBox1.style.color = settings.fontcolor;
                   smallBox2.style.background = settings.roundcolor;
+                  smallBox2.style.color = settings.fontcolor;
                   smallBox1.style.height = "50%";
                   smallBox2.style.height = "50%";
                   smallBox1.style.display = "flex";
@@ -3459,6 +3554,49 @@ const ScaleRightSide = () => {
                   smallBox2.style.alignItems = "center";
                   smallBox1.style.fontWeight = "12px";
                   smallBox2.style.fontWeight = "12px";
+
+                  function componentToHex(c) {
+                    var hex = c.toString(16);
+                    return hex.length == 1 ? "0" + hex : hex;
+                  }
+  
+                  function rgbToHex(r, g, b) {
+                    return (
+                      "#" + componentToHex(r) + componentToHex(g) + componentToHex(b)
+                    );
+                  }
+      
+                  function invert(rgb) {
+                    rgb = [].slice
+                      .call(arguments)
+                      .join(",")
+                      .replace(/rgb\(|\)|rgba\(|\)|\s/gi, "")
+                      .split(",");
+                    for (var i = 0; i < rgb.length; i++)
+                      rgb[i] = (i === 3 ? 1 : 255) - rgb[i];
+                    return rgbToHex(rgb[0], rgb[1], rgb[2]);
+                  }
+  
+                  const smallBoxBgColor = smallBox1.style.backgroundColor
+                  const smallBoxColor = smallBox1.style.color
+  
+                  smallBox1.addEventListener("mouseover", () => {
+                    smallBox1.style.backgroundColor = invert(smallBoxBgColor);
+                    smallBox1.style.color = invert(smallBoxColor);
+                  });
+                  smallBox1.addEventListener("mouseout", () => {
+                    smallBox1.style.backgroundColor = settings.roundcolor;
+                    smallBox1.style.color = settings.fontcolor;
+                  });
+  
+                  smallBox2.addEventListener("mouseover", () => {
+                    smallBox2.style.backgroundColor = invert(smallBoxBgColor);
+                    smallBox2.style.color = invert(smallBoxColor);
+                  });
+                  smallBox2.addEventListener("mouseout", () => {
+                    smallBox2.style.backgroundColor = settings.roundcolor;
+                    smallBox2.style.color = settings.fontcolor;
+                  });
 
                   circle.appendChild(smallBox1);
                   circle.appendChild(smallBox2);
@@ -3909,6 +4047,11 @@ const ScaleRightSide = () => {
       timeId.style.display = "none";
     }
   };
+
+  const timecombinedOnChange = (event) => {
+    onTimeChangeComparison(event);
+    handlePairedScaleInputChange(event);
+  }
 
   // const upperVal = Math.min(10, parseInt(document.getElementById('upperVal').value, 10));
   // if (upperVal !==null) {
@@ -6765,7 +6908,7 @@ const ScaleRightSide = () => {
                       className="bg-gray-800"
                       id="orientationIdLinkert"
                     >
-                      <option style={{ color: "black" }}>Chosse..</option>
+                      <option style={{ color: "black" }}>Choose..</option>
                       <option value="Horizontal" style={{ color: "black" }}>
                         Horizontal
                       </option>
@@ -7417,10 +7560,12 @@ const ScaleRightSide = () => {
                         fontSize: "12px",
                         margin: "0 auto",
                       }}
+                      name="orientation"
+                      onChange={handlePairedScaleInputChange}
                       className="bg-gray-800"
                       id="orientationIdComaprison"
                     >
-                      <option style={{ color: "black" }}>Chosse..</option>
+                      <option style={{ color: "black" }}>Choose..</option>
                       <option value="Horizontal" style={{ color: "black" }}>
                         Horizontal
                       </option>
@@ -7462,7 +7607,8 @@ const ScaleRightSide = () => {
                     >
                       <input
                         type="text"
-                        onChange={(e) => setScaleTitle(e.target.value)}
+                        name="scale_name"
+                        onChange={scaleNameCombinedOnChange}
                         defaultValue={scaleT ? scaleT.innerHTML : ""}
                         style={{
                           width: "82px",
@@ -7564,6 +7710,8 @@ const ScaleRightSide = () => {
                             display: "flex",
                             alignItems: "center",
                           }}
+                          name="scalecolor"
+                          onChange={handlePairedScaleInputChange}
                           id="scale_color_Comparison"
                         />
                       </div>
@@ -7598,6 +7746,8 @@ const ScaleRightSide = () => {
                             display: "flex",
                             alignItems: "center",
                           }}
+                          name="roundcolor"
+                          onChange={handlePairedScaleInputChange}
                           id="button_color_Comparison"
                         />
                       </div>
@@ -7641,6 +7791,8 @@ const ScaleRightSide = () => {
                             display: "flex",
                             alignItems: "center",
                           }}
+                          name="fontcolor"
+                          onChange={handlePairedScaleInputChange}
                           id="font_color_comparison"
                         />
                       </div>
@@ -7677,6 +7829,8 @@ const ScaleRightSide = () => {
                             border: "none",
                             alignItems: "center",
                           }}
+                          name="fontstyle"
+                          onChange={handlePairedScaleInputChange}
                           id="font_style_comparison"
                           defaultValue={
                             // !scaleDisplay ? undefined ? scaleDisplay="none" ? undefined : scaleBg
@@ -7720,7 +7874,8 @@ const ScaleRightSide = () => {
                     <input
                       type="text"
                       value={pairedInputValue}
-                      onChange={handlePairedInputChange}
+                      name="item_count"
+                      onChange={itemCountcombinedOnChange}
                       onKeyDown={handlePairedKeyDownPress}
                       placeholder="0"
                       style={{
@@ -7840,6 +7995,8 @@ const ScaleRightSide = () => {
                           outline: "none",
                           alignItems: "center",
                         }}
+                        name="time"
+                        onChange={handlePairedScaleInputChange}
                         id="time_comparison"
                       />
                     </div>
@@ -7876,6 +8033,7 @@ const ScaleRightSide = () => {
                           outline: "none",
                           alignItems: "center",
                         }}
+                        onChange={handlePairedScaleInputChange}
                         id="score"
                       />
                     </div>
