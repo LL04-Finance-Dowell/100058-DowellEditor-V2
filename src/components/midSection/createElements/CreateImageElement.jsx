@@ -21,9 +21,9 @@ function createImageElement(holderDIV, focuseddClassMaintain, handleClicked, set
     if (copy_data && copy_data != "Choose Image") {
         imageField.style.backgroundImage = copy_data;
     } else {
-        span2.className = 'img_text';
-        span2.textContent = "Choose Image";
-        span2.style.color = '#737272';
+        // span2.className = 'img_text';
+        // span2.textContent = "Choose Image";
+        // span2.style.color = '#737272';
         span2.className = 'img_text';
         span2.textContent = "Choose Image";
         span2.style.color = '#737272';

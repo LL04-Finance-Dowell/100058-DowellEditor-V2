@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import copyInput from '../CopyInput';
+import icon from '../../../assets/icons/img.svg'
+
 
 // Regular JavaScript function to create a text input field
 function createImageInputField(id, element, document_map_required, p, holderDIV, focuseddClassMaintain, handleClicked, setSidebar) {
   let isAnyRequiredElementEdited = false;
-  
+
   const imageField = document.createElement("div");
   imageField.className = "imageInput";
   imageField.id = id;
@@ -19,7 +21,7 @@ function createImageInputField(id, element, document_map_required, p, holderDIV,
   // };
   imageField.style.width = "100%";
   imageField.style.height = "100%";
-  imageField.style.backgroundColor = "#0000";
+  imageField.style.backgroundColor = "#e3eeff";
   imageField.style.borderRadius = "0px";
   imageField.style.outline = "0px";
   imageField.style.overflow = "overlay";
@@ -72,6 +74,12 @@ function createImageInputField(id, element, document_map_required, p, holderDIV,
   var uploadedImage = "";
 
   imgBtn.addEventListener("input", () => {
+    if (imageField.children.length) {
+      imageField.removeChild(span1)
+      imageField.removeChild(span2)
+    }
+    imageField.innerText = ''
+
     const reader = new FileReader();
 
     reader.addEventListener("load", () => {
@@ -84,9 +92,28 @@ function createImageInputField(id, element, document_map_required, p, holderDIV,
   // imageField.style.backgroundImage = element.data.startsWith("url(") ? element.data : "";
   // imageField.innerText = element.data;
 
-  element.data.startsWith("url(")
-    ? (imageField.style.backgroundImage = `${element.data}`)
-    : (imageField.innerText = `${element.data}`);
+  const span2 = document.createElement('span');
+  const span1 = document.createElement('span');
+  span2.className = 'img_text';
+  span2.textContent = "Choose Image";
+  span2.style.color = '#737272';
+  span1.className = 'icon_wrapper';
+  span1.innerHTML = `<img src='${icon}'/>`;
+
+
+
+  if (element.data.startsWith("url("))
+    imageField.style.backgroundImage = `${element.data}`
+  else {
+    imageField.append(span1)
+    imageField.append(span2);
+  }
+
+
+
+  // element.data.startsWith("url(")
+  //   ? (imageField.style.backgroundImage = `${element.data}`)
+  //   : (imageField.innerText = `${element.data}`);
 
   const imageButton = createImageButton("Choose File", "addImageButton", () => imgBtn.click());
   imageButton.appendChild(imgBtn);

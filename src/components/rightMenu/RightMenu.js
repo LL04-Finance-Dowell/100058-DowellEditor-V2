@@ -19,6 +19,7 @@ import EmailRightSideBar from "./EmailRightSideBar";
 import CameraRightSide from "./CameraRightSide";
 import { AiOutlineDrag } from "react-icons/ai";
 import PaymentRightSide from "./PaymentRightSide";
+import GenButtonRightSide from "./GenButtonRightSide.jsx";
 
 const RightMenu = () => {
   const {
@@ -515,7 +516,8 @@ const RightMenu = () => {
         {isClicked.email2 && <EmailRightSideBar />}
         {isClicked.newScale2 && <NewScaleRightSide />}
         {isClicked.camera2 && <CameraRightSide />}
-        {isClicked.payment2 && <PaymentRightSide/>}
+        {isClicked.payment2 && <PaymentRightSide />}
+        {isClicked.genBtn2 && <GenButtonRightSide />}
       </div>
     </>
   );

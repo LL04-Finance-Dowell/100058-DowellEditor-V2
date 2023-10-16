@@ -106,13 +106,16 @@ const Header = () => {
     containerBorderColor,
     setContainerBorderColor,
     questionAndAnswerGroupedData,
-    allowHighlight, setAllowHighlight,
-    docMapRequired, setDocMapRequired
+    allowHighlight,
+    setAllowHighlight,
+    docMapRequired,
+    setDocMapRequired,
   } = useStateContext();
 
   const [printContent, setPrintContent] = useState(false);
-  const [rejectionMsg, setRejectionMsg] = useState('');
-  const [isOpenRejectionModal, setIsOpenRejectionModal] = useState(false)
+  const [rejectionMsg, setRejectionMsg] = useState("");
+  const [isOpenRejectionModal, setIsOpenRejectionModal] = useState(false);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
   const handleOptions = () => {
     setIsMenuVisible(!isMenuVisible);
@@ -192,18 +195,28 @@ const Header = () => {
     const midsectionRect = midSec.getBoundingClientRect();
     console.log("midsectionRect position from header", midsectionRect);
 
-
     return {
       top:
         rect.top > 0
           ? Math.abs(midsectionRect.top)
           : rect.top - midsectionRect.top,
-      left: window.innerWidth < 993 ? (((rect.left * 794) / midsectionRect.width) - midsectionRect.left) : rect.left - midsectionRect.left,
+      left:
+        window.innerWidth < 993
+          ? (rect.left * 793.7007874) / midsectionRect.width -
+            midsectionRect.left
+          : rect.left - midsectionRect.left,
       // left:rect.left - midsectionRect.left,
       bottom: rect.bottom,
       right: rect.right,
-      width: window.innerWidth < 993 ? ((rect.width * 794) / midsectionRect.width) : rect.width,
-      height: rect.height,
+      width:
+        window.innerWidth < 993
+          ? (rect.width * 793.7007874) / midsectionRect.width
+          : rect.width,
+      // height: rect.height,
+      height:
+        window.innerWidth < 993
+          ? (rect.width / rect.height) * rect.height
+          : rect.height,
     };
   }
 
@@ -320,7 +333,7 @@ const Header = () => {
             type: "IMAGE_INPUT",
             data: dataName,
             border: `${borderSize}px dotted ${borderColor}`,
-            imgBorder:img[h].parentElement.style.border,
+            imgBorder: img[h].parentElement.style.border,
             id: `i${h + 1}`,
           };
 
@@ -384,7 +397,7 @@ const Header = () => {
             data:
               sign[h].firstElementChild === null
                 ? // decoded.details.action === "document"
-                sign[h].innerHTML
+                  sign[h].innerHTML
                 : sign[h].firstElementChild.src,
             id: `s${h + 1}`,
           };
@@ -416,13 +429,16 @@ const Header = () => {
               for (let j = 0; j < tableChildren[i].children.length; j++) {
                 // const element = tableChildren[i];
 
-                const childNodes = tableChildren[i].children[j]?.childNodes
-                const tdElement = []
-                childNodes.forEach(child => {
-                  if (!child.classList.contains("row-resizer") && !child.classList.contains("td-resizer")) {
+                const childNodes = tableChildren[i].children[j]?.childNodes;
+                const tdElement = [];
+                childNodes.forEach((child) => {
+                  if (
+                    !child.classList.contains("row-resizer") &&
+                    !child.classList.contains("td-resizer")
+                  ) {
                     tdElement.push(child);
                   }
-                })
+                });
                 const TdDivClassName = tdElement[0]?.className.split(" ")[0];
                 const trChild = {
                   td: {
@@ -435,11 +451,12 @@ const Header = () => {
                     data:
                       TdDivClassName == "imageInput"
                         ? tableChildren[i].children[j]?.firstElementChild.style
-                          .backgroundImage
+                            .backgroundImage
                         : tdElement[0]?.innerHTML,
-                    id: TdDivClassName == "imageInput"
-                      ? tableChildren[i].children[j]?.id
-                      : tdElement[0]?.id,
+                    id:
+                      TdDivClassName == "imageInput"
+                        ? tableChildren[i].children[j]?.id
+                        : tdElement[0]?.id,
                   },
                 };
                 newTableTR.push(trChild);
@@ -538,7 +555,7 @@ const Header = () => {
               childData.type = type;
               const imageData =
                 "imageInput" &&
-                  element?.firstElementChild?.style?.backgroundImage
+                element?.firstElementChild?.style?.backgroundImage
                   ? element.firstElementChild.style.backgroundImage
                   : element.firstElementChild?.innerHTML;
               if (type != "TEXT_INPUT") {
@@ -992,16 +1009,12 @@ const Header = () => {
   const finalDocName = decoded?.details?.update_field.document_name;
   const docRight = decoded?.details?.document_right;
 
-
-
-
   const element_updated_length =
     document.getElementsByClassName("element_updated")?.length;
   const document_map_required = docMap?.filter((item) => item.required);
 
   // ? This "if" condition is to prevent code from running, everytime Header.js renders
   // if (!docMapRequired?.length) setDocMapRequired(document_map_required)
-
 
   useEffect(() => {
     if (document_map_required?.length > 0) {
@@ -1485,7 +1498,7 @@ const Header = () => {
       _id: decoded.details._id,
     };
 
-    console.log("This is percent_sum payloaf", requestBody)
+    console.log("This is percent_sum payloaf", requestBody);
     Axios.post(
       "https://100035.pythonanywhere.com/percent-sum/api/percent-sum-response-create/",
       requestBody
@@ -1506,6 +1519,7 @@ const Header = () => {
   function submit(e) {
     e.preventDefault();
     setIsLoading(true);
+    setIsButtonDisabled(true);
     const dataa = saveDocument();
 
     const finalize = document.getElementById("finalize-button");
@@ -1522,8 +1536,7 @@ const Header = () => {
         content: JSON.stringify(dataa),
         page: item,
       };
-    }
-    else if (decoded.details.action === "document") {
+    } else if (decoded.details.action === "document") {
       updateField = {
         document_name: titleName,
         content: JSON.stringify(dataa),
@@ -1569,6 +1582,7 @@ const Header = () => {
         if (res) {
           toast.success("Saved successfully");
           setIsLoading(false);
+          setIsButtonDisabled(false);
           if (finalize) {
             handleFinalize();
           }
@@ -1585,7 +1599,7 @@ const Header = () => {
           } else if (scaleType.textContent === "percent_scale") {
             handleFinalizeButtonPercent();
           } else if (scaleType.textContent === "percent_sum_scale") {
-            handleFinalizeButtonPercentSum()
+            handleFinalizeButtonPercentSum();
           }
         }
           setIsDataSaved(true);
@@ -1593,6 +1607,7 @@ const Header = () => {
       })
       .catch((err) => {
         setIsLoading(false);
+        setIsButtonDisabled(false);
       });
   }
 
@@ -1890,8 +1905,9 @@ const Header = () => {
 
   return (
     <div
-      className={`header ${actionName == "template" ? "header_bg_template" : "header_bg_document"
-        }`}
+      className={`header ${
+        actionName == "template" ? "header_bg_template" : "header_bg_document"
+      }`}
     >
       <Container fluid>
         <Row>
@@ -1901,8 +1917,9 @@ const Header = () => {
               {isMenuVisible && (
                 <div
                   ref={menuRef}
-                  className={`position-absolute bg-white d-flex flex-column p-4 bar-menu menu ${isMenuVisible ? "show" : ""
-                    }`}
+                  className={`position-absolute bg-white d-flex flex-column p-4 bar-menu menu ${
+                    isMenuVisible ? "show" : ""
+                  }`}
                 >
                   <div className="d-flex cursor_pointer" onClick={handleUndo}>
                     <ImUndo />
@@ -1930,14 +1947,13 @@ const Header = () => {
                     className="d-flex cursor_pointer"
                     onClick={() => handlePDFPrint()}
                   >
-                    <p>
-                      <AiFillPrinter /> Print
-                    </p>
+                    <AiFillPrinter />
+                    <p>Print</p>
                   </div>
 
                   {actionName == "template" && (
                     <button
-                      className="page_btn p-0 d-flex"
+                      className="page_btn p-0 d-flex cursor_pointer"
                       onClick={() => createNewPage()}
                     >
                       <MdOutlinePostAdd />
@@ -1946,19 +1962,22 @@ const Header = () => {
                   )}
                   {actionName == "template" && (
                     <button
-                      className="page_btn p-0 d-flex"
+                      className="page_btn p-0 d-flex cursor_pointer"
                       onClick={() => removePage()}
                     >
                       <CgPlayListRemove />
                       <p>Remove Page</p>
                     </button>
                   )}
-                  <button className="page_btn p-0 d-flex" onClick={handleToken}>
+                  <button
+                    className="page_btn p-0 d-flex cursor_pointer"
+                    onClick={handleToken}
+                  >
                     <BiImport />
                     <p>Import</p>
                   </button>
                   <button
-                    className="d-flex page_btn p-0"
+                    className="d-flex page_btn p-0 cursor_pointer"
                     id="saving-button"
                     data-bs-toggle="modal"
                     data-bs-target="#exampleModal"
@@ -2004,6 +2023,7 @@ const Header = () => {
                   style={{
                     visibility: documentFlag && "hidden",
                   }}
+                  disabled={isButtonDisabled}
                 >
                   Save <FaSave color="white" />
                 </Button>
@@ -2054,51 +2074,60 @@ const Header = () => {
                 </div>
               </div>
 
-              {actionName == "document" && docMap && data != "" && docRight !== 'view' && (
-                <>
-                  <div className="mt-2 text-center mb-2 px-2">
-                    <Button
-                      variant="success"
-                      size="md"
-                      className="rounded px-4"
-                      id="finalize-button"
-                      disabled={isFinializeDisabled}
-                      onClick={submit}
-                      style={{
-                        visibility:
-                          documentFlag == "processing" ? "visible" : "hidden",
-                      }}
-                    >
-                      Finalize
-                    </Button>
-                  </div>
+              {actionName == "document" &&
+                docMap &&
+                data != "" &&
+                docRight !== "view" && (
+                  <>
+                    {/* <div className={`mt-2 text-center mb-2 px-2 ${isFinializeDisabled ? disable_pointer_event : enable_pointer_event}`}> */}
+                    <div className={`mt-2 text-center mb-2 px-2`}>
+                      <Button
+                        variant="success"
+                        size="md"
+                        className="rounded px-4"
+                        id="finalize-button"
+                        disabled={isFinializeDisabled}
+                        onClick={submit}
+                        style={{
+                          visibility:
+                            documentFlag == "processing" ? "visible" : "hidden",
+                        }}
+                      >
+                        Finalize
+                      </Button>
+                    </div>
 
-                  <div className="mt-2 text-center mb-2 px-2">
-                    <Button
-                      variant="danger"
-                      size="md"
-                      className="rounded px-4"
-                      id="reject-button"
-                      onClick={
-                        () => setIsOpenRejectionModal(true)
-                      }
-                      style={{
-                        visibility:
-                          documentFlag == "processing" ? "visible" : "hidden",
-                      }}
-                    >
-                      Reject
-                    </Button>
-                  </div>
-                </>
-              )}
+                    <div className="mt-2 text-center mb-2 px-2">
+                      <Button
+                        variant="danger"
+                        size="md"
+                        className="rounded px-4"
+                        id="reject-button"
+                        onClick={() => setIsOpenRejectionModal(true)}
+                        style={{
+                          visibility:
+                            documentFlag == "processing" ? "visible" : "hidden",
+                        }}
+                      >
+                        Reject
+                      </Button>
+                    </div>
+                  </>
+                )}
             </div>
             <ToastContainer size={5} />
           </Col>
         </Row>
       </Container>
 
-      {isOpenRejectionModal && <RejectionModal openModal={setIsOpenRejectionModal} handleReject={handleReject} msg={rejectionMsg} setMsg={setRejectionMsg} />}
+      {isOpenRejectionModal && (
+        <RejectionModal
+          openModal={setIsOpenRejectionModal}
+          handleReject={handleReject}
+          msg={rejectionMsg}
+          setMsg={setRejectionMsg}
+        />
+      )}
     </div>
   );
 };
