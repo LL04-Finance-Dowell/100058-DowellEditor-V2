@@ -1538,7 +1538,7 @@ const Header = () => {
       };
     }
 
-    console.log(updateField.content);
+    console.log('UPDATE FIELD CONTENT: ', updateField.content);
 
     <iframe src="http://localhost:5500/"></iframe>;
 
