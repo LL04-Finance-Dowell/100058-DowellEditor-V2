@@ -191,15 +191,27 @@ const Header = () => {
     const midSec = document.getElementById("midSection_container");
 
     const rect = el.getBoundingClientRect();
-    console.log("rect position from header", rect);
+    // console.log("rect position from header", rect);
     const midsectionRect = midSec.getBoundingClientRect();
-    console.log("midsectionRect position from header", midsectionRect);
+    // console.log("midsectionRect position from header", midsectionRect);
+    const width = window.innerWidth < 993
+      ? (rect.width * 793.7007874) / midsectionRect.width
+      : rect.width
+
+    const height = window.innerWidth < 993 ?
+      (rect.height / rect.width) * width
+      : rect.height;
+
+    const top = window.innerWidth < 993 ?
+      ((rect.top - midsectionRect.top) / rect.width) * width
+      : rect.top - midsectionRect.top;
 
     return {
-      top:
-        rect.top > 0
-          ? Math.abs(midsectionRect.top)
-          : rect.top - midsectionRect.top,
+      // top:
+      //   rect.top > 0
+      //     ? Math.abs(midsectionRect.top)
+      //     : rect.top - midsectionRect.top,
+      top,
       left:
         window.innerWidth < 993
           ? (rect.left * 793.7007874) / midsectionRect.width -
@@ -208,15 +220,12 @@ const Header = () => {
       // left:rect.left - midsectionRect.left,
       bottom: rect.bottom,
       right: rect.right,
-      width:
-        window.innerWidth < 993
-          ? (rect.width * 793.7007874) / midsectionRect.width
-          : rect.width,
-      // height: rect.height,
-      height:
-        window.innerWidth < 993
-          ? (rect.width / rect.height) * rect.height
-          : rect.height,
+      width,
+      height,
+      // height:
+      //   window.innerWidth < 993
+      //     ? (rect.width / rect.height) * rect.height
+      //     : rect.height,
     };
   }
 
@@ -286,7 +295,8 @@ const Header = () => {
             width: tempPosn.width,
             height: tempPosn.height,
             top: tempPosn.top,
-            topp: txt[h].parentElement.style.top,
+            // topp: txt[h].parentElement.style.top,
+            topp: tempPosn.top,
             left: tempPosn.left,
             type: "TEXT_INPUT",
             data: txt[h].innerText,
@@ -328,7 +338,8 @@ const Header = () => {
             width: tempPosn.width,
             height: tempPosn.height,
             top: tempPosn.top,
-            topp: img[h].parentElement.style.top,
+            // topp: img[h].parentElement.style.top,
+            topp: tempPosn.top,
             left: tempPosn.left,
             type: "IMAGE_INPUT",
             data: dataName,
@@ -358,7 +369,8 @@ const Header = () => {
             width: tempPosn.width,
             height: tempPosn.height,
             top: tempPosn.top,
-            topp: date[h].parentElement.style.top,
+            // topp: date[h].parentElement.style.top,
+            topp: tempPosn.top,
             left: tempPosn.left,
             type: "DATE_INPUT",
             border: `${calendarBorderSize} dotted ${calendarBorderColor}`,
@@ -389,7 +401,8 @@ const Header = () => {
             width: tempPosn.width,
             height: tempPosn.height,
             top: tempPosn.top,
-            topp: sign[h].parentElement.style.top,
+            // topp: sign[h].parentElement.style.top,
+            topp: tempPosn.top,
             left: tempPosn.left,
             type: "SIGN_INPUT",
             border: `${signBorderSize} dotted ${signBorderColor}`,
@@ -471,7 +484,8 @@ const Header = () => {
             width: tempPosn.width,
             height: tempPosn.height,
             top: tempPosn.top,
-            topp: tables[t].parentElement.style.top,
+            // topp: tables[t].parentElement.style.top,
+            topp: tempPosn.top,
             left: tempPosn.left,
             type: "TABLE_INPUT",
             data: getChildData(),
@@ -576,7 +590,8 @@ const Header = () => {
             width: tempPosn.width,
             height: tempPosn.height,
             top: tempPosn.top,
-            topp: containerElements[h].parentElement.style.top,
+            // topp: containerElements[h].parentElement.style.top,
+            topp: tempPosn.top,
             left: tempPosn.left,
             type: "CONTAINER_INPUT",
             border: `${containerBorderSize} dotted ${containerBorderColor}`,
@@ -605,7 +620,8 @@ const Header = () => {
             width: tempPosn.width,
             height: tempPosn.height,
             top: tempPosn.top,
-            topp: iframes[i].parentElement.style.top,
+            // topp: iframes[i].parentElement.style.top,
+            topp: tempPosn.top,
             left: tempPosn.left,
             type: "IFRAME_INPUT",
             border: `${iframeBorderSize} dotted ${iframeBorderColor}`,
@@ -637,7 +653,8 @@ const Header = () => {
             width: tempPosn.width,
             height: tempPosn.height,
             top: tempPosn.top,
-            topp: scales[s].parentElement.style.top,
+            // topp: scales[s].parentElement.style.top,
+            topp: tempPosn.top,
             left: tempPosn.left,
             type: "SCALE_INPUT",
             border: `${scaleBorderSize} dotted ${scaleBorderColor}`,
@@ -799,7 +816,8 @@ const Header = () => {
             width: tempPosn.width,
             height: tempPosn.height,
             top: tempPosn.top,
-            topp: newScales[b].parentElement.style.top,
+            // topp: newScales[b].parentElement.style.top,
+            topp: tempPosn.top,
             left: tempPosn.left,
             type: "NEW_SCALE_INPUT",
             data: `${title}_scale_${b + 1}`,
@@ -845,7 +863,8 @@ const Header = () => {
             width: tempPosn.width,
             height: tempPosn.height,
             top: tempPosn.top,
-            topp: imageCanva[b].parentElement.style.top,
+            // topp: imageCanva[b].parentElement.style.top,
+            topp: tempPosn.top,
             left: tempPosn.left,
             type: "CAMERA_INPUT",
             raw_data: properties,
@@ -874,7 +893,8 @@ const Header = () => {
             width: tempPosn.width,
             height: tempPosn.height,
             top: tempPosn.top,
-            topp: buttons[b].parentElement.style.top,
+            // topp: buttons[b].parentElement.style.top,
+            topp: tempPosn.top,
             left: tempPosn.left,
             type: "BUTTON_INPUT",
             buttonBorder: `${buttonBorderSize}px dotted ${buttonBorderColor}`,
@@ -905,7 +925,8 @@ const Header = () => {
             width: tempPosn.width,
             height: tempPosn.height,
             top: tempPosn.top,
-            topp: payments[p].parentElement.style.top,
+            // topp: payments[p].parentElement.style.top,
+            topp: tempPosn.top,
             left: tempPosn.left,
             type: "PAYMENT_INPUT",
             buttonBorder: `${buttonBorderSize}px dotted ${buttonBorderColor}`,
@@ -942,7 +963,8 @@ const Header = () => {
             width: tempPosn.width,
             height: tempPosn.height,
             top: tempPosn.top,
-            topp: dropDowns[d].parentElement.style.top,
+            // topp: dropDowns[d].parentElement.style.top,
+            topp: tempPosn.top,
             left: tempPosn.left,
             type: "DROPDOWN_INPUT",
             border: `${dropdownBorderSize} dotted ${dropdownBorderColor}`,
@@ -970,7 +992,8 @@ const Header = () => {
             width: tempPosn.width,
             height: tempPosn.height,
             top: tempPosn.top,
-            topp: emails[e].parentElement.style.top,
+            // topp: emails[e].parentElement.style.top,
+            topp: tempPosn.top,
             left: tempPosn.left,
             type: "FORM",
             data: emails[e].textContent,
