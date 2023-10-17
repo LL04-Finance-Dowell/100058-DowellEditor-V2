@@ -203,7 +203,7 @@ const Header = () => {
       left:
         window.innerWidth < 993
           ? (rect.left * 793.7007874) / midsectionRect.width -
-            midsectionRect.left
+          midsectionRect.left
           : rect.left - midsectionRect.left,
       // left:rect.left - midsectionRect.left,
       bottom: rect.bottom,
@@ -397,7 +397,7 @@ const Header = () => {
             data:
               sign[h].firstElementChild === null
                 ? // decoded.details.action === "document"
-                  sign[h].innerHTML
+                sign[h].innerHTML
                 : sign[h].firstElementChild.src,
             id: `s${h + 1}`,
           };
@@ -451,7 +451,7 @@ const Header = () => {
                     data:
                       TdDivClassName == "imageInput"
                         ? tableChildren[i].children[j]?.firstElementChild.style
-                            .backgroundImage
+                          .backgroundImage
                         : tdElement[0]?.innerHTML,
                     id:
                       TdDivClassName == "imageInput"
@@ -555,7 +555,7 @@ const Header = () => {
               childData.type = type;
               const imageData =
                 "imageInput" &&
-                element?.firstElementChild?.style?.backgroundImage
+                  element?.firstElementChild?.style?.backgroundImage
                   ? element.firstElementChild.style.backgroundImage
                   : element.firstElementChild?.innerHTML;
               if (type != "TEXT_INPUT") {
@@ -1586,22 +1586,22 @@ const Header = () => {
           if (finalize) {
             handleFinalize();
           }
-          if(decoded.details.action === "document") {
-          let scaleType = document.querySelector(".scaleTypeHolder");
-          if (scaleType.textContent === "nps") {
-            handleFinalizeButton();
-          } else if (scaleType.textContent === "snipte") {
-            handleFinalizeButtonStapel();
-          } else if (scaleType.textContent === "nps_lite") {
-            handleFinalizeButtonNpsLite();
-          } else if (scaleType.textContent === "likert") {
-            handleFinalizeButtonLikert();
-          } else if (scaleType.textContent === "percent_scale") {
-            handleFinalizeButtonPercent();
-          } else if (scaleType.textContent === "percent_sum_scale") {
-            handleFinalizeButtonPercentSum();
+          if (decoded.details.action === "document") {
+            let scaleType = document.querySelector(".scaleTypeHolder");
+            if (scaleType.textContent === "nps") {
+              handleFinalizeButton();
+            } else if (scaleType.textContent === "snipte") {
+              handleFinalizeButtonStapel();
+            } else if (scaleType.textContent === "nps_lite") {
+              handleFinalizeButtonNpsLite();
+            } else if (scaleType.textContent === "likert") {
+              handleFinalizeButtonLikert();
+            } else if (scaleType.textContent === "percent_scale") {
+              handleFinalizeButtonPercent();
+            } else if (scaleType.textContent === "percent_sum_scale") {
+              handleFinalizeButtonPercentSum();
+            }
           }
-        }
           setIsDataSaved(true);
         }
       })
@@ -1905,9 +1905,8 @@ const Header = () => {
 
   return (
     <div
-      className={`header ${
-        actionName == "template" ? "header_bg_template" : "header_bg_document"
-      }`}
+      className={`header ${actionName == "template" ? "header_bg_template" : "header_bg_document"
+        }`}
     >
       <Container fluid>
         <Row>
@@ -1917,9 +1916,8 @@ const Header = () => {
               {isMenuVisible && (
                 <div
                   ref={menuRef}
-                  className={`position-absolute bg-white d-flex flex-column p-4 bar-menu menu ${
-                    isMenuVisible ? "show" : ""
-                  }`}
+                  className={`position-absolute bg-white d-flex flex-column p-4 bar-menu menu ${isMenuVisible ? "show" : ""
+                    }`}
                 >
                   <div className="d-flex cursor_pointer" onClick={handleUndo}>
                     <ImUndo />
