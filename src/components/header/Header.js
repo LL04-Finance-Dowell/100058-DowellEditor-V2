@@ -683,6 +683,7 @@ const Header = () => {
           let smallBox = newScales[b].querySelector(".small_box");
           let leftLableStapel = newScales[b].querySelector(".leftToolTip");
           let rightLableStapel = newScales[b].querySelector(".rightTooltip");
+          let stapelEmojiObj = newScales[b].querySelector(".stapelEmojiObj");
           // let stapelScaleField = newScales[b].querySelector(".newScaleInput");
           console.log(font);
 
@@ -694,6 +695,7 @@ const Header = () => {
           if (buttonText.length !== 0) {
             for (let i = 0; i < buttonText.length; i++) {
               emojiArr.push(buttonText[i].textContent);
+              console.log(buttonText[i].textContent)
             }
           }
 
@@ -798,7 +800,8 @@ const Header = () => {
             orentation: orentation?.textContent,
             stapelOrientation: stapelOrientation?.textContent,
             otherComponent: otherComponent ? otherComponent.textContent : "",
-            smallBoxBgColor: smallBox?.style?.backgroundColor
+            smallBoxBgColor: smallBox?.style?.backgroundColor,
+            stapelEmojiObj: stapelEmojiObj?.textContent
           };
           // console.log(properties);
           elem = {

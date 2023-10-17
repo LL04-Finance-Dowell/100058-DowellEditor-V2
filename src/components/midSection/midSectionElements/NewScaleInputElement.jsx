@@ -330,6 +330,17 @@ function createNewScaleInputField(
       circle.style.margin = "0 2px 2px 0";
       circle.style.backgroundColor = element?.raw_data?.buttonColor;
 
+      if (selectedOption === "emoji") {
+        const buttonText = element.raw_data.buttonText;
+        let emojiArr = (buttonText[i % buttonText.length].split(" ")[0]).split("")
+        if(i === 0 || i === stapelScale.length - 1) {
+          circle.textContent = emojiArr[0]+emojiArr[1];
+        }else {
+          circle.textContent = (buttonText[i % buttonText.length]);
+        }
+        circle.style.fontSize = "1.4vw";
+      }
+      
       if(i === 0) {
         var left = document.createElement('span')
         left.className = "leftToolTip"
@@ -398,10 +409,6 @@ function createNewScaleInputField(
         scaleField.style.flexDirection = "column"
         scaleField.style.alignItems = "center"
         scaleField.style.justifyContent = "center"
-      }
-      if (selectedOption === "emoji") {
-        const buttonText = element.raw_data.buttonText;
-        circle.textContent = buttonText[i % buttonText.length];
       }
 
       if (!token) {

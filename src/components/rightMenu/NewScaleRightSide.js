@@ -1502,7 +1502,7 @@ const ScaleRightSide = () => {
                 // Set the text content of the div to the corresponding emoji
                 circle.textContent =
                   res.data.data.settings.custom_emoji_format[scaleArr[i]];
-                circle.style.fontSize = "1.8vw";
+                  circle.style.fontSize = "1.8vw";
               } else {
                 // Set the text content of the div to the number
                 circle.textContent = scaleArr[i];
@@ -1588,7 +1588,6 @@ const ScaleRightSide = () => {
               scaleField.style.alignItems = "center"
               scaleField.style.justifyContent = "center"
             }
-            console.log("This is stapel", stapelScaleArray);
           })
           .catch((err) => {
             setIsLoading(false);
@@ -1711,8 +1710,6 @@ const ScaleRightSide = () => {
             scaleField.style.color = res.data.data.settings.fontcolor;
             scaleField.style.fontFamily = res.data.data.settings.fontstyle;
             scaleText.textContent = res.data.data.settings.name;
-            //buttonChildRight.textContent = res.data.data.settings.right;
-            //button4.style.fontFamily = res.data.data.settings.fontstyle;
             optionHolder.textContent = res.data.data.settings.fomat;
             scaleField.appendChild(optionHolder);
             stapelScaleArray.textContent = res.data.data.settings.scale;
