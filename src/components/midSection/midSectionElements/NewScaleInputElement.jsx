@@ -404,9 +404,9 @@ function createNewScaleInputField(
 
       if (selectedOption === "emoji") {
         const buttonText = element.raw_data.buttonText;
-        let emojiArr = (buttonText[i % buttonText.length].split(" ")[0]).split("")
+        let emojiArr = ((buttonText[i % buttonText.length].split(" "))[0]).split("")
         if(i === 0 || i === stapelScale.length - 1) {
-          circle.textContent = emojiArr[0]+emojiArr[1];
+          circle.textContent = `${emojiArr[0]+emojiArr[1]}`;
         }else {
           circle.textContent = (buttonText[i % buttonText.length]);
         }
@@ -485,10 +485,10 @@ function createNewScaleInputField(
         scaleField.style.alignItems = "center"
         scaleField.style.justifyContent = "center"
       }
-      if (selectedOption === "emoji") {
-        const buttonText = element.raw_data.buttonText;
-        circle.textContent = buttonText[i % buttonText.length];
-      }
+      // if (selectedOption === "emoji") {
+      //   const buttonText = element.raw_data.buttonText;
+      //   circle.textContent = buttonText[i % buttonText.length];
+      // }
 
       if (!token) {
         return res.status(401).json({ error: "Unauthorized" });
