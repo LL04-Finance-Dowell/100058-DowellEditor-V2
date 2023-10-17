@@ -4,9 +4,9 @@ export const finding_percent = (element, arg) => {
     if (window.innerWidth < 993) {
 
       if (arg == "width") {
-        return (element.width / 794) * 100 + "%"
+        return (element.width / 793.7007874) * 100 + "%"
       } else {
-        return (element.left / 794) * 100 + "%"
+        return (element.left / 793.7007874) * 100 + "%"
       }
     }
     else {

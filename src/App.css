@@ -129,6 +129,8 @@ td {
 }
 .row_col_add_div {
   border: none;
+  z-index: 10;
+  position: relative;
 }
 
 tr:nth-child(even) {
@@ -210,7 +212,7 @@ tr:nth-child(even) {
   pointer-events: none;
 }
 
-.text_eabled_pointer_event{
+.text_eabled_pointer_event {
   pointer-events: auto !important;
 }
 .modal-body {
@@ -297,6 +299,22 @@ tr:nth-child(even) {
   justify-content: center;
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 1100;
+}
+
+div.iframeInput>iframe{
+  position: relative;
+  z-index: -1;
+}
+@media screen and (max-width: 480px) {
+  ::-webkit-scrollbar {
+    height: 5px;
+    width: 10px;
+  }
+
+  ::-webkit-scrollbar-thumb:horizontal {
+    border-radius: 5px;
+    background-color: rgb(21, 19, 19);
+  }
 }
 
 div.iframeInput>iframe{
