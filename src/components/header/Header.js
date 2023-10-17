@@ -191,27 +191,15 @@ const Header = () => {
     const midSec = document.getElementById("midSection_container");
 
     const rect = el.getBoundingClientRect();
-    // console.log("rect position from header", rect);
+    console.log("rect position from header", rect);
     const midsectionRect = midSec.getBoundingClientRect();
-    // console.log("midsectionRect position from header", midsectionRect);
-    const width = window.innerWidth < 993
-      ? (rect.width * 793.7007874) / midsectionRect.width
-      : rect.width
-
-    const height = window.innerWidth < 993 ?
-      (rect.height / rect.width) * width
-      : rect.height;
-
-    const top = window.innerWidth < 993 ?
-      ((rect.top - midsectionRect.top) / rect.width) * width
-      : rect.top - midsectionRect.top;
+    console.log("midsectionRect position from header", midsectionRect);
 
     return {
-      // top:
-      //   rect.top > 0
-      //     ? Math.abs(midsectionRect.top)
-      //     : rect.top - midsectionRect.top,
-      top,
+      top:
+        rect.top > 0
+          ? Math.abs(midsectionRect.top)
+          : rect.top - midsectionRect.top,
       left:
         window.innerWidth < 993
           ? (rect.left * 793.7007874) / midsectionRect.width -
@@ -220,12 +208,15 @@ const Header = () => {
       // left:rect.left - midsectionRect.left,
       bottom: rect.bottom,
       right: rect.right,
-      width,
-      height,
-      // height:
-      //   window.innerWidth < 993
-      //     ? (rect.width / rect.height) * rect.height
-      //     : rect.height,
+      width:
+        window.innerWidth < 993
+          ? (rect.width * 793.7007874) / midsectionRect.width
+          : rect.width,
+      // height: rect.height,
+      height:
+        window.innerWidth < 993
+          ? (rect.width / rect.height) * rect.height
+          : rect.height,
     };
   }
 
@@ -295,8 +286,7 @@ const Header = () => {
             width: tempPosn.width,
             height: tempPosn.height,
             top: tempPosn.top,
-            // topp: txt[h].parentElement.style.top,
-            topp: tempPosn.top,
+            topp: txt[h].parentElement.style.top,
             left: tempPosn.left,
             type: "TEXT_INPUT",
             data: txt[h].innerText,
@@ -338,8 +328,7 @@ const Header = () => {
             width: tempPosn.width,
             height: tempPosn.height,
             top: tempPosn.top,
-            // topp: img[h].parentElement.style.top,
-            topp: tempPosn.top,
+            topp: img[h].parentElement.style.top,
             left: tempPosn.left,
             type: "IMAGE_INPUT",
             data: dataName,
@@ -369,8 +358,7 @@ const Header = () => {
             width: tempPosn.width,
             height: tempPosn.height,
             top: tempPosn.top,
-            // topp: date[h].parentElement.style.top,
-            topp: tempPosn.top,
+            topp: date[h].parentElement.style.top,
             left: tempPosn.left,
             type: "DATE_INPUT",
             border: `${calendarBorderSize} dotted ${calendarBorderColor}`,
@@ -401,8 +389,7 @@ const Header = () => {
             width: tempPosn.width,
             height: tempPosn.height,
             top: tempPosn.top,
-            // topp: sign[h].parentElement.style.top,
-            topp: tempPosn.top,
+            topp: sign[h].parentElement.style.top,
             left: tempPosn.left,
             type: "SIGN_INPUT",
             border: `${signBorderSize} dotted ${signBorderColor}`,
@@ -484,8 +471,7 @@ const Header = () => {
             width: tempPosn.width,
             height: tempPosn.height,
             top: tempPosn.top,
-            // topp: tables[t].parentElement.style.top,
-            topp: tempPosn.top,
+            topp: tables[t].parentElement.style.top,
             left: tempPosn.left,
             type: "TABLE_INPUT",
             data: getChildData(),
@@ -590,8 +576,7 @@ const Header = () => {
             width: tempPosn.width,
             height: tempPosn.height,
             top: tempPosn.top,
-            // topp: containerElements[h].parentElement.style.top,
-            topp: tempPosn.top,
+            topp: containerElements[h].parentElement.style.top,
             left: tempPosn.left,
             type: "CONTAINER_INPUT",
             border: `${containerBorderSize} dotted ${containerBorderColor}`,
@@ -620,8 +605,7 @@ const Header = () => {
             width: tempPosn.width,
             height: tempPosn.height,
             top: tempPosn.top,
-            // topp: iframes[i].parentElement.style.top,
-            topp: tempPosn.top,
+            topp: iframes[i].parentElement.style.top,
             left: tempPosn.left,
             type: "IFRAME_INPUT",
             border: `${iframeBorderSize} dotted ${iframeBorderColor}`,
@@ -653,8 +637,7 @@ const Header = () => {
             width: tempPosn.width,
             height: tempPosn.height,
             top: tempPosn.top,
-            // topp: scales[s].parentElement.style.top,
-            topp: tempPosn.top,
+            topp: scales[s].parentElement.style.top,
             left: tempPosn.left,
             type: "SCALE_INPUT",
             border: `${scaleBorderSize} dotted ${scaleBorderColor}`,
@@ -697,6 +680,10 @@ const Header = () => {
           let scaleID = newScales[b].querySelector(".scaleId");
           let orentation = newScales[b].querySelector(".nps_vertical");
           let otherComponent = newScales[b].querySelector(".otherComponent");
+          let smallBox = newScales[b].querySelector(".small_box");
+          let leftLableStapel = newScales[b].querySelector(".leftToolTip");
+          let rightLableStapel = newScales[b].querySelector(".rightTooltip");
+          // let stapelScaleField = newScales[b].querySelector(".newScaleInput");
           console.log(font);
 
           let buttonText = newScales[b].querySelectorAll(".circle_label");
@@ -744,7 +731,7 @@ const Header = () => {
           let pairedScaleArray = "";
 
           if (scaleType.textContent === "comparison_paired_scale") {
-            likertScaleArray = newScales[b].querySelector(
+            pairedScaleArray = newScales[b].querySelector(
               ".paired_Scale_Array"
             );
             orientation = newScales[b].querySelector(".orientation");
@@ -784,12 +771,12 @@ const Header = () => {
             orientation = newScales[b].querySelector(".orientation");
           }
           let properties = {
-            scaleBgColor: scaleBg.style.backgroundColor,
-            fontColor: font.style.color,
-            fontFamily: font.style.fontFamily,
-            left: leftChild.textContent,
-            center: neutralChild.textContent,
-            right: rightChild.textContent,
+            scaleBgColor: scaleBg ? scaleBg.style.backgroundColor : newScales[0].style.backgroundColor,
+            fontColor: font ? font.style.color : newScales[0].style.color,
+            fontFamily: font ? font.style.fontFamily : newScales[0].style.fontFamily,
+            left: leftChild ? leftChild.textContent : leftLableStapel.textContent,
+            center: neutralChild ? neutralChild.textContent : "",
+            right: rightChild ? rightChild.textContent : rightLableStapel.textContent,
             buttonColor: circles?.style?.backgroundColor,
             scaleID: scaleID.textContent,
             scaleText: scaleText.textContent,
@@ -799,6 +786,7 @@ const Header = () => {
             stapelScaleArray: stapelScaleArray.textContent,
             npsLiteTextArray: npsLiteTextArray.textContent,
             likertScaleArray: likertScaleArray.textContent,
+            pairedScaleArray: pairedScaleArray.textContent,
             percentProdName: prodName,
             percentBackground: percentBackground?.style?.background,
             percentLabel: percentLabel?.length,
@@ -809,15 +797,15 @@ const Header = () => {
             orientation: orientation?.textContent,
             orentation: orentation?.textContent,
             stapelOrientation: stapelOrientation?.textContent,
-            otherComponent: otherComponent.textContent,
+            otherComponent: otherComponent ? otherComponent.textContent : "",
+            smallBoxBgColor: smallBox?.style?.backgroundColor
           };
           // console.log(properties);
           elem = {
             width: tempPosn.width,
             height: tempPosn.height,
             top: tempPosn.top,
-            // topp: newScales[b].parentElement.style.top,
-            topp: tempPosn.top,
+            topp: newScales[b].parentElement.style.top,
             left: tempPosn.left,
             type: "NEW_SCALE_INPUT",
             data: `${title}_scale_${b + 1}`,
@@ -863,8 +851,7 @@ const Header = () => {
             width: tempPosn.width,
             height: tempPosn.height,
             top: tempPosn.top,
-            // topp: imageCanva[b].parentElement.style.top,
-            topp: tempPosn.top,
+            topp: imageCanva[b].parentElement.style.top,
             left: tempPosn.left,
             type: "CAMERA_INPUT",
             raw_data: properties,
@@ -893,8 +880,7 @@ const Header = () => {
             width: tempPosn.width,
             height: tempPosn.height,
             top: tempPosn.top,
-            // topp: buttons[b].parentElement.style.top,
-            topp: tempPosn.top,
+            topp: buttons[b].parentElement.style.top,
             left: tempPosn.left,
             type: "BUTTON_INPUT",
             buttonBorder: `${buttonBorderSize}px dotted ${buttonBorderColor}`,
@@ -925,8 +911,7 @@ const Header = () => {
             width: tempPosn.width,
             height: tempPosn.height,
             top: tempPosn.top,
-            // topp: payments[p].parentElement.style.top,
-            topp: tempPosn.top,
+            topp: payments[p].parentElement.style.top,
             left: tempPosn.left,
             type: "PAYMENT_INPUT",
             buttonBorder: `${buttonBorderSize}px dotted ${buttonBorderColor}`,
@@ -963,8 +948,7 @@ const Header = () => {
             width: tempPosn.width,
             height: tempPosn.height,
             top: tempPosn.top,
-            // topp: dropDowns[d].parentElement.style.top,
-            topp: tempPosn.top,
+            topp: dropDowns[d].parentElement.style.top,
             left: tempPosn.left,
             type: "DROPDOWN_INPUT",
             border: `${dropdownBorderSize} dotted ${dropdownBorderColor}`,
@@ -992,8 +976,7 @@ const Header = () => {
             width: tempPosn.width,
             height: tempPosn.height,
             top: tempPosn.top,
-            // topp: emails[e].parentElement.style.top,
-            topp: tempPosn.top,
+            topp: emails[e].parentElement.style.top,
             left: tempPosn.left,
             type: "FORM",
             data: emails[e].textContent,
@@ -1561,7 +1544,7 @@ const Header = () => {
       };
     }
 
-    console.log('UPDATE FIELD CONTENT: ', updateField.content);
+    console.log(updateField.content);
 
     <iframe src="http://localhost:5500/"></iframe>;
 
