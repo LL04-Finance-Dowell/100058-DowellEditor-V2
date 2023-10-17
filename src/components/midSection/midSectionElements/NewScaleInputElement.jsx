@@ -647,7 +647,12 @@ function createNewScaleInputField(
         circle.textContent = i;
       }
 
+      scaleHold.style.height = "100%";
+      labelHold.style.border = "";
+      labelHold.style.height = "100%";
+
       labelHold.appendChild(circle);
+      scaleText.style.display = "none";
 
       if (!token) {
         return res.status(401).json({ error: "Unauthorized" });
@@ -661,19 +666,21 @@ function createNewScaleInputField(
         orientation.style.display = "none";
         labelHold.appendChild(orientation);
 
-        circle.style.margin = "15px 0";
+        circle.style.margin = "10px 0";
         circle.style.padding = "10px 30px";
 
         scaleHold.style.border = "none";
+        scaleHold.style.display = "flex";
+        scaleHold.style.alignItems = "center";
+        scaleHold.style.justifyContent = "center";
         scaleHold.style.textAlign = "center";
-        labelHold.style.height = "auto";
+        labelHold.style.height = "100%";
         labelHold.style.width = "50%";
         labelHold.style.position = "absolute";
         labelHold.style.display = "flex";
         labelHold.style.flexDirection = "column";
         labelHold.style.alignItems = "center";
         labelHold.style.marginTop = "0";
-        labelHold.style.marginLeft = "26%";
       }
 
       if (decoded.details.action === "document") {
