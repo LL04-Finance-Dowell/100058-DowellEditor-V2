@@ -1988,8 +1988,8 @@ const ScaleRightSide = () => {
 
       if (option.value === "Horizontal") {
         button4.style.border = "block";
+        button4.style.display = "block";
         button4.style.textAlign = "center";
-        button.style.marginTop = "10px";
         button.style.alignItems = "center";
         button.style.height = "85%";
         button.style.width = "100%";
@@ -2001,6 +2001,10 @@ const ScaleRightSide = () => {
       }
 
       if (option.value === "Vertical") {
+        button4.style.display = "flex";
+        button4.style.alignItems = "center";
+        button4.style.justifyContent = "center";
+        
         button4.style.border = "none";
         button4.style.textAlign = "center";
         button.style.height = "auto";
@@ -2010,7 +2014,6 @@ const ScaleRightSide = () => {
         button.style.flexDirection = "column";
         button.style.alignItems = "center";
         button.style.marginTop = "0";
-        button.style.marginLeft = "26%";
       }
 
       if (
@@ -2053,8 +2056,10 @@ const ScaleRightSide = () => {
             }
             // console.log(res);
 
-            button4.style.display = "block";
+            button4.style.height = "100%";
             labelHold.innerHTML = "";
+            labelHold.style.border = "";
+            labelHold.style.height = "100%";
             const {
               fomat,
               left,
@@ -2091,7 +2096,7 @@ const ScaleRightSide = () => {
               circle.style.backgroundColor = scalecolor;
 
               if (option.value === "Vertical") {
-                circle.style.margin = "15px 0";
+                circle.style.margin = "10px 0";
                 circle.style.padding = "10px 30px";
               }
 
@@ -2106,6 +2111,7 @@ const ScaleRightSide = () => {
             }
 
             scaleText.textContent = name;
+            scaleText.style.display = "none";
             button4.style.color = fontcolor;
             button4.style.fontFamily = fontstyle;
           })
@@ -2148,8 +2154,10 @@ const ScaleRightSide = () => {
               // console.log(res);
               // console.log("This is the still scale", scale);
 
-              button4.style.display = "block";
+              button4.style.height = "100%";
               labelHold.innerHTML = "";
+              labelHold.style.border = "";
+              labelHold.style.height = "100%";
               const {
                 fomat,
                 left,
@@ -2186,7 +2194,7 @@ const ScaleRightSide = () => {
                 circle.style.backgroundColor = scalecolor;
 
                 if (option.value === "Vertical") {
-                  circle.style.margin = "15px 0";
+                  circle.style.margin = "10px 0";
                   circle.style.padding = "10px 30px";
                 }
 
@@ -2201,6 +2209,7 @@ const ScaleRightSide = () => {
               }
 
               scaleText.textContent = name;
+              scaleText.style.display = "none";
               button4.style.color = fontcolor;
               button4.style.fontFamily = fontstyle;
             }
