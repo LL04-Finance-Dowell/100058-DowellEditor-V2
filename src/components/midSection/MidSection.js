@@ -1917,6 +1917,7 @@ const MidSection = React.forwardRef((props, ref) => {
     for (let p = 1; p <= item?.length; p++) {
       pageNo++;
       fetchedData[p]?.forEach((element) => {
+      
         if (element.type === "TEXT_INPUT") {
           const measure = {
             width: finding_percent(element, "width"),
@@ -2327,6 +2328,7 @@ const MidSection = React.forwardRef((props, ref) => {
       // cluster: decoded.details.cluster,
       // document: decoded.details.document,
       // update_field: updateField,
+      
       document_id: decoded.details._id,
       action: decoded.details.action,
       database: decoded.details.database,
@@ -2346,6 +2348,8 @@ const MidSection = React.forwardRef((props, ref) => {
       toast.error("Something went wrong while fetching data!")
       return;
     }
+
+    console.log("action: ", response.data);
 
     // console.log(JSON.parse(response.data))
     // console.log("social media data..", response.data)
@@ -2387,7 +2391,7 @@ const MidSection = React.forwardRef((props, ref) => {
     let titleField = document.createElement("div");
 
     titleField.contentEditable = true;
-    titleField.className = "socialInnerText";
+    titleField.className = "textInput";
     titleField.innerText = title;
     titleField.style.border = "none";
     titleField.style.outline = "none";
@@ -2429,7 +2433,7 @@ const MidSection = React.forwardRef((props, ref) => {
 
     let descriptionField = document.createElement("div");
     descriptionField.contentEditable = true;
-    descriptionField.className = "socialDescriptionText";
+    descriptionField.className = "textInput";
     descriptionField.innerText = paragraph;
     descriptionField.style.border = "none";
     descriptionField.style.outline = "none";
@@ -2645,6 +2649,8 @@ const MidSection = React.forwardRef((props, ref) => {
         ) {
 
           createTextElement(holderDIV, focuseddClassMaintain, handleClicked, setSidebar, getOffset)
+          onParagraphPost();
+
         } else if (
           typeOfOperation === "IMAGE_INPUT" &&
           decoded.details.action === "template"

@@ -255,6 +255,7 @@ const Header = () => {
     }
   }
 
+
   let elem = {};
   function saveDocument() {
     const txt = document.getElementsByClassName("textInput");
@@ -969,6 +970,8 @@ const Header = () => {
 
     return contentFile;
   }
+
+  
 
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token");
