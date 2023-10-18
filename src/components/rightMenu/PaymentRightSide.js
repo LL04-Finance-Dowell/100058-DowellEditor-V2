@@ -52,7 +52,6 @@ const PaymentRightSide = () => {
     const purpose = holderDIV?.children[2]?.innerHTML;
     const link = holderDIV?.children[1]?.innerHTML;
 
-    const [isJustEntered, setIsJustEntered] = useState(true);
 
 
     // useEffect(() => {
@@ -538,16 +537,21 @@ const PaymentRightSide = () => {
         }
     }
 
-    // *This is to preserve default btn select value
     useEffect(() => {
-        setIsJustEntered(false);
-        setGenSelOpt('');
+        const stripeKey = holderDIV.querySelector('.stripe_key').textContent
+        const paypalId = holderDIV.querySelector('.paypal_id').textContent
+        const idWrapper = document.getElementById('link2')
+        const stripeWrapper = document.getElementById('link');
+
+        idWrapper.value = paypalId
+        stripeWrapper.value = stripeKey
+
     }, [])
 
     return (
         <>
             <div className="mt-2 mb-3 w-100">
-                <select className='gen_btn_sel' defaultValue={isJustEntered ? 'pay' : genSelOpt} onChange={e => setGenSelOpt(e.target.value)} style={{ marginBottom: '10px' }}>
+                <select className='gen_btn_sel' defaultValue='pay' onChange={e => setGenSelOpt(e.target.value)} style={{ marginBottom: '10px' }}>
                     <option value="" disabled>Select type</option>
                     <option value="cta">CTA</option>
                     <option value="pay">Pay</option>
@@ -577,7 +581,7 @@ const PaymentRightSide = () => {
                             <Form.Control
                                 required
                                 type="text"
-                                placeholder="Paypal Client Id"
+                                placeholder="Stripe Key"
                                 // id="button_name"
                                 id="link"
                                 // value={stripeKey}
