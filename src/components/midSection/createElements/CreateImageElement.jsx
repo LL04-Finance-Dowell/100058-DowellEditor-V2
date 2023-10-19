@@ -4,6 +4,8 @@ import icon from '../../../assets/icons/img.svg'
 
 // Regular JavaScript function to create a text input field
 function createImageElement(holderDIV, focuseddClassMaintain, handleClicked, setSidebar) {
+    var uploadedImage = "";
+
     let imageField = document.createElement("div");
     imageField.className = "imageInput";
     imageField.id = "inputImg";
@@ -16,6 +18,7 @@ function createImageElement(holderDIV, focuseddClassMaintain, handleClicked, set
     imageField.style.overflow = "overlay";
     // imageField.innerHTML = `<img src="${postData.imageField.value}" alt="">`;
     imageField.style.position = "relative";
+
 
     const span2 = document.createElement('span');
     span2.className = 'img_text';
@@ -41,6 +44,8 @@ function createImageElement(holderDIV, focuseddClassMaintain, handleClicked, set
         // console.log("imgData clicked");
     });
 
+
+
     imageField.onclick = (e) => {
         e.stopPropagation();
         focuseddClassMaintain(e);
@@ -64,7 +69,7 @@ function createImageElement(holderDIV, focuseddClassMaintain, handleClicked, set
     imgBtn.className = "addImageButtonInput";
     imgBtn.type = "file";
     imgBtn.style.objectFit = "cover";
-    var uploadedImage = "";
+
 
     imgBtn.addEventListener("input", () => {
         const reader = new FileReader();
@@ -76,7 +81,21 @@ function createImageElement(holderDIV, focuseddClassMaintain, handleClicked, set
             ).style.backgroundImage = `url(${uploadedImage})`;
         });
         reader.readAsDataURL(imgBtn.files[0]);
+       
     });
+    if(uploadedImage = ""){
+        const span2 = document.createElement('span');
+        span2.className = 'img_text';
+        span2.textContent = "Choose Image";
+        span2.style.color = '#737272';
+    
+        const span1 = document.createElement('span');
+        span1.className = 'icon_wrapper';
+        span1.innerHTML = `<img src='${icon}'/>`;
+    
+        imageField.append(span1)
+        imageField.append(span2);
+    }
 
     // imgBtn.style.width = "100%";
     imageButton.append(imgBtn);
