@@ -1118,7 +1118,11 @@ const MidSection = React.forwardRef((props, ref) => {
           const idMatch = documnetMap?.filter((elmnt) => elmnt == element?.id);
           const holderDIV = getHolderDIV(measure, pageNo, idMatch);
           const id = element.id;
+<<<<<<< HEAD
           console.log('\n>>>>>>>>>>>>\n TABLE DATA', element, '\n>>>>>>>>>>>>>\n');
+=======
+          // console.log('Create Table Component');
+>>>>>>> Editor-v2.1
 
           CreateTableComponent(
             holderDIV,
