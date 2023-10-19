@@ -12,7 +12,7 @@ import PaymentPopup from "../../utils/redirectPages/PaymentPopup";
 const PaymentRightSide = () => {
     const { buttonLink, setButtonLink, buttonPurpose, setButtonPurpose, buttonBorderSize, setButtonBorderSize, buttonBorderColor, setButtonBorderColor, setConfirmRemove, confirmRemove, setIsLoading, isLoading, paymentKey, setPaymentKey, data, pageNum, paypalId,
         setPaypalId, savedSripeKey,
-        setSavedSripeKey, savedPaypalKey, setSavedPaypalKey, } =
+        setSavedSripeKey, savedPaypalKey, setSavedPaypalKey, genSelOpt, setGenSelOpt, } =
         useStateContext();
     const [selectedType, setSelectedType] = useState('')
     const [addedAns, setAddedAns] = useState([])
@@ -51,6 +51,8 @@ const PaymentRightSide = () => {
 
     const purpose = holderDIV?.children[2]?.innerHTML;
     const link = holderDIV?.children[1]?.innerHTML;
+
+    const [isJustEntered, setIsJustEntered] = useState(true);
 
 
     // useEffect(() => {
@@ -536,12 +538,22 @@ const PaymentRightSide = () => {
         }
     }
 
-
-
+    // *This is to preserve default btn select value
+    useEffect(() => {
+        setIsJustEntered(false);
+        setGenSelOpt('');
+    }, [])
 
     return (
         <>
             <div className="mt-2 mb-3 w-100">
+                <select className='gen_btn_sel' defaultValue={isJustEntered ? 'pay' : genSelOpt} onChange={e => setGenSelOpt(e.target.value)} style={{ marginBottom: '10px' }}>
+                    <option value="" disabled>Select type</option>
+                    <option value="cta">CTA</option>
+                    <option value="pay">Pay</option>
+                    <option value="email">Email</option>
+                </select>
+
                 <h3>Payment Settings</h3>
                 <br />
 

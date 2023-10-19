@@ -3,7 +3,7 @@ import { Modal, Button } from "react-bootstrap";
 import { useStateContext } from "../contexts/contextProvider";
 
 const RemoveElmentModal = ({ handleRemoveInput }) => {
-    const { setConfirmRemove, confirmRemove } = useStateContext()
+    const { setConfirmRemove, confirmRemove, setSidebar } = useStateContext()
     return (
         <div
             // className="modal show"
@@ -27,6 +27,7 @@ const RemoveElmentModal = ({ handleRemoveInput }) => {
                     <Button variant="primary" onClick={() => {
                         document.querySelector(".focussedd").remove();
                         setConfirmRemove(false)
+                        setSidebar(false)
                     }}>yes</Button>
                 </Modal.Footer>
             </Modal.Dialog>
