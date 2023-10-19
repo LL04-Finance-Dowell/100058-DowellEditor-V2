@@ -875,7 +875,6 @@ const Header = () => {
           let tempElem = buttons[b].parentElement;
           let tempPosn = getPosition(tempElem);
           const link = buttonLink;
-
           elem = {
             width: tempPosn.width,
             height: tempPosn.height,
@@ -972,6 +971,11 @@ const Header = () => {
           let tempElem = emails[e].parentElement;
           let tempPosn = getPosition(tempElem);
 
+          const emailDataDiv = tempElem.querySelector('.emailDataHolder_holder');
+          const emailSenderData = emailDataDiv.querySelector('.emailSenderDataHolder_holder')?.innerText;
+            
+
+
           elem = {
             width: tempPosn.width,
             height: tempPosn.height,
@@ -980,6 +984,7 @@ const Header = () => {
             left: tempPosn.left,
             type: "FORM",
             data: emails[e].textContent,
+            emailData:emailSenderData,
             id: `eml${e + 1}`,
           };
 
