@@ -3489,14 +3489,13 @@ const ScaleRightSide = () => {
         button4.appendChild(orientation);
         button4.style.border = "none";
         button4.style.textAlign = "center";
-        button.style.height = "80%";
-        button.style.width = "50%";
+        button4.style.padding = "0px";
+        button.style.height = "100%";
+        button.style.width = "100%";
         button.style.position = "absolute";
         button.style.display = "flex";
         button.style.flexDirection = "column";
         button.style.alignItems = "center";
-        button.style.marginTop = "1%";
-        button.style.marginLeft = "26%";
       }
 
       if (
@@ -3508,7 +3507,7 @@ const ScaleRightSide = () => {
         for (const updatedLabelText of updatedLabelTexts) {
           formData.append("item_list", updatedLabelText);
         }
-        formData.append("username", "pfactorial");
+        formData.append("username", userDetails === null ? " " : userDetails.userinfo.username);
         formData.append("user", "yes");
         setIsLoading(true);
         console.log("post req");
@@ -3532,9 +3531,8 @@ const ScaleRightSide = () => {
             console.log(res);
             const settings = res.data.data.settings;
             console.log(settings);
-            if (settings.name) {
-              scaleText.textContent = settings.name;
-            }
+            scaleText.textContent = settings.name;
+            scaleText.style.display = "none";
 
             if (settings.fontcolor) {
               button4.style.color = settings.fontcolor;
@@ -3545,7 +3543,9 @@ const ScaleRightSide = () => {
             }
 
             button4.style.display = "block";
-
+            button4.style.height = "100%";
+            labelHold.style.border = "";
+            labelHold.style.height = "100%";
             labelHold.style.justifyContent = "center";
             labelHold.style.flexWrap = "wrap";
             for (let i = 0; i < settings.item_list.length - 1; i++) {
@@ -3554,7 +3554,7 @@ const ScaleRightSide = () => {
                 circle.className = "circle_label";
                 circle.style.width = "127px";
                 circle.style.height = "45%";
-                circle.style.borderRadius = "25px";
+                circle.style.borderRadius = "12px";
                 circle.style.padding = "12px 20px";
                 circle.style.backgroundColor = settings.scalecolor;
                 circle.style.display = "flex";
@@ -3665,7 +3665,7 @@ const ScaleRightSide = () => {
           formData.append("item_list", updatedLabelText);
         }
         formData.append("scale_id", idHolder.textContent);
-        formData.append("username", "pfactorial");
+        formData.append("username", userDetails === null ? " " : userDetails.userinfo.username);
         formData.append("user", "yes");
         setIsLoading(true);
         console.log("PUT req");
@@ -3685,9 +3685,8 @@ const ScaleRightSide = () => {
 
               const settings = res.data.data;
               console.log(settings);
-              if (settings.name) {
-                scaleText.textContent = settings.name;
-              }
+              scaleText.textContent = settings.name;
+              scaleText.style.display = "none";
 
               if (settings.fontcolor) {
                 button4.style.color = settings.fontcolor;
@@ -3698,7 +3697,9 @@ const ScaleRightSide = () => {
               }
 
               button4.style.display = "block";
-
+              button4.style.height = "100%";
+              labelHold.style.border = "";
+              labelHold.style.height = "100%";
               labelHold.style.justifyContent = "center";
               labelHold.style.flexWrap = "wrap";
               for (let i = 0; i < settings.item_list.length - 1; i++) {
@@ -3707,7 +3708,7 @@ const ScaleRightSide = () => {
                   circle.className = "circle_label";
                   circle.style.width = "127px";
                   circle.style.height = "45%";
-                  circle.style.borderRadius = "25px";
+                  circle.style.borderRadius = "12px";
                   circle.style.padding = "12px 20px";
                   circle.style.backgroundColor = settings.scalecolor;
                   circle.style.display = "flex";
