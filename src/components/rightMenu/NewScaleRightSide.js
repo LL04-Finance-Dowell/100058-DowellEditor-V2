@@ -1936,7 +1936,6 @@ const ScaleRightSide = () => {
       likertScaleArray.textContent = updatedLabels;
       likertScaleArray.style.display = "none";
       labelHold.append(likertScaleArray);
-
       // // Update labelHold grid styles
       labelHold.style.display = "grid";
       labelHold.style.gridTemplateColumns = `repeat(${numColumns}, 1fr)`;
@@ -1948,19 +1947,24 @@ const ScaleRightSide = () => {
         button4.style.textAlign = "center";
         button.style.display = "flex";
         button.style.flexDirection = "row";
-        // button.style.marginTop = "5%";
+        button.style.marginTop = "-7%";
         button.style.alignItems = "center";
+        button.style.marginLeft = "15px";
         // buttonCircle.style.flexDirection = "row";
         button.style.height = "85%";
         button.style.width = "100%";
         button.style.flexDirection = "row";
         button.style.position = "relative";
         button.style.marginLeft = "0px";
+        button.style.padding = "5px 10px";
         button.style.display = "grid";
         button.style.gridTemplateColumns = `repeat(${numColumns}, 1fr)`;
         button.style.gridTemplateRows = `repeat(${numRows}, 1fr)`;
+        labelHold.style.marginTop = "-5px";
+        scaleText.style.marginBottom = "1px";
+        scaleText.style.height = "1%";
       }
-
+      var buttonWidth = labelHold.offsetWidth;
       if (option.value === "Vertical") {
         let orientation = document.createElement("h2");
         orientation.className = "orientation";
@@ -1968,15 +1972,27 @@ const ScaleRightSide = () => {
         orientation.style.display = "none";
         button4.appendChild(orientation);
         button4.style.border = "none";
-        button4.style.textAlign = "center";
+        button4.style.textAlign = "center";   
         button.style.height = "80%";
         button.style.width = "50%";
         button.style.position = "absolute";
         button.style.display = "flex";
         button.style.flexDirection = "column";
         button.style.alignItems = "center";
-        button.style.marginTop = "1%";
-        button.style.marginLeft = "26%";
+        button.style.marginTop = "5px";
+        scaleText.style.marginBottom = "1px";
+        scaleText.style.height = "10%";
+        labelHold.style.alignItems = "center";
+        if (buttonWidth < 200) {
+          // Apply the new margin when the button's width is less than 200px
+          labelHold.style.marginLeft = "15%";
+        } else {
+          // Apply the original margin when the button's width is 200px or more
+          labelHold.style.alignItems = "center";
+          labelHold.style.marginTop = "1%";
+          labelHold.style.marginLeft = "18%";
+        }
+        
       }
 
       const basePayload = {
@@ -2064,7 +2080,7 @@ const ScaleRightSide = () => {
 
             const settings = res.data.data.settings;
             if (settings.name) {
-              scaleText.textContent = settings.name;
+              scaleText.textContent = "";
             }
 
             if (settings.font_color) {
@@ -2083,7 +2099,7 @@ const ScaleRightSide = () => {
               circle.style.width = "80%";
               circle.style.height = "55%";
               circle.style.borderRadius = "25px";
-              circle.style.padding = "12px 20px";
+              circle.style.padding = "5px 10px";
               circle.style.backgroundColor = settings.round_color;
               circle.style.display = "flex";
               circle.style.justifyContent = "center";
@@ -2099,13 +2115,13 @@ const ScaleRightSide = () => {
 
               // Set the text content to the appropriate label (either text or emoji)
               circle.textContent = updatedLabels[i] || "";
-
               if (option.value === "Vertical") {
-                circle.style.margin = "5px 0";
-                circle.style.padding = "6px 12px";
+                circle.style.margin = "2px 0";
+                circle.style.padding = "3px 12px";
               }
-
+              labelHold.style.border = "";
               labelHold.appendChild(circle);
+              labelHold.style.marginTop = "-5px";
             }
 
             console.log("This is the likert scale response", res.data.data);
@@ -2142,7 +2158,7 @@ const ScaleRightSide = () => {
               }
 
               if (beNametnUpdateScal.value !== "") {
-                scaleText.textContent = beNametnUpdateScal.value;
+                scaleText.textContent = "";
               }
 
               button4.style.display = "block";
@@ -2152,7 +2168,7 @@ const ScaleRightSide = () => {
                 circle.style.width = "80%";
                 circle.style.height = "55%";
                 circle.style.borderRadius = "25px";
-                circle.style.padding = "12px 20px";
+                circle.style.padding = "5px 20px";
                 circle.style.backgroundColor = settings.round_color;
                 circle.style.display = "flex";
                 circle.style.justifyContent = "center";
@@ -2165,7 +2181,6 @@ const ScaleRightSide = () => {
                 circle.addEventListener("mouseout", () => {
                   circle.style.backgroundColor = settings.round_color; // Reset the color when not hovered
                 });
-
                 // Set the text content to the appropriate label (either text or emoji)
                 circle.textContent = updatedLabels[i] || "";
 
@@ -2175,6 +2190,7 @@ const ScaleRightSide = () => {
                 }
 
                 labelHold.appendChild(circle);
+                labelHold.style.marginTop = "-5px";
               }
               console.log("This is it+++++++______", likertScaleArray);
             }
