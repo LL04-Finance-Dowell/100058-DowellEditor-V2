@@ -124,7 +124,8 @@ const MidSection = React.forwardRef((props, ref) => {
     focuseddClassMaintain,
     buttonLink,
     setButtonPurpose,
-    confirmRemove
+    confirmRemove,
+    scaleMidSec
   } = useStateContext();
 
   const { contextMenu, setContextMenu } = useCutMenuContext()
@@ -262,6 +263,17 @@ const MidSection = React.forwardRef((props, ref) => {
     } else {
     }
   }, [isDataRetrieved]);
+
+  useEffect(() => {
+    // TODO IMPORT saveDocument AND DRAFT A WAY TO SCALE DOWN COMPONENTS ON RESIZE
+    // TODO ALSO MAKE THIS A FUNCTION AS IT WILL BE NEEDED FOR THE MID SECT SCALING
+    // TODO GOODNIGHT BRUF
+    window.onresize = () => {
+      scaleMidSec();
+    }
+
+    return () => window.removeEventListener('resize', () => { })
+  }, [])
 
   let resizing = false;
   let contentFile = [];
@@ -1006,9 +1018,9 @@ const MidSection = React.forwardRef((props, ref) => {
   //   if (window.innerWidth < 993) {
 
   //     if (arg == "width") {
-  //       return (element.width / 794) * 100 + "%"
+  //       return (element.width / 793.69) * 100 + "%"
   //     } else {
-  //       return (element.left / 794) * 100 + "%"
+  //       return (element.left / 793.69) * 100 + "%"
   //     }
   //   }
   //   else {
@@ -1021,22 +1033,32 @@ const MidSection = React.forwardRef((props, ref) => {
   // }
   const onPost = () => {
     const curr_user = document.getElementById("curr_user");
-    const midSec = document.getElementsByClassName("midSection_container");
+    const midSec = document.querySelector(".midSection_container");
+    const midSecWidth = midSec.getBoundingClientRect().width;
+
+    scaleMidSec();
+
+
 
     let pageNo = 0;
     let isAnyRequiredElementEdited = false;
 
-    // console.log("getting text input value", item)
     for (let p = 1; p <= item?.length; p++) {
+
       pageNo++;
       fetchedData[p]?.forEach((element) => {
         if (element.type === "TEXT_INPUT") {
+          const width = finding_percent(element, 'width');
+
+          const height = window.innerWidth > 993 ? element.height + 'px' : `${(element.height / element.width) * ((parseFloat(width) * midSecWidth) / 100)}px`
+          const top = window.innerWidth > 993 ? parseFloat(element.topp) + 'px' : `${(parseFloat(element.topp) / element.width) * ((parseFloat(width) * midSecWidth) / 100)}px`
+
           const measure = {
-            width: finding_percent(element, "width"),
-            // height: element.height + "px",
-            height: window.innerWidth > 992 ? element.height + "px" : ((finding_percent(element, "width")?.split("%")[0] / (element?.width / element?.height)) * window.innerWidth) / 1123 + "%",
-            left: finding_percent(element, "left"),
-            top: element.topp,
+            width,
+            height,
+            // height: window.innerWidth > 992 ? element.height + "px" : ((finding_percent(element, "width")?.split("%")[0] / (element?.width / element?.height)) * window.innerWidth) / 1123 + "%",
+            left: finding_percent(element, "left", midSecWidth),
+            top,
             border: element.borderWidths,
             auth_user: curr_user,
           };
@@ -1053,13 +1075,19 @@ const MidSection = React.forwardRef((props, ref) => {
 
         }
         if (element.type === "IMAGE_INPUT") {
+          const width = finding_percent(element, 'width');
+
+          const height = window.innerWidth > 993 ? element.height + 'px' : `${(element.height / element.width) * ((parseFloat(width) * midSecWidth) / 100)}px`
+
+          const top = window.innerWidth > 993 ? parseFloat(element.topp) + 'px' : `${(parseFloat(element.topp) / element.width) * ((parseFloat(width) * midSecWidth) / 100)}px`
+
           const measure = {
             // width: element.width + "px",
-            width: finding_percent(element, "width"),
-            // height: element.height + "px",
-            height: window.innerWidth > 992 ? element.height + "px" : ((finding_percent(element, "width")?.split("%")[0] / (element?.width / element?.height)) * window.innerWidth) / 1123 + "%",
-            left: finding_percent(element, "left"),
-            top: element.topp,
+            width,
+            height,
+            // height: window.innerWidth > 992 ? element.height + "px" : ((finding_percent(element, "width")?.split("%")[0] / (element?.width / element?.height)) * window.innerWidth) / 1123 + "%",
+            left: finding_percent(element, "left", midSecWidth),
+            top,
             border: element.imgBorder,
             auth_user: curr_user,
           };
@@ -1071,12 +1099,18 @@ const MidSection = React.forwardRef((props, ref) => {
           createImageInputField(id, element, document_map_required, p, holderDIV, focuseddClassMaintain, handleClicked, setSidebar)
         }
         if (element.type === "DATE_INPUT") {
+          const width = finding_percent(element, 'width');
+
+          const height = window.innerWidth > 993 ? element.height + 'px' : `${(element.height / element.width) * ((parseFloat(width) * midSecWidth) / 100)}px`
+
+          const top = window.innerWidth > 993 ? parseFloat(element.topp) + 'px' : `${(parseFloat(element.topp) / element.width) * ((parseFloat(width) * midSecWidth) / 100)}px`
+
           const measure = {
-            width: finding_percent(element, "width"),
-            height: window.innerWidth > 992 ? element.height + "px" : ((finding_percent(element, "width")?.split("%")[0] / (element?.width / element?.height)) * window.innerWidth) / 1123 + "%",
-            // height: element.height + "px",
-            left: finding_percent(element, "left"),
-            top: element.topp,
+            width,
+            // height: window.innerWidth > 992 ? element.height + "px" : ((finding_percent(element, "width")?.split("%")[0] / (element?.width / element?.height)) * window.innerWidth) / 1123 + "%",
+            height,
+            left: finding_percent(element, "left", midSecWidth),
+            top,
             border: element.calBorder,
             auth_user: curr_user,
           };
@@ -1089,12 +1123,18 @@ const MidSection = React.forwardRef((props, ref) => {
           createDateInputField(id, element, document_map_required, p, holderDIV, focuseddClassMaintain, handleClicked, setSidebar, setRightSideDateMenu, setMethod, setStartDate)
         }
         if (element.type === "SIGN_INPUT") {
+          const width = finding_percent(element, 'width');
+
+          const height = window.innerWidth > 993 ? element.height + 'px' : `${(element.height / element.width) * ((parseFloat(width) * midSecWidth) / 100)}px`
+
+          const top = window.innerWidth > 993 ? parseFloat(element.topp) + 'px' : `${(parseFloat(element.topp) / element.width) * ((parseFloat(width) * midSecWidth) / 100)}px`
+
           const measure = {
-            width: finding_percent(element, "width"),
-            height: window.innerWidth > 992 ? element.height + "px" : ((finding_percent(element, "width")?.split("%")[0] / (element?.width / element?.height)) * window.innerWidth) / 1123 + "%",
-            // height: element.height + "px",
-            left: finding_percent(element, "left"),
-            top: element.topp,
+            width,
+            // height: window.innerWidth > 992 ? element.height + "px" : ((finding_percent(element, "width")?.split("%")[0] / (element?.width / element?.height)) * window.innerWidth) / 1123 + "%",
+            height,
+            left: finding_percent(element, "left", midSecWidth),
+            top,
             border: element.signBorder,
             auth_user: curr_user,
           };
@@ -1106,23 +1146,25 @@ const MidSection = React.forwardRef((props, ref) => {
           createSignInputField(id, element, p, holderDIV, focuseddClassMaintain, handleClicked, setSidebar)
         }
         if (element.type === "TABLE_INPUT") {
+          const width = finding_percent(element, 'width');
+
+          const height = window.innerWidth > 993 ? element.height + 'px' : `${(element.height / element.width) * ((parseFloat(width) * midSecWidth) / 100)}px`
+
+          const top = window.innerWidth > 993 ? parseFloat(element.topp) + 'px' : `${(parseFloat(element.topp) / element.width) * ((parseFloat(width) * midSecWidth) / 100)}px`
+
           const measure = {
-            width: finding_percent(element, "width"),
-            height: window.innerWidth > 992 ? element.height + "px" : ((finding_percent(element, "width")?.split("%")[0] / (element?.width / element?.height)) * window.innerWidth) / 1123 + "%",
-            // height: element.height + "px",
-            left: finding_percent(element, "left"),
-            top: element.topp,
+            width,
+            // height: window.innerWidth > 992 ? element.height + "px" : ((finding_percent(element, "width")?.split("%")[0] / (element?.width / element?.height)) * window.innerWidth) / 1123 + "%",
+            height,
+            left: finding_percent(element, "left", midSecWidth),
+            top,
             border: element.tableBorder,
             auth_user: curr_user,
           };
           const idMatch = documnetMap?.filter((elmnt) => elmnt == element?.id);
           const holderDIV = getHolderDIV(measure, pageNo, idMatch);
           const id = element.id;
-<<<<<<< HEAD
-          console.log('\n>>>>>>>>>>>>\n TABLE DATA', element, '\n>>>>>>>>>>>>>\n');
-=======
           // console.log('Create Table Component');
->>>>>>> Editor-v2.1
 
           CreateTableComponent(
             holderDIV,
@@ -1141,13 +1183,18 @@ const MidSection = React.forwardRef((props, ref) => {
 
         }
         if (element.type === "IFRAME_INPUT") {
+          const width = finding_percent(element, 'width');
+
+          const height = window.innerWidth > 993 ? element.height + 'px' : `${(element.height / element.width) * ((parseFloat(width) * midSecWidth) / 100)}px`
+
+          const top = window.innerWidth > 993 ? parseFloat(element.topp) + 'px' : `${(parseFloat(element.topp) / element.width) * ((parseFloat(width) * midSecWidth) / 100)}px`
+
           const measure = {
-            // width: element.width + "px",
-            width: window.innerWidth < 993 ? ((element.width / 794) * 100) + "%" : element.width + "px",
-            height: window.innerWidth > 992 ? element.height + "px" : ((finding_percent(element, "width")?.split("%")[0] / (element?.width / element?.height)) * window.innerWidth) / 1123 + "%",
-            // height: element.height + "px",
-            left: window.innerWidth < 993 ? ((element.left / 794) * 100) + "%" : element.left + "px",
-            top: element.topp,
+            width,
+            // height: window.innerWidth > 992 ? element.height + "px" : ((finding_percent(element, "width")?.split("%")[0] / (element?.width / element?.height)) * window.innerWidth) / 1123 + "%",
+            height,
+            left: finding_percent(element, "left", midSecWidth),
+            top,
             border: element.iframeBorder,
             auth_user: curr_user,
           };
@@ -1159,12 +1206,18 @@ const MidSection = React.forwardRef((props, ref) => {
         }
 
         if (element.type === "BUTTON_INPUT") {
+          const width = finding_percent(element, 'width');
+
+          const height = window.innerWidth > 993 ? element.height + 'px' : `${(element.height / element.width) * ((parseFloat(width) * midSecWidth) / 100)}px`
+
+          const top = window.innerWidth > 993 ? parseFloat(element.topp) + 'px' : `${(parseFloat(element.topp) / element.width) * ((parseFloat(width) * midSecWidth) / 100)}px`
+
           const measure = {
-            width: finding_percent(element, "width"),
-            height: window.innerWidth > 992 ? element.height + "px" : ((finding_percent(element, "width")?.split("%")[0] / (element?.width / element?.height)) * window.innerWidth) / 1123 + "%",
-            // height: element.height + "px",
-            left: finding_percent(element, "left"),
-            top: element.topp,
+            width,
+            // height: window.innerWidth > 992 ? element.height + "px" : ((finding_percent(element, "width")?.split("%")[0] / (element?.width / element?.height)) * window.innerWidth) / 1123 + "%",
+            height,
+            left: finding_percent(element, "left", midSecWidth),
+            top,
             border: element.buttonBorder,
             auth_user: curr_user,
           };
@@ -1178,12 +1231,18 @@ const MidSection = React.forwardRef((props, ref) => {
           createButtonInputField(id, element, p, holderDIV, focuseddClassMaintain, handleClicked, setSidebar, finalizeButton, rejectButton, decoded, document_map_required)
         }
         if (element.type === "PAYMENT_INPUT") {
+          const width = finding_percent(element, 'width');
+
+          const height = window.innerWidth > 993 ? element.height + 'px' : `${(element.height / element.width) * ((parseFloat(width) * midSecWidth) / 100)}px`
+
+          const top = window.innerWidth > 993 ? parseFloat(element.topp) + 'px' : `${(parseFloat(element.topp) / element.width) * ((parseFloat(width) * midSecWidth) / 100)}px`
+
           const measure = {
-            width: finding_percent(element, "width"),
-            height: window.innerWidth > 992 ? element.height + "px" : ((finding_percent(element, "width")?.split("%")[0] / (element?.width / element?.height)) * window.innerWidth) / 1123 + "%",
-            // height: element.height + "px",
-            left: finding_percent(element, "left"),
-            top: element.topp,
+            width,
+            // height: window.innerWidth > 992 ? element.height + "px" : ((finding_percent(element, "width")?.split("%")[0] / (element?.width / element?.height)) * window.innerWidth) / 1123 + "%",
+            height,
+            left: finding_percent(element, "left", midSecWidth),
+            top,
             border: element.buttonBorder,
             auth_user: curr_user,
           };
@@ -1197,12 +1256,20 @@ const MidSection = React.forwardRef((props, ref) => {
           createPaymentInputField(id, element, p, holderDIV, focuseddClassMaintain, handleClicked, setSidebar, finalizeButton, rejectButton, decoded, document_map_required)
         }
         if (element.type === "FORM") {
+          const width = finding_percent(element, 'width');
+
+          const height = window.innerWidth > 993 ? element.height + 'px' : `${(element.height / element.width) * ((parseFloat(width) * midSecWidth) / 100)}px`
+
+          const top = window.innerWidth > 993 ? parseFloat(element.topp) + 'px' : `${(parseFloat(element.topp) / element.width) * ((parseFloat(width) * midSecWidth) / 100)}px`
+
+
+
           const measure = {
-            width: finding_percent(element, "width"),
-            height: window.innerWidth > 992 ? element.height + "px" : ((finding_percent(element, "width")?.split("%")[0] / (element?.width / element?.height)) * window.innerWidth) / 1123 + "%",
-            // height: element.height + "px",
-            left: finding_percent(element, "left"),
-            top: element.topp,
+            width,
+            // height: window.innerWidth > 992 ? element.height + "px" : ((finding_percent(element, "width")?.split("%")[0] / (element?.width / element?.height)) * window.innerWidth) / 1123 + "%",
+            height,
+            left: finding_percent(element, "left", midSecWidth),
+            top,
             borderWidth: element.borderWidth + "px",
             auth_user: curr_user,
           };
@@ -1215,12 +1282,20 @@ const MidSection = React.forwardRef((props, ref) => {
         }
 
         if (element.type === "SCALE_INPUT") {
+          const width = finding_percent(element, 'width');
+
+          const height = window.innerWidth > 993 ? element.height + 'px' : `${(element.height / element.width) * ((parseFloat(width) * midSecWidth) / 100)}px`
+
+          const top = window.innerWidth > 993 ? parseFloat(element.topp) + 'px' : `${(parseFloat(element.topp) / element.width) * ((parseFloat(width) * midSecWidth) / 100)}px`
+
+
+
           const measure = {
-            width: finding_percent(element, "width"),
-            height: window.innerWidth > 992 ? element.height + "px" : ((finding_percent(element, "width")?.split("%")[0] / (element?.width / element?.height)) * window.innerWidth) / 1123 + "%",
-            // height: element.height + "px",
-            left: finding_percent(element, "left"),
-            top: element.topp,
+            width,
+            // height: window.innerWidth > 992 ? element.height + "px" : ((finding_percent(element, "width")?.split("%")[0] / (element?.width / element?.height)) * window.innerWidth) / 1123 + "%",
+            height,
+            left: finding_percent(element, "left", midSecWidth),
+            top,
             border: element.scaleBorder,
             auth_user: curr_user,
           };
@@ -1232,12 +1307,18 @@ const MidSection = React.forwardRef((props, ref) => {
         }
 
         if (element.type === "CAMERA_INPUT") {
+          const width = finding_percent(element, 'width');
+
+          const height = window.innerWidth > 993 ? element.height + 'px' : `${(element.height / element.width) * ((parseFloat(width) * midSecWidth) / 100)}px`
+
+          const top = window.innerWidth > 993 ? parseFloat(element.topp) + 'px' : `${(parseFloat(element.topp) / element.width) * ((parseFloat(width) * midSecWidth) / 100)}px`
+
           const measure = {
-            width: finding_percent(element, "width"),
-            height: window.innerWidth > 992 ? element.height + "px" : ((finding_percent(element, "width")?.split("%")[0] / (element?.width / element?.height)) * window.innerWidth) / 1123 + "%",
-            // height: element.height + "px",
-            left: finding_percent(element, "left"),
-            top: element.topp,
+            width,
+            // height: window.innerWidth > 992 ? element.height + "px" : ((finding_percent(element, "width")?.split("%")[0] / (element?.width / element?.height)) * window.innerWidth) / 1123 + "%",
+            height,
+            left: finding_percent(element, "left", midSecWidth),
+            top,
             auth_user: curr_user,
           };
           const idMatch = documnetMap?.filter((elmnt) => elmnt == element?.id);
@@ -1350,12 +1431,18 @@ const MidSection = React.forwardRef((props, ref) => {
           //   ?.append(holderDIV);
         }
         if (element.type === "NEW_SCALE_INPUT") {
+          const width = finding_percent(element, 'width');
+
+          const height = window.innerWidth > 993 ? element.height + 'px' : `${(element.height / element.width) * ((parseFloat(width) * midSecWidth) / 100)}px`
+
+          const top = window.innerWidth > 993 ? parseFloat(element.topp) + 'px' : `${(parseFloat(element.topp) / element.width) * ((parseFloat(width) * midSecWidth) / 100)}px`
+
           const measure = {
-            width: finding_percent(element, "width"),
-            height: window.innerWidth > 992 ? element.height + "px" : ((finding_percent(element, "width")?.split("%")[0] / (element?.width / element?.height)) * window.innerWidth) / 1123 + "%",
-            // height: element.height + "px",
-            left: finding_percent(element, "left"),
-            top: element.topp,
+            width,
+            // height: window.innerWidth > 992 ? element.height + "px" : ((finding_percent(element, "width")?.split("%")[0] / (element?.width / element?.height)) * window.innerWidth) / 1123 + "%",
+            height,
+            left: finding_percent(element, "left", midSecWidth),
+            top,
             auth_user: curr_user,
           };
           const idMatch = documnetMap?.filter((elmnt) => elmnt == element?.id);
@@ -1366,12 +1453,18 @@ const MidSection = React.forwardRef((props, ref) => {
         }
         // Limon
         if (element.type === "DROPDOWN_INPUT") {
+          const width = finding_percent(element, 'width');
+
+          const height = window.innerWidth > 993 ? element.height + 'px' : `${(element.height / element.width) * ((parseFloat(width) * midSecWidth) / 100)}px`
+
+          const top = window.innerWidth > 993 ? parseFloat(element.topp) + 'px' : `${(parseFloat(element.topp) / element.width) * ((parseFloat(width) * midSecWidth) / 100)}px`
+
           const measure = {
-            width: finding_percent(element, "width"),
-            height: window.innerWidth > 992 ? element.height + "px" : ((finding_percent(element, "width")?.split("%")[0] / (element?.width / element?.height)) * window.innerWidth) / 1123 + "%",
-            // height: element.height + "px",
-            left: finding_percent(element, "left"),
-            top: element.topp,
+            width,
+            // height: window.innerWidth > 992 ? element.height + "px" : ((finding_percent(element, "width")?.split("%")[0] / (element?.width / element?.height)) * window.innerWidth) / 1123 + "%",
+            height,
+            left: finding_percent(element, "left", midSecWidth),
+            top,
             border: element.dropdownBorder,
             auth_user: curr_user,
           };
@@ -1385,12 +1478,18 @@ const MidSection = React.forwardRef((props, ref) => {
         }
         // conteiner retrive data
         if (element.type === "CONTAINER_INPUT") {
+          const width = finding_percent(element, 'width');
+
+          const height = window.innerWidth > 993 ? element.height + 'px' : `${(element.height / element.width) * ((parseFloat(width) * midSecWidth) / 100)}px`
+
+          const top = window.innerWidth > 993 ? parseFloat(element.topp) + 'px' : `${(parseFloat(element.topp) / element.width) * ((parseFloat(width) * midSecWidth) / 100)}px`
+
           const measure = {
-            width: finding_percent(element, "width"),
-            height: window.innerWidth > 992 ? element.height + "px" : ((finding_percent(element, "width")?.split("%")[0] / (element?.width / element?.height)) * window.innerWidth) / 1123 + "%",
-            // height: element.height + "px",
-            left: finding_percent(element, "left"),
-            top: element.topp,
+            width,
+            // height: window.innerWidth > 992 ? element.height + "px" : ((finding_percent(element, "width")?.split("%")[0] / (element?.width / element?.height)) * window.innerWidth) / 1123 + "%",
+            height,
+            left: finding_percent(element, "left", midSecWidth),
+            top,
             border: element.containerBorder,
             auth_user: curr_user,
           };
@@ -1716,7 +1815,7 @@ const MidSection = React.forwardRef((props, ref) => {
 
       const midSec = document.querySelector(".drop_zone");
       const midsectionRect = midSec.getBoundingClientRect();
-      console.log("typeOfOperation from midsection", typeOfOperation, midSec, curr_user, midsectionRect);
+      // console.log("typeOfOperation from midsection", typeOfOperation, midSec, curr_user, midsectionRect);
       const measure = {
         width: "200px",
         height: "80px",
@@ -1972,6 +2071,8 @@ const MidSection = React.forwardRef((props, ref) => {
   let page = [];
 
   let elem = {};
+
+
 
   return (
     <>

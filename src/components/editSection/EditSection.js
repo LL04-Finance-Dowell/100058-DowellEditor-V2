@@ -145,7 +145,9 @@ const EditSection = () => {
               </div>
             )}
           </Col>
-          <Col style={{marginTop:window.innerWidth<993 && left_menu_size?.height}} lg={sidebar ? 8 : 11} as="div" className="editSec_midSec">
+          <Col
+            // style={{marginTop:window.innerWidth<993 && left_menu_size?.height}} 
+            lg={sidebar ? 8 : 11} as="div" className="editSec_midSec">
             <MidSection />
           </Col>
 

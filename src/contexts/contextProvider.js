@@ -84,6 +84,8 @@ export const ContextProvider = ({ children }) => {
 
   const [genSelOpt, setGenSelOpt] = useState('');
 
+  const [fixedMidSecDim] = useState({ width: 793.69, height: 1122.52, parentHeight: 1235.89 })
+
   const handleDrop = (dropped) => {
     setIsDropped({ ...isDropped, [dropped]: true });
   };
@@ -552,6 +554,22 @@ export const ContextProvider = ({ children }) => {
     };
   };
 
+  const scaleMidSec = () => {
+    const midSecAll = document.querySelectorAll('.midSection_container');
+    const ratio = fixedMidSecDim.height / fixedMidSecDim.width;
+    const parentRatio = fixedMidSecDim.parentHeight / fixedMidSecDim.height
+    const currWidth = Number(midSecAll[0].getBoundingClientRect().width.toFixed(2));
+    const scaledHeight = Number((ratio * currWidth).toFixed(2));
+    const leftRect = document.getElementsByClassName('left_menu_wrapper')[0]?.getBoundingClientRect()
+
+    midSecAll.forEach((mid) => {
+      mid.style.height = scaledHeight + 'px';
+      mid.parentElement.style.height = (scaledHeight * parentRatio).toFixed(2) + 'px';
+    })
+
+    midSecAll[0].parentElement.parentElement.parentElement.style.marginTop = window.innerWidth > 993 ? 0 : leftRect.height + 'px';
+  }
+
   useEffect(() => {
     if (genSelOpt) {
       const holderDiv = document.querySelector('.focussedd');
@@ -721,7 +739,9 @@ export const ContextProvider = ({ children }) => {
         savedPaypalKey,
         setSavedPaypalKey,
         genSelOpt,
-        setGenSelOpt
+        setGenSelOpt,
+        fixedMidSecDim,
+        scaleMidSec
       }}
     >
       {children}
