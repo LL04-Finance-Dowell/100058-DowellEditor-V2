@@ -33,8 +33,8 @@ function createNewScaleInputField(
   scaleHold.style.fontFamily = element?.raw_data?.fontFamily;
   scaleHold.style.color = element?.raw_data?.fontColor;
   scaleHold.style.width = "100%";
-  scaleHold.style.height = "90%";
-  scaleHold.style.padding = "10px";
+  scaleHold.style.height = "96%";
+  scaleHold.style.padding = "1px";
   const scaleText = document.createElement("div");
   scaleText.className = "scale_text";
   scaleText.textContent = element?.raw_data?.scaleText;
@@ -95,11 +95,13 @@ function createNewScaleInputField(
   optionHolderLikert.textContent = element?.raw_data?.likertOptionHolder || "";
   optionHolderLikert.style.display = "none";
   scaleHold.append(optionHolderLikert);
+  scaleText.style.marginBottom = "10px";
+  scaleText.style.height = "10%";
 
   const labelHold = document.createElement("div");
   labelHold.className = "label_hold";
   labelHold.style.width = "100%";
-  labelHold.style.height = "85%";
+  labelHold.style.height = "95%";
   labelHold.style.border = "1px solid black";
   labelHold.style.backgroundColor = element?.raw_data?.scaleBgColor;
   scaleHold.appendChild(labelHold);
@@ -851,17 +853,21 @@ function createNewScaleInputField(
       circle.style.width = "80%";
       circle.style.height = "55%";
       circle.style.borderRadius = "25px";
-      circle.style.padding = "12px 10px";
-      circle.style.marginLeft = "5px";
+      circle.style.padding = "5px 10px";
+      circle.style.marginLeft = "15px";
       circle.style.marginRight = "5px";
       circle.style.backgroundColor = element?.raw_data?.buttonColor;
       circle.style.display = "flex";
       circle.style.justifyContent = "center";
       circle.style.alignItems = "center";
+      labelHold.style.marginTop = "-5px";
+      labelHold.style.border = "";
       labelHold.style.display = "grid";
       labelHold.style.gridTemplateColumns = `repeat(3, 1fr)`;
       labelHold.style.gridTemplateRows = `repeat(${numRows}, 1fr)`;
       labelHold.appendChild(circle);
+      scaleText.style.marginBottom = "1px";
+      scaleText.style.height = "1%";
 
       let orientation = element?.raw_data?.orientation;
       if (orientation === "vertical") {
@@ -873,22 +879,17 @@ function createNewScaleInputField(
         labelHold.style.position = "absolute";
         circle.style.margin = "5px 0";
         circle.style.padding = "6px 12px";
+        labelHold.style.marginTop = "5px";
         labelHold.style.height = "80%";
         labelHold.style.width = "50%";
         labelHold.style.display = "flex";
         labelHold.style.flexDirection = "column";
         labelHold.style.alignItems = "center";
-        labelHold.style.marginTop = "1%";
         labelHold.style.marginLeft = "26%";
+        scaleText.style.marginBottom = "5px";
+        scaleText.style.height = "7%";
       }
-      // var optionPosition = document.querySelector("#orientationIdLinkert");
-      // if (optionPosition) {
-      //   const newSelectedOrientation = getSelectedOrientationValue(); // Get the selected orientation
-      //   optionPosition.value = newSelectedOrientation;
 
-      //   // Save the selected orientation to local storage
-      //   localStorage.setItem('selectedOrientation', newSelectedOrientation);
-      // }
       if (decoded.details.action === "document") {
         let isClicked = false;
         const shouldHideFinalizeButton =
@@ -1388,7 +1389,7 @@ function createNewScaleInputField(
         circle.className = "circle_label";
         circle.style.width = "127px";
         circle.style.height = "45%";
-        circle.style.borderRadius = "25px";
+        circle.style.borderRadius = "12px";
         circle.style.padding = "12px 20px";
         circle.style.backgroundColor = element?.raw_data?.buttonColor;
         circle.style.display = "flex";
@@ -1470,10 +1471,14 @@ function createNewScaleInputField(
         circle.appendChild(smallBox2);
 
         scaleHold.style.textAlign = "center";
-
+        scaleHold.style.height = "100%";
+        labelHold.style.border = "";
+        labelHold.style.height = "100%";
         labelHold.style.justifyContent = "center";
+        labelHold.style.flexWrap = "wrap";
         labelHold.style.position = "relative";
         labelHold.style.marginLeft = "0px";
+        scaleText.style.display = "none";
         labelHold.appendChild(circle);
 
         let orientation = element?.raw_data?.orientation;
@@ -1483,16 +1488,15 @@ function createNewScaleInputField(
           orientation.textContent = "vertical";
           orientation.style.display = "none";
           labelHold.appendChild(orientation);
+          scaleHold.style.padding = "0px";
           labelHold.style.position = "absolute";
           circle.style.margin = "5px 0";
           circle.style.padding = "6px 12px";
-          labelHold.style.height = "80%";
-          labelHold.style.width = "50%";
+          labelHold.style.height = "100%";
+          labelHold.style.width = "100%";
           labelHold.style.display = "flex";
           labelHold.style.flexDirection = "column";
           labelHold.style.alignItems = "center";
-          labelHold.style.marginTop = "1%";
-          labelHold.style.marginLeft = "26%";
         }
       }
 
