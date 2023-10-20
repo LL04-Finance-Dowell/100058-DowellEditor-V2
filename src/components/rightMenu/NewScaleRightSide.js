@@ -85,8 +85,15 @@ const ScaleRightSide = () => {
   let scaleBg = scale?.querySelector(".label_hold");
   let percentSliderBg = scale?.querySelector(".percent-slider");
   let smallBoxBg = scale?.querySelector(".small_box");
+  let stapelScaleBg = scale?.querySelector(".newScaleInput");
   // <<<<<<< HEAD
   let fontColor = scale?.querySelector(".scool_input");
+  let fontColorStapel = scale?.querySelector(".newScaleInput");
+  let fontFamilyStapel = scale?.querySelector(".newScaleInput");
+  let stapelLeft = scale?.querySelector(".leftToolTip");
+  let stapelRight = scale?.querySelector(".rightTooltip");
+  let stapelUpperimit = scale?.querySelector(".upper_scale_limit");
+  let stapelSpaceUnit = scale?.querySelector(".space_unit");
   // =======
   // let fontColor = scale?.firstChild;
   const element = JSON.parse(sessionStorage.getItem("cutItem"));
@@ -112,6 +119,24 @@ const ScaleRightSide = () => {
 
     // // console.log(fontColor);
   }
+
+  if (fontColorStapel) {
+    // Get the computed background color in RGB format
+    const rgbColor = getComputedStyle(fontColorStapel).color;
+
+    // Extract the RGB values
+    const rgbValues = rgbColor.match(/\d+/g);
+
+    // Convert each RGB value to hexadecimal
+    fontColorStapel =
+      "#" +
+      rgbValues
+        .map((value) => parseInt(value).toString(16).padStart(2, "0"))
+        .join("");
+
+    // // console.log(fontColor);
+  }
+
   // // console.log(circles);
   if (circles) {
     // Get the computed background color in RGB format
@@ -139,6 +164,21 @@ const ScaleRightSide = () => {
 
     // Convert each RGB value to hexadecimal
     scaleBg =
+      "#" +
+      rgbValues
+        .map((value) => parseInt(value).toString(16).padStart(2, "0"))
+        .join("");
+  }
+
+  if (stapelScaleBg) {
+    // Get the computed background color in RGB format
+    const rgbColor = getComputedStyle(stapelScaleBg).backgroundColor;
+
+    // Extract the RGB values
+    const rgbValues = rgbColor.match(/\d+/g);
+
+    // Convert each RGB value to hexadecimal
+    stapelScaleBg =
       "#" +
       rgbValues
         .map((value) => parseInt(value).toString(16).padStart(2, "0"))
@@ -195,7 +235,7 @@ const ScaleRightSide = () => {
 
   var scaleColorStapel = document.getElementById("scale_color_stapel");
   if (scaleColorStapel) {
-    scaleColorStapel.defaultValue = scaleBg;
+    scaleColorStapel.defaultValue = stapelScaleBg;
   }
 
   var scaleColorNpsLite = document.getElementById("scale_color_nps_lite");
@@ -210,7 +250,7 @@ const ScaleRightSide = () => {
 
   var font_colorStapel = document.getElementById("font_color_stapel");
   if (font_colorStapel) {
-    font_colorStapel.defaultValue = fontColor;
+    font_colorStapel.defaultValue = fontColorStapel;
   }
 
   var npsLiteFontColor = document.getElementById("font_color_nps_lite");
@@ -1419,59 +1459,25 @@ const ScaleRightSide = () => {
       const btnUpdateFontColor = document.getElementById("font_color_stapel");
       const btnUpdateButton = document.getElementById("button_color_stapel");
       const beNametnUpdateScal = document.getElementById("scaleLabel_stapel");
-
-      // const headerText = document.getElementById("headerText");
       const btnUpdateLeft = document.getElementById("leftStapel");
       const btnUpdateRight = document.getElementById("rightStapel");
 
-      // let upperVal = document.getElementById("upperVal").value;
-      // // console.log(value?.value);
-      // // console.log(value);
-
       const scaleField = scale?.querySelector(".newScaleInput");
-      const button = scale?.querySelector(".label_hold");
-      //const scaleText = scale?.querySelector(".scale_text");
-      const button4 = scale?.querySelector(".scool_input");
-      const font = scale?.querySelector(".newScaleInput");
       const savedStapelScaleArr = scale?.querySelector(".stapelScaleArray");
       const savedOptionHolder = scale?.querySelector(".stapelOptionHolder");
-
-      // const buttonCircle = document.querySelectorAll(".circle_label");
-      const buttonCircle = scale
-        ? document.querySelectorAll(".circle_label")
-        : [];
-      const buttonChild = scale?.querySelector("#child");
       const btnUpdateScaleFontStapel =
         document.getElementById("font_style_stapel");
-      const buttonChildLeft = scale?.querySelector(".left_child");
-      const buttonChildRight = scale?.querySelector(".right_child");
-      const buttonChildNeutral = scale?.querySelector(".neutral_child");
       const optionSelect = document.getElementById("format_stapel");
       const option = document.querySelector("#orientationIdStapel").options[
         document.querySelector("#orientationIdStapel").selectedIndex
       ];
-      //buttonChildNeutral.textContent = "";
       let timeId = document.getElementById("timeId_stapel");
       let time = document.getElementById("time_stapel");
-      const emojiInp = document.getElementById("emojiInp_stapel").value;
-      //const labelHold = scale?.querySelector(".label_hold");
       const upperVal = Math.min(
         10,
         parseInt(document.getElementById("upperVal").value, 10)
       );
       const spacing = parseInt(document.getElementById("spacing").value, 10);
-      //tempText?.remove();
-
-      // for (let i = 0; i < buttonCircle.length; i++) {
-      //   if (btnUpdateButton.value !== "") {
-      //     buttonCircle[i].style.backgroundColor = btnUpdateButton.value;
-      //   }
-      // }
-
-      // if (scaleText) {
-      //   // console.log(scaleText);
-      //   scaleText.innerHTML = "Stapel scale";
-      // }
 
       const scaleTypeHolder = document.createElement("h6");
       scaleTypeHolder.className = "scaleTypeHolder";
@@ -1484,6 +1490,16 @@ const ScaleRightSide = () => {
       scaleText.className = "scale_text";
       scaleText.textContent = "Untitled-file_scale";
       scaleText.style.display = "none";
+
+      const upperScaleimit = document.createElement("h6");
+      upperScaleimit.className = "upper_scale_limit";
+      upperScaleimit.textContent = "";
+      upperScaleimit.style.display = "none";
+
+      const spaceUnit = document.createElement("h6");
+      spaceUnit.className = "space_unit";
+      spaceUnit.textContent = "";
+      spaceUnit.style.display = "none";
 
       const stapelScaleArray = document.createElement("div");
       stapelScaleArray.className = "stapelScaleArray";
@@ -1520,70 +1536,13 @@ const ScaleRightSide = () => {
 
         return emojiLabels;
       };
-      const emojiLabels = prepareEmojiLabels();
-      // console.log("These are emoji labels", emojiLabels);
-
-      // if (option.value === "Horizontal") {
-      //   button4.style.border = "block";
-      //   button4.style.textAlign = "center";
-      //   button.style.display = "flex";
-      //   button.style.flexDirection = "row";
-      //   // button.style.marginTop = "5%";
-      //   button.style.alignItems = "center";
-      //   // buttonCircle.style.flexDirection = "row";
-      //   button.style.height = "85%";
-      //   button.style.width = "100%";
-      //   button.style.flexDirection = "row";
-      //   buttonChildRight.style.marginTop = "0px";
-      //   buttonChildNeutral.style.marginTop = "0px";
-      //   buttonChild.style.flexDirection = "row";
-      //   buttonChild.style.justifyContent = "space-between";
-      //   buttonChild.style.alignItems = "center";
-      //   button.style.position = "relative";
-      //   buttonChild.style.marginLeft = "0px";
-      //   button.style.marginLeft = "0px";
-
-      //   // labelHold.style.position = "";
-      //   // labelHold.style.transform = "";
-
-      //   buttonChild.style = "";
-      //   buttonChild.style.display = "flex";
-      //   buttonChild.style.justifyContent = "space-between";
-      // }
-
-      // if (option.value === "Vertical") {
-      //   const stapel_vertical = document.createElement("h2");
-      //   stapel_vertical.className = "stapel_vertical";
-      //   stapel_vertical.style.display = "none";
-      //   stapel_vertical.textContent = "stapel_vertical";
-      //   button4.appendChild(stapel_vertical);
-      //   // labelHold.style.height = "82%";
-
-      //   // labelHold.style.top = "54%";
-      //   // labelHold.style.left = "50%";
-      //   // labelHold.style.transform = "translate(-50%, -50%)";
-      //   button4.style.border = "none";
-      //   button4.style.textAlign = "center";
-      //   button.style.width = "30%";
-      //   button.style.position = "absolute";
-      //   button.style.flexDirection = "column";
-      //   button.style.alignItems = "center";
-      //   buttonChild.style.display = "flex";
-      //   buttonChild.style.flexDirection = "column";
-      //   buttonChild.style.justifyContent = "space-between";
-
-      //   buttonChild.style.alignItems = "flex-start";
-      //   buttonChild.style.width = "32%";
-      //   buttonChild.style.marginLeft = "auto";
-      //   buttonChild.style.height = "98%";
-      // }
+      const emojiLabels = prepareEmojiLabels()
 
       if (
         idHolder.textContent === "scale Id" ||
         idHolder.textContent === "id"
       ) {
         setIsLoading(true);
-        // console.log("post req");
         Axios.post(
           "https://100035.pythonanywhere.com/stapel/api/stapel_settings_create/",
           {
@@ -1638,6 +1597,7 @@ const ScaleRightSide = () => {
               circle.style.height = "35px";
               circle.style.borderRadius = "50%";
               circle.style.display = "flex";
+              circle.style.flexDirection = "column";
               circle.style.justifyContent = "center";
               circle.style.alignItems = "center";
               circle.style.margin = "0 2px 2px 0";
@@ -1658,15 +1618,16 @@ const ScaleRightSide = () => {
                 left.style.visibility = "hidden";
                 left.style.position = "absolute";
                 left.style.zIndex = "1";
-                left.style.bottom = option.value === "Vertical" ? " " : "3px";
+                left.style.bottom = option.value === "Vertical" ? " " : "7px";
                 left.style.top = option.value === "Vertical" ? "5%" : "";
                 left.style.left = option.value === "Vertical" ? "" : "5%";
                 left.style.right = option.value === "Vertical" ? "5%" : "";
-                left.style.fontSize = "medium";
+                left.style.fontSize = "small";
                 left.style.writingMode =
                   option.value === "Vertical" ? "tb-rl" : "";
-                left.style.backgroundColor = "#555";
-                left.style.color = "white";
+                left.style.backgroundColor = "#272828";
+                left.style.color = "#EEEFEF";
+                left.style.borderRadius = "3px"
                 circle.append(left);
                 circle.onmouseover = function () {
                   left.style.visibility = "visible";
@@ -1682,13 +1643,16 @@ const ScaleRightSide = () => {
                 right.style.display = "none";
                 right.style.position = "absolute";
                 right.style.zIndex = "1";
-                right.style.bottom = "3px";
+                right.style.bottom = "7px";
                 right.style.right = "5%";
-                right.style.backgroundColor = "#555";
-                right.style.color = "white";
-                right.style.fontSize = "medium";
+                right.style.backgroundColor = "#272828";
+                right.style.color = "#EEEFEF";
+                right.style.fontSize = "small";
                 right.style.writingMode =
                   option.value === "Vertical" ? "tb-rl" : "";
+                right.style.width === "100%"
+                right.style.padding === "0 20px"
+                right.style.borderRadius = "3px"
                 circle.append(right);
                 circle.onmouseover = function () {
                   right.style.display = "block";
@@ -1700,19 +1664,20 @@ const ScaleRightSide = () => {
               }
             }
 
-            scaleField.style.backgroundColor =
-              res.data.data.settings.scalecolor;
+            scaleField.style.backgroundColor = res.data.data.settings.scalecolor;
             scaleField.style.color = res.data.data.settings.fontcolor;
             scaleText.textContent = res.data.data.settings.name;
             scaleField.style.fontFamily = res.data.data.settings.fontstyle;
-            //buttonChildRight.textContent = res.data.data.settings.right;
             optionHolder.textContent = res.data.data.settings.fomat;
-            //button4.style.fontFamily = res.data.data.settings.fontstyle;
+            upperScaleimit.textContent = res.data.data.settings.scale_upper_limit
+            spaceUnit.textContent = res.data.data.settings.spacing_unit
             scaleField.appendChild(optionHolder);
             stapelScaleArray.textContent = res.data.data.settings.scale;
             scaleField.append(stapelScaleArray);
             scaleField.append(scaleTypeHolder);
             scaleField.append(scaleText);
+            scaleField.append(upperScaleimit)
+            scaleField.append(spaceUnit)
             const idHolder = document.createElement("h6");
             idHolder.className = "scaleId";
             idHolder.textContent = id && id;
@@ -1770,15 +1735,10 @@ const ScaleRightSide = () => {
               setScaleData(res.data);
               setScaleId(scaleId);
               console.log("This is the data", res.data.data.settings);
-              // console.log("This is the still scale", scale);
               savedStapelScaleArr.textContent = res.data.data.settings.scale;
               savedOptionHolder.textContent = res.data.data.settings.fomat;
-              // console.log("This is the option", savedOptionHolder.textContent);
-              // console.log("This is stapel update", res.data.data);
               const scaleArr = res.data.data.settings.scale;
               const fomart = res.data.data.settings.fomat;
-              // console.log(savedStapelScaleArr);
-              //button4.style.display = "block";
 
               // Clear existing values
               //labelHold.innerHTML = "";
@@ -1792,6 +1752,7 @@ const ScaleRightSide = () => {
                 circle.style.height = "35px";
                 circle.style.borderRadius = "50%";
                 circle.style.display = "flex";
+                circle.style.flexDirection = "column";
                 circle.style.justifyContent = "center";
                 circle.style.alignItems = "center";
                 circle.style.margin = "0 2px 2px 0";
@@ -1813,15 +1774,15 @@ const ScaleRightSide = () => {
                   left.style.visibility = "hidden";
                   left.style.position = "absolute";
                   left.style.zIndex = "1";
-                  left.style.bottom = option.value === "Vertical" ? " " : "3px";
+                  left.style.bottom = option.value === "Vertical" ? " " : "7px";
                   left.style.top = option.value === "Vertical" ? "5%" : "";
                   left.style.left = option.value === "Vertical" ? "" : "5%";
                   left.style.right = option.value === "Vertical" ? "5%" : "";
-                  left.style.fontSize = "medium";
+                  left.style.fontSize = "small";
                   left.style.writingMode =
                     option.value === "Vertical" ? "tb-rl" : "";
-                  left.style.backgroundColor = "#555";
-                  left.style.color = "white";
+                  left.style.backgroundColor = "#272828";
+                  left.style.color = "#EEEFEF";
                   circle.append(left);
                   circle.onmouseover = function () {
                     left.style.visibility = "visible";
@@ -1837,11 +1798,11 @@ const ScaleRightSide = () => {
                   right.style.display = "none";
                   right.style.position = "absolute";
                   right.style.zIndex = "1";
-                  right.style.bottom = "3px";
+                  right.style.bottom = "7px";
                   right.style.right = "5%";
-                  right.style.backgroundColor = "#555";
-                  right.style.color = "white";
-                  right.style.fontSize = "medium";
+                  right.style.backgroundColor = "#272828";
+                  right.style.color = "#EEEFEF";
+                  right.style.fontSize = "small";
                   right.style.writingMode =
                     option.value === "Vertical" ? "tb-rl" : "";
                   circle.append(right);
@@ -1860,14 +1821,16 @@ const ScaleRightSide = () => {
               scaleField.style.color = res.data.data.settings.fontcolor;
               scaleField.style.fontFamily = res.data.data.settings.fontstyle;
               scaleText.textContent = res.data.data.settings.name;
-              //buttonChildRight.textContent = res.data.data.settings.right;
-              //button4.style.fontFamily = res.data.data.settings.fontstyle;
               optionHolder.textContent = res.data.data.settings.fomat;
+              upperScaleimit.textContent = res.data.data.settings.scale_upper_limit
+              spaceUnit.textContent = res.data.data.settings.spacing_unit
               scaleField.appendChild(optionHolder);
               stapelScaleArray.textContent = res.data.data.settings.scale;
               scaleField.append(stapelScaleArray);
               scaleField.append(scaleTypeHolder);
               scaleField.append(scaleText);
+              scaleField.append(upperScaleimit)
+              scaleField.append(spaceUnit)
               const idHolder = document.createElement("h6");
               idHolder.className = "scaleId";
               idHolder.textContent = stapelId.textContent;
@@ -5639,7 +5602,7 @@ const ScaleRightSide = () => {
                         }}
                         id="upperVal"
                         onChange={(e) => setUpperLimit(e.target.value)}
-
+                        defaultValue={ stapelUpperimit ? Number(stapelUpperimit.textContent) : 0}
                         // onChange={upperValueChange}
                       />
                     </div>
@@ -5680,6 +5643,7 @@ const ScaleRightSide = () => {
                         id="spacing"
                         onChange={(e) => setSpace(e.target.value)}
                         // value={-upperVal}
+                        defaultValue={stapelSpaceUnit ? Number(stapelSpaceUnit.textContent) : 0}
                       />
                     </div>
                   </div>
@@ -5856,8 +5820,8 @@ const ScaleRightSide = () => {
                           id="font_style_stapel"
                           defaultValue={
                             // !scaleDisplay ? undefined ? scaleDisplay="none" ? undefined : scaleBg
-                            fontFamlity
-                              ? fontFamlity.style.fontFamily
+                            fontFamilyStapel
+                              ? fontFamilyStapel.style.fontFamily
                               : "Select"
                           }
                         >
@@ -6131,6 +6095,7 @@ const ScaleRightSide = () => {
                               ? true
                               : false
                           }
+                          defaultValue={stapelLeft ? stapelLeft.textContent : ""}
                         />
                       </div>
                     </div>
@@ -6181,6 +6146,8 @@ const ScaleRightSide = () => {
                               ? true
                               : false
                           }
+
+                          defaultValue={stapelRight ? stapelRight.textContent : ""}
                         />
                       </div>
                     </div>
