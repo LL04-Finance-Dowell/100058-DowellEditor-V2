@@ -1964,6 +1964,12 @@ const ScaleRightSide = () => {
       }
 
       if (option.value === "Vertical") {
+        const orientation = document.createElement("h2");
+        orientation.className = "nps_lite_orientation";
+        orientation.textContent = "Vertical";
+        orientation.style.display = "none";
+        button4.appendChild(orientation);
+
         button4.style.display = "flex";
         button4.style.alignItems = "center";
         button4.style.justifyContent = "center";
