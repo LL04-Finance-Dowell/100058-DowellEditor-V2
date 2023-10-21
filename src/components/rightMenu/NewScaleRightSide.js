@@ -3839,13 +3839,20 @@ const ScaleRightSide = () => {
   // // console.log(iframeSrc, "iframeSrc");
 
   function removeScale() {
-    const focusseddElmnt = document.querySelector(".focussedd");
-    if (focusseddElmnt.classList.contains("holderDIV")) {
-      document.querySelector(".focussedd").remove();
+    // const focusseddElmnt = document.querySelector(".focussedd");
+    // if (focusseddElmnt.classList.contains("holderDIV")) {
+    //   document.querySelector(".focussedd").remove();
+    // }
+    setConfirmRemove(!confirmRemove)
+    const rscale = document.getElementsByClassName("newScaleInput")
+    if(rscale.length === 1) {
+      setScaleTypeContent("")
     }
+    console.log("Remove scale length", rscale.length)
   }
+
   const myArray = Object.values(data)[0];
-  // // console.log(myArray);
+  //console.log(myArray);
   function excludeElementsWithAttributeValue(arr, attribute, valueToExclude) {
     return arr?.filter(function (element) {
       // // console.log(element);
@@ -9274,8 +9281,8 @@ const ScaleRightSide = () => {
                 variant="secondary"
                 // className="remove_button"
                 className="remove_button"
-                // onClick={removeScale}
-                onClick={() => setConfirmRemove(!confirmRemove)}
+                onClick={removeScale}
+                //onClick={() => setConfirmRemove(!confirmRemove)}
               >
                 Remove Scale
               </Button>
