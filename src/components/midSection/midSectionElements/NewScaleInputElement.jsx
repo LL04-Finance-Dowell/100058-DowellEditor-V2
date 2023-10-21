@@ -674,8 +674,8 @@ function createNewScaleInputField(
 
       let orientation = element?.raw_data?.orientation;
       if (orientation === "Vertical") {
-        const orientation = document.createElement("div");
-        orientation.className = "orientation";
+        const orientation = document.createElement("h2");
+        orientation.className = "nps_lite_orientation";
         orientation.textContent = "Vertical";
         orientation.style.display = "none";
         labelHold.appendChild(orientation);
