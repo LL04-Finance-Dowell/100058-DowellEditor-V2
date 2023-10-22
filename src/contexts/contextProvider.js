@@ -85,6 +85,9 @@ export const ContextProvider = ({ children }) => {
   const [genSelOpt, setGenSelOpt] = useState('');
 
   const [fixedMidSecDim] = useState({ width: 793.69, height: 1122.52, parentHeight: 1235.89 })
+  const [currMidSecWidth, setCurrMidSecWidth] = useState(0)
+
+  const [dimRatios, setDimRatios] = useState([]);
 
   const handleDrop = (dropped) => {
     setIsDropped({ ...isDropped, [dropped]: true });
@@ -568,6 +571,8 @@ export const ContextProvider = ({ children }) => {
     })
 
     midSecAll[0].parentElement.parentElement.parentElement.style.marginTop = window.innerWidth > 993 ? 0 : leftRect.height + 'px';
+
+    currWidth !== currMidSecWidth && setCurrMidSecWidth(currWidth)
   }
 
   useEffect(() => {
@@ -741,7 +746,8 @@ export const ContextProvider = ({ children }) => {
         genSelOpt,
         setGenSelOpt,
         fixedMidSecDim,
-        scaleMidSec
+        scaleMidSec,
+        currMidSecWidth, dimRatios, setDimRatios
       }}
     >
       {children}

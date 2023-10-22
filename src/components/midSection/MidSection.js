@@ -53,6 +53,7 @@ import { useCutMenuContext } from "./cutMenuHook";
 import axios from "axios";
 import { toast } from "react-toastify";
 import createGenBtnEl from "./createElements/CreateGenBtnEl";
+import { saveDocument } from "../header/Header";
 // tHIS IS FOR A TEST COMMIT
 
 const dummyData = {
@@ -125,7 +126,19 @@ const MidSection = React.forwardRef((props, ref) => {
     buttonLink,
     setButtonPurpose,
     confirmRemove,
-    scaleMidSec
+    scaleMidSec,
+    currMidSecWidth,
+    fixedMidSecDim, inputBorderSize, inputBorderColor, borderSize, borderColor, tableBorderSize, tableBorderColor, setDimRatios, dimRatios, containerBorderSize, scaleBorderSize, iframeBorderSize,
+    iframeBorderColor,
+    scaleBorderColor, calendarBorderSize,
+    calendarBorderColor,
+    dropdownBorderSize,
+    dropdownBorderColor,
+    buttonBorderSize,
+    buttonBorderColor,
+    signBorderSize,
+    signBorderColor,
+    containerBorderColor,
   } = useStateContext();
 
   const { contextMenu, setContextMenu } = useCutMenuContext()
@@ -154,6 +167,8 @@ const MidSection = React.forwardRef((props, ref) => {
 
   // console.log(documnetMap);
 
+  const isFirstRender = useRef(true);
+
   const editorRef = useRef(null);
   const cutItemRef = useRef(null);
   const [selectedText, setSelectedText] = useState('');
@@ -175,52 +190,7 @@ const MidSection = React.forwardRef((props, ref) => {
 
   const midSectionRef = useRef([]);
 
-  useEffect(() => {
-    document.addEventListener("mousedown", (event) => {
 
-      // // console.log("getting mouse position on midsection", event.screenX, event.screenY);
-      const holderDIV = document.getElementsByClassName("holderDIV");
-      const holderr = document.getElementsByClassName("holder-menu");
-      const resizerr = document.getElementsByClassName("resizeBtn");
-
-      if (event?.target?.id === midSectionRef?.current?.id) {
-        // holderDIV.classList.remove('focussedd')
-        if (document.querySelector(".focussedd")) {
-          document.querySelector(".focussedd").classList.remove("focussedd");
-        }
-        if (document.querySelector(".focussed")) {
-          document.querySelector(".focussed").classList.remove("focussed");
-        }
-        setIsMenuVisible(false);
-        setSidebar(false);
-        setIsClicked(false);
-        setRightSideDateMenu(false);
-        setIsClicked({
-          ...isClicked,
-          align2: false,
-          textfill2: false,
-          image2: false,
-          table2: false,
-          signs2: false,
-          calendar2: false,
-          dropdown2: false,
-          scale2: false,
-          container2: false,
-          iframe2: false,
-          button2: false,
-          email2: false,
-          newScale2: false,
-          camera2: false,
-          payment2: false,
-        });
-
-        contextMenuClose()
-        const divsArray = document.getElementsByClassName(
-          "enable_pointer_event"
-        );
-      }
-    });
-  }, []);
 
   const [postData, setPostData] = useState({});
 
@@ -250,30 +220,7 @@ const MidSection = React.forwardRef((props, ref) => {
       });
   };
 
-  useEffect(() => {
-    if (data !== undefined) {
-      onPost();
 
-      //call this conditionally
-      if (decoded && decoded?.details?.cluster === "socialmedia") {
-        onParagraphPost()
-        console.log(decoded)
-      }
-
-    } else {
-    }
-  }, [isDataRetrieved]);
-
-  useEffect(() => {
-    // TODO IMPORT saveDocument AND DRAFT A WAY TO SCALE DOWN COMPONENTS ON RESIZE
-    // TODO ALSO MAKE THIS A FUNCTION AS IT WILL BE NEEDED FOR THE MID SECT SCALING
-    // TODO GOODNIGHT BRUF
-    window.onresize = () => {
-      scaleMidSec();
-    }
-
-    return () => window.removeEventListener('resize', () => { })
-  }, [])
 
   let resizing = false;
   let contentFile = [];
@@ -1002,7 +949,7 @@ const MidSection = React.forwardRef((props, ref) => {
     return holderDIV;
   }
 
-  // dragging test
+
 
   let dragged = null;
 
@@ -1014,40 +961,24 @@ const MidSection = React.forwardRef((props, ref) => {
       // console.log("dragged", dragged);
     });
   }
-  // const findPercent = (element, arg) => {
-  //   if (window.innerWidth < 993) {
 
-  //     if (arg == "width") {
-  //       return (element.width / 793.69) * 100 + "%"
-  //     } else {
-  //       return (element.left / 793.69) * 100 + "%"
-  //     }
-  //   }
-  //   else {
-  //     if (arg == "width") {
-  //       return element.width + "px"
-  //     } else {
-  //       return element.left + "px"
-  //     }
-  //   }
-  // }
   const onPost = () => {
     const curr_user = document.getElementById("curr_user");
     const midSec = document.querySelector(".midSection_container");
     const midSecWidth = midSec.getBoundingClientRect().width;
+    let iniDimRatio = [];
 
     scaleMidSec();
 
 
 
-    let pageNo = 0;
-    let isAnyRequiredElementEdited = false;
-
     for (let p = 1; p <= item?.length; p++) {
 
-      pageNo++;
       fetchedData[p]?.forEach((element) => {
         if (element.type === "TEXT_INPUT") {
+          const elDom = document.getElementById(element.id);
+          elDom && elDom.remove();
+
           const width = finding_percent(element, 'width');
 
           const height = window.innerWidth > 993 ? element.height + 'px' : `${(element.height / element.width) * ((parseFloat(width) * midSecWidth) / 100)}px`
@@ -1056,25 +987,33 @@ const MidSection = React.forwardRef((props, ref) => {
           const measure = {
             width,
             height,
-            // height: window.innerWidth > 992 ? element.height + "px" : ((finding_percent(element, "width")?.split("%")[0] / (element?.width / element?.height)) * window.innerWidth) / 1123 + "%",
             left: finding_percent(element, "left", midSecWidth),
             top,
             border: element.borderWidths,
             auth_user: curr_user,
           };
-          // console.log("getting text input value", measure.border);
 
           const idMatch = documnetMap?.filter((elmnt) => elmnt == element?.id);
-          // // console.log("element", element);
 
-          const holderDIV = getHolderDIV(measure, pageNo, idMatch);
+          const holderDIV = getHolderDIV(measure, p, idMatch);
           const id = `${element.id}`;
-          // console.log("texteleemnt");
 
           createTextInputField(id, element, document_map_required, p, holderDIV, focuseddClassMaintain, handleClicked, setSidebar)
 
+          // * This is to get the ratios of the dimensions of the element, to be used for resposiveness purposes
+          iniDimRatio.push({
+            type: element.type,
+            id: element.id,
+            top: parseFloat(measure.top) / midSecWidth,
+            left: parseFloat(measure.left) / midSecWidth,
+            width: parseFloat(measure.width) / midSecWidth,
+            height: parseFloat(measure.height) / midSecWidth
+          })
         }
         if (element.type === "IMAGE_INPUT") {
+          const elDom = document.getElementById(element.id);
+          elDom && elDom.remove();
+
           const width = finding_percent(element, 'width');
 
           const height = window.innerWidth > 993 ? element.height + 'px' : `${(element.height / element.width) * ((parseFloat(width) * midSecWidth) / 100)}px`
@@ -1082,23 +1021,33 @@ const MidSection = React.forwardRef((props, ref) => {
           const top = window.innerWidth > 993 ? parseFloat(element.topp) + 'px' : `${(parseFloat(element.topp) / element.width) * ((parseFloat(width) * midSecWidth) / 100)}px`
 
           const measure = {
-            // width: element.width + "px",
             width,
             height,
-            // height: window.innerWidth > 992 ? element.height + "px" : ((finding_percent(element, "width")?.split("%")[0] / (element?.width / element?.height)) * window.innerWidth) / 1123 + "%",
             left: finding_percent(element, "left", midSecWidth),
             top,
             border: element.imgBorder,
             auth_user: curr_user,
           };
-          // console.log("element", element, "measure", measure);
           const idMatch = documnetMap?.filter((elmnt) => elmnt === element?.id);
-          const holderDIV = getHolderDIV(measure, pageNo, idMatch);
+          const holderDIV = getHolderDIV(measure, p, idMatch);
           const id = `${element.id}`;
 
           createImageInputField(id, element, document_map_required, p, holderDIV, focuseddClassMaintain, handleClicked, setSidebar)
+
+          // * This is to get the ratios of the dimensions of the element, to be used for resposiveness purposes
+          iniDimRatio.push({
+            type: element.type,
+            id: element.id,
+            top: parseFloat(measure.top) / midSecWidth,
+            left: parseFloat(measure.left) / midSecWidth,
+            width: parseFloat(measure.width) / midSecWidth,
+            height: parseFloat(measure.height) / midSecWidth
+          })
         }
         if (element.type === "DATE_INPUT") {
+          const elDom = document.getElementById(element.id);
+          elDom && elDom.remove();
+
           const width = finding_percent(element, 'width');
 
           const height = window.innerWidth > 993 ? element.height + 'px' : `${(element.height / element.width) * ((parseFloat(width) * midSecWidth) / 100)}px`
@@ -1107,22 +1056,32 @@ const MidSection = React.forwardRef((props, ref) => {
 
           const measure = {
             width,
-            // height: window.innerWidth > 992 ? element.height + "px" : ((finding_percent(element, "width")?.split("%")[0] / (element?.width / element?.height)) * window.innerWidth) / 1123 + "%",
             height,
             left: finding_percent(element, "left", midSecWidth),
             top,
             border: element.calBorder,
             auth_user: curr_user,
           };
-          // console.log("date data and value", measure.border);
           const idMatch = documnetMap?.filter((elmnt) => elmnt == element?.id);
-          const holderDIV = getHolderDIV(measure, pageNo, idMatch);
-          // console.log("getting cal element", element.calBorder);
+          const holderDIV = getHolderDIV(measure, p, idMatch);
           const id = `${element.id}`;
 
           createDateInputField(id, element, document_map_required, p, holderDIV, focuseddClassMaintain, handleClicked, setSidebar, setRightSideDateMenu, setMethod, setStartDate)
+
+          // * This is to get the ratios of the dimensions of the element, to be used for resposiveness purposes
+          iniDimRatio.push({
+            type: element.type,
+            id: element.id,
+            top: parseFloat(measure.top) / midSecWidth,
+            left: parseFloat(measure.left) / midSecWidth,
+            width: parseFloat(measure.width) / midSecWidth,
+            height: parseFloat(measure.height) / midSecWidth
+          })
         }
         if (element.type === "SIGN_INPUT") {
+          const elDom = document.getElementById(element.id);
+          elDom && elDom.remove();
+
           const width = finding_percent(element, 'width');
 
           const height = window.innerWidth > 993 ? element.height + 'px' : `${(element.height / element.width) * ((parseFloat(width) * midSecWidth) / 100)}px`
@@ -1131,7 +1090,6 @@ const MidSection = React.forwardRef((props, ref) => {
 
           const measure = {
             width,
-            // height: window.innerWidth > 992 ? element.height + "px" : ((finding_percent(element, "width")?.split("%")[0] / (element?.width / element?.height)) * window.innerWidth) / 1123 + "%",
             height,
             left: finding_percent(element, "left", midSecWidth),
             top,
@@ -1140,12 +1098,25 @@ const MidSection = React.forwardRef((props, ref) => {
           };
           const idMatch = documnetMap?.filter((elmnt) => elmnt == element?.id);
 
-          const holderDIV = getHolderDIV(measure, pageNo, idMatch);
+          const holderDIV = getHolderDIV(measure, p, idMatch);
           const id = `${element.id}`;
 
           createSignInputField(id, element, p, holderDIV, focuseddClassMaintain, handleClicked, setSidebar)
+
+          // * This is to get the ratios of the dimensions of the element, to be used for resposiveness purposes
+          iniDimRatio.push({
+            type: element.type,
+            id: element.id,
+            top: parseFloat(measure.top) / midSecWidth,
+            left: parseFloat(measure.left) / midSecWidth,
+            width: parseFloat(measure.width) / midSecWidth,
+            height: parseFloat(measure.height) / midSecWidth
+          })
         }
         if (element.type === "TABLE_INPUT") {
+          const elDom = document.getElementById(element.id);
+          elDom && elDom.remove();
+
           const width = finding_percent(element, 'width');
 
           const height = window.innerWidth > 993 ? element.height + 'px' : `${(element.height / element.width) * ((parseFloat(width) * midSecWidth) / 100)}px`
@@ -1154,7 +1125,6 @@ const MidSection = React.forwardRef((props, ref) => {
 
           const measure = {
             width,
-            // height: window.innerWidth > 992 ? element.height + "px" : ((finding_percent(element, "width")?.split("%")[0] / (element?.width / element?.height)) * window.innerWidth) / 1123 + "%",
             height,
             left: finding_percent(element, "left", midSecWidth),
             top,
@@ -1162,9 +1132,8 @@ const MidSection = React.forwardRef((props, ref) => {
             auth_user: curr_user,
           };
           const idMatch = documnetMap?.filter((elmnt) => elmnt == element?.id);
-          const holderDIV = getHolderDIV(measure, pageNo, idMatch);
+          const holderDIV = getHolderDIV(measure, p, idMatch);
           const id = element.id;
-          // console.log('Create Table Component');
 
           CreateTableComponent(
             holderDIV,
@@ -1181,8 +1150,25 @@ const MidSection = React.forwardRef((props, ref) => {
             setRightSideDateMenu
           )
 
+          const tableInputs = document.querySelectorAll('.tableInput');
+          tableInputs[tableInputs.length - 1].id = `tab${tableInputs.length}`
+
+
+          // * This is to get the ratios of the dimensions of the element, to be used for resposiveness purposes
+          iniDimRatio.push({
+            type: element.type,
+            id: `tab_${tableInputs.length}`,
+            top: parseFloat(measure.top) / midSecWidth,
+            left: parseFloat(measure.left) / midSecWidth,
+            width: parseFloat(measure.width) / midSecWidth,
+            height: parseFloat(measure.height) / midSecWidth
+          })
+
         }
         if (element.type === "IFRAME_INPUT") {
+          const elDom = document.getElementById(element.id);
+          elDom && elDom.remove();
+
           const width = finding_percent(element, 'width');
 
           const height = window.innerWidth > 993 ? element.height + 'px' : `${(element.height / element.width) * ((parseFloat(width) * midSecWidth) / 100)}px`
@@ -1191,7 +1177,6 @@ const MidSection = React.forwardRef((props, ref) => {
 
           const measure = {
             width,
-            // height: window.innerWidth > 992 ? element.height + "px" : ((finding_percent(element, "width")?.split("%")[0] / (element?.width / element?.height)) * window.innerWidth) / 1123 + "%",
             height,
             left: finding_percent(element, "left", midSecWidth),
             top,
@@ -1199,13 +1184,26 @@ const MidSection = React.forwardRef((props, ref) => {
             auth_user: curr_user,
           };
           const idMatch = documnetMap?.filter((elmnt) => elmnt == element?.id);
-          const holderDIV = getHolderDIV(measure, pageNo, idMatch);
+          const holderDIV = getHolderDIV(measure, p, idMatch);
           const id = `${element.id}`;
 
           createIframeInputField(id, element, p, holderDIV, table_dropdown_focuseddClassMaintain, handleClicked, setSidebar)
+
+          // * This is to get the ratios of the dimensions of the element, to be used for resposiveness purposes
+          iniDimRatio.push({
+            type: element.type,
+            id: element.id,
+            top: parseFloat(measure.top) / midSecWidth,
+            left: parseFloat(measure.left) / midSecWidth,
+            width: parseFloat(measure.width) / midSecWidth,
+            height: parseFloat(measure.height) / midSecWidth
+          })
         }
 
         if (element.type === "BUTTON_INPUT") {
+          const elDom = document.getElementById(element.id);
+          elDom && elDom.remove();
+
           const width = finding_percent(element, 'width');
 
           const height = window.innerWidth > 993 ? element.height + 'px' : `${(element.height / element.width) * ((parseFloat(width) * midSecWidth) / 100)}px`
@@ -1214,7 +1212,6 @@ const MidSection = React.forwardRef((props, ref) => {
 
           const measure = {
             width,
-            // height: window.innerWidth > 992 ? element.height + "px" : ((finding_percent(element, "width")?.split("%")[0] / (element?.width / element?.height)) * window.innerWidth) / 1123 + "%",
             height,
             left: finding_percent(element, "left", midSecWidth),
             top,
@@ -1223,14 +1220,27 @@ const MidSection = React.forwardRef((props, ref) => {
           };
 
           const idMatch = documnetMap?.filter((elmnt) => elmnt == element?.id);
-          const holderDIV = getHolderDIV(measure, pageNo);
+          const holderDIV = getHolderDIV(measure, p);
           const id = `${element.id}`;
           const finalizeButton = document.getElementById("finalize-button");
           const rejectButton = document.getElementById("reject-button");
 
           createButtonInputField(id, element, p, holderDIV, focuseddClassMaintain, handleClicked, setSidebar, finalizeButton, rejectButton, decoded, document_map_required)
+
+          // * This is to get the ratios of the dimensions of the element, to be used for resposiveness purposes
+          iniDimRatio.push({
+            type: element.type,
+            id: element.id,
+            top: parseFloat(measure.top) / midSecWidth,
+            left: parseFloat(measure.left) / midSecWidth,
+            width: parseFloat(measure.width) / midSecWidth,
+            height: parseFloat(measure.height) / midSecWidth
+          })
         }
         if (element.type === "PAYMENT_INPUT") {
+          const elDom = document.getElementById(element.id);
+          elDom && elDom.remove();
+
           const width = finding_percent(element, 'width');
 
           const height = window.innerWidth > 993 ? element.height + 'px' : `${(element.height / element.width) * ((parseFloat(width) * midSecWidth) / 100)}px`
@@ -1239,7 +1249,6 @@ const MidSection = React.forwardRef((props, ref) => {
 
           const measure = {
             width,
-            // height: window.innerWidth > 992 ? element.height + "px" : ((finding_percent(element, "width")?.split("%")[0] / (element?.width / element?.height)) * window.innerWidth) / 1123 + "%",
             height,
             left: finding_percent(element, "left", midSecWidth),
             top,
@@ -1248,14 +1257,27 @@ const MidSection = React.forwardRef((props, ref) => {
           };
 
           const idMatch = documnetMap?.filter((elmnt) => elmnt == element?.id);
-          const holderDIV = getHolderDIV(measure, pageNo);
+          const holderDIV = getHolderDIV(measure, p);
           const id = `${element.id}`;
           const finalizeButton = document.getElementById("finalize-button");
           const rejectButton = document.getElementById("reject-button");
 
           createPaymentInputField(id, element, p, holderDIV, focuseddClassMaintain, handleClicked, setSidebar, finalizeButton, rejectButton, decoded, document_map_required)
+
+          // * This is to get the ratios of the dimensions of the element, to be used for resposiveness purposes
+          iniDimRatio.push({
+            type: element.type,
+            id: element.id,
+            top: parseFloat(measure.top) / midSecWidth,
+            left: parseFloat(measure.left) / midSecWidth,
+            width: parseFloat(measure.width) / midSecWidth,
+            height: parseFloat(measure.height) / midSecWidth
+          })
         }
         if (element.type === "FORM") {
+          const elDom = document.getElementById(element.id);
+          elDom && elDom.remove();
+
           const width = finding_percent(element, 'width');
 
           const height = window.innerWidth > 993 ? element.height + 'px' : `${(element.height / element.width) * ((parseFloat(width) * midSecWidth) / 100)}px`
@@ -1266,7 +1288,6 @@ const MidSection = React.forwardRef((props, ref) => {
 
           const measure = {
             width,
-            // height: window.innerWidth > 992 ? element.height + "px" : ((finding_percent(element, "width")?.split("%")[0] / (element?.width / element?.height)) * window.innerWidth) / 1123 + "%",
             height,
             left: finding_percent(element, "left", midSecWidth),
             top,
@@ -1275,13 +1296,26 @@ const MidSection = React.forwardRef((props, ref) => {
           };
 
           const idMatch = documnetMap?.filter((elmnt) => elmnt == element?.id);
-          const holderDIV = getHolderDIV(measure, pageNo);
+          const holderDIV = getHolderDIV(measure, p);
           const id = `${element.id}`;
 
           createFormInputField(id, element, p, holderDIV, focuseddClassMaintain, handleClicked, setSidebar)
+
+          // * This is to get the ratios of the dimensions of the element, to be used for resposiveness purposes
+          iniDimRatio.push({
+            type: element.type,
+            id: element.id,
+            top: parseFloat(measure.top) / midSecWidth,
+            left: parseFloat(measure.left) / midSecWidth,
+            width: parseFloat(measure.width) / midSecWidth,
+            height: parseFloat(measure.height) / midSecWidth
+          })
         }
 
         if (element.type === "SCALE_INPUT") {
+          const elDom = document.getElementById(element.id);
+          elDom && elDom.remove();
+
           const width = finding_percent(element, 'width');
 
           const height = window.innerWidth > 993 ? element.height + 'px' : `${(element.height / element.width) * ((parseFloat(width) * midSecWidth) / 100)}px`
@@ -1292,7 +1326,6 @@ const MidSection = React.forwardRef((props, ref) => {
 
           const measure = {
             width,
-            // height: window.innerWidth > 992 ? element.height + "px" : ((finding_percent(element, "width")?.split("%")[0] / (element?.width / element?.height)) * window.innerWidth) / 1123 + "%",
             height,
             left: finding_percent(element, "left", midSecWidth),
             top,
@@ -1300,13 +1333,26 @@ const MidSection = React.forwardRef((props, ref) => {
             auth_user: curr_user,
           };
           const idMatch = documnetMap?.filter((elmnt) => elmnt == element?.id);
-          const holderDIV = getHolderDIV(measure, pageNo, idMatch);
+          const holderDIV = getHolderDIV(measure, p, idMatch);
           const id = `${element.id}`;
 
           createScaleInputField(id, element, p, holderDIV, focuseddClassMaintain, handleClicked, setSidebar, table_dropdown_focuseddClassMaintain, decoded)
+
+          // * This is to get the ratios of the dimensions of the element, to be used for resposiveness purposes
+          iniDimRatio.push({
+            type: element.type,
+            id: element.id,
+            top: parseFloat(measure.top) / midSecWidth,
+            left: parseFloat(measure.left) / midSecWidth,
+            width: parseFloat(measure.width) / midSecWidth,
+            height: parseFloat(measure.height) / midSecWidth
+          })
         }
 
         if (element.type === "CAMERA_INPUT") {
+          const elDom = document.getElementById(element.id);
+          elDom && elDom.remove();
+
           const width = finding_percent(element, 'width');
 
           const height = window.innerWidth > 993 ? element.height + 'px' : `${(element.height / element.width) * ((parseFloat(width) * midSecWidth) / 100)}px`
@@ -1315,122 +1361,34 @@ const MidSection = React.forwardRef((props, ref) => {
 
           const measure = {
             width,
-            // height: window.innerWidth > 992 ? element.height + "px" : ((finding_percent(element, "width")?.split("%")[0] / (element?.width / element?.height)) * window.innerWidth) / 1123 + "%",
             height,
             left: finding_percent(element, "left", midSecWidth),
             top,
             auth_user: curr_user,
           };
           const idMatch = documnetMap?.filter((elmnt) => elmnt == element?.id);
-          const holderDIV = getHolderDIV(measure, pageNo, idMatch);
+          const holderDIV = getHolderDIV(measure, p, idMatch);
           const id = `${element.id}`;
           const videoLinkHolder = `${element?.raw_data?.videoLinkHolder}`;
           const imageLinkHolder = `${element?.raw_data?.imageLinkHolder}`;
-          // const holderDIV = getHolderDIV(measure, pageNo);
+          // const holderDIV = getHolderDIV(measure, p);
 
           createCameraInputField(id, p, holderDIV, handleClicked, setSidebar, table_dropdown_focuseddClassMaintain, videoLinkHolder, imageLinkHolder, decoded)
 
-          // let cameraField = document.createElement("div");
-          // cameraField.className = "cameraInput";
-          // cameraField.id = id;
-          // cameraField.style.width = "100%";
-          // cameraField.style.height = "100%";
-          // cameraField.style.borderRadius = "0px";
-          // cameraField.style.outline = "0px";
-          // cameraField.style.overflow = "overlay";
-
-          // let videoField = document.createElement("video");
-          // const imageLinkHolder1 = document.createElement("h1");
-          // const videoLinkHolder1 = document.createElement("h1");
-          // if (videoLinkHolder === "video_link") {
-          //   videoField.className = "videoInput";
-          //   videoField.style.width = "100%";
-          //   videoField.style.height = "100%";
-          //   videoField.autoplay = true;
-          //   videoField.loop = true;
-          //   videoField.style.display = "none";
-          //   cameraField.append(videoField);
-
-          //   videoLinkHolder1.className = "videoLinkHolder";
-          //   videoLinkHolder1.textContent = videoLinkHolder;
-          //   videoLinkHolder1.style.display = "none";
-          //   cameraField.append(videoLinkHolder1);
-          // } else {
-          //   videoField.className = "videoInput";
-          //   videoField.src = videoLinkHolder;
-          //   videoField.style.width = "100%";
-          //   videoField.style.height = "100%";
-          //   videoField.autoplay = true;
-          //   videoField.muted = true;
-          //   videoField.loop = true;
-          //   cameraField.append(videoField);
-
-          //   videoLinkHolder1.className = "videoLinkHolder";
-          //   videoLinkHolder1.textContent = videoLinkHolder;
-          //   videoLinkHolder1.style.display = "none";
-          //   cameraField.append(videoLinkHolder1);
-          // }
-
-          // let imgHolder = document.createElement("img");
-          // if (imageLinkHolder === "image_link") {
-          //   imgHolder.className = "imageHolder";
-          //   imgHolder.style.height = "100%";
-          //   imgHolder.style.width = "100%";
-          //   imgHolder.alt = "";
-          //   imgHolder.style.display = "none";
-          //   cameraField.append(imgHolder);
-
-          //   imageLinkHolder1.className = "imageLinkHolder";
-          //   imageLinkHolder1.textContent = imageLinkHolder;
-          //   imageLinkHolder1.style.display = "none";
-          //   cameraField.append(imageLinkHolder1);
-          // } else {
-          //   imgHolder.className = "imageHolder";
-          //   imgHolder.style.height = "100%";
-          //   imgHolder.style.width = "100%";
-          //   imgHolder.alt = "";
-          //   imgHolder.src = imageLinkHolder;
-          //   cameraField.append(imgHolder);
-
-          //   imageLinkHolder1.className = "imageLinkHolder";
-          //   imageLinkHolder1.textContent = imageLinkHolder;
-          //   imageLinkHolder1.style.display = "none";
-          //   cameraField.append(imageLinkHolder1);
-          // }
-
-          // cameraField.addEventListener("resize", () => {
-          //   videoField.style.width = cameraField.clientWidth + "px";
-          //   videoField.style.height = cameraField.clientHeight + "px";
-          // });
-
-          // cameraField.onclick = (e) => {
-          //   e.stopPropagation();
-          //   table_dropdown_focuseddClassMaintain(e);
-          //   if (e.ctrlKey) {
-          //     copyInput("camera2");
-          //   }
-          //   handleClicked("camera2");
-          //   setSidebar(true);
-          // };
-
-          // imgHolder.onclick = (e) => {
-          //   e.stopPropagation();
-          //   table_dropdown_focuseddClassMaintain(e);
-          //   if (e.ctrlKey) {
-          //     copyInput("camera2");
-          //   }
-          //   handleClicked("camera2");
-          //   setSidebar(true);
-          //   // console.log("The camera", cameraField);
-          // };
-          // holderDIV.append(cameraField);
-
-          // document
-          //   .getElementsByClassName("midSection_container")
-          //   [p - 1] // ?.item(0)
-          //   ?.append(holderDIV);
+          // * This is to get the ratios of the dimensions of the element, to be used for resposiveness purposes
+          iniDimRatio.push({
+            type: element.type,
+            id: element.id,
+            top: parseFloat(measure.top) / midSecWidth,
+            left: parseFloat(measure.left) / midSecWidth,
+            width: parseFloat(measure.width) / midSecWidth,
+            height: parseFloat(measure.height) / midSecWidth
+          })
         }
         if (element.type === "NEW_SCALE_INPUT") {
+          const elDom = document.getElementById(element.id);
+          elDom && elDom.remove();
+
           const width = finding_percent(element, 'width');
 
           const height = window.innerWidth > 993 ? element.height + 'px' : `${(element.height / element.width) * ((parseFloat(width) * midSecWidth) / 100)}px`
@@ -1439,20 +1397,32 @@ const MidSection = React.forwardRef((props, ref) => {
 
           const measure = {
             width,
-            // height: window.innerWidth > 992 ? element.height + "px" : ((finding_percent(element, "width")?.split("%")[0] / (element?.width / element?.height)) * window.innerWidth) / 1123 + "%",
             height,
             left: finding_percent(element, "left", midSecWidth),
             top,
             auth_user: curr_user,
           };
           const idMatch = documnetMap?.filter((elmnt) => elmnt == element?.id);
-          const holderDIV = getHolderDIV(measure, pageNo, idMatch);
+          const holderDIV = getHolderDIV(measure, p, idMatch);
           const id = `${element?.raw_data?.scaleID}`;
 
           createNewScaleInputField(id, element, p, holderDIV, focuseddClassMaintain, handleClicked, setSidebar, table_dropdown_focuseddClassMaintain, decoded, token, document_map_required);
+
+          // * This is to get the ratios of the dimensions of the element, to be used for resposiveness purposes
+          iniDimRatio.push({
+            type: element.type,
+            id: element.id,
+            top: parseFloat(measure.top) / midSecWidth,
+            left: parseFloat(measure.left) / midSecWidth,
+            width: parseFloat(measure.width) / midSecWidth,
+            height: parseFloat(measure.height) / midSecWidth
+          })
         }
         // Limon
         if (element.type === "DROPDOWN_INPUT") {
+          const elDom = document.getElementById(element.id);
+          elDom && elDom.remove();
+
           const width = finding_percent(element, 'width');
 
           const height = window.innerWidth > 993 ? element.height + 'px' : `${(element.height / element.width) * ((parseFloat(width) * midSecWidth) / 100)}px`
@@ -1461,23 +1431,33 @@ const MidSection = React.forwardRef((props, ref) => {
 
           const measure = {
             width,
-            // height: window.innerWidth > 992 ? element.height + "px" : ((finding_percent(element, "width")?.split("%")[0] / (element?.width / element?.height)) * window.innerWidth) / 1123 + "%",
             height,
             left: finding_percent(element, "left", midSecWidth),
             top,
             border: element.dropdownBorder,
             auth_user: curr_user,
           };
-          // // console.log("dropdown border value", measure.border);
           const idMatch = documnetMap?.filter((elmnt) => elmnt == element?.id);
-          const holderDIV = getHolderDIV(measure, pageNo, idMatch);
+          const holderDIV = getHolderDIV(measure, p, idMatch);
           const id = `${element.id}`;
-          // const holderDIV = getHolderDIV(measure, pageNo);
 
           createDropDownInputField(id, element, p, holderDIV, focuseddClassMaintain, handleClicked, setSidebar, table_dropdown_focuseddClassMaintain, decoded, setRightSideDropDown, setDropdownName);
+
+          // * This is to get the ratios of the dimensions of the element, to be used for resposiveness purposes
+          iniDimRatio.push({
+            type: element.type,
+            id: element.id,
+            top: parseFloat(measure.top) / midSecWidth,
+            left: parseFloat(measure.left) / midSecWidth,
+            width: parseFloat(measure.width) / midSecWidth,
+            height: parseFloat(measure.height) / midSecWidth
+          })
         }
         // conteiner retrive data
         if (element.type === "CONTAINER_INPUT") {
+          const elDom = document.getElementById(element.id);
+          elDom && elDom.remove();
+
           const width = finding_percent(element, 'width');
 
           const height = window.innerWidth > 993 ? element.height + 'px' : `${(element.height / element.width) * ((parseFloat(width) * midSecWidth) / 100)}px`
@@ -1486,7 +1466,6 @@ const MidSection = React.forwardRef((props, ref) => {
 
           const measure = {
             width,
-            // height: window.innerWidth > 992 ? element.height + "px" : ((finding_percent(element, "width")?.split("%")[0] / (element?.width / element?.height)) * window.innerWidth) / 1123 + "%",
             height,
             left: finding_percent(element, "left", midSecWidth),
             top,
@@ -1494,58 +1473,28 @@ const MidSection = React.forwardRef((props, ref) => {
             auth_user: curr_user,
           };
           const idMatch = documnetMap?.filter((elmnt) => elmnt == element?.id);
-          const holderDIV = getHolderDIV(measure, pageNo, idMatch);
+          const holderDIV = getHolderDIV(measure, p, idMatch);
           const id = `${element.id}`;
-          // const holderDIV = getHolderDIV(measure, pageNo);
-          console.log("\n>>>>>>>>>>>>\nCoNTAINER DATA\n", element, "\n>>>>>>>>>>>>\n")
+
           createContainerInputField(id, element, p, holderDIV, focuseddClassMaintain, handleClicked, setSidebar, table_dropdown_focuseddClassMaintain, decoded, setPostData, postData, getHolderDIV, getOffset, setStartDate, setMethod, setRightSideDateMenu, title, curr_user)
+
+          // * This is to get the ratios of the dimensions of the element, to be used for resposiveness purposes
+          iniDimRatio.push({
+            type: element.type,
+            id: element.id,
+            top: parseFloat(measure.top) / midSecWidth,
+            left: parseFloat(measure.left) / midSecWidth,
+            width: parseFloat(measure.width) / midSecWidth,
+            height: parseFloat(measure.height) / midSecWidth
+          })
         }
       });
     }
+
+    setDimRatios(iniDimRatio)
   };
 
-  // const onParagraphPost = () => {
-  //   const curr_user = document.getElementById("curr_user");
 
-  //   const measure = {
-  //     width: "300px",
-  //     height: "100px",
-  //     top: "100px",
-  //     auth_user: curr_user,
-  //   };
-
-  //   const holderDIV = getHolderDIV(measure);
-
-  //   let paragraphField = document.createElement("div");
-  //   //  inputField.setAttribute('draggable', true);
-  //   paragraphField.setAttribute("contenteditable", true);
-  //   paragraphField.className = "textInput";
-  //   paragraphField.style.width = "100%";
-  //   paragraphField.style.height = "100%";
-  //   paragraphField.style.resize = "none";
-  //   paragraphField.style.zIndex = 3;
-  //   paragraphField.style.backgroundColor = "#0000";
-  //   paragraphField.style.borderRadius = "0px";
-  //   paragraphField.style.outline = "0px";
-  //   paragraphField.style.overflow = "overlay";
-  //   paragraphField.style.position = "relative";
-  //   paragraphField.style.cursor = "text";
-  //   paragraphField.onclick = () => {
-  //     handleClicked("align2");
-  //     setSidebar(true);
-  //     paragraphField.parentElement.focus();
-  //   };
-
-  //   paragraphField.innerText = `${data.paragraph}`;
-  //   // paragraphField.innerHTML = `${data.normal.data[0][0].paragraph}`;
-
-  //   holderDIV.append(paragraphField);
-
-  //   document
-  //     .getElementById("midSection_container")
-  //     // .item(0)
-  //     .append(holderDIV);
-  // };
 
   const onParagraphPost = async () => {
     const response = await axios.post("http://uxlivinglab.pythonanywhere.com/", {
@@ -1863,7 +1812,7 @@ const MidSection = React.forwardRef((props, ref) => {
         ) {
           setIsLoading(true);
 
-          // createScaleInputElement(holderDIV, handleClicked, setSidebar, table_dropdown_focuseddClassMaintain, setScaleData, title);
+
 
           let scaleField = document.createElement("div");
           scaleField.className = "scaleInput";
@@ -2073,6 +2022,139 @@ const MidSection = React.forwardRef((props, ref) => {
   let elem = {};
 
 
+  const compsResizer = () => {
+    let page = [{}];
+
+    for (let i = 1; i <= item?.length; i++) {
+      const element = { [i]: [] };
+      page[0] = { ...page[0], ...element };
+    }
+
+    const docContent = saveDocument(page, fixedMidSecDim, inputBorderSize, inputBorderColor, borderSize, borderColor, tableBorderSize, tableBorderColor, containerBorderSize, scaleBorderSize,
+      scaleBorderColor, iframeBorderSize,
+      iframeBorderColor, calendarBorderSize,
+      calendarBorderColor,
+      dropdownBorderSize,
+      dropdownBorderColor,
+      buttonBorderSize,
+      buttonBorderColor,
+      signBorderSize,
+      signBorderColor,
+      containerBorderColor,)[0][0]
+    const allHolders = [...document.querySelectorAll('.holderDIV')];
+    const tableHoldersInfo = docContent[1].filter(con => con.type == 'TABLE_INPUT');
+    const tableHolders = allHolders.filter(holder => holder.children[0].classList.contains('tableInput'));
+
+    allHolders.forEach(holder => {
+      const el = holder.children[0];
+
+      if (el.classList.contains('tableInput')) {
+        const index = tableHolders.map((hold, ind) => el.parentElement === hold ? ind : null).find(ind => ind);
+        console.log('INDEX: ', index, tableHoldersInfo[index]);
+      }
+
+      // TODO GET THE DIMENSION RATIO AFTER THE COMPONENTS ARE DROP
+      // TODO USE MUTATION OBSERVE TO OBSERVE FOR CHANGES TO THE EDIT SECTION
+      // TODO THEN USE THIS DIMENSIONS TO COMPUTE FOR COMPONENTS NEW SIZES WHEN THE MID SEC IS RESIZED
+
+      console.log('EL: ', el);
+    })
+
+
+    console.log('DOC CONTENT: ', docContent);
+  }
+
+  useEffect(() => {
+    document.addEventListener("mousedown", (event) => {
+
+      // // console.log("getting mouse position on midsection", event.screenX, event.screenY);
+      const holderDIV = document.getElementsByClassName("holderDIV");
+      const holderr = document.getElementsByClassName("holder-menu");
+      const resizerr = document.getElementsByClassName("resizeBtn");
+
+      if (event?.target?.id === midSectionRef?.current?.id) {
+        // holderDIV.classList.remove('focussedd')
+        if (document.querySelector(".focussedd")) {
+          document.querySelector(".focussedd").classList.remove("focussedd");
+        }
+        if (document.querySelector(".focussed")) {
+          document.querySelector(".focussed").classList.remove("focussed");
+        }
+        setIsMenuVisible(false);
+        setSidebar(false);
+        setIsClicked(false);
+        setRightSideDateMenu(false);
+        setIsClicked({
+          ...isClicked,
+          align2: false,
+          textfill2: false,
+          image2: false,
+          table2: false,
+          signs2: false,
+          calendar2: false,
+          dropdown2: false,
+          scale2: false,
+          container2: false,
+          iframe2: false,
+          button2: false,
+          email2: false,
+          newScale2: false,
+          camera2: false,
+          payment2: false,
+        });
+
+        contextMenuClose()
+        const divsArray = document.getElementsByClassName(
+          "enable_pointer_event"
+        );
+      }
+    });
+  }, []);
+
+  useEffect(() => {
+    if (data !== undefined) {
+      onPost();
+
+      window.onresize = () =>
+        scaleMidSec();
+
+      //call this conditionally
+      if (decoded && decoded?.details?.cluster === "socialmedia") {
+        onParagraphPost()
+        console.log(decoded)
+      }
+
+    }
+
+    return () => window.removeEventListener('resize', () => { })
+
+  }, [isDataRetrieved]);
+
+  useEffect(() => {
+    if (isDataRetrieved && currMidSecWidth > 0) {
+      if (!isFirstRender.current) {
+        compsResizer();
+      } else isFirstRender.current = false
+
+      const editSec = document.querySelector('.editSec_midSec');
+
+      const editSecObserver = new MutationObserver((mutationLists) => {
+        for (const mutation of mutationLists) {
+          if (mutation.target.classList.contains('midSection_container')) {
+            console.log('El added or removed from midSec');
+          }
+        }
+      })
+
+      editSecObserver.observe(editSec, { childList: true, subtree: true })
+
+
+    }
+  }, [currMidSecWidth, isDataRetrieved])
+
+  useEffect(() => {
+    console.log('DIMENSION RATIOS: ', dimRatios);
+  }, [dimRatios])
 
   return (
     <>

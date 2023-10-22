@@ -752,7 +752,17 @@ const Header = () => {
     e.preventDefault();
     setIsLoading(true);
     setIsButtonDisabled(true);
-    const dataa = saveDocument(page, fixedMidSecDim, inputBorderSize, inputBorderColor, borderSize, borderColor, tableBorderSize, tableBorderColor);
+    const dataa = saveDocument(page, fixedMidSecDim, inputBorderSize, inputBorderColor, borderSize, borderColor, tableBorderSize, tableBorderColor, containerBorderSize, scaleBorderSize,
+      scaleBorderColor, iframeBorderSize,
+      iframeBorderColor, calendarBorderSize,
+      calendarBorderColor,
+      dropdownBorderSize,
+      dropdownBorderColor,
+      buttonBorderSize,
+      buttonBorderColor,
+      signBorderSize,
+      signBorderColor,
+      containerBorderColor,);
 
     const finalize = document.getElementById("finalize-button");
 
@@ -1367,7 +1377,16 @@ const Header = () => {
 export default Header;
 
 
-export function saveDocument(page, fixedMidSecDim, inputBorderSize, inputBorderColor, borderSize, borderColor, tableBorderSize, tableBorderColor) {
+export function saveDocument(page, fixedMidSecDim, inputBorderSize, inputBorderColor, borderSize, borderColor, tableBorderSize, tableBorderColor, containerBorderSize, scaleBorderSize,
+  scaleBorderColor, calendarBorderSize,
+  calendarBorderColor,
+  dropdownBorderSize,
+  dropdownBorderColor,
+  buttonBorderSize,
+  buttonBorderColor,
+  signBorderSize,
+  signBorderColor,
+  containerBorderColor,) {
   const txt = document.getElementsByClassName("textInput");
   let elem = {};
   let contentFile = [];

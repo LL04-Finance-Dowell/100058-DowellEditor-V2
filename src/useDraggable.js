@@ -4,7 +4,7 @@ import { useStateContext } from "./contexts/contextProvider";
 export default function useDraggable(el) {
   const [{ dx, dy }, setOffset] = useState({ dx: 0, dy: 0 });
 
-  const { isResizing } = useStateContext();
+  const { isResizing, setDimsRatio, dimsRatio } = useStateContext();
 
   useEffect(() => {
     if (isResizing === false) {
@@ -40,6 +40,7 @@ export default function useDraggable(el) {
   useEffect(() => {
     if (isResizing === false) {
       el.current.style.transform = `translate3d(${dx}px, ${dy}px, 0)`;
+      // TODO UPDATE dimsRatios
     }
   }, [isResizing, el, dx, dy]);
 }
