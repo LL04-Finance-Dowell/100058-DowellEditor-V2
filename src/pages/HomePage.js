@@ -13,9 +13,9 @@ const HomePage = () => {
   // console.log("PARAAAAAAAMS", params.getAll());
 
 
- 
 
-  
+
+
   const navigate = useNavigate();
   // const params = [];
 
@@ -33,15 +33,15 @@ const HomePage = () => {
   useEffect(() => {
     const params = [];
 
-  searchParams.forEach((value, key) => {
-    params.push(`${key}`);
-  });
-    if(params.includes("status")){
+    searchParams.forEach((value, key) => {
+      params.push(`${key}`);
+    });
+    if (params.includes("status")) {
       navigate("/status");
-    } 
+    }
 
-    console.log("PARAAAAAAMS",params)
-    
+    // console.log("PARAAAAAAMS",params)
+
   }, [location])
 
   // console.log("PARAAAAAAMS",params)

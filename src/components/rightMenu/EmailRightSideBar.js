@@ -37,8 +37,6 @@ const EmailRightSideBar = () => {
   const [subject, setSubject] = useState("");
   const [message, setMessage] = useState("");
 
-  const [isJustEntered, setIsJustEntered] = useState(true);
-
 
   const [isChecked, setIsChecked] = useState(false);
 
@@ -103,15 +101,11 @@ const EmailRightSideBar = () => {
     setFromEmail("");
   };
 
-  // *This is to preserve default btn select value
-  useEffect(() => {
-    setIsJustEntered(false);
-    setGenSelOpt('');
-  }, [])
+
 
   return (
     <>
-      <select className='gen_btn_sel' defaultValue={isJustEntered ? 'email' : genSelOpt} onChange={e => setGenSelOpt(e.target.value)}>
+      <select className='gen_btn_sel' defaultValue='email' onChange={e => setGenSelOpt(e.target.value)}>
         <option value="" disabled>Select type</option>
         <option value="cta">CTA</option>
         <option value="pay">Pay</option>
