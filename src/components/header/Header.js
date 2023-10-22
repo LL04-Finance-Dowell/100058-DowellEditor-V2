@@ -20,6 +20,8 @@ import { downloadPDF } from "../../utils/genratePDF.js";
 import generateImage from "../../utils/generateImage.js";
 import RejectionModal from "../modals/RejectionModal.jsx";
 
+import ProgressLoader from "../../utils/progressLoader/ProgressLoader"
+
 const Header = () => {
   const inputRef = useRef(null);
   const componentRef = useRef(null);
@@ -110,6 +112,8 @@ const Header = () => {
     setAllowHighlight,
     docMapRequired,
     setDocMapRequired,
+    progress, 
+    setProgress
   } = useStateContext();
 
   const [printContent, setPrintContent] = useState(false);
@@ -1091,6 +1095,7 @@ const Header = () => {
       .then((response) => {
         if (response.status === 200) {
           setIsLoading(false);
+          setProgress(progress + 50)
           var responseData = response.data;
           setScaleData(responseData);
           console.log(response);
@@ -1167,6 +1172,7 @@ const Header = () => {
       .then((response) => {
         if (response.status === 200) {
           setIsLoading(false);
+          setProgress(progress + 50)
           var responseData = response.data;
           setScaleData(responseData);
           console.log(response);
@@ -1246,6 +1252,7 @@ const Header = () => {
       .then((response) => {
         if (response.status === 200) {
           setIsLoading(false);
+          setProgress(progress + 50)
           var responseData = response.data;
           setScaleData(responseData);
           console.log(response);
@@ -1323,6 +1330,7 @@ const Header = () => {
       .then((response) => {
         if (response.status === 200) {
           setIsLoading(false);
+          setProgress(progress + 50)
           var responseData = response.data;
           setScaleData(responseData);
           console.log(response);
@@ -1414,6 +1422,7 @@ const Header = () => {
       .then((response) => {
         if (response.status === 200) {
           setIsLoading(false);
+          setProgress(progress + 50)
           var responseData = response.data;
           setScaleData(responseData);
           console.log(response);
@@ -1506,6 +1515,7 @@ const Header = () => {
       .then((response) => {
         if (response.status === 200) {
           setIsLoading(false);
+          setProgress(progress + 50)
           var responseData = response.data;
           setScaleData(responseData);
           console.log(response);
@@ -1517,12 +1527,15 @@ const Header = () => {
   }
 
   function submit(e) {
+    setProgress(progress + 50)
     e.preventDefault();
-    setIsLoading(true);
+    // setIsLoading(true);
     setIsButtonDisabled(true);
     const dataa = saveDocument();
 
     const finalize = document.getElementById("finalize-button");
+
+    const completeProgressBar = document.getElementById("progress-100");
 
     const titleName = document.querySelector(".title-name").innerHTML;
 
@@ -1579,6 +1592,7 @@ const Header = () => {
       }
     )
       .then((res) => {
+        completeProgressBar.click();
         if (res) {
           toast.success("Saved successfully");
           setIsLoading(false);
@@ -1606,6 +1620,7 @@ const Header = () => {
         }
       })
       .catch((err) => {
+        completeProgressBar.click();
         setIsLoading(false);
         setIsButtonDisabled(false);
       });
@@ -1717,7 +1732,7 @@ const Header = () => {
   };
 
   useEffect(() => {
-    setIsLoading(true);
+    // setIsLoading(true);
     getPostData();
   }, []);
 
@@ -1904,6 +1919,7 @@ const Header = () => {
   };
 
   return (
+    <>
     <div
       className={`header ${actionName == "template" ? "header_bg_template" : "header_bg_document"
         }`}
@@ -2127,6 +2143,10 @@ const Header = () => {
         />
       )}
     </div>
+    <div>
+      <ProgressLoader />
+    </div>
+    </>
   );
 };
 
