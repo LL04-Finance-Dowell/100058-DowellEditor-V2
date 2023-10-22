@@ -1391,40 +1391,68 @@ export function saveDocument(page, fixedMidSecDim, inputBorderSize, inputBorderC
   let elem = {};
   let contentFile = [];
 
-  function getPosition(el) {
-    // const midSec = document.getElementById("midSection_container");
+  function getPosition(el, childEl = false) {
+    const midSec = document.getElementById("midSection_container");
     const midSecAll = document.querySelectorAll('.midSection_container');
-    const page = Number([...el.classList].find(cl => cl.includes('page')).split('_')[1]);
-
-
     const rect = el.getBoundingClientRect();
-    // console.log("rect position from header", rect);
-    const midsectionRect = midSecAll[page - 1].getBoundingClientRect();
-    // console.log("midsectionRect position from header", midsectionRect);
-    const width = window.innerWidth < 993
-      ? (rect.width * fixedMidSecDim.width) / midsectionRect.width
-      : rect.width
 
-    const height = window.innerWidth < 993 ?
-      (rect.height / rect.width) * width
-      : rect.height;
+    if (!childEl) {
+      const page = Number([...el.classList].find(cl => cl.includes('page')).split('_')[1]);
+      const midsectionRect = midSecAll[page - 1].getBoundingClientRect();
+      const width = window.innerWidth < 993
+        ? (rect.width * fixedMidSecDim.width) / midsectionRect.width
+        : rect.width
 
-    const top = window.innerWidth < 993 ?
-      ((rect.top - midsectionRect.top) / rect.width) * width
-      : rect.top - midsectionRect.top;
+      const height = window.innerWidth < 993 ?
+        (rect.height / rect.width) * width
+        : rect.height;
 
-    const left = window.innerWidth < 993
-      ? ((rect.left - midsectionRect.left) / midsectionRect.width) * fixedMidSecDim.width
-      : rect.left - midsectionRect.left
+      const top = window.innerWidth < 993 ?
+        ((rect.top - midsectionRect.top) / rect.width) * width
+        : rect.top - midsectionRect.top;
+
+      const left = window.innerWidth < 993
+        ? ((rect.left - midsectionRect.left) / midsectionRect.width) * fixedMidSecDim.width
+        : rect.left - midsectionRect.left
+
+      return {
+        top,
+        left,
+        bottom: rect.bottom,
+        right: rect.right,
+        width,
+        height,
+      };
+    }
+
+
+    const midsectionRect = midSec.getBoundingClientRect();
 
     return {
-      top,
-      left,
+      top:
+        rect.top > 0
+          ? Math.abs(midsectionRect.top)
+          : rect.top - midsectionRect.top,
+      left:
+        window.innerWidth < 993
+          ? (rect.left * 793.7007874) / midsectionRect.width -
+          midsectionRect.left
+          : rect.left - midsectionRect.left,
+      // left:rect.left - midsectionRect.left,
       bottom: rect.bottom,
       right: rect.right,
-      width,
-      height,
+      width:
+        window.innerWidth < 993
+          ? (rect.width * 793.7007874) / midsectionRect.width
+          : rect.width,
+      // height: rect.height,
+      height:
+        window.innerWidth < 993
+          ? (rect.width / rect.height) * rect.height
+          : rect.height,
     };
+
+
   }
 
   const findPaageNum = (element) => {
@@ -1678,7 +1706,7 @@ export function saveDocument(page, fixedMidSecDim, inputBorderSize, inputBorderC
           for (let i = 0; i < containerChildren.length; i++) {
             const element = containerChildren[i];
 
-            let tempPosnChild = getPosition(element);
+            let tempPosnChild = getPosition(element, true);
             const containerChildClassName =
               containerChildren[i].firstElementChild?.className.split(" ")[0];
             const childData = {};
@@ -1742,7 +1770,7 @@ export function saveDocument(page, fixedMidSecDim, inputBorderSize, inputBorderC
               childData.raw_data = element.firstElementChild?.innerHTML;
             }
 
-            childData.id = `${containerChildClassName[0]}${h + 1}`;
+            childData.id = `${containerChildClassName?.[0]}${h + 1}`;
             allContainerChildren.push(childData);
           }
 
