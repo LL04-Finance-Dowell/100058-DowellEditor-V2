@@ -85,60 +85,34 @@ const dummyData = {
 // const MidSection = ({showSidebar}) => {
 const MidSection = React.forwardRef((props, ref) => {
   const {
-    sidebar,
-    dropdownName,
     setDropdownName,
-    isDropped,
     isClicked,
     setIsClicked,
     setSidebar,
     handleClicked,
-    startDate,
-    dropdownOptions,
     item,
     setItem,
     isLoading,
     setIsLoading,
     fetchedData,
     setFetchedData,
-    rightSideDatemenu,
     setRightSideDateMenu,
     setStartDate,
     setRightSideDropDown,
     setMethod,
-    deletePages,
-    setIsFinializeDisabled,
-    newToken,
     data,
     setData,
     isDataRetrieved,
     setIsDataRetrieved,
-    scaleId,
-    setScaleId,
-    scaleData,
     setScaleData,
     title,
-    setTitle,
-    isMenuVisible,
     setIsMenuVisible,
     handleDropp,
     focuseddClassMaintain,
-    buttonLink,
-    setButtonPurpose,
     confirmRemove,
     scaleMidSec,
     currMidSecWidth,
-    fixedMidSecDim, inputBorderSize, inputBorderColor, borderSize, borderColor, tableBorderSize, tableBorderColor, setDimRatios, dimRatios, containerBorderSize, scaleBorderSize, iframeBorderSize,
-    iframeBorderColor,
-    scaleBorderColor, calendarBorderSize,
-    calendarBorderColor,
-    dropdownBorderSize,
-    dropdownBorderColor,
-    buttonBorderSize,
-    buttonBorderColor,
-    signBorderSize,
-    signBorderColor,
-    containerBorderColor,
+    setDimRatios, dimRatios,
     updateDimRatios
   } = useStateContext();
 
@@ -245,7 +219,7 @@ const MidSection = React.forwardRef((props, ref) => {
 
     if (!foundElement.classList.contains('midSection')) {
       const parent = foundElement.parentElement
-      console.log("\n>>>>>>>>>>\nFound Element\n", foundElement)
+      // console.log("\n>>>>>>>>>>\nFound Element\n", foundElement)
       const tableElements = ["td", "tr", "table"]
       if (tableElements.includes(parent.tagName.toLowerCase())) {
         switch (parent.tagName.toLowerCase()) {
@@ -836,8 +810,8 @@ const MidSection = React.forwardRef((props, ref) => {
       }
 
 
-      console.log("\n>>>>>>>>>>>>>>>\nCOPIED DATA: ", elem);
-      console.log("\n>>>>>>>>>>>>>>>\nFROM: ", targetElement);
+      // console.log("\n>>>>>>>>>>>>>>>\nCOPIED DATA: ", elem);
+      // console.log("\n>>>>>>>>>>>>>>>\nFROM: ", targetElement);
       setContextMenu(prev => {
         return {
           ...prev,
@@ -1538,7 +1512,7 @@ const MidSection = React.forwardRef((props, ref) => {
       return;
     }
 
-    console.log(JSON.parse(response.data))
+    // console.log(JSON.parse(response.data))
     const { title, image, paragraph } = JSON.parse(response.data)?.data[0]
     const curr_user = document.getElementById("curr_user");
 
@@ -1654,7 +1628,7 @@ const MidSection = React.forwardRef((props, ref) => {
 
 
     imageField.addEventListener("onclick", () => {
-      console.log("imgData clicked")
+      // console.log("imgData clicked")
     })
 
     imageField.onclick = (e) => {
@@ -2045,10 +2019,7 @@ const MidSection = React.forwardRef((props, ref) => {
   const compsScaler = (holder, ratio) => {
     const midSecWidth = document.querySelector(".midSection_container").getBoundingClientRect().width;
     const holderStyles = window.getComputedStyle(holder);
-    // const iniWidth = parseFloat(holderStyles.width);
-    // const iniHeight = parseFloat(holderStyles.height);
-    // const iniTop = parseFloat(holderStyles.top);
-    // const iniLeft = parseFloat(holderStyles.left)
+
 
     const computeDim = (prop) => midSecWidth * prop + 'px'
 
@@ -2059,31 +2030,19 @@ const MidSection = React.forwardRef((props, ref) => {
   }
 
   const compsResizer = () => {
-    let page = [{}];
 
-    for (let i = 1; i <= item?.length; i++) {
-      const element = { [i]: [] };
-      page[0] = { ...page[0], ...element };
-    }
-
-    // const docContent = saveDocument(page, fixedMidSecDim, inputBorderSize, inputBorderColor, borderSize, borderColor, tableBorderSize, tableBorderColor, containerBorderSize, scaleBorderSize,
-    //   scaleBorderColor, iframeBorderSize,
-    //   iframeBorderColor, calendarBorderSize,
-    //   calendarBorderColor,
-    //   dropdownBorderSize,
-    //   dropdownBorderColor,
-    //   buttonBorderSize,
-    //   buttonBorderColor,
-    //   signBorderSize,
-    //   signBorderColor,
-    //   containerBorderColor, title)[0][0]
     const allHolders = [...document.querySelectorAll('.holderDIV')];
 
     allHolders.forEach((holder) => {
-      const el = holder.children[1]?.classList.contains('dropdownInput') ? holder.children[1] : holder.children[0];
-      const ratio = dimRatios.find(ratio => ratio.id === el.id);
+      if (holder.parentElement.id === 'midSection_container') {
+        const el = holder.children[1]?.classList.contains('dropdownInput') ? holder.children[1] : holder.children[0];
+        const ratio = dimRatios.find(ratio => ratio.id === el.id);
 
-      compsScaler(holder, ratio);
+        // console.log('HOLDER: ', holder);
+        // console.log('all el: ', el);
+
+        compsScaler(holder, ratio);
+      }
     })
   }
 
@@ -2138,13 +2097,12 @@ const MidSection = React.forwardRef((props, ref) => {
     if (data !== undefined) {
       onPost();
 
-      // window.onresize = () =>
-      //   scaleMidSec();
+
 
       //call this conditionally
       if (decoded && decoded?.details?.cluster === "socialmedia") {
         onParagraphPost()
-        console.log(decoded)
+        // console.log(decoded)
       }
 
     }
@@ -2154,7 +2112,7 @@ const MidSection = React.forwardRef((props, ref) => {
   }, [isDataRetrieved]);
 
   useEffect(() => {
-    console.log('currMidSecWidth: ', currMidSecWidth);
+    // console.log('currMidSecWidth: ', currMidSecWidth);
     if (data !== undefined) {
       window.onresize = () =>
         scaleMidSec();
@@ -2165,7 +2123,7 @@ const MidSection = React.forwardRef((props, ref) => {
   }, [isDataRetrieved, currMidSecWidth])
 
   useEffect(() => {
-    console.log('COMP RESIZER TRIGGERED');
+    // console.log('COMP RESIZER TRIGGERED');
     if (isDataRetrieved && currMidSecWidth > 0) {
       if (!isFirstRender.current) {
         compsResizer();
@@ -2221,7 +2179,7 @@ const MidSection = React.forwardRef((props, ref) => {
 
 
 
-    console.log('DIMENSION RATIOS: ', dimRatios);
+    // console.log('DIMENSION RATIOS: ', dimRatios);
   }, [dimRatios, currMidSecWidth, isDataRetrieved])
 
   return (

@@ -225,6 +225,824 @@ const Header = () => {
   }
 
   // * saveDocument function is at the end of the page
+  function saveDocument() {
+    const txt = document.getElementsByClassName("textInput");
+    let elem = {};
+    let contentFile = [];
+
+    function getPosition(el, childEl = false) {
+      const midSec = document.getElementById("midSection_container");
+      const midSecAll = document.querySelectorAll('.midSection_container');
+      const rect = el.getBoundingClientRect();
+
+      if (!childEl) {
+        const page = Number([...el.classList].find(cl => cl.includes('page')).split('_')[1]);
+        const midsectionRect = midSecAll[page - 1].getBoundingClientRect();
+        const width = window.innerWidth < 993
+          ? (rect.width * fixedMidSecDim.width) / midsectionRect.width
+          : rect.width
+
+        const height = window.innerWidth < 993 ?
+          (rect.height / rect.width) * width
+          : rect.height;
+
+        const top = window.innerWidth < 993 ?
+          ((rect.top - midsectionRect.top) / rect.width) * width
+          : rect.top - midsectionRect.top;
+
+        const left = window.innerWidth < 993
+          ? ((rect.left - midsectionRect.left) / midsectionRect.width) * fixedMidSecDim.width
+          : rect.left - midsectionRect.left
+
+        return {
+          top,
+          left,
+          bottom: rect.bottom,
+          right: rect.right,
+          width,
+          height,
+        };
+      }
+
+
+      const midsectionRect = midSec.getBoundingClientRect();
+
+      return {
+        top:
+          rect.top > 0
+            ? Math.abs(midsectionRect.top)
+            : rect.top - midsectionRect.top,
+        left:
+          window.innerWidth < 993
+            ? (rect.left * 793.7007874) / midsectionRect.width -
+            midsectionRect.left
+            : rect.left - midsectionRect.left,
+        // left:rect.left - midsectionRect.left,
+        bottom: rect.bottom,
+        right: rect.right,
+        width:
+          window.innerWidth < 993
+            ? (rect.width * 793.7007874) / midsectionRect.width
+            : rect.width,
+        // height: rect.height,
+        height:
+          window.innerWidth < 993
+            ? (rect.width / rect.height) * rect.height
+            : rect.height,
+      };
+
+
+    }
+
+    const findPaageNum = (element) => {
+      let targetParent = element;
+      let pageNum = null;
+      while (1) {
+        if (targetParent.classList.contains("midSection_container")) {
+          targetParent = targetParent;
+          break;
+        } else {
+          targetParent = targetParent.parentElement;
+        }
+      }
+      pageNum = targetParent.innerText.split("\n")[0];
+      return pageNum;
+    };
+
+    if (txt.length) {
+      for (let h = 0; h < txt.length; h++) {
+        if (
+          txt[h]?.parentElement?.classList?.contains("holderDIV") &&
+          !txt[h]?.parentElement?.parentElement?.classList?.contains(
+            "containerInput"
+          )
+        ) {
+          let tempElem = txt[h].parentElement;
+          let tempPosn = getPosition(tempElem);
+          // console.log("element position in header js", tempPosn);
+          elem = {
+            width: tempPosn.width,
+            height: tempPosn.height,
+            top: tempPosn.top,
+            // topp: txt[h].parentElement.style.top,
+            topp: tempPosn.top,
+            left: tempPosn.left,
+            type: "TEXT_INPUT",
+            data: txt[h].innerText,
+            border: `${inputBorderSize} dotted ${inputBorderColor}`,
+            borderWidths: txt[h].parentElement.style.border,
+            raw_data: txt[h].innerHTML,
+            id: `t${h + 1}`,
+          };
+
+          const pageNum = findPaageNum(txt[h]);
+          page[0][pageNum]?.push(elem);
+        }
+      }
+    }
+
+    const img_input = document.getElementsByTagName("input");
+    const img = document.getElementsByClassName("imageInput");
+    if (img) {
+      for (let h = 0; h < img.length; h++) {
+        if (
+          img[h]?.parentElement?.classList?.contains("holderDIV") &&
+          !img[h]?.parentElement?.parentElement?.classList?.contains(
+            "containerInput"
+          )
+        ) {
+          const reader = new FileReader();
+          let tempElem = img[h].parentElement;
+          let tempPosn = getPosition(tempElem);
+          // console.log(
+          //   "img[h].style.backgroundImage",
+          //   img[h].style.backgroundImage
+          // );
+          const dataName = img[h].style.backgroundImage
+            ? img[h].style.backgroundImage
+            : img[h].innerText;
+          // console.log("dataName", dataName);
+
+          elem = {
+            width: tempPosn.width,
+            height: tempPosn.height,
+            top: tempPosn.top,
+            // topp: img[h].parentElement.style.top,
+            topp: tempPosn.top,
+            left: tempPosn.left,
+            type: "IMAGE_INPUT",
+            data: dataName,
+            border: `${borderSize}px dotted ${borderColor}`,
+            imgBorder: img[h].parentElement.style.border,
+            id: `i${h + 1}`,
+          };
+
+          const pageNum = findPaageNum(img[h]);
+          page[0][pageNum]?.push(elem);
+        }
+      }
+    }
+
+    const date = document.getElementsByClassName("dateInput");
+    if (date.length) {
+      for (let h = 0; h < date.length; h++) {
+        if (
+          date[h]?.parentElement?.classList?.contains("holderDIV") &&
+          !date[h]?.parentElement?.parentElement?.classList?.contains(
+            "containerInput"
+          )
+        ) {
+          let tempElem = date[h].parentElement;
+          let tempPosn = getPosition(tempElem);
+          elem = {
+            width: tempPosn.width,
+            height: tempPosn.height,
+            top: tempPosn.top,
+            // topp: date[h].parentElement.style.top,
+            topp: tempPosn.top,
+            left: tempPosn.left,
+            type: "DATE_INPUT",
+            border: `${calendarBorderSize} dotted ${calendarBorderColor}`,
+            calBorder: date[h].parentElement.style.border,
+            data: date[h].innerHTML,
+            id: `d${h + 1}`,
+          };
+
+          const pageNum = findPaageNum(date[h]);
+          page[0][pageNum]?.push(elem);
+        }
+      }
+    }
+
+    const sign = document.getElementsByClassName("signInput");
+    if (sign.length) {
+      for (let h = 0; h < sign.length; h++) {
+        if (
+          sign[h]?.parentElement?.classList?.contains("holderDIV") &&
+          !sign[h]?.parentElement?.parentElement?.classList?.contains(
+            "containerInput"
+          )
+        ) {
+          let tempElem = sign[h].parentElement;
+          let tempPosn = getPosition(tempElem);
+
+          elem = {
+            width: tempPosn.width,
+            height: tempPosn.height,
+            top: tempPosn.top,
+            // topp: sign[h].parentElement.style.top,
+            topp: tempPosn.top,
+            left: tempPosn.left,
+            type: "SIGN_INPUT",
+            border: `${signBorderSize} dotted ${signBorderColor}`,
+            signBorder: sign[h].parentElement.style.border,
+            data:
+              sign[h].firstElementChild === null
+                ? // decoded.details.action === "document"
+                sign[h].innerHTML
+                : sign[h].firstElementChild.src,
+            id: `s${h + 1}`,
+          };
+
+          const pageNum = findPaageNum(sign[h]);
+          page[0][pageNum]?.push(elem);
+        }
+      }
+    }
+
+    const tables = document.getElementsByClassName("tableInput");
+
+    if (tables.length) {
+      for (let t = 0; t < tables.length; t++) {
+        if (
+          tables[t]?.parentElement?.classList?.contains("holderDIV") &&
+          !tables[t]?.parentElement?.parentElement?.classList?.contains(
+            "containerInput"
+          )
+        ) {
+          let tempElem = tables[t].parentElement;
+          let tempPosn = getPosition(tempElem);
+          function getChildData() {
+            const allTableCCells = [];
+            const tableChildren = tables[t].firstElementChild.children;
+            for (let i = 0; i < tableChildren.length; i++) {
+              const tableTR = { tr: null };
+              const newTableTR = [];
+              for (let j = 0; j < tableChildren[i].children.length; j++) {
+                // const element = tableChildren[i];
+
+                const childNodes = tableChildren[i].children[j]?.childNodes;
+                const tdElement = [];
+                childNodes.forEach((child) => {
+                  if (
+                    !child.classList.contains("row-resizer") &&
+                    !child.classList.contains("td-resizer")
+                  ) {
+                    tdElement.push(child);
+                  }
+                });
+                const TdDivClassName = tdElement[0]?.className.split(" ")[0];
+                const trChild = {
+                  td: {
+                    type:
+                      (TdDivClassName == "dateInput" && "DATE_INPUT") ||
+                      (TdDivClassName == "textInput" && "TEXT_INPUT") ||
+                      (TdDivClassName == "imageInput" && "IMAGE_INPUT") ||
+                      (TdDivClassName == "signInput" && "SIGN_INPUT"),
+                    // if(){
+                    data:
+                      TdDivClassName == "imageInput"
+                        ? tableChildren[i].children[j]?.firstElementChild.style
+                          .backgroundImage
+                        : tdElement[0]?.innerHTML,
+                    id:
+                      TdDivClassName == "imageInput"
+                        ? tableChildren[i].children[j]?.id
+                        : tdElement[0]?.id,
+                  },
+                };
+                newTableTR.push(trChild);
+              }
+              tableTR.tr = newTableTR;
+              allTableCCells.push(tableTR);
+            }
+            // console.log("allTableCCells", allTableCCells);
+            return allTableCCells;
+          }
+          elem = {
+            width: tempPosn.width,
+            height: tempPosn.height,
+            top: tempPosn.top,
+            // topp: tables[t].parentElement.style.top,
+            topp: tempPosn.top,
+            left: tempPosn.left,
+            type: "TABLE_INPUT",
+            data: getChildData(),
+            border: `${tableBorderSize} dotted ${tableBorderColor}`,
+            tableBorder: tables[t].parentElement.style.border,
+            id: tables[t].firstElementChild.id,
+          };
+          const pageNum = findPaageNum(tables[t]);
+          page[0][pageNum]?.push(elem);
+        }
+      }
+    }
+
+    const containerElements = document.getElementsByClassName("containerInput");
+
+    if (containerElements.length) {
+      for (let h = 0; h < containerElements.length; h++) {
+        if (
+          containerElements[h]?.parentElement?.classList?.contains("holderDIV")
+        ) {
+          let tempElem = containerElements[h].parentElement;
+          let tempPosn = getPosition(tempElem);
+
+          function getChildData() {
+            const allContainerChildren = [];
+            const containerChildren = containerElements[h].children;
+
+            for (let i = 0; i < containerChildren.length; i++) {
+              const element = containerChildren[i];
+
+              let tempPosnChild = getPosition(element, true);
+              const containerChildClassName =
+                containerChildren[i].firstElementChild?.className.split(" ")[0];
+              const childData = {};
+              childData.width = tempPosnChild.width;
+              childData.height = tempPosnChild.height;
+              childData.top = tempPosnChild.top;
+              childData.topp = element.style.top;
+              childData.left = tempPosnChild.left;
+
+              let type = "";
+
+              switch (containerChildClassName) {
+                case "dateInput":
+                  type = "DATE_INPUT";
+                  break;
+                case "textInput":
+                  type = "TEXT_INPUT";
+                  break;
+                case "imageInput":
+                  type = "IMAGE_INPUT";
+                  break;
+                case "signInput":
+                  type = "SIGN_INPUT";
+                  break;
+                case "iframeInput":
+                  type = "IFRAME_INPUT";
+                  break;
+                case "scaleInput":
+                  type = "SCALE_INPUT";
+                  break;
+                case "newScaleInput":
+                  type = "NEW_SCALE_INPUT";
+                  break;
+                case "buttonInput":
+                  type = "BUTTON_INPUT";
+                  break;
+                case "dropdownInput":
+                  type = "DROPDOWN_INPUT";
+                  break;
+                case "cameraInput":
+                  type = "CAMERA_INPUT";
+                  break;
+                case "paymentInput":
+                  type = "PAYMENT_INPUT";
+                  break;
+                default:
+                  type = "";
+              }
+
+              childData.type = type;
+              const imageData =
+                "imageInput" &&
+                  element?.firstElementChild?.style?.backgroundImage
+                  ? element.firstElementChild.style.backgroundImage
+                  : element.firstElementChild?.innerHTML;
+              if (type != "TEXT_INPUT") {
+                childData.data = imageData;
+              }
+              if (type == "TEXT_INPUT") {
+                childData.data = element.firstElementChild?.innerText;
+                childData.raw_data = element.firstElementChild?.innerHTML;
+              }
+
+              childData.id = `${containerChildClassName?.[0]}${h + 1}`;
+              allContainerChildren.push(childData);
+            }
+
+            return allContainerChildren;
+          }
+          elem = {
+            width: tempPosn.width,
+            height: tempPosn.height,
+            top: tempPosn.top,
+            // topp: containerElements[h].parentElement.style.top,
+            topp: tempPosn.top,
+            left: tempPosn.left,
+            type: "CONTAINER_INPUT",
+            border: `${containerBorderSize} dotted ${containerBorderColor}`,
+            containerBorder: containerElements[h].parentElement.style.border,
+            data: getChildData(),
+            id: `c${h + 1}`,
+          };
+
+          const pageNum = findPaageNum(containerElements[h]);
+          page[0][pageNum]?.push(elem);
+        }
+      }
+    }
+    const iframes = document.getElementsByClassName("iframeInput");
+    if (iframes.length) {
+      for (let i = 0; i < iframes.length; i++) {
+        if (
+          !iframes[i]?.parentElement?.parentElement?.classList?.contains(
+            "containerInput"
+          )
+        ) {
+          let tempElem = iframes[i].parentElement;
+          let tempPosn = getPosition(tempElem);
+
+          elem = {
+            width: tempPosn.width,
+            height: tempPosn.height,
+            top: tempPosn.top,
+            // topp: iframes[i].parentElement.style.top,
+            topp: tempPosn.top,
+            left: tempPosn.left,
+            type: "IFRAME_INPUT",
+            border: `${iframeBorderSize} dotted ${iframeBorderColor}`,
+            iframeBorder: iframes[i].parentElement.style.border,
+            data: iframes[i].innerText
+              ? "iFrame here"
+              : iframes[i].firstElementChild.src,
+            id: `ifr${i + 1}`,
+          };
+
+          const pageNum = findPaageNum(iframes[i]);
+          page[0][pageNum]?.push(elem);
+        }
+      }
+    }
+
+    const scales = document.getElementsByClassName("scaleInput");
+    if (scales.length) {
+      for (let s = 0; s < scales.length; s++) {
+        if (
+          !scales[s]?.parentElement?.parentElement?.classList?.contains(
+            "containerInput"
+          )
+        ) {
+          let tempElem = scales[s].parentElement;
+          let tempPosn = getPosition(tempElem);
+          // console.log(scales[s].firstElementChild);
+          elem = {
+            width: tempPosn.width,
+            height: tempPosn.height,
+            top: tempPosn.top,
+            // topp: scales[s].parentElement.style.top,
+            topp: tempPosn.top,
+            left: tempPosn.left,
+            type: "SCALE_INPUT",
+            border: `${scaleBorderSize} dotted ${scaleBorderColor}`,
+            scaleBorder: scales[s].parentElement.style.border,
+            data: `${title}_scale_${s + 1}`,
+            scale_url: scales[s].firstElementChild.src,
+            scaleId: tempElem.children[1].innerHTML,
+            id: `scl${s + 1}`,
+            details:
+              decoded.details.action === "document"
+                ? "Document instance"
+                : "Template scale",
+          };
+
+          const pageNum = findPaageNum(scales[s]);
+          page[0][pageNum]?.push(elem);
+        }
+      }
+    }
+
+    const newScales = document.getElementsByClassName("newScaleInput");
+    if (newScales.length) {
+      for (let b = 0; b < newScales.length; b++) {
+        if (
+          !newScales[b]?.parentElement?.parentElement?.classList?.contains(
+            "containerInput"
+          )
+        ) {
+          let tempElem = newScales[b].parentElement;
+          let tempPosn = getPosition(tempElem);
+          // console.log(newScales[b]);
+          let circles = newScales[b].querySelector(".circle_label");
+          let scaleBg = newScales[b].querySelector(".label_hold");
+          let leftChild = newScales[b].querySelector(".left_child");
+          let neutralChild = newScales[b].querySelector(".neutral_child");
+          let rightChild = newScales[b].querySelector(".right_child");
+          let scaleText = newScales[b].querySelector(".scale_text");
+          let font = newScales[b].querySelector(".scool_input");
+          let scaleType = newScales[b].querySelector(".scaleTypeHolder");
+          let scaleID = newScales[b].querySelector(".scaleId");
+          let orentation = newScales[b].querySelector(".nps_vertical");
+          let otherComponent = newScales[b].querySelector(".otherComponent");
+          let smallBox = newScales[b].querySelector(".small_box");
+          let leftLableStapel = newScales[b].querySelector(".leftToolTip");
+          let rightLableStapel = newScales[b].querySelector(".rightTooltip");
+          // let stapelScaleField = newScales[b].querySelector(".newScaleInput");
+          // console.log(font);
+
+          let buttonText = newScales[b].querySelectorAll(".circle_label");
+          // console.log(buttonText);
+
+          let emojiArr = [];
+
+          if (buttonText.length !== 0) {
+            for (let i = 0; i < buttonText.length; i++) {
+              emojiArr.push(buttonText[i].textContent);
+            }
+          }
+
+          let stapelOptionHolder = "";
+          let stapelScaleArray = "";
+          let stapelOrientation = "";
+
+          if (scaleType.textContent === "snipte") {
+            stapelOrientation = newScales[b].querySelector(".stapel_vertical");
+            stapelOptionHolder = newScales[b].querySelector(
+              ".stapelOptionHolder"
+            );
+            stapelScaleArray = newScales[b].querySelector(".stapelScaleArray");
+            // console.log("This is the saved stapel", stapelScaleArray);
+          }
+
+          let npsLiteTextArray = "";
+          let orientation = "";
+
+          if (scaleType.textContent === "nps_lite") {
+            npsLiteTextArray = newScales[b].querySelector(".nps_lite_text");
+            orientation = newScales[b].querySelector(".orientation");
+          }
+
+          let likertScaleArray = "";
+
+          if (scaleType.textContent === "likert") {
+            likertScaleArray = newScales[b].querySelector(
+              ".likert_Scale_Array"
+            );
+            orientation = newScales[b].querySelector(".orientation");
+            // console.log("This is likert", likertScaleArray.textContent);
+          }
+
+          let pairedScaleArray = "";
+
+          if (scaleType.textContent === "comparison_paired_scale") {
+            pairedScaleArray = newScales[b].querySelector(
+              ".paired_Scale_Array"
+            );
+            orientation = newScales[b].querySelector(".orientation");
+            // console.log("This is likert", pairedScaleArray.textContent);
+          }
+
+          let percentBackground = "";
+          let percentLabel = "";
+          let percentContainer = "";
+          let percentLeft = "";
+          let percentCenter = [];
+          let percentRight = "";
+          let prodName = [];
+
+          if (
+            scaleType.textContent === "percent_scale" ||
+            scaleType.textContent === "percent_sum_scale"
+          ) {
+            percentBackground = newScales[b].querySelector(".percent-slider");
+            percentLabel = newScales[b]?.querySelector(".label_hold").children;
+            percentContainer = newScales[b]?.querySelectorAll(".containerDIV");
+            // console.log(percentLabel);
+
+            percentContainer.forEach((elem) => {
+              prodName.push(elem.querySelector(".product_name")?.textContent);
+              percentCenter.push(
+                elem.querySelector("center-percent")?.textContent
+                  ? elem.querySelector("center-percent")?.textContent
+                  : 1
+              );
+              // console.log(prodName);
+              // console.log(percentCenter);
+            });
+            percentLeft = newScales[b].querySelector(".left-percent");
+            percentRight = document.querySelector(".right-percent");
+
+            orientation = newScales[b].querySelector(".orientation");
+          }
+          let properties = {
+            scaleBgColor: scaleBg ? scaleBg.style.backgroundColor : newScales[0].style.backgroundColor,
+            fontColor: font ? font.style.color : newScales[0].style.color,
+            fontFamily: font ? font.style.fontFamily : newScales[0].style.fontFamily,
+            left: leftChild ? leftChild.textContent : leftLableStapel.textContent,
+            center: neutralChild ? neutralChild.textContent : "",
+            right: rightChild ? rightChild.textContent : rightLableStapel.textContent,
+            buttonColor: circles?.style?.backgroundColor,
+            scaleID: scaleID.textContent,
+            scaleText: scaleText.textContent,
+            buttonText: emojiArr,
+            scaleType: scaleType.textContent,
+            stapelOptionHolder: stapelOptionHolder.textContent,
+            stapelScaleArray: stapelScaleArray.textContent,
+            npsLiteTextArray: npsLiteTextArray.textContent,
+            likertScaleArray: likertScaleArray.textContent,
+            pairedScaleArray: pairedScaleArray.textContent,
+            percentProdName: prodName,
+            percentBackground: percentBackground?.style?.background,
+            percentLabel: percentLabel?.length,
+            percentLeft: percentLeft?.textContent,
+            percentCenter: percentCenter?.textContent,
+            percentRight: percentRight?.textContent,
+            percentContainer: percentContainer?.length,
+            orientation: orientation?.textContent,
+            orentation: orentation?.textContent,
+            stapelOrientation: stapelOrientation?.textContent,
+            otherComponent: otherComponent ? otherComponent.textContent : "",
+            smallBoxBgColor: smallBox?.style?.backgroundColor
+          };
+          // console.log(properties);
+          elem = {
+            width: tempPosn.width,
+            height: tempPosn.height,
+            top: tempPosn.top,
+            // topp: newScales[b].parentElement.style.top,
+            topp: tempPosn.top,
+            left: tempPosn.left,
+            type: "NEW_SCALE_INPUT",
+            data: `${title}_scale_${b + 1}`,
+            // raw_data: tempElem.children[1].innerHTML,
+            raw_data: properties,
+            // purpose: tempElem.children[2].innerHTML,
+            id: `scl${b + 1}`,
+            // newScaleId = scale
+            // details:
+            //   decoded.details.action === "document"
+            //     ? "Document instance"
+            //     : "Template scale",
+          };
+
+          // console.log(elem);
+          const pageNum = findPaageNum(newScales[b]);
+          page[0][pageNum]?.push(elem);
+        }
+      }
+    }
+
+    const imageCanva = document.getElementsByClassName("cameraInput");
+    if (imageCanva.length) {
+      for (let b = 0; b < imageCanva.length; b++) {
+        if (
+          !imageCanva[b]?.parentElement?.parentElement?.classList?.contains(
+            "containerInput"
+          )
+        ) {
+          let tempElem = imageCanva[b].parentElement;
+
+          let tempPosn = getPosition(tempElem);
+          // console.log(imageCanva[b]);
+          let imageLinkHolder = imageCanva[b].querySelector(".imageLinkHolder");
+          let videoLinkHolder = imageCanva[b].querySelector(".videoLinkHolder");
+
+          let properties = {
+            imageLinkHolder: imageLinkHolder.textContent,
+            videoLinkHolder: videoLinkHolder.textContent,
+          };
+          // console.log(properties);
+          elem = {
+            width: tempPosn.width,
+            height: tempPosn.height,
+            top: tempPosn.top,
+            // topp: imageCanva[b].parentElement.style.top,
+            topp: tempPosn.top,
+            left: tempPosn.left,
+            type: "CAMERA_INPUT",
+            raw_data: properties,
+            id: `cam1${b + 1}`,
+          };
+          // console.log(elem);
+          const pageNum = findPaageNum(imageCanva[b]);
+          page[0][pageNum]?.push(elem);
+        }
+      }
+    }
+
+    const buttons = document.getElementsByClassName("buttonInput");
+    if (buttons.length) {
+      for (let b = 0; b < buttons.length; b++) {
+        if (
+          !buttons[b]?.parentElement?.parentElement?.classList?.contains(
+            "containerInput"
+          )
+        ) {
+          let tempElem = buttons[b].parentElement;
+          let tempPosn = getPosition(tempElem);
+
+          elem = {
+            width: tempPosn.width,
+            height: tempPosn.height,
+            top: tempPosn.top,
+            // topp: buttons[b].parentElement.style.top,
+            topp: tempPosn.top,
+            left: tempPosn.left,
+            type: "BUTTON_INPUT",
+            buttonBorder: `${buttonBorderSize}px dotted ${buttonBorderColor}`,
+            data: buttons[b].textContent,
+            raw_data: tempElem.children[1].innerHTML,
+            purpose: tempElem.children[2].innerHTML,
+            id: `btn${b + 1}`,
+          };
+
+          const pageNum = findPaageNum(buttons[b]);
+          page[0][pageNum]?.push(elem);
+        }
+      }
+    }
+    const payments = document.getElementsByClassName("paymentInput");
+    if (payments.length) {
+      for (let p = 0; p < payments.length; p++) {
+        if (
+          !buttons[p]?.parentElement?.parentElement?.classList?.contains(
+            "containerInput"
+          )
+        ) {
+          let tempElem = payments[p].parentElement;
+          let tempPosn = getPosition(tempElem);
+
+          elem = {
+            width: tempPosn.width,
+            height: tempPosn.height,
+            top: tempPosn.top,
+            // topp: payments[p].parentElement.style.top,
+            topp: tempPosn.top,
+            left: tempPosn.left,
+            type: "PAYMENT_INPUT",
+            buttonBorder: `${buttonBorderSize}px dotted ${buttonBorderColor}`,
+            data: payments[p].textContent,
+            raw_data: tempElem.children[1].innerHTML,
+            purpose: tempElem.children[2].innerHTML,
+            id: `pay${p + 1}`,
+          };
+
+          // console.log("raw_data", elem.raw_data);
+          const pageNum = findPaageNum(payments[p]);
+          page[0][pageNum]?.push(elem);
+        }
+      }
+    }
+
+    const dropDowns = document.getElementsByClassName("dropdownInput");
+
+    if (dropDowns.length) {
+      for (let d = 0; d < dropDowns.length; d++) {
+        if (
+          !dropDowns[d]?.parentElement?.parentElement?.classList?.contains(
+            "containerInput"
+          )
+        ) {
+          let tempElem = dropDowns[d].parentElement;
+          let tempPosn = getPosition(tempElem);
+
+          const selectElement = dropDowns[d].lastElementChild;
+          const selectedOption =
+            selectElement.options[selectElement.selectedIndex];
+          const selectedText = selectedOption?.textContent;
+          elem = {
+            width: tempPosn.width,
+            height: tempPosn.height,
+            top: tempPosn.top,
+            // topp: dropDowns[d].parentElement.style.top,
+            topp: tempPosn.top,
+            left: tempPosn.left,
+            type: "DROPDOWN_INPUT",
+            border: `${dropdownBorderSize} dotted ${dropdownBorderColor}`,
+            dropdownBorder: dropDowns[d].parentElement.style.border,
+            data: selectedText,
+            data1: dropDowns[d].firstElementChild.innerHTML,
+            data2: dropDowns[d].lastElementChild.innerHTML,
+            id: `dd${d + 1}`,
+          };
+
+          const pageNum = findPaageNum(dropDowns[d]);
+          page[0][pageNum]?.push(elem);
+        }
+      }
+    }
+
+    const emails = document.getElementsByClassName("emailButton");
+    if (emails.length) {
+      for (let e = 0; e < emails.length; e++) {
+        if (!emails[e]?.parentElement?.classList?.contains("containerInput")) {
+          let tempElem = emails[e].parentElement;
+          let tempPosn = getPosition(tempElem);
+
+          elem = {
+            width: tempPosn.width,
+            height: tempPosn.height,
+            top: tempPosn.top,
+            // topp: emails[e].parentElement.style.top,
+            topp: tempPosn.top,
+            left: tempPosn.left,
+            type: "FORM",
+            data: emails[e].textContent,
+            id: `eml${e + 1}`,
+          };
+
+          const pageNum = findPaageNum(emails[e]);
+          page[0][pageNum]?.push(elem);
+        }
+      }
+    }
+
+    contentFile.push(page);
+
+    return contentFile;
+  }
 
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token");
@@ -260,7 +1078,7 @@ const Header = () => {
 
   function handleFinalizeButton() {
     const username = decoded?.details?.authorized;
-    console.log(username);
+    // console.log(username);
 
     function generateLoginUser() {
       return "user_" + Math.random().toString(36).substring(7);
@@ -274,18 +1092,18 @@ const Header = () => {
     let scaleElements = document.querySelectorAll(".newScaleInput");
 
     const documentResponses = [];
-    console.log(scaleElements);
+    // console.log(scaleElements);
 
     scaleElements.forEach((scale) => {
-      console.log(scale);
+      // console.log(scale);
       const scaleId = scale?.querySelector(".scaleId")?.textContent;
       const holdElem = scale?.querySelector(".holdElem")?.textContent;
 
       documentResponses.push({ scale_id: scaleId, score: holdElem });
     });
 
-    console.log(generateLoginUser());
-    console.log(documentResponses);
+    // console.log(generateLoginUser());
+    // console.log(documentResponses);
 
     const requestBody = {
       process_id: decoded.details.process_id,
@@ -325,17 +1143,17 @@ const Header = () => {
           setIsLoading(false);
           var responseData = response.data;
           setScaleData(responseData);
-          console.log(response);
+          // console.log(response);
         }
       })
       .catch(function (error) {
-        console.log(error);
+        // console.log(error);
       });
   }
 
   function handleFinalizeButtonStapel() {
     const username = decoded?.details?.authorized;
-    console.log(username);
+    // console.log(username);
 
     function generateLoginUser() {
       return "user_" + Math.random().toString(36).substring(7);
@@ -349,20 +1167,20 @@ const Header = () => {
     let scaleElements = document.querySelectorAll(".newScaleInput");
 
     const documentResponses = [];
-    console.log(scaleElements);
+    // console.log(scaleElements);
 
     scaleElements.forEach((scale) => {
-      console.log(scale);
+      // console.log(scale);
       const scaleId = scale?.querySelector(".scaleId")?.textContent;
       const holdElem = scale?.querySelector(".holdElem")?.textContent;
 
       documentResponses.push({ scale_id: scaleId, score: parseInt(holdElem) });
     });
 
-    console.log("This is stapel_res", documentResponses);
+    // console.log("This is stapel_res", documentResponses);
 
-    console.log(generateLoginUser());
-    console.log(documentResponses);
+    // console.log(generateLoginUser());
+    // console.log(documentResponses);
 
     const requestBody = {
       process_id: decoded.details.process_id,
@@ -401,17 +1219,17 @@ const Header = () => {
           setIsLoading(false);
           var responseData = response.data;
           setScaleData(responseData);
-          console.log(response);
+          // console.log(response);
         }
       })
       .catch(function (error) {
-        console.log(error);
+        // console.log(error);
       });
   }
 
   function handleFinalizeButtonNpsLite() {
     const username = decoded?.details?.authorized;
-    console.log(username);
+    // console.log(username);
 
     function generateLoginUser() {
       return "user_" + Math.random().toString(36).substring(7);
@@ -429,7 +1247,7 @@ const Header = () => {
     let documentResponses = [];
 
     scaleElements.forEach((scale) => {
-      console.log(scale);
+      // console.log(scale);
       scaleId = scale?.querySelector(".scaleId")?.textContent;
       holdElem = scale?.querySelector(".holdElem")?.textContent;
 
@@ -441,7 +1259,7 @@ const Header = () => {
             : holdElem,
       });
     });
-    console.log("This is docresp", documentResponses);
+    // console.log("This is docresp", documentResponses);
 
     const requestBody = {
       process_id: decoded.details.process_id,
@@ -480,18 +1298,18 @@ const Header = () => {
           setIsLoading(false);
           var responseData = response.data;
           setScaleData(responseData);
-          console.log(response);
+          // console.log(response);
         }
       })
       .catch(function (error) {
-        console.log(error);
+        // console.log(error);
       });
   }
 
   function handleFinalizeButtonLikert() {
     localStorage.setItem("hideFinalizeButton", "true");
     const username = decoded?.details?.authorized;
-    console.log(username);
+    // console.log(username);
 
     function generateLoginUser() {
       return "user_" + Math.random().toString(36).substring(7);
@@ -507,18 +1325,18 @@ const Header = () => {
     let scaleId;
     let holdElem;
     let documentResponses = [];
-    console.log(scaleElements);
+    // console.log(scaleElements);
 
     scaleElements.forEach((scale) => {
-      console.log(scale);
+      // console.log(scale);
       scaleId = scale?.querySelector(".scaleId")?.textContent;
       holdElem = scale?.querySelector(".holdElem")?.textContent;
 
       documentResponses.push({ scale_id: scaleId, score: holdElem });
     });
 
-    console.log(generateLoginUser());
-    console.log(documentResponses);
+    // console.log(generateLoginUser());
+    // console.log(documentResponses);
 
     const requestBody = {
       process_id: decoded.details.process_id,
@@ -557,17 +1375,17 @@ const Header = () => {
           setIsLoading(false);
           var responseData = response.data;
           setScaleData(responseData);
-          console.log(response);
+          // console.log(response);
         }
       })
       .catch(function (error) {
-        console.log(error);
+        // console.log(error);
       });
   }
 
   function handleFinalizeButtonPercent() {
     const username = decoded?.details?.authorized;
-    console.log(username);
+    // console.log(username);
 
     function generateLoginUser() {
       return "user_" + Math.random().toString(36).substring(7);
@@ -605,10 +1423,10 @@ const Header = () => {
 
     // Convert the Set back to an array if needed
     const documentResponsesArray = Array.from(documentResponses);
-    console.log(documentResponsesArray);
+    // console.log(documentResponsesArray);
 
-    console.log(generateLoginUser());
-    console.log(documentResponses);
+    // console.log(generateLoginUser());
+    // console.log(documentResponses);
 
     const requestBody = {
       process_id: decoded.details.process_id,
@@ -648,17 +1466,17 @@ const Header = () => {
           setIsLoading(false);
           var responseData = response.data;
           setScaleData(responseData);
-          console.log(response);
+          // console.log(response);
         }
       })
       .catch(function (error) {
-        console.log(error);
+        // console.log(error);
       });
   }
 
   function handleFinalizeButtonPercentSum() {
     const username = decoded?.details?.authorized;
-    console.log(username);
+    // console.log(username);
 
     function generateLoginUser() {
       return "user_" + Math.random().toString(36).substring(7);
@@ -696,10 +1514,10 @@ const Header = () => {
 
     // Convert the Set back to an array if needed
     const documentResponsesArray = Array.from(documentResponses);
-    console.log(documentResponsesArray);
+    // console.log(documentResponsesArray);
 
-    console.log(generateLoginUser());
-    console.log(documentResponses);
+    // console.log(generateLoginUser());
+    // console.log(documentResponses);
 
     const requestBody = {
       process_id: decoded.details.process_id,
@@ -730,7 +1548,7 @@ const Header = () => {
       _id: decoded.details._id,
     };
 
-    console.log("This is percent_sum payloaf", requestBody);
+    // console.log("This is percent_sum payloaf", requestBody);
     Axios.post(
       "https://100035.pythonanywhere.com/percent-sum/api/percent-sum-response-create/",
       requestBody
@@ -740,11 +1558,11 @@ const Header = () => {
           setIsLoading(false);
           var responseData = response.data;
           setScaleData(responseData);
-          console.log(response);
+          // console.log(response);
         }
       })
       .catch(function (error) {
-        console.log(error);
+        // console.log(error);
       });
   }
 
@@ -752,17 +1570,7 @@ const Header = () => {
     e.preventDefault();
     setIsLoading(true);
     setIsButtonDisabled(true);
-    const dataa = saveDocument(page, fixedMidSecDim, inputBorderSize, inputBorderColor, borderSize, borderColor, tableBorderSize, tableBorderColor, containerBorderSize, scaleBorderSize,
-      scaleBorderColor, iframeBorderSize,
-      iframeBorderColor, calendarBorderSize,
-      calendarBorderColor,
-      dropdownBorderSize,
-      dropdownBorderColor,
-      buttonBorderSize,
-      buttonBorderColor,
-      signBorderSize,
-      signBorderColor,
-      containerBorderColor, title);
+    const dataa = saveDocument();
 
     const finalize = document.getElementById("finalize-button");
 
@@ -786,7 +1594,7 @@ const Header = () => {
       };
     }
 
-    console.log(updateField.content);
+    // console.log(updateField.content);
 
     <iframe src="http://localhost:5500/"></iframe>;
 
@@ -1042,8 +1850,8 @@ const Header = () => {
             const loadedData = JSON.parse(res.data.content);
             const pageData = res.data.page;
             setItem(pageData);
-            console.log(loadedData);
-            console.log("Loaded Data ", loadedData[0][0]);
+            // console.log(loadedData);
+            // console.log("Loaded Data ", loadedData[0][0]);
             setData(loadedData[0][0]);
             setFetchedData(loadedData[0][0]);
             setIsDataRetrieved(true);
@@ -1116,13 +1924,13 @@ const Header = () => {
     )
       .then((res) => {
         setIsLoading(false);
-        console.log(res);
+        // console.log(res);
         // alert(res?.data);
         toast.error(res?.data);
       })
       .catch((err) => {
         setIsLoading(false);
-        console.log(err);
+        // console.log(err);
         toast.error(err);
       });
   }
@@ -1377,831 +2185,3 @@ const Header = () => {
 export default Header;
 
 
-export function saveDocument(page, fixedMidSecDim, inputBorderSize, inputBorderColor, borderSize, borderColor, tableBorderSize, tableBorderColor, containerBorderSize, scaleBorderSize,
-  scaleBorderColor, iframeBorderSize,
-  iframeBorderColor, calendarBorderSize,
-  calendarBorderColor,
-  dropdownBorderSize,
-  dropdownBorderColor,
-  buttonBorderSize,
-  buttonBorderColor,
-  signBorderSize,
-  signBorderColor,
-  containerBorderColor, title) {
-  const txt = document.getElementsByClassName("textInput");
-  let elem = {};
-  let contentFile = [];
-
-  function getPosition(el, childEl = false) {
-    const midSec = document.getElementById("midSection_container");
-    const midSecAll = document.querySelectorAll('.midSection_container');
-    const rect = el.getBoundingClientRect();
-
-    if (!childEl) {
-      const page = Number([...el.classList].find(cl => cl.includes('page')).split('_')[1]);
-      const midsectionRect = midSecAll[page - 1].getBoundingClientRect();
-      const width = window.innerWidth < 993
-        ? (rect.width * fixedMidSecDim.width) / midsectionRect.width
-        : rect.width
-
-      const height = window.innerWidth < 993 ?
-        (rect.height / rect.width) * width
-        : rect.height;
-
-      const top = window.innerWidth < 993 ?
-        ((rect.top - midsectionRect.top) / rect.width) * width
-        : rect.top - midsectionRect.top;
-
-      const left = window.innerWidth < 993
-        ? ((rect.left - midsectionRect.left) / midsectionRect.width) * fixedMidSecDim.width
-        : rect.left - midsectionRect.left
-
-      return {
-        top,
-        left,
-        bottom: rect.bottom,
-        right: rect.right,
-        width,
-        height,
-      };
-    }
-
-
-    const midsectionRect = midSec.getBoundingClientRect();
-
-    return {
-      top:
-        rect.top > 0
-          ? Math.abs(midsectionRect.top)
-          : rect.top - midsectionRect.top,
-      left:
-        window.innerWidth < 993
-          ? (rect.left * 793.7007874) / midsectionRect.width -
-          midsectionRect.left
-          : rect.left - midsectionRect.left,
-      // left:rect.left - midsectionRect.left,
-      bottom: rect.bottom,
-      right: rect.right,
-      width:
-        window.innerWidth < 993
-          ? (rect.width * 793.7007874) / midsectionRect.width
-          : rect.width,
-      // height: rect.height,
-      height:
-        window.innerWidth < 993
-          ? (rect.width / rect.height) * rect.height
-          : rect.height,
-    };
-
-
-  }
-
-  const findPaageNum = (element) => {
-    let targetParent = element;
-    let pageNum = null;
-    while (1) {
-      if (targetParent.classList.contains("midSection_container")) {
-        targetParent = targetParent;
-        break;
-      } else {
-        targetParent = targetParent.parentElement;
-      }
-    }
-    pageNum = targetParent.innerText.split("\n")[0];
-    return pageNum;
-  };
-
-  if (txt.length) {
-    for (let h = 0; h < txt.length; h++) {
-      if (
-        txt[h]?.parentElement?.classList?.contains("holderDIV") &&
-        !txt[h]?.parentElement?.parentElement?.classList?.contains(
-          "containerInput"
-        )
-      ) {
-        let tempElem = txt[h].parentElement;
-        let tempPosn = getPosition(tempElem);
-        // console.log("element position in header js", tempPosn);
-        elem = {
-          width: tempPosn.width,
-          height: tempPosn.height,
-          top: tempPosn.top,
-          // topp: txt[h].parentElement.style.top,
-          topp: tempPosn.top,
-          left: tempPosn.left,
-          type: "TEXT_INPUT",
-          data: txt[h].innerText,
-          border: `${inputBorderSize} dotted ${inputBorderColor}`,
-          borderWidths: txt[h].parentElement.style.border,
-          raw_data: txt[h].innerHTML,
-          id: `t${h + 1}`,
-        };
-
-        const pageNum = findPaageNum(txt[h]);
-        page[0][pageNum]?.push(elem);
-      }
-    }
-  }
-
-  const img_input = document.getElementsByTagName("input");
-  const img = document.getElementsByClassName("imageInput");
-  if (img) {
-    for (let h = 0; h < img.length; h++) {
-      if (
-        img[h]?.parentElement?.classList?.contains("holderDIV") &&
-        !img[h]?.parentElement?.parentElement?.classList?.contains(
-          "containerInput"
-        )
-      ) {
-        const reader = new FileReader();
-        let tempElem = img[h].parentElement;
-        let tempPosn = getPosition(tempElem);
-        // console.log(
-        //   "img[h].style.backgroundImage",
-        //   img[h].style.backgroundImage
-        // );
-        const dataName = img[h].style.backgroundImage
-          ? img[h].style.backgroundImage
-          : img[h].innerText;
-        // console.log("dataName", dataName);
-
-        elem = {
-          width: tempPosn.width,
-          height: tempPosn.height,
-          top: tempPosn.top,
-          // topp: img[h].parentElement.style.top,
-          topp: tempPosn.top,
-          left: tempPosn.left,
-          type: "IMAGE_INPUT",
-          data: dataName,
-          border: `${borderSize}px dotted ${borderColor}`,
-          imgBorder: img[h].parentElement.style.border,
-          id: `i${h + 1}`,
-        };
-
-        const pageNum = findPaageNum(img[h]);
-        page[0][pageNum]?.push(elem);
-      }
-    }
-  }
-
-  const date = document.getElementsByClassName("dateInput");
-  if (date.length) {
-    for (let h = 0; h < date.length; h++) {
-      if (
-        date[h]?.parentElement?.classList?.contains("holderDIV") &&
-        !date[h]?.parentElement?.parentElement?.classList?.contains(
-          "containerInput"
-        )
-      ) {
-        let tempElem = date[h].parentElement;
-        let tempPosn = getPosition(tempElem);
-        elem = {
-          width: tempPosn.width,
-          height: tempPosn.height,
-          top: tempPosn.top,
-          // topp: date[h].parentElement.style.top,
-          topp: tempPosn.top,
-          left: tempPosn.left,
-          type: "DATE_INPUT",
-          border: `${calendarBorderSize} dotted ${calendarBorderColor}`,
-          calBorder: date[h].parentElement.style.border,
-          data: date[h].innerHTML,
-          id: `d${h + 1}`,
-        };
-
-        const pageNum = findPaageNum(date[h]);
-        page[0][pageNum]?.push(elem);
-      }
-    }
-  }
-
-  const sign = document.getElementsByClassName("signInput");
-  if (sign.length) {
-    for (let h = 0; h < sign.length; h++) {
-      if (
-        sign[h]?.parentElement?.classList?.contains("holderDIV") &&
-        !sign[h]?.parentElement?.parentElement?.classList?.contains(
-          "containerInput"
-        )
-      ) {
-        let tempElem = sign[h].parentElement;
-        let tempPosn = getPosition(tempElem);
-
-        elem = {
-          width: tempPosn.width,
-          height: tempPosn.height,
-          top: tempPosn.top,
-          // topp: sign[h].parentElement.style.top,
-          topp: tempPosn.top,
-          left: tempPosn.left,
-          type: "SIGN_INPUT",
-          border: `${signBorderSize} dotted ${signBorderColor}`,
-          signBorder: sign[h].parentElement.style.border,
-          data:
-            sign[h].firstElementChild === null
-              ? // decoded.details.action === "document"
-              sign[h].innerHTML
-              : sign[h].firstElementChild.src,
-          id: `s${h + 1}`,
-        };
-
-        const pageNum = findPaageNum(sign[h]);
-        page[0][pageNum]?.push(elem);
-      }
-    }
-  }
-
-  const tables = document.getElementsByClassName("tableInput");
-
-  if (tables.length) {
-    for (let t = 0; t < tables.length; t++) {
-      if (
-        tables[t]?.parentElement?.classList?.contains("holderDIV") &&
-        !tables[t]?.parentElement?.parentElement?.classList?.contains(
-          "containerInput"
-        )
-      ) {
-        let tempElem = tables[t].parentElement;
-        let tempPosn = getPosition(tempElem);
-        function getChildData() {
-          const allTableCCells = [];
-          const tableChildren = tables[t].firstElementChild.children;
-          for (let i = 0; i < tableChildren.length; i++) {
-            const tableTR = { tr: null };
-            const newTableTR = [];
-            for (let j = 0; j < tableChildren[i].children.length; j++) {
-              // const element = tableChildren[i];
-
-              const childNodes = tableChildren[i].children[j]?.childNodes;
-              const tdElement = [];
-              childNodes.forEach((child) => {
-                if (
-                  !child.classList.contains("row-resizer") &&
-                  !child.classList.contains("td-resizer")
-                ) {
-                  tdElement.push(child);
-                }
-              });
-              const TdDivClassName = tdElement[0]?.className.split(" ")[0];
-              const trChild = {
-                td: {
-                  type:
-                    (TdDivClassName == "dateInput" && "DATE_INPUT") ||
-                    (TdDivClassName == "textInput" && "TEXT_INPUT") ||
-                    (TdDivClassName == "imageInput" && "IMAGE_INPUT") ||
-                    (TdDivClassName == "signInput" && "SIGN_INPUT"),
-                  // if(){
-                  data:
-                    TdDivClassName == "imageInput"
-                      ? tableChildren[i].children[j]?.firstElementChild.style
-                        .backgroundImage
-                      : tdElement[0]?.innerHTML,
-                  id:
-                    TdDivClassName == "imageInput"
-                      ? tableChildren[i].children[j]?.id
-                      : tdElement[0]?.id,
-                },
-              };
-              newTableTR.push(trChild);
-            }
-            tableTR.tr = newTableTR;
-            allTableCCells.push(tableTR);
-          }
-          // console.log("allTableCCells", allTableCCells);
-          return allTableCCells;
-        }
-        elem = {
-          width: tempPosn.width,
-          height: tempPosn.height,
-          top: tempPosn.top,
-          // topp: tables[t].parentElement.style.top,
-          topp: tempPosn.top,
-          left: tempPosn.left,
-          type: "TABLE_INPUT",
-          data: getChildData(),
-          border: `${tableBorderSize} dotted ${tableBorderColor}`,
-          tableBorder: tables[t].parentElement.style.border,
-          id: tables[t].firstElementChild.id,
-        };
-        const pageNum = findPaageNum(tables[t]);
-        page[0][pageNum]?.push(elem);
-      }
-    }
-  }
-
-  const containerElements = document.getElementsByClassName("containerInput");
-
-  if (containerElements.length) {
-    for (let h = 0; h < containerElements.length; h++) {
-      if (
-        containerElements[h]?.parentElement?.classList?.contains("holderDIV")
-      ) {
-        let tempElem = containerElements[h].parentElement;
-        let tempPosn = getPosition(tempElem);
-
-        function getChildData() {
-          const allContainerChildren = [];
-          const containerChildren = containerElements[h].children;
-
-          for (let i = 0; i < containerChildren.length; i++) {
-            const element = containerChildren[i];
-
-            let tempPosnChild = getPosition(element, true);
-            const containerChildClassName =
-              containerChildren[i].firstElementChild?.className.split(" ")[0];
-            const childData = {};
-            childData.width = tempPosnChild.width;
-            childData.height = tempPosnChild.height;
-            childData.top = tempPosnChild.top;
-            childData.topp = element.style.top;
-            childData.left = tempPosnChild.left;
-
-            let type = "";
-
-            switch (containerChildClassName) {
-              case "dateInput":
-                type = "DATE_INPUT";
-                break;
-              case "textInput":
-                type = "TEXT_INPUT";
-                break;
-              case "imageInput":
-                type = "IMAGE_INPUT";
-                break;
-              case "signInput":
-                type = "SIGN_INPUT";
-                break;
-              case "iframeInput":
-                type = "IFRAME_INPUT";
-                break;
-              case "scaleInput":
-                type = "SCALE_INPUT";
-                break;
-              case "newScaleInput":
-                type = "NEW_SCALE_INPUT";
-                break;
-              case "buttonInput":
-                type = "BUTTON_INPUT";
-                break;
-              case "dropdownInput":
-                type = "DROPDOWN_INPUT";
-                break;
-              case "cameraInput":
-                type = "CAMERA_INPUT";
-                break;
-              case "paymentInput":
-                type = "PAYMENT_INPUT";
-                break;
-              default:
-                type = "";
-            }
-
-            childData.type = type;
-            const imageData =
-              "imageInput" &&
-                element?.firstElementChild?.style?.backgroundImage
-                ? element.firstElementChild.style.backgroundImage
-                : element.firstElementChild?.innerHTML;
-            if (type != "TEXT_INPUT") {
-              childData.data = imageData;
-            }
-            if (type == "TEXT_INPUT") {
-              childData.data = element.firstElementChild?.innerText;
-              childData.raw_data = element.firstElementChild?.innerHTML;
-            }
-
-            childData.id = `${containerChildClassName?.[0]}${h + 1}`;
-            allContainerChildren.push(childData);
-          }
-
-          return allContainerChildren;
-        }
-        elem = {
-          width: tempPosn.width,
-          height: tempPosn.height,
-          top: tempPosn.top,
-          // topp: containerElements[h].parentElement.style.top,
-          topp: tempPosn.top,
-          left: tempPosn.left,
-          type: "CONTAINER_INPUT",
-          border: `${containerBorderSize} dotted ${containerBorderColor}`,
-          containerBorder: containerElements[h].parentElement.style.border,
-          data: getChildData(),
-          id: `c${h + 1}`,
-        };
-
-        const pageNum = findPaageNum(containerElements[h]);
-        page[0][pageNum]?.push(elem);
-      }
-    }
-  }
-  const iframes = document.getElementsByClassName("iframeInput");
-  if (iframes.length) {
-    for (let i = 0; i < iframes.length; i++) {
-      if (
-        !iframes[i]?.parentElement?.parentElement?.classList?.contains(
-          "containerInput"
-        )
-      ) {
-        let tempElem = iframes[i].parentElement;
-        let tempPosn = getPosition(tempElem);
-
-        elem = {
-          width: tempPosn.width,
-          height: tempPosn.height,
-          top: tempPosn.top,
-          // topp: iframes[i].parentElement.style.top,
-          topp: tempPosn.top,
-          left: tempPosn.left,
-          type: "IFRAME_INPUT",
-          border: `${iframeBorderSize} dotted ${iframeBorderColor}`,
-          iframeBorder: iframes[i].parentElement.style.border,
-          data: iframes[i].innerText
-            ? "iFrame here"
-            : iframes[i].firstElementChild.src,
-          id: `ifr${i + 1}`,
-        };
-
-        const pageNum = findPaageNum(iframes[i]);
-        page[0][pageNum]?.push(elem);
-      }
-    }
-  }
-
-  const scales = document.getElementsByClassName("scaleInput");
-  if (scales.length) {
-    for (let s = 0; s < scales.length; s++) {
-      if (
-        !scales[s]?.parentElement?.parentElement?.classList?.contains(
-          "containerInput"
-        )
-      ) {
-        let tempElem = scales[s].parentElement;
-        let tempPosn = getPosition(tempElem);
-        // console.log(scales[s].firstElementChild);
-        elem = {
-          width: tempPosn.width,
-          height: tempPosn.height,
-          top: tempPosn.top,
-          // topp: scales[s].parentElement.style.top,
-          topp: tempPosn.top,
-          left: tempPosn.left,
-          type: "SCALE_INPUT",
-          border: `${scaleBorderSize} dotted ${scaleBorderColor}`,
-          scaleBorder: scales[s].parentElement.style.border,
-          data: `${title}_scale_${s + 1}`,
-          scale_url: scales[s].firstElementChild.src,
-          scaleId: tempElem.children[1].innerHTML,
-          id: `scl${s + 1}`,
-          details:
-            decoded.details.action === "document"
-              ? "Document instance"
-              : "Template scale",
-        };
-
-        const pageNum = findPaageNum(scales[s]);
-        page[0][pageNum]?.push(elem);
-      }
-    }
-  }
-
-  const newScales = document.getElementsByClassName("newScaleInput");
-  if (newScales.length) {
-    for (let b = 0; b < newScales.length; b++) {
-      if (
-        !newScales[b]?.parentElement?.parentElement?.classList?.contains(
-          "containerInput"
-        )
-      ) {
-        let tempElem = newScales[b].parentElement;
-        let tempPosn = getPosition(tempElem);
-        // console.log(newScales[b]);
-        let circles = newScales[b].querySelector(".circle_label");
-        let scaleBg = newScales[b].querySelector(".label_hold");
-        let leftChild = newScales[b].querySelector(".left_child");
-        let neutralChild = newScales[b].querySelector(".neutral_child");
-        let rightChild = newScales[b].querySelector(".right_child");
-        let scaleText = newScales[b].querySelector(".scale_text");
-        let font = newScales[b].querySelector(".scool_input");
-        let scaleType = newScales[b].querySelector(".scaleTypeHolder");
-        let scaleID = newScales[b].querySelector(".scaleId");
-        let orentation = newScales[b].querySelector(".nps_vertical");
-        let otherComponent = newScales[b].querySelector(".otherComponent");
-        let smallBox = newScales[b].querySelector(".small_box");
-        let leftLableStapel = newScales[b].querySelector(".leftToolTip");
-        let rightLableStapel = newScales[b].querySelector(".rightTooltip");
-        // let stapelScaleField = newScales[b].querySelector(".newScaleInput");
-        console.log(font);
-
-        let buttonText = newScales[b].querySelectorAll(".circle_label");
-        // console.log(buttonText);
-
-        let emojiArr = [];
-
-        if (buttonText.length !== 0) {
-          for (let i = 0; i < buttonText.length; i++) {
-            emojiArr.push(buttonText[i].textContent);
-          }
-        }
-
-        let stapelOptionHolder = "";
-        let stapelScaleArray = "";
-        let stapelOrientation = "";
-
-        if (scaleType.textContent === "snipte") {
-          stapelOrientation = newScales[b].querySelector(".stapel_vertical");
-          stapelOptionHolder = newScales[b].querySelector(
-            ".stapelOptionHolder"
-          );
-          stapelScaleArray = newScales[b].querySelector(".stapelScaleArray");
-          console.log("This is the saved stapel", stapelScaleArray);
-        }
-
-        let npsLiteTextArray = "";
-        let orientation = "";
-
-        if (scaleType.textContent === "nps_lite") {
-          npsLiteTextArray = newScales[b].querySelector(".nps_lite_text");
-          orientation = newScales[b].querySelector(".orientation");
-        }
-
-        let likertScaleArray = "";
-
-        if (scaleType.textContent === "likert") {
-          likertScaleArray = newScales[b].querySelector(
-            ".likert_Scale_Array"
-          );
-          orientation = newScales[b].querySelector(".orientation");
-          console.log("This is likert", likertScaleArray.textContent);
-        }
-
-        let pairedScaleArray = "";
-
-        if (scaleType.textContent === "comparison_paired_scale") {
-          pairedScaleArray = newScales[b].querySelector(
-            ".paired_Scale_Array"
-          );
-          orientation = newScales[b].querySelector(".orientation");
-          console.log("This is likert", pairedScaleArray.textContent);
-        }
-
-        let percentBackground = "";
-        let percentLabel = "";
-        let percentContainer = "";
-        let percentLeft = "";
-        let percentCenter = [];
-        let percentRight = "";
-        let prodName = [];
-
-        if (
-          scaleType.textContent === "percent_scale" ||
-          scaleType.textContent === "percent_sum_scale"
-        ) {
-          percentBackground = newScales[b].querySelector(".percent-slider");
-          percentLabel = newScales[b]?.querySelector(".label_hold").children;
-          percentContainer = newScales[b]?.querySelectorAll(".containerDIV");
-          console.log(percentLabel);
-
-          percentContainer.forEach((elem) => {
-            prodName.push(elem.querySelector(".product_name")?.textContent);
-            percentCenter.push(
-              elem.querySelector("center-percent")?.textContent
-                ? elem.querySelector("center-percent")?.textContent
-                : 1
-            );
-            // console.log(prodName);
-            // console.log(percentCenter);
-          });
-          percentLeft = newScales[b].querySelector(".left-percent");
-          percentRight = document.querySelector(".right-percent");
-
-          orientation = newScales[b].querySelector(".orientation");
-        }
-        let properties = {
-          scaleBgColor: scaleBg ? scaleBg.style.backgroundColor : newScales[0].style.backgroundColor,
-          fontColor: font ? font.style.color : newScales[0].style.color,
-          fontFamily: font ? font.style.fontFamily : newScales[0].style.fontFamily,
-          left: leftChild ? leftChild.textContent : leftLableStapel.textContent,
-          center: neutralChild ? neutralChild.textContent : "",
-          right: rightChild ? rightChild.textContent : rightLableStapel.textContent,
-          buttonColor: circles?.style?.backgroundColor,
-          scaleID: scaleID.textContent,
-          scaleText: scaleText.textContent,
-          buttonText: emojiArr,
-          scaleType: scaleType.textContent,
-          stapelOptionHolder: stapelOptionHolder.textContent,
-          stapelScaleArray: stapelScaleArray.textContent,
-          npsLiteTextArray: npsLiteTextArray.textContent,
-          likertScaleArray: likertScaleArray.textContent,
-          pairedScaleArray: pairedScaleArray.textContent,
-          percentProdName: prodName,
-          percentBackground: percentBackground?.style?.background,
-          percentLabel: percentLabel?.length,
-          percentLeft: percentLeft?.textContent,
-          percentCenter: percentCenter?.textContent,
-          percentRight: percentRight?.textContent,
-          percentContainer: percentContainer?.length,
-          orientation: orientation?.textContent,
-          orentation: orentation?.textContent,
-          stapelOrientation: stapelOrientation?.textContent,
-          otherComponent: otherComponent ? otherComponent.textContent : "",
-          smallBoxBgColor: smallBox?.style?.backgroundColor
-        };
-        // console.log(properties);
-        elem = {
-          width: tempPosn.width,
-          height: tempPosn.height,
-          top: tempPosn.top,
-          // topp: newScales[b].parentElement.style.top,
-          topp: tempPosn.top,
-          left: tempPosn.left,
-          type: "NEW_SCALE_INPUT",
-          data: `${title}_scale_${b + 1}`,
-          // raw_data: tempElem.children[1].innerHTML,
-          raw_data: properties,
-          // purpose: tempElem.children[2].innerHTML,
-          id: `scl${b + 1}`,
-          // newScaleId = scale
-          // details:
-          //   decoded.details.action === "document"
-          //     ? "Document instance"
-          //     : "Template scale",
-        };
-
-        // console.log(elem);
-        const pageNum = findPaageNum(newScales[b]);
-        page[0][pageNum]?.push(elem);
-      }
-    }
-  }
-
-  const imageCanva = document.getElementsByClassName("cameraInput");
-  if (imageCanva.length) {
-    for (let b = 0; b < imageCanva.length; b++) {
-      if (
-        !imageCanva[b]?.parentElement?.parentElement?.classList?.contains(
-          "containerInput"
-        )
-      ) {
-        let tempElem = imageCanva[b].parentElement;
-
-        let tempPosn = getPosition(tempElem);
-        // console.log(imageCanva[b]);
-        let imageLinkHolder = imageCanva[b].querySelector(".imageLinkHolder");
-        let videoLinkHolder = imageCanva[b].querySelector(".videoLinkHolder");
-
-        let properties = {
-          imageLinkHolder: imageLinkHolder.textContent,
-          videoLinkHolder: videoLinkHolder.textContent,
-        };
-        // console.log(properties);
-        elem = {
-          width: tempPosn.width,
-          height: tempPosn.height,
-          top: tempPosn.top,
-          // topp: imageCanva[b].parentElement.style.top,
-          topp: tempPosn.top,
-          left: tempPosn.left,
-          type: "CAMERA_INPUT",
-          raw_data: properties,
-          id: `cam1${b + 1}`,
-        };
-        // console.log(elem);
-        const pageNum = findPaageNum(imageCanva[b]);
-        page[0][pageNum]?.push(elem);
-      }
-    }
-  }
-
-  const buttons = document.getElementsByClassName("buttonInput");
-  if (buttons.length) {
-    for (let b = 0; b < buttons.length; b++) {
-      if (
-        !buttons[b]?.parentElement?.parentElement?.classList?.contains(
-          "containerInput"
-        )
-      ) {
-        let tempElem = buttons[b].parentElement;
-        let tempPosn = getPosition(tempElem);
-
-        elem = {
-          width: tempPosn.width,
-          height: tempPosn.height,
-          top: tempPosn.top,
-          // topp: buttons[b].parentElement.style.top,
-          topp: tempPosn.top,
-          left: tempPosn.left,
-          type: "BUTTON_INPUT",
-          buttonBorder: `${buttonBorderSize}px dotted ${buttonBorderColor}`,
-          data: buttons[b].textContent,
-          raw_data: tempElem.children[1].innerHTML,
-          purpose: tempElem.children[2].innerHTML,
-          id: `btn${b + 1}`,
-        };
-
-        const pageNum = findPaageNum(buttons[b]);
-        page[0][pageNum]?.push(elem);
-      }
-    }
-  }
-  const payments = document.getElementsByClassName("paymentInput");
-  if (payments.length) {
-    for (let p = 0; p < payments.length; p++) {
-      if (
-        !buttons[p]?.parentElement?.parentElement?.classList?.contains(
-          "containerInput"
-        )
-      ) {
-        let tempElem = payments[p].parentElement;
-        let tempPosn = getPosition(tempElem);
-
-        elem = {
-          width: tempPosn.width,
-          height: tempPosn.height,
-          top: tempPosn.top,
-          // topp: payments[p].parentElement.style.top,
-          topp: tempPosn.top,
-          left: tempPosn.left,
-          type: "PAYMENT_INPUT",
-          buttonBorder: `${buttonBorderSize}px dotted ${buttonBorderColor}`,
-          data: payments[p].textContent,
-          raw_data: tempElem.children[1].innerHTML,
-          purpose: tempElem.children[2].innerHTML,
-          id: `pay${p + 1}`,
-        };
-
-        console.log("raw_data", elem.raw_data);
-        const pageNum = findPaageNum(payments[p]);
-        page[0][pageNum]?.push(elem);
-      }
-    }
-  }
-
-  const dropDowns = document.getElementsByClassName("dropdownInput");
-
-  if (dropDowns.length) {
-    for (let d = 0; d < dropDowns.length; d++) {
-      if (
-        !dropDowns[d]?.parentElement?.parentElement?.classList?.contains(
-          "containerInput"
-        )
-      ) {
-        let tempElem = dropDowns[d].parentElement;
-        let tempPosn = getPosition(tempElem);
-
-        const selectElement = dropDowns[d].lastElementChild;
-        const selectedOption =
-          selectElement.options[selectElement.selectedIndex];
-        const selectedText = selectedOption?.textContent;
-        elem = {
-          width: tempPosn.width,
-          height: tempPosn.height,
-          top: tempPosn.top,
-          // topp: dropDowns[d].parentElement.style.top,
-          topp: tempPosn.top,
-          left: tempPosn.left,
-          type: "DROPDOWN_INPUT",
-          border: `${dropdownBorderSize} dotted ${dropdownBorderColor}`,
-          dropdownBorder: dropDowns[d].parentElement.style.border,
-          data: selectedText,
-          data1: dropDowns[d].firstElementChild.innerHTML,
-          data2: dropDowns[d].lastElementChild.innerHTML,
-          id: `dd${d + 1}`,
-        };
-
-        const pageNum = findPaageNum(dropDowns[d]);
-        page[0][pageNum]?.push(elem);
-      }
-    }
-  }
-
-  const emails = document.getElementsByClassName("emailButton");
-  if (emails.length) {
-    for (let e = 0; e < emails.length; e++) {
-      if (!emails[e]?.parentElement?.classList?.contains("containerInput")) {
-        let tempElem = emails[e].parentElement;
-        let tempPosn = getPosition(tempElem);
-
-        elem = {
-          width: tempPosn.width,
-          height: tempPosn.height,
-          top: tempPosn.top,
-          // topp: emails[e].parentElement.style.top,
-          topp: tempPosn.top,
-          left: tempPosn.left,
-          type: "FORM",
-          data: emails[e].textContent,
-          id: `eml${e + 1}`,
-        };
-
-        const pageNum = findPaageNum(emails[e]);
-        page[0][pageNum]?.push(elem);
-      }
-    }
-  }
-
-  contentFile.push(page);
-
-  return contentFile;
-}
