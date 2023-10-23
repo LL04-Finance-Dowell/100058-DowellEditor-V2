@@ -38,24 +38,22 @@ function createFormInputField(id, element, p, holderDIV, focuseddClassMaintain, 
   emailDataHolder.append(emailRecipientDataHolder);
   buttonField.onclick = (e) => {
 
-    
+
     if (buttonField.innerText === "Send mail") {
       if ((emailSenderDataHolder.innerText && emailSenderDataHolder.innerText !== "") && (emailRecipientDataHolder.innerText && emailRecipientDataHolder.innerText !== "")) {
-        console.log("\nSender Email Data >>>>>>>>>>>>>>>>>>>>>>\n,",emailSenderDataHolder.innerText,'\n')
-        console.log("\Reciever Email Data >>>>>>>>>>>>>>>>>>>>>>\n,",emailRecipientDataHolder.innerText,'\n')
         const formData = JSON.parse(emailSenderDataHolder.innerText)
         const receiverData = JSON.parse(emailRecipientDataHolder.innerText)
         if (formData.fromName !== "" || formData.fromEmail !== "" || formData.subject !== "" || formData.body !== "" || receiverData.toEmail !== "" || receiverData.toName !== "") {
           const emailData = {
-            email: receiverData.toEmail,
-            name: receiverData.toName,
-            fromName: formData.fromName,
-            fromEmail: formData.fromEmail,
+            toemail: receiverData.toEmail,
+            toname: receiverData.toName,
+            fromname: formData.fromName,
+            fromemail: formData.fromEmail,
             subject: formData.subject,
-            body: formData.body
+            email_content: formData.body
           }
           try {
-            sendEmail(emailData,buttonField);
+            sendEmail(emailData, buttonField,setSidebar);
           } catch (error) {
             console.log(error);
             toast.error('Please ensure all required data is submitted')
