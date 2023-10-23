@@ -1,4 +1,7 @@
+import { useStateContext } from "../../contexts/contextProvider";
+
 export const dragElementOverPage = (event, resizing) => {
+
   let holder;
 
   if (!resizing) {
@@ -85,6 +88,8 @@ export const dragElementOverPage = (event, resizing) => {
 
       window.addEventListener("mouseup", stopMove);
       function stopMove(ev) {
+        console.log('DRAGGING: ', ev.target);
+
         window.removeEventListener("mousemove", moveObject);
         window.removeEventListener("mouseup", stopMove);
       }

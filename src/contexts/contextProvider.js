@@ -572,7 +572,37 @@ export const ContextProvider = ({ children }) => {
 
     midSecAll[0].parentElement.parentElement.parentElement.style.marginTop = window.innerWidth > 993 ? 0 : leftRect.height + 'px';
 
+    console.log(currWidth, currMidSecWidth);
+
     currWidth !== currMidSecWidth && setCurrMidSecWidth(currWidth)
+  }
+
+  const updateDimRatios = (holder) => {
+    const midSecWidth = document.querySelector('.midSection_container').getBoundingClientRect().width;
+    const holderStyles = window.getComputedStyle(holder);
+    const el = holder.children[1]?.classList.contains('dropdownInput') ? holder.children[1] : holder.children[0];
+
+    const holderTop = parseFloat(holderStyles.top);
+    const holderLeft = parseFloat(holderStyles.left);
+    const holderWidth = parseFloat(holderStyles.width);
+    const holderHeight = parseFloat(holderStyles.height);
+
+    const dimRatios = sessionStorage.getItem('dimRatios') ? JSON.parse(sessionStorage.getItem('dimRatios')) : []
+    const modDimRatios = dimRatios.map(ratio => (ratio.id === el.id ?
+
+      {
+        ...ratio,
+        top: holderTop / midSecWidth,
+        left: holderLeft / midSecWidth,
+        width: holderWidth / midSecWidth,
+        height: holderHeight / midSecWidth
+
+      }
+
+      : ratio))
+
+    sessionStorage.setItem('dimRatios', JSON.stringify(modDimRatios))
+    setDimRatios(modDimRatios)
   }
 
   useEffect(() => {
@@ -747,7 +777,7 @@ export const ContextProvider = ({ children }) => {
         setGenSelOpt,
         fixedMidSecDim,
         scaleMidSec,
-        currMidSecWidth, dimRatios, setDimRatios
+        currMidSecWidth, dimRatios, setDimRatios, updateDimRatios
       }}
     >
       {children}

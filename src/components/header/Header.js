@@ -762,7 +762,7 @@ const Header = () => {
       buttonBorderColor,
       signBorderSize,
       signBorderColor,
-      containerBorderColor,);
+      containerBorderColor, title);
 
     const finalize = document.getElementById("finalize-button");
 
@@ -1378,7 +1378,8 @@ export default Header;
 
 
 export function saveDocument(page, fixedMidSecDim, inputBorderSize, inputBorderColor, borderSize, borderColor, tableBorderSize, tableBorderColor, containerBorderSize, scaleBorderSize,
-  scaleBorderColor, calendarBorderSize,
+  scaleBorderColor, iframeBorderSize,
+  iframeBorderColor, calendarBorderSize,
   calendarBorderColor,
   dropdownBorderSize,
   dropdownBorderColor,
@@ -1386,7 +1387,7 @@ export function saveDocument(page, fixedMidSecDim, inputBorderSize, inputBorderC
   buttonBorderColor,
   signBorderSize,
   signBorderColor,
-  containerBorderColor,) {
+  containerBorderColor, title) {
   const txt = document.getElementsByClassName("textInput");
   let elem = {};
   let contentFile = [];
@@ -1497,7 +1498,7 @@ export function saveDocument(page, fixedMidSecDim, inputBorderSize, inputBorderC
         };
 
         const pageNum = findPaageNum(txt[h]);
-        page[0][pageNum].push(elem);
+        page[0][pageNum]?.push(elem);
       }
     }
   }
@@ -1570,7 +1571,7 @@ export function saveDocument(page, fixedMidSecDim, inputBorderSize, inputBorderC
         };
 
         const pageNum = findPaageNum(date[h]);
-        page[0][pageNum].push(elem);
+        page[0][pageNum]?.push(elem);
       }
     }
   }
@@ -1606,7 +1607,7 @@ export function saveDocument(page, fixedMidSecDim, inputBorderSize, inputBorderC
         };
 
         const pageNum = findPaageNum(sign[h]);
-        page[0][pageNum].push(elem);
+        page[0][pageNum]?.push(elem);
       }
     }
   }
@@ -1684,7 +1685,7 @@ export function saveDocument(page, fixedMidSecDim, inputBorderSize, inputBorderC
           id: tables[t].firstElementChild.id,
         };
         const pageNum = findPaageNum(tables[t]);
-        page[0][pageNum].push(elem);
+        page[0][pageNum]?.push(elem);
       }
     }
   }
@@ -1791,7 +1792,7 @@ export function saveDocument(page, fixedMidSecDim, inputBorderSize, inputBorderC
         };
 
         const pageNum = findPaageNum(containerElements[h]);
-        page[0][pageNum].push(elem);
+        page[0][pageNum]?.push(elem);
       }
     }
   }
@@ -1823,7 +1824,7 @@ export function saveDocument(page, fixedMidSecDim, inputBorderSize, inputBorderC
         };
 
         const pageNum = findPaageNum(iframes[i]);
-        page[0][pageNum].push(elem);
+        page[0][pageNum]?.push(elem);
       }
     }
   }
@@ -1860,7 +1861,7 @@ export function saveDocument(page, fixedMidSecDim, inputBorderSize, inputBorderC
         };
 
         const pageNum = findPaageNum(scales[s]);
-        page[0][pageNum].push(elem);
+        page[0][pageNum]?.push(elem);
       }
     }
   }
@@ -2030,7 +2031,7 @@ export function saveDocument(page, fixedMidSecDim, inputBorderSize, inputBorderC
 
         // console.log(elem);
         const pageNum = findPaageNum(newScales[b]);
-        page[0][pageNum].push(elem);
+        page[0][pageNum]?.push(elem);
       }
     }
   }
@@ -2068,7 +2069,7 @@ export function saveDocument(page, fixedMidSecDim, inputBorderSize, inputBorderC
         };
         // console.log(elem);
         const pageNum = findPaageNum(imageCanva[b]);
-        page[0][pageNum].push(elem);
+        page[0][pageNum]?.push(elem);
       }
     }
   }
@@ -2083,7 +2084,6 @@ export function saveDocument(page, fixedMidSecDim, inputBorderSize, inputBorderC
       ) {
         let tempElem = buttons[b].parentElement;
         let tempPosn = getPosition(tempElem);
-        const link = buttonLink;
 
         elem = {
           width: tempPosn.width,
@@ -2101,7 +2101,7 @@ export function saveDocument(page, fixedMidSecDim, inputBorderSize, inputBorderC
         };
 
         const pageNum = findPaageNum(buttons[b]);
-        page[0][pageNum].push(elem);
+        page[0][pageNum]?.push(elem);
       }
     }
   }
@@ -2115,7 +2115,6 @@ export function saveDocument(page, fixedMidSecDim, inputBorderSize, inputBorderC
       ) {
         let tempElem = payments[p].parentElement;
         let tempPosn = getPosition(tempElem);
-        const link = buttonLink;
 
         elem = {
           width: tempPosn.width,
@@ -2134,7 +2133,7 @@ export function saveDocument(page, fixedMidSecDim, inputBorderSize, inputBorderC
 
         console.log("raw_data", elem.raw_data);
         const pageNum = findPaageNum(payments[p]);
-        page[0][pageNum].push(elem);
+        page[0][pageNum]?.push(elem);
       }
     }
   }
@@ -2172,7 +2171,7 @@ export function saveDocument(page, fixedMidSecDim, inputBorderSize, inputBorderC
         };
 
         const pageNum = findPaageNum(dropDowns[d]);
-        page[0][pageNum].push(elem);
+        page[0][pageNum]?.push(elem);
       }
     }
   }
@@ -2197,7 +2196,7 @@ export function saveDocument(page, fixedMidSecDim, inputBorderSize, inputBorderC
         };
 
         const pageNum = findPaageNum(emails[e]);
-        page[0][pageNum].push(elem);
+        page[0][pageNum]?.push(elem);
       }
     }
   }

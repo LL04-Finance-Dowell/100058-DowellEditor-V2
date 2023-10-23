@@ -106,7 +106,6 @@ const EditSection = () => {
     ];
 
     elements.forEach(element => {
-      console.log(element.id)
       if (prevSelElmAns.indexOf(element.id) === -1 && element.id !== selectedElement && !allowHighlight) {
         element.style.border = "none"
         if (selectedElement) {
@@ -146,7 +145,7 @@ const EditSection = () => {
             )}
           </Col>
           <Col
-            // style={{marginTop:window.innerWidth<993 && left_menu_size?.height}} 
+            // style={{marginTop:window.innerWidth< && left_menu_size?.height}} 
             lg={sidebar ? 8 : 11} as="div" className="editSec_midSec">
             <MidSection />
           </Col>

@@ -40,7 +40,6 @@ export default function useDraggable(el) {
   useEffect(() => {
     if (isResizing === false) {
       el.current.style.transform = `translate3d(${dx}px, ${dy}px, 0)`;
-      // TODO UPDATE dimsRatios
     }
   }, [isResizing, el, dx, dy]);
 }
