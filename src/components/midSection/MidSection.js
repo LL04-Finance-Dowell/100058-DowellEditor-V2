@@ -124,7 +124,9 @@ const MidSection = React.forwardRef((props, ref) => {
     focuseddClassMaintain,
     buttonLink,
     setButtonPurpose,
-    confirmRemove
+    confirmRemove,
+    progress, 
+    setProgress
   } = useStateContext();
 
   const { contextMenu, setContextMenu } = useCutMenuContext()
@@ -250,6 +252,7 @@ const MidSection = React.forwardRef((props, ref) => {
   };
 
   useEffect(() => {
+    setProgress(progress + 50)
     if (data !== undefined) {
       onPost();
 

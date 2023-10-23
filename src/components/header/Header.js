@@ -20,6 +20,8 @@ import { downloadPDF } from "../../utils/genratePDF.js";
 import generateImage from "../../utils/generateImage.js";
 import RejectionModal from "../modals/RejectionModal.jsx";
 
+import ProgressLoader from "../../utils/progressLoader/ProgressLoader"
+
 const Header = () => {
   const inputRef = useRef(null);
   const componentRef = useRef(null);
@@ -110,6 +112,8 @@ const Header = () => {
     setAllowHighlight,
     docMapRequired,
     setDocMapRequired,
+    progress, 
+    setProgress
   } = useStateContext();
 
   const [printContent, setPrintContent] = useState(false);
@@ -683,6 +687,9 @@ const Header = () => {
           let smallBox = newScales[b].querySelector(".small_box");
           let leftLableStapel = newScales[b].querySelector(".leftToolTip");
           let rightLableStapel = newScales[b].querySelector(".rightTooltip");
+          let stapelEmojiObj = newScales[b].querySelector(".stapelEmojiObj");
+          let stapelUpperimit = newScales[b].querySelector(".upper_scale_limit");
+          let spaceUnit = newScales[b].querySelector(".space_unit");
           // let stapelScaleField = newScales[b].querySelector(".newScaleInput");
           console.log(font);
 
@@ -694,6 +701,7 @@ const Header = () => {
           if (buttonText.length !== 0) {
             for (let i = 0; i < buttonText.length; i++) {
               emojiArr.push(buttonText[i].textContent);
+              console.log(buttonText[i].textContent)
             }
           }
 
@@ -715,7 +723,7 @@ const Header = () => {
 
           if (scaleType.textContent === "nps_lite") {
             npsLiteTextArray = newScales[b].querySelector(".nps_lite_text");
-            orientation = newScales[b].querySelector(".orientation");
+            orientation = newScales[b].querySelector(".nps_lite_orientation");
           }
 
           let likertScaleArray = "";
@@ -798,7 +806,10 @@ const Header = () => {
             orentation: orentation?.textContent,
             stapelOrientation: stapelOrientation?.textContent,
             otherComponent: otherComponent ? otherComponent.textContent : "",
-            smallBoxBgColor: smallBox?.style?.backgroundColor
+            smallBoxBgColor: smallBox?.style?.backgroundColor,
+            stapelEmojiObj: stapelEmojiObj?.textContent,
+            stapelUpperimit: stapelUpperimit?.textContent,
+            spaceUnit: spaceUnit?.textContent
           };
           // console.log(properties);
           elem = {
@@ -1096,6 +1107,7 @@ const Header = () => {
       .then((response) => {
         if (response.status === 200) {
           setIsLoading(false);
+          setProgress(progress + 50)
           var responseData = response.data;
           setScaleData(responseData);
           console.log(response);
@@ -1172,6 +1184,7 @@ const Header = () => {
       .then((response) => {
         if (response.status === 200) {
           setIsLoading(false);
+          setProgress(progress + 50)
           var responseData = response.data;
           setScaleData(responseData);
           console.log(response);
@@ -1251,6 +1264,7 @@ const Header = () => {
       .then((response) => {
         if (response.status === 200) {
           setIsLoading(false);
+          setProgress(progress + 50)
           var responseData = response.data;
           setScaleData(responseData);
           console.log(response);
@@ -1328,6 +1342,7 @@ const Header = () => {
       .then((response) => {
         if (response.status === 200) {
           setIsLoading(false);
+          setProgress(progress + 50)
           var responseData = response.data;
           setScaleData(responseData);
           console.log(response);
@@ -1419,6 +1434,7 @@ const Header = () => {
       .then((response) => {
         if (response.status === 200) {
           setIsLoading(false);
+          setProgress(progress + 50)
           var responseData = response.data;
           setScaleData(responseData);
           console.log(response);
@@ -1511,6 +1527,7 @@ const Header = () => {
       .then((response) => {
         if (response.status === 200) {
           setIsLoading(false);
+          setProgress(progress + 50)
           var responseData = response.data;
           setScaleData(responseData);
           console.log(response);
@@ -1522,12 +1539,15 @@ const Header = () => {
   }
 
   function submit(e) {
+    setProgress(progress + 50)
     e.preventDefault();
-    setIsLoading(true);
+    // setIsLoading(true);
     setIsButtonDisabled(true);
     const dataa = saveDocument();
 
     const finalize = document.getElementById("finalize-button");
+
+    const completeProgressBar = document.getElementById("progress-100");
 
     const titleName = document.querySelector(".title-name").innerHTML;
 
@@ -1584,6 +1604,7 @@ const Header = () => {
       }
     )
       .then((res) => {
+        completeProgressBar.click();
         if (res) {
           toast.success("Saved successfully");
           setIsLoading(false);
@@ -1611,6 +1632,7 @@ const Header = () => {
         }
       })
       .catch((err) => {
+        completeProgressBar.click();
         setIsLoading(false);
         setIsButtonDisabled(false);
       });
@@ -1722,7 +1744,7 @@ const Header = () => {
   };
 
   useEffect(() => {
-    setIsLoading(true);
+    // setIsLoading(true);
     getPostData();
   }, []);
 
@@ -1909,6 +1931,7 @@ const Header = () => {
   };
 
   return (
+    <>
     <div
       className={`header ${actionName == "template" ? "header_bg_template" : "header_bg_document"
         }`}
@@ -2132,6 +2155,10 @@ const Header = () => {
         />
       )}
     </div>
+    <div>
+      <ProgressLoader />
+    </div>
+    </>
   );
 };
 
