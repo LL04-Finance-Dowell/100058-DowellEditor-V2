@@ -490,6 +490,7 @@ const MidSection = React.forwardRef((props, ref) => {
       );
       midSection.append(tableElement);
     }
+
     function getHolderDIV(measure, i, idMatch) {
       const holderDIV = document.createElement("div");
 
@@ -2179,7 +2180,7 @@ const MidSection = React.forwardRef((props, ref) => {
       const editSecObserver = new MutationObserver((mutationLists) => {
         for (const mutation of mutationLists) {
           if (mutation.target.classList.contains('midSection_container')) {
-            if (mutation.addedNodes.length && !mutation.addedNodes[0].classList.contains('modal-container')) {
+            if (mutation.addedNodes.length && !mutation.addedNodes[0].classList.contains('modal-container') && !mutation.addedNodes[0].classList.contains('positioning')) {
               const [holder] = mutation.addedNodes;
               const el = holder.children[1]?.classList.contains('dropdownInput') ? holder.children[1] : holder.children[0];
               const elRect = el.getBoundingClientRect();
@@ -2202,7 +2203,7 @@ const MidSection = React.forwardRef((props, ref) => {
               setDimRatios(modDimRatios)
             }
 
-            if (mutation.removedNodes.length && !mutation.removedNodes[0].classList.contains('modal-container')) {
+            if (mutation.removedNodes.length && !mutation.removedNodes[0].classList.contains('modal-container') && !mutation.removedNodes[0].classList.contains('positioning')) {
               const [holder] = mutation.removedNodes;
               const el = holder.children[1]?.classList.contains('dropdownInput') ? holder.children[1] : holder.children[0];
 
