@@ -180,7 +180,7 @@ const AlignRightSide = () => {
   }
 
   function changeBgColor(font) {
-    const textDiv = document.getElementsByClassName("textInput").item(0);
+    const textDiv = document.getElementsByClassName("focussed").item(0);
 
     textDiv.style = "background-color:" + font.target.value + ";";
   }
@@ -198,6 +198,9 @@ const AlignRightSide = () => {
       range.insertNode(e); // … and inserts the new element at its place
     }
   }
+
+
+  
 
   function showColorInput() {
     const fontColor = document.getElementById("colorInputColor");
