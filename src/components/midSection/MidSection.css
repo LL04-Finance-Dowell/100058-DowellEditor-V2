@@ -22,13 +22,17 @@
   border: 2px dotted gray;
 }
 
+.textInput.empty {
+  overflow: hidden !important;
+}
+
 .textInput.empty:after {
   content: 'T';
   position: absolute;
-  top: 50%;
+  top: 60%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: 7rem;
+  font-size: 5rem;
   font-family: courier;
   font-weight: 500;
   color: #e3eeff;

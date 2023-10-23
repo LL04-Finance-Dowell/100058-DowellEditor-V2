@@ -1,7 +1,7 @@
 import copyInput from '../CopyInput';
 
 // Regular JavaScript function to create a text input field
-function createIframeElement( holderDIV, table_dropdown_focuseddClassMaintain, handleClicked, setSidebar) {
+function createIframeElement( holderDIV, table_dropdown_focuseddClassMaintain, handleClicked, setSidebar,copy_data=false) {
     let iframeField = document.createElement("div");
         iframeField.className = "iframeInput";
         iframeField.style.width = "100%";
@@ -10,9 +10,13 @@ function createIframeElement( holderDIV, table_dropdown_focuseddClassMaintain, h
         iframeField.style.borderRadius = "0px";
         iframeField.style.outline = "0px";
         iframeField.style.overflow = "overlay";
-        // iframeField.innerHTML = "iframe";
         iframeField.style.position = "absolute";
-        iframeField.innerText = "iFrame here";
+        
+        if(copy_data){
+          iframeField.innerHTML = copy_data;  
+        }else{
+          iframeField.innerText = "iFrame here";
+        }
 
         const iframes = document.getElementsByClassName("iframeInput");
         if (iframes.length) {

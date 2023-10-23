@@ -20,6 +20,8 @@ import { downloadPDF } from "../../utils/genratePDF.js";
 import generateImage from "../../utils/generateImage.js";
 import RejectionModal from "../modals/RejectionModal.jsx";
 
+import ProgressLoader from "../../utils/progressLoader/ProgressLoader"
+
 const Header = () => {
   const inputRef = useRef(null);
   const componentRef = useRef(null);
@@ -110,6 +112,8 @@ const Header = () => {
     setAllowHighlight,
     docMapRequired,
     setDocMapRequired,
+    progress, 
+    setProgress
   } = useStateContext();
 
   const [printContent, setPrintContent] = useState(false);
@@ -203,7 +207,7 @@ const Header = () => {
       left:
         window.innerWidth < 993
           ? (rect.left * 793.7007874) / midsectionRect.width -
-            midsectionRect.left
+          midsectionRect.left
           : rect.left - midsectionRect.left,
       // left:rect.left - midsectionRect.left,
       bottom: rect.bottom,
@@ -397,7 +401,7 @@ const Header = () => {
             data:
               sign[h].firstElementChild === null
                 ? // decoded.details.action === "document"
-                  sign[h].innerHTML
+                sign[h].innerHTML
                 : sign[h].firstElementChild.src,
             id: `s${h + 1}`,
           };
@@ -451,7 +455,7 @@ const Header = () => {
                     data:
                       TdDivClassName == "imageInput"
                         ? tableChildren[i].children[j]?.firstElementChild.style
-                            .backgroundImage
+                          .backgroundImage
                         : tdElement[0]?.innerHTML,
                     id:
                       TdDivClassName == "imageInput"
@@ -555,7 +559,7 @@ const Header = () => {
               childData.type = type;
               const imageData =
                 "imageInput" &&
-                element?.firstElementChild?.style?.backgroundImage
+                  element?.firstElementChild?.style?.backgroundImage
                   ? element.firstElementChild.style.backgroundImage
                   : element.firstElementChild?.innerHTML;
               if (type != "TEXT_INPUT") {
@@ -684,6 +688,8 @@ const Header = () => {
           let leftLableStapel = newScales[b].querySelector(".leftToolTip");
           let rightLableStapel = newScales[b].querySelector(".rightTooltip");
           let stapelEmojiObj = newScales[b].querySelector(".stapelEmojiObj");
+          let stapelUpperimit = newScales[b].querySelector(".upper_scale_limit");
+          let spaceUnit = newScales[b].querySelector(".space_unit");
           // let stapelScaleField = newScales[b].querySelector(".newScaleInput");
           console.log(font);
 
@@ -717,7 +723,7 @@ const Header = () => {
 
           if (scaleType.textContent === "nps_lite") {
             npsLiteTextArray = newScales[b].querySelector(".nps_lite_text");
-            orientation = newScales[b].querySelector(".orientation");
+            orientation = newScales[b].querySelector(".nps_lite_orientation");
           }
 
           let likertScaleArray = "";
@@ -801,7 +807,9 @@ const Header = () => {
             stapelOrientation: stapelOrientation?.textContent,
             otherComponent: otherComponent ? otherComponent.textContent : "",
             smallBoxBgColor: smallBox?.style?.backgroundColor,
-            stapelEmojiObj: stapelEmojiObj?.textContent
+            stapelEmojiObj: stapelEmojiObj?.textContent,
+            stapelUpperimit: stapelUpperimit?.textContent,
+            spaceUnit: spaceUnit?.textContent
           };
           // console.log(properties);
           elem = {
@@ -1094,6 +1102,7 @@ const Header = () => {
       .then((response) => {
         if (response.status === 200) {
           setIsLoading(false);
+          setProgress(progress + 50)
           var responseData = response.data;
           setScaleData(responseData);
           console.log(response);
@@ -1170,6 +1179,7 @@ const Header = () => {
       .then((response) => {
         if (response.status === 200) {
           setIsLoading(false);
+          setProgress(progress + 50)
           var responseData = response.data;
           setScaleData(responseData);
           console.log(response);
@@ -1249,6 +1259,7 @@ const Header = () => {
       .then((response) => {
         if (response.status === 200) {
           setIsLoading(false);
+          setProgress(progress + 50)
           var responseData = response.data;
           setScaleData(responseData);
           console.log(response);
@@ -1326,6 +1337,7 @@ const Header = () => {
       .then((response) => {
         if (response.status === 200) {
           setIsLoading(false);
+          setProgress(progress + 50)
           var responseData = response.data;
           setScaleData(responseData);
           console.log(response);
@@ -1417,6 +1429,7 @@ const Header = () => {
       .then((response) => {
         if (response.status === 200) {
           setIsLoading(false);
+          setProgress(progress + 50)
           var responseData = response.data;
           setScaleData(responseData);
           console.log(response);
@@ -1509,6 +1522,7 @@ const Header = () => {
       .then((response) => {
         if (response.status === 200) {
           setIsLoading(false);
+          setProgress(progress + 50)
           var responseData = response.data;
           setScaleData(responseData);
           console.log(response);
@@ -1520,12 +1534,15 @@ const Header = () => {
   }
 
   function submit(e) {
+    setProgress(progress + 50)
     e.preventDefault();
-    setIsLoading(true);
+    // setIsLoading(true);
     setIsButtonDisabled(true);
     const dataa = saveDocument();
 
     const finalize = document.getElementById("finalize-button");
+
+    const completeProgressBar = document.getElementById("progress-100");
 
     const titleName = document.querySelector(".title-name").innerHTML;
 
@@ -1582,6 +1599,7 @@ const Header = () => {
       }
     )
       .then((res) => {
+        completeProgressBar.click();
         if (res) {
           toast.success("Saved successfully");
           setIsLoading(false);
@@ -1589,26 +1607,27 @@ const Header = () => {
           if (finalize) {
             handleFinalize();
           }
-          if(decoded.details.action === "document") {
-          let scaleType = document.querySelector(".scaleTypeHolder");
-          if (scaleType.textContent === "nps") {
-            handleFinalizeButton();
-          } else if (scaleType.textContent === "snipte") {
-            handleFinalizeButtonStapel();
-          } else if (scaleType.textContent === "nps_lite") {
-            handleFinalizeButtonNpsLite();
-          } else if (scaleType.textContent === "likert") {
-            handleFinalizeButtonLikert();
-          } else if (scaleType.textContent === "percent_scale") {
-            handleFinalizeButtonPercent();
-          } else if (scaleType.textContent === "percent_sum_scale") {
-            handleFinalizeButtonPercentSum();
+          if (decoded.details.action === "document") {
+            let scaleType = document.querySelector(".scaleTypeHolder");
+            if (scaleType.textContent === "nps") {
+              handleFinalizeButton();
+            } else if (scaleType.textContent === "snipte") {
+              handleFinalizeButtonStapel();
+            } else if (scaleType.textContent === "nps_lite") {
+              handleFinalizeButtonNpsLite();
+            } else if (scaleType.textContent === "likert") {
+              handleFinalizeButtonLikert();
+            } else if (scaleType.textContent === "percent_scale") {
+              handleFinalizeButtonPercent();
+            } else if (scaleType.textContent === "percent_sum_scale") {
+              handleFinalizeButtonPercentSum();
+            }
           }
-        }
           setIsDataSaved(true);
         }
       })
       .catch((err) => {
+        completeProgressBar.click();
         setIsLoading(false);
         setIsButtonDisabled(false);
       });
@@ -1720,7 +1739,7 @@ const Header = () => {
   };
 
   useEffect(() => {
-    setIsLoading(true);
+    // setIsLoading(true);
     getPostData();
   }, []);
 
@@ -1907,10 +1926,10 @@ const Header = () => {
   };
 
   return (
+    <>
     <div
-      className={`header ${
-        actionName == "template" ? "header_bg_template" : "header_bg_document"
-      }`}
+      className={`header ${actionName == "template" ? "header_bg_template" : "header_bg_document"
+        }`}
     >
       <Container fluid>
         <Row>
@@ -1920,9 +1939,8 @@ const Header = () => {
               {isMenuVisible && (
                 <div
                   ref={menuRef}
-                  className={`position-absolute bg-white d-flex flex-column p-4 bar-menu menu ${
-                    isMenuVisible ? "show" : ""
-                  }`}
+                  className={`position-absolute bg-white d-flex flex-column p-4 bar-menu menu ${isMenuVisible ? "show" : ""
+                    }`}
                 >
                   <div className="d-flex cursor_pointer" onClick={handleUndo}>
                     <ImUndo />
@@ -2132,6 +2150,10 @@ const Header = () => {
         />
       )}
     </div>
+    <div>
+      <ProgressLoader />
+    </div>
+    </>
   );
 };
 

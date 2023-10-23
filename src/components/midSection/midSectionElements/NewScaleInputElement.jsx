@@ -387,9 +387,23 @@ function createNewScaleInputField(
     scaleHold.style.display = "none";
     scaleField.style.display = "flex";
     scaleField.style.backgroundColor = element?.raw_data?.scaleBgColor;
+    scaleField.style.color = element?.raw_data?.fontColor;
+    scaleField.style.fontFamily = element?.raw_data?.fontFamily;
     scaleField.style.flexDirection = "row";
     scaleField.style.alignItems = "center";
     scaleField.style.justifyContent = "center";
+
+    const upperScaleimit = document.createElement("h6");
+    upperScaleimit.className = "upper_scale_limit";
+    upperScaleimit.textContent = element?.raw_data?.stapelUpperimit;
+    upperScaleimit.style.display = "none";
+    scaleField.append(upperScaleimit)
+
+    const spaceUnit = document.createElement("h6");
+    spaceUnit.className = "space_unit";
+    spaceUnit.textContent = element?.raw_data?.spaceUnit;
+    spaceUnit.style.display = "none";
+    scaleField.append(spaceUnit)
     for (let i = 0; i < stapelScale.length; i++) {
       const circle = document.createElement("div");
       circle.className = "circle_label";
@@ -399,6 +413,7 @@ function createNewScaleInputField(
       circle.style.height = "35px";
       circle.style.borderRadius = "50%";
       circle.style.display = "flex";
+      circle.style.flexDirection = "column";
       circle.style.justifyContent = "center";
       circle.style.alignItems = "center";
       circle.style.margin = "0 2px 2px 0";
@@ -430,8 +445,9 @@ function createNewScaleInputField(
         left.style.fontSize = "medium";
         left.style.writingMode =
           stapelOrientation === "stapel_vertical" ? "tb-rl" : "";
-        left.style.backgroundColor = "#555";
-        left.style.color = "white";
+        left.style.backgroundColor = "#272828";
+        left.style.color = "#EEEFEF";
+        left.style.borderRadius = "3px"
         circle.append(left);
         circle.onmouseover = function () {
           left.style.visibility = "visible";
@@ -449,11 +465,12 @@ function createNewScaleInputField(
         right.style.zIndex = "1";
         right.style.bottom = "3px";
         right.style.right = "5%";
-        right.style.backgroundColor = "#555";
-        right.style.color = "white";
+        right.style.backgroundColor = "#272828";
+        right.style.color = "#EEEFEF";
         right.style.fontSize = "medium";
         right.style.writingMode =
           stapelOrientation === "stapel_vertical" ? "tb-rl" : "";
+        right.style.borderRadius = "3px"
         circle.append(right);
         circle.onmouseover = function () {
           right.style.display = "block";
@@ -470,27 +487,11 @@ function createNewScaleInputField(
         stapel_vertical.style.display = "none";
         stapel_vertical.textContent = "stapel_vertical";
         scaleField.appendChild(stapel_vertical);
-
-        // labelHold.style.height = "82%";
-        // labelHold.style.top = "54%";
-        // labelHold.style.left = "50%";
-        // labelHold.style.transform = "translate(-50%, -50%)";
-        // scaleHold.style.border = "none";
-        // scaleHold.style.textAlign = "center";
-        // labelHold.style.width = "30%";
-        // labelHold.style.position = "absolute";
-        // labelHold.style.flexDirection = "column";
-        // labelHold.style.alignItems = "center";
-        // labelHold.style.marginTop = "0";
         scaleField.style.display = "flex"
         scaleField.style.flexDirection = "column"
         scaleField.style.alignItems = "center"
         scaleField.style.justifyContent = "center"
       }
-      // if (selectedOption === "emoji") {
-      //   const buttonText = element.raw_data.buttonText;
-      //   circle.textContent = buttonText[i % buttonText.length];
-      // }
 
       if (!token) {
         return res.status(401).json({ error: "Unauthorized" });
@@ -673,8 +674,8 @@ function createNewScaleInputField(
 
       let orientation = element?.raw_data?.orientation;
       if (orientation === "Vertical") {
-        const orientation = document.createElement("div");
-        orientation.className = "orientation";
+        const orientation = document.createElement("h2");
+        orientation.className = "nps_lite_orientation";
         orientation.textContent = "Vertical";
         orientation.style.display = "none";
         labelHold.appendChild(orientation);
@@ -1389,7 +1390,7 @@ function createNewScaleInputField(
         circle.className = "circle_label";
         circle.style.width = "127px";
         circle.style.height = "45%";
-        circle.style.borderRadius = "25px";
+        circle.style.borderRadius = "12px";
         circle.style.padding = "12px 20px";
         circle.style.backgroundColor = element?.raw_data?.buttonColor;
         circle.style.display = "flex";
@@ -1471,10 +1472,14 @@ function createNewScaleInputField(
         circle.appendChild(smallBox2);
 
         scaleHold.style.textAlign = "center";
-
+        scaleHold.style.height = "100%";
+        labelHold.style.border = "";
+        labelHold.style.height = "100%";
         labelHold.style.justifyContent = "center";
+        labelHold.style.flexWrap = "wrap";
         labelHold.style.position = "relative";
         labelHold.style.marginLeft = "0px";
+        scaleText.style.display = "none";
         labelHold.appendChild(circle);
 
         let orientation = element?.raw_data?.orientation;
@@ -1484,16 +1489,15 @@ function createNewScaleInputField(
           orientation.textContent = "vertical";
           orientation.style.display = "none";
           labelHold.appendChild(orientation);
+          scaleHold.style.padding = "0px";
           labelHold.style.position = "absolute";
           circle.style.margin = "5px 0";
           circle.style.padding = "6px 12px";
-          labelHold.style.height = "80%";
-          labelHold.style.width = "50%";
+          labelHold.style.height = "100%";
+          labelHold.style.width = "100%";
           labelHold.style.display = "flex";
           labelHold.style.flexDirection = "column";
           labelHold.style.alignItems = "center";
-          labelHold.style.marginTop = "1%";
-          labelHold.style.marginLeft = "26%";
         }
       }
 

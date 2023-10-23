@@ -30,6 +30,7 @@ const ButtonRightSide = () => {
   const link = holderDIV?.children[1]?.innerHTML;
   const [showSlider, setShowSlider] = useState(false);
 
+
   const [selectedType, setSelectedType] = useState('')
 
   const handleUpdate = () => {
@@ -87,126 +88,129 @@ const ButtonRightSide = () => {
   };
   const { addedAns, setAddedAns } = useSelectedAnswer()
 
-  const [isJustEntered, setIsJustEntered] = useState(true);
 
-  // *This is to preserve default btn select value
   useEffect(() => {
-    setIsJustEntered(false);
-    setGenSelOpt('cta');
-  }, [])
-  return (
-    <>
-      <div className="mt-2 mb-3 w-100">
-        <select className='gen_btn_sel' defaultValue={isJustEntered ? 'cta' : genSelOpt} onChange={e => setGenSelOpt(e.target.value)} style={{ marginBottom: '10px' }}>
-          <option value="" disabled>Select type</option>
-          <option value="cta">CTA</option>
-          <option value="pay">Pay</option>
-          <option value="email">Email</option>
-        </select>
+    const linkWrapper = document.getElementById("link")
+    const btnName = document.getElementById("button_name")
+    const select = document.getElementById('selectt')
 
-        <h3>Button Settings</h3>
-        <Form.Label>Button Name</Form.Label>
-        <Form.Control
-          type="text"
-          placeholder="Button name"
-          id="button_name"
-          onChange={() => { }}
-        />
-      </div>
-      <select
-        onChange={handleSelect}
-        id="selectt"
-        // onChange={handleDateMethod}
-        className="select border-0 bg-white rounded w-100 h-75 p-2"
-      >
-        <option value="">Select</option>
-        <option value="finalize">Finalize</option>
-        <option value="reject">Reject</option>
-        <option value="custom">Custom</option>
+    btnName.value = button.textContent ?? '';
+    linkWrapper.value = link ?? '';
+    select.selectedIndex = purpose === 'finalize' ? 1 : purpose === 'reject' ? 2 : purpose === 'custom' ? 3 : 0
+  }, [])
+
+
+  return <>
+    <div className="mt-2 mb-3 w-100">
+      <select className='gen_btn_sel' defaultValue='cta' onChange={e => setGenSelOpt(e.target.value)} style={{ marginBottom: '10px' }}>
+        <option value="" disabled>Select type</option>
+        <option value="cta">CTA</option>
+        <option value="pay">Pay</option>
+        <option value="email">Email</option>
       </select>
 
-      <div
-        id="website_link"
-        className="mt-5 mb-5 w-100"
-        style={{ display: "none" }}
-      >
-        <Form.Label>Website Link</Form.Label>
-        <Form.Control
-          type="text"
-          placeholder="Website link"
-          id="link"
-          onChange={() => { }}
-        />
-      </div>
-      <hr />
-      <Row className="pt-4">
-        <div style={{ display: "flex", alignItems: "center" }}>
-          <h6 style={{ marginRight: "10rem" }}>Border</h6>
-          <label className="switch">
-            <input type="checkbox" onClick={() => setShowSlider(!showSlider)} />
-            <span className="slider round"></span>
-          </label>
-        </div>
-        {showSlider && (
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              backgroundColor: "#abab",
-              gap: "10px",
-              height: "40px",
-              width: "90%",
-            }}
-          >
-            <input
-              type="color"
-              value={buttonBorderColor}
-              onChange={handleBorderColorChange}
-              id="color"
-              style={{ border: "none", width: "10%", height: "15px" }}
-            />
-            <input
-              type="range"
-              min="0"
-              max="20"
-              value={buttonBorderSize}
-              onChange={handleBorderSizeChange}
-              onBlur={handleRangeBlur}
-              id="range"
-              className="range-color"
-            />
-          </div>
-        )}
-      </Row>
-      <hr />
-      <SelectAnsAndQuestion
-        selectedType={selectedType}
-        setSelectedType={setSelectedType}
-        setAddedAns={setAddedAns}
-        addedAns={addedAns} />
-      <hr />
-      <div className="mt-2 text-center pt-5">
-        <Button variant="secondary" className="px-5" onClick={handleUpdate}>
-          Update Changes
-        </Button>
-      </div>
+      <h3>Button Settings</h3>
+      <Form.Label>Button Name</Form.Label>
+      <Form.Control
+        type="text"
+        placeholder="Button name"
+        id="button_name"
+        onChange={() => { }}
+      />
+    </div>
+    <select
+      onChange={handleSelect}
+      id="selectt"
+      // onChange={handleDateMethod}
+      className="select border-0 bg-white rounded w-100 h-75 p-2"
+    >
+      <option value="">Select</option>
+      <option value="finalize">Finalize</option>
+      <option value="reject">Reject</option>
+      <option value="custom">Custom</option>
+    </select>
 
-      <div className="mt-2 text-center pt-5">
-        <Button
-          variant="primary"
-          className={
-            decoded.details.action === "template"
-              ? "px-5 remove_button"
-              : "px-5 remove_button disable_button"
-          }
-          // onClick={removeButton}
-          onClick={() => setConfirmRemove(!confirmRemove)}
-        >
-          Remove Button
-        </Button>
+    <div
+      id="website_link"
+      className="mt-5 mb-5 w-100"
+      style={{ display: "none" }}
+    >
+      <Form.Label>Website Link</Form.Label>
+      <Form.Control
+        type="text"
+        placeholder="Website link"
+        id="link"
+        onChange={() => { }}
+      />
+    </div>
+    <hr />
+    <Row className="pt-4">
+      <div style={{ display: "flex", alignItems: "center" }}>
+        <h6 style={{ marginRight: "10rem" }}>Border</h6>
+        <label className="switch">
+          <input type="checkbox" onClick={() => setShowSlider(!showSlider)} />
+          <span className="slider round"></span>
+        </label>
       </div>
-    </>
-  );
+      {showSlider && (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            backgroundColor: "#abab",
+            gap: "10px",
+            height: "40px",
+            width: "90%",
+          }}
+        >
+          <input
+            type="color"
+            value={buttonBorderColor}
+            onChange={handleBorderColorChange}
+            id="color"
+            style={{ border: "none", width: "10%", height: "15px" }}
+          />
+          <input
+            type="range"
+            min="0"
+            max="20"
+            value={buttonBorderSize}
+            onChange={handleBorderSizeChange}
+            onBlur={handleRangeBlur}
+            id="range"
+            className="range-color"
+          />
+        </div>
+      )}
+    </Row>
+    <hr />
+    <SelectAnsAndQuestion
+      selectedType={selectedType}
+      setSelectedType={setSelectedType}
+      setAddedAns={setAddedAns}
+      addedAns={addedAns} />
+    <hr />
+    <div className="mt-2 text-center pt-5">
+      <Button variant="secondary" className="px-5" onClick={handleUpdate}>
+        Update Changes
+      </Button>
+    </div>
+
+    <div className="mt-2 text-center pt-5">
+      <Button
+        variant="primary"
+        className={
+          decoded.details.action === "template"
+            ? "px-5 remove_button"
+            : "px-5 remove_button disable_button"
+        }
+        // onClick={removeButton}
+        onClick={() => setConfirmRemove(!confirmRemove)}
+      >
+        Remove Button
+      </Button>
+    </div>
+  </>
 };
 
 export default ButtonRightSide;
