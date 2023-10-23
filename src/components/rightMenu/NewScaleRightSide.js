@@ -2308,9 +2308,10 @@ const ScaleRightSide = () => {
         labelHold.style.display = "flex";
         labelHold.style.flexDirection = "column";
         labelHold.style.alignItems = "center";
-        labelHold.style.marginTop = "5px";  
+        labelHold.style.marginTop = "-8px";  
         labelHold.style.marginLeft = "13px";
-        button4.style.overflowY = "hidden"; 
+        labelHold.style.overflowX = "hidden";
+        labelHold.style.overflowY = "hidden"; 
       }
 
       const basePayload = {
