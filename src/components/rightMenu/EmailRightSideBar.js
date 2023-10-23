@@ -13,8 +13,8 @@ const EmailRightSideBar = () => {
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token");
   var decoded = jwt_decode(token);
-  // const actionName = decoded?.details?.action;
-  const actionName = 'document';
+  const actionName = decoded?.details?.action;
+
 
   const mailBtn = document.querySelector(".focussed");
 
