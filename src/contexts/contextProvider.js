@@ -54,6 +54,7 @@ export const ContextProvider = ({ children }) => {
   const [data, setData] = useState([]);
   const [title, setTitle] = useState(["Untitled-file"]);
   const [isDataRetrieved, setIsDataRetrieved] = useState(false);
+  const [iniBtnId, setIniBtnId] = useState('');
 
   //nps scale custom data
   const [customId, setCustomId] = useState([]);
@@ -606,24 +607,40 @@ export const ContextProvider = ({ children }) => {
   }
 
   useEffect(() => {
-    if (genSelOpt) {
+    const replaceIds = (oldId, newId) => {
+      const modDimRatios = dimRatios.map(ratio => (
+        ratio.id === oldId ? { ...ratio, id: newId } : ratio
+      ))
+      console.log('oldId: ', oldId, 'newId: ', newId, modDimRatios);
+      sessionStorage.setItem('dimRatios', JSON.stringify(modDimRatios));
+      setDimRatios(modDimRatios)
+      setIniBtnId(newId);
+    }
+
+    const check = (genSelOpt === 'cta' && !iniBtnId.includes('btn')) || (genSelOpt === 'pay' && !iniBtnId.includes('pay')) || (genSelOpt === 'email' && !iniBtnId.includes('eml'))
+
+    if (genSelOpt && check) {
       const holderDiv = document.querySelector('.focussedd');
       holderDiv.textContent = '';
+
       switch (genSelOpt) {
         case 'cta':
           createButtonInputElement(holderDiv, focuseddClassMaintain, handleClicked, setSidebar);
+          replaceIds(iniBtnId, iniBtnId.replace(`${iniBtnId[0]}${iniBtnId[1]}${iniBtnId[2]}`, 'btn'))
           break;
         case 'pay':
           CreatePyamentElement(holderDiv, focuseddClassMaintain, handleClicked, setSidebar);
+          replaceIds(iniBtnId, iniBtnId.replace(`${iniBtnId[0]}${iniBtnId[1]}${iniBtnId[2]}`, 'pay'))
           break;
         case 'email':
           createFormInputElement(holderDiv, focuseddClassMaintain, handleClicked, setSidebar);
+          replaceIds(iniBtnId, iniBtnId.replace(`${iniBtnId[0]}${iniBtnId[1]}${iniBtnId[2]}`, 'eml'))
           break;
         default:
           return;
       }
     }
-  }, [genSelOpt])
+  }, [genSelOpt, iniBtnId, dimRatios])
 
   return (
     <StateContext.Provider
@@ -777,7 +794,7 @@ export const ContextProvider = ({ children }) => {
         setGenSelOpt,
         fixedMidSecDim,
         scaleMidSec,
-        currMidSecWidth, dimRatios, setDimRatios, updateDimRatios
+        currMidSecWidth, dimRatios, setDimRatios, updateDimRatios, iniBtnId, setIniBtnId
       }}
     >
       {children}
