@@ -2307,52 +2307,41 @@ const ScaleRightSide = () => {
         button4.style.textAlign = "center";
         button.style.display = "flex";
         button.style.flexDirection = "row";
-        button.style.marginTop = "-7%";
         button.style.alignItems = "center";
-        button.style.marginLeft = "15px";
-        // buttonCircle.style.flexDirection = "row";
         button.style.height = "85%";
         button.style.width = "100%";
         button.style.flexDirection = "row";
         button.style.position = "relative";
         button.style.marginLeft = "0px";
-        button.style.padding = "5px 10px";
+        button.style.padding = "6px 12px";
         button.style.display = "grid";
         button.style.gridTemplateColumns = `repeat(${numColumns}, 1fr)`;
         button.style.gridTemplateRows = `repeat(${numRows}, 1fr)`;
-        labelHold.style.marginTop = "-5px";
-        scaleText.style.marginBottom = "1px";
-        scaleText.style.height = "1%";
       }
-      var buttonWidth = labelHold.offsetWidth;
+
       if (option.value === "Vertical") {
-        let orientation = document.createElement("h2");
+        const orientation = document.createElement("div");
         orientation.className = "orientation";
         orientation.textContent = "vertical";
         orientation.style.display = "none";
-        button4.appendChild(orientation);
+        labelHold.appendChild(orientation);
+        labelHold.style.position = "absolute";
+        button.style.margin = "5px 0";
+        button.style.padding = "6px 12px";
+        button.style.margin = "10px 0";
         button4.style.border = "none";
-        button4.style.textAlign = "center";   
-        button.style.height = "80%";
-        button.style.width = "50%";
-        button.style.position = "absolute";
-        button.style.display = "flex";
-        button.style.flexDirection = "column";
-        button.style.alignItems = "center";
-        button.style.marginTop = "5px";
-        scaleText.style.marginBottom = "1px";
-        scaleText.style.height = "10%";
+        button4.style.display = "flex";
+        button4.style.justifyContent = "center";
+        button4.style.textAlign = "center";
+        labelHold.style.height = "100%";
+        labelHold.style.width = "55%";
+        labelHold.style.position = "absolute";
+        labelHold.style.display = "flex";
+        labelHold.style.flexDirection = "column";
         labelHold.style.alignItems = "center";
-        if (buttonWidth < 200) {
-          // Apply the new margin when the button's width is less than 200px
-          labelHold.style.marginLeft = "15%";
-        } else {
-          // Apply the original margin when the button's width is 200px or more
-          labelHold.style.alignItems = "center";
-          labelHold.style.marginTop = "1%";
-          labelHold.style.marginLeft = "18%";
-        }
-        
+        labelHold.style.marginTop = "5px";  
+        labelHold.style.marginLeft = "13px";
+        button4.style.overflowY = "hidden"; 
       }
 
       const basePayload = {
@@ -2440,7 +2429,8 @@ const ScaleRightSide = () => {
 
             const settings = res.data.data.settings;
             if (settings.name) {
-              scaleText.textContent = "";
+              scaleText.textContent = settings.name;
+              scaleText.style.display = "none";
             }
 
             if (settings.font_color) {
@@ -2457,9 +2447,9 @@ const ScaleRightSide = () => {
               const circle = document.createElement("div");
               circle.className = "circle_label";
               circle.style.width = "80%";
-              circle.style.height = "55%";
+              circle.style.height = "60%";
               circle.style.borderRadius = "25px";
-              circle.style.padding = "5px 10px";
+              circle.style.padding = "6px 12px";
               circle.style.backgroundColor = settings.round_color;
               circle.style.display = "flex";
               circle.style.justifyContent = "center";
@@ -2477,11 +2467,10 @@ const ScaleRightSide = () => {
               circle.textContent = updatedLabels[i] || "";
               if (option.value === "Vertical") {
                 circle.style.margin = "2px 0";
-                circle.style.padding = "3px 12px";
               }
+
               labelHold.style.border = "";
               labelHold.appendChild(circle);
-              labelHold.style.marginTop = "-5px";
             }
 
             console.log("This is the likert scale response", res.data.data);
@@ -2517,8 +2506,9 @@ const ScaleRightSide = () => {
                 button4.style.fontFamily = settings.fontstyle;
               }
 
-              if (beNametnUpdateScal.value !== "") {
-                scaleText.textContent = "";
+              if (settings.name) {
+                scaleText.textContent = settings.name;
+                scaleText.style.display = "none";
               }
 
               button4.style.display = "block";
@@ -2526,9 +2516,9 @@ const ScaleRightSide = () => {
                 const circle = document.createElement("div");
                 circle.className = "circle_label";
                 circle.style.width = "80%";
-                circle.style.height = "55%";
+                circle.style.height = "60%";
                 circle.style.borderRadius = "25px";
-                circle.style.padding = "5px 20px";
+                circle.style.padding = "6px 12px";
                 circle.style.backgroundColor = settings.round_color;
                 circle.style.display = "flex";
                 circle.style.justifyContent = "center";

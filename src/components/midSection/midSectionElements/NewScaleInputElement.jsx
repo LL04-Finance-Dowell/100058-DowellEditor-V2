@@ -852,21 +852,18 @@ function createNewScaleInputField(
       circle.style.width = "80%";
       circle.style.height = "55%";
       circle.style.borderRadius = "25px";
-      circle.style.padding = "5px 10px";
-      circle.style.marginLeft = "15px";
-      circle.style.marginRight = "5px";
+      circle.style.padding = "6px 12px";
+      circle.style.marginLeft = "7px";
       circle.style.backgroundColor = element?.raw_data?.buttonColor;
       circle.style.display = "flex";
       circle.style.justifyContent = "center";
       circle.style.alignItems = "center";
-      labelHold.style.marginTop = "-5px";
       labelHold.style.border = "";
       labelHold.style.display = "grid";
       labelHold.style.gridTemplateColumns = `repeat(3, 1fr)`;
       labelHold.style.gridTemplateRows = `repeat(${numRows}, 1fr)`;
       labelHold.appendChild(circle);
-      scaleText.style.marginBottom = "1px";
-      scaleText.style.height = "1%";
+      scaleText.style.display = "none";
 
       let orientation = element?.raw_data?.orientation;
       if (orientation === "vertical") {
@@ -878,15 +875,19 @@ function createNewScaleInputField(
         labelHold.style.position = "absolute";
         circle.style.margin = "5px 0";
         circle.style.padding = "6px 12px";
-        labelHold.style.marginTop = "5px";
-        labelHold.style.height = "80%";
+        circle.style.margin = "10px 0";
+        scaleHold.style.border = "none";
+        scaleHold.style.display = "flex";
+        scaleHold.style.alignItems = "center";
+        scaleHold.style.justifyContent = "center";
+        scaleHold.style.textAlign = "center";
+        labelHold.style.height = "100%";
         labelHold.style.width = "50%";
+        labelHold.style.position = "absolute";
         labelHold.style.display = "flex";
         labelHold.style.flexDirection = "column";
         labelHold.style.alignItems = "center";
-        labelHold.style.marginLeft = "26%";
-        scaleText.style.marginBottom = "5px";
-        scaleText.style.height = "7%";
+        labelHold.style.marginTop = "8px";
       }
 
       if (decoded.details.action === "document") {
