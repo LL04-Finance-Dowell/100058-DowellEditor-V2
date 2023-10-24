@@ -5,7 +5,7 @@ import copyInput from '../CopyInput';
 function createSignInputField(id, element, p, holderDIV, focuseddClassMaintain, handleClicked, setSidebar) {
 
     let isAnyRequiredElementEdited = false;
-    
+
     let signField = document.createElement("div");
     signField.className = "signInput";
     signField.id = id;
@@ -50,7 +50,7 @@ function createSignInputField(id, element, p, holderDIV, focuseddClassMaintain, 
             reader.addEventListener("load", () => {
                 reader.addEventListener("load", () => {
                     uploadedImage = reader.result;
-                    if(!reader.result){
+                    if (!reader.result) {
                         setSidebar(false);
                         return;
                     }
@@ -68,13 +68,13 @@ function createSignInputField(id, element, p, holderDIV, focuseddClassMaintain, 
 
         }
 
-       
+
     });
 
     imageSignButton.append(signBtn);
 
-    holderDIV.append(imageSignButton);
     holderDIV.append(signField);
+    holderDIV.append(imageSignButton);
 
     document
         .getElementsByClassName("midSection_container")

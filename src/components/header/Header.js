@@ -112,6 +112,7 @@ const Header = () => {
     setAllowHighlight,
     docMapRequired,
     setDocMapRequired,
+    fixedMidSecDim,
     progress, 
     setProgress
   } = useStateContext();
@@ -191,40 +192,8 @@ const Header = () => {
 
   // Adding a new branch comment
 
-  function getPosition(el) {
-    const midSec = document.getElementById("midSection_container");
 
-    const rect = el.getBoundingClientRect();
-    console.log("rect position from header", rect);
-    const midsectionRect = midSec.getBoundingClientRect();
-    console.log("midsectionRect position from header", midsectionRect);
 
-    return {
-      top:
-        rect.top > 0
-          ? Math.abs(midsectionRect.top)
-          : rect.top - midsectionRect.top,
-      left:
-        window.innerWidth < 993
-          ? (rect.left * 793.7007874) / midsectionRect.width -
-          midsectionRect.left
-          : rect.left - midsectionRect.left,
-      // left:rect.left - midsectionRect.left,
-      bottom: rect.bottom,
-      right: rect.right,
-      width:
-        window.innerWidth < 993
-          ? (rect.width * 793.7007874) / midsectionRect.width
-          : rect.width,
-      // height: rect.height,
-      height:
-        window.innerWidth < 993
-          ? (rect.width / rect.height) * rect.height
-          : rect.height,
-    };
-  }
-
-  let contentFile = [];
   let page = [{}];
 
   for (let i = 1; i <= item?.length; i++) {
@@ -244,20 +213,7 @@ const Header = () => {
     }
   };
 
-  const findPaageNum = (element) => {
-    let targetParent = element;
-    let pageNum = null;
-    while (1) {
-      if (targetParent.classList.contains("midSection_container")) {
-        targetParent = targetParent;
-        break;
-      } else {
-        targetParent = targetParent.parentElement;
-      }
-    }
-    pageNum = targetParent.innerText.split("\n")[0];
-    return pageNum;
-  };
+
 
   function savingTableData() {
     const tables = document.getElementsByClassName("tableInput");
@@ -272,9 +228,91 @@ const Header = () => {
     }
   }
 
-  let elem = {};
+  // * saveDocument function is at the end of the page
   function saveDocument() {
     const txt = document.getElementsByClassName("textInput");
+    let elem = {};
+    let contentFile = [];
+
+    function getPosition(el, childEl = false) {
+      const midSec = document.getElementById("midSection_container");
+      const midSecAll = document.querySelectorAll('.midSection_container');
+      const rect = el.getBoundingClientRect();
+
+      if (!childEl) {
+        const page = Number([...el.classList].find(cl => cl.includes('page')).split('_')[1]);
+        const midsectionRect = midSecAll[page - 1].getBoundingClientRect();
+        const width = window.innerWidth < 993
+          ? (rect.width * fixedMidSecDim.width) / midsectionRect.width
+          : rect.width
+
+        const height = window.innerWidth < 993 ?
+          (rect.height / rect.width) * width
+          : rect.height;
+
+        const top = window.innerWidth < 993 ?
+          ((rect.top - midsectionRect.top) / rect.width) * width
+          : rect.top - midsectionRect.top;
+
+        const left = window.innerWidth < 993
+          ? ((rect.left - midsectionRect.left) / midsectionRect.width) * fixedMidSecDim.width
+          : rect.left - midsectionRect.left
+
+        return {
+          top,
+          left,
+          bottom: rect.bottom,
+          right: rect.right,
+          width,
+          height,
+        };
+      }
+
+
+      const midsectionRect = midSec.getBoundingClientRect();
+
+      return {
+        top:
+          rect.top > 0
+            ? Math.abs(midsectionRect.top)
+            : rect.top - midsectionRect.top,
+        left:
+          window.innerWidth < 993
+            ? (rect.left * 793.7007874) / midsectionRect.width -
+            midsectionRect.left
+            : rect.left - midsectionRect.left,
+        // left:rect.left - midsectionRect.left,
+        bottom: rect.bottom,
+        right: rect.right,
+        width:
+          window.innerWidth < 993
+            ? (rect.width * 793.7007874) / midsectionRect.width
+            : rect.width,
+        // height: rect.height,
+        height:
+          window.innerWidth < 993
+            ? (rect.width / rect.height) * rect.height
+            : rect.height,
+      };
+
+
+    }
+
+    const findPaageNum = (element) => {
+      let targetParent = element;
+      let pageNum = null;
+      while (1) {
+        if (targetParent.classList.contains("midSection_container")) {
+          targetParent = targetParent;
+          break;
+        } else {
+          targetParent = targetParent.parentElement;
+        }
+      }
+      pageNum = targetParent.innerText.split("\n")[0];
+      return pageNum;
+    };
+
     if (txt.length) {
       for (let h = 0; h < txt.length; h++) {
         if (
@@ -290,7 +328,8 @@ const Header = () => {
             width: tempPosn.width,
             height: tempPosn.height,
             top: tempPosn.top,
-            topp: txt[h].parentElement.style.top,
+            // topp: txt[h].parentElement.style.top,
+            topp: tempPosn.top,
             left: tempPosn.left,
             type: "TEXT_INPUT",
             data: txt[h].innerText,
@@ -301,7 +340,7 @@ const Header = () => {
           };
 
           const pageNum = findPaageNum(txt[h]);
-          page[0][pageNum].push(elem);
+          page[0][pageNum]?.push(elem);
         }
       }
     }
@@ -332,7 +371,8 @@ const Header = () => {
             width: tempPosn.width,
             height: tempPosn.height,
             top: tempPosn.top,
-            topp: img[h].parentElement.style.top,
+            // topp: img[h].parentElement.style.top,
+            topp: tempPosn.top,
             left: tempPosn.left,
             type: "IMAGE_INPUT",
             data: dataName,
@@ -362,7 +402,8 @@ const Header = () => {
             width: tempPosn.width,
             height: tempPosn.height,
             top: tempPosn.top,
-            topp: date[h].parentElement.style.top,
+            // topp: date[h].parentElement.style.top,
+            topp: tempPosn.top,
             left: tempPosn.left,
             type: "DATE_INPUT",
             border: `${calendarBorderSize} dotted ${calendarBorderColor}`,
@@ -372,7 +413,7 @@ const Header = () => {
           };
 
           const pageNum = findPaageNum(date[h]);
-          page[0][pageNum].push(elem);
+          page[0][pageNum]?.push(elem);
         }
       }
     }
@@ -393,7 +434,8 @@ const Header = () => {
             width: tempPosn.width,
             height: tempPosn.height,
             top: tempPosn.top,
-            topp: sign[h].parentElement.style.top,
+            // topp: sign[h].parentElement.style.top,
+            topp: tempPosn.top,
             left: tempPosn.left,
             type: "SIGN_INPUT",
             border: `${signBorderSize} dotted ${signBorderColor}`,
@@ -407,7 +449,7 @@ const Header = () => {
           };
 
           const pageNum = findPaageNum(sign[h]);
-          page[0][pageNum].push(elem);
+          page[0][pageNum]?.push(elem);
         }
       }
     }
@@ -475,7 +517,8 @@ const Header = () => {
             width: tempPosn.width,
             height: tempPosn.height,
             top: tempPosn.top,
-            topp: tables[t].parentElement.style.top,
+            // topp: tables[t].parentElement.style.top,
+            topp: tempPosn.top,
             left: tempPosn.left,
             type: "TABLE_INPUT",
             data: getChildData(),
@@ -484,7 +527,7 @@ const Header = () => {
             id: tables[t].firstElementChild.id,
           };
           const pageNum = findPaageNum(tables[t]);
-          page[0][pageNum].push(elem);
+          page[0][pageNum]?.push(elem);
         }
       }
     }
@@ -506,7 +549,7 @@ const Header = () => {
             for (let i = 0; i < containerChildren.length; i++) {
               const element = containerChildren[i];
 
-              let tempPosnChild = getPosition(element);
+              let tempPosnChild = getPosition(element, true);
               const containerChildClassName =
                 containerChildren[i].firstElementChild?.className.split(" ")[0];
               const childData = {};
@@ -570,7 +613,7 @@ const Header = () => {
                 childData.raw_data = element.firstElementChild?.innerHTML;
               }
 
-              childData.id = `${containerChildClassName[0]}${h + 1}`;
+              childData.id = `${containerChildClassName?.[0]}${h + 1}`;
               allContainerChildren.push(childData);
             }
 
@@ -580,7 +623,8 @@ const Header = () => {
             width: tempPosn.width,
             height: tempPosn.height,
             top: tempPosn.top,
-            topp: containerElements[h].parentElement.style.top,
+            // topp: containerElements[h].parentElement.style.top,
+            topp: tempPosn.top,
             left: tempPosn.left,
             type: "CONTAINER_INPUT",
             border: `${containerBorderSize} dotted ${containerBorderColor}`,
@@ -590,7 +634,7 @@ const Header = () => {
           };
 
           const pageNum = findPaageNum(containerElements[h]);
-          page[0][pageNum].push(elem);
+          page[0][pageNum]?.push(elem);
         }
       }
     }
@@ -609,7 +653,8 @@ const Header = () => {
             width: tempPosn.width,
             height: tempPosn.height,
             top: tempPosn.top,
-            topp: iframes[i].parentElement.style.top,
+            // topp: iframes[i].parentElement.style.top,
+            topp: tempPosn.top,
             left: tempPosn.left,
             type: "IFRAME_INPUT",
             border: `${iframeBorderSize} dotted ${iframeBorderColor}`,
@@ -621,7 +666,7 @@ const Header = () => {
           };
 
           const pageNum = findPaageNum(iframes[i]);
-          page[0][pageNum].push(elem);
+          page[0][pageNum]?.push(elem);
         }
       }
     }
@@ -641,7 +686,8 @@ const Header = () => {
             width: tempPosn.width,
             height: tempPosn.height,
             top: tempPosn.top,
-            topp: scales[s].parentElement.style.top,
+            // topp: scales[s].parentElement.style.top,
+            topp: tempPosn.top,
             left: tempPosn.left,
             type: "SCALE_INPUT",
             border: `${scaleBorderSize} dotted ${scaleBorderColor}`,
@@ -657,7 +703,7 @@ const Header = () => {
           };
 
           const pageNum = findPaageNum(scales[s]);
-          page[0][pageNum].push(elem);
+          page[0][pageNum]?.push(elem);
         }
       }
     }
@@ -691,7 +737,7 @@ const Header = () => {
           let stapelUpperimit = newScales[b].querySelector(".upper_scale_limit");
           let spaceUnit = newScales[b].querySelector(".space_unit");
           // let stapelScaleField = newScales[b].querySelector(".newScaleInput");
-          console.log(font);
+          // console.log(font);
 
           let buttonText = newScales[b].querySelectorAll(".circle_label");
           // console.log(buttonText);
@@ -715,7 +761,7 @@ const Header = () => {
               ".stapelOptionHolder"
             );
             stapelScaleArray = newScales[b].querySelector(".stapelScaleArray");
-            console.log("This is the saved stapel", stapelScaleArray);
+            // console.log("This is the saved stapel", stapelScaleArray);
           }
 
           let npsLiteTextArray = "";
@@ -733,7 +779,7 @@ const Header = () => {
               ".likert_Scale_Array"
             );
             orientation = newScales[b].querySelector(".orientation");
-            console.log("This is likert", likertScaleArray.textContent);
+            // console.log("This is likert", likertScaleArray.textContent);
           }
 
           let pairedScaleArray = "";
@@ -743,7 +789,7 @@ const Header = () => {
               ".paired_Scale_Array"
             );
             orientation = newScales[b].querySelector(".orientation");
-            console.log("This is likert", pairedScaleArray.textContent);
+            // console.log("This is likert", pairedScaleArray.textContent);
           }
 
           let percentBackground = "";
@@ -761,7 +807,7 @@ const Header = () => {
             percentBackground = newScales[b].querySelector(".percent-slider");
             percentLabel = newScales[b]?.querySelector(".label_hold").children;
             percentContainer = newScales[b]?.querySelectorAll(".containerDIV");
-            console.log(percentLabel);
+            // console.log(percentLabel);
 
             percentContainer.forEach((elem) => {
               prodName.push(elem.querySelector(".product_name")?.textContent);
@@ -816,7 +862,8 @@ const Header = () => {
             width: tempPosn.width,
             height: tempPosn.height,
             top: tempPosn.top,
-            topp: newScales[b].parentElement.style.top,
+            // topp: newScales[b].parentElement.style.top,
+            topp: tempPosn.top,
             left: tempPosn.left,
             type: "NEW_SCALE_INPUT",
             data: `${title}_scale_${b + 1}`,
@@ -833,7 +880,7 @@ const Header = () => {
 
           // console.log(elem);
           const pageNum = findPaageNum(newScales[b]);
-          page[0][pageNum].push(elem);
+          page[0][pageNum]?.push(elem);
         }
       }
     }
@@ -862,7 +909,8 @@ const Header = () => {
             width: tempPosn.width,
             height: tempPosn.height,
             top: tempPosn.top,
-            topp: imageCanva[b].parentElement.style.top,
+            // topp: imageCanva[b].parentElement.style.top,
+            topp: tempPosn.top,
             left: tempPosn.left,
             type: "CAMERA_INPUT",
             raw_data: properties,
@@ -870,7 +918,7 @@ const Header = () => {
           };
           // console.log(elem);
           const pageNum = findPaageNum(imageCanva[b]);
-          page[0][pageNum].push(elem);
+          page[0][pageNum]?.push(elem);
         }
       }
     }
@@ -890,7 +938,8 @@ const Header = () => {
             width: tempPosn.width,
             height: tempPosn.height,
             top: tempPosn.top,
-            topp: buttons[b].parentElement.style.top,
+            // topp: buttons[b].parentElement.style.top,
+            topp: tempPosn.top,
             left: tempPosn.left,
             type: "BUTTON_INPUT",
             buttonBorder: `${buttonBorderSize}px dotted ${buttonBorderColor}`,
@@ -901,7 +950,7 @@ const Header = () => {
           };
 
           const pageNum = findPaageNum(buttons[b]);
-          page[0][pageNum].push(elem);
+          page[0][pageNum]?.push(elem);
         }
       }
     }
@@ -915,13 +964,13 @@ const Header = () => {
         ) {
           let tempElem = payments[p].parentElement;
           let tempPosn = getPosition(tempElem);
-          const link = buttonLink;
 
           elem = {
             width: tempPosn.width,
             height: tempPosn.height,
             top: tempPosn.top,
-            topp: payments[p].parentElement.style.top,
+            // topp: payments[p].parentElement.style.top,
+            topp: tempPosn.top,
             left: tempPosn.left,
             type: "PAYMENT_INPUT",
             buttonBorder: `${buttonBorderSize}px dotted ${buttonBorderColor}`,
@@ -931,9 +980,9 @@ const Header = () => {
             id: `pay${p + 1}`,
           };
 
-          console.log("raw_data", elem.raw_data);
+          // console.log("raw_data", elem.raw_data);
           const pageNum = findPaageNum(payments[p]);
-          page[0][pageNum].push(elem);
+          page[0][pageNum]?.push(elem);
         }
       }
     }
@@ -958,7 +1007,8 @@ const Header = () => {
             width: tempPosn.width,
             height: tempPosn.height,
             top: tempPosn.top,
-            topp: dropDowns[d].parentElement.style.top,
+            // topp: dropDowns[d].parentElement.style.top,
+            topp: tempPosn.top,
             left: tempPosn.left,
             type: "DROPDOWN_INPUT",
             border: `${dropdownBorderSize} dotted ${dropdownBorderColor}`,
@@ -970,7 +1020,7 @@ const Header = () => {
           };
 
           const pageNum = findPaageNum(dropDowns[d]);
-          page[0][pageNum].push(elem);
+          page[0][pageNum]?.push(elem);
         }
       }
     }
@@ -991,7 +1041,8 @@ const Header = () => {
             width: tempPosn.width,
             height: tempPosn.height,
             top: tempPosn.top,
-            topp: emails[e].parentElement.style.top,
+            // topp: emails[e].parentElement.style.top,
+            topp: tempPosn.top,
             left: tempPosn.left,
             type: "FORM",
             data: emails[e].textContent,
@@ -1000,7 +1051,7 @@ const Header = () => {
           };
 
           const pageNum = findPaageNum(emails[e]);
-          page[0][pageNum].push(elem);
+          page[0][pageNum]?.push(elem);
         }
       }
     }
@@ -1044,7 +1095,7 @@ const Header = () => {
 
   function handleFinalizeButton() {
     const username = decoded?.details?.authorized;
-    console.log(username);
+    // console.log(username);
 
     function generateLoginUser() {
       return "user_" + Math.random().toString(36).substring(7);
@@ -1058,18 +1109,18 @@ const Header = () => {
     let scaleElements = document.querySelectorAll(".newScaleInput");
 
     const documentResponses = [];
-    console.log(scaleElements);
+    // console.log(scaleElements);
 
     scaleElements.forEach((scale) => {
-      console.log(scale);
+      // console.log(scale);
       const scaleId = scale?.querySelector(".scaleId")?.textContent;
       const holdElem = scale?.querySelector(".holdElem")?.textContent;
 
       documentResponses.push({ scale_id: scaleId, score: holdElem });
     });
 
-    console.log(generateLoginUser());
-    console.log(documentResponses);
+    // console.log(generateLoginUser());
+    // console.log(documentResponses);
 
     const requestBody = {
       process_id: decoded.details.process_id,
@@ -1110,17 +1161,17 @@ const Header = () => {
           setProgress(progress + 50)
           var responseData = response.data;
           setScaleData(responseData);
-          console.log(response);
+          // console.log(response);
         }
       })
       .catch(function (error) {
-        console.log(error);
+        // console.log(error);
       });
   }
 
   function handleFinalizeButtonStapel() {
     const username = decoded?.details?.authorized;
-    console.log(username);
+    // console.log(username);
 
     function generateLoginUser() {
       return "user_" + Math.random().toString(36).substring(7);
@@ -1134,20 +1185,20 @@ const Header = () => {
     let scaleElements = document.querySelectorAll(".newScaleInput");
 
     const documentResponses = [];
-    console.log(scaleElements);
+    // console.log(scaleElements);
 
     scaleElements.forEach((scale) => {
-      console.log(scale);
+      // console.log(scale);
       const scaleId = scale?.querySelector(".scaleId")?.textContent;
       const holdElem = scale?.querySelector(".holdElem")?.textContent;
 
       documentResponses.push({ scale_id: scaleId, score: parseInt(holdElem) });
     });
 
-    console.log("This is stapel_res", documentResponses);
+    // console.log("This is stapel_res", documentResponses);
 
-    console.log(generateLoginUser());
-    console.log(documentResponses);
+    // console.log(generateLoginUser());
+    // console.log(documentResponses);
 
     const requestBody = {
       process_id: decoded.details.process_id,
@@ -1187,17 +1238,17 @@ const Header = () => {
           setProgress(progress + 50)
           var responseData = response.data;
           setScaleData(responseData);
-          console.log(response);
+          // console.log(response);
         }
       })
       .catch(function (error) {
-        console.log(error);
+        // console.log(error);
       });
   }
 
   function handleFinalizeButtonNpsLite() {
     const username = decoded?.details?.authorized;
-    console.log(username);
+    // console.log(username);
 
     function generateLoginUser() {
       return "user_" + Math.random().toString(36).substring(7);
@@ -1215,7 +1266,7 @@ const Header = () => {
     let documentResponses = [];
 
     scaleElements.forEach((scale) => {
-      console.log(scale);
+      // console.log(scale);
       scaleId = scale?.querySelector(".scaleId")?.textContent;
       holdElem = scale?.querySelector(".holdElem")?.textContent;
 
@@ -1227,7 +1278,7 @@ const Header = () => {
             : holdElem,
       });
     });
-    console.log("This is docresp", documentResponses);
+    // console.log("This is docresp", documentResponses);
 
     const requestBody = {
       process_id: decoded.details.process_id,
@@ -1267,18 +1318,18 @@ const Header = () => {
           setProgress(progress + 50)
           var responseData = response.data;
           setScaleData(responseData);
-          console.log(response);
+          // console.log(response);
         }
       })
       .catch(function (error) {
-        console.log(error);
+        // console.log(error);
       });
   }
 
   function handleFinalizeButtonLikert() {
     localStorage.setItem("hideFinalizeButton", "true");
     const username = decoded?.details?.authorized;
-    console.log(username);
+    // console.log(username);
 
     function generateLoginUser() {
       return "user_" + Math.random().toString(36).substring(7);
@@ -1294,18 +1345,18 @@ const Header = () => {
     let scaleId;
     let holdElem;
     let documentResponses = [];
-    console.log(scaleElements);
+    // console.log(scaleElements);
 
     scaleElements.forEach((scale) => {
-      console.log(scale);
+      // console.log(scale);
       scaleId = scale?.querySelector(".scaleId")?.textContent;
       holdElem = scale?.querySelector(".holdElem")?.textContent;
 
       documentResponses.push({ scale_id: scaleId, score: holdElem });
     });
 
-    console.log(generateLoginUser());
-    console.log(documentResponses);
+    // console.log(generateLoginUser());
+    // console.log(documentResponses);
 
     const requestBody = {
       process_id: decoded.details.process_id,
@@ -1345,17 +1396,17 @@ const Header = () => {
           setProgress(progress + 50)
           var responseData = response.data;
           setScaleData(responseData);
-          console.log(response);
+          // console.log(response);
         }
       })
       .catch(function (error) {
-        console.log(error);
+        // console.log(error);
       });
   }
 
   function handleFinalizeButtonPercent() {
     const username = decoded?.details?.authorized;
-    console.log(username);
+    // console.log(username);
 
     function generateLoginUser() {
       return "user_" + Math.random().toString(36).substring(7);
@@ -1393,10 +1444,10 @@ const Header = () => {
 
     // Convert the Set back to an array if needed
     const documentResponsesArray = Array.from(documentResponses);
-    console.log(documentResponsesArray);
+    // console.log(documentResponsesArray);
 
-    console.log(generateLoginUser());
-    console.log(documentResponses);
+    // console.log(generateLoginUser());
+    // console.log(documentResponses);
 
     const requestBody = {
       process_id: decoded.details.process_id,
@@ -1437,17 +1488,17 @@ const Header = () => {
           setProgress(progress + 50)
           var responseData = response.data;
           setScaleData(responseData);
-          console.log(response);
+          // console.log(response);
         }
       })
       .catch(function (error) {
-        console.log(error);
+        // console.log(error);
       });
   }
 
   function handleFinalizeButtonPercentSum() {
     const username = decoded?.details?.authorized;
-    console.log(username);
+    // console.log(username);
 
     function generateLoginUser() {
       return "user_" + Math.random().toString(36).substring(7);
@@ -1485,10 +1536,10 @@ const Header = () => {
 
     // Convert the Set back to an array if needed
     const documentResponsesArray = Array.from(documentResponses);
-    console.log(documentResponsesArray);
+    // console.log(documentResponsesArray);
 
-    console.log(generateLoginUser());
-    console.log(documentResponses);
+    // console.log(generateLoginUser());
+    // console.log(documentResponses);
 
     const requestBody = {
       process_id: decoded.details.process_id,
@@ -1519,7 +1570,7 @@ const Header = () => {
       _id: decoded.details._id,
     };
 
-    console.log("This is percent_sum payloaf", requestBody);
+    // console.log("This is percent_sum payloaf", requestBody);
     Axios.post(
       "https://100035.pythonanywhere.com/percent-sum/api/percent-sum-response-create/",
       requestBody
@@ -1530,11 +1581,11 @@ const Header = () => {
           setProgress(progress + 50)
           var responseData = response.data;
           setScaleData(responseData);
-          console.log(response);
+          // console.log(response);
         }
       })
       .catch(function (error) {
-        console.log(error);
+        // console.log(error);
       });
   }
 
@@ -1548,6 +1599,7 @@ const Header = () => {
     const finalize = document.getElementById("finalize-button");
 
     const completeProgressBar = document.getElementById("progress-100");
+    const halfProgressBar = document.getElementById("progress-50");
 
     const titleName = document.querySelector(".title-name").innerHTML;
 
@@ -1569,7 +1621,7 @@ const Header = () => {
       };
     }
 
-    console.log(updateField.content);
+    // console.log(updateField.content);
 
     <iframe src="http://localhost:5500/"></iframe>;
 
@@ -1610,7 +1662,11 @@ const Header = () => {
           setIsLoading(false);
           setIsButtonDisabled(false);
           if (finalize) {
-            handleFinalize();
+            setTimeout(() => {
+              halfProgressBar.click()
+              handleFinalize();
+            }, 2000);
+            
           }
           if (decoded.details.action === "document") {
             let scaleType = document.querySelector(".scaleTypeHolder");
@@ -1827,8 +1883,8 @@ const Header = () => {
             const loadedData = JSON.parse(res.data.content);
             const pageData = res.data.page;
             setItem(pageData);
-            console.log(loadedData);
-            console.log("Loaded Data ", loadedData[0][0]);
+            // console.log(loadedData);
+            // console.log("Loaded Data ", loadedData[0][0]);
             setData(loadedData[0][0]);
             setFetchedData(loadedData[0][0]);
             setIsDataRetrieved(true);
@@ -1848,10 +1904,16 @@ const Header = () => {
   // // console.log('page count check', item);
   const linkId = decoded.details.link_id;
 
+  const halfProgressBar = document.getElementById("progress-50");
   function handleFinalize() {
-    setIsLoading(true);
+    // setIsLoading(true);
+    halfProgressBar.click();
+    setIsButtonDisabled(true);
     const finalize = document.getElementById("finalize-button");
     const reject = document.getElementById("reject-button");
+
+    const completeProgressBar = document.getElementById("progress-100");
+    
     Axios.post(
       // `https://100094.pythonanywhere.com/v1/processes/${process_id}/finalize/`,
       `https://100094.pythonanywhere.com/v1/processes/${process_id}/finalize-or-reject/`,
@@ -1869,6 +1931,7 @@ const Header = () => {
       .then((res) => {
         // console.log("This is my response", res);
         setIsLoading(false);
+        completeProgressBar.click();
         toast.success(res?.data);
         finalize.style.visibility = "hidden";
         reject.style.visibility = "hidden";
@@ -1882,7 +1945,12 @@ const Header = () => {
   }
 
   function handleReject() {
-    setIsLoading(true);
+    // setIsLoading(true);
+    setProgress(50);
+    const completeProgressBar = document.getElementById("progress-100");
+
+    const finalize = document.getElementById("finalize-button");
+    const reject = document.getElementById("reject-button");
     Axios.post(
       // `https://100094.pythonanywhere.com/v1/processes/${process_id}/reject/`,
       `https://100094.pythonanywhere.com/v1/processes/${process_id}/finalize-or-reject/`,
@@ -1897,17 +1965,21 @@ const Header = () => {
         role: role,
         user_type: user_type,
         link_id: link_idd,
+        message: rejectionMsg,
       }
     )
       .then((res) => {
+        completeProgressBar.click();
         setIsLoading(false);
-        console.log(res);
+        finalize.style.visibility = "hidden";
+        reject.style.visibility = "hidden";
+        // console.log(res);
         // alert(res?.data);
         toast.error(res?.data);
       })
       .catch((err) => {
         setIsLoading(false);
-        console.log(err);
+        // console.log(err);
         toast.error(err);
       });
   }
@@ -1929,6 +2001,8 @@ const Header = () => {
     const fileName = document.querySelector(".title-name").innerText;
     downloadPDF(Array.from(containerAll), fileName);
   };
+
+
 
   return (
     <>
@@ -2112,7 +2186,7 @@ const Header = () => {
                         size="md"
                         className="rounded px-4"
                         id="finalize-button"
-                        disabled={isFinializeDisabled}
+                        disabled={isFinializeDisabled || isButtonDisabled}
                         onClick={submit}
                         style={{
                           visibility:
@@ -2134,6 +2208,7 @@ const Header = () => {
                           visibility:
                             documentFlag == "processing" ? "visible" : "hidden",
                         }}
+                        disabled={isButtonDisabled}
                       >
                         Reject
                       </Button>
@@ -2163,3 +2238,5 @@ const Header = () => {
 };
 
 export default Header;
+
+
