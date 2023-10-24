@@ -1543,6 +1543,7 @@ const Header = () => {
     const finalize = document.getElementById("finalize-button");
 
     const completeProgressBar = document.getElementById("progress-100");
+    const halfProgressBar = document.getElementById("progress-50");
 
     const titleName = document.querySelector(".title-name").innerHTML;
 
@@ -1605,7 +1606,11 @@ const Header = () => {
           setIsLoading(false);
           setIsButtonDisabled(false);
           if (finalize) {
-            handleFinalize();
+            setTimeout(() => {
+              halfProgressBar.click()
+              handleFinalize();
+            }, 2000);
+            
           }
           if (decoded.details.action === "document") {
             let scaleType = document.querySelector(".scaleTypeHolder");
@@ -1843,10 +1848,16 @@ const Header = () => {
   // // console.log('page count check', item);
   const linkId = decoded.details.link_id;
 
+  const halfProgressBar = document.getElementById("progress-50");
   function handleFinalize() {
-    setIsLoading(true);
+    // setIsLoading(true);
+    halfProgressBar.click();
+    setIsButtonDisabled(true);
     const finalize = document.getElementById("finalize-button");
     const reject = document.getElementById("reject-button");
+
+    const completeProgressBar = document.getElementById("progress-100");
+    
     Axios.post(
       // `https://100094.pythonanywhere.com/v1/processes/${process_id}/finalize/`,
       `https://100094.pythonanywhere.com/v1/processes/${process_id}/finalize-or-reject/`,
@@ -1864,6 +1875,7 @@ const Header = () => {
       .then((res) => {
         // console.log("This is my response", res);
         setIsLoading(false);
+        completeProgressBar.click();
         toast.success(res?.data);
         finalize.style.visibility = "hidden";
         reject.style.visibility = "hidden";
@@ -1877,7 +1889,12 @@ const Header = () => {
   }
 
   function handleReject() {
-    setIsLoading(true);
+    // setIsLoading(true);
+    setProgress(50);
+    const completeProgressBar = document.getElementById("progress-100");
+
+    const finalize = document.getElementById("finalize-button");
+    const reject = document.getElementById("reject-button");
     Axios.post(
       // `https://100094.pythonanywhere.com/v1/processes/${process_id}/reject/`,
       `https://100094.pythonanywhere.com/v1/processes/${process_id}/finalize-or-reject/`,
@@ -1892,11 +1909,15 @@ const Header = () => {
         role: role,
         user_type: user_type,
         link_id: link_idd,
+        message: rejectionMsg,
       }
     )
       .then((res) => {
+        completeProgressBar.click();
         setIsLoading(false);
-        console.log(res);
+        finalize.style.visibility = "hidden";
+        reject.style.visibility = "hidden";
+        // console.log(res);
         // alert(res?.data);
         toast.error(res?.data);
       })
@@ -2107,7 +2128,7 @@ const Header = () => {
                         size="md"
                         className="rounded px-4"
                         id="finalize-button"
-                        disabled={isFinializeDisabled}
+                        disabled={isFinializeDisabled || isButtonDisabled}
                         onClick={submit}
                         style={{
                           visibility:
@@ -2129,6 +2150,7 @@ const Header = () => {
                           visibility:
                             documentFlag == "processing" ? "visible" : "hidden",
                         }}
+                        disabled={isButtonDisabled}
                       >
                         Reject
                       </Button>
