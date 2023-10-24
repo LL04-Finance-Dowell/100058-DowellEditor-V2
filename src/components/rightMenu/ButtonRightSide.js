@@ -16,7 +16,7 @@ const ButtonRightSide = () => {
     setButtonBorderSize,
     buttonBorderColor,
     setButtonBorderColor,
-    setConfirmRemove, confirmRemove, genSelOpt, setGenSelOpt,
+    setConfirmRemove, confirmRemove, genSelOpt, setGenSelOpt, iniBtnId, setIniBtnId
   } = useStateContext();
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token");
@@ -88,6 +88,14 @@ const ButtonRightSide = () => {
   };
   const { addedAns, setAddedAns } = useSelectedAnswer()
 
+
+  useEffect(() => {
+    const holder = document.querySelector('.focussedd');
+    if (holder.children[0].tagName.toLowerCase() === 'button') {
+      const id = holder.children[0].id;
+      setIniBtnId(id)
+    }
+  }, [])
 
   useEffect(() => {
     const linkWrapper = document.getElementById("link")
