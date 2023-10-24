@@ -397,13 +397,13 @@ function createNewScaleInputField(
     upperScaleimit.className = "upper_scale_limit";
     upperScaleimit.textContent = element?.raw_data?.stapelUpperimit;
     upperScaleimit.style.display = "none";
-    scaleField.append(upperScaleimit)
+    scaleField.append(upperScaleimit);
 
     const spaceUnit = document.createElement("h6");
     spaceUnit.className = "space_unit";
     spaceUnit.textContent = element?.raw_data?.spaceUnit;
     spaceUnit.style.display = "none";
-    scaleField.append(spaceUnit)
+    scaleField.append(spaceUnit);
     for (let i = 0; i < stapelScale.length; i++) {
       const circle = document.createElement("div");
       circle.className = "circle_label";
@@ -421,15 +421,17 @@ function createNewScaleInputField(
 
       if (selectedOption === "emoji") {
         const buttonText = element.raw_data.buttonText;
-        let emojiArr = ((buttonText[i % buttonText.length].split(" "))[0]).split("")
-        if(i === 0 || i === stapelScale.length - 1) {
-          circle.textContent = `${emojiArr[0]+emojiArr[1]}`;
-        }else {
-          circle.textContent = (buttonText[i % buttonText.length]);
+        let emojiArr = buttonText[i % buttonText.length]
+          .split(" ")[0]
+          .split("");
+        if (i === 0 || i === stapelScale.length - 1) {
+          circle.textContent = `${emojiArr[0] + emojiArr[1]}`;
+        } else {
+          circle.textContent = buttonText[i % buttonText.length];
         }
         circle.style.fontSize = "1.4vw";
       }
-      
+
       if (i === 0) {
         var left = document.createElement("span");
         left.className = "leftToolTip";
@@ -447,7 +449,7 @@ function createNewScaleInputField(
           stapelOrientation === "stapel_vertical" ? "tb-rl" : "";
         left.style.backgroundColor = "#272828";
         left.style.color = "#EEEFEF";
-        left.style.borderRadius = "3px"
+        left.style.borderRadius = "3px";
         circle.append(left);
         circle.onmouseover = function () {
           left.style.visibility = "visible";
@@ -470,7 +472,7 @@ function createNewScaleInputField(
         right.style.fontSize = "medium";
         right.style.writingMode =
           stapelOrientation === "stapel_vertical" ? "tb-rl" : "";
-        right.style.borderRadius = "3px"
+        right.style.borderRadius = "3px";
         circle.append(right);
         circle.onmouseover = function () {
           right.style.display = "block";
@@ -487,10 +489,10 @@ function createNewScaleInputField(
         stapel_vertical.style.display = "none";
         stapel_vertical.textContent = "stapel_vertical";
         scaleField.appendChild(stapel_vertical);
-        scaleField.style.display = "flex"
-        scaleField.style.flexDirection = "column"
-        scaleField.style.alignItems = "center"
-        scaleField.style.justifyContent = "center"
+        scaleField.style.display = "flex";
+        scaleField.style.flexDirection = "column";
+        scaleField.style.alignItems = "center";
+        scaleField.style.justifyContent = "center";
       }
 
       if (!token) {
@@ -1031,6 +1033,9 @@ function createNewScaleInputField(
   } else if (scaleTypeHolder.textContent === "percent_scale") {
     let prodLength = element?.raw_data?.percentLabel;
     console.log(labelHold.children.length);
+    scaleText.style.display = "none";
+    scaleHold.style.overflow = "hidden";
+    scaleHold.style.height = "100%";
 
     for (let i = 0; i < prodLength; i++) {
       labelHold.style.display = "flex";
@@ -1126,10 +1131,16 @@ function createNewScaleInputField(
           nameDiv.style.top = "-1px";
           nameDiv.style.right = "-7px";
         }
+
+        if (prodLength === 1) {
+          conatainerDIV.style.width = "25vw";
+          conatainerDIV.style.marginRight = "37px";
+        }
         nameDiv.style.transform = "rotate(90deg)";
         nameDiv.style.paddingBottom = prodLength > 6 ? "30px" : "0px";
         inputPercent.style.width = "100%";
         scaleText.style.marginBottom = "65px";
+        scaleText.style.marginBottom = "10px";
       }
 
       if (decoded.details.action === "document") {
