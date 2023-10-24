@@ -20,6 +20,8 @@ import { downloadPDF } from "../../utils/genratePDF.js";
 import generateImage from "../../utils/generateImage.js";
 import RejectionModal from "../modals/RejectionModal.jsx";
 
+import ProgressLoader from "../../utils/progressLoader/ProgressLoader"
+
 const Header = () => {
   const inputRef = useRef(null);
   const componentRef = useRef(null);
@@ -111,6 +113,8 @@ const Header = () => {
     docMapRequired,
     setDocMapRequired,
     fixedMidSecDim,
+    progress, 
+    setProgress
   } = useStateContext();
 
   const [printContent, setPrintContent] = useState(false);
@@ -729,6 +733,9 @@ const Header = () => {
           let smallBox = newScales[b].querySelector(".small_box");
           let leftLableStapel = newScales[b].querySelector(".leftToolTip");
           let rightLableStapel = newScales[b].querySelector(".rightTooltip");
+          let stapelEmojiObj = newScales[b].querySelector(".stapelEmojiObj");
+          let stapelUpperimit = newScales[b].querySelector(".upper_scale_limit");
+          let spaceUnit = newScales[b].querySelector(".space_unit");
           // let stapelScaleField = newScales[b].querySelector(".newScaleInput");
           // console.log(font);
 
@@ -740,6 +747,7 @@ const Header = () => {
           if (buttonText.length !== 0) {
             for (let i = 0; i < buttonText.length; i++) {
               emojiArr.push(buttonText[i].textContent);
+              console.log(buttonText[i].textContent)
             }
           }
 
@@ -761,7 +769,7 @@ const Header = () => {
 
           if (scaleType.textContent === "nps_lite") {
             npsLiteTextArray = newScales[b].querySelector(".nps_lite_text");
-            orientation = newScales[b].querySelector(".orientation");
+            orientation = newScales[b].querySelector(".nps_lite_orientation");
           }
 
           let likertScaleArray = "";
@@ -844,7 +852,10 @@ const Header = () => {
             orentation: orentation?.textContent,
             stapelOrientation: stapelOrientation?.textContent,
             otherComponent: otherComponent ? otherComponent.textContent : "",
-            smallBoxBgColor: smallBox?.style?.backgroundColor
+            smallBoxBgColor: smallBox?.style?.backgroundColor,
+            stapelEmojiObj: stapelEmojiObj?.textContent,
+            stapelUpperimit: stapelUpperimit?.textContent,
+            spaceUnit: spaceUnit?.textContent
           };
           // console.log(properties);
           elem = {
@@ -1141,6 +1152,7 @@ const Header = () => {
       .then((response) => {
         if (response.status === 200) {
           setIsLoading(false);
+          setProgress(progress + 50)
           var responseData = response.data;
           setScaleData(responseData);
           // console.log(response);
@@ -1217,6 +1229,7 @@ const Header = () => {
       .then((response) => {
         if (response.status === 200) {
           setIsLoading(false);
+          setProgress(progress + 50)
           var responseData = response.data;
           setScaleData(responseData);
           // console.log(response);
@@ -1296,6 +1309,7 @@ const Header = () => {
       .then((response) => {
         if (response.status === 200) {
           setIsLoading(false);
+          setProgress(progress + 50)
           var responseData = response.data;
           setScaleData(responseData);
           // console.log(response);
@@ -1373,6 +1387,7 @@ const Header = () => {
       .then((response) => {
         if (response.status === 200) {
           setIsLoading(false);
+          setProgress(progress + 50)
           var responseData = response.data;
           setScaleData(responseData);
           // console.log(response);
@@ -1464,6 +1479,7 @@ const Header = () => {
       .then((response) => {
         if (response.status === 200) {
           setIsLoading(false);
+          setProgress(progress + 50)
           var responseData = response.data;
           setScaleData(responseData);
           // console.log(response);
@@ -1556,6 +1572,7 @@ const Header = () => {
       .then((response) => {
         if (response.status === 200) {
           setIsLoading(false);
+          setProgress(progress + 50)
           var responseData = response.data;
           setScaleData(responseData);
           // console.log(response);
@@ -1567,12 +1584,16 @@ const Header = () => {
   }
 
   function submit(e) {
+    setProgress(progress + 50)
     e.preventDefault();
-    setIsLoading(true);
+    // setIsLoading(true);
     setIsButtonDisabled(true);
     const dataa = saveDocument();
 
     const finalize = document.getElementById("finalize-button");
+
+    const completeProgressBar = document.getElementById("progress-100");
+    const halfProgressBar = document.getElementById("progress-50");
 
     const titleName = document.querySelector(".title-name").innerHTML;
 
@@ -1629,12 +1650,17 @@ const Header = () => {
       }
     )
       .then((res) => {
+        completeProgressBar.click();
         if (res) {
           toast.success("Saved successfully");
           setIsLoading(false);
           setIsButtonDisabled(false);
           if (finalize) {
-            handleFinalize();
+            setTimeout(() => {
+              halfProgressBar.click()
+              handleFinalize();
+            }, 2000);
+            
           }
           if (decoded.details.action === "document") {
             let scaleType = document.querySelector(".scaleTypeHolder");
@@ -1656,6 +1682,7 @@ const Header = () => {
         }
       })
       .catch((err) => {
+        completeProgressBar.click();
         setIsLoading(false);
         setIsButtonDisabled(false);
       });
@@ -1767,7 +1794,7 @@ const Header = () => {
   };
 
   useEffect(() => {
-    setIsLoading(true);
+    // setIsLoading(true);
     getPostData();
   }, []);
 
@@ -1871,10 +1898,16 @@ const Header = () => {
   // // console.log('page count check', item);
   const linkId = decoded.details.link_id;
 
+  const halfProgressBar = document.getElementById("progress-50");
   function handleFinalize() {
-    setIsLoading(true);
+    // setIsLoading(true);
+    halfProgressBar.click();
+    setIsButtonDisabled(true);
     const finalize = document.getElementById("finalize-button");
     const reject = document.getElementById("reject-button");
+
+    const completeProgressBar = document.getElementById("progress-100");
+    
     Axios.post(
       // `https://100094.pythonanywhere.com/v1/processes/${process_id}/finalize/`,
       `https://100094.pythonanywhere.com/v1/processes/${process_id}/finalize-or-reject/`,
@@ -1892,6 +1925,7 @@ const Header = () => {
       .then((res) => {
         // console.log("This is my response", res);
         setIsLoading(false);
+        completeProgressBar.click();
         toast.success(res?.data);
         finalize.style.visibility = "hidden";
         reject.style.visibility = "hidden";
@@ -1905,7 +1939,12 @@ const Header = () => {
   }
 
   function handleReject() {
-    setIsLoading(true);
+    // setIsLoading(true);
+    setProgress(50);
+    const completeProgressBar = document.getElementById("progress-100");
+
+    const finalize = document.getElementById("finalize-button");
+    const reject = document.getElementById("reject-button");
     Axios.post(
       // `https://100094.pythonanywhere.com/v1/processes/${process_id}/reject/`,
       `https://100094.pythonanywhere.com/v1/processes/${process_id}/finalize-or-reject/`,
@@ -1920,10 +1959,14 @@ const Header = () => {
         role: role,
         user_type: user_type,
         link_id: link_idd,
+        message: rejectionMsg,
       }
     )
       .then((res) => {
+        completeProgressBar.click();
         setIsLoading(false);
+        finalize.style.visibility = "hidden";
+        reject.style.visibility = "hidden";
         // console.log(res);
         // alert(res?.data);
         toast.error(res?.data);
@@ -1956,6 +1999,7 @@ const Header = () => {
 
 
   return (
+    <>
     <div
       className={`header ${actionName == "template" ? "header_bg_template" : "header_bg_document"
         }`}
@@ -2136,7 +2180,7 @@ const Header = () => {
                         size="md"
                         className="rounded px-4"
                         id="finalize-button"
-                        disabled={isFinializeDisabled}
+                        disabled={isFinializeDisabled || isButtonDisabled}
                         onClick={submit}
                         style={{
                           visibility:
@@ -2158,6 +2202,7 @@ const Header = () => {
                           visibility:
                             documentFlag == "processing" ? "visible" : "hidden",
                         }}
+                        disabled={isButtonDisabled}
                       >
                         Reject
                       </Button>
@@ -2179,6 +2224,10 @@ const Header = () => {
         />
       )}
     </div>
+    <div>
+      <ProgressLoader />
+    </div>
+    </>
   );
 };
 

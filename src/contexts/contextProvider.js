@@ -160,6 +160,8 @@ export const ContextProvider = ({ children }) => {
   const [formBorderColor, setFormBorderColor] = useState("gray");
   const [docMapRequired, setDocMapRequired] = useState([]);
 
+  // progress bar state
+  const [progress, setProgress] = useState(0)
 
   //Company id
   const [companyId, setCompanyId] = useState("");
@@ -794,7 +796,9 @@ export const ContextProvider = ({ children }) => {
         setGenSelOpt,
         fixedMidSecDim,
         scaleMidSec,
-        currMidSecWidth, dimRatios, setDimRatios, updateDimRatios, iniBtnId, setIniBtnId
+        currMidSecWidth, dimRatios, setDimRatios, updateDimRatios, iniBtnId, setIniBtnId,
+        progress, 
+        setProgress
       }}
     >
       {children}

@@ -113,7 +113,11 @@ const MidSection = React.forwardRef((props, ref) => {
     scaleMidSec,
     currMidSecWidth,
     setDimRatios, dimRatios,
-    updateDimRatios
+    updateDimRatios,
+    buttonLink,
+    setButtonPurpose,
+    progress, 
+    setProgress
   } = useStateContext();
 
   const { contextMenu, setContextMenu } = useCutMenuContext()
@@ -194,6 +198,21 @@ const MidSection = React.forwardRef((props, ref) => {
         setIsLoading(false);
       });
   };
+
+  useEffect(() => {
+    setProgress(progress + 50)
+    if (data !== undefined) {
+      onPost();
+
+      //call this conditionally
+      if (decoded && decoded?.details?.cluster === "socialmedia") {
+        onParagraphPost()
+        console.log(decoded)
+      }
+
+    } else {
+    }
+  }, [isDataRetrieved]);
 
 
 
