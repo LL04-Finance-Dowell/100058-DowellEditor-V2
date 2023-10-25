@@ -16,34 +16,50 @@ function createContainerInputElement(holderDIV, focuseddClassMaintain, handleCli
   containerField.style.overflow = "overlay";
   containerField.style.position = "absolute";
 
-    const container = document.getElementsByClassName("containerInput");
-    if (container.length) {
-      const h = container.length;
-      containerField.id = `c${h + 1}`;
-    } else {
-      containerField.id = "c1";
-      }
-    containerField.onclick = (e) => {
-      e.stopPropagation();
-      focuseddClassMaintain(e);
-      if (e.ctrlKey) {
-        copyInput("container2");
-      }
-      handleClicked("container2");
-      setSidebar(true);
-      console.log("container field clicked");
-    };
-    containerField.ondragover = (e) => {
-      console.log("console from container dragover", e.target);
-      if (e.ctrlKey) {
-        copyInput("container2");
-      }
-    };
-    containerField.ondrop = (event) => {
-      const container = event.target;
-      const containerRect = container.getBoundingClientRect();
-      const typeOfOperationContainer =
-        event.dataTransfer.getData("text/plain");
+  const placeholder = document.createElement('p');
+  placeholder.className = 'placeholder'
+  placeholder.textContent = 'Container';
+  containerField.append(placeholder);
+
+  const mutationConfig = { childList: true };
+
+  const mutationObserver = new MutationObserver(entries => {
+    if (entries[entries.length - 1].removedNodes.length && !entries[0].target.children.length)
+      containerField.append(placeholder);
+  })
+
+  mutationObserver.observe(containerField, mutationConfig)
+
+
+  const container = document.getElementsByClassName("containerInput");
+  if (container.length) {
+    const h = container.length;
+    containerField.id = `c${h + 1}`;
+  } else {
+    containerField.id = "c1";
+  }
+  containerField.onclick = (e) => {
+    e.stopPropagation();
+    focuseddClassMaintain(e);
+    if (e.ctrlKey) {
+      copyInput("container2");
+    }
+    handleClicked("container2");
+    setSidebar(true);
+    console.log("container field clicked");
+  };
+  containerField.ondragover = (e) => {
+    console.log("console from container dragover", e.target);
+    if (e.ctrlKey) {
+      copyInput("container2");
+    }
+  };
+  containerField.ondrop = (event) => {
+    if (containerField.children[0].classList.contains('placeholder')) containerField.removeChild(containerField.children[0])
+    const parentId = containerField.id
+    const container = event.target;
+    const containerRect = container.getBoundingClientRect();
+    const typeOfOperationContainer = event.dataTransfer.getData("text/plain");
 
     const measureContainer = {
       width: "200px",
@@ -64,6 +80,14 @@ function createContainerInputElement(holderDIV, focuseddClassMaintain, handleCli
       dateFieldContainer.style.outline = "0px";
       dateFieldContainer.style.overflow = "overlay";
       dateFieldContainer.style.position = "relative";
+
+      const dateElements = containerField.querySelectorAll(".dateInput");
+      if (dateElements.length) {
+        const h = dateElements.length;
+        dateFieldContainer.id = parentId + `d${h + 1}`;
+      } else {
+        dateFieldContainer.id = parentId + "d1";
+      }
 
       dateFieldContainer.onchange = (event) => {
         event.preventDefault();
@@ -123,6 +147,14 @@ function createContainerInputElement(holderDIV, focuseddClassMaintain, handleCli
       imageFieldContainer.innerText = "Choose Image";
       imageFieldContainer.style.position = "relative";
 
+      const imgElements = containerField.querySelectorAll(".imageInput");
+      if (imgElements.length) {
+        const h = imgElements.length;
+        imageFieldContainer.id = parentId + `i${h + 1}`;
+      } else {
+        imageFieldContainer.id = parentId + "i1";
+      }
+
       imageFieldContainer.onclick = (e) => {
         e.stopPropagation();
         focuseddClassMaintain(e);
@@ -149,12 +181,14 @@ function createContainerInputElement(holderDIV, focuseddClassMaintain, handleCli
         const reader = new FileReader();
 
         reader.addEventListener("load", () => {
+          console.log('INSIDE CONTAINER FILE READER');
+          imageFieldContainer.innerText = ''
           uploadedImage = reader.result;
           document.querySelector(
             ".focussed"
           ).style.backgroundImage = `url(${uploadedImage})`;
         });
-        reader.readAsDataURL(imgBtnContainer.files[0]);
+        imgBtnContainer.files[0] && reader.readAsDataURL(imgBtnContainer.files[0]);
       });
 
       // imgBtnContainer.style.width = "100%";
@@ -171,6 +205,14 @@ function createContainerInputElement(holderDIV, focuseddClassMaintain, handleCli
       dropdownFieldContainer.style.outline = "0px";
       dropdownFieldContainer.style.overflow = "overlay";
       dropdownFieldContainer.style.position = "absolute";
+
+      const dropDownElements = containerField.querySelectorAll(".dropdownInput");
+      if (dropDownElements.length) {
+        const d = dropDownElements.length;
+        dropdownFieldContainer.id = parentId + `dd${d + 1}`;
+      } else {
+        dropdownFieldContainer.id = parentId + "dd1";
+      }
 
       const selectElement = document.createElement("select");
       selectElement.className = "select-element";
@@ -227,19 +269,13 @@ function createContainerInputElement(holderDIV, focuseddClassMaintain, handleCli
       inputFieldContainer.style.overflow = "overlay";
       inputFieldContainer.style.position = "relative";
       inputFieldContainer.style.cursor = "text";
-      if (inputFieldContainer.innerHTML[0]) {
-        const editTextField = {
-          editTextField: {
-            value: inputFieldContainer.innerHTML,
-            xcoordinate: getOffset(holderDIVContainer).left,
-            ycoordinate: getOffset(holderDIVContainer).top,
-          },
-        };
+      const txt = containerField.querySelectorAll(".textInput");
+      if (txt.length) {
+        const h = txt.length;
+        inputFieldContainer.id = parentId + `t${h + 1}`;
+      } else {
+        inputFieldContainer.id = parentId + "t1";
       }
-
-      if (inputFieldContainer.value !== "") {
-      }
-
       inputFieldContainer.onclick = (e) => {
         e.stopPropagation();
         focuseddClassMaintain(e);
@@ -261,6 +297,15 @@ function createContainerInputElement(holderDIV, focuseddClassMaintain, handleCli
       signFieldContainer.style.overflow = "overlay";
       signFieldContainer.innerText = "Signature here";
       signFieldContainer.style.position = "absolute";
+
+      const signInputElements = containerField.querySelectorAll(".signInput");
+      if (signInputElements.length) {
+        const h = signInputElements.length;
+        signFieldContainer.id = parentId + `s${h + 1}`;
+      } else {
+        signFieldContainer.id = parentId + "s1";
+      }
+
 
       signFieldContainer.onchange = (event) => {
         event.preventDefault();
@@ -319,6 +364,14 @@ function createContainerInputElement(holderDIV, focuseddClassMaintain, handleCli
       iframeFieldContainer.style.overflow = "overlay";
       iframeFieldContainer.style.position = "absolute";
       iframeFieldContainer.innerText = "iFrame here";
+
+      const iframes = containerField.querySelectorAll(".iframeInput");
+      if (iframes.length) {
+        const i = iframes.length;
+        iframeFieldContainer.id = parentId + `ifr${i + 1}`;
+      } else {
+        iframeFieldContainer.id = parentId + "ifr1";
+      }
 
       iframeFieldContainer.onclick = (e) => {
         e.stopPropagation();
@@ -405,6 +458,13 @@ function createContainerInputElement(holderDIV, focuseddClassMaintain, handleCli
       tableFieldContainer.style.overflow = "overlay";
       tableFieldContainer.style.position = "absolute";
 
+      const tables = containerField.querySelectorAll(".scaleInput");
+      if (tables.length) {
+        const s = tables.length;
+        tableFieldContainer.id = parentId + `T${s + 1}`;
+      } else {
+        tableFieldContainer.id = parentId + "T1";
+      }
       tableFieldContainer.onchange = (event) => {
         event.preventDefault();
 
@@ -440,6 +500,14 @@ function createContainerInputElement(holderDIV, focuseddClassMaintain, handleCli
       buttonField.style.position = "absolute";
       buttonField.textContent = "Button";
 
+      const buttonElements = containerField.querySelectorAll(".buttonInput");
+      if (buttonElements.length) {
+        const d = buttonElements.length;
+        buttonField.id = parentId + `btn${d + 1}`;
+      } else {
+        buttonField.id = parentId + "btn1";
+      }
+
       buttonField.onclick = (e) => {
         e.stopPropagation();
         focuseddClassMaintain(e);
@@ -467,5 +535,6 @@ function createContainerInputElement(holderDIV, focuseddClassMaintain, handleCli
       containerField.append(holderDIVContainer);
   };
   holderDIV.append(containerField);
+  return holderDIV;
 }
 export default createContainerInputElement;

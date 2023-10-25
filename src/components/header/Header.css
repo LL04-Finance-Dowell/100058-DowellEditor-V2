@@ -78,11 +78,11 @@
 
 .header_icons > img,
 svg {
-  width: 1rem !important;
+  width: 2rem !important;
   height: 22px;
   color: #1c2b48;
   /* margin-left: 33.9px; */
-  margin-right: 20px;
+  /* margin-right: 20px; */
   cursor: pointer;
 }
 
@@ -109,7 +109,19 @@ svg {
 }
 .cursor_pointer {
   cursor: pointer;
+  padding: 8px 0 !important;
+  border-bottom: 1px dashed grey;
 }
+
+.cursor_pointer:last-of-type:not(div.cursor_pointer) {
+  border-bottom: none;
+}
+
+.cursor_pointer p {
+  padding-left: 10px;
+  margin: 0;
+}
+
 .temp_doc {
   display: flex;
   align-items: center;
@@ -124,8 +136,11 @@ svg {
   /* transform: translateY(-50px); */
   transition: opacity 2s ease-out;
 }
-.menu button:hover,
-.menu div:hover {
+.menu .cursor_pointer:hover {
+  color: #00d3b0;
+}
+
+.cursor_pointer:hover svg {
   color: #00d3b0;
 }
 
@@ -171,7 +186,8 @@ svg {
     font-size: 2rem;
     margin-left: 0px;
   }
-  #reject-button, #finalize-button {
+  #reject-button,
+  #finalize-button {
     /* margin-left: -440%; */
     font-size: 12px;
   }

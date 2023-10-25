@@ -42,12 +42,14 @@ const ImageRightSidebar = () => {
     e.stopPropagation();
     const imageDiv = document.querySelector(".focussedd");
 
+    // console.log('imageDiv: ', imageDiv);
+
     if (imageDiv) {
-      const addImageButtonInput = document.getElementsByClassName(
+      const addImageButtonInput = imageDiv.getElementsByClassName(
         "addImageButtonInput"
       );
       addImageButtonInput.item(0).click();
-      imageDiv.firstElementChild.innerText = "";
+      // imageDiv.firstElementChild.innerText = "";
 
       handleClicked("image2", "table2");
 
@@ -74,11 +76,13 @@ const ImageRightSidebar = () => {
     }
   };
 
+
   const handleUpdate = () => {
     const imageName = document.getElementById("image_name");
-    const button = document.querySelector(".focussed");
-    if (imageName.value != "") {
-      button.textContent = imageName.value;
+    const imgFieldSpan = document.querySelector(".focussed .img_text");
+    // console.log(imgFieldSpan);
+    if (imageName.value != "" && imgFieldSpan) {
+      imgFieldSpan.textContent = imageName.value;
     }
   };
 

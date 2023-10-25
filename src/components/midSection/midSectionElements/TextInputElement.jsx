@@ -1,9 +1,18 @@
-import React, { useState } from 'react';
-import copyInput from '../CopyInput';
+import React, { useState, useEffect } from "react";
+import copyInput from "../CopyInput";
 // import copyInput from '../CopyInput';
 
 // Regular JavaScript function to create a text input field
-function createTextInputField(id, element, document_map_required, p, holderDIV, focuseddClassMaintain, handleClicked, setSidebar) {
+function createTextInputField(
+  id,
+  element,
+  document_map_required,
+  p,
+  holderDIV,
+  focuseddClassMaintain,
+  handleClicked,
+  setSidebar
+) {
   let isAnyRequiredElementEdited = false;
   const inputField = document.createElement("div");
   inputField.setAttribute("contenteditable", true);
@@ -19,6 +28,10 @@ function createTextInputField(id, element, document_map_required, p, holderDIV, 
   inputField.style.overflow = "overlay";
   inputField.style.position = "relative";
   inputField.style.cursor = "text";
+
+  if (window.innerWidth < 993) {
+    inputField.classList.add("text_eabled_pointer_event");
+  }
 
   inputField.oninput = (e) => {
     const required_map_document = document_map_required?.filter(
@@ -50,7 +63,9 @@ function createTextInputField(id, element, document_map_required, p, holderDIV, 
 
   holderDIV.appendChild(inputField);
 
-  const midSectionContainers = document.getElementsByClassName("midSection_container");
+  const midSectionContainers = document.getElementsByClassName(
+    "midSection_container"
+  );
   if (midSectionContainers[p - 1]) {
     midSectionContainers[p - 1].appendChild(holderDIV);
   }

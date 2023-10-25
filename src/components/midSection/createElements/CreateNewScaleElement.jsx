@@ -13,7 +13,6 @@ function createNewScaleInputElement(
   table_dropdown_focuseddClassMaintain,
   decoded,
   setIsLoading,
-  id
 ) {
   let scaleField = document.createElement("div");
   scaleField.className = "newScaleInput";
@@ -234,5 +233,6 @@ function createNewScaleInputElement(
   };
 
   holderDIV.append(scaleField);
+  return holderDIV;
 }
 export default createNewScaleInputElement;

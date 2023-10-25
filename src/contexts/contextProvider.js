@@ -1,4 +1,7 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
+import createButtonInputElement from "../components/midSection/createElements/CreateButtonElement.jsx";
+import CreatePyamentElement from "../components/midSection/createElements/CreatePyamentElement.jsx";
+import createFormInputElement from "../components/midSection/createElements/CreateFormElement.jsx";
 
 const StateContext = createContext();
 
@@ -51,6 +54,7 @@ export const ContextProvider = ({ children }) => {
   const [data, setData] = useState([]);
   const [title, setTitle] = useState(["Untitled-file"]);
   const [isDataRetrieved, setIsDataRetrieved] = useState(false);
+  const [iniBtnId, setIniBtnId] = useState('');
 
   //nps scale custom data
   const [customId, setCustomId] = useState([]);
@@ -79,6 +83,13 @@ export const ContextProvider = ({ children }) => {
   const [strikethrough, setStrikethrough] = useState(false);
   const [iframek, setIframek] = useState(0);
 
+  const [genSelOpt, setGenSelOpt] = useState('');
+
+  const [fixedMidSecDim] = useState({ width: 793.69, height: 1122.52, parentHeight: 1235.89 })
+  const [currMidSecWidth, setCurrMidSecWidth] = useState(0)
+
+  const [dimRatios, setDimRatios] = useState([]);
+
   const handleDrop = (dropped) => {
     setIsDropped({ ...isDropped, [dropped]: true });
   };
@@ -94,6 +105,15 @@ export const ContextProvider = ({ children }) => {
   const [sidebar, setSidebar] = useState(false);
   const [rightSideDatemenu, setRightSideDateMenu] = useState(false);
   const [rightSideDropDown, setRightSideDropDown] = useState(false);
+  const [savedSripeKey, setSavedSripeKey] = useState({
+    payment_id: null,
+    key: null
+  });
+  const [savedPaypalKey, setSavedPaypalKey] = useState({
+    payment_id: null,
+    secret_key: null,
+    key: null
+  });
   // handling date format
   const [method, setMethod] = useState("first");
   // handling page delete
@@ -140,6 +160,8 @@ export const ContextProvider = ({ children }) => {
   const [formBorderColor, setFormBorderColor] = useState("gray");
   const [docMapRequired, setDocMapRequired] = useState([]);
 
+  // progress bar state
+  const [progress, setProgress] = useState(0)
 
   //Company id
   const [companyId, setCompanyId] = useState("");
@@ -386,9 +408,9 @@ export const ContextProvider = ({ children }) => {
 
 
   const [confirmRemove, setConfirmRemove] = useState(false)
-  const [iframeSize,setIframeSize] = useState({
-    width:"",
-    height:""
+  const [iframeSize, setIframeSize] = useState({
+    width: "",
+    height: ""
   })
 
   const copyInput = (clickHandler) => {
@@ -538,6 +560,90 @@ export const ContextProvider = ({ children }) => {
     };
   };
 
+  const scaleMidSec = () => {
+    const midSecAll = document.querySelectorAll('.midSection_container');
+    const ratio = fixedMidSecDim.height / fixedMidSecDim.width;
+    const parentRatio = fixedMidSecDim.parentHeight / fixedMidSecDim.height
+    const currWidth = Number(midSecAll[0].getBoundingClientRect().width.toFixed(2));
+    const scaledHeight = Number((ratio * currWidth).toFixed(2));
+    const leftRect = document.getElementsByClassName('left_menu_wrapper')[0]?.getBoundingClientRect()
+
+    midSecAll.forEach((mid) => {
+      mid.style.height = scaledHeight + 'px';
+      mid.parentElement.style.height = (scaledHeight * parentRatio).toFixed(2) + 'px';
+    })
+
+    midSecAll[0].parentElement.parentElement.parentElement.style.marginTop = window.innerWidth > 993 ? 0 : leftRect.height + 'px';
+
+    console.log(currWidth, currMidSecWidth);
+
+    currWidth !== currMidSecWidth && setCurrMidSecWidth(currWidth)
+  }
+
+  const updateDimRatios = (holder) => {
+    const midSecWidth = document.querySelector('.midSection_container').getBoundingClientRect().width;
+    const holderStyles = window.getComputedStyle(holder);
+    const el = holder.children[1]?.classList.contains('dropdownInput') ? holder.children[1] : holder.children[0];
+
+    const holderTop = parseFloat(holderStyles.top);
+    const holderLeft = parseFloat(holderStyles.left);
+    const holderWidth = parseFloat(holderStyles.width);
+    const holderHeight = parseFloat(holderStyles.height);
+
+    const dimRatios = sessionStorage.getItem('dimRatios') ? JSON.parse(sessionStorage.getItem('dimRatios')) : []
+    const modDimRatios = dimRatios.map(ratio => (ratio.id === el.id ?
+
+      {
+        ...ratio,
+        top: holderTop / midSecWidth,
+        left: holderLeft / midSecWidth,
+        width: holderWidth / midSecWidth,
+        height: holderHeight / midSecWidth
+
+      }
+
+      : ratio))
+
+    sessionStorage.setItem('dimRatios', JSON.stringify(modDimRatios))
+    setDimRatios(modDimRatios)
+  }
+
+  useEffect(() => {
+    const replaceIds = (oldId, newId) => {
+      const modDimRatios = dimRatios.map(ratio => (
+        ratio.id === oldId ? { ...ratio, id: newId } : ratio
+      ))
+      console.log('oldId: ', oldId, 'newId: ', newId, modDimRatios);
+      sessionStorage.setItem('dimRatios', JSON.stringify(modDimRatios));
+      setDimRatios(modDimRatios)
+      setIniBtnId(newId);
+    }
+
+    const check = (genSelOpt === 'cta' && !iniBtnId.includes('btn')) || (genSelOpt === 'pay' && !iniBtnId.includes('pay')) || (genSelOpt === 'email' && !iniBtnId.includes('eml'))
+
+    if (genSelOpt && check) {
+      const holderDiv = document.querySelector('.focussedd');
+      holderDiv.textContent = '';
+
+      switch (genSelOpt) {
+        case 'cta':
+          createButtonInputElement(holderDiv, focuseddClassMaintain, handleClicked, setSidebar);
+          replaceIds(iniBtnId, iniBtnId.replace(`${iniBtnId[0]}${iniBtnId[1]}${iniBtnId[2]}`, 'btn'))
+          break;
+        case 'pay':
+          CreatePyamentElement(holderDiv, focuseddClassMaintain, handleClicked, setSidebar);
+          replaceIds(iniBtnId, iniBtnId.replace(`${iniBtnId[0]}${iniBtnId[1]}${iniBtnId[2]}`, 'pay'))
+          break;
+        case 'email':
+          createFormInputElement(holderDiv, focuseddClassMaintain, handleClicked, setSidebar);
+          replaceIds(iniBtnId, iniBtnId.replace(`${iniBtnId[0]}${iniBtnId[1]}${iniBtnId[2]}`, 'eml'))
+          break;
+        default:
+          return;
+      }
+    }
+  }, [genSelOpt, iniBtnId, dimRatios])
+
   return (
     <StateContext.Provider
       value={{
@@ -678,10 +784,21 @@ export const ContextProvider = ({ children }) => {
         confirmRemove, setConfirmRemove,
         allowHighlight, setAllowHighlight,
         copyInput,
-        paymentKey, 
+        paymentKey,
         setPaymentKey,
-        paypalId, 
+        paypalId,
         setPaypalId,
+        savedSripeKey,
+        setSavedSripeKey,
+        savedPaypalKey,
+        setSavedPaypalKey,
+        genSelOpt,
+        setGenSelOpt,
+        fixedMidSecDim,
+        scaleMidSec,
+        currMidSecWidth, dimRatios, setDimRatios, updateDimRatios, iniBtnId, setIniBtnId,
+        progress, 
+        setProgress
       }}
     >
       {children}

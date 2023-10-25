@@ -4,7 +4,7 @@ import { useStateContext } from "./contexts/contextProvider";
 export default function useDraggable(el) {
   const [{ dx, dy }, setOffset] = useState({ dx: 0, dy: 0 });
 
-  const { isResizing } = useStateContext();
+  const { isResizing, setDimsRatio, dimsRatio } = useStateContext();
 
   useEffect(() => {
     if (isResizing === false) {

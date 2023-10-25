@@ -33,8 +33,8 @@ function createNewScaleInputField(
   scaleHold.style.fontFamily = element?.raw_data?.fontFamily;
   scaleHold.style.color = element?.raw_data?.fontColor;
   scaleHold.style.width = "100%";
-  scaleHold.style.height = "90%";
-  scaleHold.style.padding = "10px";
+  scaleHold.style.height = "96%";
+  scaleHold.style.padding = "1px";
   const scaleText = document.createElement("div");
   scaleText.className = "scale_text";
   scaleText.textContent = element?.raw_data?.scaleText;
@@ -95,23 +95,30 @@ function createNewScaleInputField(
   optionHolderLikert.textContent = element?.raw_data?.likertOptionHolder || "";
   optionHolderLikert.style.display = "none";
   scaleHold.append(optionHolderLikert);
+  scaleText.style.marginBottom = "10px";
+  scaleText.style.height = "10%";
 
   const labelHold = document.createElement("div");
   labelHold.className = "label_hold";
   labelHold.style.width = "100%";
-  labelHold.style.height = "85%";
+  labelHold.style.height = "95%";
   labelHold.style.border = "1px solid black";
   labelHold.style.backgroundColor = element?.raw_data?.scaleBgColor;
   scaleHold.appendChild(labelHold);
   labelHold.style.display = "flex";
   labelHold.style.justifyContent = "space-between";
   labelHold.style.alignItems = "center";
+
+  const childDiv = document.createElement("div");
+  const element1 = document.createElement("h6");
+  const element2 = document.createElement("h6");
+  const element3 = document.createElement("h6");
   if (scaleTypeHolder.textContent === "nps") {
     for (let i = 0; i < 11; i++) {
       const circle = document.createElement("div");
       circle.className = "circle_label";
-      circle.style.width = "35%";
-      circle.style.height = "35%";
+      circle.style.width = "40px";
+      circle.style.height = "24px";
       circle.style.borderRadius = "50%";
       circle.style.backgroundColor = element?.raw_data?.buttonColor;
       circle.style.top = "30%";
@@ -121,7 +128,61 @@ function createNewScaleInputField(
       circle.style.alignItems = "center";
       circle.style.marginLeft = "2px";
 
+      labelHold.style.gap = "5px";
+      labelHold.style.height = "100%";
+      labelHold.style.justifyContent = "space-evenly";
+      labelHold.style.position = "relative";
+      scaleHold.style.height = "100%";
+      scaleHold.style.padding = "";
+      scaleText.style.display = "none";
+
       const orientation = element?.raw_data?.orentation;
+
+      circle.addEventListener("mouseenter", () => {
+        if (circle.textContent === "0") {
+          element1.style.display = "block";
+          element1.style.position = "absolute";
+          element1.style.bottom = "0";
+
+          element1.style.left = "8%";
+          element1.style.backgroundColor = "gray";
+          element1.style.padding = "2px 8px";
+          element1.style.color = "white";
+          element1.style.borderRadius = "2px";
+        } else if (circle.textContent === "5") {
+          element2.style.display = "block";
+          element2.style.position = "absolute";
+          element2.style.bottom = "0";
+          element2.style.left = !orientation ? "52%" : "8%";
+
+          element2.style.backgroundColor = "gray";
+          element2.style.padding = "2px 8px";
+          element2.style.color = "white";
+          element2.style.borderRadius = "2px";
+        } else if (circle.textContent === "10") {
+          element3.style.display = "block";
+          element3.style.position = "absolute";
+          element3.style.left = "";
+          element3.style.bottom = "0";
+          element3.style.right = "8%";
+          element3.style.backgroundColor = "gray";
+
+          element3.style.padding = "2px 8px";
+          element3.style.color = "white";
+          element3.style.borderRadius = "2px";
+        }
+      });
+
+      circle.addEventListener("mouseleave", () => {
+        if (circle.textContent === "0") {
+          element1.style.display = "none";
+        } else if (circle.textContent === "5") {
+          element2.style.display = "none";
+        } else if (circle.textContent === "10") {
+          element3.style.display = "none";
+        }
+      });
+
       if (orientation === "nps_vertical") {
         const nps_vertical = document.createElement("h2");
         nps_vertical.className = "nps_vertical";
@@ -129,13 +190,26 @@ function createNewScaleInputField(
         nps_vertical.textContent = "nps_vertical";
         labelHold.appendChild(nps_vertical);
 
-        labelHold.style.height = "82%";
-        labelHold.style.top = "54%";
+        element1.style.top = "35px";
+        element1.style.bottom = "";
+        element1.style.height = "fit-content";
+
+        element2.style.top = "50%";
+        element2.style.bottom = "";
+
+        element2.style.height = "fit-content";
+
+        element3.style.bottom = "5%";
+        element3.style.left = "8%";
+        element3.style.right = "";
+
+        labelHold.style.height = "100%";
+        labelHold.style.top = "50%";
         labelHold.style.left = "50%";
         labelHold.style.transform = "translate(-50%, -50%)";
         scaleHold.style.border = "none";
         scaleHold.style.textAlign = "center";
-        labelHold.style.width = "30%";
+        labelHold.style.width = "100%";
         labelHold.style.position = "absolute";
         labelHold.style.flexDirection = "column";
         labelHold.style.alignItems = "center";
@@ -273,7 +347,16 @@ function createNewScaleInputField(
               holdElem.textContent = i;
               holding?.appendChild(holdElem);
               console.log("This is holdEle", holdElem.textContent);
-              if (scaleField?.parentElement?.classList.contains("holderDIV")) {
+              // if (scaleField?.parentElement?.classList.contains("holderDIV")) {
+              //   scaleField?.parentElement?.classList.add("element_updated");
+              // }
+              const required_map_document = document_map_required?.filter(
+                (item) => element?.id == item?.content
+              );
+              if (
+                scaleField?.parentElement?.classList.contains("holderDIV") &&
+                required_map_document?.length > 0
+              ) {
                 scaleField?.parentElement?.classList.add("element_updated");
               }
             }
@@ -296,44 +379,118 @@ function createNewScaleInputField(
   } else if (scaleTypeHolder.textContent === "snipte") {
     const stapelScale = stapelScaleArray.textContent.split(",");
     const selectedOption = stapelOptionHolder.textContent;
+    const stapelOrientation = element?.raw_data?.stapelOrientation;
     // console.log("This is the stapel", stapelScale);
     // console.log("This is option", selectedOption);
+    //clear scaleField values
+    labelHold.style.display = "none";
+    scaleHold.style.display = "none";
+    scaleField.style.display = "flex";
+    scaleField.style.backgroundColor = element?.raw_data?.scaleBgColor;
+    scaleField.style.color = element?.raw_data?.fontColor;
+    scaleField.style.fontFamily = element?.raw_data?.fontFamily;
+    scaleField.style.flexDirection = "row";
+    scaleField.style.alignItems = "center";
+    scaleField.style.justifyContent = "center";
+
+    const upperScaleimit = document.createElement("h6");
+    upperScaleimit.className = "upper_scale_limit";
+    upperScaleimit.textContent = element?.raw_data?.stapelUpperimit;
+    upperScaleimit.style.display = "none";
+    scaleField.append(upperScaleimit)
+
+    const spaceUnit = document.createElement("h6");
+    spaceUnit.className = "space_unit";
+    spaceUnit.textContent = element?.raw_data?.spaceUnit;
+    spaceUnit.style.display = "none";
+    scaleField.append(spaceUnit)
     for (let i = 0; i < stapelScale.length; i++) {
       const circle = document.createElement("div");
       circle.className = "circle_label";
       circle.textContent = stapelScale[i];
-      labelHold.appendChild(circle);
-      circle.style.width = "35%";
-      circle.style.height = "35%";
+      scaleField.appendChild(circle);
+      circle.style.width = "35px";
+      circle.style.height = "35px";
       circle.style.borderRadius = "50%";
       circle.style.display = "flex";
+      circle.style.flexDirection = "column";
       circle.style.justifyContent = "center";
       circle.style.alignItems = "center";
-      circle.style.margin = "0 2px";
+      circle.style.margin = "0 2px 2px 0";
       circle.style.backgroundColor = element?.raw_data?.buttonColor;
-      const stapelOrientation = element?.raw_data?.stapelOrientation;
+
+      if (selectedOption === "emoji") {
+        const buttonText = element.raw_data.buttonText;
+        let emojiArr = ((buttonText[i % buttonText.length].split(" "))[0]).split("")
+        if(i === 0 || i === stapelScale.length - 1) {
+          circle.textContent = `${emojiArr[0]+emojiArr[1]}`;
+        }else {
+          circle.textContent = (buttonText[i % buttonText.length]);
+        }
+        circle.style.fontSize = "1.4vw";
+      }
+      
+      if (i === 0) {
+        var left = document.createElement("span");
+        left.className = "leftToolTip";
+        left.innerHTML = element?.raw_data?.left;
+        left.style.visibility = "hidden";
+        left.style.position = "absolute";
+        left.style.zIndex = "1";
+        left.style.bottom =
+          stapelOrientation === "stapel_vertical" ? " " : "3px";
+        left.style.top = stapelOrientation === "stapel_vertical" ? "5%" : "";
+        left.style.left = stapelOrientation === "stapel_vertical" ? "" : "5%";
+        left.style.right = stapelOrientation === "stapel_vertical" ? "5%" : "";
+        left.style.fontSize = "medium";
+        left.style.writingMode =
+          stapelOrientation === "stapel_vertical" ? "tb-rl" : "";
+        left.style.backgroundColor = "#272828";
+        left.style.color = "#EEEFEF";
+        left.style.borderRadius = "3px"
+        circle.append(left);
+        circle.onmouseover = function () {
+          left.style.visibility = "visible";
+        };
+
+        circle.onmouseout = function () {
+          left.style.visibility = "hidden";
+        };
+      } else if (i === stapelScale.length - 1) {
+        var right = document.createElement("span");
+        right.className = "rightTooltip";
+        right.innerHTML = element?.raw_data?.right;
+        right.style.display = "none";
+        right.style.position = "absolute";
+        right.style.zIndex = "1";
+        right.style.bottom = "3px";
+        right.style.right = "5%";
+        right.style.backgroundColor = "#272828";
+        right.style.color = "#EEEFEF";
+        right.style.fontSize = "medium";
+        right.style.writingMode =
+          stapelOrientation === "stapel_vertical" ? "tb-rl" : "";
+        right.style.borderRadius = "3px"
+        circle.append(right);
+        circle.onmouseover = function () {
+          right.style.display = "block";
+        };
+
+        circle.onmouseout = function () {
+          right.style.display = "none";
+        };
+      }
+
       if (stapelOrientation === "stapel_vertical") {
         const stapel_vertical = document.createElement("h2");
         stapel_vertical.className = "stapel_vertical";
         stapel_vertical.style.display = "none";
         stapel_vertical.textContent = "stapel_vertical";
-        labelHold.appendChild(stapel_vertical);
-
-        labelHold.style.height = "82%";
-        labelHold.style.top = "54%";
-        labelHold.style.left = "50%";
-        labelHold.style.transform = "translate(-50%, -50%)";
-        scaleHold.style.border = "none";
-        scaleHold.style.textAlign = "center";
-        labelHold.style.width = "30%";
-        labelHold.style.position = "absolute";
-        labelHold.style.flexDirection = "column";
-        labelHold.style.alignItems = "center";
-        labelHold.style.marginTop = "0";
-      }
-      if (selectedOption === "emoji") {
-        const buttonText = element.raw_data.buttonText;
-        circle.textContent = buttonText[i % buttonText.length];
+        scaleField.appendChild(stapel_vertical);
+        scaleField.style.display = "flex"
+        scaleField.style.flexDirection = "column"
+        scaleField.style.alignItems = "center"
+        scaleField.style.justifyContent = "center"
       }
 
       if (!token) {
@@ -445,18 +602,21 @@ function createNewScaleInputField(
               holdElem.textContent = stapelScale[i];
               holding?.appendChild(holdElem);
               console.log("This is holdEle", holdElem.textContent);
-              // const required_map_document = document_map_required?.filter(
-              //   (item) => element?.id == item?.content
-              // );
-              // if (
-              //   scaleField?.parentElement?.classList.contains("holderDIV") &&
-              //   required_map_document.length > 0
-              // ) {
-              //   scaleField?.parentElement?.classList.add("element_updated");
-              // }
-              if (scaleField?.parentElement?.classList.contains("holderDIV")) {
+              const required_map_document = document_map_required?.filter(
+                (item) => element?.id == item?.content
+              );
+              if (
+                scaleField?.parentElement?.classList.contains("holderDIV") &&
+                required_map_document?.length > 0
+              ) {
                 scaleField?.parentElement?.classList.add("element_updated");
               }
+              if (element.required) {
+                isAnyRequiredElementEdited = true;
+              }
+              // if (scaleField?.parentElement?.classList.contains("holderDIV")) {
+              //   scaleField?.parentElement?.classList.add("element_updated");
+              // }
             }
             const scaleID = scale?.querySelector(".scaleId")?.textContent;
             setClickedCircleBackgroundColor(
@@ -501,7 +661,12 @@ function createNewScaleInputField(
         circle.textContent = i;
       }
 
+      scaleHold.style.height = "100%";
+      labelHold.style.border = "";
+      labelHold.style.height = "100%";
+
       labelHold.appendChild(circle);
+      scaleText.style.display = "none";
 
       if (!token) {
         return res.status(401).json({ error: "Unauthorized" });
@@ -509,25 +674,27 @@ function createNewScaleInputField(
 
       let orientation = element?.raw_data?.orientation;
       if (orientation === "Vertical") {
-        const orientation = document.createElement("div");
-        orientation.className = "orientation";
+        const orientation = document.createElement("h2");
+        orientation.className = "nps_lite_orientation";
         orientation.textContent = "Vertical";
         orientation.style.display = "none";
         labelHold.appendChild(orientation);
 
-        circle.style.margin = "15px 0";
+        circle.style.margin = "10px 0";
         circle.style.padding = "10px 30px";
 
         scaleHold.style.border = "none";
+        scaleHold.style.display = "flex";
+        scaleHold.style.alignItems = "center";
+        scaleHold.style.justifyContent = "center";
         scaleHold.style.textAlign = "center";
-        labelHold.style.height = "auto";
+        labelHold.style.height = "100%";
         labelHold.style.width = "50%";
         labelHold.style.position = "absolute";
         labelHold.style.display = "flex";
         labelHold.style.flexDirection = "column";
         labelHold.style.alignItems = "center";
         labelHold.style.marginTop = "0";
-        labelHold.style.marginLeft = "26%";
       }
 
       if (decoded.details.action === "document") {
@@ -635,9 +802,21 @@ function createNewScaleInputField(
               holdElem.textContent = npsLiteText[i] === "" ? i : npsLiteText[i];
               holding?.appendChild(holdElem);
               console.log("This is holdEle", holdElem.textContent);
-              if (scaleField?.parentElement?.classList.contains("holderDIV")) {
+              const required_map_document = document_map_required?.filter(
+                (item) => element?.id == item?.content
+              );
+              if (
+                scaleField?.parentElement?.classList.contains("holderDIV") &&
+                required_map_document?.length > 0
+              ) {
                 scaleField?.parentElement?.classList.add("element_updated");
               }
+              if (element.required) {
+                isAnyRequiredElementEdited = true;
+              }
+              // if (scaleField?.parentElement?.classList.contains("holderDIV")) {
+              //   scaleField?.parentElement?.classList.add("element_updated");
+              // }
             }
 
             const scaleID = scale?.querySelector(".scaleId")?.textContent;
@@ -674,17 +853,21 @@ function createNewScaleInputField(
       circle.style.width = "80%";
       circle.style.height = "55%";
       circle.style.borderRadius = "25px";
-      circle.style.padding = "12px 10px";
-      circle.style.marginLeft = "5px";
+      circle.style.padding = "5px 10px";
+      circle.style.marginLeft = "15px";
       circle.style.marginRight = "5px";
       circle.style.backgroundColor = element?.raw_data?.buttonColor;
       circle.style.display = "flex";
       circle.style.justifyContent = "center";
       circle.style.alignItems = "center";
+      labelHold.style.marginTop = "-5px";
+      labelHold.style.border = "";
       labelHold.style.display = "grid";
       labelHold.style.gridTemplateColumns = `repeat(3, 1fr)`;
       labelHold.style.gridTemplateRows = `repeat(${numRows}, 1fr)`;
       labelHold.appendChild(circle);
+      scaleText.style.marginBottom = "1px";
+      scaleText.style.height = "1%";
 
       let orientation = element?.raw_data?.orientation;
       if (orientation === "vertical") {
@@ -696,22 +879,17 @@ function createNewScaleInputField(
         labelHold.style.position = "absolute";
         circle.style.margin = "5px 0";
         circle.style.padding = "6px 12px";
+        labelHold.style.marginTop = "5px";
         labelHold.style.height = "80%";
         labelHold.style.width = "50%";
         labelHold.style.display = "flex";
         labelHold.style.flexDirection = "column";
         labelHold.style.alignItems = "center";
-        labelHold.style.marginTop = "1%";
         labelHold.style.marginLeft = "26%";
+        scaleText.style.marginBottom = "5px";
+        scaleText.style.height = "7%";
       }
-      // var optionPosition = document.querySelector("#orientationIdLinkert");
-      // if (optionPosition) {
-      //   const newSelectedOrientation = getSelectedOrientationValue(); // Get the selected orientation
-      //   optionPosition.value = newSelectedOrientation;
 
-      //   // Save the selected orientation to local storage
-      //   localStorage.setItem('selectedOrientation', newSelectedOrientation);
-      // }
       if (decoded.details.action === "document") {
         let isClicked = false;
         const shouldHideFinalizeButton =
@@ -820,8 +998,17 @@ function createNewScaleInputField(
               holdElem.textContent = likertScale[i];
               holding?.appendChild(holdElem);
               console.log("This is holdEle", holdElem.textContent);
-              if (scaleField?.parentElement?.classList.contains("holderDIV")) {
+              const required_map_document = document_map_required?.filter(
+                (item) => element?.id == item?.content
+              );
+              if (
+                scaleField?.parentElement?.classList.contains("holderDIV") &&
+                required_map_document?.length > 0
+              ) {
                 scaleField?.parentElement?.classList.add("element_updated");
+              }
+              if (element.required) {
+                isAnyRequiredElementEdited = true;
               }
             }
 
@@ -845,8 +1032,6 @@ function createNewScaleInputField(
     console.log(labelHold.children.length);
 
     for (let i = 0; i < prodLength; i++) {
-      // let originalText = element?.raw_data?.percentCenter[i];
-      // let percentValue = originalText?.replace("%", "");
       labelHold.style.display = "flex";
       labelHold.style.justifyContent = "center";
       labelHold.style.height = "100%";
@@ -859,8 +1044,6 @@ function createNewScaleInputField(
       conatainerDIV.style.padding = "10px 39px 10px 10px";
       conatainerDIV.style.border = "1px solid gray";
       labelHold.append(conatainerDIV);
-      // conatainerDIV.append(labelHold);
-      // scaleHold.append(conatainerDIV)
 
       let nameDiv = document.createElement("div");
       nameDiv.className = "product_name";
@@ -868,13 +1051,11 @@ function createNewScaleInputField(
       nameDiv.style.fontWeight = "700";
       nameDiv.textContent = element?.raw_data?.percentProdName[i];
       conatainerDIV.appendChild(nameDiv);
-      // labelHold.appendChild(nameDiv);
 
       const inputPercent = document.createElement("input");
       inputPercent.type = "range";
       inputPercent.min = "0";
       inputPercent.max = "100";
-      // inputPercent.value = percentValue;
       inputPercent.disabled = "true";
       inputPercent.className = "percent-slider";
       inputPercent.style.width = "100%";
@@ -884,12 +1065,10 @@ function createNewScaleInputField(
       inputPercent.style.borderRadius = "10px";
       inputPercent.setAttribute("data-index", i);
       conatainerDIV.appendChild(inputPercent);
-      // labelHold.appendChild(inputPercent);
 
       let percentChilds = document.createElement("div");
       percentChilds.style.display = "flex";
       percentChilds.style.width = "100%";
-      percentChilds.style.alignItems = "center";
       percentChilds.style.justifyContent = "space-between";
 
       let leftPercent = document.createElement("div");
@@ -898,7 +1077,6 @@ function createNewScaleInputField(
       percentChilds.appendChild(leftPercent);
 
       let centerPercent = document.createElement("div");
-      // centerPercent.textContent = `${element?.raw_data?.percentCenter[i]}`;
       centerPercent.className = "center-percent";
       percentChilds.appendChild(centerPercent);
 
@@ -908,7 +1086,6 @@ function createNewScaleInputField(
       percentChilds.appendChild(rightPercent);
 
       conatainerDIV.appendChild(percentChilds);
-      // labelHold.appendChild(percentChilds);
       if (!token) {
         return res.status(401).json({ error: "Unauthorized" });
       }
@@ -931,20 +1108,27 @@ function createNewScaleInputField(
             : "24px 39px 37px 14px";
         conatainerDIV.style.width = "90%";
         conatainerDIV.style.position = "relative";
+        conatainerDIV.style.borderRight = "none";
 
         labelHold.style.width = "100%";
         labelHold.style.height = "96%";
         labelHold.style.alignItems = "center";
         labelHold.style.transform = "rotate(270deg)";
-
         nameDiv.style.position = "absolute";
-        nameDiv.style.top = nameDiv.textContent.length < 9 ? "23px" : "39px";
-        nameDiv.style.right = "-2px";
-        nameDiv.style.left = "70%";
-        nameDiv.style.width = "50%";
+        nameDiv.style.lineHeight = "0.95";
+        if (nameDiv.textContent.length < 10) {
+          nameDiv.style.top = "20px";
+          nameDiv.style.left = "93%";
+          nameDiv.style.right = "2px";
+        } else {
+          nameDiv.style.left = "98%";
+          nameDiv.style.top = "-1px";
+          nameDiv.style.right = "-7px";
+        }
         nameDiv.style.transform = "rotate(90deg)";
-
+        nameDiv.style.paddingBottom = prodLength > 6 ? "30px" : "0px";
         inputPercent.style.width = "100%";
+        scaleText.style.marginBottom = "65px";
       }
 
       if (decoded.details.action === "document") {
@@ -962,9 +1146,21 @@ function createNewScaleInputField(
         // Add an event listener to update centerPercent
         inputPercent.addEventListener("input", function () {
           centerPercent.textContent = `${inputPercent.value}%`;
-          if (scaleField?.parentElement?.classList.contains("holderDIV")) {
+          const required_map_document = document_map_required?.filter(
+            (item) => element?.id == item?.content
+          );
+          if (
+            scaleField?.parentElement?.classList.contains("holderDIV") &&
+            required_map_document?.length > 0
+          ) {
             scaleField?.parentElement?.classList.add("element_updated");
           }
+          if (element.required) {
+            isAnyRequiredElementEdited = true;
+          }
+          // if (scaleField?.parentElement?.classList.contains("holderDIV")) {
+          //   scaleField?.parentElement?.classList.add("element_updated");
+          // }
 
           // Store the current inputPercent value in localStorage using the unique key
           localStorage.setItem(localStorageKey, inputPercent.value);
@@ -980,6 +1176,11 @@ function createNewScaleInputField(
     }
   } else if (scaleTypeHolder.textContent === "percent_sum_scale") {
     let prodLength = element?.raw_data?.percentLabel;
+
+    let inputPercentArray = []; // Create an array to store all inputPercent elements
+    let rightPercentArray = [];
+    let centerPercentArray = [];
+    let currentProductIndex = 0;
 
     for (let i = 0; i < prodLength; i++) {
       labelHold.style.display = "flex";
@@ -1034,8 +1235,56 @@ function createNewScaleInputField(
       rightPercent.textContent = "100";
       rightPercent.className = "right-percent";
       percentChilds.appendChild(rightPercent);
-
       containerDiv.appendChild(percentChilds);
+
+      inputPercentArray.push(inputPercent);
+      rightPercentArray.push(rightPercent);
+      centerPercentArray.push(centerPercent);
+
+      // let rateValue = document.createElement("button");
+      // rateValue.className = "rate_name";
+      // rateValue.textContent = "Rate";
+      // rateValue.style.marginLeft = "45%";
+      // rateValue.style.border = "1px solid green"; // Add a border
+      // rateValue.style.borderRadius = "5px"; // Add border radius
+      // containerDiv.appendChild(rateValue);
+
+      // Add event listener to the "Rate" button
+      inputPercentArray.forEach((inputPercent, i) => {
+        console.log(
+          `i = ${i}, inputPercent.disabled = ${inputPercent.disabled}`
+        );
+        // Disable the input initially for all but the first product
+        if (i > 0) {
+          inputPercent.disabled = true;
+        }
+
+        // if (i !== prodLength - 1) {
+        //   inputPercent.disabled = false;
+        // } else {
+        //   // Disable the input for the last product
+        //   inputPercent.disabled = true;
+        // }
+
+        inputPercent.addEventListener("input", function () {
+          if (i < prodLength - 1) {
+            const totalCenterPercent = inputPercentArray
+              .slice(0, i + 1)
+              .reduce((total, input) => total + parseInt(input.value), 0);
+            const remainingPercentage = 100 - totalCenterPercent;
+            // Enable the input for the next product if the previous product has a value selected
+            if (centerPercentArray[i].textContent !== "Please select a value") {
+              centerPercentArray[i + 1].textContent = "";
+              rightPercentArray[i + 1].textContent = `${remainingPercentage}%`;
+              inputPercentArray[i + 1].max = `${remainingPercentage}`;
+              inputPercentArray[i + 1].disabled = false;
+            } else {
+              // Disable the input for the next product if the previous product has no value selected
+              inputPercentArray[i + 1].disabled = true;
+            }
+          }
+        });
+      });
 
       if (!token) {
         return res.status(401).json({ error: "Unauthorized" });
@@ -1054,23 +1303,31 @@ function createNewScaleInputField(
         scaleHold.style.alignItems = "center";
         scaleHold.style.justifyContent = "center";
         containerDiv.style.padding =
-        nameDiv.textContent.length < 9
-          ? "24px 39px 10px 14px"
-          : "24px 39px 37px 14px";
+          nameDiv.textContent.length < 9
+            ? "24px 39px 10px 14px"
+            : "24px 39px 37px 14px";
         containerDiv.style.width = "90%";
         containerDiv.style.position = "relative";
+        containerDiv.style.borderRight = "none";
         labelHold.style.width = "100%";
         labelHold.style.height = "96%";
         labelHold.style.alignItems = "center";
         labelHold.style.transform = "rotate(270deg)";
         nameDiv.style.position = "absolute";
-        nameDiv.style.top = nameDiv.textContent.length < 9 ? "23px" : "39px";
-        nameDiv.style.right = "-2px";
-        nameDiv.style.left = "70%";
-        nameDiv.style.width = "50%";
+        nameDiv.style.lineHeight = "0.95";
+        if (nameDiv.textContent.length < 10) {
+          nameDiv.style.top = "20px";
+          nameDiv.style.left = "93%";
+          nameDiv.style.right = "2px";
+        } else {
+          nameDiv.style.left = "98%";
+          nameDiv.style.top = "-1px";
+          nameDiv.style.right = "-7px";
+        }
         nameDiv.style.transform = "rotate(90deg)";
         nameDiv.style.paddingBottom = prodLength > 6 ? "30px" : "0px";
         inputPercent.style.width = "100%";
+        scaleText.style.marginBottom = "65px";
       }
 
       if (decoded.details.action === "document") {
@@ -1088,9 +1345,21 @@ function createNewScaleInputField(
         // Add an event listener to update centerPercent
         inputPercent.addEventListener("input", function () {
           centerPercent.textContent = `${inputPercent.value}%`;
-          if (scaleField?.parentElement?.classList.contains("holderDIV")) {
+          const required_map_document = document_map_required?.filter(
+            (item) => element?.id == item?.content
+          );
+          if (
+            scaleField?.parentElement?.classList.contains("holderDIV") &&
+            required_map_document?.length > 0
+          ) {
             scaleField?.parentElement?.classList.add("element_updated");
           }
+          if (element.required) {
+            isAnyRequiredElementEdited = true;
+          }
+          // if (scaleField?.parentElement?.classList.contains("holderDIV")) {
+          //   scaleField?.parentElement?.classList.add("element_updated");
+          // }
 
           // Store the current inputPercent value in localStorage using the unique key
           localStorage.setItem(localStorageKey, inputPercent.value);
@@ -1114,41 +1383,123 @@ function createNewScaleInputField(
     const pairedScale = pairedScaleArray.textContent.split(",");
     console.log("This is the d++++!!!!!!!!!", pairedScale);
 
-    for (let i = 0; i < pairedScale.length; i++) {
-      const circle = document.createElement("div");
-      circle.className = "circle_label";
-      circle.textContent = pairedScale[i];
-      circle.style.width = "80%";
-      circle.style.height = "55%";
-      circle.style.borderRadius = "25px";
-      circle.style.padding = "12px 10px";
-      circle.style.marginLeft = "5px";
-      circle.style.marginRight = "5px";
-      circle.style.backgroundColor = element?.raw_data?.buttonColor;
-      circle.style.display = "flex";
-      circle.style.justifyContent = "center";
-      circle.style.alignItems = "center";
-      labelHold.style.display = "grid";
-      labelHold.appendChild(circle);
+    for (let i = 0; i < pairedScale.length - 1; i++) {
+      for (let j = i + 1; j < pairedScale.length; j++) {
+        const circle = document.createElement("div");
+        circle.className = "circle_label";
+        circle.style.width = "127px";
+        circle.style.height = "45%";
+        circle.style.borderRadius = "12px";
+        circle.style.padding = "12px 20px";
+        circle.style.backgroundColor = element?.raw_data?.buttonColor;
+        circle.style.display = "flex";
+        circle.style.flexDirection = "column";
+        circle.style.justifyContent = "center";
+        circle.style.alignItems = "center";
+        circle.style.marginLeft = "5px";
+        circle.style.marginRight = "5px";
+        circle.style.gap = "7px";
 
-      let orientation = element?.raw_data?.orientation;
-      if (orientation === "vertical") {
-        const orientation = document.createElement("div");
-        orientation.className = "orientation";
-        orientation.textContent = "vertical";
-        orientation.style.display = "none";
-        labelHold.appendChild(orientation);
-        labelHold.style.position = "absolute";
-        circle.style.margin = "5px 0";
-        circle.style.padding = "6px 12px";
-        labelHold.style.height = "80%";
-        labelHold.style.width = "50%";
-        labelHold.style.display = "flex";
-        labelHold.style.flexDirection = "column";
-        labelHold.style.alignItems = "center";
-        labelHold.style.marginTop = "1%";
-        labelHold.style.marginLeft = "26%";
+        const smallBox1 = document.createElement("div");
+        smallBox1.className = "small_box";
+        smallBox1.textContent = pairedScale[i];
+        const smallBox2 = document.createElement("div");
+        smallBox2.className = "small_box";
+        smallBox2.textContent = pairedScale[j];
+
+        smallBox1.style.width = "95%";
+        smallBox2.style.width = "95%";
+        smallBox1.style.background = element?.raw_data?.smallBoxBgColor;
+        smallBox1.style.color = element?.raw_data?.fontColor;
+        smallBox2.style.background = element?.raw_data?.smallBoxBgColor;
+        smallBox2.style.color = element?.raw_data?.fontColor;
+        smallBox1.style.height = "50%";
+        smallBox2.style.height = "50%";
+        smallBox1.style.display = "flex";
+        smallBox2.style.display = "flex";
+        smallBox1.style.justifyContent = "center";
+        smallBox2.style.justifyContent = "center";
+        smallBox1.style.alignItems = "center";
+        smallBox2.style.alignItems = "center";
+        smallBox1.style.fontWeight = "12px";
+        smallBox2.style.fontWeight = "12px";
+
+        function componentToHex(c) {
+          var hex = c.toString(16);
+          return hex.length == 1 ? "0" + hex : hex;
+        }
+
+        function rgbToHex(r, g, b) {
+          return (
+            "#" + componentToHex(r) + componentToHex(g) + componentToHex(b)
+          );
+        }
+
+        function invert(rgb) {
+          rgb = [].slice
+            .call(arguments)
+            .join(",")
+            .replace(/rgb\(|\)|rgba\(|\)|\s/gi, "")
+            .split(",");
+          for (var i = 0; i < rgb.length; i++)
+            rgb[i] = (i === 3 ? 1 : 255) - rgb[i];
+          return rgbToHex(rgb[0], rgb[1], rgb[2]);
+        }
+
+        const smallBoxBgColor = smallBox1.style.backgroundColor;
+        const smallBoxColor = smallBox1.style.color;
+
+        smallBox1.addEventListener("mouseover", () => {
+          smallBox1.style.backgroundColor = invert(smallBoxBgColor);
+          smallBox1.style.color = invert(smallBoxColor);
+        });
+        smallBox1.addEventListener("mouseout", () => {
+          smallBox1.style.backgroundColor = element?.raw_data?.smallBoxBgColor;
+          smallBox1.style.color = element?.raw_data?.fontColor;
+        });
+
+        smallBox2.addEventListener("mouseover", () => {
+          smallBox2.style.backgroundColor = invert(smallBoxBgColor);
+          smallBox2.style.color = invert(smallBoxColor);
+        });
+        smallBox2.addEventListener("mouseout", () => {
+          smallBox2.style.backgroundColor = element?.raw_data?.smallBoxBgColor;
+          smallBox2.style.color = element?.raw_data?.fontColor;
+        });
+
+        circle.appendChild(smallBox1);
+        circle.appendChild(smallBox2);
+
+        scaleHold.style.textAlign = "center";
+        scaleHold.style.height = "100%";
+        labelHold.style.border = "";
+        labelHold.style.height = "100%";
+        labelHold.style.justifyContent = "center";
+        labelHold.style.flexWrap = "wrap";
+        labelHold.style.position = "relative";
+        labelHold.style.marginLeft = "0px";
+        scaleText.style.display = "none";
+        labelHold.appendChild(circle);
+
+        let orientation = element?.raw_data?.orientation;
+        if (orientation === "vertical") {
+          const orientation = document.createElement("div");
+          orientation.className = "orientation";
+          orientation.textContent = "vertical";
+          orientation.style.display = "none";
+          labelHold.appendChild(orientation);
+          scaleHold.style.padding = "0px";
+          labelHold.style.position = "absolute";
+          circle.style.margin = "5px 0";
+          circle.style.padding = "6px 12px";
+          labelHold.style.height = "100%";
+          labelHold.style.width = "100%";
+          labelHold.style.display = "flex";
+          labelHold.style.flexDirection = "column";
+          labelHold.style.alignItems = "center";
+        }
       }
+
       if (decoded.details.action === "document") {
         let isClicked = false;
         const shouldHideFinalizeButton =
@@ -1279,26 +1630,25 @@ function createNewScaleInputField(
     }
   }
 
-  const childDiv = document.createElement("div");
   childDiv.id = "child";
   childDiv.style.display = "flex";
   childDiv.style.justifyContent = "space-between";
   // childDiv.style.margin = "0px";
 
-  const element1 = document.createElement("h6");
   element1.className = "left_child";
   element1.style.marginLeft = "0px";
+  element1.style.display = "none";
   element1.textContent = element?.raw_data?.left;
   childDiv.appendChild(element1);
 
-  const element2 = document.createElement("h6");
   element2.className = "neutral_child";
   element2.textContent = element?.raw_data?.center;
+  element2.style.display = "none";
   childDiv.appendChild(element2);
 
-  const element3 = document.createElement("h6");
   element3.className = "right_child";
   element3.textContent = element?.raw_data?.right;
+  element3.style.display = "none";
   childDiv.appendChild(element3);
 
   const orientation = element?.raw_data?.orentation;
@@ -1411,17 +1761,20 @@ function createNewScaleInputField(
     const element1 = document.createElement("h6");
     element1.className = "left_child";
     element1.style.marginLeft = "0px";
+    element1.style.display = "none";
     element1.textContent = "Good";
     childDiv.appendChild(element1);
 
     const element2 = document.createElement("h6");
     element2.className = "neutral_child";
     element2.textContent = "Neutral";
+    element2.style.display = "none";
     childDiv.appendChild(element2);
 
     const element3 = document.createElement("h6");
     element3.className = "right_child";
     element3.textContent = "Best";
+    element3.style.display = "none";
     childDiv.appendChild(element3);
     scaleHold.append(childDiv);
     scaleField.append(scaleHold);
@@ -1593,7 +1946,11 @@ function createNewScaleInputField(
     focuseddClassMaintain(e);
     table_dropdown_focuseddClassMaintain(e);
     handleClicked("newScale2");
-    setSidebar(true);
+    if (decoded.details.action === "template") {
+      setSidebar(true);
+    } else {
+      setSidebar(false);
+    }
     // console.log("This is the scale type", scaleTypeHolder.textContent);
   };
   // console.log(element);

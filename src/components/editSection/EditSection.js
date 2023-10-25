@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Container, Row, Col } from "react-bootstrap";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 import LeftMenu from "../leftMenu/LeftMenu";
 import MidSection from "../midSection/MidSection.js";
@@ -106,7 +106,6 @@ const EditSection = () => {
     ];
 
     elements.forEach(element => {
-      console.log(element.id)
       if (prevSelElmAns.indexOf(element.id) === -1 && element.id !== selectedElement && !allowHighlight) {
         element.style.border = "none"
         if (selectedElement) {
@@ -122,6 +121,8 @@ const EditSection = () => {
     })
 
   }, [prevSelElmAns, selectedElement])
+  const left_menu_size = document.getElementsByClassName('left_menu_wrapper')[0]?.getBoundingClientRect()
+  // console.log("left_menu_size", left_menu_size);
   return (
     <div className="editSec">
       <Container fluid>
@@ -143,7 +144,9 @@ const EditSection = () => {
               </div>
             )}
           </Col>
-          <Col lg={sidebar ? 8 : 11} as="div" className="editSec_midSec">
+          <Col
+            // style={{marginTop:window.innerWidth< && left_menu_size?.height}} 
+            lg={sidebar ? 8 : 11} as="div" className="editSec_midSec">
             <MidSection />
           </Col>
 

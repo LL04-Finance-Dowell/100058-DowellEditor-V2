@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Row, Button } from "react-bootstrap";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
@@ -22,7 +22,8 @@ const EmailRightSideBar = () => {
     setFormBorderSize,
     formBorderColor,
     setFormBorderColor,
-    setConfirmRemove, confirmRemove
+    setConfirmRemove, confirmRemove,
+    genSelOpt, setGenSelOpt,
   } = useStateContext()
   const [selectedType, setSelectedType] = useState('')
   // const [addedAns, setAddedAns] = useState([])
@@ -35,6 +36,7 @@ const EmailRightSideBar = () => {
   const [toEmail, setToEmail] = useState("");
   const [subject, setSubject] = useState("");
   const [message, setMessage] = useState("");
+
 
   const [isChecked, setIsChecked] = useState(false);
 
@@ -99,8 +101,17 @@ const EmailRightSideBar = () => {
     setFromEmail("");
   };
 
+
+
   return (
     <>
+      <select className='gen_btn_sel' defaultValue='email' onChange={e => setGenSelOpt(e.target.value)}>
+        <option value="" disabled>Select type</option>
+        <option value="cta">CTA</option>
+        <option value="pay">Pay</option>
+        <option value="email">Email</option>
+      </select>
+
       <div
         style={{
           display: "flex",
