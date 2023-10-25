@@ -2331,7 +2331,7 @@ const MidSection = React.forwardRef((props, ref) => {
 
   if(!response.data) {
     toast.error("Something went wrong while fetching data!")
-    return;
+    // return;
   }
 
   console.log(JSON.parse(response.data))
