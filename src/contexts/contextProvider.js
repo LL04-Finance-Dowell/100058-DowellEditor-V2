@@ -562,6 +562,7 @@ export const ContextProvider = ({ children }) => {
 
   const scaleMidSec = () => {
     const midSecAll = document.querySelectorAll('.midSection_container');
+    console.log(midSecAll);
     const ratio = fixedMidSecDim.height / fixedMidSecDim.width;
     const parentRatio = fixedMidSecDim.parentHeight / fixedMidSecDim.height
     const currWidth = Number(midSecAll[0].getBoundingClientRect().width.toFixed(2));
@@ -623,7 +624,7 @@ export const ContextProvider = ({ children }) => {
 
     if (genSelOpt && check) {
       const holderDiv = document.querySelector('.focussedd');
-      holderDiv.textContent = '';
+      holderDiv.innerHTML = '';
 
       switch (genSelOpt) {
         case 'cta':
@@ -797,7 +798,7 @@ export const ContextProvider = ({ children }) => {
         fixedMidSecDim,
         scaleMidSec,
         currMidSecWidth, dimRatios, setDimRatios, updateDimRatios, iniBtnId, setIniBtnId,
-        progress, 
+        progress,
         setProgress
       }}
     >
