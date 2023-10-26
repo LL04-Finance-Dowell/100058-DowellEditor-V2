@@ -2274,18 +2274,19 @@ const ScaleRightSide = () => {
       if (option.value === "Horizontal") {
         button4.style.border = "block";
         button4.style.textAlign = "center";
+        button4.style.alignItems = "center";
+        button.style.height = "85%";
+        button.style.width = "96%";
         button.style.display = "flex";
         button.style.flexDirection = "row";
-        button.style.alignItems = "center";
-        button.style.height = "85%";
-        button.style.width = "100%";
-        button.style.flexDirection = "row";
-        button.style.position = "relative";
-        button.style.marginLeft = "0px";
-        button.style.padding = "6px 12px";
-        button.style.display = "grid";
-        button.style.gridTemplateColumns = `repeat(${numColumns}, 1fr)`;
-        button.style.gridTemplateRows = `repeat(${numRows}, 1fr)`;
+        button.style.justifyContent = "center";
+        button.style.position = "absolute";
+        labelHold.style.display = "grid";
+        labelHold.style.marginTop = "-10px";
+        labelHold.style.gridTemplateColumns = `repeat(${numColumns}, 1fr)`;
+        labelHold.style.gridTemplateRows = `repeat(${numRows}, 1fr)`;
+        labelHold.style.overflowX = "hidden";
+        labelHold.style.overflowY = "hidden";
       }
 
       if (option.value === "Vertical") {
@@ -2294,24 +2295,21 @@ const ScaleRightSide = () => {
         orientation.textContent = "vertical";
         orientation.style.display = "none";
         labelHold.appendChild(orientation);
-        labelHold.style.position = "absolute";
-        button.style.margin = "5px 0";
-        button.style.padding = "6px 12px";
+        button.style.padding = "5px 10px";
         button.style.margin = "10px 0";
         button4.style.border = "none";
         button4.style.display = "flex";
         button4.style.justifyContent = "center";
         button4.style.textAlign = "center";
-        labelHold.style.height = "100%";
+        labelHold.style.height = "96%";
         labelHold.style.width = "55%";
         labelHold.style.position = "absolute";
         labelHold.style.display = "flex";
         labelHold.style.flexDirection = "column";
         labelHold.style.alignItems = "center";
-        labelHold.style.marginTop = "-8px";  
-        labelHold.style.marginLeft = "13px";
-        labelHold.style.overflowX = "hidden";
+        labelHold.style.marginTop = "-5px";  
         labelHold.style.overflowY = "hidden"; 
+        labelHold.style.overflowX = "hidden";
       }
 
       const basePayload = {
@@ -2510,7 +2508,7 @@ const ScaleRightSide = () => {
                 }
 
                 labelHold.appendChild(circle);
-                labelHold.style.marginTop = "-5px";
+                labelHold.style.marginTop = "-10px";
               }
               console.log("This is it+++++++______", likertScaleArray);
             }
