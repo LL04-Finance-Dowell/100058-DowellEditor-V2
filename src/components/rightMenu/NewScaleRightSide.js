@@ -2695,7 +2695,9 @@ const ScaleRightSide = () => {
               button4.appendChild(containerDiv);
 
               if (orientation === "Horizontal") {
-                scale?.querySelector(".orientation")?.remove();
+                const orient = scale?.querySelectorAll(".orientation");
+
+                orient?.forEach((e) => e?.remove());
                 button4.style.border = "block";
                 button4.style.textAlign = "center";
                 button.style.marginTop = "10px";
@@ -2713,9 +2715,10 @@ const ScaleRightSide = () => {
                 orientation.textContent = "Vertical";
                 orientation.style.display = "none";
                 button4.appendChild(orientation);
-                containerDiv.style.transform = "rotate(270deg)";
 
-                containerDiv.style.marginTop = "80px";
+                scaleText.style.height = "";
+                scaleText.style.marginBottom = "70px";
+                containerDiv.style.transform = "rotate(270deg)";
                 containerDiv.style.width = "100%";
                 inputPercent.style.marginTop = "20px";
                 nameDiv.style.position = "absolute";
@@ -2724,20 +2727,53 @@ const ScaleRightSide = () => {
                   nameDiv.style.top = "20px";
                   nameDiv.style.left = "93%";
                   nameDiv.style.right = "-17px";
+                  newLabelHold.style.padding = "0px 20px 10px 14px"
+                  
                 } else {
+                  newLabelHold.style.padding = "0px 17px 37px 14px";
                   nameDiv.style.left = "101%";
                   nameDiv.style.top = "4px";
                   nameDiv.style.right = "-22px";
                 }
-                newLabelHold.style.padding =
-                  nameDiv.textContent.length < 9
-                    ? "0px 20px 10px 14px"
-                    : "0px 17px 37px 14px";
+                
                 nameDiv.style.transform = "rotate(90deg)";
                 newLabelHold.style.position = "relative";
                 newLabelHold.style.width = "85%";
                 percentChilds.style.alignItems = "start";
                 percentChilds.style.height = "100%";
+
+                if (inputFields.length == 1) {
+                  scaleText.style.display = "none";
+                  newLabelHold.style.marginTop = "207px"
+                  newLabelHold.style.width = "25vw"
+
+                }
+                if (inputFields.length == 4) {
+                  scaleText.style.marginBottom = "-7px";
+                }
+                if (inputFields.length == 5) {
+                  scaleText.style.marginBottom = "-33px";
+                }
+
+                if (inputFields.length == 6) {
+                  scaleText.style.marginBottom = "-31px";
+                }
+
+                if (inputFields.length == 7) {
+                  scaleText.style.marginBottom = "-62px";
+                }
+
+                if (inputFields.length == 8) {
+                  scaleText.style.marginBottom = "-80px";
+                }
+
+                if (inputFields.length == 9) {
+                  scaleText.style.marginBottom = "-117px";
+                }
+
+                if (inputFields.length == 10) {
+                  scaleText.style.marginBottom = "-151px";
+                }
               }
 
               scaleText.textContent = name;
@@ -2856,7 +2892,9 @@ const ScaleRightSide = () => {
                 button4.appendChild(containerDiv);
 
                 if (orientation === "Horizontal") {
-                  scale?.querySelector(".orientation")?.remove();
+                  const orient = scale?.querySelectorAll(".orientation");
+
+                  orient?.forEach((e) => e?.remove());
                   button4.style.border = "block";
                   button4.style.textAlign = "center";
                   button.style.marginTop = "10px";
@@ -2874,8 +2912,10 @@ const ScaleRightSide = () => {
                   orientation.textContent = "Vertical";
                   orientation.style.display = "none";
                   button4.appendChild(orientation);
+
+                  scaleText.style.height = "";
+                  scaleText.style.marginBottom = "70px";
                   containerDiv.style.transform = "rotate(270deg)";
-                  containerDiv.style.marginTop = "80px";
                   containerDiv.style.width = "100%";
                   inputPercent.style.marginTop = "20px";
                   nameDiv.style.position = "absolute";
@@ -2884,20 +2924,53 @@ const ScaleRightSide = () => {
                     nameDiv.style.top = "20px";
                     nameDiv.style.left = "93%";
                     nameDiv.style.right = "-17px";
+                    newLabelHold.style.padding = "0px 20px 10px 14px"
+                    
                   } else {
+                    newLabelHold.style.padding = "0px 17px 37px 14px";
                     nameDiv.style.left = "101%";
                     nameDiv.style.top = "4px";
                     nameDiv.style.right = "-22px";
                   }
-                  newLabelHold.style.padding =
-                    nameDiv.textContent.length < 9
-                      ? "0px 20px 10px 14px"
-                      : "0px 17px 37px 14px";
+                  
                   nameDiv.style.transform = "rotate(90deg)";
                   newLabelHold.style.position = "relative";
                   newLabelHold.style.width = "85%";
                   percentChilds.style.alignItems = "start";
                   percentChilds.style.height = "100%";
+
+                  if (inputFields.length == 1) {
+                    scaleText.style.display = "none";
+                    newLabelHold.style.marginTop = "207px"
+                    newLabelHold.style.width = "25vw"
+  
+                  }
+                  if (inputFields.length == 4) {
+                    scaleText.style.marginBottom = "-7px";
+                  }
+                  if (inputFields.length == 5) {
+                    scaleText.style.marginBottom = "-33px";
+                  }
+
+                  if (inputFields.length == 6) {
+                    scaleText.style.marginBottom = "-31px";
+                  }
+
+                  if (inputFields.length == 7) {
+                    scaleText.style.marginBottom = "-62px";
+                  }
+
+                  if (inputFields.length == 8) {
+                    scaleText.style.marginBottom = "-80px";
+                  }
+
+                  if (inputFields.length == 9) {
+                    scaleText.style.marginBottom = "-117px";
+                  }
+
+                  if (inputFields.length == 10) {
+                    scaleText.style.marginBottom = "-151px";
+                  }
                 }
 
                 scaleText.textContent = name;

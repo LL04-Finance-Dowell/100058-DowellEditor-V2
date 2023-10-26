@@ -42,7 +42,21 @@ function createButtonInputElement(holderDIV, focuseddClassMaintain, handleClicke
     purposeHolder.className = "purpose_holder";
     purposeHolder.style.display = "none";
 
-    holderDIV.append(buttonField);
+    const emailDataHolder = document.createElement("div");
+    emailDataHolder.className = "emailDataHolder_holder";
+    emailDataHolder.style.display = "none";
+
+    const emailSenderDataHolder = document.createElement("div");
+    emailSenderDataHolder.className = "emailSenderDataHolder_holder";
+    emailSenderDataHolder.style.display = "none";
+
+    const emailRecipientDataHolder = document.createElement("div");
+    emailRecipientDataHolder.className = "emailRecipientDataHolder_holder";
+    emailRecipientDataHolder.style.display = "none";
+
+    emailDataHolder.append(emailSenderDataHolder);
+    emailDataHolder.append(emailRecipientDataHolder);
+    holderDIV.append(emailDataHolder);
     holderDIV.append(linkHolder);
     holderDIV.append(purposeHolder);
 
