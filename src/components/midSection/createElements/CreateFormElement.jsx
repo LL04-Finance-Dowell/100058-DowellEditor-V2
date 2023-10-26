@@ -14,7 +14,7 @@ function createFormInputElement(holderDIV, focuseddClassMaintain, handleClicked,
   buttonField.style.overflow = "overlay";
   buttonField.style.position = "absolute";
   buttonField.type = "submit";
-  buttonField.textContent = "Mail";
+  buttonField.textContent = "Configure Mail";
   buttonField.style.backgroundColor = "#007bff";
   buttonField.style.color = "#fff";
   // buttonField.style.border = "none";
@@ -51,6 +51,23 @@ function createFormInputElement(holderDIV, focuseddClassMaintain, handleClicked,
   purposeHolder.className = "purpose_holder";
   purposeHolder.style.display = "none";
 
+      
+  const emailDataHolder = document.createElement("div");
+  emailDataHolder.className = "emailDataHolder_holder";
+  emailDataHolder.style.display = "none";
+
+  const emailSenderDataHolder = document.createElement("div");
+  emailSenderDataHolder.className = "emailSenderDataHolder_holder";
+  emailSenderDataHolder.style.display = "none";
+
+  const emailRecipientDataHolder = document.createElement("div");
+  emailRecipientDataHolder.className = "emailRecipientDataHolder_holder";
+  emailRecipientDataHolder.style.display = "none";
+
+  emailDataHolder.append(emailSenderDataHolder);
+  emailDataHolder.append(emailRecipientDataHolder);
+
+  holderDIV.append(emailDataHolder);
   holderDIV.append(buttonField);
   holderDIV.append(linkHolder);
   holderDIV.append(purposeHolder);
