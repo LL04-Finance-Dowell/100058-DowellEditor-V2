@@ -389,11 +389,14 @@ export const ContextProvider = ({ children }) => {
 
   // focus class maintain for table and midsection
   function focuseddClassMaintain(e) {
-    let allDiv = document.getElementsByClassName("focussedd");
-    for (let i = 0; i < allDiv.length; i++) {
-      allDiv[i].classList.remove("focussedd");
+    console.log('FOCUSED CALLED: ', e.target);
+    if (e.target.parentElement) {
+      let allDiv = document.getElementsByClassName("focussedd");
+      for (let i = 0; i < allDiv.length; i++) {
+        allDiv[i].classList.remove("focussedd");
+      }
+      e.target.parentElement.classList.add("focussedd");
     }
-    e.target.parentElement.classList.add("focussedd");
     // e.target.parentElement.classList.add("test_image");
 
     let focussedDiv = document.getElementsByClassName("focussed");
@@ -562,7 +565,7 @@ export const ContextProvider = ({ children }) => {
 
   const scaleMidSec = () => {
     const midSecAll = document.querySelectorAll('.midSection_container');
-    console.log(midSecAll);
+    // console.log(midSecAll);
     const ratio = fixedMidSecDim.height / fixedMidSecDim.width;
     const parentRatio = fixedMidSecDim.parentHeight / fixedMidSecDim.height
     const currWidth = Number(midSecAll[0].getBoundingClientRect().width.toFixed(2));
@@ -575,8 +578,6 @@ export const ContextProvider = ({ children }) => {
     })
 
     midSecAll[0].parentElement.parentElement.parentElement.style.marginTop = window.innerWidth > 993 ? 0 : leftRect.height + 'px';
-
-    console.log(currWidth, currMidSecWidth);
 
     currWidth !== currMidSecWidth && setCurrMidSecWidth(currWidth)
   }
@@ -609,35 +610,60 @@ export const ContextProvider = ({ children }) => {
     setDimRatios(modDimRatios)
   }
 
+  // useEffect(() => {
+  //   const replaceIds = (oldId, newId) => {
+  //     const modDimRatios = dimRatios.map(ratio => (
+  //       ratio.id === oldId ? { ...ratio, id: newId } : ratio
+  //     ))
+  //     // console.log('oldId: ', oldId, 'newId: ', newId, modDimRatios);
+  //     sessionStorage.setItem('dimRatios', JSON.stringify(modDimRatios));
+  //     setDimRatios(modDimRatios)
+  //     setIniBtnId(newId);
+  //   }
+
+  //   const check = (genSelOpt === 'cta' && !iniBtnId.includes('btn')) || (genSelOpt === 'pay' && !iniBtnId.includes('pay')) || (genSelOpt === 'email' && !iniBtnId.includes('eml'))
+
+  //   console.log('CHECKS: ', genSelOpt, check);
+
+  //   if (genSelOpt && check) {
+  //     const holderDiv = document.querySelector('.focussedd');
+  //     console.log('HOLDER: ', holderDiv);
+  //     holderDiv.innerHTML = '';
+
+  //     switch (genSelOpt) {
+  //       case 'cta':
+  //         createButtonInputElement(holderDiv, focuseddClassMaintain, handleClicked, setSidebar);
+  //         replaceIds(iniBtnId, iniBtnId.replace(`${iniBtnId[0]}${iniBtnId[1]}${iniBtnId[2]}`, 'btn'))
+  //         break;
+  //       case 'pay':
+  //         CreatePyamentElement(holderDiv, focuseddClassMaintain, handleClicked, setSidebar);
+  //         // replaceIds(iniBtnId, iniBtnId.replace(`${iniBtnId[0]}${iniBtnId[1]}${iniBtnId[2]}`, 'pay'))
+  //         break;
+  //       case 'email':
+  //         createFormInputElement(holderDiv, focuseddClassMaintain, handleClicked, setSidebar);
+  //         // replaceIds(iniBtnId, iniBtnId.replace(`${iniBtnId[0]}${iniBtnId[1]}${iniBtnId[2]}`, 'eml'))
+  //         break;
+  //       default:
+  //         return;
+  //     }
+  //   }
+  // }, [genSelOpt, iniBtnId, dimRatios])
+
   useEffect(() => {
-    const replaceIds = (oldId, newId) => {
-      const modDimRatios = dimRatios.map(ratio => (
-        ratio.id === oldId ? { ...ratio, id: newId } : ratio
-      ))
-      console.log('oldId: ', oldId, 'newId: ', newId, modDimRatios);
-      sessionStorage.setItem('dimRatios', JSON.stringify(modDimRatios));
-      setDimRatios(modDimRatios)
-      setIniBtnId(newId);
-    }
-
-    const check = (genSelOpt === 'cta' && !iniBtnId.includes('btn')) || (genSelOpt === 'pay' && !iniBtnId.includes('pay')) || (genSelOpt === 'email' && !iniBtnId.includes('eml'))
-
-    if (genSelOpt && check) {
+    if (genSelOpt) {
       const holderDiv = document.querySelector('.focussedd');
+      console.log('HOLDER: ', holderDiv);
       holderDiv.innerHTML = '';
 
       switch (genSelOpt) {
         case 'cta':
           createButtonInputElement(holderDiv, focuseddClassMaintain, handleClicked, setSidebar);
-          replaceIds(iniBtnId, iniBtnId.replace(`${iniBtnId[0]}${iniBtnId[1]}${iniBtnId[2]}`, 'btn'))
           break;
         case 'pay':
           CreatePyamentElement(holderDiv, focuseddClassMaintain, handleClicked, setSidebar);
-          replaceIds(iniBtnId, iniBtnId.replace(`${iniBtnId[0]}${iniBtnId[1]}${iniBtnId[2]}`, 'pay'))
           break;
         case 'email':
           createFormInputElement(holderDiv, focuseddClassMaintain, handleClicked, setSidebar);
-          replaceIds(iniBtnId, iniBtnId.replace(`${iniBtnId[0]}${iniBtnId[1]}${iniBtnId[2]}`, 'eml'))
           break;
         default:
           return;

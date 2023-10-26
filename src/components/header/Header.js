@@ -113,7 +113,7 @@ const Header = () => {
     docMapRequired,
     setDocMapRequired,
     fixedMidSecDim,
-    progress, 
+    progress,
     setProgress
   } = useStateContext();
 
@@ -1034,7 +1034,7 @@ const Header = () => {
 
           const emailDataDiv = tempElem.querySelector('.emailDataHolder_holder');
           const emailSenderData = emailDataDiv.querySelector('.emailSenderDataHolder_holder')?.innerText;
-            
+
 
 
           elem = {
@@ -1046,7 +1046,7 @@ const Header = () => {
             left: tempPosn.left,
             type: "FORM",
             data: emails[e].textContent,
-            emailData:emailSenderData,
+            emailData: emailSenderData,
             id: `eml${e + 1}`,
           };
 
@@ -1666,7 +1666,7 @@ const Header = () => {
               halfProgressBar.click()
               handleFinalize();
             }, 2000);
-            
+
           }
           if (decoded.details.action === "document") {
             let scaleType = document.querySelector(".scaleTypeHolder");
@@ -1800,7 +1800,7 @@ const Header = () => {
   };
 
   useEffect(() => {
-    // setIsLoading(true);
+    console.log('CALLED GETPOST');
     getPostData();
   }, []);
 
@@ -1913,7 +1913,7 @@ const Header = () => {
     const reject = document.getElementById("reject-button");
 
     const completeProgressBar = document.getElementById("progress-100");
-    
+
     Axios.post(
       // `https://100094.pythonanywhere.com/v1/processes/${process_id}/finalize/`,
       `https://100094.pythonanywhere.com/v1/processes/${process_id}/finalize-or-reject/`,
@@ -2006,233 +2006,233 @@ const Header = () => {
 
   return (
     <>
-    <div
-      className={`header ${actionName == "template" ? "header_bg_template" : "header_bg_document"
-        }`}
-    >
-      <Container fluid>
-        <Row>
-          <Col className="d-flex lhs-header">
-            <div className="header_icons position-relative">
-              <CgMenuLeft className="head-bar" onClick={handleOptions} />
-              {isMenuVisible && (
-                <div
-                  ref={menuRef}
-                  className={`position-absolute bg-white d-flex flex-column p-4 bar-menu menu ${isMenuVisible ? "show" : ""
-                    }`}
-                >
-                  <div className="d-flex cursor_pointer" onClick={handleUndo}>
-                    <ImUndo />
-                    <p>Undo</p>
-                  </div>
-                  <div className="d-flex cursor_pointer" onClick={handleRedo}>
-                    <ImRedo />
-                    <p>Redo</p>
-                  </div>
-                  <div className="d-flex cursor_pointer" onClick={handleUndo}>
-                    {/* handleCut */}
-                    <BiCut />
-                    <p>Cut</p>
-                  </div>
-                  <div className="d-flex cursor_pointer" onClick={handleCopy}>
-                    <BiCopyAlt />
-                    <p>Copy</p>
-                  </div>
-                  <div className="d-flex cursor_pointer" onClick={handleRedo}>
-                    {/* handlePaste */}
-                    <ImPaste />
-                    <p>Paste</p>
-                  </div>
+      <div
+        className={`header ${actionName == "template" ? "header_bg_template" : "header_bg_document"
+          }`}
+      >
+        <Container fluid>
+          <Row>
+            <Col className="d-flex lhs-header">
+              <div className="header_icons position-relative">
+                <CgMenuLeft className="head-bar" onClick={handleOptions} />
+                {isMenuVisible && (
                   <div
-                    className="d-flex cursor_pointer"
-                    onClick={() => handlePDFPrint()}
+                    ref={menuRef}
+                    className={`position-absolute bg-white d-flex flex-column p-4 bar-menu menu ${isMenuVisible ? "show" : ""
+                      }`}
                   >
-                    <AiFillPrinter />
-                    <p>Print</p>
+                    <div className="d-flex cursor_pointer" onClick={handleUndo}>
+                      <ImUndo />
+                      <p>Undo</p>
+                    </div>
+                    <div className="d-flex cursor_pointer" onClick={handleRedo}>
+                      <ImRedo />
+                      <p>Redo</p>
+                    </div>
+                    <div className="d-flex cursor_pointer" onClick={handleUndo}>
+                      {/* handleCut */}
+                      <BiCut />
+                      <p>Cut</p>
+                    </div>
+                    <div className="d-flex cursor_pointer" onClick={handleCopy}>
+                      <BiCopyAlt />
+                      <p>Copy</p>
+                    </div>
+                    <div className="d-flex cursor_pointer" onClick={handleRedo}>
+                      {/* handlePaste */}
+                      <ImPaste />
+                      <p>Paste</p>
+                    </div>
+                    <div
+                      className="d-flex cursor_pointer"
+                      onClick={() => handlePDFPrint()}
+                    >
+                      <AiFillPrinter />
+                      <p>Print</p>
+                    </div>
+
+                    {actionName == "template" && (
+                      <button
+                        className="page_btn p-0 d-flex cursor_pointer"
+                        onClick={() => createNewPage()}
+                      >
+                        <MdOutlinePostAdd />
+                        <p>Add Page</p>
+                      </button>
+                    )}
+                    {actionName == "template" && (
+                      <button
+                        className="page_btn p-0 d-flex cursor_pointer"
+                        onClick={() => removePage()}
+                      >
+                        <CgPlayListRemove />
+                        <p>Remove Page</p>
+                      </button>
+                    )}
+                    <button
+                      className="page_btn p-0 d-flex cursor_pointer"
+                      onClick={handleToken}
+                    >
+                      <BiImport />
+                      <p>Import</p>
+                    </button>
+                    <button
+                      className="d-flex page_btn p-0 cursor_pointer"
+                      id="saving-button"
+                      data-bs-toggle="modal"
+                      data-bs-target="#exampleModal"
+                    >
+                      <BiExport />
+                      <p>Export</p>
+                    </button>
                   </div>
-
-                  {actionName == "template" && (
-                    <button
-                      className="page_btn p-0 d-flex cursor_pointer"
-                      onClick={() => createNewPage()}
-                    >
-                      <MdOutlinePostAdd />
-                      <p>Add Page</p>
-                    </button>
-                  )}
-                  {actionName == "template" && (
-                    <button
-                      className="page_btn p-0 d-flex cursor_pointer"
-                      onClick={() => removePage()}
-                    >
-                      <CgPlayListRemove />
-                      <p>Remove Page</p>
-                    </button>
-                  )}
-                  <button
-                    className="page_btn p-0 d-flex cursor_pointer"
-                    onClick={handleToken}
-                  >
-                    <BiImport />
-                    <p>Import</p>
-                  </button>
-                  <button
-                    className="d-flex page_btn p-0 cursor_pointer"
-                    id="saving-button"
-                    data-bs-toggle="modal"
-                    data-bs-target="#exampleModal"
-                  >
-                    <BiExport />
-                    <p>Export</p>
-                  </button>
-                </div>
-              )}
-            </div>
-
-            <div className="d-flex align-items-center gap-2 header_p">
-              <div
-                className="title-name px-3"
-                contentEditable={true}
-                style={{
-                  fontSize: 18,
-                  height: window.innerWidth < 993 ? "75px" : "50px",
-                  overflowY: "auto",
-                  padding: "10px",
-                }}
-                spellCheck="false"
-                ref={inputRef}
-              >
-                {docMap ? finalDocName : titleName}
+                )}
               </div>
-              <FaPen className="cursor-pointer" onClick={handleTitle} />
-            </div>
-          </Col>
 
-          <Col>
-            <div className="right_header">
-              <div className={docMap ? "header_btn" : "savee"}>
-                {/* <div style={{ marginRight: "20px" }}>
+              <div className="d-flex align-items-center gap-2 header_p">
+                <div
+                  className="title-name px-3"
+                  contentEditable={true}
+                  style={{
+                    fontSize: 18,
+                    height: window.innerWidth < 993 ? "75px" : "50px",
+                    overflowY: "auto",
+                    padding: "10px",
+                  }}
+                  spellCheck="false"
+                  ref={inputRef}
+                >
+                  {docMap ? finalDocName : titleName}
+                </div>
+                <FaPen className="cursor-pointer" onClick={handleTitle} />
+              </div>
+            </Col>
+
+            <Col>
+              <div className="right_header">
+                <div className={docMap ? "header_btn" : "savee"}>
+                  {/* <div style={{ marginRight: "20px" }}>
                   <input type="checkbox" onChange={() => setAllowHighlight(!allowHighlight)} />{"  "}
                   <label>Allow Highlight</label>
                 </div> */}
-                <Button
-                  size="md"
-                  className="rounded"
-                  id="saving-buttonn"
-                  onClick={submit}
-                  style={{
-                    visibility: documentFlag && "hidden",
-                  }}
-                  disabled={isButtonDisabled}
-                >
-                  Save <FaSave color="white" />
-                </Button>
-                {/*  )} */}
-              </div>
-              <div className="mt-1 text-center p-2">
-                <div
-                  className="modal fade"
-                  id="exampleModal"
-                  tabindex="-1"
-                  aria-labelledby="exampleModalLabel"
-                  aria-hidden="true"
-                >
-                  <div className="modal-dialog">
-                    <div className="modal-content">
-                      <div className="modal-header">
-                        <h5 className="modal-title" id="exampleModalLabel">
-                          Token
-                        </h5>
-                        <button
-                          type="button"
-                          className="btn-close"
-                          data-bs-dismiss="modal"
-                          aria-label="Close"
-                        ></button>
-                      </div>
-                      <div className="modal-body token_text">{exportToken}</div>
-                      <div className="modal-footer head">
-                        <button
-                          type="button"
-                          className="btn btn-secondary"
-                          data-bs-dismiss="modal"
-                        >
-                          Close
-                        </button>
-                        <button
-                          onClick={copyText}
-                          type="button"
-                          data-bs-dismiss="modal"
-                          className="copyBtnn btn btn-primary"
-                        >
-                          <FaCopy className="me-2" color="white" size={32} />
-                          Copy
-                        </button>
+                  <Button
+                    size="md"
+                    className="rounded"
+                    id="saving-buttonn"
+                    onClick={submit}
+                    style={{
+                      visibility: documentFlag && "hidden",
+                    }}
+                    disabled={isButtonDisabled}
+                  >
+                    Save <FaSave color="white" />
+                  </Button>
+                  {/*  )} */}
+                </div>
+                <div className="mt-1 text-center p-2">
+                  <div
+                    className="modal fade"
+                    id="exampleModal"
+                    tabindex="-1"
+                    aria-labelledby="exampleModalLabel"
+                    aria-hidden="true"
+                  >
+                    <div className="modal-dialog">
+                      <div className="modal-content">
+                        <div className="modal-header">
+                          <h5 className="modal-title" id="exampleModalLabel">
+                            Token
+                          </h5>
+                          <button
+                            type="button"
+                            className="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"
+                          ></button>
+                        </div>
+                        <div className="modal-body token_text">{exportToken}</div>
+                        <div className="modal-footer head">
+                          <button
+                            type="button"
+                            className="btn btn-secondary"
+                            data-bs-dismiss="modal"
+                          >
+                            Close
+                          </button>
+                          <button
+                            onClick={copyText}
+                            type="button"
+                            data-bs-dismiss="modal"
+                            className="copyBtnn btn btn-primary"
+                          >
+                            <FaCopy className="me-2" color="white" size={32} />
+                            Copy
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
+
+                {actionName == "document" &&
+                  docMap &&
+                  data != "" &&
+                  docRight !== "view" && (
+                    <>
+                      {/* <div className={`mt-2 text-center mb-2 px-2 ${isFinializeDisabled ? disable_pointer_event : enable_pointer_event}`}> */}
+                      <div className={`mt-2 text-center mb-2 px-2`}>
+                        <Button
+                          variant="success"
+                          size="md"
+                          className="rounded px-4"
+                          id="finalize-button"
+                          disabled={isFinializeDisabled || isButtonDisabled}
+                          onClick={submit}
+                          style={{
+                            visibility:
+                              documentFlag == "processing" ? "visible" : "hidden",
+                          }}
+                        >
+                          Finalize
+                        </Button>
+                      </div>
+
+                      <div className="mt-2 text-center mb-2 px-2">
+                        <Button
+                          variant="danger"
+                          size="md"
+                          className="rounded px-4"
+                          id="reject-button"
+                          onClick={() => setIsOpenRejectionModal(true)}
+                          style={{
+                            visibility:
+                              documentFlag == "processing" ? "visible" : "hidden",
+                          }}
+                          disabled={isButtonDisabled}
+                        >
+                          Reject
+                        </Button>
+                      </div>
+                    </>
+                  )}
               </div>
+              <ToastContainer size={5} />
+            </Col>
+          </Row>
+        </Container>
 
-              {actionName == "document" &&
-                docMap &&
-                data != "" &&
-                docRight !== "view" && (
-                  <>
-                    {/* <div className={`mt-2 text-center mb-2 px-2 ${isFinializeDisabled ? disable_pointer_event : enable_pointer_event}`}> */}
-                    <div className={`mt-2 text-center mb-2 px-2`}>
-                      <Button
-                        variant="success"
-                        size="md"
-                        className="rounded px-4"
-                        id="finalize-button"
-                        disabled={isFinializeDisabled || isButtonDisabled}
-                        onClick={submit}
-                        style={{
-                          visibility:
-                            documentFlag == "processing" ? "visible" : "hidden",
-                        }}
-                      >
-                        Finalize
-                      </Button>
-                    </div>
-
-                    <div className="mt-2 text-center mb-2 px-2">
-                      <Button
-                        variant="danger"
-                        size="md"
-                        className="rounded px-4"
-                        id="reject-button"
-                        onClick={() => setIsOpenRejectionModal(true)}
-                        style={{
-                          visibility:
-                            documentFlag == "processing" ? "visible" : "hidden",
-                        }}
-                        disabled={isButtonDisabled}
-                      >
-                        Reject
-                      </Button>
-                    </div>
-                  </>
-                )}
-            </div>
-            <ToastContainer size={5} />
-          </Col>
-        </Row>
-      </Container>
-
-      {isOpenRejectionModal && (
-        <RejectionModal
-          openModal={setIsOpenRejectionModal}
-          handleReject={handleReject}
-          msg={rejectionMsg}
-          setMsg={setRejectionMsg}
-        />
-      )}
-    </div>
-    <div>
-      <ProgressLoader />
-    </div>
+        {isOpenRejectionModal && (
+          <RejectionModal
+            openModal={setIsOpenRejectionModal}
+            handleReject={handleReject}
+            msg={rejectionMsg}
+            setMsg={setRejectionMsg}
+          />
+        )}
+      </div>
+      <div>
+        <ProgressLoader />
+      </div>
     </>
   );
 };

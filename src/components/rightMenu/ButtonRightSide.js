@@ -97,15 +97,15 @@ const ButtonRightSide = () => {
     }
   }, [])
 
-  useEffect(() => {
-    const linkWrapper = document.getElementById("link")
-    const btnName = document.getElementById("button_name")
-    const select = document.getElementById('selectt')
+  // useEffect(() => {
+  //   const linkWrapper = document.getElementById("link")
+  //   const btnName = document.getElementById("button_name")
+  //   const select = document.getElementById('selectt')
 
-    btnName.value = button.textContent ?? '';
-    linkWrapper.value = link ?? '';
-    select.selectedIndex = purpose === 'finalize' ? 1 : purpose === 'reject' ? 2 : purpose === 'custom' ? 3 : 0
-  }, [])
+  //   btnName.value = button.textContent ?? '';
+  //   linkWrapper.value = link ?? '';
+  //   select.selectedIndex = purpose === 'finalize' ? 1 : purpose === 'reject' ? 2 : purpose === 'custom' ? 3 : 0
+  // }, [])
 
 
   return <>
