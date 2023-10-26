@@ -854,7 +854,7 @@ function createNewScaleInputField(
       circle.style.height = "55%";
       circle.style.borderRadius = "25px";
       circle.style.padding = "6px 12px";
-      circle.style.marginLeft = "7px";
+      circle.style.marginLeft = "12px";
       circle.style.backgroundColor = element?.raw_data?.buttonColor;
       circle.style.display = "flex";
       circle.style.justifyContent = "center";
@@ -873,8 +873,7 @@ function createNewScaleInputField(
         orientation.textContent = "vertical";
         orientation.style.display = "none";
         labelHold.appendChild(orientation);
-        labelHold.style.position = "absolute";
-        circle.style.margin = "5px 0";
+        labelHold.style.position = "relative";
         circle.style.padding = "6px 12px";
         circle.style.margin = "10px 0";
         scaleHold.style.border = "none";
@@ -884,7 +883,6 @@ function createNewScaleInputField(
         scaleHold.style.textAlign = "center";
         labelHold.style.height = "100%";
         labelHold.style.width = "50%";
-        labelHold.style.position = "absolute";
         labelHold.style.display = "flex";
         labelHold.style.flexDirection = "column";
         labelHold.style.alignItems = "center";
