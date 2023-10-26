@@ -18,9 +18,9 @@ function createGenBtnEl(holderDIV, focuseddClassMaintain, handleClicked, setSide
  const addedGenBtns = document.getElementsByClassName("gen_btn");
  if (addedGenBtns.length) {
   const d = addedGenBtns.length;
-  buttonField.id = `gbtn${d + 1}`;
+  buttonField.id = `gbt${d + 1}`;
  } else {
-  buttonField.id = "gbtn1";
+  buttonField.id = "gbt1";
  }
 
  buttonField.onclick = (e) => {
