@@ -412,7 +412,13 @@ const MidSection = React.forwardRef((props, ref) => {
     return resizer;
   }
 
+<<<<<<< HEAD
   //colse context menu
+=======
+  console.log("data decoded", decoded)
+
+  //colse context menu 
+>>>>>>> 4d8974b5ac238808140884e0da602ac978ca8993
 
   const contextMenuClose = () => setContextMenu(prev => {
     return {
@@ -1466,6 +1472,7 @@ const MidSection = React.forwardRef((props, ref) => {
             page: p
           })
         }
+       
         // conteiner retrive data
         if (element.type === "CONTAINER_INPUT") {
           const elDom = document.getElementById(element.id);
@@ -1512,18 +1519,28 @@ const MidSection = React.forwardRef((props, ref) => {
 
   const onParagraphPost = async () => {
     const response = await axios.post("http://uxlivinglab.pythonanywhere.com/", {
-      "cluster": "socialmedia",
-      "database": "socialmedia",
-      "collection": "step3_data",
-      "document": "step3_data",
-      "team_member_ID": "34567897799",
-      "function_ID": "ABCDE",
-      "field": { "_id": "64e367eb3bc140afab90b3ec" },
-      "command": "fetch",
-      "update_field": {
-        "order_nos": 21
-      },
-      "platform": "bangalore"
+      // document_id: decoded.details.document_id,
+      // action: decoded.details.action,
+      // database: decoded.details.database,
+      // collection: decoded.details.collection,
+      // team_member_ID: decoded.details.team_member_ID,
+      // function_ID: decoded.details.function_ID,
+      // cluster: decoded.details.cluster,
+      // document: decoded.details.document,
+      // update_field: updateField,
+      document_id: decoded.details._id,
+      action: decoded.details.action,
+      database: decoded.details.database,
+      collection: decoded.details.collection,
+      team_member_ID: decoded.details.team_member_ID,
+      function_ID: decoded.details.function_ID,
+      cluster: decoded.details.cluster,
+      field : {_id: "64e367eb3bc140afab90b3ec"},
+      command: "fetch",
+      document: decoded.details.document,
+      update_field: decoded.details.update_field,
+      platform: "bangalore",
+     
     })
 
     if (!response.data) {
@@ -1532,7 +1549,10 @@ const MidSection = React.forwardRef((props, ref) => {
     }
 
     // console.log(JSON.parse(response.data))
-    const { title, image, paragraph } = JSON.parse(response.data)?.data[0]
+    // console.log("social media data..", response.data)
+
+    const { title, image, paragraph } = JSON.parse(response.data)?.data[0] //title field
+    // console.log("social response", response.data.data);
     const curr_user = document.getElementById("curr_user");
 
     const measure = {
@@ -1544,62 +1564,85 @@ const MidSection = React.forwardRef((props, ref) => {
 
     const holderDIV1 = getHolderDIV(measure);
 
-    let titleField = document.createElement("div");
-
-    //  inputField.setAttribute('draggable', true);
-    titleField.setAttribute("contenteditable", true);
-    titleField.className = "textInput";
-    titleField.innerText = title;
-    titleField.style.width = "100%";
-    titleField.style.height = "100%";
-    titleField.style.resize = "none";
-    titleField.style.zIndex = 3;
-    titleField.style.backgroundColor = "#0000";
-    titleField.style.borderRadius = "0px";
-    titleField.style.outline = "0px";
-    titleField.style.overflow = "overlay";
-    titleField.style.position = "relative";
-    titleField.style.cursor = "text";
-    titleField.onclick = () => {
+    let titleLevel = document.createElement("div");
+    titleLevel.className = "textInput";
+    titleLevel.innerText = "Title: \n";
+    // titleLevel.style.border = "none";
+    titleLevel.style.fontWeight = "900";
+    titleLevel.style.width = "100%";
+    titleLevel.style.height = "100%";
+    titleLevel.style.resize = "none";
+    titleLevel.style.zIndex = 3;
+    titleLevel.style.backgroundColor = "#0000";
+    titleLevel.style.borderRadius = "0px";
+    titleLevel.style.outline = "0px";
+    titleLevel.style.overflow = "overlay";
+    titleLevel.style.position = "relative";
+    titleLevel.style.cursor = "text";
+    titleLevel.onclick = () => {
       handleClicked("align2");
       setSidebar(true);
-      titleField.parentElement.focus();
+      // titleLevel.parentElement.focus();
     };
 
-    // titleField.innerText = `Text Input`;
-    // paragraphField.innerHTML = `${data.normal.data[0][0].paragraph}`;
+    let titleField = document.createElement("div");
 
-    holderDIV1.append(titleField);
+    titleField.contentEditable = true;
+    titleField.className = "socialInnerText";
+    titleField.innerText = title;
+    titleField.style.border = "none";
+    titleField.style.outline = "none";
+    titleField.style.fontWeight =400;
+   
+
+    titleLevel.append(titleField);
+    holderDIV1.append(titleLevel);
 
     const measure2 = {
-      width: "300px",
-      height: "100px",
+      width: "94%",
+      height: "150px",
       top: "220px",
       auth_user: curr_user,
     };
 
     const holderDIV2 = getHolderDIV(measure2);
 
-    let descriptionField = document.createElement("div")
-    descriptionField.className = "textInput";
-    descriptionField.style.width = "100%";
-    descriptionField.style.height = "100%";
-    descriptionField.style.resize = "none";
-    descriptionField.style.zIndex = 3;
-    descriptionField.style.backgroundColor = "#0000";
-    descriptionField.style.borderRadius = "0px";
-    descriptionField.style.outline = "0px";
-    descriptionField.style.overflow = "overlay";
-    descriptionField.style.position = "relative";
-    descriptionField.style.cursor = "text";
-    descriptionField.onclick = () => {
+    let descriptionLevel = document.createElement("div")
+    descriptionLevel.className = "textInput";
+    descriptionLevel.style.width = "100%";
+    descriptionLevel.innerText = "Paragraph: ";
+    descriptionLevel.style.fontWeight = 900;
+    descriptionLevel.style.height = "100%";
+    descriptionLevel.style.resize = "none";
+    descriptionLevel.style.zIndex = 3;
+    descriptionLevel.style.backgroundColor = "#0000";
+    descriptionLevel.style.borderRadius = "0px";
+    descriptionLevel.style.outline = "0px";
+    descriptionLevel.style.overflow = "overlay";
+    descriptionLevel.style.position = "relative";
+    descriptionLevel.style.cursor = "text";
+    descriptionLevel.onclick = () => {
       handleClicked("align2");
       setSidebar(true);
-      descriptionField.parentElement.focus();
+      // descriptionLevel.parentElement.focus();
     };
-    holderDIV2.append(descriptionField);
+    
 
+    let descriptionField = document.createElement("div");
+    descriptionField.contentEditable = true;
+    descriptionField.className = "socialDescriptionText";
     descriptionField.innerText = paragraph;
+    descriptionField.style.border = "none";
+    descriptionField.style.outline = "none";
+    descriptionField.style.fontWeight = 400;
+
+
+
+
+
+    descriptionLevel.append(descriptionField);
+    holderDIV2.append(descriptionLevel);
+
 
     document
       .getElementById("midSection_container")
