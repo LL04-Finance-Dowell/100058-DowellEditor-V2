@@ -10,7 +10,7 @@ import useSelectedAnswer from '../../customHooks/useSelectedAnswers';
 
 
 const IframeRightSidebar = () => {
-  const { setSidebar, handleClicked, setIsFinializeDisabled, iframeBorderSize, setIframeBorderSize, iframeBorderColor, setIframeBorderColor, setConfirmRemove, confirmRemove } =
+  const { setSidebar, handleClicked, setIsFinializeDisabled, iframeBorderSize, setIframeBorderSize, iframeBorderColor, setIframeBorderColor, setConfirmRemove, confirmRemove, docMapRequired } =
     useStateContext();
 
   const [searchParams] = useSearchParams();
