@@ -2536,7 +2536,7 @@ const MidSection = React.forwardRef((props, ref) => {
         // console.log('DimRatios: ', dimRatios);
         // console.log('Ratio: ', ratio);
 
-        // compsScaler(holder, ratio);
+        compsScaler(holder, ratio);
       }
     });
   };
