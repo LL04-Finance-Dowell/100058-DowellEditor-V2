@@ -412,13 +412,9 @@ const MidSection = React.forwardRef((props, ref) => {
     return resizer;
   }
 
-<<<<<<< HEAD
-  //colse context menu
-=======
   console.log("data decoded", decoded)
 
   //colse context menu 
->>>>>>> 4d8974b5ac238808140884e0da602ac978ca8993
 
   const contextMenuClose = () => setContextMenu(prev => {
     return {
