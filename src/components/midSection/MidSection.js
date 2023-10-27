@@ -116,7 +116,7 @@ const MidSection = React.forwardRef((props, ref) => {
     updateDimRatios,
     buttonLink,
     setButtonPurpose,
-    progress, 
+    progress,
     setProgress
   } = useStateContext();
 
@@ -173,46 +173,9 @@ const MidSection = React.forwardRef((props, ref) => {
 
   const [postData, setPostData] = useState({});
 
-  const getPostData = async () => {
-    var decoded = jwt_decode(token);
-    //// console.log(decoded);
-    const response = await Axios.post(
-      "https://100058.pythonanywhere.com/api/get-data-from-collection/",
-      {
-        document_id: decoded.details._id,
-        action: decoded.details.action,
-      }
-    )
-      .then((res) => {
-        const loadedData = JSON.parse(res.data.content);
-        const pageData = res.data.page;
-        setItem(pageData);
 
-        setData(loadedData[0][0]);
-        setIsDataRetrieved(true);
 
-        setIsLoading(false);
-        setFetchedData(loadedData[0][0]);
-      })
-      .catch((err) => {
-        setIsLoading(false);
-      });
-  };
 
-  useEffect(() => {
-    setProgress(progress + 50)
-    if (data !== undefined) {
-      onPost();
-
-      //call this conditionally
-      if (decoded && decoded?.details?.cluster === "socialmedia") {
-        onParagraphPost()
-        console.log(decoded)
-      }
-
-    } else {
-    }
-  }, [isDataRetrieved]);
 
 
 
@@ -972,14 +935,14 @@ const MidSection = React.forwardRef((props, ref) => {
 
     scaleMidSec();
 
-
-
     for (let p = 1; p <= item?.length; p++) {
 
       fetchedData[p]?.forEach((element) => {
         if (element.type === "TEXT_INPUT") {
-          const elDom = document.getElementById(element.id);
-          elDom && elDom.remove();
+          // ! This two lines of codes is for removing the occasionally added duplicate elements
+          const elPar = document.getElementById(element.id)?.parentElement;
+          elPar && elPar.remove()
+
 
           const width = finding_percent(element, 'width');
 
@@ -1014,8 +977,10 @@ const MidSection = React.forwardRef((props, ref) => {
           })
         }
         if (element.type === "IMAGE_INPUT") {
-          const elDom = document.getElementById(element.id);
-          elDom && elDom.remove();
+          // ! This two lines of codes is for removing the occasionally added duplicate elements
+          const elPar = document.getElementById(element.id)?.parentElement;
+          elPar && elPar.remove()
+
 
           const width = finding_percent(element, 'width');
 
@@ -1049,8 +1014,10 @@ const MidSection = React.forwardRef((props, ref) => {
           })
         }
         if (element.type === "DATE_INPUT") {
-          const elDom = document.getElementById(element.id);
-          elDom && elDom.remove();
+          // ! This two lines of codes is for removing the occasionally added duplicate elements
+          const elPar = document.getElementById(element.id)?.parentElement;
+          elPar && elPar.remove()
+
 
           const width = finding_percent(element, 'width');
 
@@ -1084,8 +1051,10 @@ const MidSection = React.forwardRef((props, ref) => {
           })
         }
         if (element.type === "SIGN_INPUT") {
-          const elDom = document.getElementById(element.id);
-          elDom && elDom.remove();
+          // ! This two lines of codes is for removing the occasionally added duplicate elements
+          const elPar = document.getElementById(element.id)?.parentElement;
+          elPar && elPar.remove()
+
 
           const width = finding_percent(element, 'width');
 
@@ -1120,8 +1089,10 @@ const MidSection = React.forwardRef((props, ref) => {
           })
         }
         if (element.type === "TABLE_INPUT") {
-          const elDom = document.getElementById(element.id);
-          elDom && elDom.remove();
+          // ! This two lines of codes is for removing the occasionally added duplicate elements
+          const elPar = document.getElementById(element.id)?.parentElement;
+          elPar && elPar.remove()
+
 
           const width = finding_percent(element, 'width');
 
@@ -1173,8 +1144,10 @@ const MidSection = React.forwardRef((props, ref) => {
 
         }
         if (element.type === "IFRAME_INPUT") {
-          const elDom = document.getElementById(element.id);
-          elDom && elDom.remove();
+          // ! This two lines of codes is for removing the occasionally added duplicate elements
+          const elPar = document.getElementById(element.id)?.parentElement;
+          elPar && elPar.remove()
+
 
           const width = finding_percent(element, 'width');
 
@@ -1209,8 +1182,10 @@ const MidSection = React.forwardRef((props, ref) => {
         }
 
         if (element.type === "BUTTON_INPUT") {
-          const elDom = document.getElementById(element.id);
-          elDom && elDom.remove();
+          // ! This two lines of codes is for removing the occasionally added duplicate elements
+          const elPar = document.getElementById(element.id)?.parentElement;
+          elPar && elPar.remove()
+
 
           const width = finding_percent(element, 'width');
 
@@ -1247,8 +1222,10 @@ const MidSection = React.forwardRef((props, ref) => {
           })
         }
         if (element.type === "PAYMENT_INPUT") {
-          const elDom = document.getElementById(element.id);
-          elDom && elDom.remove();
+          // ! This two lines of codes is for removing the occasionally added duplicate elements
+          const elPar = document.getElementById(element.id)?.parentElement;
+          elPar && elPar.remove()
+
 
           const width = finding_percent(element, 'width');
 
@@ -1285,8 +1262,10 @@ const MidSection = React.forwardRef((props, ref) => {
           })
         }
         if (element.type === "FORM") {
-          const elDom = document.getElementById(element.id);
-          elDom && elDom.remove();
+          // ! This two lines of codes is for removing the occasionally added duplicate elements
+          const elPar = document.getElementById(element.id)?.parentElement;
+          elPar && elPar.remove()
+
 
           const width = finding_percent(element, 'width');
 
@@ -1324,8 +1303,10 @@ const MidSection = React.forwardRef((props, ref) => {
         }
 
         if (element.type === "SCALE_INPUT") {
-          const elDom = document.getElementById(element.id);
-          elDom && elDom.remove();
+          // ! This two lines of codes is for removing the occasionally added duplicate elements
+          const elPar = document.getElementById(element.id)?.parentElement;
+          elPar && elPar.remove()
+
 
           const width = finding_percent(element, 'width');
 
@@ -1362,8 +1343,10 @@ const MidSection = React.forwardRef((props, ref) => {
         }
 
         if (element.type === "CAMERA_INPUT") {
-          const elDom = document.getElementById(element.id);
-          elDom && elDom.remove();
+          // ! This two lines of codes is for removing the occasionally added duplicate elements
+          const elPar = document.getElementById(element.id)?.parentElement;
+          elPar && elPar.remove()
+
 
           const width = finding_percent(element, 'width');
 
@@ -1399,8 +1382,10 @@ const MidSection = React.forwardRef((props, ref) => {
           })
         }
         if (element.type === "NEW_SCALE_INPUT") {
-          const elDom = document.getElementById(element.id);
-          elDom && elDom.remove();
+          // ! This two lines of codes is for removing the occasionally added duplicate elements
+          const elPar = document.getElementById(element.id)?.parentElement;
+          elPar && elPar.remove()
+
 
           const width = finding_percent(element, 'width');
 
@@ -1434,8 +1419,10 @@ const MidSection = React.forwardRef((props, ref) => {
         }
         // Limon
         if (element.type === "DROPDOWN_INPUT") {
-          const elDom = document.getElementById(element.id);
-          elDom && elDom.remove();
+          // ! This two lines of codes is for removing the occasionally added duplicate elements
+          const elPar = document.getElementById(element.id)?.parentElement;
+          elPar && elPar.remove()
+
 
           const width = finding_percent(element, 'width');
 
@@ -1471,8 +1458,10 @@ const MidSection = React.forwardRef((props, ref) => {
        
         // conteiner retrive data
         if (element.type === "CONTAINER_INPUT") {
-          const elDom = document.getElementById(element.id);
-          elDom && elDom.remove();
+          // ! This two lines of codes is for removing the occasionally added duplicate elements
+          const elPar = document.getElementById(element.id)?.parentElement;
+          elPar && elPar.remove()
+
 
           const width = finding_percent(element, 'width');
 
@@ -2094,10 +2083,8 @@ const MidSection = React.forwardRef((props, ref) => {
     allHolders.forEach((holder) => {
       if (holder.parentElement.id === 'midSection_container') {
         const el = holder.children[1]?.classList.contains('dropdownInput') ? holder.children[1] : holder.children[0];
-        const ratio = dimRatios.find(ratio => ratio.id === el.id);
 
-        // console.log('HOLDER: ', holder);
-        // console.log('all el: ', el);
+        const ratio = dimRatios.find(ratio => ratio?.id === el?.id);
 
         compsScaler(holder, ratio);
       }
@@ -2152,11 +2139,9 @@ const MidSection = React.forwardRef((props, ref) => {
   }, []);
 
   useEffect(() => {
-    if (data !== undefined) {
+    setProgress(progress + 50)
+    if (Object.keys(fetchedData).length) {
       onPost();
-
-
-
       //call this conditionally
       if (decoded && decoded?.details?.cluster === "socialmedia") {
         onParagraphPost()
@@ -2164,33 +2149,30 @@ const MidSection = React.forwardRef((props, ref) => {
       }
 
     }
-
-    return () => window.removeEventListener('resize', () => { })
-
-  }, [isDataRetrieved]);
+  }, [fetchedData]);
 
   useEffect(() => {
     // console.log('currMidSecWidth: ', currMidSecWidth);
-    if (data !== undefined) {
+    if (Object.keys(fetchedData).length) {
       window.onresize = () =>
         scaleMidSec();
     }
 
     return () => window.removeEventListener('resize', () => { })
 
-  }, [isDataRetrieved, currMidSecWidth])
+  }, [fetchedData, currMidSecWidth])
 
   useEffect(() => {
     // console.log('COMP RESIZER TRIGGERED');
-    if (isDataRetrieved && currMidSecWidth > 0) {
+    if (Object.keys(fetchedData).length && currMidSecWidth > 0) {
       if (!isFirstRender.current) {
         compsResizer();
       } else isFirstRender.current = false
     }
-  }, [currMidSecWidth, isDataRetrieved])
+  }, [currMidSecWidth, fetchedData])
 
   useEffect(() => {
-    if (isDataRetrieved && currMidSecWidth > 0) {
+    if (Object.keys(fetchedData).length && currMidSecWidth > 0) {
       const editSec = document.querySelector('.editSec_midSec');
 
       const editSecObserver = new MutationObserver((mutationLists) => {
@@ -2234,11 +2216,8 @@ const MidSection = React.forwardRef((props, ref) => {
 
       editSecObserver.observe(editSec, { childList: true, subtree: true })
     }
-
-
-
     // console.log('DIMENSION RATIOS: ', dimRatios);
-  }, [dimRatios, currMidSecWidth, isDataRetrieved])
+  }, [dimRatios, currMidSecWidth, fetchedData])
 
   return (
     <>
