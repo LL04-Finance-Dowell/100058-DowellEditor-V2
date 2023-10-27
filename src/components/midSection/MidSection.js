@@ -1289,10 +1289,13 @@ const MidSection = React.forwardRef((props, ref) => {
         }
         if (element.type === 'TABLE_INPUT') {
           // ! This two lines of codes is for removing the occasionally added duplicate elements
-          const elPar = document.getElementById(element.id)?.parentElement;
-          elPar && elPar.remove();
+          console.log('TABLE EL: ', element);
 
-          console.log('TableEl: ', element, elPar);
+          const elPar = element.id.includes('tab')
+            ? document.getElementById(element.id)?.parentElement
+            : document.getElementById(`tab${element.id.slice(1)}`)
+                ?.parentElement;
+          elPar && elPar.remove();
 
           const width = finding_percent(element, 'width');
 
@@ -1339,13 +1342,15 @@ const MidSection = React.forwardRef((props, ref) => {
             setRightSideDateMenu
           );
 
-          const tableInputs = document.querySelectorAll('.tableInput');
-          tableInputs[tableInputs.length - 1].id = `tab${tableInputs.length}`;
+          // const tableInputs = document.querySelectorAll('.tableInput');
+          // tableInputs[tableInputs.length - 1].id = `tab${tableInputs.length}`;
 
           // * This is to get the ratios of the dimensions of the element, to be used for resposiveness purposes
           iniDimRatio.push({
             type: element.type,
-            id: `tab${tableInputs.length}`,
+            id: element.id.includes('tab')
+              ? element.id
+              : `tab${element.id.slice(1)}`,
             top: parseFloat(measure.top) / midSecWidth,
             left: parseFloat(measure.left) / midSecWidth,
             width: parseFloat(measure.width) / midSecWidth,
@@ -2536,7 +2541,7 @@ const MidSection = React.forwardRef((props, ref) => {
         // console.log('DimRatios: ', dimRatios);
         // console.log('Ratio: ', ratio);
 
-        compsScaler(holder, ratio);
+        // compsScaler(holder, ratio);
       }
     });
   };
