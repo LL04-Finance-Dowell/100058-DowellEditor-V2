@@ -206,6 +206,40 @@ export const paypalCurrencyCodes = [
   {currency: "Brazilian real", code: "BRL"},
 ]
 
+export const FontFamily = [
+  {font: "Arial"},
+  {font: "Sans Serif"},
+  {font: "Comic Sans MS"},
+  {font: "Times New Roman"},
+  {font: "Courier New"},
+  {font: "Verdana"},
+  {font: "Trebuchet MS"},
+  {font: "Arial Black"},
+  {font: "Impact"},
+  {font: "Bookman"},
+  {font: "Garamond"},
+  {font: "Palatino"},
+  {font: "Georgia"},
+  {font: "Calibri"},
+  {font: "Helvetica"},
+  {font: "Open Sans"},
+  {font: "Century Gothic"},
+  {font: "Futura"},
+  {font: "Myriad Pro"},
+  {font: "Proxima Nova"},
+  {font: "Montserrat"},
+  {font: "Playfair Display"},
+  {font: "Baskerville"},
+  {font: "Rockwell"},
+  {font: "Franklin Gothic"},
+  {font: "Trade Gothic"},
+  {font: "Gotham"},
+  {font: "Univers"},
+  {font: "Copperplate Gothic"},
+  {font: "Optima"},
+  {font: "Didot"}
+]
+
 
 
 

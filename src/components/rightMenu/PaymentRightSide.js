@@ -194,7 +194,7 @@ const PaymentRightSide = () => {
             currency_code: currencyCode,
             callback_url: Base_URL + "/status",
         }
-        console.log("stripe data", stripeData);
+        // console.log("stripe data", stripeData);
         const form = e.currentTarget;
         if (form.checkValidity() === false) {
             e.preventDefault();
@@ -216,7 +216,7 @@ const PaymentRightSide = () => {
                         ['payment_id']: res.data.payment_id
                     }
                 })
-                console.log("payment response", res.data);
+                // console.log("payment response", res.data);
                 // setQrCode(resQR.data);
                 // console.log("QR code response", resQR.data);
                 setLoader(false)
