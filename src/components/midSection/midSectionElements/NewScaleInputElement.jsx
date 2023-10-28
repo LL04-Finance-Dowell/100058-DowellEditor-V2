@@ -1251,6 +1251,9 @@ function createNewScaleInputField(
       rightPercentArray.push(rightPercent);
       centerPercentArray.push(centerPercent);
 
+      scaleHold.style.height = "100%";
+      scaleText.style.display = "none"
+
       // let rateValue = document.createElement("button");
       // rateValue.className = "rate_name";
       // rateValue.textContent = "Rate";
@@ -1337,7 +1340,6 @@ function createNewScaleInputField(
         nameDiv.style.transform = "rotate(90deg)";
         nameDiv.style.paddingBottom = prodLength > 6 ? "30px" : "0px";
         inputPercent.style.width = "100%";
-        scaleText.style.marginBottom = "65px";
       }
 
       if (decoded.details.action === "document") {
