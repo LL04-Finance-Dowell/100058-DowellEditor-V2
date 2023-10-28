@@ -509,7 +509,7 @@ const Header = () => {
               tableTR.tr = newTableTR;
               allTableCCells.push(tableTR);
             }
-            console.log('allTableCCells', allTableCCells);
+            // console.log('allTableCCells', allTableCCells);
             return allTableCCells;
           }
           elem = {
@@ -750,7 +750,7 @@ const Header = () => {
           if (buttonText.length !== 0) {
             for (let i = 0; i < buttonText.length; i++) {
               emojiArr.push(buttonText[i].textContent);
-              console.log(buttonText[i].textContent);
+              // console.log(buttonText[i].textContent);
             }
           }
 

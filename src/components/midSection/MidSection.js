@@ -1289,8 +1289,6 @@ const MidSection = React.forwardRef((props, ref) => {
         }
         if (element.type === 'TABLE_INPUT') {
           // ! This two lines of codes is for removing the occasionally added duplicate elements
-          console.log('TABLE EL: ', element);
-
           const elPar = element.id.includes('tab')
             ? document.getElementById(element.id)?.parentElement
             : document.getElementById(`tab${element.id.slice(1)}`)
