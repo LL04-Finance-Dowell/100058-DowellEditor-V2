@@ -51,6 +51,7 @@ import CreatePyamentElement from "./createElements/CreatePyamentElement.jsx";
 import createPaymentInputField from "./midSectionElements/PaymentInputElement.jsx";
 import axios from "axios";
 import { toast } from "react-toastify";
+import handleSocialMediaAPI from "../../utils/handleSocialMediaAPI";
 // tHIS IS FOR A TEST COMMIT
 
 const dummyData = {
@@ -2318,45 +2319,100 @@ const MidSection = React.forwardRef((props, ref) => {
   // };
 
   const onParagraphPost = async () => {
-    const response = await axios.post("http://uxlivinglab.pythonanywhere.com/", {
-      // document_id: decoded.details.document_id,
-      // action: decoded.details.action,
-      // database: decoded.details.database,
-      // collection: decoded.details.collection,
-      // team_member_ID: decoded.details.team_member_ID,
-      // function_ID: decoded.details.function_ID,
-      // cluster: decoded.details.cluster,
-      // document: decoded.details.document,
-      // update_field: updateField,
+    // const response = await axios.post("http://uxlivinglab.pythonanywhere.com/", {
+    //   // document_id: decoded.details.document_id,
+    //   // action: decoded.details.action,
+    //   // database: decoded.details.database,
+    //   // collection: decoded.details.collection,
+    //   // team_member_ID: decoded.details.team_member_ID,
+    //   // function_ID: decoded.details.function_ID,
+    //   // cluster: decoded.details.cluster,
+    //   // document: decoded.details.document,
+    //   // update_field: updateField,
       
-      document_id: decoded.details._id,
-      action: decoded.details.action,
-      database: decoded.details.database,
-      collection: decoded.details.collection,
-      team_member_ID: decoded.details.team_member_ID,
-      function_ID: decoded.details.function_ID,
-      cluster: decoded.details.cluster,
-      field : {_id: "64e367eb3bc140afab90b3ec"},
-      command: "fetch",
-      document: decoded.details.document,
-      update_field: decoded.details.update_field,
-      platform: "bangalore",
-     
-    })
+    //   document_id: decoded.details._id,
+    //   action: decoded.details.action,
+    //   database: decoded.details.database,
+    //   collection: decoded.details.collection,
+    //   team_member_ID: decoded.details.team_member_ID,
+    //   function_ID: decoded.details.function_ID,
+    //   cluster: decoded.details.cluster,
+    //   field : {_id: "64e367eb3bc140afab90b3ec"},
+    //   command: "fetch",
+    //   document: decoded.details.document,
+    //   update_field: decoded.details.update_field,
+    //   platform: "bangalore",
+    // })
 
-    if (!response.data) {
-      toast.error("Something went wrong while fetching data!")
-      return;
-    }
+    // if (!response.data) {
+    //   toast.error("Something went wrong while fetching data!")
+    //   return;
+    // }
 
-    console.log("action: ", response.data);
+    const response = await handleSocialMediaAPI(decoded);
+
+    
+
+    // console.log("action: ", response.data);
 
     // console.log(JSON.parse(response.data))
     // console.log("social media data..", response.data)
 
-    const { title, image, paragraph } = JSON.parse(response.data)?.data[0] //title field
-    // console.log("social response", response.data.data);
+   
+
+
+   
+
+    const { title, image, paragraph} = JSON.parse(response.data)?.data[0] //title field
+
+
+
+    // const socialData = {
+    //   cluster: "socialmedia",
+    //   database: "socialmedia",
+    //   collection: "step4_data",
+    //   document: "step4_data",
+    //   team_member_ID: "1163",
+    //   function_ID: "ABCDE",
+    //   command: "insert",
+    //   eventId: eventId,
+    //   field: {
+    //     user_id: user_id,
+    //     session_id: session_id,
+    //     eventId: eventId,
+    //     client_admin_id: client_admin_id,
+    //     title: title,
+    //     paragraph: paragraph,
+    //     source: source,
+    //     qualitative_categorization: qualitative_categorization,
+    //     targeted_for: targeted_for,
+    //     designed_for: designed_for,
+    //     targeted_category: targeted_category,
+    //     image: image,
+    //     date: new Date(),
+    //     time: " ",
+    //     status: " "
+
+    //   },
+    //   update_field: {
+    //     order_nos: order_nos
+    //   },
+    //   "platform": "bangalore"
+    // }
+
+
+
+    
+    // const saveResponse = await axios.post("http://uxlivinglab.pythonanywhere.com/", socialData);
+    // console.log("save response data", saveResponse);
+
+    
+    // setSocialResponse(saveResponse);
+   
+    
+
     const curr_user = document.getElementById("curr_user");
+    
 
     const measure = {
       width: "300px",
@@ -2368,7 +2424,7 @@ const MidSection = React.forwardRef((props, ref) => {
     const holderDIV1 = getHolderDIV(measure);
 
     let titleLevel = document.createElement("div");
-    titleLevel.className = "textInput";
+    titleLevel.className = "textInput sm-title";
     titleLevel.innerText = "Title: \n";
     // titleLevel.style.border = "none";
     titleLevel.style.fontWeight = "900";
@@ -2411,7 +2467,7 @@ const MidSection = React.forwardRef((props, ref) => {
     const holderDIV2 = getHolderDIV(measure2);
 
     let descriptionLevel = document.createElement("div")
-    descriptionLevel.className = "textInput";
+    descriptionLevel.className = "textInput sm-paragraph";
     descriptionLevel.style.width = "100%";
     descriptionLevel.innerText = "Paragraph: ";
     descriptionLevel.style.fontWeight = 900;
@@ -2459,7 +2515,7 @@ const MidSection = React.forwardRef((props, ref) => {
 
 
     let imageField = document.createElement("div");
-    imageField.className = "imageInput";
+    imageField.className = "imageInput sm-image";
     imageField.id = "inputImg";
     imageField.style.width = "100%";
     imageField.style.height = "100%";
@@ -2534,6 +2590,7 @@ const MidSection = React.forwardRef((props, ref) => {
     imageButton.append(imgBtn);
     holderDIV3.append(imageField);
     holderDIV3.append(imageButton);
+    
 
     document
       .getElementById("midSection_container")
