@@ -1949,41 +1949,41 @@ const ScaleRightSide = () => {
 
       const emojiLabels = prepareEmojiLabels();
 
-      if (option.value === "Horizontal") {
-        button4.style.border = "block";
-        button4.style.display = "block";
-        button4.style.textAlign = "center";
-        button.style.alignItems = "center";
-        button.style.height = "85%";
-        button.style.width = "100%";
-        button.style.display = "flex";
-        button.style.flexDirection = "row";
-        button.style.justifyContent = "center";
-        button.style.position = "relative";
-        button.style.marginLeft = "0px";
-      }
+      // if (option.value === "Horizontal") {
+      //   button4.style.border = "block";
+      //   button4.style.display = "block";
+      //   button4.style.textAlign = "center";
+      //   button.style.alignItems = "center";
+      //   button.style.height = "85%";
+      //   button.style.width = "100%";
+      //   button.style.display = "flex";
+      //   button.style.flexDirection = "row";
+      //   button.style.justifyContent = "center";
+      //   button.style.position = "relative";
+      //   button.style.marginLeft = "0px";
+      // }
 
-      if (option.value === "Vertical") {
-        const orientation = document.createElement("h2");
-        orientation.className = "nps_lite_orientation";
-        orientation.textContent = "Vertical";
-        orientation.style.display = "none";
-        button4.appendChild(orientation);
+      // if (option.value === "Vertical") {
+      //   const orientation = document.createElement("h2");
+      //   orientation.className = "nps_lite_orientation";
+      //   orientation.textContent = "Vertical";
+      //   orientation.style.display = "none";
+      //   button4.appendChild(orientation);
 
-        button4.style.display = "flex";
-        button4.style.alignItems = "center";
-        button4.style.justifyContent = "center";
+      //   button4.style.display = "flex";
+      //   button4.style.alignItems = "center";
+      //   button4.style.justifyContent = "center";
         
-        button4.style.border = "none";
-        button4.style.textAlign = "center";
-        button.style.height = "auto";
-        button.style.width = "50%";
-        button.style.position = "absolute";
-        button.style.display = "flex";
-        button.style.flexDirection = "column";
-        button.style.alignItems = "center";
-        button.style.marginTop = "0";
-      }
+      //   button4.style.border = "none";
+      //   button4.style.textAlign = "center";
+      //   button.style.height = "auto";
+      //   button.style.width = "50%";
+      //   button.style.position = "absolute";
+      //   button.style.display = "flex";
+      //   button.style.flexDirection = "column";
+      //   button.style.alignItems = "center";
+      //   button.style.marginTop = "0";
+      // }
 
       if (
         idHolder.textContent === "scale Id" ||

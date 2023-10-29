@@ -1595,7 +1595,6 @@ const Header = () => {
     // setIsLoading(true);
     setIsButtonDisabled(true);
     const dataa = saveDocument();
-
     const finalize = document.getElementById("finalize-button");
 
     const completeProgressBar = document.getElementById("progress-100");
