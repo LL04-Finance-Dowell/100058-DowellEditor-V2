@@ -1473,10 +1473,7 @@ const ScaleRightSide = () => {
       ];
       let timeId = document.getElementById("timeId_stapel");
       let time = document.getElementById("time_stapel");
-      const upperVal = Math.min(
-        10,
-        parseInt(document.getElementById("upperVal").value, 10)
-      );
+      const upperVal = parseInt(document.getElementById("upperVal").value, 10)
       const spacing = parseInt(document.getElementById("spacing").value, 10);
 
       const scaleTypeHolder = document.createElement("h6");
