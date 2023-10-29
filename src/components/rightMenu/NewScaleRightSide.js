@@ -3044,6 +3044,11 @@ const ScaleRightSide = () => {
       const containerDiv = document.createElement("div");
       containerDiv.className = "label_hold";
 
+      button4.style.display = "flex";
+      button4.style.justifyContent = "center";
+      button4.style.alignItems = "center";
+      button4.style.height = "100%";
+
       let productNames = document.getElementById("product_count_label");
       let inputFields = productNames?.querySelectorAll("input");
 
@@ -3082,13 +3087,11 @@ const ScaleRightSide = () => {
             const success = res.data.success;
             var successObj = JSON.parse(success);
             const id = successObj.inserted_id;
-            // console.log(id);
             if (id.length) {
               setScaleId(id && id);
               const idHolder = scale?.querySelector(".scaleId");
               idHolder.textContent = id && id;
             }
-            // console.log(res);
 
             const {
               name,
@@ -3168,9 +3171,8 @@ const ScaleRightSide = () => {
                 scale?.querySelector(".orientation")?.remove();
                 button4.style.border = "block";
                 button4.style.textAlign = "center";
-                button.style.marginTop = "10px";
                 button.style.alignItems = "center";
-                button.style.height = "85%";
+                button.style.height = "100%";
                 button.style.width = "100%";
                 button.style.flexDirection = "row";
                 button.style.position = "relative";
@@ -3185,7 +3187,6 @@ const ScaleRightSide = () => {
                 button4.appendChild(orientation);
 
                 containerDiv.style.transform = "rotate(270deg)";
-                containerDiv.style.marginTop = "80px";
                 containerDiv.style.width = "100%";
                 inputPercent.style.marginTop = "20px";
                 nameDiv.style.position = "absolute";
@@ -3235,18 +3236,16 @@ const ScaleRightSide = () => {
               }
 
               scaleText.textContent = name;
+              scaleText.style.display = "none";
               button4.style.color = fontcolor;
               button4.style.fontFamily = fontstyle;
             }
           })
           .catch((err) => {
             setIsLoading(false);
-            // console.log(err);
           });
       } else {
         setIsLoading(true);
-        // console.log("PUT req");
-        // console.log(idHolder.textContent);
         Axios.put(
           "https://100035.pythonanywhere.com/percent-sum/percent-sum-settings",
           {
@@ -3271,8 +3270,6 @@ const ScaleRightSide = () => {
               sendMessage();
               setScaleData(res.data);
               setScaleId(scaleId);
-              // console.log(res);
-              // console.log("This is the still scale", scale);
 
               const {
                 name,
@@ -3354,7 +3351,7 @@ const ScaleRightSide = () => {
                   button4.style.textAlign = "center";
                   button.style.marginTop = "10px";
                   button.style.alignItems = "center";
-                  button.style.height = "85%";
+                  button.style.height = "100%";
                   button.style.width = "100%";
                   button.style.flexDirection = "row";
                   button.style.position = "relative";
@@ -3369,7 +3366,6 @@ const ScaleRightSide = () => {
                   button4.appendChild(orientation);
 
                   containerDiv.style.transform = "rotate(270deg)";
-                  containerDiv.style.marginTop = "80px";
                   containerDiv.style.width = "100%";
                   inputPercent.style.marginTop = "20px";
                   nameDiv.style.position = "absolute";
@@ -3426,7 +3422,6 @@ const ScaleRightSide = () => {
           })
           .catch((err) => {
             setIsLoading(false);
-            // console.log(err.message);
           });
       }
     } else if (
