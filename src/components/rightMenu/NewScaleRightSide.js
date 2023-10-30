@@ -44,8 +44,6 @@ const ScaleRightSide = () => {
   // const [addedAns, setAddedAns] = useState([])
   const { addedAns, setAddedAns } = useSelectedAnswer();
   const [inputStr, setInputStr] = useState("");
-  const [upperLimit, setUpperLimit] = useState("");
-  const [space, setSpace] = useState("");
   const [showPicker, setShowPicker] = useState(false);
   const [isSwitchEnabled, setIsSwitchEnabled] = useState(false);
   const [score, setScore] = useState(false);
@@ -92,8 +90,11 @@ const ScaleRightSide = () => {
   let fontFamilyStapel = scale?.querySelector(".newScaleInput");
   let stapelLeft = scale?.querySelector(".leftToolTip");
   let stapelRight = scale?.querySelector(".rightTooltip");
-  let stapelUpperimit = scale?.querySelector(".upper_scale_limit");
+  let stapelUpperLimit = scale?.querySelector(".upper_scale_limit");
   let stapelSpaceUnit = scale?.querySelector(".space_unit");
+
+  const [space, setSpace] = useState(stapelSpaceUnit ? Number(stapelSpaceUnit.textContent) : 0);
+  const [upperLimit, setUpperLimit] = useState(stapelUpperLimit ? Number(stapelUpperLimit.textContent) : 0);
   // =======
   // let fontColor = scale?.firstChild;
   const element = JSON.parse(sessionStorage.getItem("cutItem"));
@@ -1518,19 +1519,20 @@ const ScaleRightSide = () => {
         const emojiLabels = {};
         let j = 0;
         let valRange =
-          upperLimit % space !== 0
+        upperLimit % space !== 0
             ? Math.floor(upperLimit / space) * 2
             : upperLimit;
+            console.log("This is upp",  space);
         for (let i = valRange * -1; i <= valRange; i += spacing) {
           if (i !== 0) {
             const emojiIndex = j;
             emojiLabels[i] = emojis[emojiIndex];
             j++;
-            console.log(i);
-            console.log(Math.floor(upperLimit / space));
+            console.log("This is I",i);
+            console.log(Math.floor(Number(upperLimit) / Number(space)));
           }
         }
-
+        console.log("This is the scale",scale);
         return emojiLabels;
       };
       const emojiLabels = prepareEmojiLabels()
@@ -5686,7 +5688,7 @@ const ScaleRightSide = () => {
                         }}
                         id="upperVal"
                         onChange={(e) => setUpperLimit(e.target.value)}
-                        defaultValue={ stapelUpperimit ? Number(stapelUpperimit.textContent) : 0}
+                        defaultValue={upperLimit}
                         // onChange={upperValueChange}
                       />
                     </div>
@@ -5727,7 +5729,7 @@ const ScaleRightSide = () => {
                         id="spacing"
                         onChange={(e) => setSpace(e.target.value)}
                         // value={-upperVal}
-                        defaultValue={stapelSpaceUnit ? Number(stapelSpaceUnit.textContent) : 0}
+                        defaultValue={space}
                       />
                     </div>
                   </div>
