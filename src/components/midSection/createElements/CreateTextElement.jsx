@@ -2,13 +2,12 @@ import React, { useState } from 'react';
 import copyInput from '../CopyInput';
 
 // Regular JavaScript function to create a text input field
-function createTextElement(holderDIV, focuseddClassMaintain, handleClicked, setSidebar, getOffset) {
+function createTextElement(holderDIV, focuseddClassMaintain, handleClicked, setSidebar, getOffset, copy_data = false) {
   let inputField = document.createElement("div");
   //  inputField.setAttribute('draggable', true);
   inputField.setAttribute("contenteditable", true);
   inputField.className = "textInput";
-  inputField.classList.add('empty');
-  inputField.textContent = "Enter text here!";
+  inputField.placeholder = "Enter text here";
   inputField.style.width = "100%";
   inputField.style.height = "100%";
   inputField.style.resize = "none";
@@ -19,7 +18,13 @@ function createTextElement(holderDIV, focuseddClassMaintain, handleClicked, setS
   inputField.style.position = "relative";
   inputField.style.cursor = "text";
 
-  holderDIV.style.height = '180px';
+  inputField.textContent = 'Enter text here!';
+  inputField.classList.add('empty')
+
+  // holderDIV.style.height = '130px';
+  if (copy_data) {
+    inputField.innerText = copy_data
+  }
 
   inputField.onfocus = () => {
     if (inputField.textContent === 'Enter text here!') {
@@ -66,5 +71,6 @@ function createTextElement(holderDIV, focuseddClassMaintain, handleClicked, setS
     setSidebar(true);
   };
   holderDIV.append(inputField);
+  return holderDIV;
 }
 export default createTextElement;

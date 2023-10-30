@@ -20,6 +20,8 @@ import { downloadPDF } from "../../utils/genratePDF.js";
 import generateImage from "../../utils/generateImage.js";
 import RejectionModal from "../modals/RejectionModal.jsx";
 
+import ProgressLoader from "../../utils/progressLoader/ProgressLoader"
+
 const Header = () => {
   const inputRef = useRef(null);
   const componentRef = useRef(null);
@@ -106,13 +108,19 @@ const Header = () => {
     containerBorderColor,
     setContainerBorderColor,
     questionAndAnswerGroupedData,
-    allowHighlight, setAllowHighlight,
-    docMapRequired, setDocMapRequired
+    allowHighlight,
+    setAllowHighlight,
+    docMapRequired,
+    setDocMapRequired,
+    fixedMidSecDim,
+    progress,
+    setProgress
   } = useStateContext();
 
   const [printContent, setPrintContent] = useState(false);
-  const [rejectionMsg, setRejectionMsg] = useState('');
-  const [isOpenRejectionModal, setIsOpenRejectionModal] = useState(false)
+  const [rejectionMsg, setRejectionMsg] = useState("");
+  const [isOpenRejectionModal, setIsOpenRejectionModal] = useState(false);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
   const handleOptions = () => {
     setIsMenuVisible(!isMenuVisible);
@@ -184,30 +192,8 @@ const Header = () => {
 
   // Adding a new branch comment
 
-  function getPosition(el) {
-    const midSec = document.getElementById("midSection_container");
-
-    const rect = el.getBoundingClientRect();
-    console.log("rect position from header", rect);
-    const midsectionRect = midSec.getBoundingClientRect();
-    console.log("midsectionRect position from header", midsectionRect);
 
 
-    return {
-      top:
-        rect.top > 0
-          ? Math.abs(midsectionRect.top)
-          : rect.top - midsectionRect.top,
-      left: window.innerWidth<993 ? (((rect.left*794)/midsectionRect.width) - midsectionRect.left) : rect.left - midsectionRect.left,
-      // left:rect.left - midsectionRect.left,
-      bottom: rect.bottom,
-      right: rect.right,
-      width: window.innerWidth<993 ? ((rect.width*794)/midsectionRect.width) : rect.width,
-      height: rect.height,
-    };
-  }
-
-  let contentFile = [];
   let page = [{}];
 
   for (let i = 1; i <= item?.length; i++) {
@@ -227,20 +213,7 @@ const Header = () => {
     }
   };
 
-  const findPaageNum = (element) => {
-    let targetParent = element;
-    let pageNum = null;
-    while (1) {
-      if (targetParent.classList.contains("midSection_container")) {
-        targetParent = targetParent;
-        break;
-      } else {
-        targetParent = targetParent.parentElement;
-      }
-    }
-    pageNum = targetParent.innerText.split("\n")[0];
-    return pageNum;
-  };
+
 
   function savingTableData() {
     const tables = document.getElementsByClassName("tableInput");
@@ -255,9 +228,91 @@ const Header = () => {
     }
   }
 
-  let elem = {};
+  // * saveDocument function is at the end of the page
   function saveDocument() {
     const txt = document.getElementsByClassName("textInput");
+    let elem = {};
+    let contentFile = [];
+
+    function getPosition(el, childEl = false) {
+      const midSec = document.getElementById("midSection_container");
+      const midSecAll = document.querySelectorAll('.midSection_container');
+      const rect = el.getBoundingClientRect();
+
+      if (!childEl) {
+        const page = Number([...el.classList].find(cl => cl.includes('page')).split('_')[1]);
+        const midsectionRect = midSecAll[page - 1].getBoundingClientRect();
+        const width = window.innerWidth < 993
+          ? (rect.width * fixedMidSecDim.width) / midsectionRect.width
+          : rect.width
+
+        const height = window.innerWidth < 993 ?
+          (rect.height / rect.width) * width
+          : rect.height;
+
+        const top = window.innerWidth < 993 ?
+          ((rect.top - midsectionRect.top) / rect.width) * width
+          : rect.top - midsectionRect.top;
+
+        const left = window.innerWidth < 993
+          ? ((rect.left - midsectionRect.left) / midsectionRect.width) * fixedMidSecDim.width
+          : rect.left - midsectionRect.left
+
+        return {
+          top,
+          left,
+          bottom: rect.bottom,
+          right: rect.right,
+          width,
+          height,
+        };
+      }
+
+
+      const midsectionRect = midSec.getBoundingClientRect();
+
+      return {
+        top:
+          rect.top > 0
+            ? Math.abs(midsectionRect.top)
+            : rect.top - midsectionRect.top,
+        left:
+          window.innerWidth < 993
+            ? (rect.left * 793.7007874) / midsectionRect.width -
+            midsectionRect.left
+            : rect.left - midsectionRect.left,
+        // left:rect.left - midsectionRect.left,
+        bottom: rect.bottom,
+        right: rect.right,
+        width:
+          window.innerWidth < 993
+            ? (rect.width * 793.7007874) / midsectionRect.width
+            : rect.width,
+        // height: rect.height,
+        height:
+          window.innerWidth < 993
+            ? (rect.width / rect.height) * rect.height
+            : rect.height,
+      };
+
+
+    }
+
+    const findPaageNum = (element) => {
+      let targetParent = element;
+      let pageNum = null;
+      while (1) {
+        if (targetParent.classList.contains("midSection_container")) {
+          targetParent = targetParent;
+          break;
+        } else {
+          targetParent = targetParent.parentElement;
+        }
+      }
+      pageNum = targetParent.innerText.split("\n")[0];
+      return pageNum;
+    };
+
     if (txt.length) {
       for (let h = 0; h < txt.length; h++) {
         if (
@@ -273,7 +328,8 @@ const Header = () => {
             width: tempPosn.width,
             height: tempPosn.height,
             top: tempPosn.top,
-            topp: txt[h].parentElement.style.top,
+            // topp: txt[h].parentElement.style.top,
+            topp: tempPosn.top,
             left: tempPosn.left,
             type: "TEXT_INPUT",
             data: txt[h].innerText,
@@ -284,7 +340,7 @@ const Header = () => {
           };
 
           const pageNum = findPaageNum(txt[h]);
-          page[0][pageNum].push(elem);
+          page[0][pageNum]?.push(elem);
         }
       }
     }
@@ -315,12 +371,13 @@ const Header = () => {
             width: tempPosn.width,
             height: tempPosn.height,
             top: tempPosn.top,
-            topp: img[h].parentElement.style.top,
+            // topp: img[h].parentElement.style.top,
+            topp: tempPosn.top,
             left: tempPosn.left,
             type: "IMAGE_INPUT",
             data: dataName,
             border: `${borderSize}px dotted ${borderColor}`,
-            imgBorder:img[h].parentElement.style.border,
+            imgBorder: img[h].parentElement.style.border,
             id: `i${h + 1}`,
           };
 
@@ -345,7 +402,8 @@ const Header = () => {
             width: tempPosn.width,
             height: tempPosn.height,
             top: tempPosn.top,
-            topp: date[h].parentElement.style.top,
+            // topp: date[h].parentElement.style.top,
+            topp: tempPosn.top,
             left: tempPosn.left,
             type: "DATE_INPUT",
             border: `${calendarBorderSize} dotted ${calendarBorderColor}`,
@@ -355,7 +413,7 @@ const Header = () => {
           };
 
           const pageNum = findPaageNum(date[h]);
-          page[0][pageNum].push(elem);
+          page[0][pageNum]?.push(elem);
         }
       }
     }
@@ -376,21 +434,23 @@ const Header = () => {
             width: tempPosn.width,
             height: tempPosn.height,
             top: tempPosn.top,
-            topp: sign[h].parentElement.style.top,
+            // topp: sign[h].parentElement.style.top,
+            topp: tempPosn.top,
             left: tempPosn.left,
             type: "SIGN_INPUT",
             border: `${signBorderSize} dotted ${signBorderColor}`,
             signBorder: sign[h].parentElement.style.border,
-            data:
-              sign[h].firstElementChild === null
-                ? // decoded.details.action === "document"
-                sign[h].innerHTML
-                : sign[h].firstElementChild.src,
+            // data:
+            //   sign[h].firstElementChild === null
+            //     ? // decoded.details.action === "document"
+            //     sign[h].innerHTML
+            //     : sign[h].firstElementChild.src,
+            data:sign[h].innerHTML,
             id: `s${h + 1}`,
           };
 
           const pageNum = findPaageNum(sign[h]);
-          page[0][pageNum].push(elem);
+          page[0][pageNum]?.push(elem);
         }
       }
     }
@@ -416,13 +476,16 @@ const Header = () => {
               for (let j = 0; j < tableChildren[i].children.length; j++) {
                 // const element = tableChildren[i];
 
-                const childNodes = tableChildren[i].children[j]?.childNodes
-                const tdElement = []
-                childNodes.forEach(child => {
-                  if (!child.classList.contains("row-resizer") && !child.classList.contains("td-resizer")) {
+                const childNodes = tableChildren[i].children[j]?.childNodes;
+                const tdElement = [];
+                childNodes.forEach((child) => {
+                  if (
+                    !child.classList.contains("row-resizer") &&
+                    !child.classList.contains("td-resizer")
+                  ) {
                     tdElement.push(child);
                   }
-                })
+                });
                 const TdDivClassName = tdElement[0]?.className.split(" ")[0];
                 const trChild = {
                   td: {
@@ -437,9 +500,10 @@ const Header = () => {
                         ? tableChildren[i].children[j]?.firstElementChild.style
                           .backgroundImage
                         : tdElement[0]?.innerHTML,
-                    id: TdDivClassName == "imageInput"
-                      ? tableChildren[i].children[j]?.id
-                      : tdElement[0]?.id,
+                    id:
+                      TdDivClassName == "imageInput"
+                        ? tableChildren[i].children[j]?.id
+                        : tdElement[0]?.id,
                   },
                 };
                 newTableTR.push(trChild);
@@ -454,7 +518,8 @@ const Header = () => {
             width: tempPosn.width,
             height: tempPosn.height,
             top: tempPosn.top,
-            topp: tables[t].parentElement.style.top,
+            // topp: tables[t].parentElement.style.top,
+            topp: tempPosn.top,
             left: tempPosn.left,
             type: "TABLE_INPUT",
             data: getChildData(),
@@ -463,7 +528,7 @@ const Header = () => {
             id: tables[t].firstElementChild.id,
           };
           const pageNum = findPaageNum(tables[t]);
-          page[0][pageNum].push(elem);
+          page[0][pageNum]?.push(elem);
         }
       }
     }
@@ -485,7 +550,7 @@ const Header = () => {
             for (let i = 0; i < containerChildren.length; i++) {
               const element = containerChildren[i];
 
-              let tempPosnChild = getPosition(element);
+              let tempPosnChild = getPosition(element, true);
               const containerChildClassName =
                 containerChildren[i].firstElementChild?.className.split(" ")[0];
               const childData = {};
@@ -549,7 +614,7 @@ const Header = () => {
                 childData.raw_data = element.firstElementChild?.innerHTML;
               }
 
-              childData.id = `${containerChildClassName[0]}${h + 1}`;
+              childData.id = `${containerChildClassName?.[0]}${h + 1}`;
               allContainerChildren.push(childData);
             }
 
@@ -559,7 +624,8 @@ const Header = () => {
             width: tempPosn.width,
             height: tempPosn.height,
             top: tempPosn.top,
-            topp: containerElements[h].parentElement.style.top,
+            // topp: containerElements[h].parentElement.style.top,
+            topp: tempPosn.top,
             left: tempPosn.left,
             type: "CONTAINER_INPUT",
             border: `${containerBorderSize} dotted ${containerBorderColor}`,
@@ -569,7 +635,7 @@ const Header = () => {
           };
 
           const pageNum = findPaageNum(containerElements[h]);
-          page[0][pageNum].push(elem);
+          page[0][pageNum]?.push(elem);
         }
       }
     }
@@ -588,7 +654,8 @@ const Header = () => {
             width: tempPosn.width,
             height: tempPosn.height,
             top: tempPosn.top,
-            topp: iframes[i].parentElement.style.top,
+            // topp: iframes[i].parentElement.style.top,
+            topp: tempPosn.top,
             left: tempPosn.left,
             type: "IFRAME_INPUT",
             border: `${iframeBorderSize} dotted ${iframeBorderColor}`,
@@ -600,7 +667,7 @@ const Header = () => {
           };
 
           const pageNum = findPaageNum(iframes[i]);
-          page[0][pageNum].push(elem);
+          page[0][pageNum]?.push(elem);
         }
       }
     }
@@ -620,7 +687,8 @@ const Header = () => {
             width: tempPosn.width,
             height: tempPosn.height,
             top: tempPosn.top,
-            topp: scales[s].parentElement.style.top,
+            // topp: scales[s].parentElement.style.top,
+            topp: tempPosn.top,
             left: tempPosn.left,
             type: "SCALE_INPUT",
             border: `${scaleBorderSize} dotted ${scaleBorderColor}`,
@@ -636,7 +704,7 @@ const Header = () => {
           };
 
           const pageNum = findPaageNum(scales[s]);
-          page[0][pageNum].push(elem);
+          page[0][pageNum]?.push(elem);
         }
       }
     }
@@ -663,7 +731,14 @@ const Header = () => {
           let scaleID = newScales[b].querySelector(".scaleId");
           let orentation = newScales[b].querySelector(".nps_vertical");
           let otherComponent = newScales[b].querySelector(".otherComponent");
-          console.log(font);
+          let smallBox = newScales[b].querySelector(".small_box");
+          let leftLableStapel = newScales[b].querySelector(".leftToolTip");
+          let rightLableStapel = newScales[b].querySelector(".rightTooltip");
+          let stapelEmojiObj = newScales[b].querySelector(".stapelEmojiObj");
+          let stapelUpperimit = newScales[b].querySelector(".upper_scale_limit");
+          let spaceUnit = newScales[b].querySelector(".space_unit");
+          // let stapelScaleField = newScales[b].querySelector(".newScaleInput");
+          // console.log(font);
 
           let buttonText = newScales[b].querySelectorAll(".circle_label");
           // console.log(buttonText);
@@ -673,6 +748,7 @@ const Header = () => {
           if (buttonText.length !== 0) {
             for (let i = 0; i < buttonText.length; i++) {
               emojiArr.push(buttonText[i].textContent);
+              console.log(buttonText[i].textContent)
             }
           }
 
@@ -686,7 +762,7 @@ const Header = () => {
               ".stapelOptionHolder"
             );
             stapelScaleArray = newScales[b].querySelector(".stapelScaleArray");
-            console.log("This is the saved stapel", stapelScaleArray);
+            // console.log("This is the saved stapel", stapelScaleArray);
           }
 
           let npsLiteTextArray = "";
@@ -694,7 +770,7 @@ const Header = () => {
 
           if (scaleType.textContent === "nps_lite") {
             npsLiteTextArray = newScales[b].querySelector(".nps_lite_text");
-            orientation = newScales[b].querySelector(".orientation");
+            orientation = newScales[b].querySelector(".nps_lite_orientation");
           }
 
           let likertScaleArray = "";
@@ -704,17 +780,17 @@ const Header = () => {
               ".likert_Scale_Array"
             );
             orientation = newScales[b].querySelector(".orientation");
-            console.log("This is likert", likertScaleArray.textContent);
+            // console.log("This is likert", likertScaleArray.textContent);
           }
 
           let pairedScaleArray = "";
 
           if (scaleType.textContent === "comparison_paired_scale") {
-            likertScaleArray = newScales[b].querySelector(
+            pairedScaleArray = newScales[b].querySelector(
               ".paired_Scale_Array"
             );
             orientation = newScales[b].querySelector(".orientation");
-            console.log("This is likert", pairedScaleArray.textContent);
+            // console.log("This is likert", pairedScaleArray.textContent);
           }
 
           let percentBackground = "";
@@ -732,7 +808,7 @@ const Header = () => {
             percentBackground = newScales[b].querySelector(".percent-slider");
             percentLabel = newScales[b]?.querySelector(".label_hold").children;
             percentContainer = newScales[b]?.querySelectorAll(".containerDIV");
-            console.log(percentLabel);
+            // console.log(percentLabel);
 
             percentContainer.forEach((elem) => {
               prodName.push(elem.querySelector(".product_name")?.textContent);
@@ -750,12 +826,12 @@ const Header = () => {
             orientation = newScales[b].querySelector(".orientation");
           }
           let properties = {
-            scaleBgColor: scaleBg.style.backgroundColor,
-            fontColor: font.style.color,
-            fontFamily: font.style.fontFamily,
-            left: leftChild.textContent,
-            center: neutralChild.textContent,
-            right: rightChild.textContent,
+            scaleBgColor: scaleBg ? scaleBg.style.backgroundColor : newScales[0].style.backgroundColor,
+            fontColor: font ? font.style.color : newScales[0].style.color,
+            fontFamily: font ? font.style.fontFamily : newScales[0].style.fontFamily,
+            left: leftChild ? leftChild.textContent : leftLableStapel.textContent,
+            center: neutralChild ? neutralChild.textContent : "",
+            right: rightChild ? rightChild.textContent : rightLableStapel.textContent,
             buttonColor: circles?.style?.backgroundColor,
             scaleID: scaleID.textContent,
             scaleText: scaleText.textContent,
@@ -765,6 +841,7 @@ const Header = () => {
             stapelScaleArray: stapelScaleArray.textContent,
             npsLiteTextArray: npsLiteTextArray.textContent,
             likertScaleArray: likertScaleArray.textContent,
+            pairedScaleArray: pairedScaleArray.textContent,
             percentProdName: prodName,
             percentBackground: percentBackground?.style?.background,
             percentLabel: percentLabel?.length,
@@ -775,14 +852,19 @@ const Header = () => {
             orientation: orientation?.textContent,
             orentation: orentation?.textContent,
             stapelOrientation: stapelOrientation?.textContent,
-            otherComponent: otherComponent.textContent,
+            otherComponent: otherComponent ? otherComponent.textContent : "",
+            smallBoxBgColor: smallBox?.style?.backgroundColor,
+            stapelEmojiObj: stapelEmojiObj?.textContent,
+            stapelUpperimit: stapelUpperimit?.textContent,
+            spaceUnit: spaceUnit?.textContent
           };
           // console.log(properties);
           elem = {
             width: tempPosn.width,
             height: tempPosn.height,
             top: tempPosn.top,
-            topp: newScales[b].parentElement.style.top,
+            // topp: newScales[b].parentElement.style.top,
+            topp: tempPosn.top,
             left: tempPosn.left,
             type: "NEW_SCALE_INPUT",
             data: `${title}_scale_${b + 1}`,
@@ -799,7 +881,7 @@ const Header = () => {
 
           // console.log(elem);
           const pageNum = findPaageNum(newScales[b]);
-          page[0][pageNum].push(elem);
+          page[0][pageNum]?.push(elem);
         }
       }
     }
@@ -828,7 +910,8 @@ const Header = () => {
             width: tempPosn.width,
             height: tempPosn.height,
             top: tempPosn.top,
-            topp: imageCanva[b].parentElement.style.top,
+            // topp: imageCanva[b].parentElement.style.top,
+            topp: tempPosn.top,
             left: tempPosn.left,
             type: "CAMERA_INPUT",
             raw_data: properties,
@@ -836,7 +919,7 @@ const Header = () => {
           };
           // console.log(elem);
           const pageNum = findPaageNum(imageCanva[b]);
-          page[0][pageNum].push(elem);
+          page[0][pageNum]?.push(elem);
         }
       }
     }
@@ -852,12 +935,12 @@ const Header = () => {
           let tempElem = buttons[b].parentElement;
           let tempPosn = getPosition(tempElem);
           const link = buttonLink;
-
           elem = {
             width: tempPosn.width,
             height: tempPosn.height,
             top: tempPosn.top,
-            topp: buttons[b].parentElement.style.top,
+            // topp: buttons[b].parentElement.style.top,
+            topp: tempPosn.top,
             left: tempPosn.left,
             type: "BUTTON_INPUT",
             buttonBorder: `${buttonBorderSize}px dotted ${buttonBorderColor}`,
@@ -868,7 +951,7 @@ const Header = () => {
           };
 
           const pageNum = findPaageNum(buttons[b]);
-          page[0][pageNum].push(elem);
+          page[0][pageNum]?.push(elem);
         }
       }
     }
@@ -882,13 +965,13 @@ const Header = () => {
         ) {
           let tempElem = payments[p].parentElement;
           let tempPosn = getPosition(tempElem);
-          const link = buttonLink;
 
           elem = {
             width: tempPosn.width,
             height: tempPosn.height,
             top: tempPosn.top,
-            topp: payments[p].parentElement.style.top,
+            // topp: payments[p].parentElement.style.top,
+            topp: tempPosn.top,
             left: tempPosn.left,
             type: "PAYMENT_INPUT",
             buttonBorder: `${buttonBorderSize}px dotted ${buttonBorderColor}`,
@@ -898,9 +981,9 @@ const Header = () => {
             id: `pay${p + 1}`,
           };
 
-          console.log("raw_data", elem.raw_data);
+          // console.log("raw_data", elem.raw_data);
           const pageNum = findPaageNum(payments[p]);
-          page[0][pageNum].push(elem);
+          page[0][pageNum]?.push(elem);
         }
       }
     }
@@ -925,7 +1008,8 @@ const Header = () => {
             width: tempPosn.width,
             height: tempPosn.height,
             top: tempPosn.top,
-            topp: dropDowns[d].parentElement.style.top,
+            // topp: dropDowns[d].parentElement.style.top,
+            topp: tempPosn.top,
             left: tempPosn.left,
             type: "DROPDOWN_INPUT",
             border: `${dropdownBorderSize} dotted ${dropdownBorderColor}`,
@@ -937,7 +1021,7 @@ const Header = () => {
           };
 
           const pageNum = findPaageNum(dropDowns[d]);
-          page[0][pageNum].push(elem);
+          page[0][pageNum]?.push(elem);
         }
       }
     }
@@ -949,19 +1033,26 @@ const Header = () => {
           let tempElem = emails[e].parentElement;
           let tempPosn = getPosition(tempElem);
 
+          const emailDataDiv = tempElem.querySelector('.emailDataHolder_holder');
+          const emailSenderData = emailDataDiv.querySelector('.emailSenderDataHolder_holder')?.innerText;
+
+
+
           elem = {
             width: tempPosn.width,
             height: tempPosn.height,
             top: tempPosn.top,
-            topp: emails[e].parentElement.style.top,
+            // topp: emails[e].parentElement.style.top,
+            topp: tempPosn.top,
             left: tempPosn.left,
             type: "FORM",
             data: emails[e].textContent,
+            emailData: emailSenderData,
             id: `eml${e + 1}`,
           };
 
           const pageNum = findPaageNum(emails[e]);
-          page[0][pageNum].push(elem);
+          page[0][pageNum]?.push(elem);
         }
       }
     }
@@ -986,16 +1077,12 @@ const Header = () => {
   const finalDocName = decoded?.details?.update_field.document_name;
   const docRight = decoded?.details?.document_right;
 
-
-
-
   const element_updated_length =
     document.getElementsByClassName("element_updated")?.length;
   const document_map_required = docMap?.filter((item) => item.required);
 
   // ? This "if" condition is to prevent code from running, everytime Header.js renders
   // if (!docMapRequired?.length) setDocMapRequired(document_map_required)
-
 
   useEffect(() => {
     if (document_map_required?.length > 0) {
@@ -1009,7 +1096,7 @@ const Header = () => {
 
   function handleFinalizeButton() {
     const username = decoded?.details?.authorized;
-    console.log(username);
+    // console.log(username);
 
     function generateLoginUser() {
       return "user_" + Math.random().toString(36).substring(7);
@@ -1023,18 +1110,18 @@ const Header = () => {
     let scaleElements = document.querySelectorAll(".newScaleInput");
 
     const documentResponses = [];
-    console.log(scaleElements);
+    // console.log(scaleElements);
 
     scaleElements.forEach((scale) => {
-      console.log(scale);
+      // console.log(scale);
       const scaleId = scale?.querySelector(".scaleId")?.textContent;
       const holdElem = scale?.querySelector(".holdElem")?.textContent;
 
       documentResponses.push({ scale_id: scaleId, score: holdElem });
     });
 
-    console.log(generateLoginUser());
-    console.log(documentResponses);
+    // console.log(generateLoginUser());
+    // console.log(documentResponses);
 
     const requestBody = {
       process_id: decoded.details.process_id,
@@ -1072,19 +1159,20 @@ const Header = () => {
       .then((response) => {
         if (response.status === 200) {
           setIsLoading(false);
+          setProgress(progress + 50)
           var responseData = response.data;
           setScaleData(responseData);
-          console.log(response);
+          // console.log(response);
         }
       })
       .catch(function (error) {
-        console.log(error);
+        // console.log(error);
       });
   }
 
   function handleFinalizeButtonStapel() {
     const username = decoded?.details?.authorized;
-    console.log(username);
+    // console.log(username);
 
     function generateLoginUser() {
       return "user_" + Math.random().toString(36).substring(7);
@@ -1098,20 +1186,20 @@ const Header = () => {
     let scaleElements = document.querySelectorAll(".newScaleInput");
 
     const documentResponses = [];
-    console.log(scaleElements);
+    // console.log(scaleElements);
 
     scaleElements.forEach((scale) => {
-      console.log(scale);
+      // console.log(scale);
       const scaleId = scale?.querySelector(".scaleId")?.textContent;
       const holdElem = scale?.querySelector(".holdElem")?.textContent;
 
       documentResponses.push({ scale_id: scaleId, score: parseInt(holdElem) });
     });
 
-    console.log("This is stapel_res", documentResponses);
+    // console.log("This is stapel_res", documentResponses);
 
-    console.log(generateLoginUser());
-    console.log(documentResponses);
+    // console.log(generateLoginUser());
+    // console.log(documentResponses);
 
     const requestBody = {
       process_id: decoded.details.process_id,
@@ -1148,19 +1236,20 @@ const Header = () => {
       .then((response) => {
         if (response.status === 200) {
           setIsLoading(false);
+          setProgress(progress + 50)
           var responseData = response.data;
           setScaleData(responseData);
-          console.log(response);
+          // console.log(response);
         }
       })
       .catch(function (error) {
-        console.log(error);
+        // console.log(error);
       });
   }
 
   function handleFinalizeButtonNpsLite() {
     const username = decoded?.details?.authorized;
-    console.log(username);
+    // console.log(username);
 
     function generateLoginUser() {
       return "user_" + Math.random().toString(36).substring(7);
@@ -1178,7 +1267,7 @@ const Header = () => {
     let documentResponses = [];
 
     scaleElements.forEach((scale) => {
-      console.log(scale);
+      // console.log(scale);
       scaleId = scale?.querySelector(".scaleId")?.textContent;
       holdElem = scale?.querySelector(".holdElem")?.textContent;
 
@@ -1190,7 +1279,7 @@ const Header = () => {
             : holdElem,
       });
     });
-    console.log("This is docresp", documentResponses);
+    // console.log("This is docresp", documentResponses);
 
     const requestBody = {
       process_id: decoded.details.process_id,
@@ -1227,20 +1316,21 @@ const Header = () => {
       .then((response) => {
         if (response.status === 200) {
           setIsLoading(false);
+          setProgress(progress + 50)
           var responseData = response.data;
           setScaleData(responseData);
-          console.log(response);
+          // console.log(response);
         }
       })
       .catch(function (error) {
-        console.log(error);
+        // console.log(error);
       });
   }
 
   function handleFinalizeButtonLikert() {
     localStorage.setItem("hideFinalizeButton", "true");
     const username = decoded?.details?.authorized;
-    console.log(username);
+    // console.log(username);
 
     function generateLoginUser() {
       return "user_" + Math.random().toString(36).substring(7);
@@ -1256,18 +1346,18 @@ const Header = () => {
     let scaleId;
     let holdElem;
     let documentResponses = [];
-    console.log(scaleElements);
+    // console.log(scaleElements);
 
     scaleElements.forEach((scale) => {
-      console.log(scale);
+      // console.log(scale);
       scaleId = scale?.querySelector(".scaleId")?.textContent;
       holdElem = scale?.querySelector(".holdElem")?.textContent;
 
       documentResponses.push({ scale_id: scaleId, score: holdElem });
     });
 
-    console.log(generateLoginUser());
-    console.log(documentResponses);
+    // console.log(generateLoginUser());
+    // console.log(documentResponses);
 
     const requestBody = {
       process_id: decoded.details.process_id,
@@ -1304,19 +1394,20 @@ const Header = () => {
       .then((response) => {
         if (response.status === 200) {
           setIsLoading(false);
+          setProgress(progress + 50)
           var responseData = response.data;
           setScaleData(responseData);
-          console.log(response);
+          // console.log(response);
         }
       })
       .catch(function (error) {
-        console.log(error);
+        // console.log(error);
       });
   }
 
   function handleFinalizeButtonPercent() {
     const username = decoded?.details?.authorized;
-    console.log(username);
+    // console.log(username);
 
     function generateLoginUser() {
       return "user_" + Math.random().toString(36).substring(7);
@@ -1354,10 +1445,10 @@ const Header = () => {
 
     // Convert the Set back to an array if needed
     const documentResponsesArray = Array.from(documentResponses);
-    console.log(documentResponsesArray);
+    // console.log(documentResponsesArray);
 
-    console.log(generateLoginUser());
-    console.log(documentResponses);
+    // console.log(generateLoginUser());
+    // console.log(documentResponses);
 
     const requestBody = {
       process_id: decoded.details.process_id,
@@ -1395,19 +1486,20 @@ const Header = () => {
       .then((response) => {
         if (response.status === 200) {
           setIsLoading(false);
+          setProgress(progress + 50)
           var responseData = response.data;
           setScaleData(responseData);
-          console.log(response);
+          // console.log(response);
         }
       })
       .catch(function (error) {
-        console.log(error);
+        // console.log(error);
       });
   }
 
   function handleFinalizeButtonPercentSum() {
     const username = decoded?.details?.authorized;
-    console.log(username);
+    // console.log(username);
 
     function generateLoginUser() {
       return "user_" + Math.random().toString(36).substring(7);
@@ -1445,10 +1537,10 @@ const Header = () => {
 
     // Convert the Set back to an array if needed
     const documentResponsesArray = Array.from(documentResponses);
-    console.log(documentResponsesArray);
+    // console.log(documentResponsesArray);
 
-    console.log(generateLoginUser());
-    console.log(documentResponses);
+    // console.log(generateLoginUser());
+    // console.log(documentResponses);
 
     const requestBody = {
       process_id: decoded.details.process_id,
@@ -1479,7 +1571,7 @@ const Header = () => {
       _id: decoded.details._id,
     };
 
-    console.log("This is percent_sum payloaf", requestBody)
+    // console.log("This is percent_sum payloaf", requestBody);
     Axios.post(
       "https://100035.pythonanywhere.com/percent-sum/api/percent-sum-response-create/",
       requestBody
@@ -1487,22 +1579,28 @@ const Header = () => {
       .then((response) => {
         if (response.status === 200) {
           setIsLoading(false);
+          setProgress(progress + 50)
           var responseData = response.data;
           setScaleData(responseData);
-          console.log(response);
+          // console.log(response);
         }
       })
       .catch(function (error) {
-        console.log(error);
+        // console.log(error);
       });
   }
 
   function submit(e) {
+    setProgress(progress + 50)
     e.preventDefault();
-    setIsLoading(true);
+    // setIsLoading(true);
+    setIsButtonDisabled(true);
     const dataa = saveDocument();
 
     const finalize = document.getElementById("finalize-button");
+
+    const completeProgressBar = document.getElementById("progress-100");
+    const halfProgressBar = document.getElementById("progress-50");
 
     const titleName = document.querySelector(".title-name").innerHTML;
 
@@ -1516,8 +1614,7 @@ const Header = () => {
         content: JSON.stringify(dataa),
         page: item,
       };
-    }
-    else if (decoded.details.action === "document") {
+    } else if (decoded.details.action === "document") {
       updateField = {
         document_name: titleName,
         content: JSON.stringify(dataa),
@@ -1525,7 +1622,7 @@ const Header = () => {
       };
     }
 
-    console.log(updateField.content);
+    // console.log(updateField.content);
 
     <iframe src="http://localhost:5500/"></iframe>;
 
@@ -1560,32 +1657,41 @@ const Header = () => {
       }
     )
       .then((res) => {
+        completeProgressBar.click();
         if (res) {
           toast.success("Saved successfully");
           setIsLoading(false);
+          setIsButtonDisabled(false);
           if (finalize) {
-            handleFinalize();
-          }
+            setTimeout(() => {
+              halfProgressBar.click()
+              handleFinalize();
+            }, 2000);
 
-          let scaleType = document.querySelector(".scaleTypeHolder");
-          if (scaleType.textContent === "nps") {
-            handleFinalizeButton();
-          } else if (scaleType.textContent === "snipte") {
-            handleFinalizeButtonStapel();
-          } else if (scaleType.textContent === "nps_lite") {
-            handleFinalizeButtonNpsLite();
-          } else if (scaleType.textContent === "likert") {
-            handleFinalizeButtonLikert();
-          } else if (scaleType.textContent === "percent_scale") {
-            handleFinalizeButtonPercent();
-          }else if(scaleType.textContent === "percent_sum_scale") {
-            handleFinalizeButtonPercentSum() 
+          }
+          if (decoded.details.action === "document") {
+            let scaleType = document.querySelector(".scaleTypeHolder");
+            if (scaleType.textContent === "nps") {
+              handleFinalizeButton();
+            } else if (scaleType.textContent === "snipte") {
+              handleFinalizeButtonStapel();
+            } else if (scaleType.textContent === "nps_lite") {
+              handleFinalizeButtonNpsLite();
+            } else if (scaleType.textContent === "likert") {
+              handleFinalizeButtonLikert();
+            } else if (scaleType.textContent === "percent_scale") {
+              handleFinalizeButtonPercent();
+            } else if (scaleType.textContent === "percent_sum_scale") {
+              handleFinalizeButtonPercentSum();
+            }
           }
           setIsDataSaved(true);
         }
       })
       .catch((err) => {
+        completeProgressBar.click();
         setIsLoading(false);
+        setIsButtonDisabled(false);
       });
   }
 
@@ -1613,7 +1719,7 @@ const Header = () => {
   var encodedHeader = base64url(stringifiedHeader);
 
   var dataa = {
-    document_id: decoded.details._id,
+    document_id: decoded.details.document_id,
     action: decoded.details.action,
     database: decoded.details.database,
     collection: decoded.details.collection,
@@ -1622,7 +1728,7 @@ const Header = () => {
     cluster: decoded.details.cluster,
     document: decoded.details.document,
   };
-  console.log("here is new data for export", dataa);
+  // console.log("here is new data for export", dataa);
 
   var stringifiedData = CryptoJS.enc.Utf8.parse(JSON.stringify(dataa));
   var encodedData = base64url(stringifiedData);
@@ -1695,7 +1801,7 @@ const Header = () => {
   };
 
   useEffect(() => {
-    setIsLoading(true);
+    console.log('CALLED GETPOST');
     getPostData();
   }, []);
 
@@ -1748,7 +1854,7 @@ const Header = () => {
     var tokenn = prompt("Paste your token here");
     if (tokenn != null) {
       const decodedTok = jwt_decode(tokenn);
-      // console.log("tokkkkkkennn", tokenn);
+      console.log("tokkkkkkennn", decodedTok);
       const getPostData = async () => {
         const response = await Axios.post(
           "https://100058.pythonanywhere.com/api/get-data-from-collection/",
@@ -1778,8 +1884,8 @@ const Header = () => {
             const loadedData = JSON.parse(res.data.content);
             const pageData = res.data.page;
             setItem(pageData);
-            console.log(loadedData);
-            console.log("Loaded Data ",loadedData[0][0]);
+            // console.log(loadedData);
+            // console.log("Loaded Data ", loadedData[0][0]);
             setData(loadedData[0][0]);
             setFetchedData(loadedData[0][0]);
             setIsDataRetrieved(true);
@@ -1799,10 +1905,16 @@ const Header = () => {
   // // console.log('page count check', item);
   const linkId = decoded.details.link_id;
 
+  const halfProgressBar = document.getElementById("progress-50");
   function handleFinalize() {
-    setIsLoading(true);
+    // setIsLoading(true);
+    halfProgressBar.click();
+    setIsButtonDisabled(true);
     const finalize = document.getElementById("finalize-button");
     const reject = document.getElementById("reject-button");
+
+    const completeProgressBar = document.getElementById("progress-100");
+
     Axios.post(
       // `https://100094.pythonanywhere.com/v1/processes/${process_id}/finalize/`,
       `https://100094.pythonanywhere.com/v1/processes/${process_id}/finalize-or-reject/`,
@@ -1820,6 +1932,7 @@ const Header = () => {
       .then((res) => {
         // console.log("This is my response", res);
         setIsLoading(false);
+        completeProgressBar.click();
         toast.success(res?.data);
         finalize.style.visibility = "hidden";
         reject.style.visibility = "hidden";
@@ -1833,7 +1946,12 @@ const Header = () => {
   }
 
   function handleReject() {
-    setIsLoading(true);
+    // setIsLoading(true);
+    setProgress(50);
+    const completeProgressBar = document.getElementById("progress-100");
+
+    const finalize = document.getElementById("finalize-button");
+    const reject = document.getElementById("reject-button");
     Axios.post(
       // `https://100094.pythonanywhere.com/v1/processes/${process_id}/reject/`,
       `https://100094.pythonanywhere.com/v1/processes/${process_id}/finalize-or-reject/`,
@@ -1848,17 +1966,21 @@ const Header = () => {
         role: role,
         user_type: user_type,
         link_id: link_idd,
+        message: rejectionMsg,
       }
     )
       .then((res) => {
+        completeProgressBar.click();
         setIsLoading(false);
-        console.log(res);
+        finalize.style.visibility = "hidden";
+        reject.style.visibility = "hidden";
+        // console.log(res);
         // alert(res?.data);
         toast.error(res?.data);
       })
       .catch((err) => {
         setIsLoading(false);
-        console.log(err);
+        // console.log(err);
         toast.error(err);
       });
   }
@@ -1881,219 +2003,241 @@ const Header = () => {
     downloadPDF(Array.from(containerAll), fileName);
   };
 
+
+
   return (
-    <div
-      className={`header ${actionName == "template" ? "header_bg_template" : "header_bg_document"
-        }`}
-    >
-      <Container fluid>
-        <Row>
-          <Col className="d-flex lhs-header">
-            <div className="header_icons position-relative">
-              <CgMenuLeft className="head-bar" onClick={handleOptions} />
-              {isMenuVisible && (
-                <div
-                  ref={menuRef}
-                  className={`position-absolute bg-white d-flex flex-column p-4 bar-menu menu ${isMenuVisible ? "show" : ""
-                    }`}
-                >
-                  <div className="d-flex cursor_pointer" onClick={handleUndo}>
-                    <ImUndo />
-                    <p>Undo</p>
-                  </div>
-                  <div className="d-flex cursor_pointer" onClick={handleRedo}>
-                    <ImRedo />
-                    <p>Redo</p>
-                  </div>
-                  <div className="d-flex cursor_pointer" onClick={handleUndo}>
-                    {/* handleCut */}
-                    <BiCut />
-                    <p>Cut</p>
-                  </div>
-                  <div className="d-flex cursor_pointer" onClick={handleCopy}>
-                    <BiCopyAlt />
-                    <p>Copy</p>
-                  </div>
-                  <div className="d-flex cursor_pointer" onClick={handleRedo}>
-                    {/* handlePaste */}
-                    <ImPaste />
-                    <p>Paste</p>
-                  </div>
+    <>
+      <div
+        className={`header ${actionName == "template" ? "header_bg_template" : "header_bg_document"
+          }`}
+      >
+        <Container fluid>
+          <Row>
+            <Col className="d-flex lhs-header">
+              <div className="header_icons position-relative">
+                <CgMenuLeft className="head-bar" onClick={handleOptions} />
+                {isMenuVisible && (
                   <div
-                    className="d-flex cursor_pointer"
-                    onClick={() => handlePDFPrint()}
+                    ref={menuRef}
+                    className={`position-absolute bg-white d-flex flex-column p-4 bar-menu menu ${isMenuVisible ? "show" : ""
+                      }`}
                   >
-                    <p>
-                      <AiFillPrinter /> Print
-                    </p>
+                    <div className="d-flex cursor_pointer" onClick={handleUndo}>
+                      <ImUndo />
+                      <p>Undo</p>
+                    </div>
+                    <div className="d-flex cursor_pointer" onClick={handleRedo}>
+                      <ImRedo />
+                      <p>Redo</p>
+                    </div>
+                    <div className="d-flex cursor_pointer" onClick={handleUndo}>
+                      {/* handleCut */}
+                      <BiCut />
+                      <p>Cut</p>
+                    </div>
+                    <div className="d-flex cursor_pointer" onClick={handleCopy}>
+                      <BiCopyAlt />
+                      <p>Copy</p>
+                    </div>
+                    <div className="d-flex cursor_pointer" onClick={handleRedo}>
+                      {/* handlePaste */}
+                      <ImPaste />
+                      <p>Paste</p>
+                    </div>
+                    <div
+                      className="d-flex cursor_pointer"
+                      onClick={() => handlePDFPrint()}
+                    >
+                      <AiFillPrinter />
+                      <p>Print</p>
+                    </div>
+
+                    {actionName == "template" && (
+                      <button
+                        className="page_btn p-0 d-flex cursor_pointer"
+                        onClick={() => createNewPage()}
+                      >
+                        <MdOutlinePostAdd />
+                        <p>Add Page</p>
+                      </button>
+                    )}
+                    {actionName == "template" && (
+                      <button
+                        className="page_btn p-0 d-flex cursor_pointer"
+                        onClick={() => removePage()}
+                      >
+                        <CgPlayListRemove />
+                        <p>Remove Page</p>
+                      </button>
+                    )}
+                    <button
+                      className="page_btn p-0 d-flex cursor_pointer"
+                      onClick={handleToken}
+                    >
+                      <BiImport />
+                      <p>Import</p>
+                    </button>
+                    <button
+                      className="d-flex page_btn p-0 cursor_pointer"
+                      id="saving-button"
+                      data-bs-toggle="modal"
+                      data-bs-target="#exampleModal"
+                    >
+                      <BiExport />
+                      <p>Export</p>
+                    </button>
                   </div>
-
-                  {actionName == "template" && (
-                    <button
-                      className="page_btn p-0 d-flex"
-                      onClick={() => createNewPage()}
-                    >
-                      <MdOutlinePostAdd />
-                      <p>Add Page</p>
-                    </button>
-                  )}
-                  {actionName == "template" && (
-                    <button
-                      className="page_btn p-0 d-flex"
-                      onClick={() => removePage()}
-                    >
-                      <CgPlayListRemove />
-                      <p>Remove Page</p>
-                    </button>
-                  )}
-                  <button className="page_btn p-0 d-flex" onClick={handleToken}>
-                    <BiImport />
-                    <p>Import</p>
-                  </button>
-                  <button
-                    className="d-flex page_btn p-0"
-                    id="saving-button"
-                    data-bs-toggle="modal"
-                    data-bs-target="#exampleModal"
-                  >
-                    <BiExport />
-                    <p>Export</p>
-                  </button>
-                </div>
-              )}
-            </div>
-
-            <div className="d-flex align-items-center gap-2 header_p">
-              <div
-                className="title-name px-3"
-                contentEditable={true}
-                style={{
-                  fontSize: 18,
-                  height: window.innerWidth<993 ? "75px": "50px",
-                  overflowY: "auto",
-                  padding: "10px",
-                }}
-                spellCheck="false"
-                ref={inputRef}
-              >
-                {docMap ? finalDocName : titleName}
+                )}
               </div>
-              <FaPen className="cursor-pointer" onClick={handleTitle} />
-            </div>
-          </Col>
 
-          <Col>
-            <div className="right_header">
-              <div className={docMap ? "header_btn" : "savee"}>
-                {/* <div style={{ marginRight: "20px" }}>
+              <div className="d-flex align-items-center gap-2 header_p">
+                <div
+                  className="title-name px-3"
+                  contentEditable={true}
+                  style={{
+                    fontSize: 18,
+                    height: window.innerWidth < 993 ? "75px" : "50px",
+                    overflowY: "auto",
+                    padding: "10px",
+                  }}
+                  spellCheck="false"
+                  ref={inputRef}
+                >
+                  {docMap ? finalDocName : titleName}
+                </div>
+                <FaPen className="cursor-pointer" onClick={handleTitle} />
+              </div>
+            </Col>
+
+            <Col>
+              <div className="right_header">
+                <div className={docMap ? "header_btn" : "savee"}>
+                  {/* <div style={{ marginRight: "20px" }}>
                   <input type="checkbox" onChange={() => setAllowHighlight(!allowHighlight)} />{"  "}
                   <label>Allow Highlight</label>
                 </div> */}
-                <Button
-                  size="md"
-                  className="rounded"
-                  id="saving-buttonn"
-                  onClick={submit}
-                  style={{
-                    visibility: documentFlag && "hidden",
-                  }}
-                >
-                  Save <FaSave color="white" />
-                </Button>
-                {/*  )} */}
-              </div>
-              <div className="mt-1 text-center p-2">
-                <div
-                  className="modal fade"
-                  id="exampleModal"
-                  tabindex="-1"
-                  aria-labelledby="exampleModalLabel"
-                  aria-hidden="true"
-                >
-                  <div className="modal-dialog">
-                    <div className="modal-content">
-                      <div className="modal-header">
-                        <h5 className="modal-title" id="exampleModalLabel">
-                          Token
-                        </h5>
-                        <button
-                          type="button"
-                          className="btn-close"
-                          data-bs-dismiss="modal"
-                          aria-label="Close"
-                        ></button>
-                      </div>
-                      <div className="modal-body token_text">{exportToken}</div>
-                      <div className="modal-footer head">
-                        <button
-                          type="button"
-                          className="btn btn-secondary"
-                          data-bs-dismiss="modal"
-                        >
-                          Close
-                        </button>
-                        <button
-                          onClick={copyText}
-                          type="button"
-                          data-bs-dismiss="modal"
-                          className="copyBtnn btn btn-primary"
-                        >
-                          <FaCopy className="me-2" color="white" size={32} />
-                          Copy
-                        </button>
+                  <Button
+                    size="md"
+                    className="rounded"
+                    id="saving-buttonn"
+                    onClick={submit}
+                    style={{
+                      visibility: documentFlag && "hidden",
+                    }}
+                    disabled={isButtonDisabled}
+                  >
+                    Save <FaSave color="white" />
+                  </Button>
+                  {/*  )} */}
+                </div>
+                <div className="mt-1 text-center p-2">
+                  <div
+                    className="modal fade"
+                    id="exampleModal"
+                    tabindex="-1"
+                    aria-labelledby="exampleModalLabel"
+                    aria-hidden="true"
+                  >
+                    <div className="modal-dialog">
+                      <div className="modal-content">
+                        <div className="modal-header">
+                          <h5 className="modal-title" id="exampleModalLabel">
+                            Token
+                          </h5>
+                          <button
+                            type="button"
+                            className="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"
+                          ></button>
+                        </div>
+                        <div className="modal-body token_text">{exportToken}</div>
+                        <div className="modal-footer head">
+                          <button
+                            type="button"
+                            className="btn btn-secondary"
+                            data-bs-dismiss="modal"
+                          >
+                            Close
+                          </button>
+                          <button
+                            onClick={copyText}
+                            type="button"
+                            data-bs-dismiss="modal"
+                            className="copyBtnn btn btn-primary"
+                          >
+                            <FaCopy className="me-2" color="white" size={32} />
+                            Copy
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
+
+                {actionName == "document" &&
+                  docMap &&
+                  data != "" &&
+                  docRight !== "view" && (
+                    <>
+                      {/* <div className={`mt-2 text-center mb-2 px-2 ${isFinializeDisabled ? disable_pointer_event : enable_pointer_event}`}> */}
+                      <div className={`mt-2 text-center mb-2 px-2`}>
+                        <Button
+                          variant="success"
+                          size="md"
+                          className="rounded px-4"
+                          id="finalize-button"
+                          disabled={isFinializeDisabled || isButtonDisabled}
+                          onClick={submit}
+                          style={{
+                            visibility:
+                              documentFlag == "processing" ? "visible" : "hidden",
+                          }}
+                        >
+                          Finalize
+                        </Button>
+                      </div>
+
+                      <div className="mt-2 text-center mb-2 px-2">
+                        <Button
+                          variant="danger"
+                          size="md"
+                          className="rounded px-4"
+                          id="reject-button"
+                          onClick={() => setIsOpenRejectionModal(true)}
+                          style={{
+                            visibility:
+                              documentFlag == "processing" ? "visible" : "hidden",
+                          }}
+                          disabled={isButtonDisabled}
+                        >
+                          Reject
+                        </Button>
+                      </div>
+                    </>
+                  )}
               </div>
+              <ToastContainer size={5} />
+            </Col>
+          </Row>
+        </Container>
 
-              {actionName == "document" && docMap && data != "" && docRight !== 'view' && (
-                <>
-                  <div className="mt-2 text-center mb-2 px-2">
-                    <Button
-                      variant="success"
-                      size="md"
-                      className="rounded px-4"
-                      id="finalize-button"
-                      disabled={isFinializeDisabled}
-                      onClick={submit}
-                      style={{
-                        visibility:
-                          documentFlag == "processing" ? "visible" : "hidden",
-                      }}
-                    >
-                      Finalize
-                    </Button>
-                  </div>
-
-                  <div className="mt-2 text-center mb-2 px-2">
-                    <Button
-                      variant="danger"
-                      size="md"
-                      className="rounded px-4"
-                      id="reject-button"
-                      onClick={
-                        () => setIsOpenRejectionModal(true)
-                      }
-                      style={{
-                        visibility:
-                          documentFlag == "processing" ? "visible" : "hidden",
-                      }}
-                    >
-                      Reject
-                    </Button>
-                  </div>
-                </>
-              )}
-            </div>
-            <ToastContainer size={5} />
-          </Col>
-        </Row>
-      </Container>
-
-      {isOpenRejectionModal && <RejectionModal openModal={setIsOpenRejectionModal} handleReject={handleReject} msg={rejectionMsg} setMsg={setRejectionMsg} />}
-    </div>
+        {isOpenRejectionModal && (
+          <RejectionModal
+            openModal={setIsOpenRejectionModal}
+            handleReject={handleReject}
+            msg={rejectionMsg}
+            setMsg={setRejectionMsg}
+          />
+        )}
+      </div>
+      <div>
+        <ProgressLoader />
+      </div>
+    </>
   );
 };
 
 export default Header;
+
+
