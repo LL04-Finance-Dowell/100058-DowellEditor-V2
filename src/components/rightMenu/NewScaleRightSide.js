@@ -2283,6 +2283,7 @@ const ScaleRightSide = () => {
         button.style.position = "absolute";
         labelHold.style.display = "grid";
         labelHold.style.marginTop = "-10px";
+        labelHold.style.paddingLeft = "0%";
         labelHold.style.gridTemplateColumns = `repeat(${numColumns}, 1fr)`;
         labelHold.style.gridTemplateRows = `repeat(${numRows}, 1fr)`;
         labelHold.style.overflowX = "hidden";
@@ -2298,16 +2299,15 @@ const ScaleRightSide = () => {
         button.style.padding = "5px 10px";
         button.style.margin = "10px 0";
         button4.style.border = "none";
-        button4.style.display = "flex";
-        button4.style.justifyContent = "center";
-        button4.style.textAlign = "center";
         labelHold.style.height = "96%";
-        labelHold.style.width = "55%";
+        labelHold.style.width = "60%";
         labelHold.style.position = "absolute";
-        labelHold.style.display = "flex";
-        labelHold.style.flexDirection = "column";
-        labelHold.style.alignItems = "center";
-        labelHold.style.marginTop = "-5px";  
+        button.style.display = "flex";
+        button.style.flexDirection = "column";
+        button.style.justifyContent = "center";
+        button.style.alignItems = "center";
+        button.style.marginTop = "-5px";  
+        labelHold.style.paddingLeft = "30%";
         labelHold.style.overflowY = "hidden"; 
         labelHold.style.overflowX = "hidden";
       }
