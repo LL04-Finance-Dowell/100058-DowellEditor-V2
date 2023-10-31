@@ -734,7 +734,7 @@ const Header = () => {
           let leftLableStapel = newScales[b].querySelector(".leftToolTip");
           let rightLableStapel = newScales[b].querySelector(".rightTooltip");
           let stapelEmojiObj = newScales[b].querySelector(".stapelEmojiObj");
-          let stapelUpperimit = newScales[b].querySelector(".upper_scale_limit");
+          let stapelUpperLimit = newScales[b].querySelector(".upper_scale_limit");
           let spaceUnit = newScales[b].querySelector(".space_unit");
           // let stapelScaleField = newScales[b].querySelector(".newScaleInput");
           // console.log(font);
@@ -854,7 +854,7 @@ const Header = () => {
             otherComponent: otherComponent ? otherComponent.textContent : "",
             smallBoxBgColor: smallBox?.style?.backgroundColor,
             stapelEmojiObj: stapelEmojiObj?.textContent,
-            stapelUpperimit: stapelUpperimit?.textContent,
+            stapelUpperLimit: stapelUpperLimit?.textContent,
             spaceUnit: spaceUnit?.textContent
           };
           // console.log(properties);
@@ -1595,7 +1595,6 @@ const Header = () => {
     // setIsLoading(true);
     setIsButtonDisabled(true);
     const dataa = saveDocument();
-
     const finalize = document.getElementById("finalize-button");
 
     const completeProgressBar = document.getElementById("progress-100");

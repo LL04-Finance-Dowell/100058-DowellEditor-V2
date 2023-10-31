@@ -44,8 +44,6 @@ const ScaleRightSide = () => {
   // const [addedAns, setAddedAns] = useState([])
   const { addedAns, setAddedAns } = useSelectedAnswer();
   const [inputStr, setInputStr] = useState("");
-  const [upperLimit, setUpperLimit] = useState("");
-  const [space, setSpace] = useState("");
   const [showPicker, setShowPicker] = useState(false);
   const [isSwitchEnabled, setIsSwitchEnabled] = useState(false);
   const [score, setScore] = useState(false);
@@ -92,8 +90,11 @@ const ScaleRightSide = () => {
   let fontFamilyStapel = scale?.querySelector(".newScaleInput");
   let stapelLeft = scale?.querySelector(".leftToolTip");
   let stapelRight = scale?.querySelector(".rightTooltip");
-  let stapelUpperimit = scale?.querySelector(".upper_scale_limit");
+  let stapelUpperLimit = scale?.querySelector(".upper_scale_limit");
   let stapelSpaceUnit = scale?.querySelector(".space_unit");
+
+  const [space, setSpace] = useState(stapelSpaceUnit ? Number(stapelSpaceUnit.textContent) : 0);
+  const [upperLimit, setUpperLimit] = useState(stapelUpperLimit ? Number(stapelUpperLimit.textContent) : 0);
   // =======
   // let fontColor = scale?.firstChild;
   const element = JSON.parse(sessionStorage.getItem("cutItem"));
@@ -1473,10 +1474,7 @@ const ScaleRightSide = () => {
       ];
       let timeId = document.getElementById("timeId_stapel");
       let time = document.getElementById("time_stapel");
-      const upperVal = Math.min(
-        10,
-        parseInt(document.getElementById("upperVal").value, 10)
-      );
+      const upperVal = parseInt(document.getElementById("upperVal").value, 10)
       const spacing = parseInt(document.getElementById("spacing").value, 10);
 
       const scaleTypeHolder = document.createElement("h6");
@@ -1521,19 +1519,20 @@ const ScaleRightSide = () => {
         const emojiLabels = {};
         let j = 0;
         let valRange =
-          upperLimit % space !== 0
+        upperLimit % space !== 0
             ? Math.floor(upperLimit / space) * 2
             : upperLimit;
+            console.log("This is upp",  space);
         for (let i = valRange * -1; i <= valRange; i += spacing) {
           if (i !== 0) {
             const emojiIndex = j;
             emojiLabels[i] = emojis[emojiIndex];
             j++;
-            console.log(i);
-            console.log(Math.floor(upperLimit / space));
+            console.log("This is I",i);
+            console.log(Math.floor(Number(upperLimit) / Number(space)));
           }
         }
-
+        console.log("This is the scale",scale);
         return emojiLabels;
       };
       const emojiLabels = prepareEmojiLabels()
@@ -1949,41 +1948,41 @@ const ScaleRightSide = () => {
 
       const emojiLabels = prepareEmojiLabels();
 
-      if (option.value === "Horizontal") {
-        button4.style.border = "block";
-        button4.style.display = "block";
-        button4.style.textAlign = "center";
-        button.style.alignItems = "center";
-        button.style.height = "85%";
-        button.style.width = "100%";
-        button.style.display = "flex";
-        button.style.flexDirection = "row";
-        button.style.justifyContent = "center";
-        button.style.position = "relative";
-        button.style.marginLeft = "0px";
-      }
+      // if (option.value === "Horizontal") {
+      //   button4.style.border = "block";
+      //   button4.style.display = "block";
+      //   button4.style.textAlign = "center";
+      //   button.style.alignItems = "center";
+      //   button.style.height = "85%";
+      //   button.style.width = "100%";
+      //   button.style.display = "flex";
+      //   button.style.flexDirection = "row";
+      //   button.style.justifyContent = "center";
+      //   button.style.position = "relative";
+      //   button.style.marginLeft = "0px";
+      // }
 
-      if (option.value === "Vertical") {
-        const orientation = document.createElement("h2");
-        orientation.className = "nps_lite_orientation";
-        orientation.textContent = "Vertical";
-        orientation.style.display = "none";
-        button4.appendChild(orientation);
+      // if (option.value === "Vertical") {
+      //   const orientation = document.createElement("h2");
+      //   orientation.className = "nps_lite_orientation";
+      //   orientation.textContent = "Vertical";
+      //   orientation.style.display = "none";
+      //   button4.appendChild(orientation);
 
-        button4.style.display = "flex";
-        button4.style.alignItems = "center";
-        button4.style.justifyContent = "center";
+      //   button4.style.display = "flex";
+      //   button4.style.alignItems = "center";
+      //   button4.style.justifyContent = "center";
         
-        button4.style.border = "none";
-        button4.style.textAlign = "center";
-        button.style.height = "auto";
-        button.style.width = "50%";
-        button.style.position = "absolute";
-        button.style.display = "flex";
-        button.style.flexDirection = "column";
-        button.style.alignItems = "center";
-        button.style.marginTop = "0";
-      }
+      //   button4.style.border = "none";
+      //   button4.style.textAlign = "center";
+      //   button.style.height = "auto";
+      //   button.style.width = "50%";
+      //   button.style.position = "absolute";
+      //   button.style.display = "flex";
+      //   button.style.flexDirection = "column";
+      //   button.style.alignItems = "center";
+      //   button.style.marginTop = "0";
+      // }
 
       if (
         idHolder.textContent === "scale Id" ||
@@ -3044,6 +3043,11 @@ const ScaleRightSide = () => {
       const containerDiv = document.createElement("div");
       containerDiv.className = "label_hold";
 
+      button4.style.display = "flex";
+      button4.style.justifyContent = "center";
+      button4.style.alignItems = "center";
+      button4.style.height = "100%";
+
       let productNames = document.getElementById("product_count_label");
       let inputFields = productNames?.querySelectorAll("input");
 
@@ -3082,13 +3086,11 @@ const ScaleRightSide = () => {
             const success = res.data.success;
             var successObj = JSON.parse(success);
             const id = successObj.inserted_id;
-            // console.log(id);
             if (id.length) {
               setScaleId(id && id);
               const idHolder = scale?.querySelector(".scaleId");
               idHolder.textContent = id && id;
             }
-            // console.log(res);
 
             const {
               name,
@@ -3168,9 +3170,8 @@ const ScaleRightSide = () => {
                 scale?.querySelector(".orientation")?.remove();
                 button4.style.border = "block";
                 button4.style.textAlign = "center";
-                button.style.marginTop = "10px";
                 button.style.alignItems = "center";
-                button.style.height = "85%";
+                button.style.height = "100%";
                 button.style.width = "100%";
                 button.style.flexDirection = "row";
                 button.style.position = "relative";
@@ -3185,7 +3186,6 @@ const ScaleRightSide = () => {
                 button4.appendChild(orientation);
 
                 containerDiv.style.transform = "rotate(270deg)";
-                containerDiv.style.marginTop = "80px";
                 containerDiv.style.width = "100%";
                 inputPercent.style.marginTop = "20px";
                 nameDiv.style.position = "absolute";
@@ -3235,18 +3235,16 @@ const ScaleRightSide = () => {
               }
 
               scaleText.textContent = name;
+              scaleText.style.display = "none";
               button4.style.color = fontcolor;
               button4.style.fontFamily = fontstyle;
             }
           })
           .catch((err) => {
             setIsLoading(false);
-            // console.log(err);
           });
       } else {
         setIsLoading(true);
-        // console.log("PUT req");
-        // console.log(idHolder.textContent);
         Axios.put(
           "https://100035.pythonanywhere.com/percent-sum/percent-sum-settings",
           {
@@ -3271,8 +3269,6 @@ const ScaleRightSide = () => {
               sendMessage();
               setScaleData(res.data);
               setScaleId(scaleId);
-              // console.log(res);
-              // console.log("This is the still scale", scale);
 
               const {
                 name,
@@ -3354,7 +3350,7 @@ const ScaleRightSide = () => {
                   button4.style.textAlign = "center";
                   button.style.marginTop = "10px";
                   button.style.alignItems = "center";
-                  button.style.height = "85%";
+                  button.style.height = "100%";
                   button.style.width = "100%";
                   button.style.flexDirection = "row";
                   button.style.position = "relative";
@@ -3369,7 +3365,6 @@ const ScaleRightSide = () => {
                   button4.appendChild(orientation);
 
                   containerDiv.style.transform = "rotate(270deg)";
-                  containerDiv.style.marginTop = "80px";
                   containerDiv.style.width = "100%";
                   inputPercent.style.marginTop = "20px";
                   nameDiv.style.position = "absolute";
@@ -3426,7 +3421,6 @@ const ScaleRightSide = () => {
           })
           .catch((err) => {
             setIsLoading(false);
-            // console.log(err.message);
           });
       }
     } else if (
@@ -5694,7 +5688,7 @@ const ScaleRightSide = () => {
                         }}
                         id="upperVal"
                         onChange={(e) => setUpperLimit(e.target.value)}
-                        defaultValue={ stapelUpperimit ? Number(stapelUpperimit.textContent) : 0}
+                        defaultValue={upperLimit}
                         // onChange={upperValueChange}
                       />
                     </div>
@@ -5735,7 +5729,7 @@ const ScaleRightSide = () => {
                         id="spacing"
                         onChange={(e) => setSpace(e.target.value)}
                         // value={-upperVal}
-                        defaultValue={stapelSpaceUnit ? Number(stapelSpaceUnit.textContent) : 0}
+                        defaultValue={space}
                       />
                     </div>
                   </div>
