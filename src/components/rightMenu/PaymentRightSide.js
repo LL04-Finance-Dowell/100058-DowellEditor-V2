@@ -64,9 +64,9 @@ const PaymentRightSide = () => {
     localStorage.setItem("MainURL", MainURL);
     const handleUpdate = () => {
 
-        const link = document.getElementById("link").value;
-        const purpose = document.getElementById("link2").value;
-        if (link.value != "") {
+        const link = document.getElementById("link")?.value;
+        const purpose = document.getElementById("link2")?.value;
+        if (link?.value != "") {
             setPaymentKey(link);
             setSavedSripeKey(prev => {
                 return {
@@ -77,7 +77,7 @@ const PaymentRightSide = () => {
 
             holderDIV.children[1].innerHTML = link;
         }
-        if (purpose.value != "") {
+        if (purpose?.value != "") {
             setPaypalId(purpose);
 
             setSavedPaypalKey(prev => {
@@ -132,12 +132,12 @@ const PaymentRightSide = () => {
 
         let selectedOption = selectField.options[selectField.selectedIndex];
 
-        setButtonPurpose(selectedOption.value);
-        holderDIV.children[2].innerHTML = selectedOption.value;
+        setButtonPurpose(selectedOption?.value);
+        holderDIV.children[2].innerHTML = selectedOption?.value;
 
-        if (selectedOption.value == "custom") {
+        if (selectedOption?.value == "custom") {
             linkDiv.style.display = "block";
-        } else if (selectedOption.value !== "custom") {
+        } else if (selectedOption?.value !== "custom") {
             setButtonLink("");
         } else {
             console.log("No option selected");
@@ -149,24 +149,24 @@ const PaymentRightSide = () => {
     };
 
     const handleBorderSizeChange = (e) => {
-        setButtonBorderSize(e.target.value);
+        setButtonBorderSize(e.target?.value);
 
         const box = document.getElementsByClassName("focussedd")[0];
-        box.style.borderWidth = `${e.target.value}px`;
+        box.style.borderWidth = `${e.target?.value}px`;
 
     };
 
     const handleBorderColorChange = (e) => {
-        setButtonBorderColor(e.target.value);
+        setButtonBorderColor(e.target?.value);
         const box = document.getElementsByClassName("focussedd")[0];
-        box.style.borderColor = `${e.target.value}`;
+        box.style.borderColor = `${e.target?.value}`;
     };
     const handleRangeBlur = (e) => {
         e.target.focus();
     };
 
     const handleSelectPayment = (e) => {
-        setSelectPayment(e.target.value);
+        setSelectPayment(e.target?.value);
     }
 
 
@@ -496,16 +496,23 @@ const PaymentRightSide = () => {
         const paypalId = holderDIV.querySelector('.paypal_id').textContent
         const idWrapper = document.getElementById('link2')
         const stripeWrapper = document.getElementById('link');
+        console.log(">>>\n", idWrapper, "\n>>>>");
 
-        idWrapper.value = paypalId
-        stripeWrapper.value = stripeKey
+        if(idWrapper !== null){
+            idWrapper.value = paypalId
+
+        } 
+        if(stripeWrapper !== null){
+            stripeWrapper.value = stripeKey
+
+        }
 
     }, [])
 
     return (
         <>
             <div className="mt-2 mb-3 w-100">
-                <select className='gen_btn_sel' defaultValue='pay' onChange={e => setGenSelOpt(e.target.value)} style={{ marginBottom: '10px' }}>
+                <select className='gen_btn_sel' defaultValue='pay' onChange={e => setGenSelOpt(e.target?.value)} style={{ marginBottom: '10px' }}>
                     <option value="" disabled>Select type</option>
                     <option value="cta">CTA</option>
                     <option value="pay">Pay</option>
@@ -563,7 +570,7 @@ const PaymentRightSide = () => {
                                             placeholder="Product name"
                                             id="button_name"
                                             value={productName}
-                                            onChange={(e) => setProductName(e.target.value)}
+                                            onChange={(e) => setProductName(e.target?.value)}
                                         />
 
                                         <br />
@@ -575,12 +582,12 @@ const PaymentRightSide = () => {
                                             placeholder="Product Price"
                                             // id="button_name"
                                             value={price}
-                                            onChange={(e) => setPrice(e.target.value)}
+                                            onChange={(e) => setPrice(e.target?.value)}
                                         />
                                         <br />
                                         <select
                                             required
-                                            onChange={(e) => setCurrencyCode(e.target.value)}
+                                            onChange={(e) => setCurrencyCode(e.target?.value)}
                                             id="selectt"
                                             // onChange={handleDateMethod}
                                             className="select border-0 bg-white rounded w-100 h-75 p-2"
@@ -618,7 +625,7 @@ const PaymentRightSide = () => {
                                             placeholder="Product name"
                                             id="button_name"
                                             value={productName}
-                                            onChange={(e) => setProductName(e.target.value)}
+                                            onChange={(e) => setProductName(e.target?.value)}
                                         />
 
 
@@ -631,12 +638,12 @@ const PaymentRightSide = () => {
                                             placeholder="Product Price"
                                             // id="button_name"
                                             value={price}
-                                            onChange={(e) => setPrice(e.target.value)}
+                                            onChange={(e) => setPrice(e.target?.value)}
                                         />
                                         <br />
                                         <select
                                             required
-                                            onChange={(e) => setCurrencyCode(e.target.value)}
+                                            onChange={(e) => setCurrencyCode(e.target?.value)}
                                             id="selectt"
                                             // onChange={handleDateMethod}
                                             className="select border-0 bg-white rounded w-100 h-75 p-2"
@@ -655,7 +662,7 @@ const PaymentRightSide = () => {
                                             placeholder="Callback URL"
                                             // id="button_name"
                                             value={callbackUrl}
-                                            onChange={(e) => setCallbackUrl(e.target.value)}
+                                            onChange={(e) => setCallbackUrl(e.target?.value)}
                                         /> */}
                                         <br />
                                         <button type="button" className="btn btn-primary" onClick={handleStripePayment}>
