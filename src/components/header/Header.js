@@ -721,6 +721,7 @@ const Header = () => {
           // console.log(newScales[b]);
           let circles = newScales[b].querySelector(".circle_label");
           let scaleBg = newScales[b].querySelector(".label_hold");
+          let scaleField = newScales[b];
           let leftChild = newScales[b].querySelector(".left_child");
           let neutralChild = newScales[b].querySelector(".neutral_child");
           let rightChild = newScales[b].querySelector(".right_child");
@@ -825,9 +826,9 @@ const Header = () => {
             orientation = newScales[b].querySelector(".orientation");
           }
           let properties = {
-            scaleBgColor: scaleBg ? scaleBg.style.backgroundColor : newScales[0].style.backgroundColor,
-            fontColor: font ? font.style.color : newScales[0].style.color,
-            fontFamily: font ? font.style.fontFamily : newScales[0].style.fontFamily,
+            scaleBgColor: scaleBg ? scaleBg.style.backgroundColor : scaleField.style.backgroundColor,
+            fontColor: font ? font.style.color : scaleField.style.color,
+            fontFamily: font ? font.style.fontFamily : scaleField.style.fontFamily,
             left: leftChild ? leftChild.textContent : leftLableStapel.textContent,
             center: neutralChild ? neutralChild.textContent : "",
             right: rightChild ? rightChild.textContent : rightLableStapel.textContent,

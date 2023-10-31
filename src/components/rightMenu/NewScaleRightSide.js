@@ -1200,7 +1200,7 @@ const ScaleRightSide = () => {
               labelHold.appendChild(circle);
 
               circle.addEventListener("mouseenter", () => {
-                if (circle.textContent === "0") {
+                if (circle.textContent === "0" || i === 0) {
                   buttonChildLeft.style.display = "block";
                   buttonChildLeft.style.position = "absolute";
                   buttonChildLeft.style.bottom = "0";
@@ -1214,7 +1214,7 @@ const ScaleRightSide = () => {
                   buttonChildLeft.style.padding = "2px 8px";
                   buttonChildLeft.style.color = "white";
                   buttonChildLeft.style.borderRadius = "2px";
-                } else if (circle.textContent === "5") {
+                } else if (circle.textContent === "5" || i === 5) {
                   buttonChildNeutral.style.display = "block";
                   buttonChildNeutral.style.position = "absolute";
                   buttonChildNeutral.style.bottom = "0";
@@ -1230,7 +1230,7 @@ const ScaleRightSide = () => {
                   buttonChildNeutral.style.padding = "2px 8px";
                   buttonChildNeutral.style.color = "white";
                   buttonChildNeutral.style.borderRadius = "2px";
-                } else if (circle.textContent === "10") {
+                } else if (circle.textContent === "10" || i === 10) {
                   buttonChildRight.style.display = "block";
                   buttonChildRight.style.position = "absolute";
                   buttonChildRight.style.left = "";
@@ -1250,11 +1250,11 @@ const ScaleRightSide = () => {
               });
 
               circle.addEventListener("mouseleave", () => {
-                if (circle.textContent === "0") {
+                if (circle.textContent === "0" || i === 0) {
                   buttonChildLeft.style.display = "none";
-                } else if (circle.textContent === "5") {
+                } else if (circle.textContent === "5" || i === 5) {
                   buttonChildNeutral.style.display = "none";
-                } else if (circle.textContent === "10") {
+                } else if (circle.textContent === "10" || i === 10) {
                   buttonChildRight.style.display = "none";
                 }
               });
@@ -1366,7 +1366,7 @@ const ScaleRightSide = () => {
                 labelHold.appendChild(circle);
 
                 circle.addEventListener("mouseenter", () => {
-                  if (circle.textContent === "0") {
+                  if (circle.textContent === "0" || i === 0) {
                     buttonChildLeft.style.display = "block";
                     buttonChildLeft.style.position = "absolute";
                     buttonChildLeft.style.bottom = "0";
@@ -1380,7 +1380,7 @@ const ScaleRightSide = () => {
                     buttonChildLeft.style.padding = "2px 8px";
                     buttonChildLeft.style.color = "white";
                     buttonChildLeft.style.borderRadius = "2px";
-                  } else if (circle.textContent === "5") {
+                  } else if (circle.textContent === "5" || i === 5) {
                     buttonChildNeutral.style.display = "block";
                     buttonChildNeutral.style.position = "absolute";
                     buttonChildNeutral.style.bottom = "0";
@@ -1396,7 +1396,7 @@ const ScaleRightSide = () => {
                     buttonChildNeutral.style.padding = "2px 8px";
                     buttonChildNeutral.style.color = "white";
                     buttonChildNeutral.style.borderRadius = "2px";
-                  } else if (circle.textContent === "10") {
+                  } else if (circle.textContent === "10" || i === 10) {
                     buttonChildRight.style.display = "block";
                     buttonChildRight.style.position = "absolute";
                     buttonChildRight.style.left = "";

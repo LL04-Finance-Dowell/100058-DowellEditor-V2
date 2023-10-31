@@ -139,7 +139,7 @@ function createNewScaleInputField(
       const orientation = element?.raw_data?.orentation;
 
       circle.addEventListener("mouseenter", () => {
-        if (circle.textContent === "0") {
+        if (circle.textContent === "0" || i === 0) {
           element1.style.display = "block";
           element1.style.position = "absolute";
           element1.style.bottom = "0";
@@ -149,7 +149,7 @@ function createNewScaleInputField(
           element1.style.padding = "2px 8px";
           element1.style.color = "white";
           element1.style.borderRadius = "2px";
-        } else if (circle.textContent === "5") {
+        } else if (circle.textContent === "5" || i === 5) {
           element2.style.display = "block";
           element2.style.position = "absolute";
           element2.style.bottom = "0";
@@ -159,7 +159,7 @@ function createNewScaleInputField(
           element2.style.padding = "2px 8px";
           element2.style.color = "white";
           element2.style.borderRadius = "2px";
-        } else if (circle.textContent === "10") {
+        } else if (circle.textContent === "10" || i === 10) {
           element3.style.display = "block";
           element3.style.position = "absolute";
           element3.style.left = "";
@@ -174,11 +174,11 @@ function createNewScaleInputField(
       });
 
       circle.addEventListener("mouseleave", () => {
-        if (circle.textContent === "0") {
+        if (circle.textContent === "0" || i === 0) {
           element1.style.display = "none";
-        } else if (circle.textContent === "5") {
+        } else if (circle.textContent === "5" || i === 5) {
           element2.style.display = "none";
-        } else if (circle.textContent === "10") {
+        } else if (circle.textContent === "10" || i === 10) {
           element3.style.display = "none";
         }
       });
