@@ -116,19 +116,25 @@ const ButtonRightSide = () => {
   return (
     <>
       <div className='mt-2 mb-3 w-100'>
-        <select
-          className='gen_btn_sel'
-          defaultValue='cta'
-          onChange={(e) => setGenSelOpt(e.target.value)}
-          style={{ marginBottom: '10px' }}
-        >
-          <option value='' disabled>
-            Select type
-          </option>
-          <option value='cta'>CTA</option>
-          <option value='pay'>Pay</option>
-          <option value='email'>Email</option>
-        </select>
+        <div className='sel_btn_wrapper'>
+          <label htmlFor='btn_type' className='sel_label'>
+            Select Button Type
+          </label>
+          <select
+            className='gen_btn_sel'
+            defaultValue='cta'
+            onChange={(e) => setGenSelOpt(e.target.value)}
+            style={{ marginBottom: '10px' }}
+            id='btn_type'
+          >
+            <option value='' disabled>
+              Select type
+            </option>
+            <option value='cta'>CTA</option>
+            <option value='pay'>Pay</option>
+            <option value='email'>Email</option>
+          </select>
+        </div>
 
         <h3>Button Settings</h3>
         <Form.Label>Button Name</Form.Label>
@@ -139,17 +145,24 @@ const ButtonRightSide = () => {
           onChange={() => {}}
         />
       </div>
-      <select
-        onChange={handleSelect}
-        id='selectt'
-        // onChange={handleDateMethod}
-        className='select border-0 bg-white rounded w-100 h-75 p-2'
-      >
-        <option value=''>Select</option>
-        <option value='finalize'>Finalize</option>
-        <option value='reject'>Reject</option>
-        <option value='custom'>Custom</option>
-      </select>
+
+      <div className='sel_wrapper'>
+        <label htmlFor='selectt' className='sel_label'>
+          Button Purpose
+        </label>
+
+        <select
+          onChange={handleSelect}
+          id='selectt'
+          // onChange={handleDateMethod}
+          className='select border-0 bg-white rounded w-100 h-75 p-2'
+        >
+          <option value=''>Select</option>
+          <option value='finalize'>Finalize</option>
+          <option value='reject'>Reject</option>
+          <option value='custom'>Custom</option>
+        </select>
+      </div>
 
       <div
         id='website_link'

@@ -2676,6 +2676,11 @@ const MidSection = React.forwardRef((props, ref) => {
                   .split('_')[1]
               );
 
+              console.log('element: ', el);
+
+              // * This codes opens Right sidebar once user drops component on midsection
+              // el.click();
+
               const modDimRatio = {
                 type: el.className,
                 id: el.id,
