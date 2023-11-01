@@ -416,7 +416,6 @@ const MidSection = React.forwardRef((props, ref) => {
     return resizer;
   }
 
-  console.log('data decoded', decoded);
 
   //colse context menu
 
@@ -646,24 +645,24 @@ const MidSection = React.forwardRef((props, ref) => {
 
       holderDIV.onresize = (evntt) => { };
 
-      holderDIV.addEventListener('focus', (e) => {
-        holderDIV.classList.add('zIndex-two');
-        holderDIV.style.border = '2px solid orange';
+      // holderDIV.addEventListener('focus', (e) => {
+      //   holderDIV.classList.add('zIndex-two');
+      //   holderDIV.style.border = '2px solid orange';
 
-        holderDIV.append(resizerTL, resizerTR, resizerBL, resizerBR);
-      });
+      //   holderDIV.append(resizerTL, resizerTR, resizerBL, resizerBR);
+      // });
 
-      holderDIV.addEventListener('focusout', (e) => {
-        holderDIV.classList.remove('zIndex-two');
+      // holderDIV.addEventListener('focusout', (e) => {
+      //   holderDIV.classList.remove('zIndex-two');
 
-        holderDIV.style.border = '3px dotted gray';
+      //   holderDIV.style.border = '3px dotted gray';
 
-        holderMenu.remove();
-        resizerTL.remove();
-        resizerTR.remove();
-        resizerBL.remove();
-        resizerBR.remove();
-      });
+      //   holderMenu.remove();
+      //   resizerTL.remove();
+      //   resizerTR.remove();
+      //   resizerBL.remove();
+      //   resizerBR.remove();
+      // });
 
       return holderDIV;
     }
@@ -2735,7 +2734,15 @@ const MidSection = React.forwardRef((props, ref) => {
                 onContextMenu={handleContextMenu}
               >
                 {confirmRemove && (
-                  <RemoveElementModal handleRemoveInput={handleRemoveInput} />
+                  <RemoveElementModal handleRemoveInput={()=>{
+                    if(contextMenu.targetEl){
+                      handleRemoveInput(contextMenu.targetEl)
+                    }else{
+                      if(document.querySelector(".focussedd")){
+                        document.querySelector(".focussedd")?.remove();
+                      };
+                    }
+                  }} />
                 )}
                 {contextMenu.show && (
                   <RightContextMenu
@@ -2748,9 +2755,6 @@ const MidSection = React.forwardRef((props, ref) => {
                     pasteInput={handlePaste}
                     handleCopy={() => {
                       handleCopyInput(contextMenu.targetEl);
-                    }}
-                    removeInput={() => {
-                      handleRemoveInput(contextMenu.targetEl);
                     }}
                   />
                 )}
