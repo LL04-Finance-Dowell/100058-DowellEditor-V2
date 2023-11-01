@@ -47,6 +47,8 @@ function createImageElement(holderDIV, focuseddClassMaintain, handleClicked, set
         // console.log("imgData clicked");
     });
 
+
+
     imageField.onclick = (e) => {
         e.stopPropagation();
         focuseddClassMaintain(e);
@@ -70,7 +72,7 @@ function createImageElement(holderDIV, focuseddClassMaintain, handleClicked, set
     imgBtn.className = "addImageButtonInput";
     imgBtn.type = "file";
     imgBtn.style.objectFit = "cover";
-    var uploadedImage = "";
+
 
     imgBtn.addEventListener("change", () => {
         if (imageField.children.length) {
@@ -90,6 +92,19 @@ function createImageElement(holderDIV, focuseddClassMaintain, handleClicked, set
 
         imgBtn.files[0] && reader.readAsDataURL(imgBtn.files[0]);
     });
+    if(uploadedImage = ""){
+        const span2 = document.createElement('span');
+        span2.className = 'img_text';
+        span2.textContent = "Choose Image";
+        span2.style.color = '#737272';
+    
+        const span1 = document.createElement('span');
+        span1.className = 'icon_wrapper';
+        span1.innerHTML = `<img src='${icon}'/>`;
+    
+        imageField.append(span1)
+        imageField.append(span2);
+    }
 
     // imgBtn.style.width = "100%";
     imageButton.append(imgBtn);

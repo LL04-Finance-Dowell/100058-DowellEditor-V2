@@ -9,9 +9,12 @@ function CreatePyamentElement(holderDIV, focuseddClassMaintain, handleClicked, s
     paymentField.style.height = "100%";
     paymentField.style.backgroundColor = "#0000";
     paymentField.style.borderRadius = "0px";
-    paymentField.style.outline = "0px";
+    // paymentField.style.outline = "0px";
     paymentField.style.overflow = "overlay";
     paymentField.style.position = "absolute";
+    paymentField.style.outline = "none";
+    // paymentField.style.boxShadow="none"; 
+    paymentField.style.border = "none"
     paymentField.textContent = "Pay";
 
     const paymentInput = document.getElementsByClassName("paymentInput");

@@ -29,6 +29,7 @@ import { useSearchParams } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 import SelectAnsAndQuestion from "../selectAnsAndQuestion";
 import useSelectedAnswer from "../../customHooks/useSelectedAnswers";
+import { FontFamily } from "../../data/data";
 
 const AlignRightSide = () => {
   const {
@@ -180,7 +181,7 @@ const AlignRightSide = () => {
   }
 
   function changeBgColor(font) {
-    const textDiv = document.getElementsByClassName("textInput").item(0);
+    const textDiv = document.getElementsByClassName("focussed").item(0);
 
     textDiv.style = "background-color:" + font.target.value + ";";
   }
@@ -198,6 +199,9 @@ const AlignRightSide = () => {
       range.insertNode(e); // … and inserts the new element at its place
     }
   }
+
+
+  
 
   function showColorInput() {
     const fontColor = document.getElementById("colorInputColor");
@@ -283,39 +287,14 @@ const AlignRightSide = () => {
               className="bg-white border-0 rounded w-100 h-75 select"
               onChange={changeFont}
             >
-              <option value="Arial">Arial</option>
               <option value="Sans Serif" selected>
                 Sans Serif
               </option>
-              <option value="Comic Sans MS">Comic Sans MS</option>
-              <option value="Times New Roman">Times New Roman</option>
-              <option value="Courier New">Courier New</option>
-              <option value="Verdana">Verdana</option>
-              <option value="Trebuchet MS">Trebuchet MS</option>
-              <option value="Arial Black">Arial Black</option>
-              <option value="Impact">Impact</option>
-              <option value="Bookman">Bookman</option>
-              <option value="Garamond">Garamond</option>
-              <option value="Palatino">Palatino</option>
-              <option value="Georgia">Georgia</option>
-              <option value="Calibri">Calibri</option>
-              <option value="Helvetica">Helvetica</option>
-              <option value="Open Sans">Open Sans</option>
-              <option value="Century Gothic">Century Gothic</option>
-              <option value="Futura">Futura</option>
-              <option value="Myriad Pro">Myriad Pro</option>
-              <option value="Proxima Nova">Proxima Nova</option>
-              <option value="Montserrat">Montserrat</option>
-              <option value="Playfair Display">Playfair Display</option>
-              <option value="Baskerville">Baskerville</option>
-              <option value="Rockwell">Rockwell</option>
-              <option value="Franklin Gothic">Franklin Gothic</option>
-              <option value="Trade Gothic">Trade Gothic</option>
-              <option value="Gotham">Gotham</option>
-              <option value="Univers">Univers</option>
-              <option value="Copperplate Gothic">Copperplate Gothic</option>
-              <option value="Optima">Optima</option>
-              <option value="Didot">Didot</option>
+              {
+                FontFamily.map(font => 
+                  <option key={font.font} value={font.font}>{font.font}</option>
+                  )
+              }
             </select>
           </Col>
         </Row>
