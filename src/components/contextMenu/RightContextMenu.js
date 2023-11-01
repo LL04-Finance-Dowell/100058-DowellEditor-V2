@@ -12,9 +12,8 @@ const RightContextMenu = ({
   cutInput,
   pasteInput,
   handleCopy,
-  removeInput,
 }) => {
-  const { confirmRemove, setConfirmRemove } = useStateContext()
+  const {setConfirmRemove } = useStateContext()
   return (
     <div
       onClick={() => closeContextMenu()}
@@ -32,11 +31,7 @@ const RightContextMenu = ({
           <ImPaste />
           Paste
         </li>
-        {/* <li onClick={removeInput}>
-          <CgPlayListRemove />
-          Remove
-        </li> */}
-        <li onClick={() => setConfirmRemove(!confirmRemove)}><CgPlayListRemove />Remove</li>
+        <li onClick={()=>{setConfirmRemove(true)}}><CgPlayListRemove />Remove</li>
       </ul>
     </div>
   );
