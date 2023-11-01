@@ -330,10 +330,7 @@ const MidSection = React.forwardRef((props, ref) => {
       resizer.style.right = '-5px';
     }
 
-    if (
-      (attr1 == 'top' && attr2 === 'right') ||
-      (attr1 == 'bottom' && attr2 === 'left')
-    ) {
+    if (attr1 == 'top' && attr2 === 'right' || attr1 == 'bottom' && attr2 === 'left') {
       resizer.onmouseover = (event) => {
         event.target.style.cursor = 'nesw-resize';
       };
@@ -343,7 +340,9 @@ const MidSection = React.forwardRef((props, ref) => {
       };
     }
 
+
     resizer.onmousedown = (event) => {
+
       let initX = event.screenX;
       let initY = event.screenY;
       resizing = true;
@@ -353,68 +352,54 @@ const MidSection = React.forwardRef((props, ref) => {
 
       const holderSize = (function () {
         const holderSize = {
-          width:
-            decoded.details.flag === 'editing' ? holder.offsetWidth : undefined,
-          height:
-            decoded.details.flag === 'editing'
-              ? holder.offsetHeight
-              : undefined,
-          top:
-            decoded.details.flag === 'editing' ? holder.offsetTop : undefined,
-          left:
-            decoded.details.flag === 'editing' ? holder.offsetLeft : undefined,
-
-          // width: parseInt(holder.style?.width.slice(0, -2)),
+          width: holder.offsetWidth,
+          height: holder.offsetHeight,
+          top: holder.offsetTop,
+          left: holder.offsetLeft
+          // width: parseInt(holder.style.width.slice(0, -2)),
           // height: parseInt(holder.style.height.slice(0, -2)),
           // top: parseInt(holder.style.top.slice(0, -2)),
           // left: parseInt(holder.style.left.slice(0, -2))//elemLeft : 0
-        };
+        }
         return Object.seal(holderSize);
       })();
 
       window.addEventListener('mousemove', resizeElement);
       function resizeElement(ev) {
-        const el = document.getElementById('midSection_container');
-        const midsectionRect = el.getBoundingClientRect();
-        if (
-          ev.screenX > midsectionRect.left &&
-          ev.screenY > midsectionRect.top &&
-          ev.screenX < midsectionRect.right
-        ) {
-          if (attr1 == 'bottom' && attr2 == 'right') {
-            holder.style.width = ev.screenX - initX + holderSize.width + 'px';
-            holder.style.height = ev.screenY - initY + holderSize.height + 'px';
-          } else if (attr1 == 'bottom' && attr2 == 'left') {
-            holder.style.left = holderSize.left + (ev.screenX - initX) + 'px';
-            holder.style.width = holderSize.width - (ev.screenX - initX) + 'px';
-            holder.style.height = ev.screenY - initY + holderSize.height + 'px';
-          } else if (attr1 == 'top' && attr2 == 'left') {
-            holder.style.top = holderSize.top + (ev.screenY - initY) + 'px';
-            holder.style.left = holderSize.left + (ev.screenX - initX) + 'px';
-            holder.style.width = holderSize.width - (ev.screenX - initX) + 'px';
-            holder.style.height =
-              holderSize.height - (ev.screenY - initY) + 'px';
-          } else if (attr1 == 'top' && attr2 == 'right') {
-            holder.style.top = holderSize.top + (ev.screenY - initY) + 'px';
-            holder.style.width = holderSize.width + (ev.screenX - initX) + 'px';
-            holder.style.height =
-              holderSize.height - (ev.screenY - initY) + 'px';
-          }
+        if (attr1 == 'bottom' && attr2 == 'right') {
+          holder.style.width = ((ev.screenX - initX) + holderSize.width) + 'px';
+          holder.style.height = ((ev.screenY - initY) + holderSize.height) + 'px';
+
+        } else if (attr1 == 'bottom' && attr2 == 'left') {
+          holder.style.left = (holderSize.left + (ev.screenX - initX)) + 'px';
+          holder.style.width = (holderSize.width - (ev.screenX - initX)) + 'px';
+          holder.style.height = ((ev.screenY - initY) + holderSize.height) + 'px';
+        } else if (attr1 == 'top' && attr2 == 'left') {
+          holder.style.top = (holderSize.top + (ev.screenY - initY)) + 'px';
+          holder.style.left = (holderSize.left + (ev.screenX - initX)) + 'px';
+          holder.style.width = (holderSize.width - (ev.screenX - initX)) + 'px';
+          holder.style.height = (holderSize.height - (ev.screenY - initY)) + 'px';
+        } else if (attr1 == 'top' && attr2 == 'right') {
+          holder.style.top = (holderSize.top + (ev.screenY - initY)) + 'px';
+          holder.style.width = (holderSize.width + (ev.screenX - initX)) + 'px';
+          holder.style.height = (holderSize.height - (ev.screenY - initY)) + 'px';
         }
-        // console.log('RESIZE: ', ev.target.parentElement);
+
       }
 
       window.addEventListener('mouseup', stopResizing);
       function stopResizing(ev) {
-        // updateDimRatios(ev.target.parentElement)
         window.removeEventListener('mousemove', resizeElement);
         window.removeEventListener('mouseup', stopResizing);
         resizing = false;
+
       }
-    };
+    }
 
     return resizer;
   }
+
+
 
 
   //colse context menu
@@ -645,24 +630,24 @@ const MidSection = React.forwardRef((props, ref) => {
 
       holderDIV.onresize = (evntt) => { };
 
-      // holderDIV.addEventListener('focus', (e) => {
-      //   holderDIV.classList.add('zIndex-two');
-      //   holderDIV.style.border = '2px solid orange';
+      holderDIV.addEventListener('focus', (e) => {
+        holderDIV.classList.add('zIndex-two');
+        holderDIV.style.border = '2px solid orange';
 
-      //   holderDIV.append(resizerTL, resizerTR, resizerBL, resizerBR);
-      // });
+        holderDIV.append(resizerTL, resizerTR, resizerBL, resizerBR);
+      });
 
-      // holderDIV.addEventListener('focusout', (e) => {
-      //   holderDIV.classList.remove('zIndex-two');
+      holderDIV.addEventListener('focusout', (e) => {
+        holderDIV.classList.remove('zIndex-two');
 
-      //   holderDIV.style.border = '3px dotted gray';
+        holderDIV.style.border = '3px dotted gray';
 
-      //   holderMenu.remove();
-      //   resizerTL.remove();
-      //   resizerTR.remove();
-      //   resizerBL.remove();
-      //   resizerBR.remove();
-      // });
+        holderMenu.remove();
+        resizerTL.remove();
+        resizerTR.remove();
+        resizerBL.remove();
+        resizerBR.remove();
+      });
 
       return holderDIV;
     }
