@@ -791,13 +791,13 @@ const TableRightSidebar = () => {
       const trNum = focusseddDiv?.firstElementChild?.firstElementChild?.children;
       let isHeaderRow = true
       for (let i = 0; i < trNum.length; i++) {
-        if (trNum[i].querySelector('.target-el') && isHeaderRow) {
+        if (trNum[i].querySelector('.configure-table') && isHeaderRow) {
           trNum[i].remove()
           isHeaderRow = false;
         }
         if (!isHeaderRow) {
           trNum[i].querySelectorAll('td').forEach(td => {
-            if (td.querySelector('.target-el')) {
+            if (td.querySelector('.configure-table')) {
               td.remove();
             }
           })
@@ -866,10 +866,10 @@ const TableRightSidebar = () => {
 
       var addColBtn = document.createElement("BUTTON");
       addColBtn.onclick = addColumn;
-      addRowBtn.className = "btn btn-primary me-3 my-3 target-el";
+      addRowBtn.className = "btn btn-primary me-3 my-3 configure-table";
       addRowBtn.innerText = "Add Row";
       addColBtn.innerText = "Add Col";
-      addColBtn.className = "btn btn-primary my-3 target-el";
+      addColBtn.className = "btn btn-primary my-3 configure-table";
       editDiv.appendChild(addRowBtn);
       editDiv.appendChild(addColBtn);
       editDiv.style.display = "flex";
@@ -892,7 +892,7 @@ const TableRightSidebar = () => {
           td.style.height = "50px";
           // if (rowIndex == 0 && colIndex != numOfCol) {
           const colDeleteBtn = document.createElement("button");
-          colDeleteBtn.className = "btn btn-warning target-el";
+          colDeleteBtn.className = "btn btn-warning configure-table";
           colDeleteBtn.style.marginLeft = "5px";
           const deleteIcon = `<img src="${deleteSVG}"/>`
           colDeleteBtn.innerHTML = deleteIcon
@@ -926,7 +926,7 @@ const TableRightSidebar = () => {
             // if (colIndex == numOfCol && rowIndex != 0) {
             var td = document.createElement("td");
             const rowDeleteBtn = document.createElement("button");
-            rowDeleteBtn.className = "btn btn-warning target-el";
+            rowDeleteBtn.className = "btn btn-warning configure-table";
             rowDeleteBtn.style.marginLeft = "5px";
             const deleteIcon = `<img src="${deleteSVG}"/>`
             rowDeleteBtn.innerHTML = deleteIcon;
@@ -1049,7 +1049,7 @@ const TableRightSidebar = () => {
       }
       const buttonTd = document.createElement("td");
       const rowDeleteBtn = document.createElement("button");
-      rowDeleteBtn.className = "btn btn-warning target-el";
+      rowDeleteBtn.className = "btn btn-warning configure-table";
       rowDeleteBtn.style.marginLeft = "5px";
       const deleteIcon = `<img src="${deleteSVG}"/>`
       rowDeleteBtn.innerHTML = deleteIcon;
@@ -1192,7 +1192,7 @@ const TableRightSidebar = () => {
         const colDeleteBtn = document.createElement("button");
         const deleteIcon = `<img src="${deleteSVG}"/>`
         colDeleteBtn.innerHTML = deleteIcon
-        colDeleteBtn.className = "btn btn-warning target-el";
+        colDeleteBtn.className = "btn btn-warning configure-table";
         colDeleteBtn.style.marginLeft = "5px";
 
         colDeleteBtn.onclick = (e) => {
@@ -1417,7 +1417,7 @@ const TableRightSidebar = () => {
 
         <Button
           variant="secondary"
-          className="px-5 me-3"
+          className="px-5 me-3 tb-rightsidebar-buttons"
           onClick={makeTable}
           disabled={isCreateTableBtnDisabled}
         >
@@ -1425,7 +1425,7 @@ const TableRightSidebar = () => {
         </Button>
         <Button
           variant="success"
-          className="px-5"
+          className="px-5 tb-rightsidebar-buttons"
           // data-bs-toggle="modal"
           // data-bs-target="#tableUpdateModal"
           onClick={updateTable}
