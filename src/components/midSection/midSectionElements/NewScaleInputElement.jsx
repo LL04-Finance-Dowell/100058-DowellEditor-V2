@@ -555,13 +555,13 @@ function createNewScaleInputField(
             let holdingParentEl =
               circle.parentElement.parentElement.parentElement.parentElement;
             let scale =
-              circle.parentElement.parentElement.parentElement.parentElement;
+              circle.parentElement.parentElement;
             let holding = scale?.querySelector(".newScaleInput");
             const buttonCircle = scale
               ? scale.querySelectorAll(".circle_label")
               : [];
 
-            // console.log("This is the background color", holdingParentEl);
+             console.log("This is the background color", holdingParentEl);
             function componentToHex(c) {
               var hex = c.toString(16);
               return hex.length == 1 ? "0" + hex : hex;
