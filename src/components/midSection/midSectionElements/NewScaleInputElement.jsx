@@ -1203,7 +1203,8 @@ function createNewScaleInputField(
       containerDiv.className = "containerDIV";
       containerDiv.style.width = "95%";
       containerDiv.style.padding = "10px 39px 10px 10px";
-      containerDiv.style.border = "1px solid gray";
+      containerDiv.style.borderTop = "1px solid gray";
+      containerDiv.style.borderBottom = "1px solid gray";
       labelHold.append(containerDiv);
 
       let nameDiv = document.createElement("div");

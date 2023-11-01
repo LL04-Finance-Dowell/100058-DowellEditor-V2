@@ -3043,10 +3043,11 @@ const ScaleRightSide = () => {
       const containerDiv = document.createElement("div");
       containerDiv.className = "label_hold";
 
-      button4.style.display = "flex";
-      button4.style.justifyContent = "center";
-      button4.style.alignItems = "center";
-      button4.style.height = "100%";
+      containerDiv.style.display = "flex";
+      containerDiv.style.justifyContent = "center";
+      containerDiv.style.alignItems = "center";
+      containerDiv.style.flexDirection = "column";
+      containerDiv.style.height = "100%";
 
       let productNames = document.getElementById("product_count_label");
       let inputFields = productNames?.querySelectorAll("input");
@@ -3108,12 +3109,10 @@ const ScaleRightSide = () => {
               newLabelHold.classList.remove("label_hold");
               newLabelHold.innerHTML = "";
               newLabelHold.style = "";
-              newLabelHold.style.padding = "3px";
-              newLabelHold.style.borderBottom = "1px solid gray";
-              newLabelHold.style.paddingRight = "35px";
-              newLabelHold.style.paddingLeft = "35px";
-              newLabelHold.style.borderBottom = "1px solid gray";
+              newLabelHold.style.padding = "10px 39px 10px 10px";
+              newLabelHold.style.width = "95%";
               newLabelHold.style.borderTop = "1px solid gray";
+              newLabelHold.style.borderBottom = "1px solid gray";
 
               let nameDiv = document.createElement("div");
               nameDiv.className = "product_name";
@@ -3286,10 +3285,8 @@ const ScaleRightSide = () => {
                 newLabelHold.classList.remove("label_hold");
                 newLabelHold.innerHTML = "";
                 newLabelHold.style = "";
-                newLabelHold.style.padding = "3px";
-                newLabelHold.style.borderBottom = "1px solid gray";
-                newLabelHold.style.paddingRight = "35px";
-                newLabelHold.style.paddingLeft = "35px";
+                newLabelHold.style.padding = "10px 39px 10px 10px";
+                newLabelHold.style.width = "95%";
                 newLabelHold.style.borderBottom = "1px solid gray";
                 newLabelHold.style.borderTop = "1px solid gray";
 
