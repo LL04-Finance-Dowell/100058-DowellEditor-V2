@@ -101,7 +101,7 @@ const DropDownRightSide = () => {
       <Form.Control
         type="text"
         placeholder="Enter Name"
-        onChange={handleNameChange}
+        onBlur={handleNameChange}
       />
 
       <Form.Label>List Items</Form.Label>
