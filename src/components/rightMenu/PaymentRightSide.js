@@ -463,7 +463,6 @@ const PaymentRightSide = () => {
             if (Stripelink != "") {
                 // setPaymentKey(link);
                 setSavedSripeKey(prev => {
-                    console.log("Stripe link......")
                     return {
                         ...prev,
                         ['key']: Stripelink
@@ -496,7 +495,6 @@ const PaymentRightSide = () => {
         const paypalId = holderDIV.querySelector('.paypal_id').textContent
         const idWrapper = document.getElementById('link2')
         const stripeWrapper = document.getElementById('link');
-        console.log(">>>\n", idWrapper, "\n>>>>");
 
         if(idWrapper !== null){
             idWrapper.value = paypalId

@@ -139,8 +139,7 @@ const TableRightSidebar = () => {
       imageField.style.overflow = "overlay";
       imageField.innerHTML = "Image here";
       imageField.style.position = "relative";
-      imageField.id = `${targetTable.id}i${imageId}`
-
+      imageField.id = `${targetTable.id}i${imageId}`;
       imageField.onclick = (e) => {
         if (imageField) {
           handleClicked("image2", "table2");
@@ -578,6 +577,11 @@ const TableRightSidebar = () => {
 
       for (var colIndex = 0; colIndex < col; colIndex++) {
         var td = document.createElement("td");
+        td.contentEditable = true;
+        // td.style.flexDirection = "row";
+        // td.style.overflow = "hidden"
+        // td.style.padding = "10px"
+        // td.style.display = "flex"
         td.className = "dropp";
         if (rowIndex === 0) {
           const resizer = document.createElement('div');

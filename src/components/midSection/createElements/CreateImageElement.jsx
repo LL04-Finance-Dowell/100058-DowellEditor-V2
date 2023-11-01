@@ -33,6 +33,7 @@ function createImageElement(holderDIV, focuseddClassMaintain, handleClicked, set
         imageField.append(span2);
     }
 
+    var uploadedImage = " ";
 
 
     const img = document.getElementsByClassName("imageInput");
