@@ -150,15 +150,18 @@ const EditSection = () => {
             <MidSection />
           </Col>
 
+          {/* <div style={{overflowY:"scroll"}}>s */}
           <Col
-            style={sidebar ? { display: "block" } : { display: "none" }}
+            style={sidebar ? { display: "block", 
+            // height:`${window.innerHeight}px`
+            } : { display: "none" }}
             lg={sidebar ? 3 : 0}
             as="div"
             className="editSec_rightMenu"
           >
-
             <RightMenu />
           </Col>
+          {/* </div> */}
         </Row>
       </Container>
     </div>

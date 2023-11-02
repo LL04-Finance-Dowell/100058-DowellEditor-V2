@@ -63,7 +63,7 @@ code {
     border-radius: 5px;
   } */
 
-  .fixed3 {
+  /* .fixed3 {
     position: fixed;
     padding: 15px 20px;
     border-radius: 10px;
@@ -76,8 +76,7 @@ code {
     overflow: auto;
     touch-action: none;
     max-width: 500px;
-    /* cursor: grab; */
-  }
+  } */
 
   /* .fixed3 {
     position: fixed;
