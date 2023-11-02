@@ -2312,8 +2312,8 @@ const ScaleRightSide = () => {
         button.style.flexDirection = "column";
         button.style.justifyContent = "center";
         button.style.alignItems = "center";
-        button.style.marginTop = "-5px";  
-        labelHold.style.paddingLeft = "30%";
+        button.style.marginTop = "-2px";  
+        labelHold.style.marginLeft = "11%";
         labelHold.style.overflowY = "hidden"; 
         labelHold.style.overflowX = "hidden";
       }
@@ -2440,7 +2440,8 @@ const ScaleRightSide = () => {
               // Set the text content to the appropriate label (either text or emoji)
               circle.textContent = updatedLabels[i] || "";
               if (option.value === "Vertical") {
-                circle.style.margin = "2px 0";
+                circle.style.margin = "5px 0";
+                circle.style.padding = "6px 12px";
               }
 
               labelHold.style.border = "";
@@ -2510,7 +2511,6 @@ const ScaleRightSide = () => {
 
                 if (option.value === "Vertical") {
                   circle.style.margin = "5px 0";
-                  circle.style.padding = "6px 12px";
                 }
 
                 labelHold.appendChild(circle);
