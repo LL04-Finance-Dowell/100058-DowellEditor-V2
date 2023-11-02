@@ -2305,8 +2305,8 @@ const ScaleRightSide = () => {
         button.style.flexDirection = "column";
         button.style.justifyContent = "center";
         button.style.alignItems = "center";
-        button.style.marginTop = "-5px";  
-        labelHold.style.paddingLeft = "30%";
+        button.style.marginTop = "-2px";  
+        labelHold.style.marginLeft = "11%";
         labelHold.style.overflowY = "hidden"; 
         labelHold.style.overflowX = "hidden";
       }
