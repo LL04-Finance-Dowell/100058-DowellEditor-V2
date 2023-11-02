@@ -890,7 +890,7 @@ const Header = () => {
             //     : "Template scale",
           };
 
-          // console.log(elem);
+          console.log('NEW SCALE: ', elem);
           const pageNum = findPaageNum(newScales[b]);
           page[0][pageNum]?.push(elem);
         }
@@ -971,7 +971,7 @@ const Header = () => {
       for (let p = 0; p < payments.length; p++) {
         if (
           !payments[p]?.parentElement?.parentElement?.classList?.contains(
-            "containerInput"
+            'containerInput'
           )
         ) {
           let tempElem = payments[p].parentElement;

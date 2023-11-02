@@ -1750,7 +1750,13 @@ const MidSection = React.forwardRef((props, ref) => {
           };
           const idMatch = documnetMap?.filter((elmnt) => elmnt == element?.id);
           const holderDIV = getHolderDIV(measure, p, idMatch);
-          const id = `${element?.raw_data?.scaleID}`;
+          const id = `${
+            element?.raw_data?.scaleID.includes('scale Id')
+              ? element.id
+              : element?.raw_data?.scaleID
+          }`;
+
+          console.log('NEW SCALE POST: ', element, id);
 
           createNewScaleInputField(
             id,
@@ -2545,7 +2551,7 @@ const MidSection = React.forwardRef((props, ref) => {
     const midSecWidth = document
       .querySelector('.midSection_container')
       .getBoundingClientRect().width;
-    const holderStyles = window.getComputedStyle(holder);
+    // const holderStyles = window.getComputedStyle(holder);
 
     const computeDim = (prop) => midSecWidth * prop + 'px';
 
@@ -2634,7 +2640,6 @@ const MidSection = React.forwardRef((props, ref) => {
   }, [fetchedData]);
 
   useEffect(() => {
-    // console.log('currMidSecWidth: ', currMidSecWidth);
     if (Object.keys(fetchedData).length) {
       window.onresize = () => scaleMidSec();
     }
@@ -2676,10 +2681,8 @@ const MidSection = React.forwardRef((props, ref) => {
                   .split('_')[1]
               );
 
-              console.log('element: ', el);
-
               // * This codes opens Right sidebar once user drops component on midsection
-              // el.click();
+              !dimRatios.find((dim) => dim.id === el.id) && el.click();
 
               const modDimRatio = {
                 type: el.className,

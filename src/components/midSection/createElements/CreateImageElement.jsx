@@ -74,6 +74,7 @@ function createImageElement(
   imgBtn.className = 'addImageButtonInput';
   imgBtn.type = 'file';
   imgBtn.style.objectFit = 'cover';
+  var uploadedImage = '';
 
   imgBtn.addEventListener('change', () => {
     if (imageField.children.length) {

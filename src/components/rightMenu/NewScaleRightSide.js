@@ -853,7 +853,7 @@ const ScaleRightSide = () => {
     setInputFields(newInputFields);
   };
 
-  console.log(scale);
+  // console.log(scale);
 
   const handleInputChange = (event) => {
     const selectedValue = event.target.value;
@@ -952,7 +952,7 @@ const ScaleRightSide = () => {
 
   const handleUpdates = () => {
     const scaleType = document.getElementById("scaleType");
-    console.log("Content prop", scaleTypeContent);
+    // console.log("Content prop", scaleTypeContent);
     setScaleTypeContent(scaleType ? scaleType.value : scaleTypeContent);
     const scaleTypeHolder = scale?.querySelector(".scaleTypeHolder");
     scaleTypeHolder.textContent = scaleType
@@ -1140,7 +1140,7 @@ const ScaleRightSide = () => {
             const id = res.data.data.scale_id;
             // var successObj = JSON.parse(success);
             // const id = successObj.inserted_id;
-            console.log("This is the scale id", id);
+            // console.log("This is the scale id", id);
             if (id.length) {
               setScaleId(id && id);
               const idHolder = scale?.querySelector(".scaleId");
@@ -1259,13 +1259,13 @@ const ScaleRightSide = () => {
               });
 
               if (selectedOption === "emoji" && emojiInp !== "") {
-                console.log(selectedOption);
+                // console.log(selectedOption);
                 // Set the text content of the div to the corresponding emoji
                 const emojiFormat = /(\p{Emoji}|\uFE0F)/gu;
                 const emojis = emojiInp
                   .split(emojiFormat)
                   .filter((emoji) => emoji !== "");
-                console.log(emojis);
+                // console.log(emojis);
                 circle.textContent = emojis[i % emojis.length];
               } else {
                 // Set the text content of the div to the number
@@ -1425,13 +1425,13 @@ const ScaleRightSide = () => {
                 });
 
                 if (selectedOption === "emoji" && emojiInp !== "") {
-                  console.log(selectedOption);
+                  // console.log(selectedOption);
                   // Set the text content of the div to the corresponding emoji
                   const emojiFormat = /(\p{Emoji}|\uFE0F)/gu;
                   const emojis = emojiInp
                     .split(emojiFormat)
                     .filter((emoji) => emoji !== "");
-                  console.log(emojis);
+                  // console.log(emojis);
                   circle.textContent = emojis[i % emojis.length];
                 } else {
                   // Set the text content of the div to the number
@@ -1529,8 +1529,8 @@ const ScaleRightSide = () => {
             const emojiIndex = j;
             emojiLabels[i] = emojis[emojiIndex];
             j++;
-            console.log(i);
-            console.log(Math.floor(upperLimit / space));
+            // console.log(i);
+            // console.log(Math.floor(upperLimit / space));
           }
         }
 
@@ -1577,10 +1577,10 @@ const ScaleRightSide = () => {
               idHolder.textContent = id && id;
             }
 
-            console.log(
-              "This is scale type holder",
-              scaleTypeHolder?.textContent
-            );
+            // console.log(
+            //   "This is scale type holder",
+            //   scaleTypeHolder?.textContent
+            // );
             const scaleArr = res.data.data.settings.scale;
             const fomart = res.data.data.settings.fomat;
 
@@ -1734,7 +1734,7 @@ const ScaleRightSide = () => {
               sendMessage();
               setScaleData(res.data);
               setScaleId(scaleId);
-              console.log("This is the data", res.data.data.settings);
+              // console.log("This is the data", res.data.data.settings);
               savedStapelScaleArr.textContent = res.data.data.settings.scale;
               savedOptionHolder.textContent = res.data.data.settings.fomat;
               const scaleArr = res.data.data.settings.scale;
@@ -1855,10 +1855,10 @@ const ScaleRightSide = () => {
               }
             }
 
-            console.log("scaleConet", scaleTypeContent);
+            // console.log("scaleConet", scaleTypeContent);
 
-            console.log("scaleConet", scaleTypeHolder?.textContent);
-            console.log("Scalefield", scaleField);
+            // console.log("scaleConet", scaleTypeHolder?.textContent);
+            // console.log("Scalefield", scaleField);
           })
           .catch((err) => {
             setIsLoading(false);
@@ -2017,7 +2017,7 @@ const ScaleRightSide = () => {
             sendMessage();
             setScaleData(res.data);
             const id = res.data.data.scale_id;
-            console.log("This is the id", id);
+            // console.log("This is the id", id);
             if (id.length) {
               setScaleId(id && id);
               const idHolder = scale?.querySelector(".scaleId");
