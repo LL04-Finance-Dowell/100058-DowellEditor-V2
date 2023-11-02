@@ -875,7 +875,7 @@ function createNewScaleInputField(
         orientation.textContent = "vertical";
         orientation.style.display = "none";
         labelHold.appendChild(orientation);
-        labelHold.style.position = "relative";
+        labelHold.style.position = "absolute";
         circle.style.padding = "6px 12px";
         circle.style.margin = "10px 0";
         scaleHold.style.border = "none";

@@ -2433,7 +2433,8 @@ const ScaleRightSide = () => {
               // Set the text content to the appropriate label (either text or emoji)
               circle.textContent = updatedLabels[i] || "";
               if (option.value === "Vertical") {
-                circle.style.margin = "2px 0";
+                circle.style.margin = "5px 0";
+                circle.style.padding = "6px 12px";
               }
 
               labelHold.style.border = "";
@@ -2503,7 +2504,6 @@ const ScaleRightSide = () => {
 
                 if (option.value === "Vertical") {
                   circle.style.margin = "5px 0";
-                  circle.style.padding = "6px 12px";
                 }
 
                 labelHold.appendChild(circle);
