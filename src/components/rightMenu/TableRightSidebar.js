@@ -892,7 +892,7 @@ const TableRightSidebar = () => {
           td.style.height = "50px";
           // if (rowIndex == 0 && colIndex != numOfCol) {
           const colDeleteBtn = document.createElement("button");
-          colDeleteBtn.className = "btn btn-warning configure-table";
+          colDeleteBtn.className = "btn btn-warning col-delete";
           colDeleteBtn.style.marginLeft = "5px";
           const deleteIcon = `<img src="${deleteSVG}"/>`
           colDeleteBtn.innerHTML = deleteIcon
@@ -926,7 +926,7 @@ const TableRightSidebar = () => {
             // if (colIndex == numOfCol && rowIndex != 0) {
             var td = document.createElement("td");
             const rowDeleteBtn = document.createElement("button");
-            rowDeleteBtn.className = "btn btn-warning configure-table";
+            rowDeleteBtn.className = "btn btn-warning col-delete";
             rowDeleteBtn.style.marginLeft = "5px";
             const deleteIcon = `<img src="${deleteSVG}"/>`
             rowDeleteBtn.innerHTML = deleteIcon;
@@ -960,7 +960,7 @@ const TableRightSidebar = () => {
       var saveDiv = document.createElement("div");
       saveDiv.className = "table_update_save_div";
       var saveBtn = document.createElement("BUTTON");
-      saveBtn.className = "btn btn-primary my-3";
+      saveBtn.className = "btn btn-primary my-3 remove_button";
       saveBtn.innerText = "Save Changes";
       saveBtn.onclick = hadleTableUpdateSave;
       saveDiv.appendChild(saveBtn);
