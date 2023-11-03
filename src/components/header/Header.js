@@ -722,24 +722,24 @@ const Header = () => {
           let tempElem = newScales[b].parentElement;
           let tempPosn = getPosition(tempElem);
           // console.log(newScales[b]);
-          let circles = newScales[b].querySelector('.circle_label');
-          let scaleBg = newScales[b].querySelector('.label_hold');
-          let leftChild = newScales[b].querySelector('.left_child');
-          let neutralChild = newScales[b].querySelector('.neutral_child');
-          let rightChild = newScales[b].querySelector('.right_child');
-          let scaleText = newScales[b].querySelector('.scale_text');
-          let font = newScales[b].querySelector('.scool_input');
-          let scaleType = newScales[b].querySelector('.scaleTypeHolder');
-          let scaleID = newScales[b].querySelector('.scaleId');
-          let orentation = newScales[b].querySelector('.nps_vertical');
-          let otherComponent = newScales[b].querySelector('.otherComponent');
-          let smallBox = newScales[b].querySelector('.small_box');
-          let leftLableStapel = newScales[b].querySelector('.leftToolTip');
-          let rightLableStapel = newScales[b].querySelector('.rightTooltip');
-          let stapelEmojiObj = newScales[b].querySelector('.stapelEmojiObj');
-          let stapelUpperimit =
-            newScales[b].querySelector('.upper_scale_limit');
-          let spaceUnit = newScales[b].querySelector('.space_unit');
+          let circles = newScales[b].querySelector(".circle_label");
+          let scaleBg = newScales[b].querySelector(".label_hold");
+          let scaleField = newScales[b];
+          let leftChild = newScales[b].querySelector(".left_child");
+          let neutralChild = newScales[b].querySelector(".neutral_child");
+          let rightChild = newScales[b].querySelector(".right_child");
+          let scaleText = newScales[b].querySelector(".scale_text");
+          let font = newScales[b].querySelector(".scool_input");
+          let scaleType = newScales[b].querySelector(".scaleTypeHolder");
+          let scaleID = newScales[b].querySelector(".scaleId");
+          let orentation = newScales[b].querySelector(".nps_vertical");
+          let otherComponent = newScales[b].querySelector(".otherComponent");
+          let smallBox = newScales[b].querySelector(".small_box");
+          let leftLableStapel = newScales[b].querySelector(".leftToolTip");
+          let rightLableStapel = newScales[b].querySelector(".rightTooltip");
+          let stapelEmojiObj = newScales[b].querySelector(".stapelEmojiObj");
+          let stapelUpperLimit = newScales[b].querySelector(".upper_scale_limit");
+          let spaceUnit = newScales[b].querySelector(".space_unit");
           // let stapelScaleField = newScales[b].querySelector(".newScaleInput");
           // console.log(font);
 
@@ -829,20 +829,12 @@ const Header = () => {
             orientation = newScales[b].querySelector('.orientation');
           }
           let properties = {
-            scaleBgColor: scaleBg
-              ? scaleBg.style.backgroundColor
-              : newScales[0].style.backgroundColor,
-            fontColor: font ? font.style.color : newScales[0].style.color,
-            fontFamily: font
-              ? font.style.fontFamily
-              : newScales[0].style.fontFamily,
-            left: leftChild
-              ? leftChild.textContent
-              : leftLableStapel.textContent,
-            center: neutralChild ? neutralChild.textContent : '',
-            right: rightChild
-              ? rightChild.textContent
-              : rightLableStapel.textContent,
+            scaleBgColor: scaleBg ? scaleBg.style.backgroundColor : scaleField.style.backgroundColor,
+            fontColor: font ? font.style.color : scaleField.style.color,
+            fontFamily: font ? font.style.fontFamily : scaleField.style.fontFamily,
+            left: leftChild ? leftChild.textContent : leftLableStapel.textContent,
+            center: neutralChild ? neutralChild.textContent : "",
+            right: rightChild ? rightChild.textContent : rightLableStapel.textContent,
             buttonColor: circles?.style?.backgroundColor,
             scaleID: scaleID.textContent,
             scaleText: scaleText.textContent,
@@ -866,8 +858,8 @@ const Header = () => {
             otherComponent: otherComponent ? otherComponent.textContent : '',
             smallBoxBgColor: smallBox?.style?.backgroundColor,
             stapelEmojiObj: stapelEmojiObj?.textContent,
-            stapelUpperimit: stapelUpperimit?.textContent,
-            spaceUnit: spaceUnit?.textContent,
+            stapelUpperLimit: stapelUpperLimit?.textContent,
+            spaceUnit: spaceUnit?.textContent
           };
           // console.log(properties);
           elem = {
@@ -1609,8 +1601,7 @@ const Header = () => {
     // setIsLoading(true);
     setIsButtonDisabled(true);
     const dataa = saveDocument();
-
-    const finalize = document.getElementById('finalize-button');
+    const finalize = document.getElementById("finalize-button");
 
     const completeProgressBar = document.getElementById('progress-100');
     const halfProgressBar = document.getElementById('progress-50');
