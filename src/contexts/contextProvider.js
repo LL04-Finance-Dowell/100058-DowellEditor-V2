@@ -50,6 +50,8 @@ export const ContextProvider = ({ children }) => {
 
   const [isResizing, setIsResizing] = useState(false);
 
+  const [idIni, setIdIni] = useState('');
+
   // Fetched Data
   const [data, setData] = useState([]);
   const [title, setTitle] = useState(['Untitled-file']);
@@ -612,8 +614,6 @@ export const ContextProvider = ({ children }) => {
     sessionStorage.setItem('dimRatios', JSON.stringify(modDimRatios));
     setDimRatios(modDimRatios);
   };
-
-  const [idIni, setIdIni] = useState('');
 
   useEffect(() => {
     const replaceIds = (oldId) => {
