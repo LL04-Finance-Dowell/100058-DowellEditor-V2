@@ -1516,7 +1516,6 @@ function createNewScaleInputField(
       if (decoded.details.action === "document") {
         const circle = document.createElement("div");
         circle.className = "circle_label";
-        circle.textContent = likertScale[i];
         let isClicked = false;
         const shouldHideFinalizeButton =
           localStorage.getItem("hideFinalizeButton");
