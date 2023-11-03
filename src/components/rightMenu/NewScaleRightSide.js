@@ -2521,7 +2521,6 @@ const ScaleRightSide = () => {
           })
           .catch((err) => {
             setIsLoading(false);
-            // console.log(err.message);
           });
       }
     } else if (
@@ -2556,9 +2555,6 @@ const ScaleRightSide = () => {
 
       let labelHold = scale?.querySelector(".label_hold");
 
-      // setTimeout(() => {
-      //   labelHold.style.flexDirection = "column";
-      // }, 50);
       let tempText = scale?.querySelector(".tempText");
       tempText?.remove();
 
@@ -2577,6 +2573,11 @@ const ScaleRightSide = () => {
 
       const containerDiv = document.createElement("div");
       containerDiv.className = "label_hold";
+      containerDiv.style.display = "flex";
+      containerDiv.style.justifyContent = "center";
+      containerDiv.style.alignItems = "center";
+      containerDiv.style.flexDirection = "column";
+      containerDiv.style.height = "100%";
 
       let product_names = document.getElementById("product_name");
       console.log(product_names.length);
@@ -2626,6 +2627,8 @@ const ScaleRightSide = () => {
             const {
               name,
               orientation,
+              fontcolor,
+              fontstyle,
               scale_color,
               product_count,
               product_names,
@@ -2639,13 +2642,11 @@ const ScaleRightSide = () => {
               newLabelHold.innerHTML = "";
               newLabelHold.style = "";
 
-              // newLabelHold.style.padding = "25px";
-              newLabelHold.style.borderBottom = "1px solid gray";
-
-              // newLabelHold.style.paddingRight = "50px";
-              // newLabelHold.style.paddingLeft = "35px";
-              // newLabelHold.style.borderBottom = "1px solid gray";
+              newLabelHold.style.padding = "10px 15px";
+              newLabelHold.style.width = "95%";
               newLabelHold.style.borderTop = "1px solid gray";
+              newLabelHold.style.borderBottom = "1px solid gray";
+              button4.style.height = "93%";
 
               let nameDiv = document.createElement("div");
               nameDiv.className = "product_name";
@@ -2695,7 +2696,6 @@ const ScaleRightSide = () => {
               percentChilds.appendChild(rightPercent);
 
               containerDiv.appendChild(newLabelHold);
-              // labelHold.append(newLabelHold);
 
               newLabelHold.appendChild(percentChilds);
               button4.appendChild(containerDiv);
@@ -2722,8 +2722,6 @@ const ScaleRightSide = () => {
                 orientation.style.display = "none";
                 button4.appendChild(orientation);
 
-                scaleText.style.height = "";
-                scaleText.style.marginBottom = "70px";
                 containerDiv.style.transform = "rotate(270deg)";
                 containerDiv.style.width = "100%";
                 inputPercent.style.marginTop = "20px";
@@ -2754,39 +2752,12 @@ const ScaleRightSide = () => {
                   newLabelHold.style.width = "25vw"
 
                 }
-                if (inputFields.length == 4) {
-                  scaleText.style.marginBottom = "-7px";
-                }
-                if (inputFields.length == 5) {
-                  scaleText.style.marginBottom = "-33px";
-                }
-
-                if (inputFields.length == 6) {
-                  scaleText.style.marginBottom = "-31px";
-                }
-
-                if (inputFields.length == 7) {
-                  scaleText.style.marginBottom = "-62px";
-                }
-
-                if (inputFields.length == 8) {
-                  scaleText.style.marginBottom = "-80px";
-                }
-
-                if (inputFields.length == 9) {
-                  scaleText.style.marginBottom = "-117px";
-                }
-
-                if (inputFields.length == 10) {
-                  scaleText.style.marginBottom = "-151px";
-                }
               }
 
               scaleText.textContent = name;
-
-              button4.style.color = btnUpdateFontColor.value;
-
-              button4.style.fontFamily = btnUpdateScaleFont.value;
+              scaleText.style.display = "none";
+              button4.style.color = fontcolor;
+              button4.style.fontFamily = fontstyle;
             }
           })
           .catch((err) => {
@@ -2825,6 +2796,8 @@ const ScaleRightSide = () => {
               const {
                 name,
                 orientation,
+                fontcolor,
+                fontstyle,
                 scale_color,
                 product_count,
                 product_names,
@@ -2837,12 +2810,11 @@ const ScaleRightSide = () => {
                 newLabelHold.innerHTML = "";
                 newLabelHold.style = "";
 
-                newLabelHold.style.borderBottom = "1px solid gray";
-
-                // newLabelHold.style.paddingRight = "35px";
-                // newLabelHold.style.paddingLeft = "35px";
-                newLabelHold.style.borderBottom = "1px solid gray";
+                newLabelHold.style.padding = "10px 15px";
+                newLabelHold.style.width = "95%";
                 newLabelHold.style.borderTop = "1px solid gray";
+                newLabelHold.style.borderBottom = "1px solid gray";
+                button4.style.height = "93%";
 
                 let nameDiv = document.createElement("div");
                 nameDiv.className = "product_name";
@@ -2892,7 +2864,6 @@ const ScaleRightSide = () => {
                 percentChilds.appendChild(rightPercent);
 
                 containerDiv.appendChild(newLabelHold);
-                // labelHold.append(newLabelHold);
 
                 newLabelHold.appendChild(percentChilds);
                 button4.appendChild(containerDiv);
@@ -2919,8 +2890,6 @@ const ScaleRightSide = () => {
                   orientation.style.display = "none";
                   button4.appendChild(orientation);
 
-                  scaleText.style.height = "";
-                  scaleText.style.marginBottom = "70px";
                   containerDiv.style.transform = "rotate(270deg)";
                   containerDiv.style.width = "100%";
                   inputPercent.style.marginTop = "20px";
@@ -2951,39 +2920,12 @@ const ScaleRightSide = () => {
                     newLabelHold.style.width = "25vw"
   
                   }
-                  if (inputFields.length == 4) {
-                    scaleText.style.marginBottom = "-7px";
-                  }
-                  if (inputFields.length == 5) {
-                    scaleText.style.marginBottom = "-33px";
-                  }
-
-                  if (inputFields.length == 6) {
-                    scaleText.style.marginBottom = "-31px";
-                  }
-
-                  if (inputFields.length == 7) {
-                    scaleText.style.marginBottom = "-62px";
-                  }
-
-                  if (inputFields.length == 8) {
-                    scaleText.style.marginBottom = "-80px";
-                  }
-
-                  if (inputFields.length == 9) {
-                    scaleText.style.marginBottom = "-117px";
-                  }
-
-                  if (inputFields.length == 10) {
-                    scaleText.style.marginBottom = "-151px";
-                  }
                 }
 
                 scaleText.textContent = name;
-
-                button4.style.color = btnUpdateFontColor.value;
-
-                button4.style.fontFamily = btnUpdateScaleFont.value;
+                scaleText.style.display = "none";
+                button4.style.color = fontcolor;
+                button4.style.fontFamily = fontstyle;
               }
             }
           })
@@ -3049,12 +2991,12 @@ const ScaleRightSide = () => {
 
       const containerDiv = document.createElement("div");
       containerDiv.className = "label_hold";
-
       containerDiv.style.display = "flex";
       containerDiv.style.justifyContent = "center";
       containerDiv.style.alignItems = "center";
       containerDiv.style.flexDirection = "column";
       containerDiv.style.height = "100%";
+      
 
       let productNames = document.getElementById("product_count_label");
       let inputFields = productNames?.querySelectorAll("input");
@@ -3069,7 +3011,6 @@ const ScaleRightSide = () => {
         idHolder.textContent === "id"
       ) {
         setIsLoading(true);
-        // console.log("post req");
         Axios.post(
           "https://100035.pythonanywhere.com/percent-sum/percent-sum-settings",
           {
@@ -3116,10 +3057,11 @@ const ScaleRightSide = () => {
               newLabelHold.classList.remove("label_hold");
               newLabelHold.innerHTML = "";
               newLabelHold.style = "";
-              newLabelHold.style.padding = "10px 39px 10px 10px";
+              newLabelHold.style.padding = "10px 15px";
               newLabelHold.style.width = "95%";
               newLabelHold.style.borderTop = "1px solid gray";
               newLabelHold.style.borderBottom = "1px solid gray";
+              button4.style.height = "92%";
 
               let nameDiv = document.createElement("div");
               nameDiv.className = "product_name";
@@ -3214,32 +3156,7 @@ const ScaleRightSide = () => {
                 newLabelHold.style.width = "85%";
                 percentChilds.style.alignItems = "start";
                 percentChilds.style.height = "100%";
-
-                if (inputFields.length == 5) {
-                  scaleText.style.marginBottom = "-100px";
-                }
-
-                if (inputFields.length == 6) {
-                  scaleText.style.marginBottom = "-31px";
-                }
-
-                if (inputFields.length == 7) {
-                  scaleText.style.marginBottom = "-62px";
-                }
-
-                if (inputFields.length == 8) {
-                  scaleText.style.marginBottom = "-80px";
-                }
-
-                if (inputFields.length == 9) {
-                  scaleText.style.marginBottom = "-117px";
-                }
-
-                if (inputFields.length == 10) {
-                  scaleText.style.marginBottom = "-151px";
-                }
               }
-
               scaleText.textContent = name;
               scaleText.style.display = "none";
               button4.style.color = fontcolor;
@@ -3292,10 +3209,11 @@ const ScaleRightSide = () => {
                 newLabelHold.classList.remove("label_hold");
                 newLabelHold.innerHTML = "";
                 newLabelHold.style = "";
-                newLabelHold.style.padding = "10px 39px 10px 10px";
+                newLabelHold.style.padding = "10px 15px";
                 newLabelHold.style.width = "95%";
                 newLabelHold.style.borderBottom = "1px solid gray";
                 newLabelHold.style.borderTop = "1px solid gray";
+                button4.style.height = "92%";
 
                 let nameDiv = document.createElement("div");
                 nameDiv.className = "product_name";
@@ -3391,36 +3309,11 @@ const ScaleRightSide = () => {
                   newLabelHold.style.width = "85%";
                   percentChilds.style.alignItems = "start";
                   percentChilds.style.height = "100%";
-
-                  if (inputFields.length == 5) {
-                    scaleText.style.marginBottom = "-100px";
-                  }
-
-                  if (inputFields.length == 6) {
-                    scaleText.style.marginBottom = "-31px";
-                  }
-
-                  if (inputFields.length == 7) {
-                    scaleText.style.marginBottom = "-62px";
-                  }
-
-                  if (inputFields.length == 8) {
-                    scaleText.style.marginBottom = "-80px";
-                  }
-
-                  if (inputFields.length == 9) {
-                    scaleText.style.marginBottom = "-117px";
-                  }
-
-                  if (inputFields.length == 10) {
-                    scaleText.style.marginBottom = "-151px";
-                  }
                 }
+                scaleText.textContent = name;
+                button4.style.color = fontcolor;
+                button4.style.fontFamily = fontstyle;
               }
-
-              scaleText.textContent = name;
-              button4.style.color = fontcolor;
-              button4.style.fontFamily = fontstyle;
             }
           })
           .catch((err) => {
