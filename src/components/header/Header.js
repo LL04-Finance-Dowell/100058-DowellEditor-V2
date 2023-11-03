@@ -2128,7 +2128,7 @@ const Header = () => {
                 </div> */}
                   <Button
                     size='md'
-                    className='rounded'
+                    className='rounded remove_button'
                     id='saving-buttonn'
                     onClick={submit}
                     style={{
