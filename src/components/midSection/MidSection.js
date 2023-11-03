@@ -4,7 +4,6 @@
 /* eslint-disable no-redeclare */
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useRef, useState } from 'react';
-import { handleCopyPaste } from './cutMenuHook';
 import { Row, Col } from 'react-bootstrap';
 import { useSearchParams } from 'react-router-dom';
 import { Container } from 'react-bootstrap';
@@ -119,7 +118,7 @@ const MidSection = React.forwardRef((props, ref) => {
     setProgress,
   } = useStateContext();
 
-  const { contextMenu, setContextMenu } = useCutMenuContext();
+  const { contextMenu, setContextMenu,setFromContextMenu} = useCutMenuContext();
 
   const [focusedElement, setFocusedElement] = useState(null);
   const [allPages, setAllPages] = useState([]);
@@ -2688,6 +2687,10 @@ const MidSection = React.forwardRef((props, ref) => {
     // console.log('DIMENSION RATIOS: ', dimRatios);
   }, [dimRatios, currMidSecWidth, fetchedData]);
 
+  const getCurrentEl = (fromMidSection)=>{
+    
+    return fromMidSection;
+  }
   return (
     <>
       {item?.map((currentItem, index) => {
@@ -2719,7 +2722,9 @@ const MidSection = React.forwardRef((props, ref) => {
                 onContextMenu={handleContextMenu}
               >
                 {confirmRemove && (
-                  <RemoveElementModal handleRemoveInput={()=>{
+                  <RemoveElementModal 
+                
+                  handleRemoveInput={()=>{
                     if(contextMenu.targetEl){
                       handleRemoveInput(contextMenu.targetEl)
                     }else{
@@ -2727,7 +2732,9 @@ const MidSection = React.forwardRef((props, ref) => {
                         document.querySelector(".focussedd")?.remove();
                       };
                     }
-                  }} />
+                  }} 
+                  targetEl={contextMenu.targetEl}
+                  />
                 )}
                 {contextMenu.show && (
                   <RightContextMenu
