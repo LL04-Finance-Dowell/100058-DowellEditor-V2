@@ -20,7 +20,7 @@ const GenButtonRightSide = () => {
    </select>
 
 
-   <button className="gen_rem_btn" onClick={() => setConfirmRemove(!confirmRemove)}>
+   <button className="gen_rem_btn remove_button" onClick={() => setConfirmRemove(!confirmRemove)}>
     Remove Button
    </button>
   </div>

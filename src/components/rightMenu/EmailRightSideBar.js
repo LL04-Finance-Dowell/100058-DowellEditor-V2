@@ -356,7 +356,7 @@ const EmailRightSideBar = () => {
               variant="primary"
               // onClick={removeContainer}
               onClick={() => setConfirmRemove(!confirmRemove)}
-              className="remove_container text-center mt-5"
+              className="remove_container remove_button text-center mt-5"
             >
               Remove Container
             </Button>
