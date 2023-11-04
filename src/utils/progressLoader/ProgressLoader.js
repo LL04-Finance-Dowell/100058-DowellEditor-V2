@@ -17,7 +17,7 @@ const ProgressLoader = () => {
     <div>
       <LoadingBar
         height={4}
-        color={actionName == "template" ? "blue" : "green"}
+        color={actionName == "template" ? "#1c2b48" : "green"}
         progress={progress}
         loaderSpeed={1000}
         onLoaderFinished={() => setProgress(0)}

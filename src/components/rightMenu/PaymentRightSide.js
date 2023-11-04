@@ -7,6 +7,7 @@ import axios, * as others from 'axios';
 import { ToastContainer, toast } from "react-toastify";
 import ThankYouPage from "../../utils/redirectPages/ThankYouPage";
 import PaymentPopup from "../../utils/redirectPages/PaymentPopup";
+import { stripeCurrencyCodes, paypalCurrencyCodes } from "../../data/data";
 
 
 const PaymentRightSide = () => {
@@ -63,9 +64,9 @@ const PaymentRightSide = () => {
     localStorage.setItem("MainURL", MainURL);
     const handleUpdate = () => {
 
-        const link = document.getElementById("link").value;
-        const purpose = document.getElementById("link2").value;
-        if (link.value != "") {
+        const link = document.getElementById("link")?.value;
+        const purpose = document.getElementById("link2")?.value;
+        if (link?.value != "") {
             setPaymentKey(link);
             setSavedSripeKey(prev => {
                 return {
@@ -76,7 +77,7 @@ const PaymentRightSide = () => {
 
             holderDIV.children[1].innerHTML = link;
         }
-        if (purpose.value != "") {
+        if (purpose?.value != "") {
             setPaypalId(purpose);
 
             setSavedPaypalKey(prev => {
@@ -131,12 +132,12 @@ const PaymentRightSide = () => {
 
         let selectedOption = selectField.options[selectField.selectedIndex];
 
-        setButtonPurpose(selectedOption.value);
-        holderDIV.children[2].innerHTML = selectedOption.value;
+        setButtonPurpose(selectedOption?.value);
+        holderDIV.children[2].innerHTML = selectedOption?.value;
 
-        if (selectedOption.value == "custom") {
+        if (selectedOption?.value == "custom") {
             linkDiv.style.display = "block";
-        } else if (selectedOption.value !== "custom") {
+        } else if (selectedOption?.value !== "custom") {
             setButtonLink("");
         } else {
             console.log("No option selected");
@@ -148,24 +149,24 @@ const PaymentRightSide = () => {
     };
 
     const handleBorderSizeChange = (e) => {
-        setButtonBorderSize(e.target.value);
+        setButtonBorderSize(e.target?.value);
 
         const box = document.getElementsByClassName("focussedd")[0];
-        box.style.borderWidth = `${e.target.value}px`;
+        box.style.borderWidth = `${e.target?.value}px`;
 
     };
 
     const handleBorderColorChange = (e) => {
-        setButtonBorderColor(e.target.value);
+        setButtonBorderColor(e.target?.value);
         const box = document.getElementsByClassName("focussedd")[0];
-        box.style.borderColor = `${e.target.value}`;
+        box.style.borderColor = `${e.target?.value}`;
     };
     const handleRangeBlur = (e) => {
         e.target.focus();
     };
 
     const handleSelectPayment = (e) => {
-        setSelectPayment(e.target.value);
+        setSelectPayment(e.target?.value);
     }
 
 
@@ -194,7 +195,7 @@ const PaymentRightSide = () => {
             currency_code: currencyCode,
             callback_url: Base_URL + "/status",
         }
-        console.log("stripe data", stripeData);
+        // console.log("stripe data", stripeData);
         const form = e.currentTarget;
         if (form.checkValidity() === false) {
             e.preventDefault();
@@ -216,7 +217,7 @@ const PaymentRightSide = () => {
                         ['payment_id']: res.data.payment_id
                     }
                 })
-                console.log("payment response", res.data);
+                // console.log("payment response", res.data);
                 // setQrCode(resQR.data);
                 // console.log("QR code response", resQR.data);
                 setLoader(false)
@@ -253,28 +254,7 @@ const PaymentRightSide = () => {
                             ['key']: Paypalpurpose
                         }
                     });
-                    // holderDIV.children[2].innerHTML = Paypalpurpose;
                 }
-
-
-
-
-
-
-                // const resVerify = await axios.post("https://100088.pythonanywhere.com/api/workflow/verify/payment/stripe", {
-                //     stripe_key: link,
-                //     id: res.data.payment_id
-                // });
-
-                // if (resVerify.data.status == "succeeded") {
-                //     setTimeout(function () {
-                //         window.location.href = res.callbackUrl;
-                //     }, 2000);
-                // } else {
-                //     console.log("Your Stripe Payment Not verified");
-                // }
-
-                // console.log("verify payment", resVerify.data);
 
 
 
@@ -310,17 +290,11 @@ const PaymentRightSide = () => {
 
         }
         setValidated(true);
-        // setLoader(true)
         if (form.checkValidity() === true) {
             e.preventDefault();
             setQrLoader(true)
             try {
-                // const res = await axios.post(endpoint, stripeData);
-                // const resQR = await axios.post(endpoint, stripeData);
-                // const res = await axios.post("https://100088.pythonanywhere.com/api/workflow/stripe/initialize", stripeData);
                 const resQR = await axios.post("https://100088.pythonanywhere.com/api/workflow/stripe/initialize/qrcode", stripeData);
-                // setStripePaymentData(res.data);
-                // console.log("payment response", res.data);
                 setQrCode(resQR.data);
                 console.log("QR code response", resQR.data);
                 setQrLoader(false)
@@ -339,7 +313,6 @@ const PaymentRightSide = () => {
                 const Stripelink = document.querySelector(".stripe_key").innerHTML;
                 const Paypalpurpose = document.querySelector(".paypal_id").innerHTML;
                 if (Stripelink != "") {
-                    // setPaymentKey(link);
                     setSavedSripeKey(prev => {
                         console.log("Stripe link......")
                         return {
@@ -348,10 +321,8 @@ const PaymentRightSide = () => {
                         }
                     });
 
-                    // holderDIV.children[1].innerHTML = Stripelink;
                 }
                 if (Paypalpurpose != "") {
-                    // setPaypalId(purpose);
 
                     setSavedPaypalKey(prev => {
                         return {
@@ -359,24 +330,7 @@ const PaymentRightSide = () => {
                             ['key']: Paypalpurpose
                         }
                     });
-                    // holderDIV.children[2].innerHTML = Paypalpurpose;
                 }
-
-
-                // const resVerify = await axios.post("https://100088.pythonanywhere.com/api/workflow/verify/payment/stripe", {
-                //     stripe_key: link,
-                //     id: resQR.data.payment_id
-                // });
-
-                // if (resVerify.data.status == "succeeded") {
-                //     setTimeout(function () {
-                //         window.location.href = Base_URL + "/status";
-                //     }, 2000);
-                // } else if (resVerify.data.status == "failed") {
-                //     console.log("Your Stripe Payment Not verified");
-                //     toast.error("Your Payment Not Successfull!");
-                // }
-
 
             } catch (error) {
                 console.log(error)
@@ -542,16 +496,23 @@ const PaymentRightSide = () => {
         const paypalId = holderDIV.querySelector('.paypal_id').textContent
         const idWrapper = document.getElementById('link2')
         const stripeWrapper = document.getElementById('link');
+        console.log(">>>\n", idWrapper, "\n>>>>");
 
-        idWrapper.value = paypalId
-        stripeWrapper.value = stripeKey
+        if(idWrapper !== null){
+            idWrapper.value = paypalId
+
+        } 
+        if(stripeWrapper !== null){
+            stripeWrapper.value = stripeKey
+
+        }
 
     }, [])
 
     return (
         <>
             <div className="mt-2 mb-3 w-100">
-                <select className='gen_btn_sel' defaultValue='pay' onChange={e => setGenSelOpt(e.target.value)} style={{ marginBottom: '10px' }}>
+                <select className='gen_btn_sel' defaultValue='pay' onChange={e => setGenSelOpt(e.target?.value)} style={{ marginBottom: '10px' }}>
                     <option value="" disabled>Select type</option>
                     <option value="cta">CTA</option>
                     <option value="pay">Pay</option>
@@ -593,8 +554,6 @@ const PaymentRightSide = () => {
                             <select
                                 onChange={handleSelectPayment}
                                 id="selectt"
-                                // onChange={handleDateMethod}
-
                                 className="select border-0 bg-white rounded w-100 h-75 p-2"
                             >
                                 <option value="stripe">Stripe</option>
@@ -611,7 +570,7 @@ const PaymentRightSide = () => {
                                             placeholder="Product name"
                                             id="button_name"
                                             value={productName}
-                                            onChange={(e) => setProductName(e.target.value)}
+                                            onChange={(e) => setProductName(e.target?.value)}
                                         />
 
                                         <br />
@@ -623,31 +582,25 @@ const PaymentRightSide = () => {
                                             placeholder="Product Price"
                                             // id="button_name"
                                             value={price}
-                                            onChange={(e) => setPrice(e.target.value)}
+                                            onChange={(e) => setPrice(e.target?.value)}
                                         />
                                         <br />
                                         <select
                                             required
-                                            onChange={(e) => setCurrencyCode(e.target.value)}
+                                            onChange={(e) => setCurrencyCode(e.target?.value)}
                                             id="selectt"
                                             // onChange={handleDateMethod}
                                             className="select border-0 bg-white rounded w-100 h-75 p-2"
                                         >
                                             <option value="">Select Currency</option>
-                                            <option value="usd">USD</option>
-                                            <option value="aed">AED</option>
-                                            <option value="afn">AFN</option>
-                                            <option value="amd">AMD</option>
-                                            <option value="ang">ANG</option>
-                                            <option value="aoa">AOA</option>
+                                            {
+                                                paypalCurrencyCodes.map(code => 
+                                                    <option value={code.code}>{code.currency}</option>
+                                                    )
+                                            }
                                         </select>
                                         <br />
 
-                                        {/* <Link to={"/100058-DowellEditor-V2/status"}>
-                                            <button type="button" className="btn btn-primary">
-                                                Thank You
-                                            </button>
-                                        </Link> */}
                                         <button type="button" className="btn btn-primary" onClick={handlePaypalPayment}>
                                             {
                                                 loader ? "Wait...." : "Submit Info"
@@ -656,7 +609,7 @@ const PaymentRightSide = () => {
 
                                         <button type="button" className="btn btn-primary m-3" onClick={handlePaypalQRPayment}>
                                             {
-                                                qrLoader ? "Wait...." : "QR Code"
+                                                qrLoader ? "Wait...." : "QR code"
                                             }
                                         </button>
                                     </Form>
@@ -672,7 +625,7 @@ const PaymentRightSide = () => {
                                             placeholder="Product name"
                                             id="button_name"
                                             value={productName}
-                                            onChange={(e) => setProductName(e.target.value)}
+                                            onChange={(e) => setProductName(e.target?.value)}
                                         />
 
 
@@ -685,30 +638,23 @@ const PaymentRightSide = () => {
                                             placeholder="Product Price"
                                             // id="button_name"
                                             value={price}
-                                            onChange={(e) => setPrice(e.target.value)}
+                                            onChange={(e) => setPrice(e.target?.value)}
                                         />
                                         <br />
                                         <select
                                             required
-                                            onChange={(e) => setCurrencyCode(e.target.value)}
+                                            onChange={(e) => setCurrencyCode(e.target?.value)}
                                             id="selectt"
                                             // onChange={handleDateMethod}
                                             className="select border-0 bg-white rounded w-100 h-75 p-2"
                                         >
                                             <option value="">Select Currency</option>
-                                            <option value="usd">USD</option>
-                                            <option value="aed">AED</option>
-                                            <option value="afn">AFN</option>
-                                            <option value="amd">AMD</option>
-                                            <option value="ang">ANG</option>
-                                            <option value="aoa">AOA</option>
+                                            {
+                                                stripeCurrencyCodes.map(code => 
+                                                    <option value={code.code}>{code.currency}</option>
+                                                    )
+                                            }
                                         </select>
-                                        <br />
-                                        <Link to={"/100058-DowellEditor-V2/status"}>
-                                            <button type="button" className="btn btn-primary">
-                                                Thank You
-                                            </button>
-                                        </Link>
                                         {/* <Form.Label>Callback URL</Form.Label>
                                         <Form.Control
                                             required
@@ -716,7 +662,7 @@ const PaymentRightSide = () => {
                                             placeholder="Callback URL"
                                             // id="button_name"
                                             value={callbackUrl}
-                                            onChange={(e) => setCallbackUrl(e.target.value)}
+                                            onChange={(e) => setCallbackUrl(e.target?.value)}
                                         /> */}
                                         <br />
                                         <button type="button" className="btn btn-primary" onClick={handleStripePayment}>
