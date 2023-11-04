@@ -406,7 +406,7 @@ const MidSection = React.forwardRef((props, ref) => {
     return resizer;
   }
 
-  console.log('data decoded', decoded);
+  // console.log('data decoded', decoded);
 
   //colse context menu
 

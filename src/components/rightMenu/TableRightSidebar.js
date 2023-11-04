@@ -577,14 +577,30 @@ const TableRightSidebar = () => {
 
       for (var colIndex = 0; colIndex < col; colIndex++) {
         var td = document.createElement("td");
+        var editableTd = document.createElement("p");
         td.contentEditable = true;
+        // td.innerText.appendChild(editableTd)
         // td.style.flexDirection = "row";
         // td.style.overflow = "hidden"
         // td.style.padding = "10px"
         // td.style.display = "flex"
+        // td.className = "textInput";
+        // td.style.width = "100%";
+        // td.style.height = "100%";
+        // td.style.resize = "none";
+        // td.style.backgroundColor = "#0000";
+        // td.style.borderRadius = "0px";
+        // td.style.outline = "0px";
+        // td.style.overflow = "overlay";
+        // td.style.position = "relative";
+        td.style.cursor = "text";
         td.className = "dropp";
+        // const tdData = td.innerText;
+        // console.log("...\n", tdData, "...\n");
+        // console.log("....\n", td, "...\n");
         if (rowIndex === 0) {
           const resizer = document.createElement('div');
+          resizer.contentEditable = false;
           resizer.classList.add('td-resizer');
           resizer.addEventListener("mousedown", (e) => {
             let x = 0;
@@ -597,6 +613,7 @@ const TableRightSidebar = () => {
       }
       const rowResizeCell = tr.firstElementChild
       const resizer = document.createElement('div');
+      resizer.contentEditable = false;
       resizer.classList.add('row-resizer');
       resizer.addEventListener("mousedown", (e) => {
         let x = 0;
@@ -1181,9 +1198,7 @@ const TableRightSidebar = () => {
           resizer.classList.add('td-resizer');
           resizer.addEventListener("mousedown", (e) => {
             let x = 0;
-            let w = 0;
-
-
+            let w = 0;  
           })
           td.appendChild(resizer);
           createResizableColumn(td, resizer)
