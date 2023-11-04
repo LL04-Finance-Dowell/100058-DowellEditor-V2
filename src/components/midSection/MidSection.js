@@ -2622,7 +2622,11 @@ const MidSection = React.forwardRef((props, ref) => {
   }, []);
 
   useEffect(() => {
-    setProgress(progress + 50);
+    if(decoded?.details?.update_field.template_name == "Untitled Template"){
+      setProgress(100);
+    } else {
+      setProgress(progress + 50);
+    }
     if (Object.keys(fetchedData).length) {
       onPost();
       //call this conditionally
