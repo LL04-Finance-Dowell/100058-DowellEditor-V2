@@ -61,8 +61,8 @@ const ContainerRigntSideBar = () => {
           onClick={() => setConfirmRemove(!confirmRemove)}
           className={
             decoded.details.action === "template"
-              ? "remove_container text-center mt-5"
-              : "remove_container text-center mt-5 disable_button"
+              ? "remove_container remove_button text-center mt-5"
+              : "remove_container remove_button text-center mt-5 disable_button"
           }
         >
           Remove Container

@@ -3,9 +3,10 @@ import React, { useState } from "react";
 import { Button } from "react-bootstrap";
 import { useSearchParams } from "react-router-dom";
 import jwt_decode from "jwt-decode";
+import { useStateContext } from "../../contexts/contextProvider";
 
 function CameraRightSide() {
-
+  const{setConfirmRemove}=useStateContext()
   const [isCameraOn, setIsCameraOn] = React.useState(false)
   const [searchParams] = useSearchParams();
 
@@ -258,7 +259,10 @@ function CameraRightSide() {
           variant="secondary"
           // className="remove_button"
           className="remove_button"
-          onClick={removeCamera}
+          onClick={() => {
+            setConfirmRemove(true)
+          }
+          }
           disabled={decoded.details.action === "document" ? true : false}
         >
           Remove Camera

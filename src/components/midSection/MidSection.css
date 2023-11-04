@@ -78,6 +78,12 @@
   pointer-events: none;
 }
 
+.dateInput {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 /*
 .midSection_container{
     background-color: #ffffff;q
