@@ -577,27 +577,9 @@ const TableRightSidebar = () => {
 
       for (var colIndex = 0; colIndex < col; colIndex++) {
         var td = document.createElement("td");
-        var editableTd = document.createElement("p");
         td.contentEditable = true;
-        // td.innerText.appendChild(editableTd)
-        // td.style.flexDirection = "row";
-        // td.style.overflow = "hidden"
-        // td.style.padding = "10px"
-        // td.style.display = "flex"
-        // td.className = "textInput";
-        // td.style.width = "100%";
-        // td.style.height = "100%";
-        // td.style.resize = "none";
-        // td.style.backgroundColor = "#0000";
-        // td.style.borderRadius = "0px";
-        // td.style.outline = "0px";
-        // td.style.overflow = "overlay";
-        // td.style.position = "relative";
         td.style.cursor = "text";
         td.className = "dropp";
-        // const tdData = td.innerText;
-        // console.log("...\n", tdData, "...\n");
-        // console.log("....\n", td, "...\n");
         if (rowIndex === 0) {
           const resizer = document.createElement('div');
           resizer.contentEditable = false;
