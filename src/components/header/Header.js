@@ -2237,10 +2237,12 @@ const Header = () => {
             setMsg={setRejectionMsg}
           />
         )}
-      </div>
-      <div>
         <ProgressLoader />
       </div>
+
+      {/* <div>
+        <ProgressLoader />
+      </div> */}
     </>
   );
 };
