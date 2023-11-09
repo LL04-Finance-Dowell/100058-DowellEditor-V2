@@ -1730,7 +1730,7 @@ const Header = () => {
   var encodedHeader = base64url(stringifiedHeader);
 
   var dataa = {
-    document_id: decoded.details.document_id,
+    document_id: decoded.details._id,
     action: decoded.details.action,
     database: decoded.details.database,
     collection: decoded.details.collection,
@@ -1738,6 +1738,7 @@ const Header = () => {
     function_ID: decoded.details.function_ID,
     cluster: decoded.details.cluster,
     document: decoded.details.document,
+    update_field: decoded.details.update_field,
   };
   // console.log("here is new data for export", dataa);
 
