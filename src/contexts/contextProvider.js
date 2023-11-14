@@ -45,6 +45,7 @@ export const ContextProvider = ({ children }) => {
   const [isClicked, setIsClicked] = useState(initialState2);
 
   const [isDataSaved, setIsDataSaved] = useState(false);
+  const [mode, setMode] = useState('edit');
 
   const [isDropped, setIsDropped] = useState(initialState);
 
@@ -824,8 +825,8 @@ export const ContextProvider = ({ children }) => {
         dimRatios,
         setDimRatios,
         updateDimRatios,
-        // iniBtnId, setIniBtnId,
-
+        mode,
+        setMode,
         progress,
         setProgress,
       }}

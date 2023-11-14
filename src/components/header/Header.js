@@ -8,7 +8,11 @@ import CryptoJS from 'crypto-js';
 import { useStateContext } from '../../contexts/contextProvider';
 import Axios from 'axios';
 import { CgMenuLeft, CgPlayListRemove } from 'react-icons/cg';
-import { MdOutlinePostAdd } from 'react-icons/md';
+import {
+  MdOutlineEditCalendar,
+  MdOutlinePostAdd,
+  MdPreview,
+} from 'react-icons/md';
 import { useSearchParams } from 'react-router-dom';
 import jwt_decode from 'jwt-decode';
 import { ToastContainer, toast } from 'react-toastify';
@@ -115,6 +119,8 @@ const Header = () => {
     fixedMidSecDim,
     progress,
     setProgress,
+    mode,
+    setMode,
   } = useStateContext();
 
   const [printContent, setPrintContent] = useState(false);
@@ -722,24 +728,25 @@ const Header = () => {
           let tempElem = newScales[b].parentElement;
           let tempPosn = getPosition(tempElem);
           // console.log(newScales[b]);
-          let circles = newScales[b].querySelector(".circle_label");
-          let scaleBg = newScales[b].querySelector(".label_hold");
+          let circles = newScales[b].querySelector('.circle_label');
+          let scaleBg = newScales[b].querySelector('.label_hold');
           let scaleField = newScales[b];
-          let leftChild = newScales[b].querySelector(".left_child");
-          let neutralChild = newScales[b].querySelector(".neutral_child");
-          let rightChild = newScales[b].querySelector(".right_child");
-          let scaleText = newScales[b].querySelector(".scale_text");
-          let font = newScales[b].querySelector(".scool_input");
-          let scaleType = newScales[b].querySelector(".scaleTypeHolder");
-          let scaleID = newScales[b].querySelector(".scaleId");
-          let orentation = newScales[b].querySelector(".nps_vertical");
-          let otherComponent = newScales[b].querySelector(".otherComponent");
-          let smallBox = newScales[b].querySelector(".small_box");
-          let leftLableStapel = newScales[b].querySelector(".leftToolTip");
-          let rightLableStapel = newScales[b].querySelector(".rightTooltip");
-          let stapelEmojiObj = newScales[b].querySelector(".stapelEmojiObj");
-          let stapelUpperLimit = newScales[b].querySelector(".upper_scale_limit");
-          let spaceUnit = newScales[b].querySelector(".space_unit");
+          let leftChild = newScales[b].querySelector('.left_child');
+          let neutralChild = newScales[b].querySelector('.neutral_child');
+          let rightChild = newScales[b].querySelector('.right_child');
+          let scaleText = newScales[b].querySelector('.scale_text');
+          let font = newScales[b].querySelector('.scool_input');
+          let scaleType = newScales[b].querySelector('.scaleTypeHolder');
+          let scaleID = newScales[b].querySelector('.scaleId');
+          let orentation = newScales[b].querySelector('.nps_vertical');
+          let otherComponent = newScales[b].querySelector('.otherComponent');
+          let smallBox = newScales[b].querySelector('.small_box');
+          let leftLableStapel = newScales[b].querySelector('.leftToolTip');
+          let rightLableStapel = newScales[b].querySelector('.rightTooltip');
+          let stapelEmojiObj = newScales[b].querySelector('.stapelEmojiObj');
+          let stapelUpperLimit =
+            newScales[b].querySelector('.upper_scale_limit');
+          let spaceUnit = newScales[b].querySelector('.space_unit');
           // let stapelScaleField = newScales[b].querySelector(".newScaleInput");
           // console.log(font);
 
@@ -829,12 +836,20 @@ const Header = () => {
             orientation = newScales[b].querySelector('.orientation');
           }
           let properties = {
-            scaleBgColor: scaleBg ? scaleBg.style.backgroundColor : scaleField.style.backgroundColor,
+            scaleBgColor: scaleBg
+              ? scaleBg.style.backgroundColor
+              : scaleField.style.backgroundColor,
             fontColor: font ? font.style.color : scaleField.style.color,
-            fontFamily: font ? font.style.fontFamily : scaleField.style.fontFamily,
-            left: leftChild ? leftChild.textContent : leftLableStapel.textContent,
-            center: neutralChild ? neutralChild.textContent : "",
-            right: rightChild ? rightChild.textContent : rightLableStapel.textContent,
+            fontFamily: font
+              ? font.style.fontFamily
+              : scaleField.style.fontFamily,
+            left: leftChild
+              ? leftChild.textContent
+              : leftLableStapel.textContent,
+            center: neutralChild ? neutralChild.textContent : '',
+            right: rightChild
+              ? rightChild.textContent
+              : rightLableStapel.textContent,
             buttonColor: circles?.style?.backgroundColor,
             scaleID: scaleID.textContent,
             scaleText: scaleText.textContent,
@@ -859,7 +874,7 @@ const Header = () => {
             smallBoxBgColor: smallBox?.style?.backgroundColor,
             stapelEmojiObj: stapelEmojiObj?.textContent,
             stapelUpperLimit: stapelUpperLimit?.textContent,
-            spaceUnit: spaceUnit?.textContent
+            spaceUnit: spaceUnit?.textContent,
           };
           // console.log(properties);
           elem = {
@@ -1601,7 +1616,7 @@ const Header = () => {
     // setIsLoading(true);
     setIsButtonDisabled(true);
     const dataa = saveDocument();
-    const finalize = document.getElementById("finalize-button");
+    const finalize = document.getElementById('finalize-button');
 
     const completeProgressBar = document.getElementById('progress-100');
     const halfProgressBar = document.getElementById('progress-50');
@@ -2014,7 +2029,11 @@ const Header = () => {
         <Container fluid>
           <Row>
             <Col className='d-flex lhs-header'>
-              <div className='header_icons position-relative'>
+              <div
+                className={`header_icons position-relative ${
+                  mode === 'preview' ? 'vis_hid' : ''
+                }`}
+              >
                 <CgMenuLeft className='head-bar' onClick={handleOptions} />
                 {isMenuVisible && (
                   <div
@@ -2091,7 +2110,11 @@ const Header = () => {
                 )}
               </div>
 
-              <div className='d-flex align-items-center gap-2 header_p'>
+              <div
+                className={`d-flex align-items-center gap-2 header_p ${
+                  mode === 'preview' ? 'vis_hid' : ''
+                }`}
+              >
                 <div
                   className='title-name px-3'
                   contentEditable={true}
@@ -2112,7 +2135,44 @@ const Header = () => {
 
             <Col>
               <div className='right_header'>
-                <div className={docMap ? 'header_btn' : 'savee'}>
+                <div className='view_mode_wrapper'>
+                  <button
+                    className='view_mode'
+                    onClick={() =>
+                      setMode(
+                        mode === 'edit'
+                          ? 'preview'
+                          : mode === 'preview'
+                          ? 'edit'
+                          : ''
+                      )
+                    }
+                  >
+                    {mode === 'edit' ? (
+                      <>
+                        <span className='mode_icon'>
+                          <MdPreview />
+                        </span>{' '}
+                        <span className='mode_tag'>Preview</span>
+                      </>
+                    ) : mode === 'preview' ? (
+                      <>
+                        <span className='mode_icon'>
+                          <MdOutlineEditCalendar />
+                        </span>
+                        <span className='mode_tag'>Edit</span>
+                      </>
+                    ) : (
+                      'Mode bug'
+                    )}
+                  </button>
+                </div>
+
+                <div
+                  className={`${docMap ? 'header_btn' : 'savee'} ${
+                    mode === 'preview' ? 'vis_hid' : ''
+                  }`}
+                >
                   {/* <div style={{ marginRight: "20px" }}>
                   <input type="checkbox" onChange={() => setAllowHighlight(!allowHighlight)} />{"  "}
                   <label>Allow Highlight</label>
@@ -2131,7 +2191,11 @@ const Header = () => {
                   </Button>
                   {/*  )} */}
                 </div>
-                <div className='mt-1 text-center p-2'>
+                <div
+                  className={`mt-1 text-center p-2 ${
+                    mode === 'preview' ? 'vis_hid' : ''
+                  }`}
+                >
                   <div
                     className='modal fade'
                     id='exampleModal'
@@ -2184,7 +2248,11 @@ const Header = () => {
                   docRight !== 'view' && (
                     <>
                       {/* <div className={`mt-2 text-center mb-2 px-2 ${isFinializeDisabled ? disable_pointer_event : enable_pointer_event}`}> */}
-                      <div className={`mt-2 text-center mb-2 px-2`}>
+                      <div
+                        className={`mt-2 text-center mb-2 px-2 ${
+                          mode === 'preview' ? 'vis_hid' : ''
+                        }`}
+                      >
                         <Button
                           variant='success'
                           size='md'
@@ -2203,7 +2271,11 @@ const Header = () => {
                         </Button>
                       </div>
 
-                      <div className='mt-2 text-center mb-2 px-2'>
+                      <div
+                        className={`mt-2 text-center mb-2 px-2 ${
+                          mode === 'preview' ? 'vis_hid' : ''
+                        }`}
+                      >
                         <Button
                           variant='danger'
                           size='md'

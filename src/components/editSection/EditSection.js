@@ -23,6 +23,8 @@ const EditSection = () => {
     setIsMenuVisible,
     questionAndAnswerGroupedData,
     allowHighlight,
+    mode,
+    setSidebar,
   } = useStateContext();
 
   const [searchParams] = useSearchParams();
@@ -124,6 +126,27 @@ const EditSection = () => {
   const left_menu_size = document
     .getElementsByClassName('left_menu_wrapper')[0]
     ?.getBoundingClientRect();
+
+  useEffect(() => {
+    const allHolderDivs = [...document.querySelectorAll('.holderDIV')];
+    switch (mode) {
+      case 'preview':
+        setSidebar(false);
+        allHolderDivs.forEach((div) => {
+          div.style.border = 'none';
+          div.style.pointerEvents = 'none';
+        });
+        break;
+
+      default:
+        allHolderDivs.forEach((div) => {
+          div.style.border = '3px dotted gray';
+          div.style.pointerEvents = 'auto';
+        });
+        return;
+    }
+  }, [mode]);
+
   return (
     <div className='editSec'>
       <Container fluid>
@@ -135,7 +158,9 @@ const EditSection = () => {
             {actionName == 'template' && (
               <div
                 style={
-                  actionName == 'document'
+                  mode === 'preview'
+                    ? { background: '#e3eeff', overflow: 'hidden' }
+                    : actionName == 'document'
                     ? { background: '#e3eeff' }
                     : { background: '#1c2b48' }
                 }
@@ -156,14 +181,21 @@ const EditSection = () => {
 
           {/* <div style={{overflowY:"scroll"}}>s */}
           <Col
-            style={sidebar ? { display: "block", 
-            // height:`${window.innerHeight}px`
-            } : { display: "none" }}
+            style={
+              sidebar
+                ? {
+                    display: 'block',
+                    // height:`${window.innerHeight}px`
+                  }
+                : { display: 'none' }
+            }
             lg={sidebar ? 3 : 0}
             as='div'
             className='editSec_rightMenu'
           >
-            <RightMenu />
+            <div className={`${mode === 'preview' ? 'vis_hid' : ''}`}>
+              <RightMenu />
+            </div>
           </Col>
           {/* </div> */}
         </Row>
