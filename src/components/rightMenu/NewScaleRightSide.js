@@ -44,8 +44,6 @@ const ScaleRightSide = () => {
   // const [addedAns, setAddedAns] = useState([])
   const { addedAns, setAddedAns } = useSelectedAnswer();
   const [inputStr, setInputStr] = useState("");
-  const [upperLimit, setUpperLimit] = useState("");
-  const [space, setSpace] = useState("");
   const [showPicker, setShowPicker] = useState(false);
   const [isSwitchEnabled, setIsSwitchEnabled] = useState(false);
   const [score, setScore] = useState(false);
@@ -92,8 +90,11 @@ const ScaleRightSide = () => {
   let fontFamilyStapel = scale?.querySelector(".newScaleInput");
   let stapelLeft = scale?.querySelector(".leftToolTip");
   let stapelRight = scale?.querySelector(".rightTooltip");
-  let stapelUpperimit = scale?.querySelector(".upper_scale_limit");
+  let stapelUpperLimit = scale?.querySelector(".upper_scale_limit");
   let stapelSpaceUnit = scale?.querySelector(".space_unit");
+
+  const [space, setSpace] = useState(stapelSpaceUnit ? Number(stapelSpaceUnit.textContent) : 0);
+  const [upperLimit, setUpperLimit] = useState(stapelUpperLimit ? Number(stapelUpperLimit.textContent) : 0);
   // =======
   // let fontColor = scale?.firstChild;
   const element = JSON.parse(sessionStorage.getItem("cutItem"));
@@ -853,7 +854,7 @@ const ScaleRightSide = () => {
     setInputFields(newInputFields);
   };
 
-  // console.log(scale);
+  console.log(scale);
 
   const handleInputChange = (event) => {
     const selectedValue = event.target.value;
@@ -952,7 +953,7 @@ const ScaleRightSide = () => {
 
   const handleUpdates = () => {
     const scaleType = document.getElementById("scaleType");
-    // console.log("Content prop", scaleTypeContent);
+    console.log("Content prop", scaleTypeContent);
     setScaleTypeContent(scaleType ? scaleType.value : scaleTypeContent);
     const scaleTypeHolder = scale?.querySelector(".scaleTypeHolder");
     scaleTypeHolder.textContent = scaleType
@@ -1140,7 +1141,7 @@ const ScaleRightSide = () => {
             const id = res.data.data.scale_id;
             // var successObj = JSON.parse(success);
             // const id = successObj.inserted_id;
-            // console.log("This is the scale id", id);
+            console.log("This is the scale id", id);
             if (id.length) {
               setScaleId(id && id);
               const idHolder = scale?.querySelector(".scaleId");
@@ -1199,7 +1200,7 @@ const ScaleRightSide = () => {
               labelHold.appendChild(circle);
 
               circle.addEventListener("mouseenter", () => {
-                if (circle.textContent === "0") {
+                if (circle.textContent === "0" || i === 0) {
                   buttonChildLeft.style.display = "block";
                   buttonChildLeft.style.position = "absolute";
                   buttonChildLeft.style.bottom = "0";
@@ -1213,7 +1214,7 @@ const ScaleRightSide = () => {
                   buttonChildLeft.style.padding = "2px 8px";
                   buttonChildLeft.style.color = "white";
                   buttonChildLeft.style.borderRadius = "2px";
-                } else if (circle.textContent === "5") {
+                } else if (circle.textContent === "5" || i === 5) {
                   buttonChildNeutral.style.display = "block";
                   buttonChildNeutral.style.position = "absolute";
                   buttonChildNeutral.style.bottom = "0";
@@ -1229,7 +1230,7 @@ const ScaleRightSide = () => {
                   buttonChildNeutral.style.padding = "2px 8px";
                   buttonChildNeutral.style.color = "white";
                   buttonChildNeutral.style.borderRadius = "2px";
-                } else if (circle.textContent === "10") {
+                } else if (circle.textContent === "10" || i === 10) {
                   buttonChildRight.style.display = "block";
                   buttonChildRight.style.position = "absolute";
                   buttonChildRight.style.left = "";
@@ -1249,23 +1250,23 @@ const ScaleRightSide = () => {
               });
 
               circle.addEventListener("mouseleave", () => {
-                if (circle.textContent === "0") {
+                if (circle.textContent === "0" || i === 0) {
                   buttonChildLeft.style.display = "none";
-                } else if (circle.textContent === "5") {
+                } else if (circle.textContent === "5" || i === 5) {
                   buttonChildNeutral.style.display = "none";
-                } else if (circle.textContent === "10") {
+                } else if (circle.textContent === "10" || i === 10) {
                   buttonChildRight.style.display = "none";
                 }
               });
 
               if (selectedOption === "emoji" && emojiInp !== "") {
-                // console.log(selectedOption);
+                console.log(selectedOption);
                 // Set the text content of the div to the corresponding emoji
                 const emojiFormat = /(\p{Emoji}|\uFE0F)/gu;
                 const emojis = emojiInp
                   .split(emojiFormat)
                   .filter((emoji) => emoji !== "");
-                // console.log(emojis);
+                console.log(emojis);
                 circle.textContent = emojis[i % emojis.length];
               } else {
                 // Set the text content of the div to the number
@@ -1365,7 +1366,7 @@ const ScaleRightSide = () => {
                 labelHold.appendChild(circle);
 
                 circle.addEventListener("mouseenter", () => {
-                  if (circle.textContent === "0") {
+                  if (circle.textContent === "0" || i === 0) {
                     buttonChildLeft.style.display = "block";
                     buttonChildLeft.style.position = "absolute";
                     buttonChildLeft.style.bottom = "0";
@@ -1379,7 +1380,7 @@ const ScaleRightSide = () => {
                     buttonChildLeft.style.padding = "2px 8px";
                     buttonChildLeft.style.color = "white";
                     buttonChildLeft.style.borderRadius = "2px";
-                  } else if (circle.textContent === "5") {
+                  } else if (circle.textContent === "5" || i === 5) {
                     buttonChildNeutral.style.display = "block";
                     buttonChildNeutral.style.position = "absolute";
                     buttonChildNeutral.style.bottom = "0";
@@ -1395,7 +1396,7 @@ const ScaleRightSide = () => {
                     buttonChildNeutral.style.padding = "2px 8px";
                     buttonChildNeutral.style.color = "white";
                     buttonChildNeutral.style.borderRadius = "2px";
-                  } else if (circle.textContent === "10") {
+                  } else if (circle.textContent === "10" || i === 10) {
                     buttonChildRight.style.display = "block";
                     buttonChildRight.style.position = "absolute";
                     buttonChildRight.style.left = "";
@@ -1425,13 +1426,13 @@ const ScaleRightSide = () => {
                 });
 
                 if (selectedOption === "emoji" && emojiInp !== "") {
-                  // console.log(selectedOption);
+                  console.log(selectedOption);
                   // Set the text content of the div to the corresponding emoji
                   const emojiFormat = /(\p{Emoji}|\uFE0F)/gu;
                   const emojis = emojiInp
                     .split(emojiFormat)
                     .filter((emoji) => emoji !== "");
-                  // console.log(emojis);
+                  console.log(emojis);
                   circle.textContent = emojis[i % emojis.length];
                 } else {
                   // Set the text content of the div to the number
@@ -1473,10 +1474,7 @@ const ScaleRightSide = () => {
       ];
       let timeId = document.getElementById("timeId_stapel");
       let time = document.getElementById("time_stapel");
-      const upperVal = Math.min(
-        10,
-        parseInt(document.getElementById("upperVal").value, 10)
-      );
+      const upperVal = parseInt(document.getElementById("upperVal").value, 10)
       const spacing = parseInt(document.getElementById("spacing").value, 10);
 
       const scaleTypeHolder = document.createElement("h6");
@@ -1512,6 +1510,11 @@ const ScaleRightSide = () => {
       optionHolder.className = "stapelOptionHolder";
       optionHolder.style.display = "none";
 
+      const otherComponent = document.createElement("h6");
+      otherComponent.className = "otherComponent";
+      otherComponent.style.display = "none";
+      otherComponent.textContent = ""
+
       const prepareEmojiLabels = () => {
         const emojiFormat = /(\p{Emoji}|\uFE0F)/gu;
         const emojis = inputStr
@@ -1521,19 +1524,20 @@ const ScaleRightSide = () => {
         const emojiLabels = {};
         let j = 0;
         let valRange =
-          upperLimit % space !== 0
+        upperLimit % space !== 0
             ? Math.floor(upperLimit / space) * 2
             : upperLimit;
+            console.log("This is upp",  space);
         for (let i = valRange * -1; i <= valRange; i += spacing) {
           if (i !== 0) {
             const emojiIndex = j;
             emojiLabels[i] = emojis[emojiIndex];
             j++;
-            // console.log(i);
-            // console.log(Math.floor(upperLimit / space));
+            console.log("This is I",i);
+            console.log(Math.floor(Number(upperLimit) / Number(space)));
           }
         }
-
+        console.log("This is the scale",scale);
         return emojiLabels;
       };
       const emojiLabels = prepareEmojiLabels()
@@ -1577,10 +1581,10 @@ const ScaleRightSide = () => {
               idHolder.textContent = id && id;
             }
 
-            // console.log(
-            //   "This is scale type holder",
-            //   scaleTypeHolder?.textContent
-            // );
+            console.log(
+              "This is scale type holder",
+              scaleTypeHolder?.textContent
+            );
             const scaleArr = res.data.data.settings.scale;
             const fomart = res.data.data.settings.fomat;
 
@@ -1678,6 +1682,7 @@ const ScaleRightSide = () => {
             scaleField.append(scaleText);
             scaleField.append(upperScaleimit)
             scaleField.append(spaceUnit)
+            scaleField.appendChild(otherComponent);
             const idHolder = document.createElement("h6");
             idHolder.className = "scaleId";
             idHolder.textContent = id && id;
@@ -1734,7 +1739,7 @@ const ScaleRightSide = () => {
               sendMessage();
               setScaleData(res.data);
               setScaleId(scaleId);
-              // console.log("This is the data", res.data.data.settings);
+              console.log("This is the data", res.data.data.settings);
               savedStapelScaleArr.textContent = res.data.data.settings.scale;
               savedOptionHolder.textContent = res.data.data.settings.fomat;
               const scaleArr = res.data.data.settings.scale;
@@ -1831,6 +1836,7 @@ const ScaleRightSide = () => {
               scaleField.append(scaleText);
               scaleField.append(upperScaleimit)
               scaleField.append(spaceUnit)
+              scaleField.appendChild(otherComponent);
               const idHolder = document.createElement("h6");
               idHolder.className = "scaleId";
               idHolder.textContent = stapelId.textContent;
@@ -1855,10 +1861,10 @@ const ScaleRightSide = () => {
               }
             }
 
-            // console.log("scaleConet", scaleTypeContent);
+            console.log("scaleConet", scaleTypeContent);
 
-            // console.log("scaleConet", scaleTypeHolder?.textContent);
-            // console.log("Scalefield", scaleField);
+            console.log("scaleConet", scaleTypeHolder?.textContent);
+            console.log("Scalefield", scaleField);
           })
           .catch((err) => {
             setIsLoading(false);
@@ -2017,7 +2023,7 @@ const ScaleRightSide = () => {
             sendMessage();
             setScaleData(res.data);
             const id = res.data.data.scale_id;
-            // console.log("This is the id", id);
+            console.log("This is the id", id);
             if (id.length) {
               setScaleId(id && id);
               const idHolder = scale?.querySelector(".scaleId");
@@ -2274,18 +2280,20 @@ const ScaleRightSide = () => {
       if (option.value === "Horizontal") {
         button4.style.border = "block";
         button4.style.textAlign = "center";
+        button4.style.alignItems = "center";
+        button.style.height = "85%";
+        button.style.width = "96%";
         button.style.display = "flex";
         button.style.flexDirection = "row";
-        button.style.alignItems = "center";
-        button.style.height = "85%";
-        button.style.width = "100%";
-        button.style.flexDirection = "row";
-        button.style.position = "relative";
-        button.style.marginLeft = "0px";
-        button.style.padding = "6px 12px";
-        button.style.display = "grid";
-        button.style.gridTemplateColumns = `repeat(${numColumns}, 1fr)`;
-        button.style.gridTemplateRows = `repeat(${numRows}, 1fr)`;
+        button.style.justifyContent = "center";
+        button.style.position = "absolute";
+        labelHold.style.display = "grid";
+        labelHold.style.marginTop = "-10px";
+        labelHold.style.paddingLeft = "0%";
+        labelHold.style.gridTemplateColumns = `repeat(${numColumns}, 1fr)`;
+        labelHold.style.gridTemplateRows = `repeat(${numRows}, 1fr)`;
+        labelHold.style.overflowX = "hidden";
+        labelHold.style.overflowY = "hidden";
       }
 
       if (option.value === "Vertical") {
@@ -2294,24 +2302,20 @@ const ScaleRightSide = () => {
         orientation.textContent = "vertical";
         orientation.style.display = "none";
         labelHold.appendChild(orientation);
-        labelHold.style.position = "absolute";
-        button.style.margin = "5px 0";
-        button.style.padding = "6px 12px";
+        button.style.padding = "5px 10px";
         button.style.margin = "10px 0";
         button4.style.border = "none";
-        button4.style.display = "flex";
-        button4.style.justifyContent = "center";
-        button4.style.textAlign = "center";
-        labelHold.style.height = "100%";
-        labelHold.style.width = "55%";
+        labelHold.style.height = "96%";
+        labelHold.style.width = "60%";
         labelHold.style.position = "absolute";
-        labelHold.style.display = "flex";
-        labelHold.style.flexDirection = "column";
-        labelHold.style.alignItems = "center";
-        labelHold.style.marginTop = "-8px";  
-        labelHold.style.marginLeft = "13px";
-        labelHold.style.overflowX = "hidden";
+        button.style.display = "flex";
+        button.style.flexDirection = "column";
+        button.style.justifyContent = "center";
+        button.style.alignItems = "center";
+        button.style.marginTop = "-2px";  
+        labelHold.style.marginLeft = "11%";
         labelHold.style.overflowY = "hidden"; 
+        labelHold.style.overflowX = "hidden";
       }
 
       const basePayload = {
@@ -2436,7 +2440,8 @@ const ScaleRightSide = () => {
               // Set the text content to the appropriate label (either text or emoji)
               circle.textContent = updatedLabels[i] || "";
               if (option.value === "Vertical") {
-                circle.style.margin = "2px 0";
+                circle.style.margin = "5px 0";
+                circle.style.padding = "6px 12px";
               }
 
               labelHold.style.border = "";
@@ -2506,18 +2511,16 @@ const ScaleRightSide = () => {
 
                 if (option.value === "Vertical") {
                   circle.style.margin = "5px 0";
-                  circle.style.padding = "6px 12px";
                 }
 
                 labelHold.appendChild(circle);
-                labelHold.style.marginTop = "-5px";
+                labelHold.style.marginTop = "-10px";
               }
               console.log("This is it+++++++______", likertScaleArray);
             }
           })
           .catch((err) => {
             setIsLoading(false);
-            // console.log(err.message);
           });
       }
     } else if (
@@ -2552,9 +2555,6 @@ const ScaleRightSide = () => {
 
       let labelHold = scale?.querySelector(".label_hold");
 
-      // setTimeout(() => {
-      //   labelHold.style.flexDirection = "column";
-      // }, 50);
       let tempText = scale?.querySelector(".tempText");
       tempText?.remove();
 
@@ -2573,6 +2573,11 @@ const ScaleRightSide = () => {
 
       const containerDiv = document.createElement("div");
       containerDiv.className = "label_hold";
+      containerDiv.style.display = "flex";
+      containerDiv.style.justifyContent = "center";
+      containerDiv.style.alignItems = "center";
+      containerDiv.style.flexDirection = "column";
+      containerDiv.style.height = "100%";
 
       let product_names = document.getElementById("product_name");
       console.log(product_names.length);
@@ -2622,6 +2627,8 @@ const ScaleRightSide = () => {
             const {
               name,
               orientation,
+              fontcolor,
+              fontstyle,
               scale_color,
               product_count,
               product_names,
@@ -2635,13 +2642,11 @@ const ScaleRightSide = () => {
               newLabelHold.innerHTML = "";
               newLabelHold.style = "";
 
-              // newLabelHold.style.padding = "25px";
-              newLabelHold.style.borderBottom = "1px solid gray";
-
-              // newLabelHold.style.paddingRight = "50px";
-              // newLabelHold.style.paddingLeft = "35px";
-              // newLabelHold.style.borderBottom = "1px solid gray";
+              newLabelHold.style.padding = "10px 15px";
+              newLabelHold.style.width = "95%";
               newLabelHold.style.borderTop = "1px solid gray";
+              newLabelHold.style.borderBottom = "1px solid gray";
+              button4.style.height = "93%";
 
               let nameDiv = document.createElement("div");
               nameDiv.className = "product_name";
@@ -2691,13 +2696,14 @@ const ScaleRightSide = () => {
               percentChilds.appendChild(rightPercent);
 
               containerDiv.appendChild(newLabelHold);
-              // labelHold.append(newLabelHold);
 
               newLabelHold.appendChild(percentChilds);
               button4.appendChild(containerDiv);
 
               if (orientation === "Horizontal") {
-                scale?.querySelector(".orientation")?.remove();
+                const orient = scale?.querySelectorAll(".orientation");
+
+                orient?.forEach((e) => e?.remove());
                 button4.style.border = "block";
                 button4.style.textAlign = "center";
                 button.style.marginTop = "10px";
@@ -2715,9 +2721,8 @@ const ScaleRightSide = () => {
                 orientation.textContent = "Vertical";
                 orientation.style.display = "none";
                 button4.appendChild(orientation);
-                containerDiv.style.transform = "rotate(270deg)";
 
-                containerDiv.style.marginTop = "80px";
+                containerDiv.style.transform = "rotate(270deg)";
                 containerDiv.style.width = "100%";
                 inputPercent.style.marginTop = "20px";
                 nameDiv.style.position = "absolute";
@@ -2726,27 +2731,33 @@ const ScaleRightSide = () => {
                   nameDiv.style.top = "20px";
                   nameDiv.style.left = "93%";
                   nameDiv.style.right = "-17px";
+                  newLabelHold.style.padding = "0px 20px 10px 14px"
+                  
                 } else {
+                  newLabelHold.style.padding = "0px 17px 37px 14px";
                   nameDiv.style.left = "101%";
                   nameDiv.style.top = "4px";
                   nameDiv.style.right = "-22px";
                 }
-                newLabelHold.style.padding =
-                  nameDiv.textContent.length < 9
-                    ? "0px 20px 10px 14px"
-                    : "0px 17px 37px 14px";
+                
                 nameDiv.style.transform = "rotate(90deg)";
                 newLabelHold.style.position = "relative";
                 newLabelHold.style.width = "85%";
                 percentChilds.style.alignItems = "start";
                 percentChilds.style.height = "100%";
+
+                if (inputFields.length == 1) {
+                  scaleText.style.display = "none";
+                  newLabelHold.style.marginTop = "207px"
+                  newLabelHold.style.width = "25vw"
+
+                }
               }
 
               scaleText.textContent = name;
-
-              button4.style.color = btnUpdateFontColor.value;
-
-              button4.style.fontFamily = btnUpdateScaleFont.value;
+              scaleText.style.display = "none";
+              button4.style.color = fontcolor;
+              button4.style.fontFamily = fontstyle;
             }
           })
           .catch((err) => {
@@ -2785,6 +2796,8 @@ const ScaleRightSide = () => {
               const {
                 name,
                 orientation,
+                fontcolor,
+                fontstyle,
                 scale_color,
                 product_count,
                 product_names,
@@ -2797,12 +2810,11 @@ const ScaleRightSide = () => {
                 newLabelHold.innerHTML = "";
                 newLabelHold.style = "";
 
-                newLabelHold.style.borderBottom = "1px solid gray";
-
-                // newLabelHold.style.paddingRight = "35px";
-                // newLabelHold.style.paddingLeft = "35px";
-                newLabelHold.style.borderBottom = "1px solid gray";
+                newLabelHold.style.padding = "10px 15px";
+                newLabelHold.style.width = "95%";
                 newLabelHold.style.borderTop = "1px solid gray";
+                newLabelHold.style.borderBottom = "1px solid gray";
+                button4.style.height = "93%";
 
                 let nameDiv = document.createElement("div");
                 nameDiv.className = "product_name";
@@ -2852,13 +2864,14 @@ const ScaleRightSide = () => {
                 percentChilds.appendChild(rightPercent);
 
                 containerDiv.appendChild(newLabelHold);
-                // labelHold.append(newLabelHold);
 
                 newLabelHold.appendChild(percentChilds);
                 button4.appendChild(containerDiv);
 
                 if (orientation === "Horizontal") {
-                  scale?.querySelector(".orientation")?.remove();
+                  const orient = scale?.querySelectorAll(".orientation");
+
+                  orient?.forEach((e) => e?.remove());
                   button4.style.border = "block";
                   button4.style.textAlign = "center";
                   button.style.marginTop = "10px";
@@ -2876,8 +2889,8 @@ const ScaleRightSide = () => {
                   orientation.textContent = "Vertical";
                   orientation.style.display = "none";
                   button4.appendChild(orientation);
+
                   containerDiv.style.transform = "rotate(270deg)";
-                  containerDiv.style.marginTop = "80px";
                   containerDiv.style.width = "100%";
                   inputPercent.style.marginTop = "20px";
                   nameDiv.style.position = "absolute";
@@ -2886,27 +2899,33 @@ const ScaleRightSide = () => {
                     nameDiv.style.top = "20px";
                     nameDiv.style.left = "93%";
                     nameDiv.style.right = "-17px";
+                    newLabelHold.style.padding = "0px 20px 10px 14px"
+                    
                   } else {
+                    newLabelHold.style.padding = "0px 17px 37px 14px";
                     nameDiv.style.left = "101%";
                     nameDiv.style.top = "4px";
                     nameDiv.style.right = "-22px";
                   }
-                  newLabelHold.style.padding =
-                    nameDiv.textContent.length < 9
-                      ? "0px 20px 10px 14px"
-                      : "0px 17px 37px 14px";
+                  
                   nameDiv.style.transform = "rotate(90deg)";
                   newLabelHold.style.position = "relative";
                   newLabelHold.style.width = "85%";
                   percentChilds.style.alignItems = "start";
                   percentChilds.style.height = "100%";
+
+                  if (inputFields.length == 1) {
+                    scaleText.style.display = "none";
+                    newLabelHold.style.marginTop = "207px"
+                    newLabelHold.style.width = "25vw"
+  
+                  }
                 }
 
                 scaleText.textContent = name;
-
-                button4.style.color = btnUpdateFontColor.value;
-
-                button4.style.fontFamily = btnUpdateScaleFont.value;
+                scaleText.style.display = "none";
+                button4.style.color = fontcolor;
+                button4.style.fontFamily = fontstyle;
               }
             }
           })
@@ -2972,6 +2991,12 @@ const ScaleRightSide = () => {
 
       const containerDiv = document.createElement("div");
       containerDiv.className = "label_hold";
+      containerDiv.style.display = "flex";
+      containerDiv.style.justifyContent = "center";
+      containerDiv.style.alignItems = "center";
+      containerDiv.style.flexDirection = "column";
+      containerDiv.style.height = "100%";
+      
 
       let productNames = document.getElementById("product_count_label");
       let inputFields = productNames?.querySelectorAll("input");
@@ -2986,7 +3011,6 @@ const ScaleRightSide = () => {
         idHolder.textContent === "id"
       ) {
         setIsLoading(true);
-        // console.log("post req");
         Axios.post(
           "https://100035.pythonanywhere.com/percent-sum/percent-sum-settings",
           {
@@ -3011,13 +3035,11 @@ const ScaleRightSide = () => {
             const success = res.data.success;
             var successObj = JSON.parse(success);
             const id = successObj.inserted_id;
-            // console.log(id);
             if (id.length) {
               setScaleId(id && id);
               const idHolder = scale?.querySelector(".scaleId");
               idHolder.textContent = id && id;
             }
-            // console.log(res);
 
             const {
               name,
@@ -3035,12 +3057,11 @@ const ScaleRightSide = () => {
               newLabelHold.classList.remove("label_hold");
               newLabelHold.innerHTML = "";
               newLabelHold.style = "";
-              newLabelHold.style.padding = "3px";
-              newLabelHold.style.borderBottom = "1px solid gray";
-              newLabelHold.style.paddingRight = "35px";
-              newLabelHold.style.paddingLeft = "35px";
-              newLabelHold.style.borderBottom = "1px solid gray";
+              newLabelHold.style.padding = "10px 15px";
+              newLabelHold.style.width = "95%";
               newLabelHold.style.borderTop = "1px solid gray";
+              newLabelHold.style.borderBottom = "1px solid gray";
+              button4.style.height = "92%";
 
               let nameDiv = document.createElement("div");
               nameDiv.className = "product_name";
@@ -3097,9 +3118,8 @@ const ScaleRightSide = () => {
                 scale?.querySelector(".orientation")?.remove();
                 button4.style.border = "block";
                 button4.style.textAlign = "center";
-                button.style.marginTop = "10px";
                 button.style.alignItems = "center";
-                button.style.height = "85%";
+                button.style.height = "100%";
                 button.style.width = "100%";
                 button.style.flexDirection = "row";
                 button.style.position = "relative";
@@ -3114,7 +3134,6 @@ const ScaleRightSide = () => {
                 button4.appendChild(orientation);
 
                 containerDiv.style.transform = "rotate(270deg)";
-                containerDiv.style.marginTop = "80px";
                 containerDiv.style.width = "100%";
                 inputPercent.style.marginTop = "20px";
                 nameDiv.style.position = "absolute";
@@ -3137,45 +3156,18 @@ const ScaleRightSide = () => {
                 newLabelHold.style.width = "85%";
                 percentChilds.style.alignItems = "start";
                 percentChilds.style.height = "100%";
-
-                if (inputFields.length == 5) {
-                  scaleText.style.marginBottom = "-100px";
-                }
-
-                if (inputFields.length == 6) {
-                  scaleText.style.marginBottom = "-31px";
-                }
-
-                if (inputFields.length == 7) {
-                  scaleText.style.marginBottom = "-62px";
-                }
-
-                if (inputFields.length == 8) {
-                  scaleText.style.marginBottom = "-80px";
-                }
-
-                if (inputFields.length == 9) {
-                  scaleText.style.marginBottom = "-117px";
-                }
-
-                if (inputFields.length == 10) {
-                  scaleText.style.marginBottom = "-151px";
-                }
               }
-
               scaleText.textContent = name;
+              scaleText.style.display = "none";
               button4.style.color = fontcolor;
               button4.style.fontFamily = fontstyle;
             }
           })
           .catch((err) => {
             setIsLoading(false);
-            // console.log(err);
           });
       } else {
         setIsLoading(true);
-        // console.log("PUT req");
-        // console.log(idHolder.textContent);
         Axios.put(
           "https://100035.pythonanywhere.com/percent-sum/percent-sum-settings",
           {
@@ -3200,8 +3192,6 @@ const ScaleRightSide = () => {
               sendMessage();
               setScaleData(res.data);
               setScaleId(scaleId);
-              // console.log(res);
-              // console.log("This is the still scale", scale);
 
               const {
                 name,
@@ -3219,12 +3209,11 @@ const ScaleRightSide = () => {
                 newLabelHold.classList.remove("label_hold");
                 newLabelHold.innerHTML = "";
                 newLabelHold.style = "";
-                newLabelHold.style.padding = "3px";
-                newLabelHold.style.borderBottom = "1px solid gray";
-                newLabelHold.style.paddingRight = "35px";
-                newLabelHold.style.paddingLeft = "35px";
+                newLabelHold.style.padding = "10px 15px";
+                newLabelHold.style.width = "95%";
                 newLabelHold.style.borderBottom = "1px solid gray";
                 newLabelHold.style.borderTop = "1px solid gray";
+                button4.style.height = "92%";
 
                 let nameDiv = document.createElement("div");
                 nameDiv.className = "product_name";
@@ -3283,7 +3272,7 @@ const ScaleRightSide = () => {
                   button4.style.textAlign = "center";
                   button.style.marginTop = "10px";
                   button.style.alignItems = "center";
-                  button.style.height = "85%";
+                  button.style.height = "100%";
                   button.style.width = "100%";
                   button.style.flexDirection = "row";
                   button.style.position = "relative";
@@ -3298,7 +3287,6 @@ const ScaleRightSide = () => {
                   button4.appendChild(orientation);
 
                   containerDiv.style.transform = "rotate(270deg)";
-                  containerDiv.style.marginTop = "80px";
                   containerDiv.style.width = "100%";
                   inputPercent.style.marginTop = "20px";
                   nameDiv.style.position = "absolute";
@@ -3321,41 +3309,15 @@ const ScaleRightSide = () => {
                   newLabelHold.style.width = "85%";
                   percentChilds.style.alignItems = "start";
                   percentChilds.style.height = "100%";
-
-                  if (inputFields.length == 5) {
-                    scaleText.style.marginBottom = "-100px";
-                  }
-
-                  if (inputFields.length == 6) {
-                    scaleText.style.marginBottom = "-31px";
-                  }
-
-                  if (inputFields.length == 7) {
-                    scaleText.style.marginBottom = "-62px";
-                  }
-
-                  if (inputFields.length == 8) {
-                    scaleText.style.marginBottom = "-80px";
-                  }
-
-                  if (inputFields.length == 9) {
-                    scaleText.style.marginBottom = "-117px";
-                  }
-
-                  if (inputFields.length == 10) {
-                    scaleText.style.marginBottom = "-151px";
-                  }
                 }
+                scaleText.textContent = name;
+                button4.style.color = fontcolor;
+                button4.style.fontFamily = fontstyle;
               }
-
-              scaleText.textContent = name;
-              button4.style.color = fontcolor;
-              button4.style.fontFamily = fontstyle;
             }
           })
           .catch((err) => {
             setIsLoading(false);
-            // console.log(err.message);
           });
       }
     } else if (
@@ -5623,7 +5585,7 @@ const ScaleRightSide = () => {
                         }}
                         id="upperVal"
                         onChange={(e) => setUpperLimit(e.target.value)}
-                        defaultValue={ stapelUpperimit ? Number(stapelUpperimit.textContent) : 0}
+                        defaultValue={upperLimit}
                         // onChange={upperValueChange}
                       />
                     </div>
@@ -5664,7 +5626,7 @@ const ScaleRightSide = () => {
                         id="spacing"
                         onChange={(e) => setSpace(e.target.value)}
                         // value={-upperVal}
-                        defaultValue={stapelSpaceUnit ? Number(stapelSpaceUnit.textContent) : 0}
+                        defaultValue={space}
                       />
                     </div>
                   </div>

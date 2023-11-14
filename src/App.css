@@ -109,6 +109,9 @@ td {
   user-select: none;
   z-index: 20;
 }
+.tb-rightsidebar-buttons{
+  background-color: rgb(28, 43, 72) !important;
+}
 
 .row-resizer {
   position: absolute;
@@ -139,11 +142,20 @@ tr:nth-child(even) {
 .tableInput {
   overflow: visible !important;
 }
-.target-el img {
+.configure-table {
+  background-color: rgb(28, 43, 72) !important;
+  
+}
+.col-delete img {
   height: clamp(0.5rem, 1.5rem, 2.5rem);
   width: clamp(0.5rem, 2rem, 3rem);
 }
-
+.remove_button{
+  background-color: rgb(28, 43, 72) !important;
+  outline: none !important;
+  border: none;
+  
+}
 .addImageButtonInput {
   display: none;
 }
@@ -300,7 +312,19 @@ tr:nth-child(even) {
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 1100;
 }
-
+.modal-header{
+  background-color:  rgb(28, 43, 72) !important;
+}
+div.modal-footer:first-child{
+  background-color:  rgb(28, 43, 72) !important;
+}
+.modal-confirm-remove{
+  background-color:  rgb(28, 43, 72) !important;
+  border: none;
+}
+.modal-confirm-remove:hover{
+  outline:#000 1px solid; 
+}
 div.iframeInput>iframe{
   position: relative;
   z-index: -1;

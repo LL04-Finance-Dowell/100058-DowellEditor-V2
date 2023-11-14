@@ -172,7 +172,10 @@ const CalendarRightSidebar = (props) => {
         >
           <Button
             variant="primary"
-            onClick={removeDate}
+            onClick={() => {
+              setConfirmRemove(true)
+            }
+            }
             className={decoded.details.action === "template" ? "remove_button" : "remove_button disable_button"}
           >
             Remove Date

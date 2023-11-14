@@ -560,8 +560,8 @@ export const ContextProvider = ({ children }) => {
 
   const scaleMidSec = () => {
     const midSecAll = document.querySelectorAll('.midSection_container');
-    const ratio = fixedMidSecDim.height / fixedMidSecDim.width;
-    const parentRatio = fixedMidSecDim.parentHeight / fixedMidSecDim.height;
+    const ratio = fixedMidSecDim?.height / fixedMidSecDim?.width;
+    const parentRatio = fixedMidSecDim?.parentHeight / fixedMidSecDim?.height;
     const currWidth = Number(
       midSecAll[0].getBoundingClientRect().width.toFixed(2)
     );
@@ -570,14 +570,14 @@ export const ContextProvider = ({ children }) => {
       .getElementsByClassName('left_menu_wrapper')[0]
       ?.getBoundingClientRect();
 
-    midSecAll.forEach((mid) => {
+    midSecAll?.forEach((mid) => {
       mid.style.height = scaledHeight + 'px';
       mid.parentElement.style.height =
         (scaledHeight * parentRatio).toFixed(2) + 'px';
     });
 
     midSecAll[0].parentElement.parentElement.parentElement.style.marginTop =
-      window.innerWidth > 993 ? 0 : leftRect.height + 'px';
+      window.innerWidth > 993 ? 0 : leftRect?.height + 'px';
 
     currWidth !== currMidSecWidth && setCurrMidSecWidth(currWidth);
   };
