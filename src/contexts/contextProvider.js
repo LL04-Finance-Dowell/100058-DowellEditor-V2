@@ -43,13 +43,18 @@ const initialState2 = {
 export const ContextProvider = ({ children }) => {
   const [fetchedData, setFetchedData] = useState({});
   const [isClicked, setIsClicked] = useState(initialState2);
-
   const [isDataSaved, setIsDataSaved] = useState(false);
   const [mode, setMode] = useState('edit');
-
   const [isDropped, setIsDropped] = useState(initialState);
-
   const [isResizing, setIsResizing] = useState(false);
+  const [defSelOpt] = useState(
+    window.innerWidth > 993
+      ? 'large'
+      : window.innerWidth <= 993 && window.innerWidth >= 770
+      ? 'mid'
+      : 'small'
+  );
+  const [selOpt, setSelOpt] = useState(defSelOpt);
 
   const [idIni, setIdIni] = useState('');
 
@@ -829,6 +834,9 @@ export const ContextProvider = ({ children }) => {
         setMode,
         progress,
         setProgress,
+        selOpt,
+        setSelOpt,
+        defSelOpt,
       }}
     >
       {children}

@@ -25,6 +25,7 @@ import generateImage from '../../utils/generateImage.js';
 import RejectionModal from '../modals/RejectionModal.jsx';
 
 import ProgressLoader from '../../utils/progressLoader/ProgressLoader';
+import MidResizer from './MidResizer.jsx';
 
 const Header = () => {
   const inputRef = useRef(null);
@@ -121,6 +122,8 @@ const Header = () => {
     setProgress,
     mode,
     setMode,
+    setSelOpt,
+    defSelOpt,
   } = useStateContext();
 
   const [printContent, setPrintContent] = useState(false);
@@ -2138,15 +2141,16 @@ const Header = () => {
                 <div className='view_mode_wrapper'>
                   <button
                     className='view_mode'
-                    onClick={() =>
+                    onClick={() => {
                       setMode(
                         mode === 'edit'
                           ? 'preview'
                           : mode === 'preview'
                           ? 'edit'
                           : ''
-                      )
-                    }
+                      );
+                      setSelOpt(defSelOpt);
+                    }}
                   >
                     {mode === 'edit' ? (
                       <>
@@ -2166,6 +2170,10 @@ const Header = () => {
                       'Mode bug'
                     )}
                   </button>
+
+                  {actionName === 'template' && mode === 'preview' && (
+                    <MidResizer />
+                  )}
                 </div>
 
                 <div

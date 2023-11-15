@@ -116,6 +116,8 @@ const MidSection = React.forwardRef((props, ref) => {
     setButtonPurpose,
     progress,
     setProgress,
+    selOpt,
+    fixedMidSecDim,
   } = useStateContext();
 
   const { contextMenu, setContextMenu, setFromContextMenu } =
@@ -2640,6 +2642,34 @@ const MidSection = React.forwardRef((props, ref) => {
       }
     }
   }, [fetchedData]);
+
+  useEffect(() => {
+    if (isDataRetrieved) {
+      const setMidSecWdith = (width) => {
+        const midSecAll = document.querySelectorAll('.midSection_container');
+        midSecAll.forEach((mid) => {
+          mid.style.width = width + 'px';
+        });
+      };
+
+      switch (selOpt) {
+        case 'large':
+          setMidSecWdith(fixedMidSecDim.width);
+          scaleMidSec();
+          break;
+        case 'mid':
+          setMidSecWdith(720);
+          scaleMidSec();
+          break;
+        case 'small':
+          setMidSecWdith(350);
+          scaleMidSec();
+          break;
+        default:
+          return;
+      }
+    }
+  }, [isDataRetrieved, selOpt]);
 
   useEffect(() => {
     if (Object.keys(fetchedData).length) {
