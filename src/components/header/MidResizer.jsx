@@ -5,7 +5,7 @@ import { useStateContext } from '../../contexts/contextProvider';
 import './midResizer.css';
 
 const MidResizer = () => {
-  const { selOpt, setSelOpt } = useStateContext();
+  const { selOpt, setSelOpt, setIsCompsScaler } = useStateContext();
   const [isDrop, setIsDrop] = useState(false);
   const [selOpts] = useState(
     window.innerWidth > 993
@@ -59,6 +59,7 @@ const MidResizer = () => {
               onClick={() => {
                 setSelOpt(opt);
                 setIsDrop(false);
+                setIsCompsScaler(true);
               }}
             >
               <span className='opt_icon'>

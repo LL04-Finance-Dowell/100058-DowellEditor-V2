@@ -121,6 +121,8 @@ const MidSection = React.forwardRef((props, ref) => {
     setEnablePreview,
     modHeightEls,
     setModHeightEls,
+    setIsCompsScaler,
+    isCompsScaler,
   } = useStateContext();
 
   const { contextMenu, setContextMenu, setFromContextMenu } =
@@ -405,8 +407,52 @@ const MidSection = React.forwardRef((props, ref) => {
     return resizer;
   }
 
+  // * This gets the page a holderDIV is in
+  const getPage = (holderDiv) =>
+    Number(
+      [...holderDiv.classList].find((cl) => cl.includes('page')).split('_')[1]
+    );
+
   // TODO OVERFLOW FUNCTION
-  const handleElOverflow = (el) => {};
+  const handleElOverflow = (el, holderDiv) => {
+    const midSecs = [...document.querySelectorAll('.midSection_container')];
+    if (el.classList.contains('textInput')) {
+      if (el.scrollHeight > el.getBoundingClientRect().height) {
+        console.log('Overflow');
+        const iniHeight = holderDiv.getBoundingClientRect().height;
+        const iniBottom = holderDiv.getBoundingClientRect().bottom;
+        const elId = el.id;
+        const overflowY = el.scrollHeight + 50 - iniHeight;
+        const page = getPage(holderDiv);
+        const parHeightRatio =
+          fixedMidSecDim.parentHeight / fixedMidSecDim.height;
+        const midSec = midSecs[page - 1];
+
+        // *Adjusts parent height by multiplying midSec height with parent height ratio
+        holderDiv.style.height = el.scrollHeight + 'px';
+        midSec.style.height =
+          midSec.getBoundingClientRect().height + overflowY + 'px';
+        midSec.parentElement.style.height =
+          midSec.getBoundingClientRect().height * parHeightRatio + 'px';
+
+        // *Adjusts top of elements below
+        const midSecChildren = [...midSec.children].filter(
+          (child, index) => index !== 0
+        );
+
+        midSecChildren.forEach((el) => {
+          if (el.getBoundingClientRect().top <= iniBottom) {
+            console.log('el Below: ', el);
+          }
+        });
+
+        setModHeightEls((prev) => [
+          ...prev,
+          { elId, iniHeight, iniBottom, overflowY },
+        ]);
+      }
+    }
+  };
 
   //colse context menu
 
@@ -1924,6 +1970,21 @@ const MidSection = React.forwardRef((props, ref) => {
         }
       });
     }
+
+    const holderDivs = [...document.querySelectorAll('.holderDIV')];
+
+    const delayEx = setTimeout(() => {
+      holderDivs.forEach((holderDiv) => {
+        const el = holderDiv.children[1]?.classList.contains('dropdownInput')
+          ? holderDiv.children[1]
+          : holderDiv.children[0];
+
+        handleElOverflow(el, holderDiv);
+      });
+
+      clearTimeout(delayEx);
+    }, 500);
+
     sessionStorage.setItem('dimRatios', JSON.stringify(iniDimRatio));
     setDimRatios(iniDimRatio);
   };
@@ -2609,6 +2670,8 @@ const MidSection = React.forwardRef((props, ref) => {
         // console.log('Ratio: ', ratio);
 
         compsScaler(holder, ratio, el);
+
+        // setIsCompsScaler(false);
       }
     });
   };
@@ -2705,91 +2768,29 @@ const MidSection = React.forwardRef((props, ref) => {
 
   useEffect(() => {
     if (Object.keys(fetchedData).length) {
-      window.onresize = () => scaleMidSec();
+      window.onresize = () => {
+        isCompsScaler || setIsCompsScaler(true);
+        scaleMidSec();
+      };
     }
 
     return () => window.removeEventListener('resize', () => {});
-  }, [fetchedData, currMidSecWidth]);
+  }, [fetchedData, currMidSecWidth, isCompsScaler]);
 
   useEffect(() => {
     // console.log('COMP RESIZER TRIGGERED');
-    if (Object.keys(fetchedData).length && currMidSecWidth > 0) {
+    if (
+      Object.keys(fetchedData).length &&
+      currMidSecWidth > 0 &&
+      isCompsScaler
+    ) {
+      console.log('First render: ', isFirstRender.current);
       if (!isFirstRender.current) {
+        // !FIND A FIX FOR THIS GUY
         compsResizer();
       } else isFirstRender.current = false;
     }
   }, [currMidSecWidth, fetchedData]);
-
-  useEffect(() => {
-    if (Object.keys(fetchedData).length && currMidSecWidth > 0) {
-      const editSec = document.querySelector('.editSec_midSec');
-
-      const editSecObserver = new MutationObserver((mutationLists) => {
-        for (const mutation of mutationLists) {
-          if (mutation.target.classList.contains('midSection_container')) {
-            if (
-              mutation.addedNodes.length &&
-              !mutation.addedNodes[0].classList.contains('modal-container') &&
-              !mutation.addedNodes[0].classList.contains('positioning')
-            ) {
-              const [holder] = mutation.addedNodes;
-              const el = holder.children[1]?.classList.contains('dropdownInput')
-                ? holder.children[1]
-                : holder.children[0];
-              const elRect = el.getBoundingClientRect();
-              const midSec = document.querySelector('.midSection_container');
-              const midSecWidth = midSec.getBoundingClientRect().width;
-              const page = Number(
-                [...holder.classList]
-                  .find((cl) => cl.includes('page'))
-                  .split('_')[1]
-              );
-
-              // * This codes opens Right sidebar once user drops component on midsection
-              !dimRatios.find((dim) => dim.id === el.id) && el.click();
-
-              const modDimRatio = {
-                type: el.className,
-                id: el.id,
-                top: elRect.top / midSecWidth,
-                left: elRect.left / midSecWidth,
-                width: elRect?.width / midSecWidth,
-                height: elRect.height / midSecWidth,
-                page,
-              };
-
-              const modDimRatios = [...dimRatios, modDimRatio];
-              sessionStorage.setItem('dimRatios', JSON.stringify(modDimRatios));
-              setDimRatios(modDimRatios);
-            }
-
-            if (
-              mutation.removedNodes.length &&
-              !mutation.removedNodes[0].classList.contains('modal-container') &&
-              !mutation.removedNodes[0].classList.contains('positioning')
-            ) {
-              const [holder] = mutation.removedNodes;
-              const el = holder.children[1]?.classList.contains('dropdownInput')
-                ? holder.children[1]
-                : holder.children[0];
-
-              const modDimRatios = dimRatios.filter(
-                (ratio) => ratio.id !== el.id
-              );
-              sessionStorage.setItem('dimRatios', JSON.stringify(modDimRatios));
-              setDimRatios(modDimRatios);
-            }
-          }
-        }
-      });
-
-      editSecObserver.observe(editSec, { childList: true, subtree: true });
-
-      if (dimRatios.length) setEnablePreview(true);
-      else setEnablePreview(false);
-    }
-    // console.log('DIMENSION RATIOS: ', dimRatios);
-  }, [dimRatios, currMidSecWidth, fetchedData]);
 
   const getCurrentEl = (fromMidSection) => {
     return fromMidSection;

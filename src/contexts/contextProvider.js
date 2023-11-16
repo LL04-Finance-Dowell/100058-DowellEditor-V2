@@ -63,6 +63,7 @@ export const ContextProvider = ({ children }) => {
   const [data, setData] = useState([]);
   const [title, setTitle] = useState(['Untitled-file']);
   const [isDataRetrieved, setIsDataRetrieved] = useState(false);
+  const [isCompsScaler, setIsCompsScaler] = useState(false);
   // const [iniBtnId, setIniBtnId] = useState('');
 
   //nps scale custom data
@@ -843,6 +844,8 @@ export const ContextProvider = ({ children }) => {
         setEnablePreview,
         modHeightEls,
         setModHeightEls,
+        isCompsScaler,
+        setIsCompsScaler,
       }}
     >
       {children}

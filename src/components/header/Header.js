@@ -2142,7 +2142,9 @@ const Header = () => {
               <div className='right_header'>
                 <div className='view_mode_wrapper'>
                   <button
-                    className={`view_mode ${enablePreview ? '' : 'btn_disable'}`}
+                    className={`view_mode ${
+                      enablePreview ? '' : 'btn_disable'
+                    }`}
                     onClick={() => {
                       setMode(
                         mode === 'edit'
