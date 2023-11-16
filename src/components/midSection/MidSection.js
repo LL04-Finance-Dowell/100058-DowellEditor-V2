@@ -118,6 +118,7 @@ const MidSection = React.forwardRef((props, ref) => {
     setProgress,
     selOpt,
     fixedMidSecDim,
+    setEnablePreview,
   } = useStateContext();
 
   const { contextMenu, setContextMenu, setFromContextMenu } =
@@ -1604,7 +1605,7 @@ const MidSection = React.forwardRef((props, ref) => {
           const elPar = document.getElementById(element.id)?.parentElement;
           elPar && elPar.remove();
 
-          // console.log('Elment Parent: ', elPar, element);
+          // console.log('SCALE_INPUT El Par: ', elPar, element);
 
           const width = finding_percent(element, 'width');
 
@@ -1752,13 +1753,14 @@ const MidSection = React.forwardRef((props, ref) => {
           };
           const idMatch = documnetMap?.filter((elmnt) => elmnt == element?.id);
           const holderDIV = getHolderDIV(measure, p, idMatch);
-          const id = `${
-            element?.raw_data?.scaleID.includes('scale Id')
-              ? element.id
-              : element?.raw_data?.scaleID
-          }`;
+          // const id = `${
+          //   element?.raw_data?.scaleID.includes('scale Id')
+          //     ? element.id
+          //     : element?.raw_data?.scaleID
+          // }`;
+          const id = element.id;
 
-          console.log('NEW SCALE POST: ', element, id);
+          // console.log('New_SCALE_INPUT El Par: ', elPar, element);
 
           createNewScaleInputField(
             id,
@@ -2754,6 +2756,9 @@ const MidSection = React.forwardRef((props, ref) => {
       });
 
       editSecObserver.observe(editSec, { childList: true, subtree: true });
+
+      if (dimRatios.length) setEnablePreview(true);
+      else setEnablePreview(false);
     }
     // console.log('DIMENSION RATIOS: ', dimRatios);
   }, [dimRatios, currMidSecWidth, fetchedData]);

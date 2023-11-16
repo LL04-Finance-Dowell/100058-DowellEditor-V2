@@ -165,6 +165,16 @@ svg:not(.view_mode svg, .mid_resizer svg) {
   position: relative;
 }
 
+.btn_disable {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.view_mode.btn_disable:hover {
+  color: #1c2b48;
+  background-color: #fff;
+}
+
 .view_mode {
   display: flex;
   align-items: center;

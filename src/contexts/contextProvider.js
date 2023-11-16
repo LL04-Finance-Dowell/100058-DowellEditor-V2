@@ -55,7 +55,7 @@ export const ContextProvider = ({ children }) => {
       : 'small'
   );
   const [selOpt, setSelOpt] = useState(defSelOpt);
-
+  const [enablePreview, setEnablePreview] = useState(false);
   const [idIni, setIdIni] = useState('');
 
   // Fetched Data
@@ -837,6 +837,8 @@ export const ContextProvider = ({ children }) => {
         selOpt,
         setSelOpt,
         defSelOpt,
+        enablePreview,
+        setEnablePreview,
       }}
     >
       {children}

@@ -124,6 +124,8 @@ const Header = () => {
     setMode,
     setSelOpt,
     defSelOpt,
+    enablePreview,
+    setEnablePreview,
   } = useStateContext();
 
   const [printContent, setPrintContent] = useState(false);
@@ -2140,7 +2142,7 @@ const Header = () => {
               <div className='right_header'>
                 <div className='view_mode_wrapper'>
                   <button
-                    className='view_mode'
+                    className={`view_mode ${enablePreview ? '' : 'btn_disable'}`}
                     onClick={() => {
                       setMode(
                         mode === 'edit'
@@ -2151,6 +2153,7 @@ const Header = () => {
                       );
                       setSelOpt(defSelOpt);
                     }}
+                    disabled={!enablePreview}
                   >
                     {mode === 'edit' ? (
                       <>
