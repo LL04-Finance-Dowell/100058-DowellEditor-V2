@@ -119,6 +119,8 @@ const MidSection = React.forwardRef((props, ref) => {
     selOpt,
     fixedMidSecDim,
     setEnablePreview,
+    modHeightEls,
+    setModHeightEls,
   } = useStateContext();
 
   const { contextMenu, setContextMenu, setFromContextMenu } =
@@ -402,6 +404,9 @@ const MidSection = React.forwardRef((props, ref) => {
 
     return resizer;
   }
+
+  // TODO OVERFLOW FUNCTION
+  const handleElOverflow = (el) => {};
 
   //colse context menu
 
@@ -2551,11 +2556,13 @@ const MidSection = React.forwardRef((props, ref) => {
 
   let elem = {};
 
-  const compsScaler = (holder, ratio) => {
+  const compsScaler = (holder, ratio, el) => {
     const midSecWidth = document
       .querySelector('.midSection_container')
       .getBoundingClientRect().width;
     // const holderStyles = window.getComputedStyle(holder);
+
+    console.log('CompScaler called');
 
     const computeDim = (prop) => midSecWidth * prop + 'px';
 
@@ -2563,10 +2570,31 @@ const MidSection = React.forwardRef((props, ref) => {
     holder.style.height = computeDim(ratio.height);
     holder.style.top = computeDim(ratio.top);
     holder.style.left = computeDim(ratio.left);
+    // todo Create a function for the readjustement f overflowing els
+    // Todo this function will be called in onPost and compsScaler too
+
+    // if (el.classList.contains('textInput')) {
+    //   console.log(
+    //     'Element heights: ',
+    //     el.scrollHeight,
+    //     el.getBoundingClientRect().height
+    //   );
+    //   if (el.scrollHeight > el.getBoundingClientRect().height) {
+    //     const iniHeight = holder.getBoundingClientRect().height;
+    //     const iniBottom = holder.getBoundingClientRect().bottom;
+    //     const elId = el.id;
+    //     const overflowY = el.scrollHeight - iniHeight;
+
+    //     console.log('Overflow');
+
+    //     holder.style.height = el.scrollHeight + 'px';
+    //   }
+    // }
   };
 
   const compsResizer = () => {
     const allHolders = [...document.querySelectorAll('.holderDIV')];
+    console.log('Comp Resizer called');
 
     allHolders.forEach((holder) => {
       if (holder.parentElement.id === 'midSection_container') {
@@ -2580,7 +2608,7 @@ const MidSection = React.forwardRef((props, ref) => {
         // console.log('DimRatios: ', dimRatios);
         // console.log('Ratio: ', ratio);
 
-        compsScaler(holder, ratio);
+        compsScaler(holder, ratio, el);
       }
     });
   };

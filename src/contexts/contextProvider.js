@@ -57,6 +57,7 @@ export const ContextProvider = ({ children }) => {
   const [selOpt, setSelOpt] = useState(defSelOpt);
   const [enablePreview, setEnablePreview] = useState(false);
   const [idIni, setIdIni] = useState('');
+  const [modHeightEls, setModHeightEls] = useState([]);
 
   // Fetched Data
   const [data, setData] = useState([]);
@@ -586,6 +587,7 @@ export const ContextProvider = ({ children }) => {
       window.innerWidth > 993 ? 0 : leftRect?.height + 'px';
 
     currWidth !== currMidSecWidth && setCurrMidSecWidth(currWidth);
+    console.log('Mid sec Scaled');
   };
 
   const updateDimRatios = (holder) => {
@@ -839,6 +841,8 @@ export const ContextProvider = ({ children }) => {
         defSelOpt,
         enablePreview,
         setEnablePreview,
+        modHeightEls,
+        setModHeightEls,
       }}
     >
       {children}
