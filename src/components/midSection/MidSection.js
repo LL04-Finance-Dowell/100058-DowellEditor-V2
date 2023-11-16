@@ -1604,6 +1604,8 @@ const MidSection = React.forwardRef((props, ref) => {
           const elPar = document.getElementById(element.id)?.parentElement;
           elPar && elPar.remove();
 
+          // console.log('Elment Parent: ', elPar, element);
+
           const width = finding_percent(element, 'width');
 
           const height =
