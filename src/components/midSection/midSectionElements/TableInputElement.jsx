@@ -162,9 +162,11 @@ export const CreateTableComponent = (
       const tableTDData = tableTRData[j]['td'];
       // console.log("tableTD", tableTRData[j]["td"]);
       var cells = document.createElement('td');
+      cells.contentEditable = true;
       cells.className = 'dropp';
       if (i === 0) {
         const resizer = document.createElement('div');
+        resizer.contentEditable = false;
         resizer.classList.add('td-resizer');
         resizer.addEventListener('mousedown', (e) => {
           let x = 0;
@@ -314,6 +316,7 @@ export const CreateTableComponent = (
     }
     const rowResizeCell = tabbTR.firstElementChild;
     const resizer = document.createElement('div');
+    resizer.contentEditable = false;
     resizer.classList.add('row-resizer');
     resizer.addEventListener('mousedown', (e) => {
       let x = 0;

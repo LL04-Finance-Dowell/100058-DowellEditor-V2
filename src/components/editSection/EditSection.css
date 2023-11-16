@@ -6,9 +6,13 @@
   height: auto;
 }
 .editSec_rightMenu {
-  overflow-y: scroll;
+  position: fixed;
+  right: 0;
   padding: 15px 20px;
   background-color: #fbfbfb;
+  /* max-height: 600px; */
+  height: 85%;
+  overflow-y: auto;
 }
 
 .finalize_reject {
