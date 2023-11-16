@@ -1516,14 +1516,14 @@ function createNewScaleInputField(
       if (decoded.details.action === "document") {
         const circle = document.createElement("div");
         circle.className = "circle_label";
-        const smallBox1 = document.createElement("div");
-        smallBox1.className = "small_box";
-        smallBox1.textContent = pairedScale[i];
-        const smallBox2 = document.createElement("div");
-        smallBox2.className = "small_box";
-        smallBox2.textContent = pairedScale[j];
-        circle.appendChild(smallBox1);
-        circle.appendChild(smallBox2);
+        // const smallBox1 = document.createElement("div");
+        // smallBox1.className = "small_box";
+        // smallBox1.textContent = pairedScale[i];
+        // const smallBox2 = document.createElement("div");
+        // smallBox2.className = "small_box";
+        // smallBox2.textContent = pairedScale[j];
+        // circle.appendChild(smallBox1);
+        // circle.appendChild(smallBox2);
         let isClicked = false;
         const shouldHideFinalizeButton =
           localStorage.getItem("hideFinalizeButton");
