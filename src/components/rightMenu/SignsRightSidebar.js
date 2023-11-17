@@ -165,6 +165,22 @@ const SignsRightSidebar = () => {
           <hr />
         </>
       )}
+
+      <div className="mt-2 mb-3 w-100">
+        <h3>Signature Settings</h3>
+        <Form.Label>Place Holder Name</Form.Label>
+        <Form.Control
+          type="text"
+          placeholder="Signature Place Holder"
+          id="image_name"
+          onChange={() => { }}
+        />
+      </div>
+      <div className="mt-2 text-center pt-5">
+        <Button variant="secondary" className="px-5" onClick={handleUpdate}>
+          Update Changes
+        </Button>
+      </div>
       <hr />
       <Row className="pt-4">
         <div style={{ display: "flex", alignItems: "center" }}>
@@ -206,22 +222,7 @@ const SignsRightSidebar = () => {
         )}
       </Row>
       <hr />
-      <div className="mt-2 mb-3 w-100">
-        <h3>Signature Settings</h3>
-        <Form.Label>Place Holder Name</Form.Label>
-        <Form.Control
-          type="text"
-          placeholder="Signature Place Holder"
-          id="image_name"
-          onChange={() => { }}
-        />
-      </div>
-      <div className="mt-2 text-center pt-5">
-        <Button variant="secondary" className="px-5" onClick={handleUpdate}>
-          Update Changes
-        </Button>
-      </div>
-      <hr />
+
       <SelectAnsAndQuestion
         selectedType={selectedType}
         setSelectedType={setSelectedType}
