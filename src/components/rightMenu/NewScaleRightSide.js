@@ -1633,13 +1633,8 @@ const ScaleRightSide = () => {
                 left.style.color = "#EEEFEF";
                 left.style.borderRadius = "3px"
                 circle.append(left);
-                circle.onmouseover = function () {
-                  left.style.visibility = "visible";
-                };
 
-                circle.onmouseout = function () {
-                  left.style.visibility = "hidden";
-                };
+                circle.title = res.data.data.settings.left
               } else if (i === scaleArr.length - 1) {
                 var right = document.createElement("span");
                 right.className = "rightTooltip";
@@ -1658,13 +1653,8 @@ const ScaleRightSide = () => {
                 right.style.padding === "0 20px"
                 right.style.borderRadius = "3px"
                 circle.append(right);
-                circle.onmouseover = function () {
-                  right.style.display = "block";
-                };
-
-                circle.onmouseout = function () {
-                  right.style.display = "none";
-                };
+                
+                circle.title = res.data.data.settings.right
               }
             }
 
@@ -1788,14 +1778,9 @@ const ScaleRightSide = () => {
                     option.value === "Vertical" ? "tb-rl" : "";
                   left.style.backgroundColor = "#272828";
                   left.style.color = "#EEEFEF";
-                  circle.append(left);
-                  circle.onmouseover = function () {
-                    left.style.visibility = "visible";
-                  };
+                  circle.append(left)
 
-                  circle.onmouseout = function () {
-                    left.style.visibility = "hidden";
-                  };
+                  circle.title = res.data.data.settings.left
                 } else if (i === scaleArr.length - 1) {
                   var right = document.createElement("span");
                   right.className = "rightTooltip";
@@ -1811,13 +1796,8 @@ const ScaleRightSide = () => {
                   right.style.writingMode =
                     option.value === "Vertical" ? "tb-rl" : "";
                   circle.append(right);
-                  circle.onmouseover = function () {
-                    right.style.display = "block";
-                  };
-
-                  circle.onmouseout = function () {
-                    right.style.display = "none";
-                  };
+                  
+                  circle.title = res.data.data.settings.right
                 }
               }
 

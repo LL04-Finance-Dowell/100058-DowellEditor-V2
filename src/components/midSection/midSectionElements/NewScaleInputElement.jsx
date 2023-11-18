@@ -138,6 +138,15 @@ function createNewScaleInputField(
 
       const orientation = element?.raw_data?.orentation;
 
+      if (circle.textContent === "0" || i === 0) {
+        circle.title = element?.raw_data?.left
+      }
+      else if (circle.textContent === "5" || i === 5) {
+        circle.title = element?.raw_data?.center
+      } else if (circle.textContent === "10" || i === 10) {
+        circle.title = element?.raw_data?.right
+      }
+
       circle.addEventListener("mouseenter", () => {
         if (circle.textContent === "0" || i === 0) {
           element1.style.display = "block";
@@ -451,13 +460,7 @@ function createNewScaleInputField(
         left.style.color = "#EEEFEF";
         left.style.borderRadius = "3px";
         circle.append(left);
-        circle.onmouseover = function () {
-          left.style.visibility = "visible";
-        };
-
-        circle.onmouseout = function () {
-          left.style.visibility = "hidden";
-        };
+        circle.title = element?.raw_data?.left
       } else if (i === stapelScale.length - 1) {
         var right = document.createElement("span");
         right.className = "rightTooltip";
@@ -474,13 +477,7 @@ function createNewScaleInputField(
           stapelOrientation === "stapel_vertical" ? "tb-rl" : "";
         right.style.borderRadius = "3px";
         circle.append(right);
-        circle.onmouseover = function () {
-          right.style.display = "block";
-        };
-
-        circle.onmouseout = function () {
-          right.style.display = "none";
-        };
+        circle.title = element?.raw_data?.right
       }
 
       if (stapelOrientation === "stapel_vertical") {
