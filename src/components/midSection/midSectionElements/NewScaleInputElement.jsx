@@ -147,41 +147,6 @@ function createNewScaleInputField(
         circle.title = element?.raw_data?.right
       }
 
-      circle.addEventListener("mouseenter", () => {
-        if (circle.textContent === "0" || i === 0) {
-          element1.style.display = "block";
-          element1.style.position = "absolute";
-          element1.style.bottom = "0";
-
-          element1.style.left = "8%";
-          element1.style.backgroundColor = "gray";
-          element1.style.padding = "2px 8px";
-          element1.style.color = "white";
-          element1.style.borderRadius = "2px";
-        } else if (circle.textContent === "5" || i === 5) {
-          element2.style.display = "block";
-          element2.style.position = "absolute";
-          element2.style.bottom = "0";
-          element2.style.left = !orientation ? "52%" : "8%";
-
-          element2.style.backgroundColor = "gray";
-          element2.style.padding = "2px 8px";
-          element2.style.color = "white";
-          element2.style.borderRadius = "2px";
-        } else if (circle.textContent === "10" || i === 10) {
-          element3.style.display = "block";
-          element3.style.position = "absolute";
-          element3.style.left = "";
-          element3.style.bottom = "0";
-          element3.style.right = "8%";
-          element3.style.backgroundColor = "gray";
-
-          element3.style.padding = "2px 8px";
-          element3.style.color = "white";
-          element3.style.borderRadius = "2px";
-        }
-      });
-
       circle.addEventListener("mouseleave", () => {
         if (circle.textContent === "0" || i === 0) {
           element1.style.display = "none";
