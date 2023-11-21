@@ -5,7 +5,8 @@ import { useStateContext } from '../../contexts/contextProvider';
 import './midResizer.css';
 
 const MidResizer = () => {
-  const { selOpt, setSelOpt, setIsCompsScaler } = useStateContext();
+  const { selOpt, setSelOpt, setIsCompsScaler, isCompsScaler } =
+    useStateContext();
   const [isDrop, setIsDrop] = useState(false);
   const [selOpts] = useState(
     window.innerWidth > 993
@@ -17,6 +18,24 @@ const MidResizer = () => {
 
   const containerRef = useRef(null);
   const contentRef = useRef(null);
+
+  const handleSelOpt = (opt) => {
+    if (window.scrollY === 0) {
+      setSelOpt(opt);
+      setIsDrop(false);
+      isCompsScaler || setIsCompsScaler(true);
+    } else {
+      window.scrollTo(0, 0);
+      window.onscroll = () => {
+        if (window.scrollY === 0) {
+          setSelOpt(opt);
+          setIsDrop(false);
+          isCompsScaler || setIsCompsScaler(true);
+          window.onscroll = null;
+        }
+      };
+    }
+  };
 
   useEffect(() => {
     const containerEl = containerRef.current;
@@ -56,11 +75,7 @@ const MidResizer = () => {
             <li
               className={`drop_opt ${opt === selOpt ? 'sel' : ''}`}
               key={opt}
-              onClick={() => {
-                setSelOpt(opt);
-                setIsDrop(false);
-                setIsCompsScaler(true);
-              }}
+              onClick={() => handleSelOpt(opt)}
             >
               <span className='opt_icon'>
                 {opt === 'large' ? (

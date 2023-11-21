@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useRef,
+} from 'react';
 import createButtonInputElement from '../components/midSection/createElements/CreateButtonElement.jsx';
 import CreatePyamentElement from '../components/midSection/createElements/CreatePyamentElement.jsx';
 import createFormInputElement from '../components/midSection/createElements/CreateFormElement.jsx';
@@ -47,7 +53,7 @@ export const ContextProvider = ({ children }) => {
   const [mode, setMode] = useState('edit');
   const [isDropped, setIsDropped] = useState(initialState);
   const [isResizing, setIsResizing] = useState(false);
-  const [defSelOpt] = useState(
+  const [defSelOpt, setDefSelOpt] = useState(
     window.innerWidth > 993
       ? 'large'
       : window.innerWidth <= 993 && window.innerWidth >= 770
@@ -101,6 +107,7 @@ export const ContextProvider = ({ children }) => {
     parentHeight: 1235.89,
   });
   const [currMidSecWidth, setCurrMidSecWidth] = useState(0);
+  const resizeChecker = useRef(window.innerWidth);
 
   const [dimRatios, setDimRatios] = useState([]);
 
@@ -566,7 +573,7 @@ export const ContextProvider = ({ children }) => {
     };
   };
 
-  const scaleMidSec = () => {
+  const scaleMidSec = (isOnPost) => {
     const midSecAll = document.querySelectorAll('.midSection_container');
     const ratio = fixedMidSecDim?.height / fixedMidSecDim?.width;
     const parentRatio = fixedMidSecDim?.parentHeight / fixedMidSecDim?.height;
@@ -578,17 +585,21 @@ export const ContextProvider = ({ children }) => {
       .getElementsByClassName('left_menu_wrapper')[0]
       ?.getBoundingClientRect();
 
-    midSecAll?.forEach((mid) => {
-      mid.style.height = scaledHeight + 'px';
-      mid.parentElement.style.height =
-        (scaledHeight * parentRatio).toFixed(2) + 'px';
-    });
+    console.log({ currWidth, currMidSecWidth });
 
-    midSecAll[0].parentElement.parentElement.parentElement.style.marginTop =
-      window.innerWidth > 993 ? 0 : leftRect?.height + 'px';
+    if (isOnPost || currWidth !== currMidSecWidth) {
+      midSecAll?.forEach((mid) => {
+        mid.style.height = scaledHeight + 'px';
+        mid.parentElement.style.height =
+          (scaledHeight * parentRatio).toFixed(2) + 'px';
+      });
 
-    currWidth !== currMidSecWidth && setCurrMidSecWidth(currWidth);
-    console.log('Mid sec Scaled');
+      midSecAll[0].parentElement.parentElement.parentElement.style.marginTop =
+        window.innerWidth > 993 ? 0 : leftRect?.height + 'px';
+
+      setCurrMidSecWidth(currWidth);
+      console.log('Mid sec Scaled');
+    }
   };
 
   const updateDimRatios = (holder) => {
@@ -674,6 +685,10 @@ export const ContextProvider = ({ children }) => {
       }
     }
   }, [genSelOpt, idIni]);
+
+  useEffect(() => {
+    sessionStorage.removeItem('orig_fnt');
+  }, []);
 
   return (
     <StateContext.Provider
@@ -840,12 +855,14 @@ export const ContextProvider = ({ children }) => {
         selOpt,
         setSelOpt,
         defSelOpt,
+        setDefSelOpt,
         enablePreview,
         setEnablePreview,
         modHeightEls,
         setModHeightEls,
         isCompsScaler,
         setIsCompsScaler,
+        resizeChecker,
       }}
     >
       {children}

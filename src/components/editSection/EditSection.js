@@ -134,7 +134,7 @@ const EditSection = () => {
         setSidebar(false);
         allHolderDivs.forEach((div) => {
           div.style.border = 'none';
-          // div.style.pointerEvents = 'none';
+          div.style.pointerEvents = 'none';
         });
         break;
 

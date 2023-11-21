@@ -126,6 +126,7 @@ const Header = () => {
     defSelOpt,
     enablePreview,
     setEnablePreview,
+    scaleMidSec,
   } = useStateContext();
 
   const [printContent, setPrintContent] = useState(false);
@@ -2024,6 +2025,36 @@ const Header = () => {
     downloadPDF(Array.from(containerAll), fileName);
   };
 
+  const handleModeChange = () => {
+    if (mode === 'preview') {
+      const setMidSecWdith = (width) => {
+        const midSecAll = document.querySelectorAll('.midSection_container');
+        midSecAll.forEach((mid) => {
+          mid.style.width = width + 'px';
+        });
+      };
+
+      switch (defSelOpt) {
+        case 'large':
+          setMidSecWdith(fixedMidSecDim.width);
+          scaleMidSec();
+          break;
+        case 'mid':
+          setMidSecWdith(720);
+          scaleMidSec();
+          break;
+        case 'small':
+          setMidSecWdith(350);
+          scaleMidSec();
+          break;
+        default:
+          return;
+      }
+    }
+    setSelOpt(defSelOpt);
+    setMode(mode === 'edit' ? 'preview' : mode === 'preview' ? 'edit' : '');
+  };
+
   return (
     <>
       <div
@@ -2145,16 +2176,7 @@ const Header = () => {
                     className={`view_mode ${
                       enablePreview ? '' : 'btn_disable'
                     }`}
-                    onClick={() => {
-                      setMode(
-                        mode === 'edit'
-                          ? 'preview'
-                          : mode === 'preview'
-                          ? 'edit'
-                          : ''
-                      );
-                      setSelOpt(defSelOpt);
-                    }}
+                    onClick={handleModeChange}
                     disabled={!enablePreview}
                   >
                     {mode === 'edit' ? (
