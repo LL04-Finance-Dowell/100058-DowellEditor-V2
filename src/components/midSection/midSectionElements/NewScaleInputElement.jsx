@@ -138,40 +138,14 @@ function createNewScaleInputField(
 
       const orientation = element?.raw_data?.orentation;
 
-      circle.addEventListener("mouseenter", () => {
-        if (circle.textContent === "0" || i === 0) {
-          element1.style.display = "block";
-          element1.style.position = "absolute";
-          element1.style.bottom = "0";
-
-          element1.style.left = "8%";
-          element1.style.backgroundColor = "gray";
-          element1.style.padding = "2px 8px";
-          element1.style.color = "white";
-          element1.style.borderRadius = "2px";
-        } else if (circle.textContent === "5" || i === 5) {
-          element2.style.display = "block";
-          element2.style.position = "absolute";
-          element2.style.bottom = "0";
-          element2.style.left = !orientation ? "52%" : "8%";
-
-          element2.style.backgroundColor = "gray";
-          element2.style.padding = "2px 8px";
-          element2.style.color = "white";
-          element2.style.borderRadius = "2px";
-        } else if (circle.textContent === "10" || i === 10) {
-          element3.style.display = "block";
-          element3.style.position = "absolute";
-          element3.style.left = "";
-          element3.style.bottom = "0";
-          element3.style.right = "8%";
-          element3.style.backgroundColor = "gray";
-
-          element3.style.padding = "2px 8px";
-          element3.style.color = "white";
-          element3.style.borderRadius = "2px";
-        }
-      });
+      if (circle.textContent === "0" || i === 0) {
+        circle.title = element?.raw_data?.left
+      }
+      else if (circle.textContent === "5" || i === 5) {
+        circle.title = element?.raw_data?.center
+      } else if (circle.textContent === "10" || i === 10) {
+        circle.title = element?.raw_data?.right
+      }
 
       circle.addEventListener("mouseleave", () => {
         if (circle.textContent === "0" || i === 0) {
@@ -451,13 +425,7 @@ function createNewScaleInputField(
         left.style.color = "#EEEFEF";
         left.style.borderRadius = "3px";
         circle.append(left);
-        circle.onmouseover = function () {
-          left.style.visibility = "visible";
-        };
-
-        circle.onmouseout = function () {
-          left.style.visibility = "hidden";
-        };
+        circle.title = element?.raw_data?.left
       } else if (i === stapelScale.length - 1) {
         var right = document.createElement("span");
         right.className = "rightTooltip";
@@ -474,13 +442,7 @@ function createNewScaleInputField(
           stapelOrientation === "stapel_vertical" ? "tb-rl" : "";
         right.style.borderRadius = "3px";
         circle.append(right);
-        circle.onmouseover = function () {
-          right.style.display = "block";
-        };
-
-        circle.onmouseout = function () {
-          right.style.display = "none";
-        };
+        circle.title = element?.raw_data?.right
       }
 
       if (stapelOrientation === "stapel_vertical") {
@@ -875,7 +837,7 @@ function createNewScaleInputField(
         orientation.textContent = "vertical";
         orientation.style.display = "none";
         labelHold.appendChild(orientation);
-        labelHold.style.position = "relative";
+        labelHold.style.position = "absolute";
         circle.style.padding = "6px 12px";
         circle.style.margin = "10px 0";
         scaleHold.style.border = "none";
@@ -1030,7 +992,6 @@ function createNewScaleInputField(
     }
   } else if (scaleTypeHolder.textContent === "percent_scale") {
     let prodLength = element?.raw_data?.percentLabel;
-    console.log(labelHold.children.length);
     scaleText.style.display = "none";
     scaleHold.style.overflow = "hidden";
     scaleHold.style.height = "100%";
@@ -1042,19 +1003,20 @@ function createNewScaleInputField(
       labelHold.style.flexDirection = "column";
       labelHold.style.border = "none";
 
-      let conatainerDIV = document.createElement("div");
-      conatainerDIV.className = "containerDIV";
-      conatainerDIV.style.width = "95%";
-      conatainerDIV.style.padding = "10px 39px 10px 10px";
-      conatainerDIV.style.border = "1px solid gray";
-      labelHold.append(conatainerDIV);
+      let containerDIV = document.createElement("div");
+      containerDIV.className = "containerDIV";
+      containerDIV.style.width = "95%";
+      containerDIV.style.padding = "10px 15px";
+      containerDIV.style.borderTop = "1px solid gray";
+      containerDIV.style.borderBottom = "1px solid gray";
+      labelHold.append(containerDIV);
 
       let nameDiv = document.createElement("div");
       nameDiv.className = "product_name";
       nameDiv.style.textAlign = "center";
       nameDiv.style.fontWeight = "700";
       nameDiv.textContent = element?.raw_data?.percentProdName[i];
-      conatainerDIV.appendChild(nameDiv);
+      containerDIV.appendChild(nameDiv);
 
       const inputPercent = document.createElement("input");
       inputPercent.type = "range";
@@ -1068,7 +1030,7 @@ function createNewScaleInputField(
       inputPercent.style.webkitAppearance = "none";
       inputPercent.style.borderRadius = "10px";
       inputPercent.setAttribute("data-index", i);
-      conatainerDIV.appendChild(inputPercent);
+      containerDIV.appendChild(inputPercent);
 
       let percentChilds = document.createElement("div");
       percentChilds.style.display = "flex";
@@ -1089,7 +1051,7 @@ function createNewScaleInputField(
       rightPercent.className = "right-percent";
       percentChilds.appendChild(rightPercent);
 
-      conatainerDIV.appendChild(percentChilds);
+      containerDIV.appendChild(percentChilds);
       if (!token) {
         return res.status(401).json({ error: "Unauthorized" });
       }
@@ -1106,13 +1068,13 @@ function createNewScaleInputField(
         scaleHold.style.alignItems = "center";
         scaleHold.style.justifyContent = "center";
 
-        conatainerDIV.style.padding =
+        containerDIV.style.padding =
           nameDiv.textContent.length < 9
             ? "24px 39px 10px 14px"
             : "24px 39px 37px 14px";
-        conatainerDIV.style.width = "90%";
-        conatainerDIV.style.position = "relative";
-        conatainerDIV.style.borderRight = "none";
+        containerDIV.style.width = "90%";
+        containerDIV.style.position = "relative";
+        containerDIV.style.borderRight = "none";
 
         labelHold.style.width = "100%";
         labelHold.style.height = "96%";
@@ -1131,8 +1093,8 @@ function createNewScaleInputField(
         }
 
         if (prodLength === 1) {
-          conatainerDIV.style.width = "25vw";
-          conatainerDIV.style.marginRight = "37px";
+          containerDIV.style.width = "25vw";
+          containerDIV.style.marginRight = "37px";
         }
         nameDiv.style.transform = "rotate(90deg)";
         nameDiv.style.paddingBottom = prodLength > 6 ? "30px" : "0px";
@@ -1202,8 +1164,9 @@ function createNewScaleInputField(
       let containerDiv = document.createElement("div");
       containerDiv.className = "containerDIV";
       containerDiv.style.width = "95%";
-      containerDiv.style.padding = "10px 39px 10px 10px";
-      containerDiv.style.border = "1px solid gray";
+      containerDiv.style.padding = "10px 15px";
+      containerDiv.style.borderTop = "1px solid gray";
+      containerDiv.style.borderBottom = "1px solid gray";
       labelHold.append(containerDiv);
 
       let nameDiv = document.createElement("div");
@@ -1513,6 +1476,16 @@ function createNewScaleInputField(
       }
 
       if (decoded.details.action === "document") {
+        const circle = document.createElement("div");
+        circle.className = "circle_label";
+        // const smallBox1 = document.createElement("div");
+        // smallBox1.className = "small_box";
+        // smallBox1.textContent = pairedScale[i];
+        // const smallBox2 = document.createElement("div");
+        // smallBox2.className = "small_box";
+        // smallBox2.textContent = pairedScale[j];
+        // circle.appendChild(smallBox1);
+        // circle.appendChild(smallBox2);
         let isClicked = false;
         const shouldHideFinalizeButton =
           localStorage.getItem("hideFinalizeButton");

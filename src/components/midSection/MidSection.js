@@ -116,10 +116,23 @@ const MidSection = React.forwardRef((props, ref) => {
     setButtonPurpose,
     progress,
     setProgress,
+    selOpt,
+    fixedMidSecDim,
+    setEnablePreview,
+    mode,
+    modHeightEls,
+    setModHeightEls,
+    setIsCompsScaler,
+    isCompsScaler,
+    resizeChecker,
+    setDefSelOpt,
+    defSelOpt,
   } = useStateContext();
 
-  const { contextMenu, setContextMenu,setFromContextMenu} = useCutMenuContext();
+  const { contextMenu, setContextMenu, setFromContextMenu } =
+    useCutMenuContext();
 
+  const defOptRef = useRef(defSelOpt);
   const [focusedElement, setFocusedElement] = useState(null);
   const [allPages, setAllPages] = useState([]);
   const [searchParams] = useSearchParams();
@@ -131,20 +144,11 @@ const MidSection = React.forwardRef((props, ref) => {
   const divList = documnentsMap?.map?.((item) => item.page);
   var documnetMap = documnentsMap?.map?.((item) => item.content);
   const document_map_required = documnentsMap?.filter((item) => item.required);
-  // console.log("document_map_required", document_map_required);
-  // console.log("decode", decoded);
-  // console.log("data", data[1]);
 
   const documentsMap = documnentsMap;
   if (documnentsMap?.length > 0) {
     const documentsMap = documnentsMap;
-  } else {
-    // console.log("There's no document map");
   }
-
-  // console.log(documnetMap);
-
-  const isFirstRender = useRef(true);
 
   const editorRef = useRef(null);
   const cutItemRef = useRef(null);
@@ -191,7 +195,6 @@ const MidSection = React.forwardRef((props, ref) => {
 
     if (!foundElement.classList.contains('midSection')) {
       const parent = foundElement.parentElement;
-      // console.log("\n>>>>>>>>>>\nFound Element\n", foundElement)
       const tableElements = ['td', 'tr', 'table'];
       if (tableElements.includes(parent.tagName.toLowerCase())) {
         switch (parent.tagName.toLowerCase()) {
@@ -237,7 +240,6 @@ const MidSection = React.forwardRef((props, ref) => {
         )
       ) {
         let container = parent.parentElement;
-        console.log("\n>>>>>>>>>>\nFound Element 1\n", foundElement)
 
         if (
           parent.parentElement?.parentElement?.classList.contains(
@@ -245,8 +247,6 @@ const MidSection = React.forwardRef((props, ref) => {
           )
         ) {
           container = parent.parentElement.parentElement;
-          console.log("\n>>>>>>>>>>\nFound Element 2\n", foundElement)
-
         }
         setContextMenu({
           show: true,
@@ -255,9 +255,13 @@ const MidSection = React.forwardRef((props, ref) => {
           targetEl: container,
         });
       } else if (foundElement.classList.contains('dropdownInput')) {
-        let container = foundElement.parentElement
-        if (foundElement.parentElement?.parentElement?.classList.contains('containerInput')) {
-          container = foundElement.parentElement?.parentElement?.parentElement
+        let container = foundElement.parentElement;
+        if (
+          foundElement.parentElement?.parentElement?.classList.contains(
+            'containerInput'
+          )
+        ) {
+          container = foundElement.parentElement?.parentElement?.parentElement;
         }
         setContextMenu({
           show: true,
@@ -305,7 +309,6 @@ const MidSection = React.forwardRef((props, ref) => {
     }
     setCutItem_value(e.target);
     cutItemRef.current = e.target;
-    // console.log("target.parentElement", e.target);
   };
 
   function getResizer(attr1, attr2) {
@@ -329,7 +332,10 @@ const MidSection = React.forwardRef((props, ref) => {
       resizer.style.right = '-5px';
     }
 
-    if (attr1 == 'top' && attr2 === 'right' || attr1 == 'bottom' && attr2 === 'left') {
+    if (
+      (attr1 == 'top' && attr2 === 'right') ||
+      (attr1 == 'bottom' && attr2 === 'left')
+    ) {
       resizer.onmouseover = (event) => {
         event.target.style.cursor = 'nesw-resize';
       };
@@ -339,9 +345,7 @@ const MidSection = React.forwardRef((props, ref) => {
       };
     }
 
-
     resizer.onmousedown = (event) => {
-
       let initX = event.screenX;
       let initY = event.screenY;
       resizing = true;
@@ -354,36 +358,34 @@ const MidSection = React.forwardRef((props, ref) => {
           width: holder.offsetWidth,
           height: holder.offsetHeight,
           top: holder.offsetTop,
-          left: holder.offsetLeft
+          left: holder.offsetLeft,
           // width: parseInt(holder.style.width.slice(0, -2)),
           // height: parseInt(holder.style?.height.slice(0, -2)),
           // top: parseInt(holder.style.top.slice(0, -2)),
           // left: parseInt(holder.style.left.slice(0, -2))//elemLeft : 0
-        }
+        };
         return Object.seal(holderSize);
       })();
 
       window.addEventListener('mousemove', resizeElement);
       function resizeElement(ev) {
         if (attr1 == 'bottom' && attr2 == 'right') {
-          holder.style.width = ((ev.screenX - initX) + holderSize.width) + 'px';
-          holder.style.height = ((ev.screenY - initY) + holderSize?.height) + 'px';
-
+          holder.style.width = ev.screenX - initX + holderSize.width + 'px';
+          holder.style.height = ev.screenY - initY + holderSize.height + 'px';
         } else if (attr1 == 'bottom' && attr2 == 'left') {
-          holder.style.left = (holderSize.left + (ev.screenX - initX)) + 'px';
-          holder.style.width = (holderSize.width - (ev.screenX - initX)) + 'px';
-          holder.style.height = ((ev.screenY - initY) + holderSize?.height) + 'px';
+          holder.style.left = holderSize.left + (ev.screenX - initX) + 'px';
+          holder.style.width = holderSize.width - (ev.screenX - initX) + 'px';
+          holder.style.height = ev.screenY - initY + holderSize.height + 'px';
         } else if (attr1 == 'top' && attr2 == 'left') {
-          holder.style.top = (holderSize.top + (ev.screenY - initY)) + 'px';
-          holder.style.left = (holderSize.left + (ev.screenX - initX)) + 'px';
-          holder.style.width = (holderSize.width - (ev.screenX - initX)) + 'px';
-          holder.style.height = (holderSize?.height - (ev.screenY - initY)) + 'px';
+          holder.style.top = holderSize.top + (ev.screenY - initY) + 'px';
+          holder.style.left = holderSize.left + (ev.screenX - initX) + 'px';
+          holder.style.width = holderSize.width - (ev.screenX - initX) + 'px';
+          holder.style.height = holderSize.height - (ev.screenY - initY) + 'px';
         } else if (attr1 == 'top' && attr2 == 'right') {
-          holder.style.top = (holderSize.top + (ev.screenY - initY)) + 'px';
-          holder.style.width = (holderSize.width + (ev.screenX - initX)) + 'px';
-          holder.style.height = (holderSize?.height - (ev.screenY - initY)) + 'px';
+          holder.style.top = holderSize.top + (ev.screenY - initY) + 'px';
+          holder.style.width = holderSize.width + (ev.screenX - initX) + 'px';
+          holder.style.height = holderSize.height - (ev.screenY - initY) + 'px';
         }
-
       }
 
       window.addEventListener('mouseup', stopResizing);
@@ -391,15 +393,96 @@ const MidSection = React.forwardRef((props, ref) => {
         window.removeEventListener('mousemove', resizeElement);
         window.removeEventListener('mouseup', stopResizing);
         resizing = false;
-
       }
-    }
+    };
 
     return resizer;
   }
 
+  // * This gets the page a holderDIV is in
+  const getPage = (holderDiv) =>
+    Number(
+      [...holderDiv.classList].find((cl) => cl.includes('page')).split('_')[1]
+    );
 
+  const handleFntSizes = (el) => {
+    const midSecWidth = document
+      .querySelector('.midSection_container')
+      .getBoundingClientRect().width;
 
+    const origFntSizes = sessionStorage.getItem('orig_fnt')
+      ? JSON.parse(sessionStorage.getItem('orig_fnt'))
+      : [];
+
+    if (midSecWidth <= 500) {
+      if (el.classList.contains('textInput')) {
+        if (!origFntSizes.find((org) => org.id === el.id)) {
+          const fntSize = parseFloat(window.getComputedStyle(el).fontSize);
+          sessionStorage.setItem(
+            'orig_fnt',
+            JSON.stringify([...origFntSizes, { id: el.id, fntSize }])
+          );
+          el.style.fontSize = fntSize / 1.23 + 'px';
+        }
+      }
+    } else {
+      if (el.classList.contains('textInput')) {
+        const fntSize =
+          origFntSizes.find((org) => org.id === el.id)?.fntSize ?? null;
+        if (fntSize) {
+          el.style.fontSize = fntSize + 'px';
+          sessionStorage.setItem(
+            'orig_fnt',
+            JSON.stringify(origFntSizes.filter((org) => org.id !== el.id))
+          );
+        }
+      }
+    }
+  };
+
+  const handleElOverflow = (el, holderDiv) => {
+    const midSecs = [...document.querySelectorAll('.midSection_container')];
+    if (el.classList.contains('textInput')) {
+      if (el.scrollHeight > el.getBoundingClientRect().height) {
+        const iniHeight = holderDiv.getBoundingClientRect().height;
+        const iniBottom = holderDiv.getBoundingClientRect().bottom;
+        const elId = el.id;
+        const overflowY = el.scrollHeight - iniHeight;
+        const page = getPage(holderDiv);
+        const parHeightRatio =
+          fixedMidSecDim.parentHeight / fixedMidSecDim.height;
+        const midSec = midSecs[page - 1];
+
+        // *Adjusts parent height by multiplying midSec height with parent height ratio
+        holderDiv.style.height = el.scrollHeight + 'px';
+        midSec.style.height =
+          midSec.getBoundingClientRect().height + overflowY + 'px';
+        midSec.parentElement.style.height =
+          midSec.getBoundingClientRect().height * parHeightRatio + 'px';
+
+        // *Adjusts top of elements below
+        const midSecChildren = [...midSec.children].filter(
+          (child, index) => index !== 0
+        );
+
+        midSecChildren.forEach((holder) => {
+          const holderRect = holder.getBoundingClientRect();
+
+          if (holderRect.top >= iniBottom) {
+            holder.style.top =
+              parseFloat(window.getComputedStyle(holder).top) +
+              overflowY +
+              'px';
+          }
+        });
+
+        setModHeightEls((prev) => [
+          ...prev,
+          { elId, iniHeight, iniBottom, overflowY },
+        ]);
+      }
+    }
+  };
 
   //colse context menu
 
@@ -574,7 +657,6 @@ const MidSection = React.forwardRef((props, ref) => {
       holderDIV.style.flexDirection = 'column';
       // holderDIV.style.border = "2px dotted red";
       holderDIV.tabIndex = '1';
-      // //// console.log("measure", measure);
       holderDIV.style.width = measure?.width;
       holderDIV.style.height = measure?.height;
       holderDIV.style.left = measure.left;
@@ -593,12 +675,8 @@ const MidSection = React.forwardRef((props, ref) => {
         holderDIV.classList.add(`dotted_border`);
       }
 
-      holderDIV.addEventListener('dragstart', (event) => {
-        // console.log("dragStart fun called");
-      });
-      holderDIV.ondragstart = (e) => {
-        // console.log("dragStart fun called");
-      };
+      holderDIV.addEventListener('dragstart', (event) => {});
+      holderDIV.ondragstart = (e) => {};
 
       const resizerTL = getResizer('top', 'left');
       const resizerTR = getResizer('top', 'right');
@@ -627,7 +705,7 @@ const MidSection = React.forwardRef((props, ref) => {
         updateDimRatios(e.currentTarget);
       };
 
-      holderDIV.onresize = (evntt) => { };
+      holderDIV.onresize = (evntt) => {};
 
       holderDIV.addEventListener('focus', (e) => {
         holderDIV.classList.add('zIndex-two');
@@ -738,7 +816,7 @@ const MidSection = React.forwardRef((props, ref) => {
                     data:
                       TdDivClassName == 'imageInput'
                         ? tableChildren[i].children[j]?.firstElementChild.style
-                          .backgroundImage
+                            .backgroundImage
                         : tdElement[0]?.innerHTML,
                     id:
                       TdDivClassName == 'imageInput'
@@ -823,7 +901,7 @@ const MidSection = React.forwardRef((props, ref) => {
               childData.type = type;
               const imageData =
                 'imageInput' &&
-                  element?.firstElementChild?.style?.backgroundImage
+                element?.firstElementChild?.style?.backgroundImage
                   ? element.firstElementChild.style.backgroundImage
                   : element.firstElementChild?.innerHTML;
               if (type != 'TEXT_INPUT') {
@@ -917,9 +995,6 @@ const MidSection = React.forwardRef((props, ref) => {
         default:
           type = '';
       }
-
-      // console.log("\n>>>>>>>>>>>>>>>\nCOPIED DATA: ", elem);
-      // console.log("\n>>>>>>>>>>>>>>>\nFROM: ", targetElement);
       setContextMenu((prev) => {
         return {
           ...prev,
@@ -959,7 +1034,6 @@ const MidSection = React.forwardRef((props, ref) => {
     holderDIV.style.flexDirection = 'column';
     // holderDIV.style.border = "2px dotted red";
     holderDIV.tabIndex = '1';
-    // //// console.log("measure", measure);
     holderDIV.style.width = measure?.width;
     holderDIV.style.height = measure?.height;
     holderDIV.style.left = measure.left;
@@ -978,12 +1052,8 @@ const MidSection = React.forwardRef((props, ref) => {
       holderDIV.classList.add(`dotted_border`);
     }
 
-    holderDIV.addEventListener('dragstart', (event) => {
-      // console.log("dragStart fun called");
-    });
-    holderDIV.ondragstart = (e) => {
-      // console.log("dragStart fun called");
-    };
+    holderDIV.addEventListener('dragstart', (event) => {});
+    holderDIV.ondragstart = (e) => {};
 
     const resizerTL = getResizer('top', 'left');
     const resizerTR = getResizer('top', 'right');
@@ -1011,7 +1081,7 @@ const MidSection = React.forwardRef((props, ref) => {
       updateDimRatios(e.currentTarget);
     };
 
-    holderDIV.onresize = (evntt) => { };
+    holderDIV.onresize = (evntt) => {};
 
     holderDIV.addEventListener('focus', (e) => {
       holderDIV.classList.add('zIndex-two');
@@ -1042,7 +1112,6 @@ const MidSection = React.forwardRef((props, ref) => {
   if (source) {
     source.addEventListener('dragstart', (event) => {
       dragged = event.target;
-      // console.log("dragged", dragged);
     });
   }
 
@@ -1052,7 +1121,7 @@ const MidSection = React.forwardRef((props, ref) => {
     const midSecWidth = midSec.getBoundingClientRect()?.width;
     let iniDimRatio = [];
 
-    scaleMidSec();
+    scaleMidSec(true);
 
     for (let p = 1; p <= item?.length; p++) {
       fetchedData[p]?.forEach((element) => {
@@ -1065,16 +1134,18 @@ const MidSection = React.forwardRef((props, ref) => {
 
           const height =
             window.innerWidth > 993
-              ? element?.height + 'px'
-              : `${(element?.height / element?.width) *
-              ((parseFloat(width) * midSecWidth) / 100)
-              }px`;
+              ? element.height + 'px'
+              : `${
+                  (element.height / element.width) *
+                  ((parseFloat(width) * midSecWidth) / 100)
+                }px`;
           const top =
             window.innerWidth > 993
               ? parseFloat(element.topp) + 'px'
-              : `${(parseFloat(element.topp) / element?.width) *
-              ((parseFloat(width) * midSecWidth) / 100)
-              }px`;
+              : `${
+                  (parseFloat(element.topp) / element.width) *
+                  ((parseFloat(width) * midSecWidth) / 100)
+                }px`;
 
           const measure = {
             width,
@@ -1107,8 +1178,10 @@ const MidSection = React.forwardRef((props, ref) => {
             id: element.id,
             top: parseFloat(measure.top) / midSecWidth,
             left: parseFloat(measure.left) / midSecWidth,
-            width: parseFloat(measure?.width) / midSecWidth,
-            height: parseFloat(measure?.height) / midSecWidth,
+            width:
+              parseFloat(measure?.width) /
+              (window.innerWidth < 993 ? 100 : midSecWidth),
+            height: parseFloat(measure.height) / midSecWidth,
             page: p,
           });
         }
@@ -1121,17 +1194,19 @@ const MidSection = React.forwardRef((props, ref) => {
 
           const height =
             window.innerWidth > 993
-              ? element?.height + 'px'
-              : `${(element?.height / element?.width) *
-              ((parseFloat(width) * midSecWidth) / 100)
-              }px`;
+              ? element.height + 'px'
+              : `${
+                  (element.height / element.width) *
+                  ((parseFloat(width) * midSecWidth) / 100)
+                }px`;
 
           const top =
             window.innerWidth > 993
               ? parseFloat(element.topp) + 'px'
-              : `${(parseFloat(element.topp) / element?.width) *
-              ((parseFloat(width) * midSecWidth) / 100)
-              }px`;
+              : `${
+                  (parseFloat(element.topp) / element.width) *
+                  ((parseFloat(width) * midSecWidth) / 100)
+                }px`;
 
           const measure = {
             width,
@@ -1162,8 +1237,10 @@ const MidSection = React.forwardRef((props, ref) => {
             id: element.id,
             top: parseFloat(measure.top) / midSecWidth,
             left: parseFloat(measure.left) / midSecWidth,
-            width: parseFloat(measure?.width) / midSecWidth,
-            height: parseFloat(measure?.height) / midSecWidth,
+            width:
+              parseFloat(measure?.width) /
+              (window.innerWidth < 993 ? 100 : midSecWidth),
+            height: parseFloat(measure.height) / midSecWidth,
             page: p,
           });
         }
@@ -1176,17 +1253,19 @@ const MidSection = React.forwardRef((props, ref) => {
 
           const height =
             window.innerWidth > 993
-              ? element?.height + 'px'
-              : `${(element?.height / element?.width) *
-              ((parseFloat(width) * midSecWidth) / 100)
-              }px`;
+              ? element.height + 'px'
+              : `${
+                  (element.height / element.width) *
+                  ((parseFloat(width) * midSecWidth) / 100)
+                }px`;
 
           const top =
             window.innerWidth > 993
               ? parseFloat(element.topp) + 'px'
-              : `${(parseFloat(element.topp) / element?.width) *
-              ((parseFloat(width) * midSecWidth) / 100)
-              }px`;
+              : `${
+                  (parseFloat(element.topp) / element.width) *
+                  ((parseFloat(width) * midSecWidth) / 100)
+                }px`;
 
           const measure = {
             width,
@@ -1220,8 +1299,10 @@ const MidSection = React.forwardRef((props, ref) => {
             id: element.id,
             top: parseFloat(measure.top) / midSecWidth,
             left: parseFloat(measure.left) / midSecWidth,
-            width: parseFloat(measure?.width) / midSecWidth,
-            height: parseFloat(measure?.height) / midSecWidth,
+            width:
+              parseFloat(measure?.width) /
+              (window.innerWidth < 993 ? 100 : midSecWidth),
+            height: parseFloat(measure.height) / midSecWidth,
             page: p,
           });
         }
@@ -1234,17 +1315,19 @@ const MidSection = React.forwardRef((props, ref) => {
 
           const height =
             window.innerWidth > 993
-              ? element?.height + 'px'
-              : `${(element?.height / element?.width) *
-              ((parseFloat(width) * midSecWidth) / 100)
-              }px`;
+              ? element.height + 'px'
+              : `${
+                  (element.height / element.width) *
+                  ((parseFloat(width) * midSecWidth) / 100)
+                }px`;
 
           const top =
             window.innerWidth > 993
               ? parseFloat(element.topp) + 'px'
-              : `${(parseFloat(element.topp) / element?.width) *
-              ((parseFloat(width) * midSecWidth) / 100)
-              }px`;
+              : `${
+                  (parseFloat(element.topp) / element.width) *
+                  ((parseFloat(width) * midSecWidth) / 100)
+                }px`;
 
           const measure = {
             width,
@@ -1275,8 +1358,10 @@ const MidSection = React.forwardRef((props, ref) => {
             id: element.id,
             top: parseFloat(measure.top) / midSecWidth,
             left: parseFloat(measure.left) / midSecWidth,
-            width: parseFloat(measure?.width) / midSecWidth,
-            height: parseFloat(measure?.height) / midSecWidth,
+            width:
+              parseFloat(measure?.width) /
+              (window.innerWidth < 993 ? 100 : midSecWidth),
+            height: parseFloat(measure.height) / midSecWidth,
             page: p,
           });
         }
@@ -1285,24 +1370,26 @@ const MidSection = React.forwardRef((props, ref) => {
           const elPar = element.id.includes('tab')
             ? document.getElementById(element.id)?.parentElement
             : document.getElementById(`tab${element.id.slice(1)}`)
-              ?.parentElement;
+                ?.parentElement;
           elPar && elPar.remove();
 
           const width = finding_percent(element, 'width');
 
           const height =
             window.innerWidth > 993
-              ? element?.height + 'px'
-              : `${(element?.height / element?.width) *
-              ((parseFloat(width) * midSecWidth) / 100)
-              }px`;
+              ? element.height + 'px'
+              : `${
+                  (element.height / element.width) *
+                  ((parseFloat(width) * midSecWidth) / 100)
+                }px`;
 
           const top =
             window.innerWidth > 993
               ? parseFloat(element.topp) + 'px'
-              : `${(parseFloat(element.topp) / element?.width) *
-              ((parseFloat(width) * midSecWidth) / 100)
-              }px`;
+              : `${
+                  (parseFloat(element.topp) / element.width) *
+                  ((parseFloat(width) * midSecWidth) / 100)
+                }px`;
 
           const measure = {
             width,
@@ -1342,8 +1429,10 @@ const MidSection = React.forwardRef((props, ref) => {
               : `tab${element.id.slice(1)}`,
             top: parseFloat(measure.top) / midSecWidth,
             left: parseFloat(measure.left) / midSecWidth,
-            width: parseFloat(measure?.width) / midSecWidth,
-            height: parseFloat(measure?.height) / midSecWidth,
+            width:
+              parseFloat(measure?.width) /
+              (window.innerWidth < 993 ? 100 : midSecWidth),
+            height: parseFloat(measure.height) / midSecWidth,
             page: p,
           });
         }
@@ -1356,17 +1445,19 @@ const MidSection = React.forwardRef((props, ref) => {
 
           const height =
             window.innerWidth > 993
-              ? element?.height + 'px'
-              : `${(element?.height / element?.width) *
-              ((parseFloat(width) * midSecWidth) / 100)
-              }px`;
+              ? element.height + 'px'
+              : `${
+                  (element.height / element.width) *
+                  ((parseFloat(width) * midSecWidth) / 100)
+                }px`;
 
           const top =
             window.innerWidth > 993
               ? parseFloat(element.topp) + 'px'
-              : `${(parseFloat(element.topp) / element?.width) *
-              ((parseFloat(width) * midSecWidth) / 100)
-              }px`;
+              : `${
+                  (parseFloat(element.topp) / element.width) *
+                  ((parseFloat(width) * midSecWidth) / 100)
+                }px`;
 
           const measure = {
             width,
@@ -1396,8 +1487,10 @@ const MidSection = React.forwardRef((props, ref) => {
             id: element.id,
             top: parseFloat(measure.top) / midSecWidth,
             left: parseFloat(measure.left) / midSecWidth,
-            width: parseFloat(measure?.width) / midSecWidth,
-            height: parseFloat(measure?.height) / midSecWidth,
+            width:
+              parseFloat(measure?.width) /
+              (window.innerWidth < 993 ? 100 : midSecWidth),
+            height: parseFloat(measure.height) / midSecWidth,
             page: p,
           });
         }
@@ -1411,17 +1504,19 @@ const MidSection = React.forwardRef((props, ref) => {
 
           const height =
             window.innerWidth > 993
-              ? element?.height + 'px'
-              : `${(element?.height / element?.width) *
-              ((parseFloat(width) * midSecWidth) / 100)
-              }px`;
+              ? element.height + 'px'
+              : `${
+                  (element.height / element.width) *
+                  ((parseFloat(width) * midSecWidth) / 100)
+                }px`;
 
           const top =
             window.innerWidth > 993
               ? parseFloat(element.topp) + 'px'
-              : `${(parseFloat(element.topp) / element?.width) *
-              ((parseFloat(width) * midSecWidth) / 100)
-              }px`;
+              : `${
+                  (parseFloat(element.topp) / element.width) *
+                  ((parseFloat(width) * midSecWidth) / 100)
+                }px`;
 
           const measure = {
             width,
@@ -1458,8 +1553,10 @@ const MidSection = React.forwardRef((props, ref) => {
             id: element.id,
             top: parseFloat(measure.top) / midSecWidth,
             left: parseFloat(measure.left) / midSecWidth,
-            width: parseFloat(measure?.width) / midSecWidth,
-            height: parseFloat(measure?.height) / midSecWidth,
+            width:
+              parseFloat(measure?.width) /
+              (window.innerWidth < 993 ? 100 : midSecWidth),
+            height: parseFloat(measure.height) / midSecWidth,
             page: p,
           });
         }
@@ -1472,17 +1569,19 @@ const MidSection = React.forwardRef((props, ref) => {
 
           const height =
             window.innerWidth > 993
-              ? element?.height + 'px'
-              : `${(element?.height / element?.width) *
-              ((parseFloat(width) * midSecWidth) / 100)
-              }px`;
+              ? element.height + 'px'
+              : `${
+                  (element.height / element.width) *
+                  ((parseFloat(width) * midSecWidth) / 100)
+                }px`;
 
           const top =
             window.innerWidth > 993
               ? parseFloat(element.topp) + 'px'
-              : `${(parseFloat(element.topp) / element?.width) *
-              ((parseFloat(width) * midSecWidth) / 100)
-              }px`;
+              : `${
+                  (parseFloat(element.topp) / element.width) *
+                  ((parseFloat(width) * midSecWidth) / 100)
+                }px`;
 
           const measure = {
             width,
@@ -1519,8 +1618,10 @@ const MidSection = React.forwardRef((props, ref) => {
             id: element.id,
             top: parseFloat(measure.top) / midSecWidth,
             left: parseFloat(measure.left) / midSecWidth,
-            width: parseFloat(measure?.width) / midSecWidth,
-            height: parseFloat(measure?.height) / midSecWidth,
+            width:
+              parseFloat(measure?.width) /
+              (window.innerWidth < 993 ? 100 : midSecWidth),
+            height: parseFloat(measure.height) / midSecWidth,
             page: p,
           });
         }
@@ -1533,17 +1634,19 @@ const MidSection = React.forwardRef((props, ref) => {
 
           const height =
             window.innerWidth > 993
-              ? element?.height + 'px'
-              : `${(element?.height / element?.width) *
-              ((parseFloat(width) * midSecWidth) / 100)
-              }px`;
+              ? element.height + 'px'
+              : `${
+                  (element.height / element.width) *
+                  ((parseFloat(width) * midSecWidth) / 100)
+                }px`;
 
           const top =
             window.innerWidth > 993
               ? parseFloat(element.topp) + 'px'
-              : `${(parseFloat(element.topp) / element?.width) *
-              ((parseFloat(width) * midSecWidth) / 100)
-              }px`;
+              : `${
+                  (parseFloat(element.topp) / element.width) *
+                  ((parseFloat(width) * midSecWidth) / 100)
+                }px`;
 
           const measure = {
             width,
@@ -1574,8 +1677,10 @@ const MidSection = React.forwardRef((props, ref) => {
             id: element.id,
             top: parseFloat(measure.top) / midSecWidth,
             left: parseFloat(measure.left) / midSecWidth,
-            width: parseFloat(measure?.width) / midSecWidth,
-            height: parseFloat(measure?.height) / midSecWidth,
+            width:
+              parseFloat(measure?.width) /
+              (window.innerWidth < 993 ? 100 : midSecWidth),
+            height: parseFloat(measure.height) / midSecWidth,
             page: p,
           });
         }
@@ -1589,17 +1694,19 @@ const MidSection = React.forwardRef((props, ref) => {
 
           const height =
             window.innerWidth > 993
-              ? element?.height + 'px'
-              : `${(element?.height / element?.width) *
-              ((parseFloat(width) * midSecWidth) / 100)
-              }px`;
+              ? element.height + 'px'
+              : `${
+                  (element.height / element.width) *
+                  ((parseFloat(width) * midSecWidth) / 100)
+                }px`;
 
           const top =
             window.innerWidth > 993
               ? parseFloat(element.topp) + 'px'
-              : `${(parseFloat(element.topp) / element?.width) *
-              ((parseFloat(width) * midSecWidth) / 100)
-              }px`;
+              : `${
+                  (parseFloat(element.topp) / element.width) *
+                  ((parseFloat(width) * midSecWidth) / 100)
+                }px`;
 
           const measure = {
             width,
@@ -1631,8 +1738,10 @@ const MidSection = React.forwardRef((props, ref) => {
             id: element.id,
             top: parseFloat(measure.top) / midSecWidth,
             left: parseFloat(measure.left) / midSecWidth,
-            width: parseFloat(measure?.width) / midSecWidth,
-            height: parseFloat(measure?.height) / midSecWidth,
+            width:
+              parseFloat(measure?.width) /
+              (window.innerWidth < 993 ? 100 : midSecWidth),
+            height: parseFloat(measure.height) / midSecWidth,
             page: p,
           });
         }
@@ -1646,17 +1755,19 @@ const MidSection = React.forwardRef((props, ref) => {
 
           const height =
             window.innerWidth > 993
-              ? element?.height + 'px'
-              : `${(element?.height / element?.width) *
-              ((parseFloat(width) * midSecWidth) / 100)
-              }px`;
+              ? element.height + 'px'
+              : `${
+                  (element.height / element.width) *
+                  ((parseFloat(width) * midSecWidth) / 100)
+                }px`;
 
           const top =
             window.innerWidth > 993
               ? parseFloat(element.topp) + 'px'
-              : `${(parseFloat(element.topp) / element?.width) *
-              ((parseFloat(width) * midSecWidth) / 100)
-              }px`;
+              : `${
+                  (parseFloat(element.topp) / element.width) *
+                  ((parseFloat(width) * midSecWidth) / 100)
+                }px`;
 
           const measure = {
             width,
@@ -1690,8 +1801,10 @@ const MidSection = React.forwardRef((props, ref) => {
             id: element.id,
             top: parseFloat(measure.top) / midSecWidth,
             left: parseFloat(measure.left) / midSecWidth,
-            width: parseFloat(measure?.width) / midSecWidth,
-            height: parseFloat(measure?.height) / midSecWidth,
+            width:
+              parseFloat(measure?.width) /
+              (window.innerWidth < 993 ? 100 : midSecWidth),
+            height: parseFloat(measure.height) / midSecWidth,
             page: p,
           });
         }
@@ -1704,17 +1817,19 @@ const MidSection = React.forwardRef((props, ref) => {
 
           const height =
             window.innerWidth > 993
-              ? element?.height + 'px'
-              : `${(element?.height / element?.width) *
-              ((parseFloat(width) * midSecWidth) / 100)
-              }px`;
+              ? element.height + 'px'
+              : `${
+                  (element.height / element.width) *
+                  ((parseFloat(width) * midSecWidth) / 100)
+                }px`;
 
           const top =
             window.innerWidth > 993
               ? parseFloat(element.topp) + 'px'
-              : `${(parseFloat(element.topp) / element?.width) *
-              ((parseFloat(width) * midSecWidth) / 100)
-              }px`;
+              : `${
+                  (parseFloat(element.topp) / element.width) *
+                  ((parseFloat(width) * midSecWidth) / 100)
+                }px`;
 
           const measure = {
             width,
@@ -1725,13 +1840,12 @@ const MidSection = React.forwardRef((props, ref) => {
           };
           const idMatch = documnetMap?.filter((elmnt) => elmnt == element?.id);
           const holderDIV = getHolderDIV(measure, p, idMatch);
-          const id = `${
-            element?.raw_data?.scaleID.includes('scale Id')
-              ? element.id
-              : element?.raw_data?.scaleID
-          }`;
-
-          console.log('NEW SCALE POST: ', element, id);
+          // const id = `${
+          //   element?.raw_data?.scaleID.includes('scale Id')
+          //     ? element.id
+          //     : element?.raw_data?.scaleID
+          // }`;
+          const id = element.id;
 
           createNewScaleInputField(
             id,
@@ -1753,8 +1867,10 @@ const MidSection = React.forwardRef((props, ref) => {
             id: element.id,
             top: parseFloat(measure.top) / midSecWidth,
             left: parseFloat(measure.left) / midSecWidth,
-            width: parseFloat(measure?.width) / midSecWidth,
-            height: parseFloat(measure?.height) / midSecWidth,
+            width:
+              parseFloat(measure?.width) /
+              (window.innerWidth < 993 ? 100 : midSecWidth),
+            height: parseFloat(measure.height) / midSecWidth,
             page: p,
           });
         }
@@ -1768,17 +1884,19 @@ const MidSection = React.forwardRef((props, ref) => {
 
           const height =
             window.innerWidth > 993
-              ? element?.height + 'px'
-              : `${(element?.height / element?.width) *
-              ((parseFloat(width) * midSecWidth) / 100)
-              }px`;
+              ? element.height + 'px'
+              : `${
+                  (element.height / element.width) *
+                  ((parseFloat(width) * midSecWidth) / 100)
+                }px`;
 
           const top =
             window.innerWidth > 993
               ? parseFloat(element.topp) + 'px'
-              : `${(parseFloat(element.topp) / element?.width) *
-              ((parseFloat(width) * midSecWidth) / 100)
-              }px`;
+              : `${
+                  (parseFloat(element.topp) / element.width) *
+                  ((parseFloat(width) * midSecWidth) / 100)
+                }px`;
 
           const measure = {
             width,
@@ -1812,8 +1930,10 @@ const MidSection = React.forwardRef((props, ref) => {
             id: element.id,
             top: parseFloat(measure.top) / midSecWidth,
             left: parseFloat(measure.left) / midSecWidth,
-            width: parseFloat(measure?.width) / midSecWidth,
-            height: parseFloat(measure?.height) / midSecWidth,
+            width:
+              parseFloat(measure?.width) /
+              (window.innerWidth < 993 ? 100 : midSecWidth),
+            height: parseFloat(measure.height) / midSecWidth,
             page: p,
           });
         }
@@ -1828,17 +1948,19 @@ const MidSection = React.forwardRef((props, ref) => {
 
           const height =
             window.innerWidth > 993
-              ? element?.height + 'px'
-              : `${(element?.height / element?.width) *
-              ((parseFloat(width) * midSecWidth) / 100)
-              }px`;
+              ? element.height + 'px'
+              : `${
+                  (element.height / element.width) *
+                  ((parseFloat(width) * midSecWidth) / 100)
+                }px`;
 
           const top =
             window.innerWidth > 993
               ? parseFloat(element.topp) + 'px'
-              : `${(parseFloat(element.topp) / element?.width) *
-              ((parseFloat(width) * midSecWidth) / 100)
-              }px`;
+              : `${
+                  (parseFloat(element.topp) / element.width) *
+                  ((parseFloat(width) * midSecWidth) / 100)
+                }px`;
 
           const measure = {
             width,
@@ -1879,13 +2001,41 @@ const MidSection = React.forwardRef((props, ref) => {
             id: element.id,
             top: parseFloat(measure.top) / midSecWidth,
             left: parseFloat(measure.left) / midSecWidth,
-            width: parseFloat(measure?.width) / midSecWidth,
-            height: parseFloat(measure?.height) / midSecWidth,
+            width:
+              parseFloat(measure?.width) /
+              (window.innerWidth < 993 ? 100 : midSecWidth),
+            height: parseFloat(measure.height) / midSecWidth,
             page: p,
           });
         }
       });
     }
+
+    const holderDivs = [...document.querySelectorAll('.holderDIV')];
+
+    holderDivs.forEach((holderDiv) => {
+      const el = holderDiv.children[1]?.classList.contains('dropdownInput')
+        ? holderDiv.children[1]
+        : holderDiv.children[0];
+
+      const origFntSizes = sessionStorage.getItem('orig_fnt')
+        ? JSON.parse(sessionStorage.getItem('orig_fnt'))
+        : [];
+
+      if (midSecWidth <= 500) {
+        if (el.classList.contains('textInput')) {
+          const fntSize = parseFloat(window.getComputedStyle(el).fontSize);
+          sessionStorage.setItem(
+            'orig_fnt',
+            JSON.stringify([...origFntSizes, { id: el.id, fntSize }])
+          );
+          el.style.fontSize = fntSize / 1.23 + 'px';
+        }
+      }
+
+      handleElOverflow(el, holderDiv);
+    });
+
     sessionStorage.setItem('dimRatios', JSON.stringify(iniDimRatio));
     setDimRatios(iniDimRatio);
   };
@@ -1923,11 +2073,7 @@ const MidSection = React.forwardRef((props, ref) => {
       return;
     }
 
-    // console.log(JSON.parse(response.data))
-    // console.log("social media data..", response.data)
-
     const { title, image, paragraph } = JSON.parse(response.data)?.data[0]; //title field
-    // console.log("social response", response.data.data);
     const curr_user = document.getElementById('curr_user');
 
     const measure = {
@@ -2054,9 +2200,7 @@ const MidSection = React.forwardRef((props, ref) => {
       imageField.id = 'i1';
     }
 
-    imageField.addEventListener('onclick', () => {
-      // console.log("imgData clicked")
-    });
+    imageField.addEventListener('onclick', () => {});
 
     imageField.onclick = (e) => {
       e.stopPropagation();
@@ -2171,7 +2315,6 @@ const MidSection = React.forwardRef((props, ref) => {
 
     var dataFound = event.dataTransfer.getData('text');
     if (dataFound == 'rightMenuDragStart') {
-      // console.log('right menu drag');
     } else {
       const has_table_drag_class =
         event.target.classList.contains('table_drag');
@@ -2182,7 +2325,6 @@ const MidSection = React.forwardRef((props, ref) => {
 
       const midSec = document.querySelector('.drop_zone');
       const midsectionRect = midSec.getBoundingClientRect();
-      // console.log("typeOfOperation from midsection", typeOfOperation, midSec, curr_user, midsectionRect);
       const measure = {
         width: '200px',
         height: '80px',
@@ -2302,14 +2444,11 @@ const MidSection = React.forwardRef((props, ref) => {
           )
             .then((res) => {
               setIsLoading(false);
-              // console.log(res.data, "scaleData");
               setScaleData(res.data);
               const success = res.data.success;
               var successObj = JSON.parse(success);
               const id = successObj.inserted_id;
-              // console.log(res.scale_urls, "stateScale");
               if (id.length) {
-                // console.log(id, "id");
                 // setScaleId(id);
                 scaleIdHolder.innerHTML = id;
               }
@@ -2317,7 +2456,6 @@ const MidSection = React.forwardRef((props, ref) => {
             })
             .catch((err) => {
               setIsLoading(false);
-              // console.log(err);
             });
 
           scaleField.onclick = (e) => {
@@ -2518,24 +2656,25 @@ const MidSection = React.forwardRef((props, ref) => {
 
   let elem = {};
 
-  const compsScaler = (holder, ratio) => {
+  const compsScaler = (holder, ratio, el) => {
     const midSecWidth = document
       .querySelector('.midSection_container')
-      .getBoundingClientRect()?.width;
+      ?.getBoundingClientRect()?.width;
     // const holderStyles = window.getComputedStyle(holder);
 
     const computeDim = (prop) => midSecWidth * prop + 'px';
 
     holder.style.width = computeDim(ratio?.width);
     holder.style.height = computeDim(ratio?.height);
-    holder.style.top = computeDim(ratio.top);
-    holder.style.left = computeDim(ratio.left);
+    holder.style.top = computeDim(ratio?.top);
+    holder.style.left = computeDim(ratio?.left);
   };
 
   const compsResizer = () => {
     const allHolders = [...document.querySelectorAll('.holderDIV')];
 
-    allHolders.forEach((holder) => {
+    allHolders?.forEach((holder) => {
+      // * This ensures only high order holderDivs are selected
       if (holder.parentElement.id === 'midSection_container') {
         const el = holder.children[1]?.classList.contains('dropdownInput')
           ? holder.children[1]
@@ -2543,18 +2682,22 @@ const MidSection = React.forwardRef((props, ref) => {
 
         const ratio = dimRatios.find((ratio) => ratio?.id === el?.id);
 
-        // console.log('El: ', el);
-        // console.log('DimRatios: ', dimRatios);
-        // console.log('Ratio: ', ratio);
-
-        compsScaler(holder, ratio);
+        handleFntSizes(el);
+        compsScaler(holder, ratio, el);
       }
+    });
+
+    allHolders.forEach((holderDiv) => {
+      const el = holderDiv.children[1]?.classList.contains('dropdownInput')
+        ? holderDiv.children[1]
+        : holderDiv.children[0];
+
+      handleElOverflow(el, holderDiv);
     });
   };
 
   useEffect(() => {
     document.addEventListener('mousedown', (event) => {
-      // // console.log("getting mouse position on midsection", event.screenX, event.screenY);
       const holderDIV = document.getElementsByClassName('holderDIV');
       const holderr = document.getElementsByClassName('holder-menu');
       const resizerr = document.getElementsByClassName('resizeBtn');
@@ -2599,7 +2742,7 @@ const MidSection = React.forwardRef((props, ref) => {
   }, []);
 
   useEffect(() => {
-    if(decoded?.details?.update_field.template_name == "Untitled Template"){
+    if (decoded?.details?.update_field.template_name == 'Untitled Template') {
       setProgress(100);
     } else {
       setProgress(progress + 50);
@@ -2609,27 +2752,70 @@ const MidSection = React.forwardRef((props, ref) => {
       //call this conditionally
       if (decoded && decoded?.details?.cluster === 'socialmedia') {
         onParagraphPost();
-        // console.log(decoded)
       }
     }
   }, [fetchedData]);
 
   useEffect(() => {
-    if (Object.keys(fetchedData).length) {
-      window.onresize = () => scaleMidSec();
-    }
+    if (isDataRetrieved && mode === 'preview') {
+      const setMidSecWdith = (width) => {
+        const midSecAll = document.querySelectorAll('.midSection_container');
+        midSecAll.forEach((mid) => {
+          mid.style.width = width + 'px';
+        });
+      };
 
-    return () => window.removeEventListener('resize', () => { });
-  }, [fetchedData, currMidSecWidth]);
+      switch (selOpt) {
+        case 'large':
+          setMidSecWdith(fixedMidSecDim.width);
+          scaleMidSec();
+          break;
+        case 'mid':
+          setMidSecWdith(720);
+          scaleMidSec();
+          break;
+        case 'small':
+          setMidSecWdith(350);
+          scaleMidSec();
+          break;
+        default:
+          return;
+      }
+    }
+  }, [isDataRetrieved, selOpt, mode]);
 
   useEffect(() => {
-    // console.log('COMP RESIZER TRIGGERED');
-    if (Object.keys(fetchedData).length && currMidSecWidth > 0) {
-      if (!isFirstRender.current) {
-        compsResizer();
-      } else isFirstRender.current = false;
+    if (Object.keys(fetchedData).length) {
+      window.onresize = () => {
+        if (resizeChecker.current !== window.innerWidth) {
+          isCompsScaler || setIsCompsScaler(true);
+          scaleMidSec();
+          resizeChecker.current = window.innerWidth;
+        }
+
+        if (defOptRef.current !== 'large' && window.innerWidth > 993)
+          setDefSelOpt('large');
+        else if (
+          (defOptRef.current !== 'large' || defOptRef.current !== 'mid') &&
+          window.innerWidth <= 993 &&
+          window.innerWidth >= 770
+        )
+          setDefSelOpt('mid');
+      };
     }
-  }, [currMidSecWidth, fetchedData]);
+
+    return () => (window.onresize = null);
+  }, [fetchedData, currMidSecWidth, isCompsScaler]);
+
+  useEffect(() => {
+    if (
+      Object.keys(fetchedData).length &&
+      currMidSecWidth > 0 &&
+      isCompsScaler
+    ) {
+      compsResizer();
+    }
+  }, [currMidSecWidth, fetchedData, isCompsScaler]);
 
   useEffect(() => {
     if (Object.keys(fetchedData).length && currMidSecWidth > 0) {
@@ -2695,14 +2881,15 @@ const MidSection = React.forwardRef((props, ref) => {
       });
 
       editSecObserver.observe(editSec, { childList: true, subtree: true });
+
+      if (dimRatios.length) setEnablePreview(true);
+      else setEnablePreview(false);
     }
-    // console.log('DIMENSION RATIOS: ', dimRatios);
   }, [dimRatios, currMidSecWidth, fetchedData]);
 
-  const getCurrentEl = (fromMidSection)=>{
-    
+  const getCurrentEl = (fromMidSection) => {
     return fromMidSection;
-  }
+  };
   return (
     <>
       {item?.map((currentItem, index) => {
@@ -2734,18 +2921,17 @@ const MidSection = React.forwardRef((props, ref) => {
                 onContextMenu={handleContextMenu}
               >
                 {confirmRemove && (
-                  <RemoveElementModal 
-                
-                  handleRemoveInput={()=>{
-                    if(contextMenu.targetEl){
-                      handleRemoveInput(contextMenu.targetEl)
-                    }else{
-                      if(document.querySelector(".focussedd")){
-                        document.querySelector(".focussedd")?.remove();
-                      };
-                    }
-                  }} 
-                  targetEl={contextMenu.targetEl}
+                  <RemoveElementModal
+                    handleRemoveInput={() => {
+                      if (contextMenu.targetEl) {
+                        handleRemoveInput(contextMenu.targetEl);
+                      } else {
+                        if (document.querySelector('.focussedd')) {
+                          document.querySelector('.focussedd')?.remove();
+                        }
+                      }
+                    }}
+                    targetEl={contextMenu.targetEl}
                   />
                 )}
                 {contextMenu.show && (

@@ -1199,65 +1199,14 @@ const ScaleRightSide = () => {
               button4.style.padding = "";
               labelHold.appendChild(circle);
 
-              circle.addEventListener("mouseenter", () => {
-                if (circle.textContent === "0" || i === 0) {
-                  buttonChildLeft.style.display = "block";
-                  buttonChildLeft.style.position = "absolute";
-                  buttonChildLeft.style.bottom = "0";
-                  if (option?.value === "Vertical") {
-                    buttonChildLeft.style.top = "35px";
-                    buttonChildLeft.style.bottom = "";
-                    buttonChildLeft.style.height = "fit-content";
-                  }
-                  buttonChildLeft.style.left = "8%";
-                  buttonChildLeft.style.backgroundColor = "gray";
-                  buttonChildLeft.style.padding = "2px 8px";
-                  buttonChildLeft.style.color = "white";
-                  buttonChildLeft.style.borderRadius = "2px";
-                } else if (circle.textContent === "5" || i === 5) {
-                  buttonChildNeutral.style.display = "block";
-                  buttonChildNeutral.style.position = "absolute";
-                  buttonChildNeutral.style.bottom = "0";
-                  buttonChildNeutral.style.left = "52%";
-
-                  if (option?.value === "Vertical") {
-                    buttonChildNeutral.style.top = "50%";
-                    buttonChildNeutral.style.bottom = "";
-                    buttonChildNeutral.style.left = "8%";
-                    buttonChildNeutral.style.height = "fit-content";
-                  }
-                  buttonChildNeutral.style.backgroundColor = "gray";
-                  buttonChildNeutral.style.padding = "2px 8px";
-                  buttonChildNeutral.style.color = "white";
-                  buttonChildNeutral.style.borderRadius = "2px";
-                } else if (circle.textContent === "10" || i === 10) {
-                  buttonChildRight.style.display = "block";
-                  buttonChildRight.style.position = "absolute";
-                  buttonChildRight.style.left = "";
-                  buttonChildRight.style.bottom = "0";
-                  buttonChildRight.style.right = "8%";
-                  buttonChildRight.style.backgroundColor = "gray";
-
-                  if (option?.value === "Vertical") {
-                    buttonChildRight.style.bottom = "5%";
-                    buttonChildRight.style.left = "8%";
-                    buttonChildRight.style.right = "";
-                  }
-                  buttonChildRight.style.padding = "2px 8px";
-                  buttonChildRight.style.color = "white";
-                  buttonChildRight.style.borderRadius = "2px";
-                }
-              });
-
-              circle.addEventListener("mouseleave", () => {
-                if (circle.textContent === "0" || i === 0) {
-                  buttonChildLeft.style.display = "none";
-                } else if (circle.textContent === "5" || i === 5) {
-                  buttonChildNeutral.style.display = "none";
-                } else if (circle.textContent === "10" || i === 10) {
-                  buttonChildRight.style.display = "none";
-                }
-              });
+              if (circle.textContent === "0" || i === 0) {
+                circle.title = res.data.data.settings.left
+              }
+              else if (circle.textContent === "5" || i === 5) {
+                circle.title = res.data.data.settings.center
+              } else if (circle.textContent === "10" || i === 10) {
+                circle.title = res.data.data.settings.right
+              }
 
               if (selectedOption === "emoji" && emojiInp !== "") {
                 console.log(selectedOption);
@@ -1365,65 +1314,14 @@ const ScaleRightSide = () => {
                 button4.style.padding = "";
                 labelHold.appendChild(circle);
 
-                circle.addEventListener("mouseenter", () => {
-                  if (circle.textContent === "0" || i === 0) {
-                    buttonChildLeft.style.display = "block";
-                    buttonChildLeft.style.position = "absolute";
-                    buttonChildLeft.style.bottom = "0";
-                    if (option?.value === "Vertical") {
-                      buttonChildLeft.style.top = "35px";
-                      buttonChildLeft.style.bottom = "";
-                      buttonChildLeft.style.height = "fit-content";
-                    }
-                    buttonChildLeft.style.left = "8%";
-                    buttonChildLeft.style.backgroundColor = "gray";
-                    buttonChildLeft.style.padding = "2px 8px";
-                    buttonChildLeft.style.color = "white";
-                    buttonChildLeft.style.borderRadius = "2px";
-                  } else if (circle.textContent === "5" || i === 5) {
-                    buttonChildNeutral.style.display = "block";
-                    buttonChildNeutral.style.position = "absolute";
-                    buttonChildNeutral.style.bottom = "0";
-                    buttonChildNeutral.style.left = "52%";
-
-                    if (option?.value === "Vertical") {
-                      buttonChildNeutral.style.top = "50%";
-                      buttonChildNeutral.style.bottom = "";
-                      buttonChildNeutral.style.left = "8%";
-                      buttonChildNeutral.style.height = "fit-content";
-                    }
-                    buttonChildNeutral.style.backgroundColor = "gray";
-                    buttonChildNeutral.style.padding = "2px 8px";
-                    buttonChildNeutral.style.color = "white";
-                    buttonChildNeutral.style.borderRadius = "2px";
-                  } else if (circle.textContent === "10" || i === 10) {
-                    buttonChildRight.style.display = "block";
-                    buttonChildRight.style.position = "absolute";
-                    buttonChildRight.style.left = "";
-                    buttonChildRight.style.bottom = "0";
-                    buttonChildRight.style.right = "8%";
-                    buttonChildRight.style.backgroundColor = "gray";
-
-                    if (option?.value === "Vertical") {
-                      buttonChildRight.style.bottom = "5%";
-                      buttonChildRight.style.left = "8%";
-                      buttonChildRight.style.right = "";
-                    }
-                    buttonChildRight.style.padding = "2px 8px";
-                    buttonChildRight.style.color = "white";
-                    buttonChildRight.style.borderRadius = "2px";
-                  }
-                });
-
-                circle.addEventListener("mouseleave", () => {
-                  if (i === 0) {
-                    buttonChildLeft.style.display = "none";
-                  } else if (i === 5) {
-                    buttonChildNeutral.style.display = "none";
-                  } else if (i === 10) {
-                    buttonChildRight.style.display = "none";
-                  }
-                });
+                if (circle.textContent === "0" || i === 0) {
+                  circle.title = res.data.data.settings.left
+                }
+                else if (circle.textContent === "5" || i === 5) {
+                  circle.title = res.data.data.settings.center
+                } else if (circle.textContent === "10" || i === 10) {
+                  circle.title = res.data.data.settings.right
+                }
 
                 if (selectedOption === "emoji" && emojiInp !== "") {
                   console.log(selectedOption);
@@ -1633,13 +1531,8 @@ const ScaleRightSide = () => {
                 left.style.color = "#EEEFEF";
                 left.style.borderRadius = "3px"
                 circle.append(left);
-                circle.onmouseover = function () {
-                  left.style.visibility = "visible";
-                };
 
-                circle.onmouseout = function () {
-                  left.style.visibility = "hidden";
-                };
+                circle.title = res.data.data.settings.left
               } else if (i === scaleArr.length - 1) {
                 var right = document.createElement("span");
                 right.className = "rightTooltip";
@@ -1658,13 +1551,8 @@ const ScaleRightSide = () => {
                 right.style.padding === "0 20px"
                 right.style.borderRadius = "3px"
                 circle.append(right);
-                circle.onmouseover = function () {
-                  right.style.display = "block";
-                };
-
-                circle.onmouseout = function () {
-                  right.style.display = "none";
-                };
+                
+                circle.title = res.data.data.settings.right
               }
             }
 
@@ -1788,14 +1676,9 @@ const ScaleRightSide = () => {
                     option.value === "Vertical" ? "tb-rl" : "";
                   left.style.backgroundColor = "#272828";
                   left.style.color = "#EEEFEF";
-                  circle.append(left);
-                  circle.onmouseover = function () {
-                    left.style.visibility = "visible";
-                  };
+                  circle.append(left)
 
-                  circle.onmouseout = function () {
-                    left.style.visibility = "hidden";
-                  };
+                  circle.title = res.data.data.settings.left
                 } else if (i === scaleArr.length - 1) {
                   var right = document.createElement("span");
                   right.className = "rightTooltip";
@@ -1811,13 +1694,8 @@ const ScaleRightSide = () => {
                   right.style.writingMode =
                     option.value === "Vertical" ? "tb-rl" : "";
                   circle.append(right);
-                  circle.onmouseover = function () {
-                    right.style.display = "block";
-                  };
-
-                  circle.onmouseout = function () {
-                    right.style.display = "none";
-                  };
+                  
+                  circle.title = res.data.data.settings.right
                 }
               }
 
