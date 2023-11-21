@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useRef,
+} from 'react';
 import createButtonInputElement from '../components/midSection/createElements/CreateButtonElement.jsx';
 import CreatePyamentElement from '../components/midSection/createElements/CreatePyamentElement.jsx';
 import createFormInputElement from '../components/midSection/createElements/CreateFormElement.jsx';
@@ -43,17 +49,27 @@ const initialState2 = {
 export const ContextProvider = ({ children }) => {
   const [fetchedData, setFetchedData] = useState({});
   const [isClicked, setIsClicked] = useState(initialState2);
-
   const [isDataSaved, setIsDataSaved] = useState(false);
-
+  const [mode, setMode] = useState('edit');
   const [isDropped, setIsDropped] = useState(initialState);
-
   const [isResizing, setIsResizing] = useState(false);
+  const [defSelOpt, setDefSelOpt] = useState(
+    window.innerWidth > 993
+      ? 'large'
+      : window.innerWidth <= 993 && window.innerWidth >= 770
+      ? 'mid'
+      : 'small'
+  );
+  const [selOpt, setSelOpt] = useState(defSelOpt);
+  const [enablePreview, setEnablePreview] = useState(false);
+  const [idIni, setIdIni] = useState('');
+  const [modHeightEls, setModHeightEls] = useState([]);
 
   // Fetched Data
   const [data, setData] = useState([]);
   const [title, setTitle] = useState(['Untitled-file']);
   const [isDataRetrieved, setIsDataRetrieved] = useState(false);
+  const [isCompsScaler, setIsCompsScaler] = useState(false);
   // const [iniBtnId, setIniBtnId] = useState('');
 
   //nps scale custom data
@@ -91,6 +107,7 @@ export const ContextProvider = ({ children }) => {
     parentHeight: 1235.89,
   });
   const [currMidSecWidth, setCurrMidSecWidth] = useState(0);
+  const resizeChecker = useRef(window.innerWidth);
 
   const [dimRatios, setDimRatios] = useState([]);
 
@@ -556,7 +573,7 @@ export const ContextProvider = ({ children }) => {
     };
   };
 
-  const scaleMidSec = () => {
+  const scaleMidSec = (isOnPost) => {
     const midSecAll = document.querySelectorAll('.midSection_container');
     const ratio = fixedMidSecDim?.height / fixedMidSecDim?.width;
     const parentRatio = fixedMidSecDim?.parentHeight / fixedMidSecDim?.height;
@@ -568,16 +585,18 @@ export const ContextProvider = ({ children }) => {
       .getElementsByClassName('left_menu_wrapper')[0]
       ?.getBoundingClientRect();
 
-    midSecAll?.forEach((mid) => {
-      mid.style.height = scaledHeight + 'px';
-      mid.parentElement.style.height =
-        (scaledHeight * parentRatio).toFixed(2) + 'px';
-    });
+    if (isOnPost || currWidth !== currMidSecWidth) {
+      midSecAll?.forEach((mid) => {
+        mid.style.height = scaledHeight + 'px';
+        mid.parentElement.style.height =
+          (scaledHeight * parentRatio).toFixed(2) + 'px';
+      });
 
-    midSecAll[0].parentElement.parentElement.parentElement.style.marginTop =
-      window.innerWidth > 993 ? 0 : leftRect?.height + 'px';
+      midSecAll[0].parentElement.parentElement.parentElement.style.marginTop =
+        window.innerWidth > 993 ? 0 : leftRect?.height + 'px';
 
-    currWidth !== currMidSecWidth && setCurrMidSecWidth(currWidth);
+      setCurrMidSecWidth(currWidth);
+    }
   };
 
   const updateDimRatios = (holder) => {
@@ -612,8 +631,6 @@ export const ContextProvider = ({ children }) => {
     sessionStorage.setItem('dimRatios', JSON.stringify(modDimRatios));
     setDimRatios(modDimRatios);
   };
-
-  const [idIni, setIdIni] = useState('');
 
   useEffect(() => {
     const replaceIds = (oldId) => {
@@ -665,6 +682,10 @@ export const ContextProvider = ({ children }) => {
       }
     }
   }, [genSelOpt, idIni]);
+
+  useEffect(() => {
+    sessionStorage.removeItem('orig_fnt');
+  }, []);
 
   return (
     <StateContext.Provider
@@ -824,10 +845,21 @@ export const ContextProvider = ({ children }) => {
         dimRatios,
         setDimRatios,
         updateDimRatios,
-        // iniBtnId, setIniBtnId,
-
+        mode,
+        setMode,
         progress,
         setProgress,
+        selOpt,
+        setSelOpt,
+        defSelOpt,
+        setDefSelOpt,
+        enablePreview,
+        setEnablePreview,
+        modHeightEls,
+        setModHeightEls,
+        isCompsScaler,
+        setIsCompsScaler,
+        resizeChecker,
       }}
     >
       {children}
