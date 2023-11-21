@@ -144,18 +144,11 @@ const MidSection = React.forwardRef((props, ref) => {
   const divList = documnentsMap?.map?.((item) => item.page);
   var documnetMap = documnentsMap?.map?.((item) => item.content);
   const document_map_required = documnentsMap?.filter((item) => item.required);
-  // console.log("document_map_required", document_map_required);
-  // console.log("decode", decoded);
-  // console.log("data", data[1]);
 
   const documentsMap = documnentsMap;
   if (documnentsMap?.length > 0) {
     const documentsMap = documnentsMap;
-  } else {
-    // console.log("There's no document map");
   }
-
-  // console.log(documnetMap);
 
   const editorRef = useRef(null);
   const cutItemRef = useRef(null);
@@ -202,7 +195,6 @@ const MidSection = React.forwardRef((props, ref) => {
 
     if (!foundElement.classList.contains('midSection')) {
       const parent = foundElement.parentElement;
-      // console.log("\n>>>>>>>>>>\nFound Element\n", foundElement)
       const tableElements = ['td', 'tr', 'table'];
       if (tableElements.includes(parent.tagName.toLowerCase())) {
         switch (parent.tagName.toLowerCase()) {
@@ -248,7 +240,6 @@ const MidSection = React.forwardRef((props, ref) => {
         )
       ) {
         let container = parent.parentElement;
-        console.log('\n>>>>>>>>>>\nFound Element 1\n', foundElement);
 
         if (
           parent.parentElement?.parentElement?.classList.contains(
@@ -256,7 +247,6 @@ const MidSection = React.forwardRef((props, ref) => {
           )
         ) {
           container = parent.parentElement.parentElement;
-          console.log('\n>>>>>>>>>>\nFound Element 2\n', foundElement);
         }
         setContextMenu({
           show: true,
@@ -319,7 +309,6 @@ const MidSection = React.forwardRef((props, ref) => {
     }
     setCutItem_value(e.target);
     cutItemRef.current = e.target;
-    // console.log("target.parentElement", e.target);
   };
 
   function getResizer(attr1, attr2) {
@@ -427,7 +416,6 @@ const MidSection = React.forwardRef((props, ref) => {
 
     if (midSecWidth <= 500) {
       if (el.classList.contains('textInput')) {
-        console.log('IN');
         if (!origFntSizes.find((org) => org.id === el.id)) {
           const fntSize = parseFloat(window.getComputedStyle(el).fontSize);
           sessionStorage.setItem(
@@ -435,13 +423,10 @@ const MidSection = React.forwardRef((props, ref) => {
             JSON.stringify([...origFntSizes, { id: el.id, fntSize }])
           );
           el.style.fontSize = fntSize / 1.23 + 'px';
-          console.log('Font resized');
         }
-        console.log('OUT');
       }
     } else {
       if (el.classList.contains('textInput')) {
-        console.log({ midSecWidth });
         const fntSize =
           origFntSizes.find((org) => org.id === el.id)?.fntSize ?? null;
         if (fntSize) {
@@ -456,11 +441,9 @@ const MidSection = React.forwardRef((props, ref) => {
   };
 
   const handleElOverflow = (el, holderDiv) => {
-    // console.log('ENTER HANDLE OVERFLOW');
     const midSecs = [...document.querySelectorAll('.midSection_container')];
     if (el.classList.contains('textInput')) {
       if (el.scrollHeight > el.getBoundingClientRect().height) {
-        // console.log('Overflow');
         const iniHeight = holderDiv.getBoundingClientRect().height;
         const iniBottom = holderDiv.getBoundingClientRect().bottom;
         const elId = el.id;
@@ -485,10 +468,7 @@ const MidSection = React.forwardRef((props, ref) => {
         midSecChildren.forEach((holder) => {
           const holderRect = holder.getBoundingClientRect();
 
-          // console.log(holder, ' Holder top: ', holderRect.top, { iniBottom });
-
           if (holderRect.top >= iniBottom) {
-            // console.log('el: ', holder.children);
             holder.style.top =
               parseFloat(window.getComputedStyle(holder).top) +
               overflowY +
@@ -677,7 +657,6 @@ const MidSection = React.forwardRef((props, ref) => {
       holderDIV.style.flexDirection = 'column';
       // holderDIV.style.border = "2px dotted red";
       holderDIV.tabIndex = '1';
-      // //// console.log("measure", measure);
       holderDIV.style.width = measure?.width;
       holderDIV.style.height = measure.height;
       holderDIV.style.left = measure.left;
@@ -696,12 +675,8 @@ const MidSection = React.forwardRef((props, ref) => {
         holderDIV.classList.add(`dotted_border`);
       }
 
-      holderDIV.addEventListener('dragstart', (event) => {
-        // console.log("dragStart fun called");
-      });
-      holderDIV.ondragstart = (e) => {
-        // console.log("dragStart fun called");
-      };
+      holderDIV.addEventListener('dragstart', (event) => {});
+      holderDIV.ondragstart = (e) => {};
 
       const resizerTL = getResizer('top', 'left');
       const resizerTR = getResizer('top', 'right');
@@ -1020,9 +995,6 @@ const MidSection = React.forwardRef((props, ref) => {
         default:
           type = '';
       }
-
-      // console.log("\n>>>>>>>>>>>>>>>\nCOPIED DATA: ", elem);
-      // console.log("\n>>>>>>>>>>>>>>>\nFROM: ", targetElement);
       setContextMenu((prev) => {
         return {
           ...prev,
@@ -1062,7 +1034,6 @@ const MidSection = React.forwardRef((props, ref) => {
     holderDIV.style.flexDirection = 'column';
     // holderDIV.style.border = "2px dotted red";
     holderDIV.tabIndex = '1';
-    // //// console.log("measure", measure);
     holderDIV.style.width = measure?.width;
     holderDIV.style.height = measure.height;
     holderDIV.style.left = measure.left;
@@ -1081,12 +1052,8 @@ const MidSection = React.forwardRef((props, ref) => {
       holderDIV.classList.add(`dotted_border`);
     }
 
-    holderDIV.addEventListener('dragstart', (event) => {
-      // console.log("dragStart fun called");
-    });
-    holderDIV.ondragstart = (e) => {
-      // console.log("dragStart fun called");
-    };
+    holderDIV.addEventListener('dragstart', (event) => {});
+    holderDIV.ondragstart = (e) => {};
 
     const resizerTL = getResizer('top', 'left');
     const resizerTR = getResizer('top', 'right');
@@ -1145,12 +1112,8 @@ const MidSection = React.forwardRef((props, ref) => {
   if (source) {
     source.addEventListener('dragstart', (event) => {
       dragged = event.target;
-      // console.log("dragged", dragged);
     });
   }
-
-  // TODO  THINK OF A WAY TO HANDLE FONT SIZE RESPONSIVENESS IN onPost
-  // TODO ALSO SET defSelOpt TO CHANGE WITH CHANGES IN SCREEN SIZES
 
   const onPost = () => {
     const curr_user = document.getElementById('curr_user');
@@ -1221,8 +1184,6 @@ const MidSection = React.forwardRef((props, ref) => {
             height: parseFloat(measure.height) / midSecWidth,
             page: p,
           });
-
-          console.log({ iniDimRatio, measure, midSecWidth });
         }
         if (element.type === 'IMAGE_INPUT') {
           // ! This two lines of codes is for removing the occasionally added duplicate elements
@@ -1729,8 +1690,6 @@ const MidSection = React.forwardRef((props, ref) => {
           const elPar = document.getElementById(element.id)?.parentElement;
           elPar && elPar.remove();
 
-          // console.log('SCALE_INPUT El Par: ', elPar, element);
-
           const width = finding_percent(element, 'width');
 
           const height =
@@ -1887,8 +1846,6 @@ const MidSection = React.forwardRef((props, ref) => {
           //     : element?.raw_data?.scaleID
           // }`;
           const id = element.id;
-
-          // console.log('New_SCALE_INPUT El Par: ', elPar, element);
 
           createNewScaleInputField(
             id,
@@ -2073,7 +2030,6 @@ const MidSection = React.forwardRef((props, ref) => {
             JSON.stringify([...origFntSizes, { id: el.id, fntSize }])
           );
           el.style.fontSize = fntSize / 1.23 + 'px';
-          console.log('Font resized');
         }
       }
 
@@ -2117,11 +2073,7 @@ const MidSection = React.forwardRef((props, ref) => {
       return;
     }
 
-    // console.log(JSON.parse(response.data))
-    // console.log("social media data..", response.data)
-
     const { title, image, paragraph } = JSON.parse(response.data)?.data[0]; //title field
-    // console.log("social response", response.data.data);
     const curr_user = document.getElementById('curr_user');
 
     const measure = {
@@ -2248,9 +2200,7 @@ const MidSection = React.forwardRef((props, ref) => {
       imageField.id = 'i1';
     }
 
-    imageField.addEventListener('onclick', () => {
-      // console.log("imgData clicked")
-    });
+    imageField.addEventListener('onclick', () => {});
 
     imageField.onclick = (e) => {
       e.stopPropagation();
@@ -2365,7 +2315,6 @@ const MidSection = React.forwardRef((props, ref) => {
 
     var dataFound = event.dataTransfer.getData('text');
     if (dataFound == 'rightMenuDragStart') {
-      // console.log('right menu drag');
     } else {
       const has_table_drag_class =
         event.target.classList.contains('table_drag');
@@ -2376,7 +2325,6 @@ const MidSection = React.forwardRef((props, ref) => {
 
       const midSec = document.querySelector('.drop_zone');
       const midsectionRect = midSec.getBoundingClientRect();
-      // console.log("typeOfOperation from midsection", typeOfOperation, midSec, curr_user, midsectionRect);
       const measure = {
         width: '200px',
         height: '80px',
@@ -2496,14 +2444,11 @@ const MidSection = React.forwardRef((props, ref) => {
           )
             .then((res) => {
               setIsLoading(false);
-              // console.log(res.data, "scaleData");
               setScaleData(res.data);
               const success = res.data.success;
               var successObj = JSON.parse(success);
               const id = successObj.inserted_id;
-              // console.log(res.scale_urls, "stateScale");
               if (id.length) {
-                // console.log(id, "id");
                 // setScaleId(id);
                 scaleIdHolder.innerHTML = id;
               }
@@ -2511,7 +2456,6 @@ const MidSection = React.forwardRef((props, ref) => {
             })
             .catch((err) => {
               setIsLoading(false);
-              // console.log(err);
             });
 
           scaleField.onclick = (e) => {
@@ -2718,16 +2662,12 @@ const MidSection = React.forwardRef((props, ref) => {
       .getBoundingClientRect().width;
     // const holderStyles = window.getComputedStyle(holder);
 
-    // console.log('CompScaler called');
-
     const computeDim = (prop) => midSecWidth * prop + 'px';
 
     holder.style.width = computeDim(ratio.width);
     holder.style.height = computeDim(ratio.height);
     holder.style.top = computeDim(ratio.top);
     holder.style.left = computeDim(ratio.left);
-
-    // console.log('Comp Scaling done for: ', holder);
   };
 
   const compsResizer = () => {
@@ -2752,15 +2692,12 @@ const MidSection = React.forwardRef((props, ref) => {
         ? holderDiv.children[1]
         : holderDiv.children[0];
 
-      // console.log('handle overflow for: ', holderDiv);
-
       handleElOverflow(el, holderDiv);
     });
   };
 
   useEffect(() => {
     document.addEventListener('mousedown', (event) => {
-      // // console.log("getting mouse position on midsection", event.screenX, event.screenY);
       const holderDIV = document.getElementsByClassName('holderDIV');
       const holderr = document.getElementsByClassName('holder-menu');
       const resizerr = document.getElementsByClassName('resizeBtn');
@@ -2815,7 +2752,6 @@ const MidSection = React.forwardRef((props, ref) => {
       //call this conditionally
       if (decoded && decoded?.details?.cluster === 'socialmedia') {
         onParagraphPost();
-        // console.log(decoded)
       }
     }
   }, [fetchedData]);
@@ -2852,7 +2788,6 @@ const MidSection = React.forwardRef((props, ref) => {
     if (Object.keys(fetchedData).length) {
       window.onresize = () => {
         if (resizeChecker.current !== window.innerWidth) {
-          console.log('Resize fired');
           isCompsScaler || setIsCompsScaler(true);
           scaleMidSec();
           resizeChecker.current = window.innerWidth;
@@ -2873,13 +2808,11 @@ const MidSection = React.forwardRef((props, ref) => {
   }, [fetchedData, currMidSecWidth, isCompsScaler]);
 
   useEffect(() => {
-    console.log();
     if (
       Object.keys(fetchedData).length &&
       currMidSecWidth > 0 &&
       isCompsScaler
     ) {
-      console.log('COMP RESIZER TRIGGERED');
       compsResizer();
     }
   }, [currMidSecWidth, fetchedData, isCompsScaler]);
@@ -2952,7 +2885,6 @@ const MidSection = React.forwardRef((props, ref) => {
       if (dimRatios.length) setEnablePreview(true);
       else setEnablePreview(false);
     }
-    // console.log('DIMENSION RATIOS: ', dimRatios);
   }, [dimRatios, currMidSecWidth, fetchedData]);
 
   const getCurrentEl = (fromMidSection) => {

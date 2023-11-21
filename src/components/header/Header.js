@@ -903,7 +903,6 @@ const Header = () => {
             //     : "Template scale",
           };
 
-          console.log('NEW SCALE: ', elem);
           const pageNum = findPaageNum(newScales[b]);
           page[0][pageNum]?.push(elem);
         }

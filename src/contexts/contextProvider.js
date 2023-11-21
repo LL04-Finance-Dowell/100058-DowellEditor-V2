@@ -585,8 +585,6 @@ export const ContextProvider = ({ children }) => {
       .getElementsByClassName('left_menu_wrapper')[0]
       ?.getBoundingClientRect();
 
-    console.log({ currWidth, currMidSecWidth });
-
     if (isOnPost || currWidth !== currMidSecWidth) {
       midSecAll?.forEach((mid) => {
         mid.style.height = scaledHeight + 'px';
@@ -598,7 +596,6 @@ export const ContextProvider = ({ children }) => {
         window.innerWidth > 993 ? 0 : leftRect?.height + 'px';
 
       setCurrMidSecWidth(currWidth);
-      console.log('Mid sec Scaled');
     }
   };
 
