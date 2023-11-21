@@ -481,6 +481,7 @@ const Header = () => {
           function getChildData() {
             const allTableCCells = [];
             const tableChildren = tables[t].firstElementChild.children;
+            // console.log("....\n", tableChildren.length, "...\n");
             for (let i = 0; i < tableChildren.length; i++) {
               const tableTR = { tr: null };
               const newTableTR = [];
@@ -488,19 +489,25 @@ const Header = () => {
                 // const element = tableChildren[i];
 
                 const childNodes = tableChildren[i].children[j]?.childNodes;
+                const currentTd  = tableChildren[i].children[j]
                 const tdElement = [];
+                tdElement.push(currentTd);
+
                 childNodes.forEach((child) => {
                   if (
-                    !child.classList.contains('row-resizer') &&
-                    !child.classList.contains('td-resizer')
+                    !child.classList?.contains('row-resizer') &&
+                    !child.classList?.contains('td-resizer')
                   ) {
                     tdElement.push(child);
                   }
+                
                 });
-                const TdDivClassName = tdElement[0]?.className.split(' ')[0];
+
+                const TdDivClassName = tdElement[0]?.className?.split(' ')[0];
                 const trChild = {
                   td: {
                     type:
+                      (TdDivClassName == 'dropp') ||
                       (TdDivClassName == 'dateInput' && 'DATE_INPUT') ||
                       (TdDivClassName == 'textInput' && 'TEXT_INPUT') ||
                       (TdDivClassName == 'imageInput' && 'IMAGE_INPUT') ||
@@ -522,6 +529,7 @@ const Header = () => {
               tableTR.tr = newTableTR;
               allTableCCells.push(tableTR);
             }
+
             // console.log('allTableCCells', allTableCCells);
             return allTableCCells;
           }
@@ -1742,7 +1750,7 @@ const Header = () => {
   var encodedHeader = base64url(stringifiedHeader);
 
   var dataa = {
-    document_id: decoded.details.document_id,
+    document_id: decoded.details._id,
     action: decoded.details.action,
     database: decoded.details.database,
     collection: decoded.details.collection,
@@ -1750,6 +1758,7 @@ const Header = () => {
     function_ID: decoded.details.function_ID,
     cluster: decoded.details.cluster,
     document: decoded.details.document,
+    update_field: decoded.details.update_field,
   };
   // console.log("here is new data for export", dataa);
 
@@ -1873,7 +1882,10 @@ const Header = () => {
     setFetchedData([]);
     setIsLoading(true);
     var tokenn = prompt('Paste your token here');
-    if (tokenn != null) {
+    if(tokenn == null) {
+      console.log(" No token given here", tokenn);
+    }
+    else if (tokenn != null) {
       const decodedTok = jwt_decode(tokenn);
       console.log('tokkkkkkennn', decodedTok);
       const getPostData = async () => {
@@ -1921,6 +1933,8 @@ const Header = () => {
       };
       getPostData();
     }
+    getPostData();
+
   }
 
   // // console.log('page count check', item);

@@ -139,8 +139,7 @@ const TableRightSidebar = () => {
       imageField.style.overflow = "overlay";
       imageField.innerHTML = "Image here";
       imageField.style.position = "relative";
-      imageField.id = `${targetTable.id}i${imageId}`
-
+      imageField.id = `${targetTable.id}i${imageId}`;
       imageField.onclick = (e) => {
         if (imageField) {
           handleClicked("image2", "table2");
@@ -578,9 +577,12 @@ const TableRightSidebar = () => {
 
       for (var colIndex = 0; colIndex < col; colIndex++) {
         var td = document.createElement("td");
+        td.contentEditable = true;
+        td.style.cursor = "text";
         td.className = "dropp";
         if (rowIndex === 0) {
           const resizer = document.createElement('div');
+          resizer.contentEditable = false;
           resizer.classList.add('td-resizer');
           resizer.addEventListener("mousedown", (e) => {
             let x = 0;
@@ -593,6 +595,7 @@ const TableRightSidebar = () => {
       }
       const rowResizeCell = tr.firstElementChild
       const resizer = document.createElement('div');
+      resizer.contentEditable = false;
       resizer.classList.add('row-resizer');
       resizer.addEventListener("mousedown", (e) => {
         let x = 0;
@@ -1177,9 +1180,7 @@ const TableRightSidebar = () => {
           resizer.classList.add('td-resizer');
           resizer.addEventListener("mousedown", (e) => {
             let x = 0;
-            let w = 0;
-
-
+            let w = 0;  
           })
           td.appendChild(resizer);
           createResizableColumn(td, resizer)

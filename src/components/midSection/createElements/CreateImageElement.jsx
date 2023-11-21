@@ -104,10 +104,9 @@ function createImageElement(
     span1.className = 'icon_wrapper';
     span1.innerHTML = `<img src='${icon}'/>`;
 
-    imageField.append(span1);
+    imageField.append(span1)
     imageField.append(span2);
   }
-
   // imgBtn.style.width = "100%";
   imageButton.append(imgBtn);
   holderDIV.append(imageField);

@@ -2659,21 +2659,21 @@ const MidSection = React.forwardRef((props, ref) => {
   const compsScaler = (holder, ratio, el) => {
     const midSecWidth = document
       .querySelector('.midSection_container')
-      .getBoundingClientRect().width;
+      ?.getBoundingClientRect()?.width;
     // const holderStyles = window.getComputedStyle(holder);
 
     const computeDim = (prop) => midSecWidth * prop + 'px';
 
-    holder.style.width = computeDim(ratio.width);
-    holder.style.height = computeDim(ratio.height);
-    holder.style.top = computeDim(ratio.top);
-    holder.style.left = computeDim(ratio.left);
+    holder.style.width = computeDim(ratio?.width);
+    holder.style.height = computeDim(ratio?.height);
+    holder.style.top = computeDim(ratio?.top);
+    holder.style.left = computeDim(ratio?.left);
   };
 
   const compsResizer = () => {
     const allHolders = [...document.querySelectorAll('.holderDIV')];
 
-    allHolders.forEach((holder) => {
+    allHolders?.forEach((holder) => {
       // * This ensures only high order holderDivs are selected
       if (holder.parentElement.id === 'midSection_container') {
         const el = holder.children[1]?.classList.contains('dropdownInput')

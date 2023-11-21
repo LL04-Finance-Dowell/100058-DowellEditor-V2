@@ -557,59 +557,56 @@ const PaymentRightSide = () => {
       setQrLoader(true);
 
       try {
-        const res = await axios.post(
-          'https://100088.pythonanywhere.com/api/workflow/paypal/initialize/qrcode',
-          paypalData
-        );
-        setQrLoader(true);
+        const res = await axios.post("https://100088.pythonanywhere.com/api/workflow/paypal/initialize/qrcode", paypalData)
+        setQrLoader(true)
         setPaypalQrCode(res.data);
-        setQrLoader(false);
-        console.log('paypal data', res.data);
-        toast.success('Successfully Submitted!');
+        setQrLoader(false)
+        console.log("paypal data", res.data)
+        toast.success("Successfully Submitted!");
         openPopup(res.data.qr_image_url);
 
-        localStorage.setItem('paypalPaymentId', res.data.payment_id);
-        localStorage.setItem('paypalClientId', purpose);
-        localStorage.setItem('paypalClientSecret', paypalData.paypal_secret_key);
+        localStorage.setItem("paypalPaymentId", res.data.payment_id);
+        localStorage.setItem("paypalClientId", purpose);
+        localStorage.setItem("paypalClientSecret", paypalData.paypal_secret_key);
 
-        const Stripelink = document.querySelector('.stripe_key').innerHTML;
-        const Paypalpurpose = document.querySelector('.paypal_id').innerHTML;
-        if (Stripelink != '') {
+
+        const Stripelink = document.querySelector(".stripe_key").innerHTML;
+        const Paypalpurpose = document.querySelector(".paypal_id").innerHTML;
+        if (Stripelink != "") {
           // setPaymentKey(link);
-          setSavedSripeKey((prev) => {
-            console.log('Stripe link......');
+          setSavedSripeKey(prev => {
             return {
               ...prev,
-              ['key']: Stripelink,
-            };
+              ['key']: Stripelink
+            }
           });
 
           // holderDIV.children[1].innerHTML = Stripelink;
         }
-        if (Paypalpurpose != '') {
+        if (Paypalpurpose != "") {
           // setPaypalId(purpose);
 
-          setSavedPaypalKey((prev) => {
+          setSavedPaypalKey(prev => {
             return {
               ...prev,
-              ['key']: Paypalpurpose,
-            };
+              ['key']: Paypalpurpose
+            }
           });
           // holderDIV.children[2].innerHTML = Paypalpurpose;
         }
+
       } catch (error) {
-        console.log(error);
-        setQrLoader(false);
+        console.log(error)
+        setQrLoader(false)
         // toast.error(error.data.error);
       }
-    };
+    }
 
     useEffect(() => {
       const stripeKey = holderDIV.querySelector('.stripe_key').textContent
       const paypalId = holderDIV.querySelector('.paypal_id').textContent
       const idWrapper = document.getElementById('link2')
       const stripeWrapper = document.getElementById('link');
-      console.log(">>>\n", idWrapper, "\n>>>>");
 
       if (idWrapper !== null) {
         idWrapper.value = paypalId
@@ -876,6 +873,6 @@ const PaymentRightSide = () => {
         <ToastContainer size={5} />
       </>
     );
-  };
+  }
 }
   export default PaymentRightSide;

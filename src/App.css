@@ -99,6 +99,14 @@ td {
   min-width: 2.5rem;
   background-color: #fff;
   border: 1px solid black;
+  border-radius: 0 !important;
+  outline: 0 !important;
+  /* -ms-overflow-style: none;
+  scrollbar-width: none; */
+}
+
+td::-webkit-scrollbar {
+  /* display: none; */
 }
 .td-resizer {
   position: absolute;
