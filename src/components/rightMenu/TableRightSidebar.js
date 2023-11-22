@@ -845,7 +845,10 @@ const TableRightSidebar = () => {
         cells[i].ondrop = handleDropp;
       }
       e.target?.parentElement.remove();
+      document.querySelectorAll('.col-delete')?.forEach(el=>el.parentElement.remove())
       const updatedTable = tablee;
+      tablee.querySelectorAll('tr')[0]?.remove()
+      
       const col_resizers = updatedTable.querySelectorAll('.td-resizer');
       const row_resizers = updatedTable.querySelectorAll('.row-resizer');
       for (const resizer of col_resizers) {
