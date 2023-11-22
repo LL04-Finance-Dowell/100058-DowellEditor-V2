@@ -442,6 +442,7 @@ const MidSection = React.forwardRef((props, ref) => {
 
   const handleElOverflow = (el, holderDiv) => {
     const midSecs = [...document.querySelectorAll('.midSection_container')];
+    if(!el) return;
     if (el.classList.contains('textInput')) {
       if (el.scrollHeight > el.getBoundingClientRect().height) {
         const iniHeight = holderDiv.getBoundingClientRect().height;
