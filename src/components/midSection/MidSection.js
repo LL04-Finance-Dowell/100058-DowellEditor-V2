@@ -1914,6 +1914,7 @@ const MidSection = React.forwardRef((props, ref) => {
   };
 
   const onParagraphPost = async () => {
+    console.log("successfully yaaaaya");
     const response = await axios.post(
       'http://uxlivinglab.pythonanywhere.com/',
       {
@@ -2630,10 +2631,14 @@ const MidSection = React.forwardRef((props, ref) => {
     if (Object.keys(fetchedData).length) {
       onPost();
       //call this conditionally
-      if (decoded && decoded?.details?.cluster === 'socialmedia') {
-        onParagraphPost();
-        // console.log(decoded)
-      }
+      // if (decoded && decoded?.details?.cluster === 'socialmedia') {
+      //   onParagraphPost();
+      //   // console.log(decoded)
+      // }
+    } 
+    if (decoded && decoded?.details?.cluster === 'socialmedia') {
+      onParagraphPost();
+      // console.log(decoded)
     }
   }, [fetchedData]);
 
