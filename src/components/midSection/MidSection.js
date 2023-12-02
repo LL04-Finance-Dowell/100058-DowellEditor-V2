@@ -2014,7 +2014,7 @@ const MidSection = React.forwardRef((props, ref) => {
 
   const onParagraphPost = async () => {
     const response = await axios.post(
-      'http://uxlivinglab.pythonanywhere.com/',
+      'https://uxlivinglab.pythonanywhere.com/',
       {
         // document_id: decoded.details.document_id,
         // action: decoded.details.action,
