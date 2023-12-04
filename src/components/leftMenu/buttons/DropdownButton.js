@@ -13,15 +13,19 @@ const DropdownButton = ({ customFunc }) => {
   };
 
   return (
-    <button
-      type="button"
-      title="Dropdown"
-      draggable="true"
-      onDragStart={dragStartDropdown}
-      onClick={customFunc}
-    >
-      <BsMenuButtonWideFill />
-    </button>
+    <div className="btn_wrapper">
+      <button
+        type="button"
+        title="Dropdown"
+        draggable="true"
+        onDragStart={dragStartDropdown}
+        onClick={customFunc}
+      >
+        <BsMenuButtonWideFill />
+      </button>
+
+      <p className="btn_tag">Dropdown</p>
+    </div>
   );
 };
 

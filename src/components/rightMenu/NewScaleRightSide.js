@@ -8,9 +8,7 @@ import { useSearchParams } from "react-router-dom";
 import { GrEmoji } from "react-icons/gr";
 import Picker from "emoji-picker-react";
 import SelectAnsAndQuestion from "../selectAnsAndQuestion";
-import useSelectedAnswer from '../../customHooks/useSelectedAnswers';
-
-
+import useSelectedAnswer from "../../customHooks/useSelectedAnswers";
 
 const ScaleRightSide = () => {
   const {
@@ -41,9 +39,10 @@ const ScaleRightSide = () => {
   const inputRef1 = useRef(null);
   const inputRef2 = useRef(null);
 
-  const [selectedType, setSelectedType] = useState('')
+  const [formData, setFormData] = useState(new FormData());
+  const [selectedType, setSelectedType] = useState("");
   // const [addedAns, setAddedAns] = useState([])
-  const { addedAns, setAddedAns } = useSelectedAnswer()
+  const { addedAns, setAddedAns } = useSelectedAnswer();
   const [inputStr, setInputStr] = useState("");
   const [upperLimit, setUpperLimit] = useState("");
   const [space, setSpace] = useState("");
@@ -65,6 +64,11 @@ const ScaleRightSide = () => {
     <input key={0} type="text" placeholder="Product 1" required />,
   ]);
 
+  const handlePairedScaleInputChange = (e) => {
+    const { name, value } = e.target;
+    formData.set(name, value);
+  };
+
   const fontStyles = [
     "Arial",
     "Helvetica",
@@ -80,8 +84,16 @@ const ScaleRightSide = () => {
   let circles = scale?.querySelector(".circle_label");
   let scaleBg = scale?.querySelector(".label_hold");
   let percentSliderBg = scale?.querySelector(".percent-slider");
+  let smallBoxBg = scale?.querySelector(".small_box");
+  let stapelScaleBg = scale?.querySelector(".newScaleInput");
   // <<<<<<< HEAD
   let fontColor = scale?.querySelector(".scool_input");
+  let fontColorStapel = scale?.querySelector(".newScaleInput");
+  let fontFamilyStapel = scale?.querySelector(".newScaleInput");
+  let stapelLeft = scale?.querySelector(".leftToolTip");
+  let stapelRight = scale?.querySelector(".rightTooltip");
+  let stapelUpperimit = scale?.querySelector(".upper_scale_limit");
+  let stapelSpaceUnit = scale?.querySelector(".space_unit");
   // =======
   // let fontColor = scale?.firstChild;
   const element = JSON.parse(sessionStorage.getItem("cutItem"));
@@ -107,6 +119,24 @@ const ScaleRightSide = () => {
 
     // // console.log(fontColor);
   }
+
+  if (fontColorStapel) {
+    // Get the computed background color in RGB format
+    const rgbColor = getComputedStyle(fontColorStapel).color;
+
+    // Extract the RGB values
+    const rgbValues = rgbColor.match(/\d+/g);
+
+    // Convert each RGB value to hexadecimal
+    fontColorStapel =
+      "#" +
+      rgbValues
+        .map((value) => parseInt(value).toString(16).padStart(2, "0"))
+        .join("");
+
+    // // console.log(fontColor);
+  }
+
   // // console.log(circles);
   if (circles) {
     // Get the computed background color in RGB format
@@ -140,6 +170,21 @@ const ScaleRightSide = () => {
         .join("");
   }
 
+  if (stapelScaleBg) {
+    // Get the computed background color in RGB format
+    const rgbColor = getComputedStyle(stapelScaleBg).backgroundColor;
+
+    // Extract the RGB values
+    const rgbValues = rgbColor.match(/\d+/g);
+
+    // Convert each RGB value to hexadecimal
+    stapelScaleBg =
+      "#" +
+      rgbValues
+        .map((value) => parseInt(value).toString(16).padStart(2, "0"))
+        .join("");
+  }
+
   if (percentSliderBg) {
     // Get the computed background color in RGB format
     const rgbColor = getComputedStyle(percentSliderBg).backgroundColor;
@@ -154,6 +199,22 @@ const ScaleRightSide = () => {
         .map((value) => parseInt(value).toString(16).padStart(2, "0"))
         .join("");
   }
+
+  if (smallBoxBg) {
+    // Get the computed background color in RGB format
+    const rgbColor = getComputedStyle(smallBoxBg).backgroundColor;
+
+    // Extract the RGB values
+    const rgbValues = rgbColor.match(/\d+/g);
+
+    // Convert each RGB value to hexadecimal
+    smallBoxBg =
+      "#" +
+      rgbValues
+        .map((value) => parseInt(value).toString(16).padStart(2, "0"))
+        .join("");
+  }
+
   // // console.log(scaleDisplay);
 
   const leftChild = scale?.querySelector(".left_child");
@@ -174,7 +235,7 @@ const ScaleRightSide = () => {
 
   var scaleColorStapel = document.getElementById("scale_color_stapel");
   if (scaleColorStapel) {
-    scaleColorStapel.defaultValue = scaleBg;
+    scaleColorStapel.defaultValue = stapelScaleBg;
   }
 
   var scaleColorNpsLite = document.getElementById("scale_color_nps_lite");
@@ -189,7 +250,7 @@ const ScaleRightSide = () => {
 
   var font_colorStapel = document.getElementById("font_color_stapel");
   if (font_colorStapel) {
-    font_colorStapel.defaultValue = fontColor;
+    font_colorStapel.defaultValue = fontColorStapel;
   }
 
   var npsLiteFontColor = document.getElementById("font_color_nps_lite");
@@ -295,6 +356,27 @@ const ScaleRightSide = () => {
   var percentSumFontColor = document.getElementById("font_color_percent_sum");
   if (percentSumFontColor) {
     percentSumFontColor.defaultValue = fontColor;
+  }
+
+  var pairedComparisonFontColor = document.getElementById(
+    "font_color_comparison"
+  );
+  if (pairedComparisonFontColor) {
+    pairedComparisonFontColor.defaultValue = fontColor;
+  }
+
+  var pairedComparisonRoundColor = document.getElementById(
+    "button_color_Comparison"
+  );
+  if (pairedComparisonRoundColor) {
+    pairedComparisonRoundColor.defaultValue = smallBoxBg;
+  }
+
+  var pairedComparisonScaleColor = document.getElementById(
+    "scale_color_Comparison"
+  );
+  if (pairedComparisonScaleColor) {
+    pairedComparisonScaleColor.defaultValue = circles;
   }
 
   if (scaleTypeHolder?.textContent === "percent_scale") {
@@ -549,7 +631,7 @@ const ScaleRightSide = () => {
   const [labelTexts, setLabelTexts] = useState([]);
   const [selectedEmojis, setSelectedEmojis] = useState([]);
   const [activeEmojiPicker, setActiveEmojiPicker] = useState(null); // Track active emoji picker for text label type
-
+  const userDetails = JSON.parse(sessionStorage.getItem("userDetail"));
   useEffect(() => {
     // Fetch saved data from storage (localStorage, sessionStorage, etc.)
     const savedLabelScale = localStorage.getItem("labelScale");
@@ -825,6 +907,16 @@ const ScaleRightSide = () => {
     }
   };
 
+  const itemCountcombinedOnChange = (event) => {
+    handlePairedInputChange(event);
+    handlePairedScaleInputChange(event);
+  };
+
+  const scaleNameCombinedOnChange = (event) => {
+    setScaleTitle(event.target.value);
+    handlePairedScaleInputChange(event);
+  };
+
   const handlePairedKeyDownPress = (event) => {
     if (event.key === "Enter") {
       const selectedValue = event.target.value;
@@ -860,6 +952,7 @@ const ScaleRightSide = () => {
 
   const handleUpdates = () => {
     const scaleType = document.getElementById("scaleType");
+    console.log("Content prop", scaleTypeContent);
     setScaleTypeContent(scaleType ? scaleType.value : scaleTypeContent);
     const scaleTypeHolder = scale?.querySelector(".scaleTypeHolder");
     scaleTypeHolder.textContent = scaleType
@@ -940,14 +1033,14 @@ const ScaleRightSide = () => {
 
       if (option.value === "Vertical") {
         nps_vertical.textContent = "nps_vertical";
-
-        labelHold.style.height = "82%";
-        labelHold.style.top = "54%";
+        button4.style.overflow = "hidden";
+        labelHold.style.height = "100%";
+        labelHold.style.top = "50%";
         labelHold.style.left = "50%";
         labelHold.style.transform = "translate(-50%, -50%)";
         button4.style.border = "none";
         button4.style.textAlign = "center";
-        button.style.width = "30%";
+        button.style.width = "100%";
         button.style.position = "absolute";
         button.style.flexDirection = "column";
         button.style.alignItems = "center";
@@ -1021,7 +1114,7 @@ const ScaleRightSide = () => {
         // console.log("post req");
         Axios.post("https://100035.pythonanywhere.com/api/nps_create/", {
           user: "true",
-          username: "NdoneAmbrose",
+          username: userDetails === null ? " " : userDetails.userinfo.username,
           orientation: option?.value,
           scalecolor: btnUpdateScale.value,
           roundcolor: btnUpdateButton.value,
@@ -1058,6 +1151,7 @@ const ScaleRightSide = () => {
 
             if (beNametnUpdateScal.value !== "") {
               scaleText.textContent = beNametnUpdateScal.value;
+              scaleText.style.display = "none";
             }
 
             if (btnUpdateFontColor.value !== "") {
@@ -1074,10 +1168,12 @@ const ScaleRightSide = () => {
             }
 
             buttonChildLeft.textContent = btnUpdateLeft.value;
+            buttonChildLeft.style.display = "none";
 
             buttonChildRight.textContent = btnUpdateRight.value;
+            buttonChildRight.style.display = "none";
 
-            buttonChildNeutral.style.display = "block";
+            buttonChildNeutral.style.display = "none";
             buttonChildNeutral.textContent = btnUpdateCenter.value;
 
             for (let i = 0; i <= 10; i++) {
@@ -1087,14 +1183,81 @@ const ScaleRightSide = () => {
               circle.textContent = i;
 
               // Apply circular background using inline style
-              circle.style.width = "35%";
-              circle.style.height = "35%";
+              circle.style.width = "30px";
+              circle.style.height = "24px";
               circle.style.borderRadius = "50%";
               circle.style.display = "flex";
               circle.style.justifyContent = "center";
               circle.style.alignItems = "center";
               circle.style.backgroundColor = btnUpdateButton.value;
+              labelHold.style.gap = "5px";
+              labelHold.style.height = "100%";
+              labelHold.style.justifyContent = "space-evenly";
+              labelHold.style.position = "relative";
+              button4.style.height = "100%";
+              button4.style.padding = "";
               labelHold.appendChild(circle);
+
+              circle.addEventListener("mouseenter", () => {
+                if (circle.textContent === "0") {
+                  buttonChildLeft.style.display = "block";
+                  buttonChildLeft.style.position = "absolute";
+                  buttonChildLeft.style.bottom = "0";
+                  if (option?.value === "Vertical") {
+                    buttonChildLeft.style.top = "35px";
+                    buttonChildLeft.style.bottom = "";
+                    buttonChildLeft.style.height = "fit-content";
+                  }
+                  buttonChildLeft.style.left = "8%";
+                  buttonChildLeft.style.backgroundColor = "gray";
+                  buttonChildLeft.style.padding = "2px 8px";
+                  buttonChildLeft.style.color = "white";
+                  buttonChildLeft.style.borderRadius = "2px";
+                } else if (circle.textContent === "5") {
+                  buttonChildNeutral.style.display = "block";
+                  buttonChildNeutral.style.position = "absolute";
+                  buttonChildNeutral.style.bottom = "0";
+                  buttonChildNeutral.style.left = "52%";
+
+                  if (option?.value === "Vertical") {
+                    buttonChildNeutral.style.top = "50%";
+                    buttonChildNeutral.style.bottom = "";
+                    buttonChildNeutral.style.left = "8%";
+                    buttonChildNeutral.style.height = "fit-content";
+                  }
+                  buttonChildNeutral.style.backgroundColor = "gray";
+                  buttonChildNeutral.style.padding = "2px 8px";
+                  buttonChildNeutral.style.color = "white";
+                  buttonChildNeutral.style.borderRadius = "2px";
+                } else if (circle.textContent === "10") {
+                  buttonChildRight.style.display = "block";
+                  buttonChildRight.style.position = "absolute";
+                  buttonChildRight.style.left = "";
+                  buttonChildRight.style.bottom = "0";
+                  buttonChildRight.style.right = "8%";
+                  buttonChildRight.style.backgroundColor = "gray";
+
+                  if (option?.value === "Vertical") {
+                    buttonChildRight.style.bottom = "5%";
+                    buttonChildRight.style.left = "8%";
+                    buttonChildRight.style.right = "";
+                  }
+                  buttonChildRight.style.padding = "2px 8px";
+                  buttonChildRight.style.color = "white";
+                  buttonChildRight.style.borderRadius = "2px";
+                }
+              });
+
+              circle.addEventListener("mouseleave", () => {
+                if (circle.textContent === "0") {
+                  buttonChildLeft.style.display = "none";
+                } else if (circle.textContent === "5") {
+                  buttonChildNeutral.style.display = "none";
+                } else if (circle.textContent === "10") {
+                  buttonChildRight.style.display = "none";
+                }
+              });
+
               if (selectedOption === "emoji" && emojiInp !== "") {
                 console.log(selectedOption);
                 // Set the text content of the div to the corresponding emoji
@@ -1104,7 +1267,6 @@ const ScaleRightSide = () => {
                   .filter((emoji) => emoji !== "");
                 console.log(emojis);
                 circle.textContent = emojis[i % emojis.length];
-                circle.style.fontSize = "1.8vw";
               } else {
                 // Set the text content of the div to the number
                 circle.textContent = i;
@@ -1124,7 +1286,7 @@ const ScaleRightSide = () => {
         Axios.put("https://100035.pythonanywhere.com/api/nps_create/", {
           user: "true",
           scale_id: idHolder.textContent,
-          username: "NdoneAmbrose",
+          username: userDetails === null ? " " : userDetails.userinfo.username,
           orientation: option?.value,
           scalecolor: btnUpdateScale.value,
           roundcolor: btnUpdateButton.value,
@@ -1172,29 +1334,98 @@ const ScaleRightSide = () => {
               }
 
               buttonChildLeft.textContent = btnUpdateLeft.value;
+              buttonChildLeft.style.display = "none";
 
               buttonChildRight.textContent = btnUpdateRight.value;
+              buttonChildRight.style.display = "none";
 
-              buttonChildNeutral.style.display = "block";
+              buttonChildNeutral.style.display = "none";
               buttonChildNeutral.textContent = btnUpdateCenter.value;
 
               for (let i = 0; i <= 10; i++) {
-                // const selectedOption = optionSelect.value;
+                const selectedOption = optionSelect.value;
                 const circle = document.createElement("div");
                 circle.className = "circle_label";
                 circle.textContent = i;
 
                 // Apply circular background using inline style
-                circle.style.width = "35%";
-                circle.style.height = "35%";
+                circle.style.width = "40px";
+                circle.style.height = "24px";
                 circle.style.borderRadius = "50%";
                 circle.style.display = "flex";
                 circle.style.justifyContent = "center";
                 circle.style.alignItems = "center";
                 circle.style.backgroundColor = btnUpdateButton.value;
+                labelHold.style.gap = "5px";
+                labelHold.style.height = "100%";
+                labelHold.style.justifyContent = "space-evenly";
+                labelHold.style.position = "relative";
+                button4.style.height = "100%";
+                button4.style.padding = "";
                 labelHold.appendChild(circle);
-                console.log(selectedOption);
+
+                circle.addEventListener("mouseenter", () => {
+                  if (circle.textContent === "0") {
+                    buttonChildLeft.style.display = "block";
+                    buttonChildLeft.style.position = "absolute";
+                    buttonChildLeft.style.bottom = "0";
+                    if (option?.value === "Vertical") {
+                      buttonChildLeft.style.top = "35px";
+                      buttonChildLeft.style.bottom = "";
+                      buttonChildLeft.style.height = "fit-content";
+                    }
+                    buttonChildLeft.style.left = "8%";
+                    buttonChildLeft.style.backgroundColor = "gray";
+                    buttonChildLeft.style.padding = "2px 8px";
+                    buttonChildLeft.style.color = "white";
+                    buttonChildLeft.style.borderRadius = "2px";
+                  } else if (circle.textContent === "5") {
+                    buttonChildNeutral.style.display = "block";
+                    buttonChildNeutral.style.position = "absolute";
+                    buttonChildNeutral.style.bottom = "0";
+                    buttonChildNeutral.style.left = "52%";
+
+                    if (option?.value === "Vertical") {
+                      buttonChildNeutral.style.top = "50%";
+                      buttonChildNeutral.style.bottom = "";
+                      buttonChildNeutral.style.left = "8%";
+                      buttonChildNeutral.style.height = "fit-content";
+                    }
+                    buttonChildNeutral.style.backgroundColor = "gray";
+                    buttonChildNeutral.style.padding = "2px 8px";
+                    buttonChildNeutral.style.color = "white";
+                    buttonChildNeutral.style.borderRadius = "2px";
+                  } else if (circle.textContent === "10") {
+                    buttonChildRight.style.display = "block";
+                    buttonChildRight.style.position = "absolute";
+                    buttonChildRight.style.left = "";
+                    buttonChildRight.style.bottom = "0";
+                    buttonChildRight.style.right = "8%";
+                    buttonChildRight.style.backgroundColor = "gray";
+
+                    if (option?.value === "Vertical") {
+                      buttonChildRight.style.bottom = "5%";
+                      buttonChildRight.style.left = "8%";
+                      buttonChildRight.style.right = "";
+                    }
+                    buttonChildRight.style.padding = "2px 8px";
+                    buttonChildRight.style.color = "white";
+                    buttonChildRight.style.borderRadius = "2px";
+                  }
+                });
+
+                circle.addEventListener("mouseleave", () => {
+                  if (i === 0) {
+                    buttonChildLeft.style.display = "none";
+                  } else if (i === 5) {
+                    buttonChildNeutral.style.display = "none";
+                  } else if (i === 10) {
+                    buttonChildRight.style.display = "none";
+                  }
+                });
+
                 if (selectedOption === "emoji" && emojiInp !== "") {
+                  console.log(selectedOption);
                   // Set the text content of the div to the corresponding emoji
                   const emojiFormat = /(\p{Emoji}|\uFE0F)/gu;
                   const emojis = emojiInp
@@ -1202,7 +1433,6 @@ const ScaleRightSide = () => {
                     .filter((emoji) => emoji !== "");
                   console.log(emojis);
                   circle.textContent = emojis[i % emojis.length];
-                  circle.style.fontSize = "1.8vw";
                 } else {
                   // Set the text content of the div to the number
                   circle.textContent = i;
@@ -1224,63 +1454,52 @@ const ScaleRightSide = () => {
       const scale = document.querySelector(".focussedd");
       // console.log(scale);
 
+      const stapelId = scale?.querySelector(".scaleId");
       const btnUpdateScale = document.getElementById("scale_color_stapel");
       const btnUpdateFontColor = document.getElementById("font_color_stapel");
       const btnUpdateButton = document.getElementById("button_color_stapel");
       const beNametnUpdateScal = document.getElementById("scaleLabel_stapel");
-
-      // const headerText = document.getElementById("headerText");
       const btnUpdateLeft = document.getElementById("leftStapel");
       const btnUpdateRight = document.getElementById("rightStapel");
 
-      // let upperVal = document.getElementById("upperVal").value;
-      // // console.log(value?.value);
-      // // console.log(value);
-
-      const button = scale?.querySelector(".label_hold");
-      const scaleText = scale?.querySelector(".scale_text");
-      const button4 = scale?.querySelector(".scool_input");
-      const font = scale?.querySelector(".newScaleInput");
+      const scaleField = scale?.querySelector(".newScaleInput");
       const savedStapelScaleArr = scale?.querySelector(".stapelScaleArray");
       const savedOptionHolder = scale?.querySelector(".stapelOptionHolder");
-
-      // const buttonCircle = document.querySelectorAll(".circle_label");
-      const buttonCircle = scale
-        ? document.querySelectorAll(".circle_label")
-        : [];
-      const buttonChild = scale?.querySelector("#child");
       const btnUpdateScaleFontStapel =
         document.getElementById("font_style_stapel");
-      const buttonChildLeft = scale?.querySelector(".left_child");
-      const buttonChildRight = scale?.querySelector(".right_child");
-      const buttonChildNeutral = scale?.querySelector(".neutral_child");
       const optionSelect = document.getElementById("format_stapel");
       const option = document.querySelector("#orientationIdStapel").options[
         document.querySelector("#orientationIdStapel").selectedIndex
       ];
-      buttonChildNeutral.textContent = "";
       let timeId = document.getElementById("timeId_stapel");
       let time = document.getElementById("time_stapel");
-      const emojiInp = document.getElementById("emojiInp_stapel").value;
-      let tempText = scale?.querySelector(".tempText");
-      const labelHold = scale?.querySelector(".label_hold");
       const upperVal = Math.min(
         10,
         parseInt(document.getElementById("upperVal").value, 10)
       );
       const spacing = parseInt(document.getElementById("spacing").value, 10);
-      tempText?.remove();
 
-      // for (let i = 0; i < buttonCircle.length; i++) {
-      //   if (btnUpdateButton.value !== "") {
-      //     buttonCircle[i].style.backgroundColor = btnUpdateButton.value;
-      //   }
-      // }
+      const scaleTypeHolder = document.createElement("h6");
+      scaleTypeHolder.className = "scaleTypeHolder";
+      scaleTypeHolder.textContent = scaleType
+        ? scaleType.value
+        : scaleTypeContent;
+      scaleTypeHolder.style.display = "none";
 
-      // if (scaleText) {
-      //   // console.log(scaleText);
-      //   scaleText.innerHTML = "Stapel scale";
-      // }
+      const scaleText = document.createElement("div");
+      scaleText.className = "scale_text";
+      scaleText.textContent = "Untitled-file_scale";
+      scaleText.style.display = "none";
+
+      const upperScaleimit = document.createElement("h6");
+      upperScaleimit.className = "upper_scale_limit";
+      upperScaleimit.textContent = "";
+      upperScaleimit.style.display = "none";
+
+      const spaceUnit = document.createElement("h6");
+      spaceUnit.className = "space_unit";
+      spaceUnit.textContent = "";
+      spaceUnit.style.display = "none";
 
       const stapelScaleArray = document.createElement("div");
       stapelScaleArray.className = "stapelScaleArray";
@@ -1317,75 +1536,19 @@ const ScaleRightSide = () => {
 
         return emojiLabels;
       };
-      const emojiLabels = prepareEmojiLabels();
-      // console.log("These are emoji labels", emojiLabels);
-
-      if (option.value === "Horizontal") {
-        button4.style.border = "block";
-        button4.style.textAlign = "center";
-        button.style.display = "flex";
-        button.style.flexDirection = "row";
-        // button.style.marginTop = "5%";
-        button.style.alignItems = "center";
-        // buttonCircle.style.flexDirection = "row";
-        button.style.height = "85%";
-        button.style.width = "100%";
-        button.style.flexDirection = "row";
-        buttonChildRight.style.marginTop = "0px";
-        buttonChildNeutral.style.marginTop = "0px";
-        buttonChild.style.flexDirection = "row";
-        buttonChild.style.justifyContent = "space-between";
-        buttonChild.style.alignItems = "center";
-        button.style.position = "relative";
-        buttonChild.style.marginLeft = "0px";
-        button.style.marginLeft = "0px";
-
-        labelHold.style.position = "";
-        labelHold.style.transform = "";
-
-        buttonChild.style = "";
-        buttonChild.style.display = "flex";
-        buttonChild.style.justifyContent = "space-between";
-      }
-
-      if (option.value === "Vertical") {
-        const stapel_vertical = document.createElement("h2");
-        stapel_vertical.className = "stapel_vertical";
-        stapel_vertical.style.display = "none";
-        stapel_vertical.textContent = "stapel_vertical";
-        button4.appendChild(stapel_vertical);
-        labelHold.style.height = "82%";
-
-        labelHold.style.top = "54%";
-        labelHold.style.left = "50%";
-        labelHold.style.transform = "translate(-50%, -50%)";
-        button4.style.border = "none";
-        button4.style.textAlign = "center";
-        button.style.width = "30%";
-        button.style.position = "absolute";
-        button.style.flexDirection = "column";
-        button.style.alignItems = "center";
-        buttonChild.style.display = "flex";
-        buttonChild.style.flexDirection = "column";
-        buttonChild.style.justifyContent = "space-between";
-
-        buttonChild.style.alignItems = "flex-start";
-        buttonChild.style.width = "32%";
-        buttonChild.style.marginLeft = "auto";
-        buttonChild.style.height = "98%";
-      }
+      const emojiLabels = prepareEmojiLabels()
 
       if (
         idHolder.textContent === "scale Id" ||
         idHolder.textContent === "id"
       ) {
         setIsLoading(true);
-        // console.log("post req");
         Axios.post(
           "https://100035.pythonanywhere.com/stapel/api/stapel_settings_create/",
           {
             user: "true",
-            username: "TadesseJemal",
+            username:
+              userDetails === null ? " " : userDetails.userinfo.username,
             orientation: option?.value,
             spacing_unit: spacing,
             scale_upper_limit: upperVal,
@@ -1407,16 +1570,13 @@ const ScaleRightSide = () => {
             sendMessage();
             setScaleData(res.data.data.scale_id);
             const id = res.data.data.scale_id;
-            // var successObj = JSON.parse(success);
-            // const id = successObj.inserted_id;
-            // console.log(id);
+
             if (id.length) {
               setScaleId(id && id);
               const idHolder = scale?.querySelector(".scaleId");
               idHolder.textContent = id && id;
             }
 
-            // console.log("This is the stapel  scale response", res.data.data);
             console.log(
               "This is scale type holder",
               scaleTypeHolder?.textContent
@@ -1424,46 +1584,122 @@ const ScaleRightSide = () => {
             const scaleArr = res.data.data.settings.scale;
             const fomart = res.data.data.settings.fomat;
 
-            button4.style.display = "block";
-
             // Clear existing values
-            labelHold.innerHTML = "";
+            // labelHold.innerHTML = "";
+            scaleField.innerHTML = "";
 
             for (let i = 0; i < scaleArr.length; i++) {
               const circle = document.createElement("div");
               circle.className = "circle_label";
               circle.textContent = scaleArr[i];
-              labelHold.appendChild(circle);
-              circle.style.width = "35%";
-              circle.style.height = "35%";
+              scaleField.append(circle);
+              circle.style.width = "35px";
+              circle.style.height = "35px";
               circle.style.borderRadius = "50%";
               circle.style.display = "flex";
+              circle.style.flexDirection = "column";
               circle.style.justifyContent = "center";
               circle.style.alignItems = "center";
-              circle.style.margin = "0 2px";
+              circle.style.margin = "0 2px 2px 0";
               circle.style.backgroundColor = res.data.data.settings.roundcolor;
               if (fomart === "emoji") {
                 // Set the text content of the div to the corresponding emoji
                 circle.textContent =
                   res.data.data.settings.custom_emoji_format[scaleArr[i]];
-                circle.style.fontSize = "1.8vw";
+                  circle.style.fontSize = "1.8vw";
               } else {
                 // Set the text content of the div to the number
                 circle.textContent = scaleArr[i];
               }
+              if (i === 0) {
+                var left = document.createElement("span");
+                left.className = "leftToolTip";
+                left.innerHTML = res.data.data.settings.left;
+                left.style.visibility = "hidden";
+                left.style.position = "absolute";
+                left.style.zIndex = "1";
+                left.style.bottom = option.value === "Vertical" ? " " : "7px";
+                left.style.top = option.value === "Vertical" ? "5%" : "";
+                left.style.left = option.value === "Vertical" ? "" : "5%";
+                left.style.right = option.value === "Vertical" ? "5%" : "";
+                left.style.fontSize = "small";
+                left.style.writingMode =
+                  option.value === "Vertical" ? "tb-rl" : "";
+                left.style.backgroundColor = "#272828";
+                left.style.color = "#EEEFEF";
+                left.style.borderRadius = "3px"
+                circle.append(left);
+                circle.onmouseover = function () {
+                  left.style.visibility = "visible";
+                };
+
+                circle.onmouseout = function () {
+                  left.style.visibility = "hidden";
+                };
+              } else if (i === scaleArr.length - 1) {
+                var right = document.createElement("span");
+                right.className = "rightTooltip";
+                right.innerHTML = res.data.data.settings.right;
+                right.style.display = "none";
+                right.style.position = "absolute";
+                right.style.zIndex = "1";
+                right.style.bottom = "7px";
+                right.style.right = "5%";
+                right.style.backgroundColor = "#272828";
+                right.style.color = "#EEEFEF";
+                right.style.fontSize = "small";
+                right.style.writingMode =
+                  option.value === "Vertical" ? "tb-rl" : "";
+                right.style.width === "100%"
+                right.style.padding === "0 20px"
+                right.style.borderRadius = "3px"
+                circle.append(right);
+                circle.onmouseover = function () {
+                  right.style.display = "block";
+                };
+
+                circle.onmouseout = function () {
+                  right.style.display = "none";
+                };
+              }
             }
 
-            button.style.backgroundColor = res.data.data.settings.scalecolor;
-            button4.style.color = res.data.data.settings.fontcolor;
+            scaleField.style.backgroundColor = res.data.data.settings.scalecolor;
+            scaleField.style.color = res.data.data.settings.fontcolor;
             scaleText.textContent = res.data.data.settings.name;
-            buttonChildLeft.textContent = res.data.data.settings.left;
-            buttonChildRight.textContent = res.data.data.settings.right;
+            scaleField.style.fontFamily = res.data.data.settings.fontstyle;
             optionHolder.textContent = res.data.data.settings.fomat;
-            button4.style.fontFamily = res.data.data.settings.fontstyle;
-            labelHold.appendChild(optionHolder);
+            upperScaleimit.textContent = res.data.data.settings.scale_upper_limit
+            spaceUnit.textContent = res.data.data.settings.spacing_unit
+            scaleField.appendChild(optionHolder);
             stapelScaleArray.textContent = res.data.data.settings.scale;
-            labelHold.append(stapelScaleArray);
-            console.log("This is stapel", stapelScaleArray);
+            scaleField.append(stapelScaleArray);
+            scaleField.append(scaleTypeHolder);
+            scaleField.append(scaleText);
+            scaleField.append(upperScaleimit)
+            scaleField.append(spaceUnit)
+            const idHolder = document.createElement("h6");
+            idHolder.className = "scaleId";
+            idHolder.textContent = id && id;
+            idHolder.style.display = "none";
+            scaleField.append(idHolder);
+
+            if (option.value === "Horizontal") {
+              scaleField.style.display = "flex";
+              scaleField.style.flexDirection = "row";
+              scaleField.style.alignItems = "center";
+              scaleField.style.justifyContent = "center";
+            } else if (option.value === "Vertical") {
+              const stapel_vertical = document.createElement("h2");
+              stapel_vertical.className = "stapel_vertical";
+              stapel_vertical.style.display = "none";
+              stapel_vertical.textContent = "stapel_vertical";
+              scaleField.appendChild(stapel_vertical);
+              scaleField.style.display = "flex";
+              scaleField.style.flexDirection = "column";
+              scaleField.style.alignItems = "center";
+              scaleField.style.justifyContent = "center";
+            }
           })
           .catch((err) => {
             setIsLoading(false);
@@ -1498,32 +1734,28 @@ const ScaleRightSide = () => {
               sendMessage();
               setScaleData(res.data);
               setScaleId(scaleId);
-              // console.log(res);
-              // console.log("This is the still scale", scale);
+              console.log("This is the data", res.data.data.settings);
               savedStapelScaleArr.textContent = res.data.data.settings.scale;
               savedOptionHolder.textContent = res.data.data.settings.fomat;
-              // console.log("This is the option", savedOptionHolder.textContent);
-              // console.log("This is stapel update", res.data.data);
               const scaleArr = res.data.data.settings.scale;
               const fomart = res.data.data.settings.fomat;
-              // console.log(savedStapelScaleArr);
-              button4.style.display = "block";
 
               // Clear existing values
-              labelHold.innerHTML = "";
-
+              //labelHold.innerHTML = "";
+              scaleField.innerHTML = "";
               for (let i = 0; i < scaleArr.length; i++) {
                 const circle = document.createElement("div");
                 circle.className = "circle_label";
                 circle.textContent = scaleArr[i];
-                labelHold.appendChild(circle);
-                circle.style.width = "35%";
-                circle.style.height = "35%";
+                scaleField.append(circle);
+                circle.style.width = "35px";
+                circle.style.height = "35px";
                 circle.style.borderRadius = "50%";
                 circle.style.display = "flex";
+                circle.style.flexDirection = "column";
                 circle.style.justifyContent = "center";
                 circle.style.alignItems = "center";
-                circle.style.margin = "0 2px";
+                circle.style.margin = "0 2px 2px 0";
                 circle.style.backgroundColor =
                   res.data.data.settings.roundcolor;
                 if (fomart === "emoji") {
@@ -1535,18 +1767,98 @@ const ScaleRightSide = () => {
                   // Set the text content of the div to the number
                   circle.textContent = scaleArr[i];
                 }
+                if (i === 0) {
+                  var left = document.createElement("span");
+                  left.className = "leftToolTip";
+                  left.innerHTML = res.data.data.settings.left;
+                  left.style.visibility = "hidden";
+                  left.style.position = "absolute";
+                  left.style.zIndex = "1";
+                  left.style.bottom = option.value === "Vertical" ? " " : "7px";
+                  left.style.top = option.value === "Vertical" ? "5%" : "";
+                  left.style.left = option.value === "Vertical" ? "" : "5%";
+                  left.style.right = option.value === "Vertical" ? "5%" : "";
+                  left.style.fontSize = "small";
+                  left.style.writingMode =
+                    option.value === "Vertical" ? "tb-rl" : "";
+                  left.style.backgroundColor = "#272828";
+                  left.style.color = "#EEEFEF";
+                  circle.append(left);
+                  circle.onmouseover = function () {
+                    left.style.visibility = "visible";
+                  };
+
+                  circle.onmouseout = function () {
+                    left.style.visibility = "hidden";
+                  };
+                } else if (i === scaleArr.length - 1) {
+                  var right = document.createElement("span");
+                  right.className = "rightTooltip";
+                  right.innerHTML = res.data.data.settings.right;
+                  right.style.display = "none";
+                  right.style.position = "absolute";
+                  right.style.zIndex = "1";
+                  right.style.bottom = "7px";
+                  right.style.right = "5%";
+                  right.style.backgroundColor = "#272828";
+                  right.style.color = "#EEEFEF";
+                  right.style.fontSize = "small";
+                  right.style.writingMode =
+                    option.value === "Vertical" ? "tb-rl" : "";
+                  circle.append(right);
+                  circle.onmouseover = function () {
+                    right.style.display = "block";
+                  };
+
+                  circle.onmouseout = function () {
+                    right.style.display = "none";
+                  };
+                }
               }
 
-              button.style.backgroundColor = res.data.data.settings.scalecolor;
-              button4.style.color = res.data.data.settings.fontcolor;
+              scaleField.style.backgroundColor =
+                res.data.data.settings.scalecolor;
+              scaleField.style.color = res.data.data.settings.fontcolor;
+              scaleField.style.fontFamily = res.data.data.settings.fontstyle;
               scaleText.textContent = res.data.data.settings.name;
-              buttonChildLeft.textContent = res.data.data.settings.left;
-              buttonChildRight.textContent = res.data.data.settings.right;
               optionHolder.textContent = res.data.data.settings.fomat;
-              labelHold.appendChild(optionHolder);
+              upperScaleimit.textContent = res.data.data.settings.scale_upper_limit
+              spaceUnit.textContent = res.data.data.settings.spacing_unit
+              scaleField.appendChild(optionHolder);
               stapelScaleArray.textContent = res.data.data.settings.scale;
-              labelHold.append(stapelScaleArray);
+              scaleField.append(stapelScaleArray);
+              scaleField.append(scaleTypeHolder);
+              scaleField.append(scaleText);
+              scaleField.append(upperScaleimit)
+              scaleField.append(spaceUnit)
+              const idHolder = document.createElement("h6");
+              idHolder.className = "scaleId";
+              idHolder.textContent = stapelId.textContent;
+              idHolder.style.display = "none";
+              scaleField.append(idHolder);
+
+              if (option.value === "Horizontal") {
+                scaleField.style.display = "flex";
+                scaleField.style.flexDirection = "row";
+                scaleField.style.alignItems = "center";
+                scaleField.style.justifyContent = "center";
+              } else if (option.value === "Vertical") {
+                const stapel_vertical = document.createElement("h2");
+                stapel_vertical.className = "stapel_vertical";
+                stapel_vertical.style.display = "none";
+                stapel_vertical.textContent = "stapel_vertical";
+                scaleField.appendChild(stapel_vertical);
+                scaleField.style.display = "flex";
+                scaleField.style.flexDirection = "column";
+                scaleField.style.alignItems = "center";
+                scaleField.style.justifyContent = "center";
+              }
             }
+
+            console.log("scaleConet", scaleTypeContent);
+
+            console.log("scaleConet", scaleTypeHolder?.textContent);
+            console.log("Scalefield", scaleField);
           })
           .catch((err) => {
             setIsLoading(false);
@@ -1639,8 +1951,8 @@ const ScaleRightSide = () => {
 
       if (option.value === "Horizontal") {
         button4.style.border = "block";
+        button4.style.display = "block";
         button4.style.textAlign = "center";
-        button.style.marginTop = "10px";
         button.style.alignItems = "center";
         button.style.height = "85%";
         button.style.width = "100%";
@@ -1652,6 +1964,16 @@ const ScaleRightSide = () => {
       }
 
       if (option.value === "Vertical") {
+        const orientation = document.createElement("h2");
+        orientation.className = "nps_lite_orientation";
+        orientation.textContent = "Vertical";
+        orientation.style.display = "none";
+        button4.appendChild(orientation);
+
+        button4.style.display = "flex";
+        button4.style.alignItems = "center";
+        button4.style.justifyContent = "center";
+        
         button4.style.border = "none";
         button4.style.textAlign = "center";
         button.style.height = "auto";
@@ -1661,7 +1983,6 @@ const ScaleRightSide = () => {
         button.style.flexDirection = "column";
         button.style.alignItems = "center";
         button.style.marginTop = "0";
-        button.style.marginLeft = "26%";
       }
 
       if (
@@ -1674,7 +1995,8 @@ const ScaleRightSide = () => {
           "https://100035.pythonanywhere.com/nps-lite/api/nps-lite-settings/",
           {
             user: "true",
-            username: "NdoneAmbrose",
+            username:
+              userDetails === null ? " " : userDetails.userinfo.username,
             orientation: option?.value,
             scalecolor: btnUpdateScale.value,
             fontcolor: btnUpdateFontColor.value,
@@ -1695,7 +2017,7 @@ const ScaleRightSide = () => {
             sendMessage();
             setScaleData(res.data);
             const id = res.data.data.scale_id;
-            console.log("This is the id",id);
+            console.log("This is the id", id);
             if (id.length) {
               setScaleId(id && id);
               const idHolder = scale?.querySelector(".scaleId");
@@ -1703,8 +2025,10 @@ const ScaleRightSide = () => {
             }
             // console.log(res);
 
-            button4.style.display = "block";
+            button4.style.height = "100%";
             labelHold.innerHTML = "";
+            labelHold.style.border = "";
+            labelHold.style.height = "100%";
             const {
               fomat,
               left,
@@ -1741,7 +2065,7 @@ const ScaleRightSide = () => {
               circle.style.backgroundColor = scalecolor;
 
               if (option.value === "Vertical") {
-                circle.style.margin = "15px 0";
+                circle.style.margin = "10px 0";
                 circle.style.padding = "10px 30px";
               }
 
@@ -1756,6 +2080,7 @@ const ScaleRightSide = () => {
             }
 
             scaleText.textContent = name;
+            scaleText.style.display = "none";
             button4.style.color = fontcolor;
             button4.style.fontFamily = fontstyle;
           })
@@ -1772,7 +2097,8 @@ const ScaleRightSide = () => {
           {
             scale_id: idHolder.textContent,
             user: "true",
-            username: "NdoneAmbrose",
+            username:
+              userDetails === null ? " " : userDetails.userinfo.username,
             orientation: option?.value,
             scalecolor: btnUpdateScale.value,
             fontcolor: btnUpdateFontColor.value,
@@ -1797,8 +2123,10 @@ const ScaleRightSide = () => {
               // console.log(res);
               // console.log("This is the still scale", scale);
 
-              button4.style.display = "block";
+              button4.style.height = "100%";
               labelHold.innerHTML = "";
+              labelHold.style.border = "";
+              labelHold.style.height = "100%";
               const {
                 fomat,
                 left,
@@ -1835,7 +2163,7 @@ const ScaleRightSide = () => {
                 circle.style.backgroundColor = scalecolor;
 
                 if (option.value === "Vertical") {
-                  circle.style.margin = "15px 0";
+                  circle.style.margin = "10px 0";
                   circle.style.padding = "10px 30px";
                 }
 
@@ -1850,6 +2178,7 @@ const ScaleRightSide = () => {
               }
 
               scaleText.textContent = name;
+              scaleText.style.display = "none";
               button4.style.color = fontcolor;
               button4.style.fontFamily = fontstyle;
             }
@@ -1936,7 +2265,6 @@ const ScaleRightSide = () => {
       likertScaleArray.textContent = updatedLabels;
       likertScaleArray.style.display = "none";
       labelHold.append(likertScaleArray);
-
       // // Update labelHold grid styles
       labelHold.style.display = "grid";
       labelHold.style.gridTemplateColumns = `repeat(${numColumns}, 1fr)`;
@@ -1948,40 +2276,47 @@ const ScaleRightSide = () => {
         button4.style.textAlign = "center";
         button.style.display = "flex";
         button.style.flexDirection = "row";
-        // button.style.marginTop = "5%";
         button.style.alignItems = "center";
-        // buttonCircle.style.flexDirection = "row";
         button.style.height = "85%";
         button.style.width = "100%";
         button.style.flexDirection = "row";
         button.style.position = "relative";
         button.style.marginLeft = "0px";
+        button.style.padding = "6px 12px";
         button.style.display = "grid";
         button.style.gridTemplateColumns = `repeat(${numColumns}, 1fr)`;
         button.style.gridTemplateRows = `repeat(${numRows}, 1fr)`;
       }
 
       if (option.value === "Vertical") {
-        let orientation = document.createElement("h2");
+        const orientation = document.createElement("div");
         orientation.className = "orientation";
         orientation.textContent = "vertical";
         orientation.style.display = "none";
-        button4.appendChild(orientation);
+        labelHold.appendChild(orientation);
+        labelHold.style.position = "absolute";
+        button.style.margin = "5px 0";
+        button.style.padding = "6px 12px";
+        button.style.margin = "10px 0";
         button4.style.border = "none";
+        button4.style.display = "flex";
+        button4.style.justifyContent = "center";
         button4.style.textAlign = "center";
-        button.style.height = "80%";
-        button.style.width = "50%";
-        button.style.position = "absolute";
-        button.style.display = "flex";
-        button.style.flexDirection = "column";
-        button.style.alignItems = "center";
-        button.style.marginTop = "1%";
-        button.style.marginLeft = "26%";
+        labelHold.style.height = "100%";
+        labelHold.style.width = "55%";
+        labelHold.style.position = "absolute";
+        labelHold.style.display = "flex";
+        labelHold.style.flexDirection = "column";
+        labelHold.style.alignItems = "center";
+        labelHold.style.marginTop = "-8px";  
+        labelHold.style.marginLeft = "13px";
+        labelHold.style.overflowX = "hidden";
+        labelHold.style.overflowY = "hidden"; 
       }
 
       const basePayload = {
         user: "yes",
-        username: "TadesseJemal",
+        username: userDetails === null ? " " : userDetails.userinfo.username,
         instance_id: "2",
         orientation: option?.value,
         fontstyle: btnUpdateScaleFontLinkert.value,
@@ -2012,7 +2347,7 @@ const ScaleRightSide = () => {
         scale_id: idHolder.textContent,
         user: "yes",
         instance_id: "2",
-        username: "TadesseJemal",
+        username: userDetails === null ? " " : userDetails.userinfo.username,
         fontstyle: btnUpdateScaleFontLinkert.value,
         orientation: option?.value,
         scale_name: beNametnUpdateScal.value,
@@ -2065,6 +2400,7 @@ const ScaleRightSide = () => {
             const settings = res.data.data.settings;
             if (settings.name) {
               scaleText.textContent = settings.name;
+              scaleText.style.display = "none";
             }
 
             if (settings.font_color) {
@@ -2081,9 +2417,9 @@ const ScaleRightSide = () => {
               const circle = document.createElement("div");
               circle.className = "circle_label";
               circle.style.width = "80%";
-              circle.style.height = "55%";
+              circle.style.height = "60%";
               circle.style.borderRadius = "25px";
-              circle.style.padding = "12px 20px";
+              circle.style.padding = "6px 12px";
               circle.style.backgroundColor = settings.round_color;
               circle.style.display = "flex";
               circle.style.justifyContent = "center";
@@ -2099,12 +2435,11 @@ const ScaleRightSide = () => {
 
               // Set the text content to the appropriate label (either text or emoji)
               circle.textContent = updatedLabels[i] || "";
-
               if (option.value === "Vertical") {
-                circle.style.margin = "5px 0";
-                circle.style.padding = "6px 12px";
+                circle.style.margin = "2px 0";
               }
 
+              labelHold.style.border = "";
               labelHold.appendChild(circle);
             }
 
@@ -2141,8 +2476,9 @@ const ScaleRightSide = () => {
                 button4.style.fontFamily = settings.fontstyle;
               }
 
-              if (beNametnUpdateScal.value !== "") {
-                scaleText.textContent = beNametnUpdateScal.value;
+              if (settings.name) {
+                scaleText.textContent = settings.name;
+                scaleText.style.display = "none";
               }
 
               button4.style.display = "block";
@@ -2150,9 +2486,9 @@ const ScaleRightSide = () => {
                 const circle = document.createElement("div");
                 circle.className = "circle_label";
                 circle.style.width = "80%";
-                circle.style.height = "55%";
+                circle.style.height = "60%";
                 circle.style.borderRadius = "25px";
-                circle.style.padding = "12px 20px";
+                circle.style.padding = "6px 12px";
                 circle.style.backgroundColor = settings.round_color;
                 circle.style.display = "flex";
                 circle.style.justifyContent = "center";
@@ -2165,7 +2501,6 @@ const ScaleRightSide = () => {
                 circle.addEventListener("mouseout", () => {
                   circle.style.backgroundColor = settings.round_color; // Reset the color when not hovered
                 });
-
                 // Set the text content to the appropriate label (either text or emoji)
                 circle.textContent = updatedLabels[i] || "";
 
@@ -2175,6 +2510,7 @@ const ScaleRightSide = () => {
                 }
 
                 labelHold.appendChild(circle);
+                labelHold.style.marginTop = "-5px";
               }
               console.log("This is it+++++++______", likertScaleArray);
             }
@@ -2257,7 +2593,8 @@ const ScaleRightSide = () => {
         Axios.post(
           "https://100035.pythonanywhere.com/percent/api/percent_settings_create/",
           {
-            username: "pfactorial",
+            username:
+              userDetails === null ? " " : userDetails.userinfo.username,
             time: time.value,
             scale_name: beNametnUpdateScal.value,
             no_of_scale: 1,
@@ -2379,23 +2716,28 @@ const ScaleRightSide = () => {
                 orientation.style.display = "none";
                 button4.appendChild(orientation);
                 containerDiv.style.transform = "rotate(270deg)";
-                nameDiv.style.right = "-8px";
-                nameDiv.style.position = "absolute";
-                nameDiv.style.width = "50%";
-                nameDiv.style.left = "75%";
-                nameDiv.textContent.length < 9
-                  ? (nameDiv.style.top = "23px")
-                  : (nameDiv.style.top = "39px");
 
+                containerDiv.style.marginTop = "80px";
+                containerDiv.style.width = "100%";
+                inputPercent.style.marginTop = "20px";
+                nameDiv.style.position = "absolute";
+                nameDiv.style.lineHeight = "0.85";
+                if (nameDiv.textContent.length < 10) {
+                  nameDiv.style.top = "20px";
+                  nameDiv.style.left = "93%";
+                  nameDiv.style.right = "-17px";
+                } else {
+                  nameDiv.style.left = "101%";
+                  nameDiv.style.top = "4px";
+                  nameDiv.style.right = "-22px";
+                }
                 newLabelHold.style.padding =
                   nameDiv.textContent.length < 9
                     ? "0px 20px 10px 14px"
-                    : "0px 20px 37px 14px";
+                    : "0px 17px 37px 14px";
                 nameDiv.style.transform = "rotate(90deg)";
-
                 newLabelHold.style.position = "relative";
-                newLabelHold.style.width = "80%";
-                newLabelHold.style.paddingTop = "24px";
+                newLabelHold.style.width = "85%";
                 percentChilds.style.alignItems = "start";
                 percentChilds.style.height = "100%";
               }
@@ -2419,7 +2761,8 @@ const ScaleRightSide = () => {
           "https://100035.pythonanywhere.com/percent/api/percent_settings_create/",
           {
             scale_id: idHolder.textContent,
-            username: "pfactorial",
+            username:
+              userDetails === null ? " " : userDetails.userinfo.username,
             time: time.value,
             scale_name: beNametnUpdateScal.value,
             no_of_scale: 1,
@@ -2534,23 +2877,27 @@ const ScaleRightSide = () => {
                   orientation.style.display = "none";
                   button4.appendChild(orientation);
                   containerDiv.style.transform = "rotate(270deg)";
+                  containerDiv.style.marginTop = "80px";
+                  containerDiv.style.width = "100%";
+                  inputPercent.style.marginTop = "20px";
                   nameDiv.style.position = "absolute";
-                  nameDiv.style.width = "50%";
-                  nameDiv.style.left = "75%";
-                  nameDiv.textContent.length < 9
-                    ? (nameDiv.style.top = "23px")
-                    : (nameDiv.style.top = "39px");
-
+                  nameDiv.style.lineHeight = "0.85";
+                  if (nameDiv.textContent.length < 10) {
+                    nameDiv.style.top = "20px";
+                    nameDiv.style.left = "93%";
+                    nameDiv.style.right = "-17px";
+                  } else {
+                    nameDiv.style.left = "101%";
+                    nameDiv.style.top = "4px";
+                    nameDiv.style.right = "-22px";
+                  }
                   newLabelHold.style.padding =
                     nameDiv.textContent.length < 9
                       ? "0px 20px 10px 14px"
-                      : "0px 20px 37px 14px";
-                  nameDiv.style.right = "-8px";
+                      : "0px 17px 37px 14px";
                   nameDiv.style.transform = "rotate(90deg)";
-
                   newLabelHold.style.position = "relative";
-                  newLabelHold.style.width = "80%";
-                  newLabelHold.style.paddingTop = "24px";
+                  newLabelHold.style.width = "85%";
                   percentChilds.style.alignItems = "start";
                   percentChilds.style.height = "100%";
                 }
@@ -2643,7 +2990,8 @@ const ScaleRightSide = () => {
         Axios.post(
           "https://100035.pythonanywhere.com/percent-sum/percent-sum-settings",
           {
-            username: "pfactorial",
+            username:
+              userDetails === null ? " " : userDetails.userinfo.username,
             time: time.value,
             scale_name: beNametnUpdateScal.value,
             no_of_scale: 1,
@@ -2770,22 +3118,20 @@ const ScaleRightSide = () => {
                 containerDiv.style.width = "100%";
                 inputPercent.style.marginTop = "20px";
                 nameDiv.style.position = "absolute";
-                if ( nameDiv.textContent.length < 10) {
-                  nameDiv.style.top = "20px"
+                nameDiv.style.lineHeight = "0.85";
+                if (nameDiv.textContent.length < 10) {
+                  nameDiv.style.top = "20px";
                   nameDiv.style.left = "93%";
                   nameDiv.style.right = "-17px";
                 } else {
-                  // nameDiv.style.left = "98%";
-                  // nameDiv.style.top = "-6px";
-                  // nameDiv.style.right = "-20px";
-                  nameDiv.style.left = "103%";
-                  nameDiv.style.top = "-15px";
-                  nameDiv.style.right = "-20px";
+                  nameDiv.style.left = "101%";
+                  nameDiv.style.top = "4px";
+                  nameDiv.style.right = "-22px";
                 }
-              newLabelHold.style.padding =
-                nameDiv.textContent.length < 9
-                  ? "0px 20px 10px 14px"
-                  : "0px 17px 37px 14px";
+                newLabelHold.style.padding =
+                  nameDiv.textContent.length < 9
+                    ? "0px 20px 10px 14px"
+                    : "0px 17px 37px 14px";
                 nameDiv.style.transform = "rotate(90deg)";
                 newLabelHold.style.position = "relative";
                 newLabelHold.style.width = "85%";
@@ -2834,7 +3180,8 @@ const ScaleRightSide = () => {
           "https://100035.pythonanywhere.com/percent-sum/percent-sum-settings",
           {
             scale_id: idHolder.textContent,
-            username: "pfactorial",
+            username:
+              userDetails === null ? " " : userDetails.userinfo.username,
             time: time.value,
             scale_name: beNametnUpdateScal.value,
             no_of_scale: 1,
@@ -2955,19 +3302,20 @@ const ScaleRightSide = () => {
                   containerDiv.style.width = "100%";
                   inputPercent.style.marginTop = "20px";
                   nameDiv.style.position = "absolute";
-                  if ( nameDiv.textContent.length < 10) {
-                  nameDiv.style.top = "20px"
-                  nameDiv.style.left = "93%";
-                  nameDiv.style.right = "-17px";
-                } else {
-                  nameDiv.style.left = "103%";
-                  nameDiv.style.top = "-15px";
-                  nameDiv.style.right = "-20px";
-                }
-                newLabelHold.style.padding =
-                  nameDiv.textContent.length < 9
-                    ? "0px 20px 10px 14px"
-                    : "0px 17px 37px 14px";
+                  nameDiv.style.lineHeight = "0.85";
+                  if (nameDiv.textContent.length < 10) {
+                    nameDiv.style.top = "20px";
+                    nameDiv.style.left = "93%";
+                    nameDiv.style.right = "-17px";
+                  } else {
+                    nameDiv.style.left = "101%";
+                    nameDiv.style.top = "4px";
+                    nameDiv.style.right = "-22px";
+                  }
+                  newLabelHold.style.padding =
+                    nameDiv.textContent.length < 9
+                      ? "0px 20px 10px 14px"
+                      : "0px 17px 37px 14px";
                   nameDiv.style.transform = "rotate(90deg)";
                   newLabelHold.style.position = "relative";
                   newLabelHold.style.width = "85%";
@@ -3101,37 +3449,31 @@ const ScaleRightSide = () => {
         button4.appendChild(orientation);
         button4.style.border = "none";
         button4.style.textAlign = "center";
-        button.style.height = "80%";
-        button.style.width = "50%";
+        button4.style.padding = "0px";
+        button.style.height = "100%";
+        button.style.width = "100%";
         button.style.position = "absolute";
         button.style.display = "flex";
         button.style.flexDirection = "column";
         button.style.alignItems = "center";
-        button.style.marginTop = "1%";
-        button.style.marginLeft = "26%";
       }
 
       if (
         idHolder.textContent === "scale Id" ||
         idHolder.textContent === "id"
       ) {
+        formData.delete("item_list");
+        const updatedLabelTexts = [...pairedLabelTexts];
+        for (const updatedLabelText of updatedLabelTexts) {
+          formData.append("item_list", updatedLabelText);
+        }
+        formData.append("username", userDetails === null ? " " : userDetails.userinfo.username);
+        formData.append("user", "yes");
         setIsLoading(true);
         console.log("post req");
         Axios.post(
           "https://100035.pythonanywhere.com/paired-comparison/paired-comparison-settings/",
-          {
-            username: "pfactorial",
-            time: time.value,
-            scale_name: beNametnUpdateScal.value,
-            orientation: option.value,
-            roundcolor: btnUpdateScale.value,
-            scalecolor: btnUpdateScaleColor.value,
-            fontcolor: btnUpdateFontColor.value,
-            fontstyle: btnUpdateScaleFont.value,
-            item_count: numberOfItemsToPair,
-            item_list: itemList,
-            user: "yes",
-          }
+          formData
         )
           .then((res) => {
             setIsLoading(false);
@@ -3149,9 +3491,8 @@ const ScaleRightSide = () => {
             console.log(res);
             const settings = res.data.data.settings;
             console.log(settings);
-            if (settings.name) {
-              scaleText.textContent = settings.name;
-            }
+            scaleText.textContent = settings.name;
+            scaleText.style.display = "none";
 
             if (settings.fontcolor) {
               button4.style.color = settings.fontcolor;
@@ -3162,16 +3503,18 @@ const ScaleRightSide = () => {
             }
 
             button4.style.display = "block";
-
+            button4.style.height = "100%";
+            labelHold.style.border = "";
+            labelHold.style.height = "100%";
             labelHold.style.justifyContent = "center";
             labelHold.style.flexWrap = "wrap";
-            for (let i = 0; i < updatedPairedLabels.length - 1; i++) {
-              for (let j = i + 1; j < updatedPairedLabels.length; j++) {
+            for (let i = 0; i < settings.item_list.length - 1; i++) {
+              for (let j = i + 1; j < settings.item_list.length; j++) {
                 const circle = document.createElement("div");
                 circle.className = "circle_label";
                 circle.style.width = "127px";
                 circle.style.height = "45%";
-                circle.style.borderRadius = "25px";
+                circle.style.borderRadius = "12px";
                 circle.style.padding = "12px 20px";
                 circle.style.backgroundColor = settings.scalecolor;
                 circle.style.display = "flex";
@@ -3183,14 +3526,17 @@ const ScaleRightSide = () => {
                 circle.style.gap = "7px";
 
                 const smallBox1 = document.createElement("div");
-                smallBox1.textContent = updatedPairedLabels[i];
+                smallBox1.className = "small_box";
+                smallBox1.textContent = settings.item_list[i];
                 const smallBox2 = document.createElement("div");
-                smallBox2.textContent = updatedPairedLabels[j];
-
+                smallBox2.className = "small_box";
+                smallBox2.textContent = settings.item_list[j];
                 smallBox1.style.width = "95%";
                 smallBox2.style.width = "95%";
-                smallBox1.style.background = settings.roundcolor;
-                smallBox2.style.background = settings.roundcolor;
+                smallBox1.style.backgroundColor = settings.roundcolor;
+                smallBox1.style.color = settings.fontcolor;
+                smallBox2.style.backgroundColor = settings.roundcolor;
+                smallBox2.style.color = settings.fontcolor;
                 smallBox1.style.height = "50%";
                 smallBox2.style.height = "50%";
                 smallBox1.style.display = "flex";
@@ -3201,6 +3547,52 @@ const ScaleRightSide = () => {
                 smallBox2.style.alignItems = "center";
                 smallBox1.style.fontWeight = "12px";
                 smallBox2.style.fontWeight = "12px";
+
+                function componentToHex(c) {
+                  var hex = c.toString(16);
+                  return hex.length == 1 ? "0" + hex : hex;
+                }
+
+                function rgbToHex(r, g, b) {
+                  return (
+                    "#" +
+                    componentToHex(r) +
+                    componentToHex(g) +
+                    componentToHex(b)
+                  );
+                }
+
+                function invert(rgb) {
+                  rgb = [].slice
+                    .call(arguments)
+                    .join(",")
+                    .replace(/rgb\(|\)|rgba\(|\)|\s/gi, "")
+                    .split(",");
+                  for (var i = 0; i < rgb.length; i++)
+                    rgb[i] = (i === 3 ? 1 : 255) - rgb[i];
+                  return rgbToHex(rgb[0], rgb[1], rgb[2]);
+                }
+
+                const smallBoxBgColor = smallBox1.style.backgroundColor;
+                const smallBoxColor = smallBox1.style.color;
+
+                smallBox1.addEventListener("mouseover", () => {
+                  smallBox1.style.backgroundColor = invert(smallBoxBgColor);
+                  smallBox1.style.color = invert(smallBoxColor);
+                });
+                smallBox1.addEventListener("mouseout", () => {
+                  smallBox1.style.backgroundColor = settings.roundcolor;
+                  smallBox1.style.color = settings.fontcolor;
+                });
+
+                smallBox2.addEventListener("mouseover", () => {
+                  smallBox2.style.backgroundColor = invert(smallBoxBgColor);
+                  smallBox2.style.color = invert(smallBoxColor);
+                });
+                smallBox2.addEventListener("mouseout", () => {
+                  smallBox2.style.backgroundColor = settings.roundcolor;
+                  smallBox2.style.color = settings.fontcolor;
+                });
 
                 circle.appendChild(smallBox1);
                 circle.appendChild(smallBox2);
@@ -3215,26 +3607,32 @@ const ScaleRightSide = () => {
             }
           })
           .catch((err) => {
+            if (err) {
+              let message = err.response.data.error;
+              alert(
+                `${
+                  message[0].toUpperCase() + message.slice(1)
+                }. All fields are required.`
+              );
+            }
             setIsLoading(false);
             console.log(err);
           });
       } else {
+        formData.delete("item_list");
+        const updatedLabelTexts = [...pairedLabelTexts];
+        for (const updatedLabelText of updatedLabelTexts) {
+          formData.append("item_list", updatedLabelText);
+        }
+        formData.append("scale_id", idHolder.textContent);
+        formData.append("username", userDetails === null ? " " : userDetails.userinfo.username);
+        formData.append("user", "yes");
         setIsLoading(true);
         console.log("PUT req");
         console.log(idHolder.textContent);
         Axios.put(
           "https://100035.pythonanywhere.com/paired-comparison/paired-comparison-settings",
-          {
-            scale_id: idHolder.textContent,
-            username: "pfactorial",
-            roundcolor: btnUpdateScale.value,
-            scalecolor: btnUpdateScaleColor.value,
-            fontcolor: btnUpdateFontColor.value,
-            fontstyle: btnUpdateScaleFont.value,
-            item_count: numberOfItemsToPair,
-            item_list: itemList,
-            user: "yes",
-          }
+          formData
         )
           .then((res) => {
             if (res.status == 200) {
@@ -3247,9 +3645,8 @@ const ScaleRightSide = () => {
 
               const settings = res.data.data;
               console.log(settings);
-              if (settings.name) {
-                scaleText.textContent = settings.name;
-              }
+              scaleText.textContent = settings.name;
+              scaleText.style.display = "none";
 
               if (settings.fontcolor) {
                 button4.style.color = settings.fontcolor;
@@ -3260,7 +3657,9 @@ const ScaleRightSide = () => {
               }
 
               button4.style.display = "block";
-
+              button4.style.height = "100%";
+              labelHold.style.border = "";
+              labelHold.style.height = "100%";
               labelHold.style.justifyContent = "center";
               labelHold.style.flexWrap = "wrap";
               for (let i = 0; i < settings.item_list.length - 1; i++) {
@@ -3269,7 +3668,7 @@ const ScaleRightSide = () => {
                   circle.className = "circle_label";
                   circle.style.width = "127px";
                   circle.style.height = "45%";
-                  circle.style.borderRadius = "25px";
+                  circle.style.borderRadius = "12px";
                   circle.style.padding = "12px 20px";
                   circle.style.backgroundColor = settings.scalecolor;
                   circle.style.display = "flex";
@@ -3281,14 +3680,18 @@ const ScaleRightSide = () => {
                   circle.style.gap = "7px";
 
                   const smallBox1 = document.createElement("div");
+                  smallBox1.className = "small_box";
                   smallBox1.textContent = settings.item_list[i];
                   const smallBox2 = document.createElement("div");
+                  smallBox2.className = "small_box";
                   smallBox2.textContent = settings.item_list[j];
 
                   smallBox1.style.width = "95%";
                   smallBox2.style.width = "95%";
                   smallBox1.style.background = settings.roundcolor;
+                  smallBox1.style.color = settings.fontcolor;
                   smallBox2.style.background = settings.roundcolor;
+                  smallBox2.style.color = settings.fontcolor;
                   smallBox1.style.height = "50%";
                   smallBox2.style.height = "50%";
                   smallBox1.style.display = "flex";
@@ -3299,6 +3702,52 @@ const ScaleRightSide = () => {
                   smallBox2.style.alignItems = "center";
                   smallBox1.style.fontWeight = "12px";
                   smallBox2.style.fontWeight = "12px";
+
+                  function componentToHex(c) {
+                    var hex = c.toString(16);
+                    return hex.length == 1 ? "0" + hex : hex;
+                  }
+
+                  function rgbToHex(r, g, b) {
+                    return (
+                      "#" +
+                      componentToHex(r) +
+                      componentToHex(g) +
+                      componentToHex(b)
+                    );
+                  }
+
+                  function invert(rgb) {
+                    rgb = [].slice
+                      .call(arguments)
+                      .join(",")
+                      .replace(/rgb\(|\)|rgba\(|\)|\s/gi, "")
+                      .split(",");
+                    for (var i = 0; i < rgb.length; i++)
+                      rgb[i] = (i === 3 ? 1 : 255) - rgb[i];
+                    return rgbToHex(rgb[0], rgb[1], rgb[2]);
+                  }
+
+                  const smallBoxBgColor = smallBox1.style.backgroundColor;
+                  const smallBoxColor = smallBox1.style.color;
+
+                  smallBox1.addEventListener("mouseover", () => {
+                    smallBox1.style.backgroundColor = invert(smallBoxBgColor);
+                    smallBox1.style.color = invert(smallBoxColor);
+                  });
+                  smallBox1.addEventListener("mouseout", () => {
+                    smallBox1.style.backgroundColor = settings.roundcolor;
+                    smallBox1.style.color = settings.fontcolor;
+                  });
+
+                  smallBox2.addEventListener("mouseover", () => {
+                    smallBox2.style.backgroundColor = invert(smallBoxBgColor);
+                    smallBox2.style.color = invert(smallBoxColor);
+                  });
+                  smallBox2.addEventListener("mouseout", () => {
+                    smallBox2.style.backgroundColor = settings.roundcolor;
+                    smallBox2.style.color = settings.fontcolor;
+                  });
 
                   circle.appendChild(smallBox1);
                   circle.appendChild(smallBox2);
@@ -3387,13 +3836,20 @@ const ScaleRightSide = () => {
   // // console.log(iframeSrc, "iframeSrc");
 
   function removeScale() {
-    const focusseddElmnt = document.querySelector(".focussedd");
-    if (focusseddElmnt.classList.contains("holderDIV")) {
-      document.querySelector(".focussedd").remove();
+    // const focusseddElmnt = document.querySelector(".focussedd");
+    // if (focusseddElmnt.classList.contains("holderDIV")) {
+    //   document.querySelector(".focussedd").remove();
+    // }
+    setConfirmRemove(!confirmRemove)
+    const rscale = document.getElementsByClassName("newScaleInput")
+    if(rscale.length === 1) {
+      setScaleTypeContent("")
     }
+    console.log("Remove scale length", rscale.length)
   }
+
   const myArray = Object.values(data)[0];
-  // // console.log(myArray);
+  //console.log(myArray);
   function excludeElementsWithAttributeValue(arr, attribute, valueToExclude) {
     return arr?.filter(function (element) {
       // // console.log(element);
@@ -3451,12 +3907,13 @@ const ScaleRightSide = () => {
       const option = options[i];
       if (option.selected) {
         selectedValues[option.value] = option.id;
-        console.log("This is option", option);
+        console.log("This is option 2", option);
       }
     }
 
-    console.log(selectedValues);
+    console.log("This is the selected value", selectedValues);
     setSelectedOptions(selectedValues);
+    console.log("This is the selected options", selectedOptions);
 
     let selectedOption = selectField.options[selectField.selectedIndex];
     let selectedElementId = selectedOption.id;
@@ -3472,7 +3929,7 @@ const ScaleRightSide = () => {
     }
     console.log(elemArray);
     console.log(`"${selectedOption.value}"`);
-    elemArray.push(selectedOption.value);
+    elemArray.push(selectedOption.value + " " + selectedOption.id);
     let string = JSON.stringify(elemArray);
     sessionStorage.setItem("elements", string);
   };
@@ -3644,7 +4101,11 @@ const ScaleRightSide = () => {
   console.log("The other elements", otherElementsArray);
 
   const options = otherElementsArray.map((element, index) => (
-    <option key={index} value={element} id={element.split(" ")[1]}>
+    <option
+      key={index}
+      value={element.split(" ")[0]}
+      id={element.split(" ")[1]}
+    >
       {element}
     </option>
   ));
@@ -3747,6 +4208,11 @@ const ScaleRightSide = () => {
     } else {
       timeId.style.display = "none";
     }
+  };
+
+  const timecombinedOnChange = (event) => {
+    onTimeChangeComparison(event);
+    handlePairedScaleInputChange(event);
   };
 
   // const upperVal = Math.min(10, parseInt(document.getElementById('upperVal').value, 10));
@@ -5157,7 +5623,7 @@ const ScaleRightSide = () => {
                         }}
                         id="upperVal"
                         onChange={(e) => setUpperLimit(e.target.value)}
-
+                        defaultValue={ stapelUpperimit ? Number(stapelUpperimit.textContent) : 0}
                         // onChange={upperValueChange}
                       />
                     </div>
@@ -5198,6 +5664,7 @@ const ScaleRightSide = () => {
                         id="spacing"
                         onChange={(e) => setSpace(e.target.value)}
                         // value={-upperVal}
+                        defaultValue={stapelSpaceUnit ? Number(stapelSpaceUnit.textContent) : 0}
                       />
                     </div>
                   </div>
@@ -5374,8 +5841,8 @@ const ScaleRightSide = () => {
                           id="font_style_stapel"
                           defaultValue={
                             // !scaleDisplay ? undefined ? scaleDisplay="none" ? undefined : scaleBg
-                            fontFamlity
-                              ? fontFamlity.style.fontFamily
+                            fontFamilyStapel
+                              ? fontFamilyStapel.style.fontFamily
                               : "Select"
                           }
                         >
@@ -5649,6 +6116,7 @@ const ScaleRightSide = () => {
                               ? true
                               : false
                           }
+                          defaultValue={stapelLeft ? stapelLeft.textContent : ""}
                         />
                       </div>
                     </div>
@@ -5699,6 +6167,8 @@ const ScaleRightSide = () => {
                               ? true
                               : false
                           }
+
+                          defaultValue={stapelRight ? stapelRight.textContent : ""}
                         />
                       </div>
                     </div>
@@ -6604,7 +7074,7 @@ const ScaleRightSide = () => {
                       className="bg-gray-800"
                       id="orientationIdLinkert"
                     >
-                      <option style={{ color: "black" }}>Chosse..</option>
+                      <option style={{ color: "black" }}>Choose..</option>
                       <option value="Horizontal" style={{ color: "black" }}>
                         Horizontal
                       </option>
@@ -7256,10 +7726,12 @@ const ScaleRightSide = () => {
                         fontSize: "12px",
                         margin: "0 auto",
                       }}
+                      name="orientation"
+                      onChange={handlePairedScaleInputChange}
                       className="bg-gray-800"
                       id="orientationIdComaprison"
                     >
-                      <option style={{ color: "black" }}>Chosse..</option>
+                      <option style={{ color: "black" }}>Choose..</option>
                       <option value="Horizontal" style={{ color: "black" }}>
                         Horizontal
                       </option>
@@ -7301,7 +7773,8 @@ const ScaleRightSide = () => {
                     >
                       <input
                         type="text"
-                        onChange={(e) => setScaleTitle(e.target.value)}
+                        name="scale_name"
+                        onChange={scaleNameCombinedOnChange}
                         defaultValue={scaleT ? scaleT.innerHTML : ""}
                         style={{
                           width: "82px",
@@ -7403,6 +7876,8 @@ const ScaleRightSide = () => {
                             display: "flex",
                             alignItems: "center",
                           }}
+                          name="scalecolor"
+                          onChange={handlePairedScaleInputChange}
                           id="scale_color_Comparison"
                         />
                       </div>
@@ -7437,6 +7912,8 @@ const ScaleRightSide = () => {
                             display: "flex",
                             alignItems: "center",
                           }}
+                          name="roundcolor"
+                          onChange={handlePairedScaleInputChange}
                           id="button_color_Comparison"
                         />
                       </div>
@@ -7480,6 +7957,8 @@ const ScaleRightSide = () => {
                             display: "flex",
                             alignItems: "center",
                           }}
+                          name="fontcolor"
+                          onChange={handlePairedScaleInputChange}
                           id="font_color_comparison"
                         />
                       </div>
@@ -7516,6 +7995,8 @@ const ScaleRightSide = () => {
                             border: "none",
                             alignItems: "center",
                           }}
+                          name="fontstyle"
+                          onChange={handlePairedScaleInputChange}
                           id="font_style_comparison"
                           defaultValue={
                             // !scaleDisplay ? undefined ? scaleDisplay="none" ? undefined : scaleBg
@@ -7559,7 +8040,8 @@ const ScaleRightSide = () => {
                     <input
                       type="text"
                       value={pairedInputValue}
-                      onChange={handlePairedInputChange}
+                      name="item_count"
+                      onChange={itemCountcombinedOnChange}
                       onKeyDown={handlePairedKeyDownPress}
                       placeholder="0"
                       style={{
@@ -7679,6 +8161,8 @@ const ScaleRightSide = () => {
                           outline: "none",
                           alignItems: "center",
                         }}
+                        name="time"
+                        onChange={handlePairedScaleInputChange}
                         id="time_comparison"
                       />
                     </div>
@@ -7715,6 +8199,7 @@ const ScaleRightSide = () => {
                           outline: "none",
                           alignItems: "center",
                         }}
+                        onChange={handlePairedScaleInputChange}
                         id="score"
                       />
                     </div>
@@ -8793,8 +9278,8 @@ const ScaleRightSide = () => {
                 variant="secondary"
                 // className="remove_button"
                 className="remove_button"
-                // onClick={removeScale}
-                onClick={() => setConfirmRemove(!confirmRemove)}
+                onClick={removeScale}
+                //onClick={() => setConfirmRemove(!confirmRemove)}
               >
                 Remove Scale
               </Button>

@@ -108,8 +108,10 @@ export const CreateTableComponent = (
   setSidebar,
   setStartDate,
   setMethod,
-  setRightSideDateMenu
+  setRightSideDateMenu,
+  copy_data = false
 ) => {
+  console.log('Creating Table Component');
 
   let isAnyRequiredElementEdited = false;
   let tableField = document.createElement("div");
@@ -122,6 +124,14 @@ export const CreateTableComponent = (
   tableField.style.overflow = "overlay";
   // tableField.innerHTML = 'table';
   tableField.style.position = "absolute";
+
+  const placeholder = document.createElement('p');
+  placeholder.className = 'placeholder'
+  placeholder.textContent = 'Insert Table';
+  placeholder.style.zIndex = '-1';
+  tableField.append(placeholder);
+  // tableField.textContent = 'Table'
+
   tableField.oninput = (e) => {
     //setIsFinializeDisabled(false);
   };
@@ -141,7 +151,12 @@ export const CreateTableComponent = (
   tabb.id = id;
 
   // tabb.innerHTML = element.data;
-  const tableData = element?.data;
+  let tableData = element?.data;
+  if (copy_data) {
+    tableData = copy_data;
+  } else {
+    tableData = element?.data;
+  }
   // console.log("tableData", tableData);
   for (let i = 0; i < tableData.length; i++) {
     const tabbTR = document.createElement("tr");
@@ -327,8 +342,13 @@ export const CreateTableComponent = (
   resizeObserver.observe(tabb);
   tableField.append(tabb);
   holderDIV.append(tableField);
-  document
-    .getElementsByClassName("midSection_container")
-  [p - 1] // ?.item(0)
-    ?.append(holderDIV);
+  if (copy_data) {
+    return holderDIV;
+  } else {
+    document
+      .getElementsByClassName("midSection_container")
+    [p - 1] // ?.item(0)
+      ?.append(holderDIV);
+  }
+
 }

@@ -1,4 +1,7 @@
+import { useStateContext } from "../../contexts/contextProvider";
+
 export const dragElementOverPage = (event, resizing) => {
+
   let holder;
 
   if (!resizing) {

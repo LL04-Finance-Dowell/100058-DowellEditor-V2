@@ -32,7 +32,7 @@ function createPaymentInputField(id, element, p, holderDIV, focuseddClassMaintai
             if (e.ctrlKey) {
                 copyInput("payment2");
             }
-            handleClicked("payment2");
+            handleClicked("payment2", "table2");
             setSidebar(true);
         };
     }
@@ -106,7 +106,7 @@ function createPaymentInputField(id, element, p, holderDIV, focuseddClassMaintai
     holderDIV.append(paymentField);
     holderDIV.append(linkHolder);
     holderDIV.append(purposeHolder);
-    console.log(element);
+    // console.log(element);
     document
         .getElementsByClassName("midSection_container")
     [p - 1] // ?.item(0)

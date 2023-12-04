@@ -6,6 +6,7 @@
   height: auto;
 }
 .editSec_rightMenu {
+  overflow-y: scroll;
   padding: 15px 20px;
   background-color: #fbfbfb;
 }
