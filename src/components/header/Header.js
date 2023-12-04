@@ -269,7 +269,7 @@ const Header = () => {
         const left =
           window.innerWidth < 993
             ? ((rect.left - midsectionRect.left) / midsectionRect.width) *
-              fixedMidSecDim.width
+            fixedMidSecDim.width
             : rect.left - midsectionRect.left;
 
         return {
@@ -292,7 +292,7 @@ const Header = () => {
         left:
           window.innerWidth < 993
             ? (rect.left * 793.7007874) / midsectionRect.width -
-              midsectionRect.left
+            midsectionRect.left
             : rect.left - midsectionRect.left,
         // left:rect.left - midsectionRect.left,
         bottom: rect.bottom,
@@ -467,7 +467,6 @@ const Header = () => {
     }
 
     const tables = document.getElementsByClassName('tableInput');
-
     if (tables.length) {
       for (let t = 0; t < tables.length; t++) {
         if (
@@ -480,43 +479,43 @@ const Header = () => {
           let tempPosn = getPosition(tempElem);
           function getChildData() {
             const allTableCCells = [];
-            const tableChildren = tables[t].firstElementChild.children;
-            // console.log("....\n", tableChildren.length, "...\n");
+            const tableChildren = tables[t].querySelector('table')?.children;
             for (let i = 0; i < tableChildren.length; i++) {
               const tableTR = { tr: null };
               const newTableTR = [];
               for (let j = 0; j < tableChildren[i].children.length; j++) {
-                // const element = tableChildren[i];
-
                 const childNodes = tableChildren[i].children[j]?.childNodes;
-                const currentTd  = tableChildren[i].children[j]
+                const currentTd = tableChildren[i].children[j]
                 const tdElement = [];
-                tdElement.push(currentTd);
-
+                if (!childNodes) {
+                  tdElement.push(currentTd);
+                }
                 childNodes.forEach((child) => {
                   if (
                     !child.classList?.contains('row-resizer') &&
                     !child.classList?.contains('td-resizer')
                   ) {
-                    tdElement.push(child);
+                    if (!child.innerHTML) {
+                      tdElement.push(currentTd);
+                    } else {
+                      tdElement.push(child);
+                    }
                   }
-                
-                });
 
+                });
                 const TdDivClassName = tdElement[0]?.className?.split(' ')[0];
                 const trChild = {
                   td: {
                     type:
-                      (TdDivClassName == 'dropp') ||
                       (TdDivClassName == 'dateInput' && 'DATE_INPUT') ||
                       (TdDivClassName == 'textInput' && 'TEXT_INPUT') ||
                       (TdDivClassName == 'imageInput' && 'IMAGE_INPUT') ||
-                      (TdDivClassName == 'signInput' && 'SIGN_INPUT'),
-                    // if(){
+                      (TdDivClassName == 'signInput' && 'SIGN_INPUT') ||
+                      (TdDivClassName == 'dropp' && 'dropp'),
                     data:
                       TdDivClassName == 'imageInput'
                         ? tableChildren[i].children[j]?.firstElementChild.style
-                            .backgroundImage
+                          .backgroundImage
                         : tdElement[0]?.innerHTML,
                     id:
                       TdDivClassName == 'imageInput'
@@ -530,14 +529,12 @@ const Header = () => {
               allTableCCells.push(tableTR);
             }
 
-            // console.log('allTableCCells', allTableCCells);
             return allTableCCells;
           }
           elem = {
             width: tempPosn.width,
             height: tempPosn.height,
             top: tempPosn.top,
-            // topp: tables[t].parentElement.style.top,
             topp: tempPosn.top,
             left: tempPosn.left,
             type: 'TABLE_INPUT',
@@ -548,7 +545,6 @@ const Header = () => {
               ? tables[t].firstElementChild.id
               : `tab${t + 1}`,
           };
-
           const pageNum = findPaageNum(tables[t]);
           page[0][pageNum]?.push(elem);
         }
@@ -625,7 +621,7 @@ const Header = () => {
               childData.type = type;
               const imageData =
                 'imageInput' &&
-                element?.firstElementChild?.style?.backgroundImage
+                  element?.firstElementChild?.style?.backgroundImage
                   ? element.firstElementChild.style.backgroundImage
                   : element.firstElementChild?.innerHTML;
               if (type != 'TEXT_INPUT') {
@@ -1882,7 +1878,7 @@ const Header = () => {
     setFetchedData([]);
     setIsLoading(true);
     var tokenn = prompt('Paste your token here');
-    if(tokenn == null) {
+    if (tokenn == null) {
       console.log(" No token given here", tokenn);
     }
     else if (tokenn != null) {
@@ -2071,25 +2067,22 @@ const Header = () => {
   return (
     <>
       <div
-        className={`header ${
-          actionName == 'template' ? 'header_bg_template' : 'header_bg_document'
-        }`}
+        className={`header ${actionName == 'template' ? 'header_bg_template' : 'header_bg_document'
+          }`}
       >
         <Container fluid>
           <Row>
             <Col className='d-flex lhs-header'>
               <div
-                className={`header_icons position-relative ${
-                  mode === 'preview' ? 'vis_hid' : ''
-                }`}
+                className={`header_icons position-relative ${mode === 'preview' ? 'vis_hid' : ''
+                  }`}
               >
                 <CgMenuLeft className='head-bar' onClick={handleOptions} />
                 {isMenuVisible && (
                   <div
                     ref={menuRef}
-                    className={`position-absolute bg-white d-flex flex-column p-4 bar-menu menu ${
-                      isMenuVisible ? 'show' : ''
-                    }`}
+                    className={`position-absolute bg-white d-flex flex-column p-4 bar-menu menu ${isMenuVisible ? 'show' : ''
+                      }`}
                   >
                     <div className='d-flex cursor_pointer' onClick={handleUndo}>
                       <ImUndo />
@@ -2160,9 +2153,8 @@ const Header = () => {
               </div>
 
               <div
-                className={`d-flex align-items-center gap-2 header_p ${
-                  mode === 'preview' ? 'vis_hid' : ''
-                }`}
+                className={`d-flex align-items-center gap-2 header_p ${mode === 'preview' ? 'vis_hid' : ''
+                  }`}
               >
                 <div
                   className='title-name px-3'
@@ -2186,9 +2178,8 @@ const Header = () => {
               <div className='right_header'>
                 <div className='view_mode_wrapper'>
                   <button
-                    className={`view_mode ${
-                      enablePreview ? '' : 'btn_disable'
-                    }`}
+                    className={`view_mode ${enablePreview ? '' : 'btn_disable'
+                      }`}
                     onClick={handleModeChange}
                     disabled={!enablePreview}
                   >
@@ -2217,9 +2208,8 @@ const Header = () => {
                 </div>
 
                 <div
-                  className={`${docMap ? 'header_btn' : 'savee'} ${
-                    mode === 'preview' ? 'vis_hid' : ''
-                  }`}
+                  className={`${docMap ? 'header_btn' : 'savee'} ${mode === 'preview' ? 'vis_hid' : ''
+                    }`}
                 >
                   {/* <div style={{ marginRight: "20px" }}>
                   <input type="checkbox" onChange={() => setAllowHighlight(!allowHighlight)} />{"  "}
@@ -2240,9 +2230,8 @@ const Header = () => {
                   {/*  )} */}
                 </div>
                 <div
-                  className={`mt-1 text-center p-2 ${
-                    mode === 'preview' ? 'vis_hid' : ''
-                  }`}
+                  className={`mt-1 text-center p-2 ${mode === 'preview' ? 'vis_hid' : ''
+                    }`}
                 >
                   <div
                     className='modal fade'
@@ -2297,9 +2286,8 @@ const Header = () => {
                     <>
                       {/* <div className={`mt-2 text-center mb-2 px-2 ${isFinializeDisabled ? disable_pointer_event : enable_pointer_event}`}> */}
                       <div
-                        className={`mt-2 text-center mb-2 px-2 ${
-                          mode === 'preview' ? 'vis_hid' : ''
-                        }`}
+                        className={`mt-2 text-center mb-2 px-2 ${mode === 'preview' ? 'vis_hid' : ''
+                          }`}
                       >
                         <Button
                           variant='success'
@@ -2320,9 +2308,8 @@ const Header = () => {
                       </div>
 
                       <div
-                        className={`mt-2 text-center mb-2 px-2 ${
-                          mode === 'preview' ? 'vis_hid' : ''
-                        }`}
+                        className={`mt-2 text-center mb-2 px-2 ${mode === 'preview' ? 'vis_hid' : ''
+                          }`}
                       >
                         <Button
                           variant='danger'

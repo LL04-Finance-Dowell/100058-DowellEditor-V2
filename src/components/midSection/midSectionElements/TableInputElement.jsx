@@ -208,7 +208,8 @@ export const CreateTableComponent = (
         (dataType == 'DATE_INPUT' && 'dateInput') ||
         (dataType == 'TEXT_INPUT' && 'textInput') ||
         (dataType == 'IMAGE_INPUT' && 'imageInput') ||
-        (dataType == 'SIGN_INPUT' && 'signInput');
+        (dataType == 'SIGN_INPUT' && 'signInput') || 
+        (dataType == 'dropp'  && 'dropp')  ;
       if (dataType == 'DATE_INPUT') {
         setStartDate(new Date());
         setMethod('select');
