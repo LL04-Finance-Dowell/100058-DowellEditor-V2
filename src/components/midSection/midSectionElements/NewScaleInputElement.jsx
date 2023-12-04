@@ -139,7 +139,7 @@ function createNewScaleInputField(
       const orientation = element?.raw_data?.orentation;
 
       circle.addEventListener("mouseenter", () => {
-        if (circle.textContent === "0") {
+        if (circle.textContent === "0" || i === 0) {
           element1.style.display = "block";
           element1.style.position = "absolute";
           element1.style.bottom = "0";
@@ -149,7 +149,7 @@ function createNewScaleInputField(
           element1.style.padding = "2px 8px";
           element1.style.color = "white";
           element1.style.borderRadius = "2px";
-        } else if (circle.textContent === "5") {
+        } else if (circle.textContent === "5" || i === 5) {
           element2.style.display = "block";
           element2.style.position = "absolute";
           element2.style.bottom = "0";
@@ -159,7 +159,7 @@ function createNewScaleInputField(
           element2.style.padding = "2px 8px";
           element2.style.color = "white";
           element2.style.borderRadius = "2px";
-        } else if (circle.textContent === "10") {
+        } else if (circle.textContent === "10" || i === 10) {
           element3.style.display = "block";
           element3.style.position = "absolute";
           element3.style.left = "";
@@ -174,11 +174,11 @@ function createNewScaleInputField(
       });
 
       circle.addEventListener("mouseleave", () => {
-        if (circle.textContent === "0") {
+        if (circle.textContent === "0" || i === 0) {
           element1.style.display = "none";
-        } else if (circle.textContent === "5") {
+        } else if (circle.textContent === "5" || i === 5) {
           element2.style.display = "none";
-        } else if (circle.textContent === "10") {
+        } else if (circle.textContent === "10" || i === 10) {
           element3.style.display = "none";
         }
       });
@@ -393,17 +393,17 @@ function createNewScaleInputField(
     scaleField.style.alignItems = "center";
     scaleField.style.justifyContent = "center";
 
-    const upperScaleimit = document.createElement("h6");
-    upperScaleimit.className = "upper_scale_limit";
-    upperScaleimit.textContent = element?.raw_data?.stapelUpperimit;
-    upperScaleimit.style.display = "none";
-    scaleField.append(upperScaleimit)
+    const upperScaleLimit = document.createElement("h6");
+    upperScaleLimit.className = "upper_scale_limit";
+    upperScaleLimit.textContent = element?.raw_data?.stapelUpperLimit;
+    upperScaleLimit.style.display = "none";
+    scaleField.append(upperScaleLimit);
 
     const spaceUnit = document.createElement("h6");
     spaceUnit.className = "space_unit";
     spaceUnit.textContent = element?.raw_data?.spaceUnit;
     spaceUnit.style.display = "none";
-    scaleField.append(spaceUnit)
+    scaleField.append(spaceUnit);
     for (let i = 0; i < stapelScale.length; i++) {
       const circle = document.createElement("div");
       circle.className = "circle_label";
@@ -421,15 +421,17 @@ function createNewScaleInputField(
 
       if (selectedOption === "emoji") {
         const buttonText = element.raw_data.buttonText;
-        let emojiArr = ((buttonText[i % buttonText.length].split(" "))[0]).split("")
-        if(i === 0 || i === stapelScale.length - 1) {
-          circle.textContent = `${emojiArr[0]+emojiArr[1]}`;
-        }else {
-          circle.textContent = (buttonText[i % buttonText.length]);
+        let emojiArr = buttonText[i % buttonText.length]
+          .split(" ")[0]
+          .split("");
+        if (i === 0 || i === stapelScale.length - 1) {
+          circle.textContent = `${emojiArr[0] + emojiArr[1]}`;
+        } else {
+          circle.textContent = buttonText[i % buttonText.length];
         }
         circle.style.fontSize = "1.4vw";
       }
-      
+
       if (i === 0) {
         var left = document.createElement("span");
         left.className = "leftToolTip";
@@ -447,7 +449,7 @@ function createNewScaleInputField(
           stapelOrientation === "stapel_vertical" ? "tb-rl" : "";
         left.style.backgroundColor = "#272828";
         left.style.color = "#EEEFEF";
-        left.style.borderRadius = "3px"
+        left.style.borderRadius = "3px";
         circle.append(left);
         circle.onmouseover = function () {
           left.style.visibility = "visible";
@@ -470,7 +472,7 @@ function createNewScaleInputField(
         right.style.fontSize = "medium";
         right.style.writingMode =
           stapelOrientation === "stapel_vertical" ? "tb-rl" : "";
-        right.style.borderRadius = "3px"
+        right.style.borderRadius = "3px";
         circle.append(right);
         circle.onmouseover = function () {
           right.style.display = "block";
@@ -487,10 +489,10 @@ function createNewScaleInputField(
         stapel_vertical.style.display = "none";
         stapel_vertical.textContent = "stapel_vertical";
         scaleField.appendChild(stapel_vertical);
-        scaleField.style.display = "flex"
-        scaleField.style.flexDirection = "column"
-        scaleField.style.alignItems = "center"
-        scaleField.style.justifyContent = "center"
+        scaleField.style.display = "flex";
+        scaleField.style.flexDirection = "column";
+        scaleField.style.alignItems = "center";
+        scaleField.style.justifyContent = "center";
       }
 
       if (!token) {
@@ -553,13 +555,13 @@ function createNewScaleInputField(
             let holdingParentEl =
               circle.parentElement.parentElement.parentElement.parentElement;
             let scale =
-              circle.parentElement.parentElement.parentElement.parentElement;
+              circle.parentElement.parentElement;
             let holding = scale?.querySelector(".newScaleInput");
             const buttonCircle = scale
               ? scale.querySelectorAll(".circle_label")
               : [];
 
-            // console.log("This is the background color", holdingParentEl);
+             console.log("This is the background color", holdingParentEl);
             function componentToHex(c) {
               var hex = c.toString(16);
               return hex.length == 1 ? "0" + hex : hex;
@@ -854,7 +856,7 @@ function createNewScaleInputField(
       circle.style.height = "55%";
       circle.style.borderRadius = "25px";
       circle.style.padding = "6px 12px";
-      circle.style.marginLeft = "7px";
+      circle.style.marginLeft = "12px";
       circle.style.backgroundColor = element?.raw_data?.buttonColor;
       circle.style.display = "flex";
       circle.style.justifyContent = "center";
@@ -873,8 +875,7 @@ function createNewScaleInputField(
         orientation.textContent = "vertical";
         orientation.style.display = "none";
         labelHold.appendChild(orientation);
-        labelHold.style.position = "absolute";
-        circle.style.margin = "5px 0";
+        labelHold.style.position = "relative";
         circle.style.padding = "6px 12px";
         circle.style.margin = "10px 0";
         scaleHold.style.border = "none";
@@ -884,7 +885,6 @@ function createNewScaleInputField(
         scaleHold.style.textAlign = "center";
         labelHold.style.height = "100%";
         labelHold.style.width = "50%";
-        labelHold.style.position = "absolute";
         labelHold.style.display = "flex";
         labelHold.style.flexDirection = "column";
         labelHold.style.alignItems = "center";
@@ -1031,6 +1031,9 @@ function createNewScaleInputField(
   } else if (scaleTypeHolder.textContent === "percent_scale") {
     let prodLength = element?.raw_data?.percentLabel;
     console.log(labelHold.children.length);
+    scaleText.style.display = "none";
+    scaleHold.style.overflow = "hidden";
+    scaleHold.style.height = "100%";
 
     for (let i = 0; i < prodLength; i++) {
       labelHold.style.display = "flex";
@@ -1126,10 +1129,16 @@ function createNewScaleInputField(
           nameDiv.style.top = "-1px";
           nameDiv.style.right = "-7px";
         }
+
+        if (prodLength === 1) {
+          conatainerDIV.style.width = "25vw";
+          conatainerDIV.style.marginRight = "37px";
+        }
         nameDiv.style.transform = "rotate(90deg)";
         nameDiv.style.paddingBottom = prodLength > 6 ? "30px" : "0px";
         inputPercent.style.width = "100%";
         scaleText.style.marginBottom = "65px";
+        scaleText.style.marginBottom = "10px";
       }
 
       if (decoded.details.action === "document") {
@@ -1242,6 +1251,9 @@ function createNewScaleInputField(
       rightPercentArray.push(rightPercent);
       centerPercentArray.push(centerPercent);
 
+      scaleHold.style.height = "100%";
+      scaleText.style.display = "none"
+
       // let rateValue = document.createElement("button");
       // rateValue.className = "rate_name";
       // rateValue.textContent = "Rate";
@@ -1328,7 +1340,6 @@ function createNewScaleInputField(
         nameDiv.style.transform = "rotate(90deg)";
         nameDiv.style.paddingBottom = prodLength > 6 ? "30px" : "0px";
         inputPercent.style.width = "100%";
-        scaleText.style.marginBottom = "65px";
       }
 
       if (decoded.details.action === "document") {
