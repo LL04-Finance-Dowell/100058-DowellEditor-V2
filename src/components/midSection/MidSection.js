@@ -45,14 +45,7 @@ import RemoveElementModal from '../RemoveElementModal';
 import createFormInputElement from './createElements/CreateFormElement.jsx';
 import createContainerInputElement from './createElements/CreateContainerElement.jsx';
 import { finding_percent } from './../../utils/util_functions/finding_percent';
-import { CreateTableComponent } from "./midSectionElements/TableInputElement.jsx";
-import CreatePyamentElement from "./createElements/CreatePyamentElement.jsx";
-import createPaymentInputField from "./midSectionElements/PaymentInputElement.jsx";
-import { useCutMenuContext } from "./cutMenuHook";
-import axios from "axios";
-import { toast } from "react-toastify";
-import createGenBtnEl from "./createElements/CreateGenBtnEl";
-import { saveDocument } from "../header/Header";
+
 import handleSocialMediaAPI from "../../utils/handleSocialMediaAPI";
 import { CreateTableComponent } from './midSectionElements/TableInputElement.jsx';
 import CreatePyamentElement from './createElements/CreatePyamentElement.jsx';
@@ -2024,9 +2017,9 @@ const MidSection = React.forwardRef((props, ref) => {
   };
 
   const onParagraphPost = async () => {
-    console.log("successfully yaaaaya");
+
     const res = await axios.post(
-      'http://uxlivinglab.pythonanywhere.com/',
+      'https://uxlivinglab.pythonanywhere.com/',
       {
         // document_id: decoded.details.document_id,
         // action: decoded.details.action,
