@@ -845,7 +845,10 @@ const TableRightSidebar = () => {
         cells[i].ondrop = handleDropp;
       }
       e.target?.parentElement.remove();
+      tablee.querySelector('.tr-del')?.remove()
+      tablee.querySelectorAll('.col-delete')?.forEach(el => el.parentElement?.remove())
       const updatedTable = tablee;
+
       const col_resizers = updatedTable.querySelectorAll('.td-resizer');
       const row_resizers = updatedTable.querySelectorAll('.row-resizer');
       for (const resizer of col_resizers) {
@@ -888,6 +891,7 @@ const TableRightSidebar = () => {
         // const numOfROW = numOfTr;
         const numOfCol = numOfTd / numOfTr;
         var tr = document.createElement("tr");
+        tr.className = "tr-del"
 
         for (let i = 0; i < numOfCol; i++) {
           var td = document.createElement("td");
@@ -1052,7 +1056,7 @@ const TableRightSidebar = () => {
       }
       const buttonTd = document.createElement("td");
       const rowDeleteBtn = document.createElement("button");
-      rowDeleteBtn.className = "btn btn-warning configure-table";
+      rowDeleteBtn.className = "btn btn-warning col-delete";
       rowDeleteBtn.style.marginLeft = "5px";
       const deleteIcon = `<img src="${deleteSVG}"/>`
       rowDeleteBtn.innerHTML = deleteIcon;
@@ -1071,98 +1075,7 @@ const TableRightSidebar = () => {
     // }
   };
 
-  const handleAddRow = (e, direction) => {
-    const focussedDiv = document.querySelector(".focussedd");
 
-    const editableTable = findEditableTable();
-    const numOfTr = editableTable?.rows?.length;
-    const numOfTd = editableTable.querySelectorAll("td").length;
-    const numOfCol = numOfTd / numOfTr;
-    for (var rowIndex = 0; rowIndex < 1; rowIndex++) {
-      var tr = document.createElement("tr");
-      for (var colIndex = 0; colIndex < numOfCol; colIndex++) {
-        // // console.log("numOfCol", numOfTr, numOfTd, numOfCol);
-        var td = document.createElement("td");
-        td.className = "dropp";
-        const iconMenu = createIconMenu();
-        td.appendChild(iconMenu);
-        // td.style.height = "50px";
-        // if (colIndex == numOfCol - 1) {
-        //   const rowDeleteBtn = document.createElement("button");
-        //   rowDeleteBtn.className = "btn btn-warning";
-        //   rowDeleteBtn.style.marginLeft = "5px";
-        //   rowDeleteBtn.innerText = "Del Row";
-        //   rowDeleteBtn.onclick = (e) => {
-        //     e.target?.parentElement?.parentElement?.remove();
-        //     e.stopPropagation();
-        //   };
-        //   td.style.border = "none";
-        //   // td.style.background = "#fff";
-        //   td.appendChild(rowDeleteBtn);
-        // }
-        td.onmouseover = function (e) {
-          e.preventDefault();
-          if (e.target.classList.contains("dropp"))
-            e.target.classList.add("cells_menu");
-        };
-        td.onmouseleave = function (e) {
-          e.preventDefault();
-          var notes = null;
-          for (var i = 0; i < e.target.childNodes.length; i++) {
-            if (e.target.childNodes[i].className == "table_menu_update") {
-              notes = e.target.childNodes[i];
-              break;
-            }
-          }
-          if (notes) e.target.removeChild(notes);
-
-          e.target.classList.remove("cells_menu");
-          const editableTable = findEditableTable();
-          editableTable.parentElement.classList.remove("over_flow_maintainer");
-          focussedDiv.style.border = "2px solid orange";
-        };
-        td.ondragover = function (e) {
-          e.preventDefault();
-          e.target.classList.add("table_drag");
-          if (e.target.childNodes.length < 2) {
-            e.target.style.border = "3px solid blue";
-          }
-          if (e.target.classList.contains("imageInput")) {
-            e.target.style.border = "none";
-          }
-        };
-        td.ondragleave = (e) => {
-          e.preventDefault();
-          if (e.target.classList.contains("imageInput")) {
-            e.target.style.border = "none";
-          }
-        };
-
-        // // console.log("td", td.classList.contains("dropp"));
-        td.ondrop = handleDropp;
-        e.target.parentElement.prepend(td);
-        tr.prepend(td);
-      }
-      // editableTable.prepend(tr);
-      const AllTrOfEditableTable = editableTable.querySelectorAll("tr");
-      let targetTr = null;
-      for (let i = 0; i < AllTrOfEditableTable.length; i++) {
-        if (
-          AllTrOfEditableTable[i] ==
-          e.target.parentElement.parentElement.parentElement
-        ) {
-          targetTr = i;
-          // break;
-        }
-      }
-      if (direction == "above") {
-        editableTable.querySelectorAll("tr")[targetTr].before(tr);
-      } else {
-        editableTable.querySelectorAll("tr")[targetTr].after(tr);
-      }
-    }
-    e.stopPropagation();
-  };
 
 
   const addColumn = () => {
@@ -1180,7 +1093,7 @@ const TableRightSidebar = () => {
           resizer.classList.add('td-resizer');
           resizer.addEventListener("mousedown", (e) => {
             let x = 0;
-            let w = 0;  
+            let w = 0;
           })
           td.appendChild(resizer);
           createResizableColumn(td, resizer)
@@ -1189,11 +1102,12 @@ const TableRightSidebar = () => {
       } else {
         const td = document.createElement("td");
         td.className = "dropp";
+        td.classList.add('col-delete');
         td.style.height = "50px";
         const colDeleteBtn = document.createElement("button");
         const deleteIcon = `<img src="${deleteSVG}"/>`
         colDeleteBtn.innerHTML = deleteIcon
-        colDeleteBtn.className = "btn btn-warning configure-table";
+        colDeleteBtn.className = "btn btn-warning";
         colDeleteBtn.style.marginLeft = "5px";
 
         colDeleteBtn.onclick = (e) => {
@@ -1215,78 +1129,6 @@ const TableRightSidebar = () => {
       }
     })
   }
-  const handleAddColumn = (e, direction) => {
-    const focussedDiv = document.querySelector(".focussedd");
-
-    const editableTable = findEditableTable();
-    const numOfTr = editableTable?.rows?.length;
-    const numOfTdElement = editableTable.querySelectorAll("td");
-    const numOfTd = numOfTdElement.length;
-    const numOfCol = numOfTd / numOfTr;
-
-    // // console.log("numOfTr", numOfTr, "numOfTd", numOfTd, "numOfCol", numOfCol);
-    const AllTrOfEditableTable = editableTable.querySelectorAll("tr");
-
-    const index = Array.from(
-      e.target.parentElement.parentElement.parentElement.children
-    ).indexOf(e.target.parentElement.parentElement);
-    for (let i = 0; i < AllTrOfEditableTable.length; i++) {
-      var td = document.createElement("td");
-      td.className = "dropp";
-      td.style.height = "50px";
-      const iconMenu = createIconMenu();
-      td.appendChild(iconMenu);
-      td.onmouseover = function (e) {
-        e.preventDefault();
-        if (e.target.classList.contains("dropp"))
-          e.target.classList.add("cells_menu");
-      };
-      td.onmouseleave = function (e) {
-        e.preventDefault();
-        var notes = null;
-        for (var i = 0; i < e.target.childNodes.length; i++) {
-          if (e.target.childNodes[i].className == "table_menu_update") {
-            notes = e.target.childNodes[i];
-            break;
-          }
-        }
-        if (notes) e.target.removeChild(notes);
-
-        e.target.classList.remove("cells_menu");
-        const editableTable = findEditableTable();
-        editableTable.parentElement.classList.remove("over_flow_maintainer");
-        focussedDiv.style.border = "2px solid orange";
-      };
-      td.ondragover = function (e) {
-        e.preventDefault();
-        e.target.classList.add("table_drag");
-        if (e.target.childNodes.length < 2) {
-          e.target.style.border = "3px solid blue";
-        }
-        if (e.target.classList.contains("imageInput")) {
-          e.target.style.border = "none";
-        }
-      };
-      td.ondragleave = (e) => {
-        e.preventDefault();
-        if (e.target.classList.contains("imageInput")) {
-          e.target.style.border = "none";
-        }
-      };
-
-      // // console.log("td", td.classList.contains("dropp"));
-      td.ondrop = handleDropp;
-      AllTrOfEditableTable[i].insertBefore(
-        td,
-        direction == "left"
-          ? AllTrOfEditableTable[i].childNodes[index]
-          : AllTrOfEditableTable[i].childNodes[index].nextSibling
-      );
-    }
-
-    e.stopPropagation();
-    // }
-  };
   const handleDeleteRow = (e) => {
     const editableTable = findEditableTable();
     const AllTrOfEditableTable = editableTable.querySelectorAll("tr");
