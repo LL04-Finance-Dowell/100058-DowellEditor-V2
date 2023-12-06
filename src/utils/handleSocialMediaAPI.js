@@ -3,7 +3,7 @@ import React from 'react';
 
 const handleSocialMediaAPI = async (decoded, save=false ) => {
 
-    const response = await axios.post("http://uxlivinglab.pythonanywhere.com/", {
+    const response = await axios.post("https://uxlivinglab.pythonanywhere.com/", {
         // document_id: decoded.details.document_id,
         // action: decoded.details.action,
         // database: decoded.details.database,
@@ -82,7 +82,7 @@ const handleSocialMediaAPI = async (decoded, save=false ) => {
         }
 
         console.log("/n>>> Decoded\n", socialData,"\n>>>")
-        const saveResponse = await axios.post("http://uxlivinglab.pythonanywhere.com/", socialData);
+        const saveResponse = await axios.post("https://uxlivinglab.pythonanywhere.com/", socialData);
     console.log("save response data", saveResponse);
 
       }else {
