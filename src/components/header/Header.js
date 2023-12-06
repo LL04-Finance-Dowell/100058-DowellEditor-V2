@@ -21,6 +21,9 @@ import { AiFillPrinter } from 'react-icons/ai';
 
 import { downloadPDF } from '../../utils/genratePDF.js';
 
+import generateImage from "../../utils/generateImage.js";
+import RejectionModal from "../modals/RejectionModal.jsx";
+import handleSocialMediaAPI from "../../utils/handleSocialMediaAPI";
 import generateImage from '../../utils/generateImage.js';
 import RejectionModal from '../modals/RejectionModal.jsx';
 
@@ -236,8 +239,24 @@ const Header = () => {
     }
   }
 
-  function saveDocument() {
-    const txt = document.getElementsByClassName('textInput');
+
+
+
+  let elem = {};
+  async function saveDocument() {
+    // console.log("/n>>> Decoded\n", decoded,"\n>>>")
+    if(decoded.product_name === "Social Media Automation"){
+      try {
+       await handleSocialMediaAPI(decoded, true);
+       toast.success("Social Media Info Saved!");
+       return;
+      } catch (error) {
+        toast.error("Something Went Wrong!");
+        console.log(error);
+        return;
+      }
+    }
+    const txt = document.getElementsByClassName("textInput");
     let elem = {};
     let contentFile = [];
 
@@ -1091,6 +1110,8 @@ const Header = () => {
     return contentFile;
   }
 
+  
+
   const [searchParams] = useSearchParams();
   const token = searchParams.get('token');
   const link_idd = searchParams.get('link_id');
@@ -1647,7 +1668,7 @@ const Header = () => {
         document_name: titleName,
         content: JSON.stringify(dataa),
         page: item,
-      };
+      }
     }
 
     // console.log(updateField.content);
@@ -1662,7 +1683,6 @@ const Header = () => {
       const iframe = document.querySelector('iframe');
       iframe?.contentWindow?.postMessage(message, '*');
     }
-
     Axios.post(
       'https://100058.pythonanywhere.com/api/save-data-into-collection/',
       {
@@ -1676,7 +1696,7 @@ const Header = () => {
         team_member_ID: decoded.details.team_member_ID,
         update_field: updateField,
         page: item,
-        // scale_url: `${scaleData}`,
+        scale_url: `${scaleData}`,
         company_id: companyId,
         type: decoded.details.action,
         questionAndAns: questionAndAnswerGroupedData,
@@ -1766,6 +1786,7 @@ const Header = () => {
   // token creation end
 
   const getPostData = async () => {
+    // handleSocialMediaAPI(decoded, true);
     const response = await Axios.post(
       'https://100058.pythonanywhere.com/api/get-data-from-collection/',
       {

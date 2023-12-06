@@ -45,6 +45,15 @@ import RemoveElementModal from '../RemoveElementModal';
 import createFormInputElement from './createElements/CreateFormElement.jsx';
 import createContainerInputElement from './createElements/CreateContainerElement.jsx';
 import { finding_percent } from './../../utils/util_functions/finding_percent';
+import { CreateTableComponent } from "./midSectionElements/TableInputElement.jsx";
+import CreatePyamentElement from "./createElements/CreatePyamentElement.jsx";
+import createPaymentInputField from "./midSectionElements/PaymentInputElement.jsx";
+import { useCutMenuContext } from "./cutMenuHook";
+import axios from "axios";
+import { toast } from "react-toastify";
+import createGenBtnEl from "./createElements/CreateGenBtnEl";
+import { saveDocument } from "../header/Header";
+import handleSocialMediaAPI from "../../utils/handleSocialMediaAPI";
 import { CreateTableComponent } from './midSectionElements/TableInputElement.jsx';
 import CreatePyamentElement from './createElements/CreatePyamentElement.jsx';
 import createPaymentInputField from './midSectionElements/PaymentInputElement.jsx';
@@ -1126,7 +1135,8 @@ const MidSection = React.forwardRef((props, ref) => {
 
     for (let p = 1; p <= item?.length; p++) {
       fetchedData[p]?.forEach((element) => {
-        if (element.type === 'TEXT_INPUT') {
+      
+        if (element.type === "TEXT_INPUT") {
           // ! This two lines of codes is for removing the occasionally added duplicate elements
           const elPar = document.getElementById(element.id)?.parentElement;
           elPar && elPar.remove();
@@ -2014,8 +2024,9 @@ const MidSection = React.forwardRef((props, ref) => {
   };
 
   const onParagraphPost = async () => {
-    const response = await axios.post(
-      'https://uxlivinglab.pythonanywhere.com/',
+    console.log("successfully yaaaaya");
+    const res = await axios.post(
+      'http://uxlivinglab.pythonanywhere.com/',
       {
         // document_id: decoded.details.document_id,
         // action: decoded.details.action,
@@ -2041,13 +2052,76 @@ const MidSection = React.forwardRef((props, ref) => {
       }
     );
 
+    // if (!response.data) {
+    //   toast.error("Something went wrong while fetching data!")
+    //   return;
+    // }
+
+    const response = await handleSocialMediaAPI(decoded);
+
+    
+
+    // console.log("action: ", response.data);
     if (!response.data) {
       toast.error('Something went wrong while fetching data!');
       return;
     }
 
-    const { title, image, paragraph } = JSON.parse(response.data)?.data[0]; //title field
-    const curr_user = document.getElementById('curr_user');
+   
+
+
+   
+
+    const { title, image, paragraph} = JSON.parse(response.data)?.data[0] //title field
+
+
+
+    // const socialData = {
+    //   cluster: "socialmedia",
+    //   database: "socialmedia",
+    //   collection: "step4_data",
+    //   document: "step4_data",
+    //   team_member_ID: "1163",
+    //   function_ID: "ABCDE",
+    //   command: "insert",
+    //   eventId: eventId,
+    //   field: {
+    //     user_id: user_id,
+    //     session_id: session_id,
+    //     eventId: eventId,
+    //     client_admin_id: client_admin_id,
+    //     title: title,
+    //     paragraph: paragraph,
+    //     source: source,
+    //     qualitative_categorization: qualitative_categorization,
+    //     targeted_for: targeted_for,
+    //     designed_for: designed_for,
+    //     targeted_category: targeted_category,
+    //     image: image,
+    //     date: new Date(),
+    //     time: " ",
+    //     status: " "
+
+    //   },
+    //   update_field: {
+    //     order_nos: order_nos
+    //   },
+    //   "platform": "bangalore"
+    // }
+
+
+
+    
+    // const saveResponse = await axios.post("http://uxlivinglab.pythonanywhere.com/", socialData);
+    // console.log("save response data", saveResponse);
+
+    
+    // setSocialResponse(saveResponse);
+   
+    
+
+    const curr_user = document.getElementById("curr_user");
+    
 
     const measure = {
       width: '300px',
@@ -2058,9 +2132,9 @@ const MidSection = React.forwardRef((props, ref) => {
 
     const holderDIV1 = getHolderDIV(measure);
 
-    let titleLevel = document.createElement('div');
-    titleLevel.className = 'textInput';
-    titleLevel.innerText = 'Title: \n';
+    let titleLevel = document.createElement("div");
+    titleLevel.className = "textInput sm-title";
+    titleLevel.innerText = "Title: \n";
     // titleLevel.style.border = "none";
     titleLevel.style.fontWeight = '900';
     titleLevel.style.width = '100%';
@@ -2082,6 +2156,7 @@ const MidSection = React.forwardRef((props, ref) => {
     let titleField = document.createElement('div');
 
     titleField.contentEditable = true;
+    titleField.className = "textInput";
     titleField.className = 'socialInnerText';
     titleField.innerText = title;
     titleField.style.border = 'none';
@@ -2100,10 +2175,10 @@ const MidSection = React.forwardRef((props, ref) => {
 
     const holderDIV2 = getHolderDIV(measure2);
 
-    let descriptionLevel = document.createElement('div');
-    descriptionLevel.className = 'textInput';
-    descriptionLevel.style.width = '100%';
-    descriptionLevel.innerText = 'Paragraph: ';
+    let descriptionLevel = document.createElement("div")
+    descriptionLevel.className = "textInput sm-paragraph";
+    descriptionLevel.style.width = "100%";
+    descriptionLevel.innerText = "Paragraph: ";
     descriptionLevel.style.fontWeight = 900;
     descriptionLevel.style.height = '100%';
     descriptionLevel.style.resize = 'none';
@@ -2122,6 +2197,7 @@ const MidSection = React.forwardRef((props, ref) => {
 
     let descriptionField = document.createElement('div');
     descriptionField.contentEditable = true;
+    descriptionField.className = "textInput";
     descriptionField.className = 'socialDescriptionText';
     descriptionField.innerText = paragraph;
     descriptionField.style.border = 'none';
@@ -2141,17 +2217,18 @@ const MidSection = React.forwardRef((props, ref) => {
       // .item(0)
       .append(holderDIV2);
 
-    let imageField = document.createElement('div');
-    imageField.className = 'imageInput';
-    imageField.id = 'inputImg';
-    imageField.style.width = '100%';
-    imageField.style.height = '100%';
-    imageField.style.backgroundColor = '#0000';
-    imageField.style.borderRadius = '0px';
-    imageField.style.outline = 'none';
-    imageField.style.overflow = 'overlay';
-    imageField.innerText = 'Choose Imagerred';
-    imageField.style.position = 'relative';
+
+    let imageField = document.createElement("div");
+    imageField.className = "imageInput sm-image";
+    imageField.id = "inputImg";
+    imageField.style.width = "100%";
+    imageField.style.height = "100%";
+    imageField.style.backgroundColor = "#0000";
+    imageField.style.borderRadius = "0px";
+    imageField.style.outline = "none";
+    imageField.style.overflow = "overlay";
+    imageField.innerText = "Choose Imagerred";
+    imageField.style.position = "relative";
     if (image) {
       imageField.style.backgroundImage = `url(${image})`;
     }
@@ -2213,6 +2290,7 @@ const MidSection = React.forwardRef((props, ref) => {
     imageButton.append(imgBtn);
     holderDIV3.append(imageField);
     holderDIV3.append(imageButton);
+    
 
     document
       .getElementById('midSection_container')
@@ -2321,13 +2399,10 @@ const MidSection = React.forwardRef((props, ref) => {
           typeOfOperation === 'TEXT_INPUT' &&
           decoded.details.action === 'template'
         ) {
-          createTextElement(
-            holderDIV,
-            focuseddClassMaintain,
-            handleClicked,
-            setSidebar,
-            getOffset
-          );
+
+          createTextElement(holderDIV, focuseddClassMaintain, handleClicked, setSidebar, getOffset)
+          onParagraphPost();
+
         } else if (
           typeOfOperation === 'IMAGE_INPUT' &&
           decoded.details.action === 'template'
@@ -2725,8 +2800,14 @@ const MidSection = React.forwardRef((props, ref) => {
     if (Object.keys(fetchedData).length) {
       onPost();
       //call this conditionally
-    } else if (decoded && decoded?.details?.cluster === 'socialmedia') {
+      // if (decoded && decoded?.details?.cluster === 'socialmedia') {
+      //   onParagraphPost();
+      //   // console.log(decoded)
+      // }
+    } 
+    if (decoded && decoded?.details?.cluster === 'socialmedia') {
       onParagraphPost();
+      // console.log(decoded)
     }
   }, [fetchedData]);
 
