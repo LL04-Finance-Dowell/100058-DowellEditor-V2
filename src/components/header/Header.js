@@ -239,10 +239,7 @@ const Header = () => {
 
 
 
-
-  let elem = {};
-  async function saveDocument() {
-    // console.log("/n>>> Decoded\n", decoded,"\n>>>")
+  async function saveSocialMedia(){
     if(decoded.product_name === "Social Media Automation"){
       try {
        await handleSocialMediaAPI(decoded, true);
@@ -254,6 +251,12 @@ const Header = () => {
         return;
       }
     }
+  }
+
+  let elem = {};
+  function saveDocument() {
+    // console.log("/n>>> Decoded\n", decoded,"\n>>>")
+  
     const txt = document.getElementsByClassName("textInput");
     let elem = {};
     let contentFile = [];
@@ -1644,6 +1647,7 @@ const Header = () => {
     // setIsLoading(true);
     setIsButtonDisabled(true);
     const dataa = saveDocument();
+    saveSocialMedia();
     const finalize = document.getElementById('finalize-button');
 
     const completeProgressBar = document.getElementById('progress-100');
@@ -2238,7 +2242,9 @@ const Header = () => {
                     size='md'
                     className='rounded remove_button'
                     id='saving-buttonn'
-                    onClick={submit}
+                    onClick={
+                      decoded.product_name === "Social Media Automation" ? saveSocialMedia : submit
+                    }
                     style={{
                       visibility: documentFlag && 'hidden',
                     }}

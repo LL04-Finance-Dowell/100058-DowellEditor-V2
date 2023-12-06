@@ -2394,7 +2394,7 @@ const MidSection = React.forwardRef((props, ref) => {
         ) {
 
           createTextElement(holderDIV, focuseddClassMaintain, handleClicked, setSidebar, getOffset)
-          onParagraphPost();
+          // onParagraphPost();
 
         } else if (
           typeOfOperation === 'IMAGE_INPUT' &&
