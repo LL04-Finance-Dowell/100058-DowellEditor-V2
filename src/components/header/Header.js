@@ -137,6 +137,13 @@ const Header = () => {
   const handleOptions = () => {
     setIsMenuVisible(!isMenuVisible);
   };
+
+  document.body.addEventListener("click", function() {
+    if(isMenuVisible === true) {
+      setIsMenuVisible(!isMenuVisible);
+    }
+  }, true);
+
   const handleUndo = () => {
     document.execCommand('undo');
   };
@@ -1847,6 +1854,7 @@ const Header = () => {
     return () => {
       window.removeEventListener('click', handleClickOutside);
     };
+
   }, []);
 
   // copy text function
