@@ -26,6 +26,7 @@ import RejectionModal from '../modals/RejectionModal.jsx';
 
 import ProgressLoader from '../../utils/progressLoader/ProgressLoader';
 import MidResizer from './MidResizer.jsx';
+import { current } from '@reduxjs/toolkit';
 
 const Header = () => {
   const inputRef = useRef(null);
@@ -480,6 +481,8 @@ const Header = () => {
           function getChildData() {
             const allTableCCells = [];
             const tableChildren = tables[t].querySelector('table')?.children;
+            const tableId = tables[t].querySelector('table')?.id ?? 'T1';
+            let tdId=tables[t].querySelector('table')?.querySelectorAll('.text_td').length + 1
             for (let i = 0; i < tableChildren.length; i++) {
               const tableTR = { tr: null };
               const newTableTR = [];
@@ -487,16 +490,16 @@ const Header = () => {
                 const childNodes = tableChildren[i].children[j]?.childNodes;
                 const currentTd = tableChildren[i].children[j]
                 const tdElement = [];
-                if (!childNodes) {
-                  tdElement.push(currentTd);
-                }
                 childNodes.forEach((child) => {
                   if (
                     !child.classList?.contains('row-resizer') &&
                     !child.classList?.contains('td-resizer')
-                  ) {
-                    if (!child.innerHTML) {
-                      tdElement.push(currentTd);
+                    ) {
+                      if (!child.innerHTML) {
+                        currentTd.id = `${tableId}td${tdId}`
+                        tdElement.push(currentTd);
+                        tdId++;
+                        console.log("\nCURRENT TD\n",currentTd,"\n")
                     } else {
                       tdElement.push(child);
                     }
@@ -511,7 +514,7 @@ const Header = () => {
                       (TdDivClassName == 'textInput' && 'TEXT_INPUT') ||
                       (TdDivClassName == 'imageInput' && 'IMAGE_INPUT') ||
                       (TdDivClassName == 'signInput' && 'SIGN_INPUT') ||
-                      (TdDivClassName == 'dropp' && 'dropp'),
+                      (TdDivClassName == 'dropp' && 'text_td'),
                     data:
                       TdDivClassName == 'imageInput'
                         ? tableChildren[i].children[j]?.firstElementChild.style
@@ -545,6 +548,8 @@ const Header = () => {
               ? tables[t].firstElementChild.id
               : `tab${t + 1}`,
           };
+          console.log("\nCURRENT ELEM\n",elem.data,"\n")
+
           const pageNum = findPaageNum(tables[t]);
           page[0][pageNum]?.push(elem);
         }
