@@ -21,7 +21,7 @@ const handleSocialMediaAPI = async (decoded, save=false ) => {
         team_member_ID: decoded.details.team_member_ID,
         function_ID: decoded.details.function_ID,
         cluster: decoded.details.cluster,
-        field : {_id: "64e367eb3bc140afab90b3ec"},
+        field : {_id: decoded.details._id},
         command: "fetch",
         document: decoded.details.document,
         update_field: decoded.details.update_field,
