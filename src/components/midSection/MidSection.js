@@ -2037,7 +2037,7 @@ const MidSection = React.forwardRef((props, ref) => {
  
 
   useEffect(() => {
-    onParagraphPost();
+    // onParagraphPost();
   }, [socialMediaImg])
 
   const onParagraphPost = async () => {
