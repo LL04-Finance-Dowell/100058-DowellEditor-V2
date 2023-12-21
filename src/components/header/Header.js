@@ -20,8 +20,8 @@ import { downloadPDF } from '../../utils/genratePDF.js';
 import generateImage from "../../utils/generateImage.js";
 import RejectionModal from "../modals/RejectionModal.jsx";
 import handleSocialMediaAPI from "../../utils/handleSocialMediaAPI";
-import generateImage from '../../utils/generateImage.js';
-import RejectionModal from '../modals/RejectionModal.jsx';
+// import generateImage from '../../utils/generateImage.js';
+// import RejectionModal from '../modals/RejectionModal.jsx';
 
 import ProgressLoader from '../../utils/progressLoader/ProgressLoader';
 
