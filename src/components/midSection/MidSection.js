@@ -50,14 +50,14 @@ import { finding_percent } from './../../utils/util_functions/finding_percent';
 
 import handleSocialMediaAPI from "../../utils/handleSocialMediaAPI";
 import SocialMedia from '../modals/SocialMedia.js';
-// import { CreateTableComponent } from './midSectionElements/TableInputElement.jsx';
-// import CreatePyamentElement from './createElements/CreatePyamentElement.jsx';
-// import createPaymentInputField from './midSectionElements/PaymentInputElement.jsx';
-// import { useCutMenuContext } from './cutMenuHook';
-// import axios from 'axios';
-// import { toast } from 'react-toastify';
-// import createGenBtnEl from './createElements/CreateGenBtnEl';
-// import { saveDocument } from '../header/Header';
+import { CreateTableComponent } from './midSectionElements/TableInputElement.jsx';
+import CreatePyamentElement from './createElements/CreatePyamentElement.jsx';
+import createPaymentInputField from './midSectionElements/PaymentInputElement.jsx';
+import { useCutMenuContext } from './cutMenuHook';
+import axios from 'axios';
+import { toast } from 'react-toastify';
+import createGenBtnEl from './createElements/CreateGenBtnEl';
+import { saveDocument } from '../header/Header';
 // tHIS IS FOR A TEST COMMIT
 
 const dummyData = {
