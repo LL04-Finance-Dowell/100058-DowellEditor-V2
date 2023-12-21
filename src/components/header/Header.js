@@ -22,8 +22,8 @@ import { AiFillPrinter } from 'react-icons/ai';
 import { downloadPDF } from '../../utils/genratePDF.js';
 
 import handleSocialMediaAPI from "../../utils/handleSocialMediaAPI";
-import generateImage from '../../utils/generateImage.js';
-import RejectionModal from '../modals/RejectionModal.jsx';
+// import generateImage from '../../utils/generateImage.js';
+// import RejectionModal from '../modals/RejectionModal.jsx';
 
 import ProgressLoader from '../../utils/progressLoader/ProgressLoader';
 import MidResizer from './MidResizer.jsx';

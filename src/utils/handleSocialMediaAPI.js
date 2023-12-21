@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React from 'react';
+import { useStateContext } from '../contexts/contextProvider';
 
 const handleSocialMediaAPI = async (decoded, save=false ) => {
 
@@ -35,7 +36,8 @@ const handleSocialMediaAPI = async (decoded, save=false ) => {
       if(save==true){
         const title = document.querySelector(".sm-title")?.innerText;
         const paragraph = document.querySelector(".sm-paragraph")?.innerText;
-        const image = document.querySelector(".sm-image")?.style?.backgroundImage;
+        // const image = document.querySelector(".sm-image")?.style?.backgroundImage;
+        const image = localStorage.getItem("editor_social_img");
 
         if(title == null || paragraph == null || image == null){
             return;

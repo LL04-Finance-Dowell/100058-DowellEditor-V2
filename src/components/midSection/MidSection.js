@@ -3,6 +3,8 @@
 /* eslint-disable no-loop-func */
 /* eslint-disable no-redeclare */
 /* eslint-disable no-unused-vars */
+
+//pexels api key = Hl1vc1m448ZiRV4JJGGkPqxgMtZtQ99ttmzZq7XHyKiTBDvF20dYZZsY
 import React, { useEffect, useRef, useState } from 'react';
 import { Row, Col } from 'react-bootstrap';
 import { useSearchParams } from 'react-router-dom';
@@ -47,14 +49,15 @@ import createContainerInputElement from './createElements/CreateContainerElement
 import { finding_percent } from './../../utils/util_functions/finding_percent';
 
 import handleSocialMediaAPI from "../../utils/handleSocialMediaAPI";
-import { CreateTableComponent } from './midSectionElements/TableInputElement.jsx';
-import CreatePyamentElement from './createElements/CreatePyamentElement.jsx';
-import createPaymentInputField from './midSectionElements/PaymentInputElement.jsx';
-import { useCutMenuContext } from './cutMenuHook';
-import axios from 'axios';
-import { toast } from 'react-toastify';
-import createGenBtnEl from './createElements/CreateGenBtnEl';
-import { saveDocument } from '../header/Header';
+import SocialMedia from '../modals/SocialMedia.js';
+// import { CreateTableComponent } from './midSectionElements/TableInputElement.jsx';
+// import CreatePyamentElement from './createElements/CreatePyamentElement.jsx';
+// import createPaymentInputField from './midSectionElements/PaymentInputElement.jsx';
+// import { useCutMenuContext } from './cutMenuHook';
+// import axios from 'axios';
+// import { toast } from 'react-toastify';
+// import createGenBtnEl from './createElements/CreateGenBtnEl';
+// import { saveDocument } from '../header/Header';
 // tHIS IS FOR A TEST COMMIT
 
 const dummyData = {
@@ -129,6 +132,8 @@ const MidSection = React.forwardRef((props, ref) => {
     resizeChecker,
     setDefSelOpt,
     defSelOpt,
+    socialMediaImg, 
+    setSocialMediaImg
   } = useStateContext();
 
   const { contextMenu, setContextMenu, setFromContextMenu } =
@@ -157,6 +162,15 @@ const MidSection = React.forwardRef((props, ref) => {
   const [selectedText, setSelectedText] = useState('');
   const handleCutInputRef = useRef(null);
   const copyItemRef = useRef(null);
+  const [socialModalIsOpen, setSocialModalIsOpen] = useState(false);
+
+  const openSocialModal = () => {
+    setSocialModalIsOpen(true);
+  };
+
+  const closeSociaModal = () => {
+    setSocialModalIsOpen(false);
+  }
 
   const boldCommand = () => {
     if (!editorRef.current) return;
@@ -2016,6 +2030,16 @@ const MidSection = React.forwardRef((props, ref) => {
     setDimRatios(iniDimRatio);
   };
 
+  
+
+
+
+ 
+
+  useEffect(() => {
+    onParagraphPost();
+  }, [socialMediaImg])
+
   const onParagraphPost = async () => {
 
     const res = await axios.post(
@@ -2051,10 +2075,24 @@ const MidSection = React.forwardRef((props, ref) => {
     // }
 
     const response = await handleSocialMediaAPI(decoded);
+    // const resp = await axios.get("https://api.pexels.com/v1/curated", {
+    //   headers: {
+    //     Authorization: "Hl1vc1m448ZiRV4JJGGkPqxgMtZtQ99ttmzZq7XHyKiTBDvF20dYZZsY"
+    //   }
+    // });
+    
+
+    // // const [getImg, setImg] = useState();
+    // // // const getImages = async () => {
+    // //   const resp =  axios.get("https://api.pexels.com/v1/curated") 
+    // //   console.log(resp)
+    // // // }
+
+
 
     
 
-    // console.log("action: ", response.data);
+    // console.log("\n>>action: \n>>", resp.data.photos[0].src.original);
     if (!response.data) {
       toast.error('Something went wrong while fetching data!');
       return;
@@ -2209,26 +2247,101 @@ const MidSection = React.forwardRef((props, ref) => {
       .getElementById('midSection_container')
       // .item(0)
       .append(holderDIV2);
+   
+      
+
+      // const response = await handleSocialMediaAPI(decoded);
+      // const resp = await axios.get("https://api.pexels.com/v1/curated", {
+      //   headers: {
+      //     Authorization: "Hl1vc1m448ZiRV4JJGGkPqxgMtZtQ99ttmzZq7XHyKiTBDvF20dYZZsY"
+      //   }
+      // });
+      
+  
+      // const [getImg, setImg] = useState();
+      // // const getImages = async () => {
+      //   const resp =  axios.get("https://api.pexels.com/v1/curated") 
+      //   console.log(resp)
+      // // }
+  
+  
+  
+      // const measure4 = {
+      //   width: '400px',
+      //   height: '400px',
+      //   top: '100px',
+      //   border: "2px dotted gray",
+      //   auth_user: curr_user,
+      // };
+  
+      // const holderDIV4 = getHolderDIV(measure4);
+      
+  
+      // console.log("\n>>action: \n>>", resp.data.photos[0].src.original);
+
+      // let iframeField = document.createElement("iframe");
+      // iframeField.className ="iframInput";
+      // iframeField.style.width = "800px";
+      // iframeField.style.height = "800px";
+      // iframeField.style.border = "2px dotted gray"
+      // let iframeField = document.createElement("iframe");
+      // resp.data.photos.map((img) => {
+      // iframeField.className ="iframInput";
+      // iframeField.style.width = "800px";
+      // iframeField.style.height = "800px";
+      // iframeField.style.border = "2px dotted gray"
+      // iframeField.src = `${img.src.original}`
+      // }
+      // )
+      // const iframeContent = resp.data.photos.map(img => `<img src="${img.src.original}" alt="${img.photographer}">`).join("");
+      // iframeField.src = resp.data.photos.map(img => `${img.src.original}`)
+      // resp.data.photos.map((img) => 
+      // // <iframe width="300" height="300"  src={img.src.original} title="W3Schools Free Online Web Tutorials"></iframe>
+      // // {
+    
+      // iframeField.src = `${img.src.original}`
+
+      
+      // // }
+
+      //   // {
+      //     // console.log("\n>>>", img.src.original)
+      //   // }
+      //   )
+        // holderDIV4.append(iframeField);
 
 
+      // let iframeField = document.createElement("iframe");
+      // iframeField.className ="iframInput";
+      // iframeField.style.width = "300px";
+      // iframeField.style.height = "300px";
+      // iframeField.src = {img.src.original}
+      // document
+      // .getElementById('midSection_container')
+      // // .item(0)
+      // .append(holderDIV4);
+<br/>
     let imageField = document.createElement("div");
     imageField.className = "imageInput sm-image";
     imageField.id = "inputImg";
     imageField.style.width = "100%";
     imageField.style.height = "100%";
-    imageField.style.backgroundColor = "#0000";
     imageField.style.borderRadius = "0px";
     imageField.style.outline = "none";
     imageField.style.overflow = "overlay";
-    imageField.innerText = "Choose Imagerred";
+    imageField.innerText = "Choose Image";
     imageField.style.position = "relative";
-    if (image) {
-      imageField.style.backgroundImage = `url(${image})`;
-    }
+
+    if (socialMediaImg) {
+          imageField.style.backgroundImage = `url(${socialMediaImg})`;
+          imageField.innerText = " ";
+        }
+        // console.log( imageField.style.backgroundImage = `url(${socialImg})`)
+  
 
     const measure3 = {
-      width: '300px',
-      height: '100px',
+      width: "400px",
+      height: '300px',
       top: '370px',
       auth_user: curr_user,
     };
@@ -2245,6 +2358,7 @@ const MidSection = React.forwardRef((props, ref) => {
 
     imageField.addEventListener('onclick', () => { });
 
+
     imageField.onclick = (e) => {
       e.stopPropagation();
       focuseddClassMaintain(e);
@@ -2252,37 +2366,38 @@ const MidSection = React.forwardRef((props, ref) => {
         copyInput('image2');
       }
       handleClicked('image2', 'container2');
-      setSidebar(true);
+      // setSidebar(true);
+      openSocialModal();
     };
 
-    const imageButton = document.createElement('div');
-    imageButton.className = 'addImageButton';
-    imageButton.innerText = 'Choose File';
-    imageButton.style.display = 'none';
+    // const imageButton = document.createElement('div');
+    // imageButton.className = 'addImageButton';
+    // imageButton.innerText = 'Choose File';
+    // imageButton.style.display = 'none';
 
-    const imgBtn = document.createElement('input');
-    imgBtn.className = 'addImageButtonInput';
-    imgBtn.type = 'file';
-    imgBtn.style.objectFit = 'cover';
-    var uploadedImage = '';
+    // const imgBtn = document.createElement('input');
+    // imgBtn.className = 'addImageButtonInput';
+    // imgBtn.type = 'file';
+    // imgBtn.style.objectFit = 'cover';
+    // var uploadedImage = '';
 
-    imgBtn.addEventListener('input', () => {
-      const reader = new FileReader();
-      imageField.innerText = '';
+    // imgBtn.addEventListener('input', () => {
+    //   const reader = new FileReader();
+    //   imageField.innerText = '';
 
-      reader.addEventListener('load', () => {
-        uploadedImage = reader.result;
-        document.querySelector(
-          '.focussed'
-        ).style.backgroundImage = `url(${uploadedImage})`;
-      });
-      reader.readAsDataURL(imgBtn.files[0]);
-    });
+    //   reader.addEventListener('load', () => {
+    //     uploadedImage = reader.result;
+    //     document.querySelector(
+    //       '.focussed'
+    //     ).style.backgroundImage = `url(${uploadedImage})`;
+    //   });
+    //   reader.readAsDataURL(imgBtn.files[0]);
+    // });
 
     // imgBtn.style?.width = "100%";
-    imageButton.append(imgBtn);
+    // imageButton.append(imgBtn);
     holderDIV3.append(imageField);
-    holderDIV3.append(imageButton);
+    // holderDIV3.append(imageButton);
     
 
     document
@@ -2799,6 +2914,8 @@ const MidSection = React.forwardRef((props, ref) => {
       // }
     } 
     if (decoded && decoded?.details?.cluster === 'socialmedia') {
+      // setSocialMediaImg(socialMediaImg)
+      // console.log(socialMediaImg)
       onParagraphPost();
       // console.log(decoded)
     }
@@ -3002,6 +3119,7 @@ const MidSection = React.forwardRef((props, ref) => {
                     {isLoading && <Spinner />}
                   </Col>
                 </Row>
+                <SocialMedia isOpen={socialModalIsOpen} onRequestClose={closeSociaModal}/>
               </Container>
             </div>
           </Print>
