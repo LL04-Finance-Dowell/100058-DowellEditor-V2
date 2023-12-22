@@ -39,7 +39,6 @@ const EmailRightSideBar = () => {
     fromName: '',
     fromEmail: '',
     subject: '',
-    body: '',
   });
 
   const handleBorderSizeChange = (e) => {
@@ -279,22 +278,7 @@ const EmailRightSideBar = () => {
                 }}
                 required
               />
-              <textarea
-                name='body'
-                placeholder='Message'
-                value={formData.body}
-                style={{ marginBottom: '10px', padding: '5px' }}
-                onChange={(e) => {
-                  setFormData((prev) => {
-                    const { name, value } = e.target;
-                    return {
-                      ...prev,
-                      [name]: value,
-                    };
-                  });
-                }}
-                required
-              />
+              
 
               <button
                 type='submit'
