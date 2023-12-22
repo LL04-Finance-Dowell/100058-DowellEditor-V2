@@ -2046,6 +2046,12 @@ const Header = () => {
         midSecAll.forEach((mid) => {
           mid.style.width = width + 'px';
         });
+
+        const previewCanvas = document.querySelector('.preview-canvas');
+        const previewElements =midSecAll[0]?.cloneNode(true).children
+        for(const child in previewElements){
+          previewCanvas?.append(child)
+        }
       };
 
       switch (defSelOpt) {

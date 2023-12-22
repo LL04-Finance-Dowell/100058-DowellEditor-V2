@@ -442,7 +442,7 @@ const MidSection = React.forwardRef((props, ref) => {
 
   const handleElOverflow = (el, holderDiv) => {
     const midSecs = [...document.querySelectorAll('.midSection_container')];
-    if(!el) return;
+    if (!el) return;
     if (el.classList.contains('textInput')) {
       if (el.scrollHeight > el.getBoundingClientRect().height) {
         const iniHeight = holderDiv.getBoundingClientRect().height;
@@ -2734,9 +2734,15 @@ const MidSection = React.forwardRef((props, ref) => {
     if (isDataRetrieved && mode === 'preview') {
       const setMidSecWdith = (width) => {
         const midSecAll = document.querySelectorAll('.midSection_container');
+        const mainSection = document.querySelector('#main-section');
         midSecAll.forEach((mid) => {
           mid.style.width = width + 'px';
+          const previewCanvas = mid.cloneNode(true);
+          previewCanvas.className = 'midSection_container print_container preview-canvas';
+          previewCanvas.style.marginTop = window.innerWidth < 993 && actionName != 'template' && 0 + 'px';         
+          mainSection.append(previewCanvas)
         });
+
       };
 
       switch (selOpt) {
@@ -2755,6 +2761,9 @@ const MidSection = React.forwardRef((props, ref) => {
         default:
           return;
       }
+    }else{
+      // const previews = document.querySelectorAll('.preview-canvas');
+      // previews?.forEach(preview=>preview.remove());
     }
   }, [isDataRetrieved, selOpt, mode]);
 
@@ -2872,6 +2881,7 @@ const MidSection = React.forwardRef((props, ref) => {
             <div
               ref={ref}
               key={index}
+              id="main-section"
               className={`midSection print_midsection_${index}`}
             >
               <Container
@@ -2880,7 +2890,7 @@ const MidSection = React.forwardRef((props, ref) => {
                 className={
                   // !sidebar
                   //   ? "midSection_without_RightMenu_container"
-                  'midSection_container print_container'
+                  'midSection_container print_container preview-canvas'
                 }
                 style={{
                   marginTop:
@@ -2889,7 +2899,7 @@ const MidSection = React.forwardRef((props, ref) => {
                     0 + 'px',
                 }}
                 // className="midSection_container"
-                id='midSection_container'
+                id='midSection_container preview-canvas'
                 onDragOver={dragOver}
                 onDrop={onDrop}
                 onContextMenu={handleContextMenu}
@@ -2929,6 +2939,7 @@ const MidSection = React.forwardRef((props, ref) => {
                   </Col>
                 </Row>
               </Container>
+
             </div>
           </Print>
         );
