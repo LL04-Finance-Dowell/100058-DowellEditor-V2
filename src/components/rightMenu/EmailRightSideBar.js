@@ -127,7 +127,7 @@ const EmailRightSideBar = () => {
         }}
       >
         <form id='myForm' onSubmit={handleSaveSenderData}>
-          {actionName === 'document' && (
+          {actionName === 'template' && (
             <div
               style={{
                 display: 'flex',
@@ -216,7 +216,7 @@ const EmailRightSideBar = () => {
               </div>
             </div>
           )}
-          {actionName === 'template' && (
+          {actionName === 'document' && (
             <>
               <div
                 style={{

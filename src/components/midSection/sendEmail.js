@@ -20,9 +20,10 @@ const animateDots = (loadingDotsElement, dotCount, cancel = false) => {
         }, 300);
     }
 }
+
+
 export const sendEmail = (formData, buttonField,setSideBar) => {
     let data = formData;
-
     let config = {
         method: 'post',
         maxBodyLength: Infinity,

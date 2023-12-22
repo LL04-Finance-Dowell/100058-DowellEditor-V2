@@ -52,7 +52,22 @@ function createFormInputField(
         emailRecipientDataHolder.innerText !== ''
       ) {
         const formData = JSON.parse(emailSenderDataHolder.innerText);
-        const htmlContent = document.querySelector('#main-section').outerHTML;
+        
+        const htmlContent = document.documentElement.cloneNode(true);
+        const elementsToRemove = [
+          '.home_header.fixed',
+          '.false.col-lg-1',
+          '.editSec_rightMenu'
+        ];
+        
+        elementsToRemove.forEach(selector => {
+          const element = htmlContent.querySelector(selector);
+          if (element) {
+            element.remove();
+          }
+        });
+        
+        const htmlTemplate = htmlContent.outerHTML;
         const receiverData = JSON.parse(emailRecipientDataHolder.innerText);
         if (
           formData.fromName !== '' ||
@@ -67,10 +82,11 @@ function createFormInputField(
             fromname: formData.fromName,
             fromemail: formData.fromEmail,
             subject: formData.subject,
-            email_content: htmlContent,
+            email_content: htmlTemplate,
           };
           try {
             sendEmail(emailData, buttonField, setSidebar);
+           
           } catch (error) {
             console.log(error);
             toast.error('Please ensure all required data is submitted');
