@@ -3064,6 +3064,7 @@ const MidSection = React.forwardRef((props, ref) => {
               ref={ref}
               key={index}
               className={`midSection print_midsection_${index}`}
+              id='main-section'
             >
               <Container
                 as='div'

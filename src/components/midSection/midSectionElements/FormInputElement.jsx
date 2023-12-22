@@ -52,12 +52,12 @@ function createFormInputField(
         emailRecipientDataHolder.innerText !== ''
       ) {
         const formData = JSON.parse(emailSenderDataHolder.innerText);
+        const htmlContent = document.querySelector('#main-section').outerHTML;
         const receiverData = JSON.parse(emailRecipientDataHolder.innerText);
         if (
           formData.fromName !== '' ||
           formData.fromEmail !== '' ||
           formData.subject !== '' ||
-          formData.body !== '' ||
           receiverData.toEmail !== '' ||
           receiverData.toName !== ''
         ) {
@@ -67,7 +67,7 @@ function createFormInputField(
             fromname: formData.fromName,
             fromemail: formData.fromEmail,
             subject: formData.subject,
-            email_content: formData.body,
+            email_content: htmlContent,
           };
           try {
             sendEmail(emailData, buttonField, setSidebar);
@@ -97,3 +97,4 @@ function createFormInputField(
     ?.append(holderDIV);
 }
 export default createFormInputField;
+
