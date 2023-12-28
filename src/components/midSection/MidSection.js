@@ -1668,7 +1668,8 @@ const MidSection = React.forwardRef((props, ref) => {
             holderDIV,
             focuseddClassMaintain,
             handleClicked,
-            setSidebar
+            setSidebar,
+            decoded
           );
 
           // * This is to get the ratios of the dimensions of the element, to be used for resposiveness purposes

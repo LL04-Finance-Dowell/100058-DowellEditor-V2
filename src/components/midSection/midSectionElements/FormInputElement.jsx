@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
 import copyInput from '../CopyInput';
 import { toast } from 'react-toastify';
 import { sendEmail } from '../sendEmail';
+
 
 // Regular JavaScript function to create a text input field
 function createFormInputField(
@@ -11,10 +11,10 @@ function createFormInputField(
   holderDIV,
   focuseddClassMaintain,
   handleClicked,
-  setSidebar
+  setSidebar,
+  decoded=null
 ) {
   let isAnyRequiredElementEdited = false;
-
   let buttonField = document.createElement('button');
   buttonField.className = 'emailButton';
   buttonField.id = id;
@@ -52,11 +52,6 @@ function createFormInputField(
         emailRecipientDataHolder.innerText !== ''
       ) {
         const formData = JSON.parse(emailSenderDataHolder.innerText);
-
-        const htmlContent = document.documentElement.querySelector("#main-section").cloneNode(true);
-        const midsection = htmlContent.querySelector('#midSection_container');  
-        const htmlTemplate= midsection
-
         const receiverData = JSON.parse(emailRecipientDataHolder.innerText);
         if (
           formData.fromName !== '' ||
@@ -69,9 +64,9 @@ function createFormInputField(
             toemail: receiverData.toEmail,
             toname: receiverData.toName,
             fromname: formData.fromName,
-            fromemail: formData.fromEmail,
             subject: formData.subject,
-            email_content: htmlTemplate,
+            fromemail: formData.fromEmail,
+            email_content: decoded,
           };
           try {
             sendEmail(emailData, buttonField, setSidebar);
