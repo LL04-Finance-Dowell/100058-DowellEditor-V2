@@ -2,8 +2,10 @@ import Axios from "axios";
 import React, { useState } from "react";
 import { Button } from "react-bootstrap";
 import { useSearchParams } from "react-router-dom";
+import { FiCameraOff } from "react-icons/fi";
 import jwt_decode from "jwt-decode";
 import { useStateContext } from "../../contexts/contextProvider";
+import { color } from "framer-motion";
 
 function CameraRightSide() {
   const{setConfirmRemove}=useStateContext()
@@ -195,16 +197,26 @@ function CameraRightSide() {
   };
 
   function removeCamera() {
+    setConfirmRemove(true)
     let camera = document.querySelector(".focussedd");
     let video = camera?.querySelector(".videoInput");
     const mediaStream = video.srcObject;
     const tracks = mediaStream.getTracks();
     tracks[0].stop();
     tracks[1].stop();
-    const focusseddElmnt = document.querySelector(".focussedd");
-    if (focusseddElmnt?.classList.contains("holderDIV")) {
-      document.querySelector(".focussedd").remove();
-    }
+    // const focusseddElmnt = document.querySelector(".focussedd");
+    // if (focusseddElmnt?.classList.contains("holderDIV")) {
+    //   document.querySelector(".focussedd").remove();
+    // }
+  }
+
+  const switchOff = () => {
+    let camera = document.querySelector(".focussedd");
+    let video = camera?.querySelector(".videoInput");
+    const mediaStream = video.srcObject;
+    const tracks = mediaStream.getTracks();
+    tracks[0].stop();
+    tracks[1].stop();
   }
 
   return (
@@ -255,14 +267,23 @@ function CameraRightSide() {
           >
             Video
           </Button>}
+          {decoded.details.action === "template" ? (<Button
+            id="recordBtn"
+            variant="primary"
+            className="px-5"
+            style={{ marginBottom: "30px" }}
+            onClick={switchOff}
+          ><FiCameraOff style={{color:"white"}} />
+          </Button>) : ""}
         <Button
           variant="secondary"
           // className="remove_button"
           className="remove_button"
-          onClick={() => {
-            setConfirmRemove(true)
-          }
-          }
+          // onClick={() => {
+          //   setConfirmRemove(true)
+          // }
+          // }
+          onClick={removeCamera}
           disabled={decoded.details.action === "document" ? true : false}
         >
           Remove Camera

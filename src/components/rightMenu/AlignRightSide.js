@@ -154,6 +154,8 @@ const AlignRightSide = () => {
 
   function changeFont(font) {
     var sel = document.getSelection(); // Gets selection
+ 
+    //console.log("This is sel range", sel)
     if (sel.rangeCount) {
       // Creates a new element, and insert the selected text with the chosen font inside
       var e = document.createElement("span");
@@ -164,6 +166,30 @@ const AlignRightSide = () => {
       range.deleteContents(); // Deletes selected text…
       range.insertNode(e); // … and inserts the new element at its place
     }
+
+    // console.log(document.getSelection().getRangeAt(0), "nnnnnnnn ghtfrrff")
+    // document.getSelection().getRangeAt(0).deleteContents()
+    // console.log(document.getSelection().getRangeAt(0), "The second")
+    // var e = document.createElement("span");
+    // e.style = "font-family:" + font.target.value + ";";
+    // e.innerHTML = sel.toString();
+
+    // var range = sel.getRangeAt(0);
+    // range.deleteContents(); // Deletes selected text…
+    // range.insertNode(e); // … and inserts the new element at its place
+
+    // if(document.getSelection().toString() === "") {
+    //   var e = document.createElement("span");
+    //   e.style = "font-family:" + font.target.value + ";";
+    //   e.innerHTML = sel.toString();
+    
+    //   const textBox = document.querySelector(".focussedd");
+    //   //const textField = textBox?.querySelector(".textInput");
+    //   //const textFieldHolder = textField.parentElement
+    //   textBox.appendChild(e)
+    //   //console.log("This is it", textFieldHolder)
+    // }
+
   }
 
   function changeFontColor(font) {

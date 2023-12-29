@@ -2206,6 +2206,7 @@ const ScaleRightSide = () => {
         no_of_scales: numberOfScalesValue,
         font_color: btnUpdateFontColor.value,
         round_color: btnUpdateButton.value,
+        scale_color: "red",
         label_type: labelTypeForPut,
         label_scale_selection: updatedLabelScale,
         time: timeId.style.display === "none" ? "00" : time?.value,
@@ -2240,6 +2241,7 @@ const ScaleRightSide = () => {
         label_scale_selection: updatedLabelScale,
         label_scale_input: updatedLabelInput,
         custom_emoji_format: customEmojiFormat,
+        scale_color: "red",
         time: timeId.style.display === "none" ? "00" : time?.value,
         fomat: labelTypeForPut,
       };
