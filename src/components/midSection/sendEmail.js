@@ -62,12 +62,12 @@ const generateHTML = async (link) => {
             </header>
 
             <main style="padding: 20px; display: grid; place-items: center">
-                <section style="margin: 20px; display: grid; text-align: center;">
+                <section style="margin: 20px; display: grid; text-align: center;font-size:1.2rem">
                 <p>
                     A document has been shared with you, please click the button
                     below to open the document
                 </p>
-                <a href="${link}" style="text-decoration:none;width:max-content;text-align: center;margin:1.2rem auto;padding: 2em 4em; background-color: #005733;color: #fff;">Open document</a>
+                <a href="${link}" style="text-decoration:none;font-weight:700;width:max-content;text-align: center;margin:1.2rem auto;padding: 2em 4em; background-color: #005733;color: #fff;">Open document</a>
                 </section>
             </main>
 
@@ -113,8 +113,8 @@ const getEmailPayLoad = async (midsectionNode) => {
             maxBodyLength: Infinity,
             url: 'https://100058.pythonanywhere.com/api/generate-pdf-link/',
             data: {
-                item_id: '656882f53f710fce29fa287f',
-                item_type: 'document'
+                item_id: id,
+                item_type: midsectionNode.details.action
             }
         };
 
@@ -135,7 +135,7 @@ const getEmailPayLoad = async (midsectionNode) => {
 }
 
 export const sendEmail = async (formData, buttonField, setSideBar) => {
-    console.log("\nEMAIL RAW:\n", formData, "\n")
+    animateDots(buttonField, 4);
     const { email_content, ...data } = formData;
     const htmlTemplate = await getEmailPayLoad(email_content)
     if (!htmlTemplate) {
@@ -151,8 +151,6 @@ export const sendEmail = async (formData, buttonField, setSideBar) => {
             email_content: htmlTemplate
         }
     };
-    console.log("\n EMAIL PAYLOAD:\n", config, "\n")
-    animateDots(buttonField, 4)
     axios.request(config)
         .then((response) => {
             console.log(JSON.stringify(response.data));
