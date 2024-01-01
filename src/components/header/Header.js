@@ -139,11 +139,12 @@ const Header = () => {
     setIsMenuVisible(!isMenuVisible);
   };
 
-  document.body.addEventListener("click", function() {
-    if(isMenuVisible === true) {
-      setIsMenuVisible(!isMenuVisible);
-    }
-  }, true);
+  // document.body.addEventListener("click", function() {
+  //   const menuBar = document.getElementsByClassName("bar-menu")
+  //   if(isMenuVisible === true) {
+  //     setIsMenuVisible(!isMenuVisible);
+  //   } 
+  // }, true);
 
   const handleUndo = () => {
     document.execCommand('undo');
