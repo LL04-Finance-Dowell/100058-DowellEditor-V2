@@ -2102,9 +2102,11 @@ const Header = () => {
         default:
           return;
       }
+    }else{
+      document.querySelector('.preview-canvas')?.remove()
+      setSelOpt(defSelOpt);
+      setMode(mode === 'edit' ? 'preview' : mode === 'preview' ? 'edit' : '');
     }
-    setSelOpt(defSelOpt);
-    setMode(mode === 'edit' ? 'preview' : mode === 'preview' ? 'edit' : '');
   };
 
   return (
