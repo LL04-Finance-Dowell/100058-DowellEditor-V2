@@ -3,6 +3,8 @@
 /* eslint-disable no-loop-func */
 /* eslint-disable no-redeclare */
 /* eslint-disable no-unused-vars */
+
+//pexels api key = Hl1vc1m448ZiRV4JJGGkPqxgMtZtQ99ttmzZq7XHyKiTBDvF20dYZZsY
 import React, { useEffect, useRef, useState } from 'react';
 import { Row, Col } from 'react-bootstrap';
 import { useSearchParams } from 'react-router-dom';
@@ -45,6 +47,9 @@ import RemoveElementModal from '../RemoveElementModal';
 import createFormInputElement from './createElements/CreateFormElement.jsx';
 import createContainerInputElement from './createElements/CreateContainerElement.jsx';
 import { finding_percent } from './../../utils/util_functions/finding_percent';
+
+import handleSocialMediaAPI from "../../utils/handleSocialMediaAPI";
+import SocialMedia from '../modals/SocialMedia.js';
 import { CreateTableComponent } from './midSectionElements/TableInputElement.jsx';
 import CreatePyamentElement from './createElements/CreatePyamentElement.jsx';
 import createPaymentInputField from './midSectionElements/PaymentInputElement.jsx';
@@ -127,6 +132,8 @@ const MidSection = React.forwardRef((props, ref) => {
     resizeChecker,
     setDefSelOpt,
     defSelOpt,
+    socialMediaImg, 
+    setSocialMediaImg
   } = useStateContext();
 
   const { contextMenu, setContextMenu, setFromContextMenu } =
@@ -155,6 +162,15 @@ const MidSection = React.forwardRef((props, ref) => {
   const [selectedText, setSelectedText] = useState('');
   const handleCutInputRef = useRef(null);
   const copyItemRef = useRef(null);
+  const [socialModalIsOpen, setSocialModalIsOpen] = useState(false);
+
+  const openSocialModal = () => {
+    setSocialModalIsOpen(true);
+  };
+
+  const closeSociaModal = () => {
+    setSocialModalIsOpen(false);
+  }
 
   const boldCommand = () => {
     if (!editorRef.current) return;
@@ -1126,7 +1142,8 @@ const MidSection = React.forwardRef((props, ref) => {
 
     for (let p = 1; p <= item?.length; p++) {
       fetchedData[p]?.forEach((element) => {
-        if (element.type === 'TEXT_INPUT') {
+      
+        if (element.type === "TEXT_INPUT") {
           // ! This two lines of codes is for removing the occasionally added duplicate elements
           const elPar = document.getElementById(element.id)?.parentElement;
           elPar && elPar.remove();
@@ -1651,7 +1668,8 @@ const MidSection = React.forwardRef((props, ref) => {
             holderDIV,
             focuseddClassMaintain,
             handleClicked,
-            setSidebar
+            setSidebar,
+            decoded
           );
 
           // * This is to get the ratios of the dimensions of the element, to be used for resposiveness purposes
@@ -2013,8 +2031,19 @@ const MidSection = React.forwardRef((props, ref) => {
     setDimRatios(iniDimRatio);
   };
 
+  
+
+
+
+ 
+
+  useEffect(() => {
+    // onParagraphPost();
+  }, [socialMediaImg])
+
   const onParagraphPost = async () => {
-    const response = await axios.post(
+
+    const res = await axios.post(
       'https://uxlivinglab.pythonanywhere.com/',
       {
         // document_id: decoded.details.document_id,
@@ -2041,13 +2070,90 @@ const MidSection = React.forwardRef((props, ref) => {
       }
     );
 
+    // if (!response.data) {
+    //   toast.error("Something went wrong while fetching data!")
+    //   return;
+    // }
+
+    const response = await handleSocialMediaAPI(decoded);
+    // const resp = await axios.get("https://api.pexels.com/v1/curated", {
+    //   headers: {
+    //     Authorization: "Hl1vc1m448ZiRV4JJGGkPqxgMtZtQ99ttmzZq7XHyKiTBDvF20dYZZsY"
+    //   }
+    // });
+    
+
+    // // const [getImg, setImg] = useState();
+    // // // const getImages = async () => {
+    // //   const resp =  axios.get("https://api.pexels.com/v1/curated") 
+    // //   console.log(resp)
+    // // // }
+
+
+
+    
+
+    // console.log("\n>>action: \n>>", resp.data.photos[0].src.original);
     if (!response.data) {
       toast.error('Something went wrong while fetching data!');
       return;
     }
 
-    const { title, image, paragraph } = JSON.parse(response.data)?.data[0]; //title field
-    const curr_user = document.getElementById('curr_user');
+   
+
+
+   
+
+    const { title, image, paragraph} = JSON.parse(response.data)?.data[0] //title field
+
+
+
+    // const socialData = {
+    //   cluster: "socialmedia",
+    //   database: "socialmedia",
+    //   collection: "step4_data",
+    //   document: "step4_data",
+    //   team_member_ID: "1163",
+    //   function_ID: "ABCDE",
+    //   command: "insert",
+    //   eventId: eventId,
+    //   field: {
+    //     user_id: user_id,
+    //     session_id: session_id,
+    //     eventId: eventId,
+    //     client_admin_id: client_admin_id,
+    //     title: title,
+    //     paragraph: paragraph,
+    //     source: source,
+    //     qualitative_categorization: qualitative_categorization,
+    //     targeted_for: targeted_for,
+    //     designed_for: designed_for,
+    //     targeted_category: targeted_category,
+    //     image: image,
+    //     date: new Date(),
+    //     time: " ",
+    //     status: " "
+
+    //   },
+    //   update_field: {
+    //     order_nos: order_nos
+    //   },
+    //   "platform": "bangalore"
+    // }
+
+
+
+    
+    // const saveResponse = await axios.post("http://uxlivinglab.pythonanywhere.com/", socialData);
+    // console.log("save response data", saveResponse);
+
+    
+    // setSocialResponse(saveResponse);
+   
+    
+
+    const curr_user = document.getElementById("curr_user");
+    
 
     const measure = {
       width: '300px',
@@ -2058,9 +2164,9 @@ const MidSection = React.forwardRef((props, ref) => {
 
     const holderDIV1 = getHolderDIV(measure);
 
-    let titleLevel = document.createElement('div');
-    titleLevel.className = 'textInput';
-    titleLevel.innerText = 'Title: \n';
+    let titleLevel = document.createElement("div");
+    titleLevel.className = "textInput sm-title";
+    titleLevel.innerText = "Title: \n";
     // titleLevel.style.border = "none";
     titleLevel.style.fontWeight = '900';
     titleLevel.style.width = '100%';
@@ -2082,6 +2188,7 @@ const MidSection = React.forwardRef((props, ref) => {
     let titleField = document.createElement('div');
 
     titleField.contentEditable = true;
+    titleField.className = "textInput";
     titleField.className = 'socialInnerText';
     titleField.innerText = title;
     titleField.style.border = 'none';
@@ -2100,10 +2207,10 @@ const MidSection = React.forwardRef((props, ref) => {
 
     const holderDIV2 = getHolderDIV(measure2);
 
-    let descriptionLevel = document.createElement('div');
-    descriptionLevel.className = 'textInput';
-    descriptionLevel.style.width = '100%';
-    descriptionLevel.innerText = 'Paragraph: ';
+    let descriptionLevel = document.createElement("div")
+    descriptionLevel.className = "textInput sm-paragraph";
+    descriptionLevel.style.width = "100%";
+    descriptionLevel.innerText = "Paragraph: ";
     descriptionLevel.style.fontWeight = 900;
     descriptionLevel.style.height = '100%';
     descriptionLevel.style.resize = 'none';
@@ -2122,6 +2229,7 @@ const MidSection = React.forwardRef((props, ref) => {
 
     let descriptionField = document.createElement('div');
     descriptionField.contentEditable = true;
+    descriptionField.className = "textInput";
     descriptionField.className = 'socialDescriptionText';
     descriptionField.innerText = paragraph;
     descriptionField.style.border = 'none';
@@ -2140,25 +2248,101 @@ const MidSection = React.forwardRef((props, ref) => {
       .getElementById('midSection_container')
       // .item(0)
       .append(holderDIV2);
+   
+      
 
-    let imageField = document.createElement('div');
-    imageField.className = 'imageInput';
-    imageField.id = 'inputImg';
-    imageField.style.width = '100%';
-    imageField.style.height = '100%';
-    imageField.style.backgroundColor = '#0000';
-    imageField.style.borderRadius = '0px';
-    imageField.style.outline = 'none';
-    imageField.style.overflow = 'overlay';
-    imageField.innerText = 'Choose Imagerred';
-    imageField.style.position = 'relative';
-    if (image) {
-      imageField.style.backgroundImage = `url(${image})`;
-    }
+      // const response = await handleSocialMediaAPI(decoded);
+      // const resp = await axios.get("https://api.pexels.com/v1/curated", {
+      //   headers: {
+      //     Authorization: "Hl1vc1m448ZiRV4JJGGkPqxgMtZtQ99ttmzZq7XHyKiTBDvF20dYZZsY"
+      //   }
+      // });
+      
+  
+      // const [getImg, setImg] = useState();
+      // // const getImages = async () => {
+      //   const resp =  axios.get("https://api.pexels.com/v1/curated") 
+      //   console.log(resp)
+      // // }
+  
+  
+  
+      // const measure4 = {
+      //   width: '400px',
+      //   height: '400px',
+      //   top: '100px',
+      //   border: "2px dotted gray",
+      //   auth_user: curr_user,
+      // };
+  
+      // const holderDIV4 = getHolderDIV(measure4);
+      
+  
+      // console.log("\n>>action: \n>>", resp.data.photos[0].src.original);
+
+      // let iframeField = document.createElement("iframe");
+      // iframeField.className ="iframInput";
+      // iframeField.style.width = "800px";
+      // iframeField.style.height = "800px";
+      // iframeField.style.border = "2px dotted gray"
+      // let iframeField = document.createElement("iframe");
+      // resp.data.photos.map((img) => {
+      // iframeField.className ="iframInput";
+      // iframeField.style.width = "800px";
+      // iframeField.style.height = "800px";
+      // iframeField.style.border = "2px dotted gray"
+      // iframeField.src = `${img.src.original}`
+      // }
+      // )
+      // const iframeContent = resp.data.photos.map(img => `<img src="${img.src.original}" alt="${img.photographer}">`).join("");
+      // iframeField.src = resp.data.photos.map(img => `${img.src.original}`)
+      // resp.data.photos.map((img) => 
+      // // <iframe width="300" height="300"  src={img.src.original} title="W3Schools Free Online Web Tutorials"></iframe>
+      // // {
+    
+      // iframeField.src = `${img.src.original}`
+
+      
+      // // }
+
+      //   // {
+      //     // console.log("\n>>>", img.src.original)
+      //   // }
+      //   )
+        // holderDIV4.append(iframeField);
+
+
+      // let iframeField = document.createElement("iframe");
+      // iframeField.className ="iframInput";
+      // iframeField.style.width = "300px";
+      // iframeField.style.height = "300px";
+      // iframeField.src = {img.src.original}
+      // document
+      // .getElementById('midSection_container')
+      // // .item(0)
+      // .append(holderDIV4);
+<br/>
+    let imageField = document.createElement("div");
+    imageField.className = "imageInput sm-image";
+    imageField.id = "inputImg";
+    imageField.style.width = "100%";
+    imageField.style.height = "100%";
+    imageField.style.borderRadius = "0px";
+    imageField.style.outline = "none";
+    imageField.style.overflow = "overlay";
+    imageField.innerText = "Choose Image";
+    imageField.style.position = "relative";
+
+    if (socialMediaImg) {
+          imageField.style.backgroundImage = `url(${socialMediaImg})`;
+          imageField.innerText = " ";
+        }
+        // console.log( imageField.style.backgroundImage = `url(${socialImg})`)
+  
 
     const measure3 = {
-      width: '300px',
-      height: '100px',
+      width: "400px",
+      height: '300px',
       top: '370px',
       auth_user: curr_user,
     };
@@ -2175,6 +2359,7 @@ const MidSection = React.forwardRef((props, ref) => {
 
     imageField.addEventListener('onclick', () => { });
 
+
     imageField.onclick = (e) => {
       e.stopPropagation();
       focuseddClassMaintain(e);
@@ -2182,37 +2367,39 @@ const MidSection = React.forwardRef((props, ref) => {
         copyInput('image2');
       }
       handleClicked('image2', 'container2');
-      setSidebar(true);
+      // setSidebar(true);
+      openSocialModal();
     };
 
-    const imageButton = document.createElement('div');
-    imageButton.className = 'addImageButton';
-    imageButton.innerText = 'Choose File';
-    imageButton.style.display = 'none';
+    // const imageButton = document.createElement('div');
+    // imageButton.className = 'addImageButton';
+    // imageButton.innerText = 'Choose File';
+    // imageButton.style.display = 'none';
 
-    const imgBtn = document.createElement('input');
-    imgBtn.className = 'addImageButtonInput';
-    imgBtn.type = 'file';
-    imgBtn.style.objectFit = 'cover';
-    var uploadedImage = '';
+    // const imgBtn = document.createElement('input');
+    // imgBtn.className = 'addImageButtonInput';
+    // imgBtn.type = 'file';
+    // imgBtn.style.objectFit = 'cover';
+    // var uploadedImage = '';
 
-    imgBtn.addEventListener('input', () => {
-      const reader = new FileReader();
-      imageField.innerText = '';
+    // imgBtn.addEventListener('input', () => {
+    //   const reader = new FileReader();
+    //   imageField.innerText = '';
 
-      reader.addEventListener('load', () => {
-        uploadedImage = reader.result;
-        document.querySelector(
-          '.focussed'
-        ).style.backgroundImage = `url(${uploadedImage})`;
-      });
-      reader.readAsDataURL(imgBtn.files[0]);
-    });
+    //   reader.addEventListener('load', () => {
+    //     uploadedImage = reader.result;
+    //     document.querySelector(
+    //       '.focussed'
+    //     ).style.backgroundImage = `url(${uploadedImage})`;
+    //   });
+    //   reader.readAsDataURL(imgBtn.files[0]);
+    // });
 
     // imgBtn.style?.width = "100%";
-    imageButton.append(imgBtn);
+    // imageButton.append(imgBtn);
     holderDIV3.append(imageField);
-    holderDIV3.append(imageButton);
+    // holderDIV3.append(imageButton);
+    
 
     document
       .getElementById('midSection_container')
@@ -2321,13 +2508,10 @@ const MidSection = React.forwardRef((props, ref) => {
           typeOfOperation === 'TEXT_INPUT' &&
           decoded.details.action === 'template'
         ) {
-          createTextElement(
-            holderDIV,
-            focuseddClassMaintain,
-            handleClicked,
-            setSidebar,
-            getOffset
-          );
+
+          createTextElement(holderDIV, focuseddClassMaintain, handleClicked, setSidebar, getOffset)
+          // onParagraphPost();
+
         } else if (
           typeOfOperation === 'IMAGE_INPUT' &&
           decoded.details.action === 'template'
@@ -2725,8 +2909,16 @@ const MidSection = React.forwardRef((props, ref) => {
     if (Object.keys(fetchedData).length) {
       onPost();
       //call this conditionally
-    } else if (decoded && decoded?.details?.cluster === 'socialmedia') {
+      // if (decoded && decoded?.details?.cluster === 'socialmedia') {
+      //   onParagraphPost();
+      //   // console.log(decoded)
+      // }
+    } 
+    if (decoded && decoded?.details?.cluster === 'socialmedia') {
+      // setSocialMediaImg(socialMediaImg)
+      // console.log(socialMediaImg)
       onParagraphPost();
+      // console.log(decoded)
     }
   }, [fetchedData]);
 
@@ -2883,6 +3075,7 @@ const MidSection = React.forwardRef((props, ref) => {
               key={index}
               id="main-section"
               className={`midSection print_midsection_${index}`}
+              id='main-section'
             >
               <Container
                 as='div'
@@ -2938,6 +3131,7 @@ const MidSection = React.forwardRef((props, ref) => {
                     {isLoading && <Spinner />}
                   </Col>
                 </Row>
+                <SocialMedia isOpen={socialModalIsOpen} onRequestClose={closeSociaModal}/>
               </Container>
 
             </div>

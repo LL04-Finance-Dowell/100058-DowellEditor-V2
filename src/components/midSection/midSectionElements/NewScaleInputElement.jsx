@@ -1424,23 +1424,31 @@ function createNewScaleInputField(
         const smallBoxBgColor = smallBox1.style.backgroundColor;
         const smallBoxColor = smallBox1.style.color;
 
-        smallBox1.addEventListener("mouseover", () => {
+        const mouseoverBox1Func = () => {
           smallBox1.style.backgroundColor = invert(smallBoxBgColor);
           smallBox1.style.color = invert(smallBoxColor);
-        });
-        smallBox1.addEventListener("mouseout", () => {
+        }
+
+        const mouseLeaveBox1Func = () => {
           smallBox1.style.backgroundColor = element?.raw_data?.smallBoxBgColor;
           smallBox1.style.color = element?.raw_data?.fontColor;
-        });
+        }
 
-        smallBox2.addEventListener("mouseover", () => {
+        const mouseoverBox2Func = () => {
           smallBox2.style.backgroundColor = invert(smallBoxBgColor);
           smallBox2.style.color = invert(smallBoxColor);
-        });
-        smallBox2.addEventListener("mouseout", () => {
+        }
+
+        const mouseLeaveBox2Func = () => {
           smallBox2.style.backgroundColor = element?.raw_data?.smallBoxBgColor;
           smallBox2.style.color = element?.raw_data?.fontColor;
-        });
+        }
+
+        smallBox1.addEventListener("mouseover", mouseoverBox1Func(), false);
+        smallBox1.addEventListener("mouseout", mouseLeaveBox1Func(), false);
+
+        smallBox2.addEventListener("mouseover", mouseoverBox2Func(), false);
+        smallBox2.addEventListener("mouseout", mouseLeaveBox2Func(), false);
 
         circle.appendChild(smallBox1);
         circle.appendChild(smallBox2);
@@ -1473,19 +1481,13 @@ function createNewScaleInputField(
           labelHold.style.flexDirection = "column";
           labelHold.style.alignItems = "center";
         }
-      }
 
       if (decoded.details.action === "document") {
-        const circle = document.createElement("div");
-        circle.className = "circle_label";
-        // const smallBox1 = document.createElement("div");
-        // smallBox1.className = "small_box";
-        // smallBox1.textContent = pairedScale[i];
-        // const smallBox2 = document.createElement("div");
-        // smallBox2.className = "small_box";
-        // smallBox2.textContent = pairedScale[j];
-        // circle.appendChild(smallBox1);
-        // circle.appendChild(smallBox2);
+        smallBox1.removeEventListener("mouseover", mouseoverBox1Func(), false)
+        smallBox1.removeEventListener("mouseout", mouseLeaveBox1Func(), false)
+        smallBox2.removeEventListener("mouseover", mouseoverBox2Func(), false)
+        smallBox2.removeEventListener("mouseout", mouseLeaveBox2Func(), false)
+        
         let isClicked = false;
         const shouldHideFinalizeButton =
           localStorage.getItem("hideFinalizeButton");
@@ -1534,14 +1536,11 @@ function createNewScaleInputField(
           });
         }, 1000);
 
-        circle.addEventListener("click", function () {
+        smallBox1.addEventListener("click", function () {
           if (!isClicked) {
             let scale =
-              circle.parentElement.parentElement.parentElement.parentElement;
+            smallBox1.parentElement.parentElement.parentElement.parentElement;
             let holding = scale?.querySelector(".newScaleInput");
-            const buttonCircle = scale
-              ? scale.querySelectorAll(".circle_label")
-              : [];
 
             console.log(
               "This is the background color",
@@ -1570,27 +1569,28 @@ function createNewScaleInputField(
               return rgbToHex(rgb[0], rgb[1], rgb[2]);
             }
 
-            const circleBgColor = circle.style.backgroundColor;
+            const circleBgColor = smallBox1.style.backgroundColor;
 
-            circle.style.backgroundColor = invert(circleBgColor);
+            smallBox1.style.backgroundColor = invert(circleBgColor);
+            smallBox2.style.backgroundColor = circleBgColor
 
-            for (let i = 0; i < buttonCircle.length; i++) {
-              if (buttonCircle[i].textContent !== circle.textContent) {
-                buttonCircle[i].style.backgroundColor = circleBgColor;
-              }
-            }
+            // for (let i = 0; i < buttonCircle.length; i++) {
+            //   if (buttonCircle[i].textContent !== circle.textContent) {
+            //     buttonCircle[i].style.backgroundColor = circleBgColor;
+            //   }
+            // }
 
             let holdElem = scale?.querySelector(".holdElem");
 
             if (holdElem) {
               // If holdElem exists, update its text content
-              holdElem.textContent = likertScale[i];
+              holdElem.textContent = smallBox1[i];
             } else {
               // If holdElem doesn't exist, create a new one
               holdElem = document.createElement("div");
               holdElem.className = "holdElem";
               holdElem.style.display = "none";
-              holdElem.textContent = likertScale[i];
+              holdElem.textContent = smallBox1[i];
               holding?.appendChild(holdElem);
               console.log("This is holdEle", holdElem.textContent);
               if (scaleField?.parentElement?.classList.contains("holderDIV")) {
@@ -1612,6 +1612,7 @@ function createNewScaleInputField(
           }
         });
       }
+    }
     }
   }
 

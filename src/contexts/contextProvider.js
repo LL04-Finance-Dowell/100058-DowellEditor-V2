@@ -178,6 +178,29 @@ export const ContextProvider = ({ children }) => {
   const [formBorderColor, setFormBorderColor] = useState('gray');
   const [docMapRequired, setDocMapRequired] = useState([]);
 
+
+  //social Media
+  const [socialMediaImg, setSocialMediaImg] = useState(() => {
+    const storedImg = localStorage.getItem('editor_social_img');
+    console.log(">>>>\n Image changes", storedImg)
+    return storedImg; 
+  });
+
+  // useEffect(() => {
+  //   const handleStorageChange = (event) => {
+  //     const imgDtaaa = localStorage.getItem("editor_social_img")
+  //     if (event.key === imgDtaaa) {
+  //       setSocialMediaImg(event.newValue || ''); // Set a default value if nothing is stored
+  //     }
+  //   };
+
+  //   window.addEventListener('storage', handleStorageChange);
+
+  //   return () => {
+  //     window.removeEventListener('storage', handleStorageChange);
+  //   };
+  // }, []);
+
   // progress bar state
   const [progress, setProgress] = useState(0);
 
@@ -187,6 +210,9 @@ export const ContextProvider = ({ children }) => {
   // handle drop event for table and retrieve midsection
 
   const [allowHighlight, setAllowHighlight] = useState(false);
+
+
+
 
   const handleDropp = (e) => {
     e.preventDefault();
@@ -860,6 +886,8 @@ export const ContextProvider = ({ children }) => {
         isCompsScaler,
         setIsCompsScaler,
         resizeChecker,
+        socialMediaImg, 
+        setSocialMediaImg
       }}
     >
       {children}
