@@ -1,3 +1,11 @@
+#main-section{
+  background-color: #e3eeff;
+  display: flex;
+  flex:row wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 5rem ;
+}
 .midSection {
   display: flex;
   height: 327mm;
@@ -90,6 +98,13 @@
     width: 216mm;
     height: 297mm;
     position: relative;
+        height: 1235.87px;
+    width: 100vw;
+    display: flex;
+    background-color: aliceblue;
+    place-content: center space-around;
+    align-items: center;
+}
 }
 .midSection_without_RightMenu_container{
     background-color: #ffffff;

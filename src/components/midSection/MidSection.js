@@ -132,7 +132,7 @@ const MidSection = React.forwardRef((props, ref) => {
     resizeChecker,
     setDefSelOpt,
     defSelOpt,
-    socialMediaImg, 
+    socialMediaImg,
     setSocialMediaImg
   } = useStateContext();
 
@@ -1142,7 +1142,7 @@ const MidSection = React.forwardRef((props, ref) => {
 
     for (let p = 1; p <= item?.length; p++) {
       fetchedData[p]?.forEach((element) => {
-      
+
         if (element.type === "TEXT_INPUT") {
           // ! This two lines of codes is for removing the occasionally added duplicate elements
           const elPar = document.getElementById(element.id)?.parentElement;
@@ -2031,11 +2031,11 @@ const MidSection = React.forwardRef((props, ref) => {
     setDimRatios(iniDimRatio);
   };
 
-  
 
 
 
- 
+
+
 
   useEffect(() => {
     // onParagraphPost();
@@ -2081,7 +2081,7 @@ const MidSection = React.forwardRef((props, ref) => {
     //     Authorization: "Hl1vc1m448ZiRV4JJGGkPqxgMtZtQ99ttmzZq7XHyKiTBDvF20dYZZsY"
     //   }
     // });
-    
+
 
     // // const [getImg, setImg] = useState();
     // // // const getImages = async () => {
@@ -2091,7 +2091,7 @@ const MidSection = React.forwardRef((props, ref) => {
 
 
 
-    
+
 
     // console.log("\n>>action: \n>>", resp.data.photos[0].src.original);
     if (!response.data) {
@@ -2099,12 +2099,12 @@ const MidSection = React.forwardRef((props, ref) => {
       return;
     }
 
-   
 
 
-   
 
-    const { title, image, paragraph} = JSON.parse(response.data)?.data[0] //title field
+
+
+    const { title, image, paragraph } = JSON.parse(response.data)?.data[0] //title field
 
 
 
@@ -2143,17 +2143,17 @@ const MidSection = React.forwardRef((props, ref) => {
 
 
 
-    
+
     // const saveResponse = await axios.post("http://uxlivinglab.pythonanywhere.com/", socialData);
     // console.log("save response data", saveResponse);
 
-    
+
     // setSocialResponse(saveResponse);
-   
-    
+
+
 
     const curr_user = document.getElementById("curr_user");
-    
+
 
     const measure = {
       width: '300px',
@@ -2248,80 +2248,80 @@ const MidSection = React.forwardRef((props, ref) => {
       .getElementById('midSection_container')
       // .item(0)
       .append(holderDIV2);
-   
-      
-
-      // const response = await handleSocialMediaAPI(decoded);
-      // const resp = await axios.get("https://api.pexels.com/v1/curated", {
-      //   headers: {
-      //     Authorization: "Hl1vc1m448ZiRV4JJGGkPqxgMtZtQ99ttmzZq7XHyKiTBDvF20dYZZsY"
-      //   }
-      // });
-      
-  
-      // const [getImg, setImg] = useState();
-      // // const getImages = async () => {
-      //   const resp =  axios.get("https://api.pexels.com/v1/curated") 
-      //   console.log(resp)
-      // // }
-  
-  
-  
-      // const measure4 = {
-      //   width: '400px',
-      //   height: '400px',
-      //   top: '100px',
-      //   border: "2px dotted gray",
-      //   auth_user: curr_user,
-      // };
-  
-      // const holderDIV4 = getHolderDIV(measure4);
-      
-  
-      // console.log("\n>>action: \n>>", resp.data.photos[0].src.original);
-
-      // let iframeField = document.createElement("iframe");
-      // iframeField.className ="iframInput";
-      // iframeField.style.width = "800px";
-      // iframeField.style.height = "800px";
-      // iframeField.style.border = "2px dotted gray"
-      // let iframeField = document.createElement("iframe");
-      // resp.data.photos.map((img) => {
-      // iframeField.className ="iframInput";
-      // iframeField.style.width = "800px";
-      // iframeField.style.height = "800px";
-      // iframeField.style.border = "2px dotted gray"
-      // iframeField.src = `${img.src.original}`
-      // }
-      // )
-      // const iframeContent = resp.data.photos.map(img => `<img src="${img.src.original}" alt="${img.photographer}">`).join("");
-      // iframeField.src = resp.data.photos.map(img => `${img.src.original}`)
-      // resp.data.photos.map((img) => 
-      // // <iframe width="300" height="300"  src={img.src.original} title="W3Schools Free Online Web Tutorials"></iframe>
-      // // {
-    
-      // iframeField.src = `${img.src.original}`
-
-      
-      // // }
-
-      //   // {
-      //     // console.log("\n>>>", img.src.original)
-      //   // }
-      //   )
-        // holderDIV4.append(iframeField);
 
 
-      // let iframeField = document.createElement("iframe");
-      // iframeField.className ="iframInput";
-      // iframeField.style.width = "300px";
-      // iframeField.style.height = "300px";
-      // iframeField.src = {img.src.original}
-      // document
-      // .getElementById('midSection_container')
-      // // .item(0)
-      // .append(holderDIV4);
-<br/>
+
+    // const response = await handleSocialMediaAPI(decoded);
+    // const resp = await axios.get("https://api.pexels.com/v1/curated", {
+    //   headers: {
+    //     Authorization: "Hl1vc1m448ZiRV4JJGGkPqxgMtZtQ99ttmzZq7XHyKiTBDvF20dYZZsY"
+    //   }
+    // });
+
+
+    // const [getImg, setImg] = useState();
+    // // const getImages = async () => {
+    //   const resp =  axios.get("https://api.pexels.com/v1/curated") 
+    //   console.log(resp)
+    // // }
+
+
+
+    // const measure4 = {
+    //   width: '400px',
+    //   height: '400px',
+    //   top: '100px',
+    //   border: "2px dotted gray",
+    //   auth_user: curr_user,
+    // };
+
+    // const holderDIV4 = getHolderDIV(measure4);
+
+
+    // console.log("\n>>action: \n>>", resp.data.photos[0].src.original);
+
+    // let iframeField = document.createElement("iframe");
+    // iframeField.className ="iframInput";
+    // iframeField.style.width = "800px";
+    // iframeField.style.height = "800px";
+    // iframeField.style.border = "2px dotted gray"
+    // let iframeField = document.createElement("iframe");
+    // resp.data.photos.map((img) => {
+    // iframeField.className ="iframInput";
+    // iframeField.style.width = "800px";
+    // iframeField.style.height = "800px";
+    // iframeField.style.border = "2px dotted gray"
+    // iframeField.src = `${img.src.original}`
+    // }
+    // )
+    // const iframeContent = resp.data.photos.map(img => `<img src="${img.src.original}" alt="${img.photographer}">`).join("");
+    // iframeField.src = resp.data.photos.map(img => `${img.src.original}`)
+    // resp.data.photos.map((img) => 
+    // // <iframe width="300" height="300"  src={img.src.original} title="W3Schools Free Online Web Tutorials"></iframe>
+    // // {
+
+    // iframeField.src = `${img.src.original}`
+
+
+    // // }
+
+    //   // {
+    //     // console.log("\n>>>", img.src.original)
+    //   // }
+    //   )
+    // holderDIV4.append(iframeField);
+
+
+    // let iframeField = document.createElement("iframe");
+    // iframeField.className ="iframInput";
+    // iframeField.style.width = "300px";
+    // iframeField.style.height = "300px";
+    // iframeField.src = {img.src.original}
+    // document
+    // .getElementById('midSection_container')
+    // // .item(0)
+    // .append(holderDIV4);
+    <br />
     let imageField = document.createElement("div");
     imageField.className = "imageInput sm-image";
     imageField.id = "inputImg";
@@ -2334,11 +2334,11 @@ const MidSection = React.forwardRef((props, ref) => {
     imageField.style.position = "relative";
 
     if (socialMediaImg) {
-          imageField.style.backgroundImage = `url(${socialMediaImg})`;
-          imageField.innerText = " ";
-        }
-        // console.log( imageField.style.backgroundImage = `url(${socialImg})`)
-  
+      imageField.style.backgroundImage = `url(${socialMediaImg})`;
+      imageField.innerText = " ";
+    }
+    // console.log( imageField.style.backgroundImage = `url(${socialImg})`)
+
 
     const measure3 = {
       width: "400px",
@@ -2399,7 +2399,7 @@ const MidSection = React.forwardRef((props, ref) => {
     // imageButton.append(imgBtn);
     holderDIV3.append(imageField);
     // holderDIV3.append(imageButton);
-    
+
 
     document
       .getElementById('midSection_container')
@@ -2913,7 +2913,7 @@ const MidSection = React.forwardRef((props, ref) => {
       //   onParagraphPost();
       //   // console.log(decoded)
       // }
-    } 
+    }
     if (decoded && decoded?.details?.cluster === 'socialmedia') {
       // setSocialMediaImg(socialMediaImg)
       // console.log(socialMediaImg)
@@ -2923,15 +2923,18 @@ const MidSection = React.forwardRef((props, ref) => {
   }, [fetchedData]);
 
   useEffect(() => {
+    const rightMenu = document.querySelector('.false.col-lg-1')
+    const mainSection = document.querySelector('#main-section');
+    document.querySelectorAll('.preview-canvas')?.forEach(prev => prev.remove())
     if (isDataRetrieved && mode === 'preview') {
       const setMidSecWdith = (width) => {
+        rightMenu.style.display = 'none'
         const midSecAll = document.querySelectorAll('.midSection_container');
-        const mainSection = document.querySelector('#main-section');
         midSecAll.forEach((mid) => {
           mid.style.width = width + 'px';
           const previewCanvas = mid.cloneNode(true);
           previewCanvas.className = 'midSection_container print_container preview-canvas';
-          previewCanvas.style.marginTop = window.innerWidth < 993 && actionName != 'template' && 0 + 'px';         
+          previewCanvas.style.marginTop = window.innerWidth < 993 && actionName != 'template' && 0 + 'px';
           mainSection.append(previewCanvas)
         });
 
@@ -2953,9 +2956,12 @@ const MidSection = React.forwardRef((props, ref) => {
         default:
           return;
       }
-    }else{
+    } else {
       // const previews = document.querySelectorAll('.preview-canvas');
       // previews?.forEach(preview=>preview.remove());
+      rightMenu.style.display = 'flex'
+      document.querySelectorAll('.preview-canvas')?.forEach(prev => prev.remove())
+
     }
   }, [isDataRetrieved, selOpt, mode]);
 
@@ -3075,7 +3081,6 @@ const MidSection = React.forwardRef((props, ref) => {
               key={index}
               id="main-section"
               className={`midSection print_midsection_${index}`}
-              id='main-section'
             >
               <Container
                 as='div'
@@ -3083,7 +3088,7 @@ const MidSection = React.forwardRef((props, ref) => {
                 className={
                   // !sidebar
                   //   ? "midSection_without_RightMenu_container"
-                  'midSection_container print_container preview-canvas'
+                  'midSection_container print_container'
                 }
                 style={{
                   marginTop:
@@ -3092,7 +3097,7 @@ const MidSection = React.forwardRef((props, ref) => {
                     0 + 'px',
                 }}
                 // className="midSection_container"
-                id='midSection_container preview-canvas'
+                id='midSection_container'
                 onDragOver={dragOver}
                 onDrop={onDrop}
                 onContextMenu={handleContextMenu}
@@ -3131,7 +3136,7 @@ const MidSection = React.forwardRef((props, ref) => {
                     {isLoading && <Spinner />}
                   </Col>
                 </Row>
-                <SocialMedia isOpen={socialModalIsOpen} onRequestClose={closeSociaModal}/>
+                <SocialMedia isOpen={socialModalIsOpen} onRequestClose={closeSociaModal} />
               </Container>
 
             </div>
