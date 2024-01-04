@@ -103,6 +103,13 @@ const generateHTML = async (link) => {
 
 }
 
+const getEmailPayLoadd = (token) => {
+    console.log(token);
+    const emailTemplate = generateHTML(`https://ll04-finance-dowell.github.io/100058-DowellEditor-V2/?token=${token}`)
+    return emailTemplate;
+
+}
+
 const getEmailPayLoad = async (midsectionNode) => {
 
 
@@ -134,6 +141,28 @@ const getEmailPayLoad = async (midsectionNode) => {
     }
 }
 
+export const shareToEmail = async (shareInfo, token) => {
+    const htmlTemplate = await getEmailPayLoadd(token)
+     let config = {
+        method: 'post',
+        maxBodyLength: Infinity,
+        url: 'https://100085.pythonanywhere.com/api/uxlivinglab/email/',
+        data: {
+            ...shareInfo,
+            email_content: htmlTemplate
+        }
+    };
+    axios.request(config)
+        .then((response) => {
+            console.log(JSON.stringify(response.data));
+            toast.success('email sent successfully');
+        })
+        .catch((error) => {
+            console.log(error);
+            toast.error("email not sent")
+        });
+
+}
 export const sendEmail = async (formData, buttonField, setSideBar) => {
     animateDots(buttonField, 4);
     const { email_content, ...data } = formData;
