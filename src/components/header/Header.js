@@ -248,12 +248,12 @@ const Header = () => {
 
 
 
-  async function saveSocialMedia(){
-    if(decoded.product_name === "Social Media Automation"){
+  async function saveSocialMedia() {
+    if (decoded.product_name === "Social Media Automation") {
       try {
-       await handleSocialMediaAPI(decoded, true);
-       toast.success("Social Media Info Saved!");
-       return;
+        await handleSocialMediaAPI(decoded, true);
+        toast.success("Social Media Info Saved!");
+        return;
       } catch (error) {
         toast.error("Something Went Wrong!");
         console.log(error);
@@ -265,7 +265,7 @@ const Header = () => {
   let elem = {};
   function saveDocument() {
     // console.log("/n>>> Decoded\n", decoded,"\n>>>")
-  
+
     const txt = document.getElementsByClassName("textInput");
     let elem = {};
     let contentFile = [];
@@ -510,7 +510,7 @@ const Header = () => {
             const allTableCCells = [];
             const tableChildren = tables[t].querySelector('table')?.children;
             const tableId = tables[t].querySelector('table')?.id ?? 'T1';
-            let tdId=tables[t].querySelector('table')?.querySelectorAll('.text_td').length + 1
+            let tdId = tables[t].querySelector('table')?.querySelectorAll('.text_td').length + 1
             for (let i = 0; i < tableChildren.length; i++) {
               const tableTR = { tr: null };
               const newTableTR = [];
@@ -522,12 +522,12 @@ const Header = () => {
                   if (
                     !child.classList?.contains('row-resizer') &&
                     !child.classList?.contains('td-resizer')
-                    ) {
-                      if (!child.innerHTML) {
-                        currentTd.id = `${tableId}td${tdId}`
-                        tdElement.push(currentTd);
-                        tdId++;
-                        console.log("\nCURRENT TD\n",currentTd,"\n")
+                  ) {
+                    if (!child.innerHTML) {
+                      currentTd.id = `${tableId}td${tdId}`
+                      tdElement.push(currentTd);
+                      tdId++;
+                      console.log("\nCURRENT TD\n", currentTd, "\n")
                     } else {
                       tdElement.push(child);
                     }
@@ -576,7 +576,7 @@ const Header = () => {
               ? tables[t].firstElementChild.id
               : `tab${t + 1}`,
           };
-          console.log("\nCURRENT ELEM\n",elem.data,"\n")
+          console.log("\nCURRENT ELEM\n", elem.data, "\n")
 
           const pageNum = findPaageNum(tables[t]);
           page[0][pageNum]?.push(elem);
@@ -1124,7 +1124,7 @@ const Header = () => {
     return contentFile;
   }
 
-  
+
 
   const [searchParams] = useSearchParams();
   const token = searchParams.get('token');
@@ -2078,12 +2078,6 @@ const Header = () => {
         midSecAll.forEach((mid) => {
           mid.style.width = width + 'px';
         });
-
-        const previewCanvas = document.querySelector('.preview-canvas');
-        const previewElements =midSecAll[0]?.cloneNode(true).children
-        for(const child in previewElements){
-          previewCanvas?.append(child)
-        }
       };
 
       switch (defSelOpt) {
@@ -2102,11 +2096,12 @@ const Header = () => {
         default:
           return;
       }
-    }else{
-      document.querySelector('.preview-canvas')?.remove()
-      setSelOpt(defSelOpt);
-      setMode(mode === 'edit' ? 'preview' : mode === 'preview' ? 'edit' : '');
-    }
+    } 
+
+    setSelOpt(defSelOpt);
+    setMode(mode === 'edit' ? 'preview' : mode === 'preview' ? 'edit' : '');
+      
+    document.querySelectorAll('.preview-canvas')?.forEach(prev => prev.remove())
   };
 
   return (
