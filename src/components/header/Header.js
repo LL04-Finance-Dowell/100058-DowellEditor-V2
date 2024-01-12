@@ -2074,31 +2074,31 @@ const Header = () => {
   const handleModeChange = () => {
     if (mode === 'preview') {
       const setMidSecWdith = (width) => {
-        const midSecAll = document.querySelectorAll('.midSection_container');
-        midSecAll.forEach((mid) => {
+        const midSecAll = document.querySelectorAll('.preview-canvas');
+        midSecAll?.forEach((mid) => {
           mid.style.width = width + 'px';
         });
       };
 
-      switch (defSelOpt) {
-        case 'large':
-          setMidSecWdith(fixedMidSecDim.width);
-          scaleMidSec();
-          break;
-        case 'mid':
-          setMidSecWdith(720);
-          scaleMidSec();
-          break;
-        case 'small':
-          setMidSecWdith(350);
-          scaleMidSec();
-          break;
-        default:
-          return;
-      }
+      // switch (defSelOpt) {
+      //   case 'large':
+      //     setMidSecWdith(fixedMidSecDim.width);
+      //     scaleMidSec();
+      //     break;
+      //   case 'mid':
+      //     setMidSecWdith(720);
+      //     scaleMidSec();
+      //     break;
+      //   case 'small':
+      //     setMidSecWdith(350);
+      //     scaleMidSec();
+      //     break;
+      //   default:
+      //     return;
+      // }
     } 
 
-    setSelOpt(defSelOpt);
+    // setSelOpt(defSelOpt);
     setMode(mode === 'edit' ? 'preview' : mode === 'preview' ? 'edit' : '');
       
     document.querySelectorAll('.preview-canvas')?.forEach(prev => prev.remove())

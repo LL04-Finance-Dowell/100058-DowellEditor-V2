@@ -23,15 +23,15 @@ const MidResizer = () => {
     if (window.scrollY === 0) {
       setSelOpt(opt);
       setIsDrop(false);
-      isCompsScaler || setIsCompsScaler(true);
+      // isCompsScaler || setIsCompsScaler(true);
     } else {
       window.scrollTo(0, 0);
       window.onscroll = () => {
         if (window.scrollY === 0) {
           setSelOpt(opt);
           setIsDrop(false);
-          isCompsScaler || setIsCompsScaler(true);
-          window.onscroll = null;
+          // isCompsScaler || setIsCompsScaler(true);
+          // window.onscroll = null;
         }
       };
     }
