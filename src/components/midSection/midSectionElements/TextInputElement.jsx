@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import copyInput from "../CopyInput";
+import { renderPreview } from "../MidSection";
 // import copyInput from '../CopyInput';
 
 // Regular JavaScript function to create a text input field
@@ -28,7 +29,10 @@ function createTextInputField(
   inputField.style.overflow = "overlay";
   inputField.style.position = "relative";
   inputField.style.cursor = "text";
-
+  inputField.addEventListener('input', function() {
+    const mainSection = document.querySelector('#main-section');
+    if (mainSection) renderPreview(mainSection);
+});
   if (window.innerWidth < 993) {
     inputField.classList.add("text_eabled_pointer_event");
   }

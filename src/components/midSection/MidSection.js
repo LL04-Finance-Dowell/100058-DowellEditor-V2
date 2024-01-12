@@ -83,7 +83,20 @@ const dummyData = {
     sampling_status_text: 'Not expected',
   },
 };
-
+export const renderPreview = (mainSection) => {
+  mainSection.querySelectorAll('.preview-canvas')?.forEach(child=>child.remove())
+  const midSecAll = document.querySelectorAll('.midSection_container');
+  midSecAll.forEach((mid) => {
+    // mid.style.width = width + 'px';
+    const previewCanvas = mid.cloneNode(true);
+    previewCanvas.querySelectorAll('.holderDIV')?.forEach((div) => {
+      div.style.border = 'none';
+      div.style.pointerEvents = 'none';
+    });
+    previewCanvas.className = 'midSection_container print_container preview-canvas';
+    mainSection.append(previewCanvas)
+  });
+}
 // const MidSection = ({showSidebar}) => {
 const MidSection = React.forwardRef((props, ref) => {
   const {
@@ -380,6 +393,7 @@ const MidSection = React.forwardRef((props, ref) => {
           // top: parseInt(holder.style.top.slice(0, -2)),
           // left: parseInt(holder.style.left.slice(0, -2))//elemLeft : 0
         };
+        
         return Object.seal(holderSize);
       })();
 
@@ -402,6 +416,8 @@ const MidSection = React.forwardRef((props, ref) => {
           holder.style.width = holderSize.width + (ev.screenX - initX) + 'px';
           holder.style.height = holderSize.height - (ev.screenY - initY) + 'px';
         }
+        const mainSection = document.querySelector('#main-section');
+        renderPreview(mainSection)
       }
 
       window.addEventListener('mouseup', stopResizing);
@@ -712,6 +728,8 @@ const MidSection = React.forwardRef((props, ref) => {
             event.target.className != 'row-resizer'
           ) {
             dragElementOverPage(event, resizing);
+            const mainSection = document.querySelector('#main-section');
+            if(mainSection)renderPreview(mainSection);
           }
         },
         false
@@ -727,7 +745,7 @@ const MidSection = React.forwardRef((props, ref) => {
       holderDIV.addEventListener('focus', (e) => {
         holderDIV.classList.add('zIndex-two');
         holderDIV.style.border = '2px solid orange';
-
+        
         holderDIV.append(resizerTL, resizerTR, resizerBL, resizerBR);
       });
 
@@ -1078,7 +1096,7 @@ const MidSection = React.forwardRef((props, ref) => {
     const resizerBR = getResizer('bottom', 'right');
 
     const holderMenu = getHolderMenu(measure.auth_user);
-
+    
     // const holderMenu = getHolderMenu(measure.auth_user);
 
     holderDIV.onmousedown = holderDIV.addEventListener(
@@ -1138,7 +1156,7 @@ const MidSection = React.forwardRef((props, ref) => {
     const midSecWidth = midSec.getBoundingClientRect()?.width;
     let iniDimRatio = [];
 
-    scaleMidSec(true);
+    // scaleMidSec(true);
 
     for (let p = 1; p <= item?.length; p++) {
       fetchedData[p]?.forEach((element) => {
@@ -2028,7 +2046,7 @@ const MidSection = React.forwardRef((props, ref) => {
     });
 
     sessionStorage.setItem('dimRatios', JSON.stringify(iniDimRatio));
-    setDimRatios(iniDimRatio);
+    // setDimRatios(iniDimRatio);
   };
 
 
@@ -2927,19 +2945,14 @@ const MidSection = React.forwardRef((props, ref) => {
     const mainSection = document.querySelector('#main-section');
     document.querySelectorAll('.preview-canvas')?.forEach(prev => prev.remove())
     if (isDataRetrieved && mode === 'preview') {
+      rightMenu.style.display = 'none';
       const setMidSecWdith = (width) => {
-        rightMenu.style.display = 'none'
-        const midSecAll = document.querySelectorAll('.midSection_container');
-        midSecAll.forEach((mid) => {
+        const previewMidSecAll = document.querySelectorAll('.preview-canvas');
+        previewMidSecAll.forEach((mid) => {
           mid.style.width = width + 'px';
-          const previewCanvas = mid.cloneNode(true);
-          previewCanvas.className = 'midSection_container print_container preview-canvas';
-          previewCanvas.style.marginTop = window.innerWidth < 993 && actionName != 'template' && 0 + 'px';
-          mainSection.append(previewCanvas)
         });
-
       };
-
+      renderPreview(mainSection)
       switch (selOpt) {
         case 'large':
           setMidSecWdith(fixedMidSecDim.width);
@@ -2954,6 +2967,7 @@ const MidSection = React.forwardRef((props, ref) => {
           scaleMidSec();
           break;
         default:
+          setMidSecWdith(fixedMidSecDim.width);
           return;
       }
     } else {
@@ -2965,103 +2979,104 @@ const MidSection = React.forwardRef((props, ref) => {
     }
   }, [isDataRetrieved, selOpt, mode]);
 
-  useEffect(() => {
-    if (Object.keys(fetchedData).length) {
-      window.onresize = () => {
-        if (resizeChecker.current !== window.innerWidth) {
-          isCompsScaler || setIsCompsScaler(true);
-          scaleMidSec();
-          resizeChecker.current = window.innerWidth;
-        }
+  // useEffect(() => {
+  //   // if (Object.keys(fetchedData).length) {
+  //   //   window.onresize = () => {
+  //   //     if (resizeChecker.current !== window.innerWidth) {
+  //   //       isCompsScaler || setIsCompsScaler(true);
+  //   //       scaleMidSec();
+  //   //       resizeChecker.current = window.innerWidth;
+  //   //     }
 
-        if (defOptRef.current !== 'large' && window.innerWidth > 993)
-          setDefSelOpt('large');
-        else if (
-          (defOptRef.current !== 'large' || defOptRef.current !== 'mid') &&
-          window.innerWidth <= 993 &&
-          window.innerWidth >= 770
-        )
-          setDefSelOpt('mid');
-      };
-    }
+  //   //     if (defOptRef.current !== 'large' && window.innerWidth > 993)
+  //   //       setDefSelOpt('large');
+  //   //     else if (
+  //   //       (defOptRef.current !== 'large' || defOptRef.current !== 'mid') &&
+  //   //       window.innerWidth <= 993 &&
+  //   //       window.innerWidth >= 770
+  //   //     )
+  //   //       setDefSelOpt('mid');
+  //   //   };
+  //   // }
 
-    return () => (window.onresize = null);
-  }, [fetchedData, currMidSecWidth, isCompsScaler]);
+  //   return () => (window.onresize = null);
+  // }, [fetchedData, currMidSecWidth, isCompsScaler]);
 
-  useEffect(() => {
-    if (
-      Object.keys(fetchedData).length &&
-      currMidSecWidth > 0 &&
-      isCompsScaler
-    ) {
-      compsResizer();
-    }
-  }, [currMidSecWidth, fetchedData, isCompsScaler]);
+  // useEffect(() => {
+  //   if (
+  //     Object.keys(fetchedData).length &&
+  //     currMidSecWidth > 0 &&
+  //     isCompsScaler
+  //   ) {
+  //     compsResizer();
+  //   }
+  // }, [currMidSecWidth, fetchedData, isCompsScaler]);
 
   useEffect(() => {
     if (Object.keys(fetchedData).length && currMidSecWidth > 0) {
-      const editSec = document.querySelector('.editSec_midSec');
+      //DISABLE RESPONSIVE DESIGN USING OBSERVERS
+      // const editSec = document.querySelector('.editSec_midSec');
 
-      const editSecObserver = new MutationObserver((mutationLists) => {
-        for (const mutation of mutationLists) {
-          if (mutation.target.classList.contains('midSection_container')) {
-            if (
-              mutation.addedNodes.length &&
-              !mutation.addedNodes[0].classList.contains('modal-container') &&
-              !mutation.addedNodes[0].classList.contains('positioning')
-            ) {
-              const [holder] = mutation.addedNodes;
-              const el = holder.children[1]?.classList.contains('dropdownInput')
-                ? holder.children[1]
-                : holder.children[0];
-              const elRect = el.getBoundingClientRect();
-              const midSec = document.querySelector('.midSection_container');
-              const midSecWidth = midSec.getBoundingClientRect().width;
-              const page = Number(
-                [...holder.classList]
-                  .find((cl) => cl.includes('page'))
-                  .split('_')[1]
-              );
+      // const editSecObserver = new MutationObserver((mutationLists) => {
+      //   for (const mutation of mutationLists) {
+      //     if (mutation.target.classList.contains('midSection_container')) {
+      //       if (
+      //         mutation.addedNodes.length &&
+      //         !mutation.addedNodes[0].classList.contains('modal-container') &&
+      //         !mutation.addedNodes[0].classList.contains('positioning')
+      //       ) {
+      //         const [holder] = mutation.addedNodes;
+      //         const el = holder.children[1]?.classList.contains('dropdownInput')
+      //           ? holder.children[1]
+      //           : holder.children[0];
+      //         const elRect = el.getBoundingClientRect();
+      //         const midSec = document.querySelector('.midSection_container');
+      //         const midSecWidth = midSec.getBoundingClientRect().width;
+      //         const page = Number(
+      //           [...holder.classList]
+      //             .find((cl) => cl.includes('page'))
+      //             .split('_')[1]
+      //         );
 
-              // * This codes opens Right sidebar once user drops component on midsection
-              !dimRatios.find((dim) => dim.id === el.id) && el.click();
+      //         // * This codes opens Right sidebar once user drops component on midsection
+      //         !dimRatios.find((dim) => dim.id === el.id) && el.click();
 
-              const modDimRatio = {
-                type: el.className,
-                id: el.id,
-                top: elRect.top / midSecWidth,
-                left: elRect.left / midSecWidth,
-                width: elRect?.width / midSecWidth,
-                height: elRect?.height / midSecWidth,
-                page,
-              };
+      //         const modDimRatio = {
+      //           type: el.className,
+      //           id: el.id,
+      //           top: elRect.top / midSecWidth,
+      //           left: elRect.left / midSecWidth,
+      //           width: elRect?.width / midSecWidth,
+      //           height: elRect?.height / midSecWidth,
+      //           page,
+      //         };
 
-              const modDimRatios = [...dimRatios, modDimRatio];
-              sessionStorage.setItem('dimRatios', JSON.stringify(modDimRatios));
-              setDimRatios(modDimRatios);
-            }
+      //         const modDimRatios = [...dimRatios, modDimRatio];
+      //         sessionStorage.setItem('dimRatios', JSON.stringify(modDimRatios));
+      //         setDimRatios(modDimRatios);
+      //       }
 
-            if (
-              mutation.removedNodes.length &&
-              !mutation.removedNodes[0].classList.contains('modal-container') &&
-              !mutation.removedNodes[0].classList.contains('positioning')
-            ) {
-              const [holder] = mutation.removedNodes;
-              const el = holder.children[1]?.classList.contains('dropdownInput')
-                ? holder.children[1]
-                : holder.children[0];
+      //       if (
+      //         mutation.removedNodes.length &&
+      //         !mutation.removedNodes[0].classList.contains('modal-container') &&
+      //         !mutation.removedNodes[0].classList.contains('positioning')
+      //       ) {
+      //         const [holder] = mutation.removedNodes;
+      //         const el = holder.children[1]?.classList.contains('dropdownInput')
+      //           ? holder.children[1]
+      //           : holder.children[0];
 
-              const modDimRatios = dimRatios.filter(
-                (ratio) => ratio.id !== el.id
-              );
-              sessionStorage.setItem('dimRatios', JSON.stringify(modDimRatios));
-              setDimRatios(modDimRatios);
-            }
-          }
-        }
-      });
+      //         const modDimRatios = dimRatios.filter(
+      //           (ratio) => ratio.id !== el.id
+      //         );
+      //         sessionStorage.setItem('dimRatios', JSON.stringify(modDimRatios));
+      //         setDimRatios(modDimRatios);
+      //       }
+      //     }
+      //   }
+      // });
 
-      editSecObserver.observe(editSec, { childList: true, subtree: true });
+      // editSecObserver.observe(editSec, { childList: true, subtree: true });
 
       if (dimRatios.length) setEnablePreview(true);
       else setEnablePreview(false);
