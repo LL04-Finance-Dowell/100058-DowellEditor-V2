@@ -22,8 +22,11 @@ function createTextElement(holderDIV, focuseddClassMaintain, handleClicked, setS
   inputField.textContent = 'Enter text here!';
   inputField.classList.add('empty')
   inputField.addEventListener('input', function() {
-    const mainSection = document.querySelector('#main-section');
-    if (mainSection) renderPreview(mainSection);
+    const previewCanvas =document.querySelector('.preview-canvas');
+    if (previewCanvas) {
+      const mainSection = document.querySelector('.editSec_midSec');
+      if (mainSection) renderPreview(mainSection);
+    };
 });
   // holderDIV.style.height = '130px';
   if (copy_data) {

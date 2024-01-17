@@ -30,8 +30,11 @@ function createTextInputField(
   inputField.style.position = "relative";
   inputField.style.cursor = "text";
   inputField.addEventListener('input', function() {
-    const mainSection = document.querySelector('#main-section');
-    if (mainSection) renderPreview(mainSection);
+    const previewCanvas =document.querySelector('.preview-canvas');
+    if (previewCanvas) {
+      const mainSection = document.querySelector('.editSec_midSec');
+      if (mainSection) renderPreview(mainSection);
+    };
 });
   if (window.innerWidth < 993) {
     inputField.classList.add("text_eabled_pointer_event");
