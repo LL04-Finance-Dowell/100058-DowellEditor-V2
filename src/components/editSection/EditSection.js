@@ -180,7 +180,10 @@ const EditSection = () => {
             as='div'
             className='editSec_midSec'
           >
+            <div className='canvas-holder'> 
+
             <MidSection />
+            </div>
           </Col>
 
           {/* <div style={{overflowY:"scroll"}}>s */}
