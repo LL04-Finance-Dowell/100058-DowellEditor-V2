@@ -58,6 +58,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import createGenBtnEl from './createElements/CreateGenBtnEl';
 import { saveDocument } from '../header/Header';
+import { BsNodeMinusFill } from 'react-icons/bs';
 // tHIS IS FOR A TEST COMMIT
 
 const dummyData = {
@@ -84,7 +85,11 @@ const dummyData = {
   },
 };
 export const renderPreview = (mainSection) => {
-  mainSection.querySelectorAll('.preview-canvas')?.forEach(child=>child.remove())
+  document.querySelector('#main-section-container')?.remove();
+  const editSec = mainSection;
+  const previewContainer=document.createElement('div');
+  previewContainer.id='main-section-container';
+  editSec.append(previewContainer);
   const midSecAll = document.querySelectorAll('.midSection_container');
   midSecAll.forEach((mid) => {
     // mid.style.width = width + 'px';
@@ -94,7 +99,7 @@ export const renderPreview = (mainSection) => {
       div.style.pointerEvents = 'none';
     });
     previewCanvas.className = 'midSection_container print_container preview-canvas';
-    mainSection.append(previewCanvas)
+    document.querySelector('#main-section-container').append(previewCanvas)
   });
 }
 // const MidSection = ({showSidebar}) => {
@@ -416,8 +421,12 @@ const MidSection = React.forwardRef((props, ref) => {
           holder.style.width = holderSize.width + (ev.screenX - initX) + 'px';
           holder.style.height = holderSize.height - (ev.screenY - initY) + 'px';
         }
-        const mainSection = document.querySelector('#main-section');
-        renderPreview(mainSection)
+        const previewCanvas =document.querySelector('.preview-canvas');
+        if(previewCanvas){
+          const mainSection = document.querySelector('.editSec_midSec');
+          renderPreview(mainSection);
+
+        }
       }
 
       window.addEventListener('mouseup', stopResizing);
@@ -727,8 +736,8 @@ const MidSection = React.forwardRef((props, ref) => {
             event.target.className != 'td-resizer' &&
             event.target.className != 'row-resizer'
           ) {
-            dragElementOverPage(event, resizing);
-            const mainSection = document.querySelector('#main-section');
+            dragElementOverPage(event, resizing,mode);
+            const mainSection = document.querySelector('.editSec_midSec');
             if(mainSection)renderPreview(mainSection);
           }
         },
@@ -1106,7 +1115,7 @@ const MidSection = React.forwardRef((props, ref) => {
           event.target.className != 'td-resizer' &&
           event.target.className != 'row-resizer'
         ) {
-          dragElementOverPage(event, resizing);
+          dragElementOverPage(event, resizing,mode);
         }
       },
       false
@@ -2458,7 +2467,6 @@ const MidSection = React.forwardRef((props, ref) => {
 
   const dragOver = (event) => {
     const isLink = event.dataTransfer.types.includes('text/plain');
-
     if (isLink) {
       event.preventDefault();
       event.currentTarget.classList.add('drop_zone');
@@ -2942,7 +2950,7 @@ const MidSection = React.forwardRef((props, ref) => {
 
   useEffect(() => {
     const rightMenu = document.querySelector('.false.col-lg-1')
-    const mainSection = document.querySelector('#main-section');
+    const mainSection = document.querySelector('.editSec_midSec');
     document.querySelectorAll('.preview-canvas')?.forEach(prev => prev.remove())
     if (isDataRetrieved && mode === 'preview') {
       rightMenu.style.display = 'none';
