@@ -175,6 +175,7 @@ const EditSection = () => {
             lg={sidebar ? 8 : 11}
             as='div'
             className='editSec_midSec'
+            id='editSec_midSec'
           >
             <MidSection />
           </Col>

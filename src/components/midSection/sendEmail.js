@@ -2,6 +2,7 @@ import axios from "axios"
 import { downloadPDF, generatePDF } from "../../utils/genratePDF";
 import { toast } from "react-toastify";
 import { pdf } from "@react-pdf/renderer";
+import { takeScreenShot } from "../../utils/takeScreenShot";
 
 var interval;
 const animateDots = (loadingDotsElement, dotCount, cancel = false) => {
@@ -103,9 +104,116 @@ const generateHTML = async (link) => {
 
 }
 
+const generateShareHTML = async (link) => {
+    try {
+        const image = await takeScreenShot();
+
+        const base64WithoutPrefix = image.replace(/^data:image\/(png|jpeg|jpg);base64,/, '');
+
+        // Convert base64 to ArrayBuffer
+        const arrayBuffer = Uint8Array.from(atob(base64WithoutPrefix), c => c.charCodeAt(0)).buffer;
+    
+        // Create a Blob from the ArrayBuffer
+        const blob = new Blob([arrayBuffer], { type: 'image/jpeg' });
+    
+        // Create an object URL from the Blob
+        const imageUrl = URL.createObjectURL(blob);
+    
+    
+
+        console.log("screen", imageUrl);
+        const htmlTemplate = ` 
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>DoWell WorkFlow AI Email</title>
+    </head>
+
+    <body
+        style="
+            font-family: Arial, sans-serif;
+            background-color: #ffffff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+        "
+    >
+        <div style="width: 100%; background-color: #ffffff">
+            <header
+                style="
+                color: #fff;
+                display: flex;
+                text-align: center;
+                justify-content: center;
+                padding: 5px;
+                "
+            >
+                <img
+                src="https://dowellfileuploader.uxlivinglab.online/hr/logo-2-min-min.png"
+                height="140px"
+                width="140px"
+                style="display: block; margin: 0 auto"
+                />
+            </header>
+
+            <main style="padding: 20px; display: grid; place-items: center">
+                <section style="margin: 20px; display: grid; text-align: center;font-size:1.2rem">
+                <p>
+                    A document has been shared with you, please click the button
+                    below to open the document
+                </p>
+                <img
+                src="${imageUrl}"
+                style="display: block; margin: 0 auto"
+                alt="Document picture"
+                />
+                <a href="${link}" style="text-decoration:none;font-weight:700;width:max-content;text-align: center;margin:1.2rem auto;padding: 2em 4em; background-color: #005733;color: #fff;">Open document</a>
+                </section>
+            </main>
+
+            <footer
+                style="
+                background-color: #005733;
+                color: #fff;
+                text-align: center;
+                padding: 25px;
+                "
+            >
+                <a
+                href="https://www.uxlivinglab.org/"
+                style="
+                    text-align: center;
+                    color: white;
+                    margin-bottom: 20px;
+                    padding-bottom: 10px;
+                    text-decoration: none;
+                "
+                >
+                DoWell UX Living Lab
+                </a>
+                <p style="margin-top: 10px; font-size: 12px">
+                &copy; 2023-All rights reserved.
+                </p>
+            </footer>
+        </div>
+    </body>
+    </html>
+  `
+        return htmlTemplate;
+    } catch (error) {
+        console.error("Error generating HTML:", error);
+        return "";
+    }
+
+}
+
+
 const getEmailPayLoadd = (token) => {
     console.log(token);
-    const emailTemplate = generateHTML(`https://ll04-finance-dowell.github.io/100058-DowellEditor-V2/?token=${token}`)
+    const emailTemplate = generateShareHTML(`https://ll04-finance-dowell.github.io/100058-DowellEditor-V2/?token=${token}`)
     return emailTemplate;
 
 }
@@ -143,7 +251,7 @@ const getEmailPayLoad = async (midsectionNode) => {
 
 export const shareToEmail = async (shareInfo, token) => {
     const htmlTemplate = await getEmailPayLoadd(token)
-     let config = {
+    let config = {
         method: 'post',
         maxBodyLength: Infinity,
         url: 'https://100085.pythonanywhere.com/api/uxlivinglab/email/',
