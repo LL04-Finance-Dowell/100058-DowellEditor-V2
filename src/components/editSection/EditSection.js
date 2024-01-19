@@ -35,6 +35,7 @@ const EditSection = () => {
   const newPageButton = document.querySelector('.new-page-btn');
   const actionName = decoded?.details?.action;
   const docMap = decoded?.details?.document_map;
+  const documentFlag = decoded?.details?.document_flag;
 
   const [prevSelectedElement, setPrevSelectedElement] = useState(null);
   const [prevSelElmAns, setPrevSelElmAns] = useState([]);
@@ -161,8 +162,8 @@ const EditSection = () => {
                   mode === 'preview'
                     ? { background: '#e3eeff', overflow: 'hidden' }
                     : actionName == 'document'
-                    ? { background: '#e3eeff' }
-                    : { background: '#1c2b48' }
+                      ? { background: '#e3eeff' }
+                      : { background: '#1c2b48' }
                 }
                 className='left_menu_wrapper scrollbar'
               >
@@ -185,16 +186,23 @@ const EditSection = () => {
             style={
               sidebar
                 ? {
-                    display: 'block',
-                    // height:`${window.innerHeight}px`
-                  }
+                  display: 'block',
+                  // height:`${window.innerHeight}px`
+                }
                 : { display: 'none' }
             }
             lg={sidebar ? 3 : 0}
             as='div'
             className='editSec_rightMenu'
           >
-            <div className={`${mode === 'preview' ? 'vis_hid' : ''}`}>
+            <div className={`${mode === 'preview' ? 'vis_hid' : ''}`}
+              style={{
+                visibility:
+                  documentFlag == 'processing'
+                    ? 'visible'
+                    : 'hidden',
+              }}
+            >
               <RightMenu />
             </div>
           </Col>

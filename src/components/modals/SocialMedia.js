@@ -4,6 +4,9 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useStateContext } from '../../contexts/contextProvider';
 
+import { useSearchParams } from 'react-router-dom';
+import jwt_decode from 'jwt-decode';
+
 const SocialMedia = ({ isOpen, onRequestClose }) => {
   const [images, setImages] = useState([]);
   const [query, setQuery] = useState("");
@@ -12,6 +15,10 @@ const SocialMedia = ({ isOpen, onRequestClose }) => {
     socialMediaImg,
     setSocialMediaImg
   } = useStateContext()
+
+  const [searchParams] = useSearchParams();
+  const token = searchParams.get('token');
+  var decoded = jwt_decode(token);
   // console.log('Clicked image src:', socialMediaImg);
 
   // useEffect(() => {
@@ -50,8 +57,9 @@ const SocialMedia = ({ isOpen, onRequestClose }) => {
   };
 
   useEffect(() => {
-   
+    if (decoded?.details?.cluster === 'socialmedia') {
     fetchData();
+    }
   }, []);
   // useEffect(() => {
   //   localStorage.setItem("editor_social_img", socialMediaImg)

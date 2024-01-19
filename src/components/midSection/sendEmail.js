@@ -108,20 +108,28 @@ const generateShareHTML = async (link) => {
     try {
         const image = await takeScreenShot();
 
-        const base64WithoutPrefix = image.replace(/^data:image\/(png|jpeg|jpg);base64,/, '');
 
-        // Convert base64 to ArrayBuffer
-        const arrayBuffer = Uint8Array.from(atob(base64WithoutPrefix), c => c.charCodeAt(0)).buffer;
-    
-        // Create a Blob from the ArrayBuffer
-        const blob = new Blob([arrayBuffer], { type: 'image/jpeg' });
-    
-        // Create an object URL from the Blob
-        const imageUrl = URL.createObjectURL(blob);
-    
+    // Remove the data URL prefix (e.g., "data:image/jpeg;base64,")
+    const base64WithoutPrefix = image.replace(/^data:image\/(png|jpeg|jpg);base64,/, '');
+
+    // Convert base64 to ArrayBuffer
+    const arrayBuffer = Uint8Array.from(atob(base64WithoutPrefix), c => c.charCodeAt(0)).buffer;
+
+    // Create a Blob from the ArrayBuffer
+    const blob = new Blob([arrayBuffer], { type: 'image/jpeg' });
+
+    // Create a FileReader
+    const reader = new FileReader();
+
+    // Convert Blob to Data URL
+    reader.onload = function () {
+        const imageUrl = reader.result;
+    };
+
+    reader.readAsDataURL(blob);
     
 
-        console.log("screen", imageUrl);
+        // console.log("screen", imageUrl);
         const htmlTemplate = ` 
     <!DOCTYPE html>
     <html lang="en">
@@ -166,7 +174,7 @@ const generateShareHTML = async (link) => {
                     below to open the document
                 </p>
                 <img
-                src="${imageUrl}"
+                src="${reader.result}"
                 style="display: block; margin: 0 auto"
                 alt="Document picture"
                 />
