@@ -196,12 +196,7 @@ const EditSection = () => {
             className='editSec_rightMenu'
           >
             <div className={`${mode === 'preview' ? 'vis_hid' : ''}`}
-              style={{
-                visibility:
-                  documentFlag == 'processing'
-                    ? 'visible'
-                    : 'hidden',
-              }}
+            
             >
               <RightMenu />
             </div>
