@@ -7,12 +7,15 @@ export const takeScreenShot = () => {
         return Promise.reject("Element not found");
     }
 
+    const timestamp = new Date().getTime(); // Get current timestamp
+
     return html2canvas(element)
         .then((canvas) => {
             return new Promise((resolve) => {
                 canvas.toBlob((blob) => {
+                    const filename = `screenshot_${timestamp}.jpg`;
                     const formData = new FormData();
-                    formData.append("image", blob, "screenshot.jpg");
+                    formData.append("image", blob, filename);
                     resolve(formData);
                 }, "image/jpeg");
             });
