@@ -9,7 +9,13 @@ export const takeScreenShot = () => {
 
     return html2canvas(element)
         .then((canvas) => {
-            return canvas.toDataURL("image/jpeg");
+            return new Promise((resolve) => {
+                canvas.toBlob((blob) => {
+                    const formData = new FormData();
+                    formData.append("image", blob, "screenshot.jpg");
+                    resolve(formData);
+                }, "image/jpeg");
+            });
         })
         .catch((err) => {
             console.log("Unable to take screenshot at the moment:", err);

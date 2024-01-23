@@ -64,7 +64,7 @@ const SignsRightSidebar = () => {
     if (sign?.parentElement.classList.contains("focussedd")) {
       console.log("target: ", sign);
       if (document.querySelector(".focussed").innerHTML != signImage) {
-        if (sign.parentElement.classList.contains("holderDIV") && isRequired) {
+        if (sign.parentElement.classList.contains("holderDIV")) {
           sign.parentElement.classList.add("element_updated")
         }
 

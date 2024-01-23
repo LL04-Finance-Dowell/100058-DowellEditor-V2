@@ -104,123 +104,117 @@ const generateHTML = async (link) => {
 
 }
 
+const sendScreenShotToAPI = async () => {
+
+    const apiEndpoint = "https://dowellfileuploader.uxlivinglab.online/uploadfiles/upload-image-to-drive/";
+
+    const formData = await takeScreenShot();
+    return fetch(apiEndpoint, {
+        method: "POST",
+        body: formData,
+    })
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error(`API request failed with status: ${response.status}`);
+            }
+
+            return response.json(); // or response.text() depending on the API response format
+        });
+};
+
 const generateShareHTML = async (link) => {
-    try {
-        const image = await takeScreenShot();
 
-
-    // Remove the data URL prefix (e.g., "data:image/jpeg;base64,")
-    const base64WithoutPrefix = image.replace(/^data:image\/(png|jpeg|jpg);base64,/, '');
-
-    // Convert base64 to ArrayBuffer
-    const arrayBuffer = Uint8Array.from(atob(base64WithoutPrefix), c => c.charCodeAt(0)).buffer;
-
-    // Create a Blob from the ArrayBuffer
-    const blob = new Blob([arrayBuffer], { type: 'image/jpeg' });
-
-    // Create a FileReader
-    const reader = new FileReader();
-
-    // Convert Blob to Data URL
-    reader.onload = function () {
-        const imageUrl = reader.result;
-    };
-
-    reader.readAsDataURL(blob);
-    
-
-        // console.log("screen", imageUrl);
-        const htmlTemplate = ` 
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>DoWell WorkFlow AI Email</title>
-    </head>
-
-    <body
-        style="
-            font-family: Arial, sans-serif;
-            background-color: #ffffff;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-        "
-    >
-        <div style="width: 100%; background-color: #ffffff">
-            <header
+    const imgUrl = await sendScreenShotToAPI();
+    console.log(imgUrl);
+    const htmlTemplate = ` 
+            <!DOCTYPE html>
+            <html lang="en">
+            <head>
+                <meta charset="UTF-8" />
+                <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                <title>DoWell WorkFlow AI Email</title>
+            </head>
+        
+            <body
                 style="
-                color: #fff;
-                display: flex;
-                text-align: center;
-                justify-content: center;
-                padding: 5px;
+                    font-family: Arial, sans-serif;
+                    background-color: #ffffff;
+                    margin: 0;
+                    padding: 0;
+                    display: flex;
+                    justify-content: center;
                 "
             >
-                <img
-                src="https://dowellfileuploader.uxlivinglab.online/hr/logo-2-min-min.png"
-                height="140px"
-                width="140px"
-                style="display: block; margin: 0 auto"
-                />
-            </header>
-
-            <main style="padding: 20px; display: grid; place-items: center">
-                <section style="margin: 20px; display: grid; text-align: center;font-size:1.2rem">
-                <p>
-                    A document has been shared with you, please click the button
-                    below to open the document
-                </p>
-                <img
-                src="${reader.result}"
-                style="display: block; margin: 0 auto"
-                alt="Document picture"
-                />
-                <a href="${link}" style="text-decoration:none;font-weight:700;width:max-content;text-align: center;margin:1.2rem auto;padding: 2em 4em; background-color: #005733;color: #fff;">Open document</a>
-                </section>
-            </main>
-
-            <footer
-                style="
-                background-color: #005733;
-                color: #fff;
-                text-align: center;
-                padding: 25px;
-                "
-            >
-                <a
-                href="https://www.uxlivinglab.org/"
-                style="
-                    text-align: center;
-                    color: white;
-                    margin-bottom: 20px;
-                    padding-bottom: 10px;
-                    text-decoration: none;
-                "
-                >
-                DoWell UX Living Lab
-                </a>
-                <p style="margin-top: 10px; font-size: 12px">
-                &copy; 2023-All rights reserved.
-                </p>
-            </footer>
-        </div>
-    </body>
-    </html>
-  `
-        return htmlTemplate;
-    } catch (error) {
-        console.error("Error generating HTML:", error);
-        return "";
-    }
+                <div style="width: 100%; background-color: #ffffff">
+                    <header
+                        style="
+                        color: #fff;
+                        display: flex;
+                        text-align: center;
+                        justify-content: center;
+                        padding: 5px;
+                        "
+                    >
+                        <img
+                        src="https://dowellfileuploader.uxlivinglab.online/hr/logo-2-min-min.png"
+                        height="140px"
+                        width="140px"
+                        style="display: block; margin: 0 auto"
+                        />
+                    </header>
+        
+                    <main style="padding: 20px; display: grid; place-items: center">
+                        <section style="margin: 20px; display: grid; text-align: center;font-size:1.2rem">
+                        <p>
+                            A document has been shared with you, please click the button
+                            below to open the document
+                        </p>
+                        <img
+                        src="${imgUrl.file_url}"
+                        style="display: block; margin: 0 auto"
+                        height="100%"
+                        width="100%"
+                        alt="Document picture"
+                        />
+                        <a href="${link}" style="text-decoration:none;font-weight:700;width:max-content;text-align: center;margin:1.2rem auto;padding: 2em 4em; background-color: #005733;color: #fff;">Open document</a>
+                        </section>
+                    </main>
+        
+                    <footer
+                        style="
+                        background-color: #005733;
+                        color: #fff;
+                        text-align: center;
+                        padding: 25px;
+                        "
+                    >
+                        <a
+                        href="https://www.uxlivinglab.org/"
+                        style="
+                            text-align: center;
+                            color: white;
+                            margin-bottom: 20px;
+                            padding-bottom: 10px;
+                            text-decoration: none;
+                        "
+                        >
+                        DoWell UX Living Lab
+                        </a>
+                        <p style="margin-top: 10px; font-size: 12px">
+                        &copy; 2023-All rights reserved.
+                        </p>
+                    </footer>
+                </div>
+            </body>
+            </html>
+          `
+    return htmlTemplate;
 
 }
 
 
 const getEmailPayLoadd = (token) => {
-    console.log(token);
+
     const emailTemplate = generateShareHTML(`https://ll04-finance-dowell.github.io/100058-DowellEditor-V2/?token=${token}`)
     return emailTemplate;
 
@@ -259,6 +253,7 @@ const getEmailPayLoad = async (midsectionNode) => {
 
 export const shareToEmail = async (shareInfo, token) => {
     const htmlTemplate = await getEmailPayLoadd(token)
+    console.log(htmlTemplate);
     let config = {
         method: 'post',
         maxBodyLength: Infinity,
