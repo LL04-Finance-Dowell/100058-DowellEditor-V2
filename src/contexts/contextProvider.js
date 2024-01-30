@@ -137,11 +137,11 @@ export const ContextProvider = ({ children }) => {
   });
 
   const setSidebar = (bool) => {
-const previewCanvas =document.querySelector('.preview-canvas')
+    const previewCanvas = document.querySelector('.preview-canvas')
     if (!previewCanvas) {
       setSidebarStatus(bool);
-    } ;
-     
+    };
+
   }
   // handling date format
   const [method, setMethod] = useState('first');
@@ -609,62 +609,90 @@ const previewCanvas =document.querySelector('.preview-canvas')
   };
 
   const scaleMidSec = (isOnPost) => {
-    // const midSecAll = document.querySelectorAll('.midSection_container');
-    // const ratio = fixedMidSecDim?.height / fixedMidSecDim?.width;
-    // const parentRatio = fixedMidSecDim?.parentHeight / fixedMidSecDim?.height;
-    // const currWidth = Number(
-    //   midSecAll[0].getBoundingClientRect().width.toFixed(2)
-    // );
-    // const scaledHeight = Number((ratio * currWidth).toFixed(2));
-    // const leftRect = document
-    //   .getElementsByClassName('left_menu_wrapper')[0]
-    //   ?.getBoundingClientRect();
+    if (!document.querySelector('.preview-canvas')) {
+      const midSecAll = document.querySelectorAll('.midSection_container');
+      const ratio = fixedMidSecDim?.height / fixedMidSecDim?.width;
+      const parentRatio = fixedMidSecDim?.parentHeight / fixedMidSecDim?.height;
+      const currWidth = Number(
+        midSecAll[0].getBoundingClientRect().width.toFixed(2)
+      );
+      const scaledHeight = Number((ratio * currWidth).toFixed(2));
+      const leftRect = document
+        .getElementsByClassName('left_menu_wrapper')[0]
+        ?.getBoundingClientRect();
 
-    // if (isOnPost || currWidth !== currMidSecWidth) {
-    //   midSecAll?.forEach((mid) => {
-    //     mid.style.height = scaledHeight + 'px';
-    //     mid.parentElement.style.height =
-    //       (scaledHeight * parentRatio).toFixed(2) + 'px';
-    //   });
+      if (isOnPost || currWidth !== currMidSecWidth) {
+        midSecAll?.forEach((mid) => {
+          mid.style.height = scaledHeight + 'px';
+          mid.parentElement.style.height =
+            (scaledHeight * parentRatio).toFixed(2) + 'px';
+        });
 
-    //   midSecAll[0].parentElement.parentElement.parentElement.style.marginTop =
-    //     window.innerWidth > 993 ? 0 : leftRect?.height + 'px';
+        midSecAll[0].parentElement.parentElement.parentElement.style.marginTop =
+          window.innerWidth > 993 ? 0 : leftRect?.height + 'px';
 
-    //   setCurrMidSecWidth(currWidth);
-    // }
+        setCurrMidSecWidth(currWidth);
+      }
+
+    } else {
+      const midSecAll = document.querySelectorAll('.preview-canvas');
+      const ratio = fixedMidSecDim?.height / fixedMidSecDim?.width;
+      const parentRatio = fixedMidSecDim?.parentHeight / fixedMidSecDim?.height;
+      const currWidth = Number(
+        midSecAll[0].getBoundingClientRect().width.toFixed(2)
+      );
+      const scaledHeight = Number((ratio * currWidth).toFixed(2));
+      const leftRect = document
+        .getElementsByClassName('left_menu_wrapper')[0]
+        ?.getBoundingClientRect();
+
+      if (isOnPost || currWidth !== currMidSecWidth) {
+        midSecAll?.forEach((mid) => {
+          mid.style.height = scaledHeight + 'px';
+          mid.parentElement.style.height =
+            (scaledHeight * parentRatio).toFixed(2) + 'px';
+        });
+
+        midSecAll[0].parentElement.parentElement.parentElement.style.marginTop =
+          window.innerWidth > 993 ? 0 : leftRect?.height + 'px';
+
+        setCurrMidSecWidth(currWidth);
+      }
+    }
   };
 
   const updateDimRatios = (holder) => {
-    // const midSecWidth = document
-    //   .querySelector('.midSection_container')
-    //   .getBoundingClientRect().width;
-    // const holderStyles = window.getComputedStyle(holder);
-    // const el = holder.children[1]?.classList.contains('dropdownInput')
-    //   ? holder.children[1]
-    //   : holder.children[0];
+      const midSecWidth = document
+        .querySelector('.midSection_container')
+        .getBoundingClientRect().width;
+      const holderStyles = window.getComputedStyle(holder);
+      const el = holder.children[1]?.classList.contains('dropdownInput')
+        ? holder.children[1]
+        : holder.children[0];
 
-    // const holderTop = parseFloat(holderStyles.top);
-    // const holderLeft = parseFloat(holderStyles.left);
-    // const holderWidth = parseFloat(holderStyles.width);
-    // const holderHeight = parseFloat(holderStyles.height);
+      const holderTop = parseFloat(holderStyles.top);
+      const holderLeft = parseFloat(holderStyles.left);
+      const holderWidth = parseFloat(holderStyles.width);
+      const holderHeight = parseFloat(holderStyles.height);
 
-    // const dimRatios = sessionStorage.getItem('dimRatios')
-    //   ? JSON.parse(sessionStorage.getItem('dimRatios'))
-    //   : [];
-    // const modDimRatios = dimRatios.map((ratio) =>
-    //   ratio.id === el.id
-    //     ? {
-    //         ...ratio,
-    //         top: holderTop / midSecWidth,
-    //         left: holderLeft / midSecWidth,
-    //         width: holderWidth / midSecWidth,
-    //         height: holderHeight / midSecWidth,
-    //       }
-    //     : ratio
-    // );
+      const dimRatios = sessionStorage.getItem('dimRatios')
+        ? JSON.parse(sessionStorage.getItem('dimRatios'))
+        : [];
+      const modDimRatios = dimRatios.map((ratio) =>
+        ratio.id === el.id
+          ? {
+            ...ratio,
+            top: holderTop / midSecWidth,
+            left: holderLeft / midSecWidth,
+            width: holderWidth / midSecWidth,
+            height: holderHeight / midSecWidth,
+          }
+          : ratio
+      );
 
-    // sessionStorage.setItem('dimRatios', JSON.stringify(modDimRatios));
-    // setDimRatios(modDimRatios);
+      sessionStorage.setItem('dimRatios', JSON.stringify(modDimRatios));
+      setDimRatios(modDimRatios);
+   
   };
 
   useEffect(() => {
