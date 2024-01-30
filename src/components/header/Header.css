@@ -198,6 +198,10 @@ svg:not(.view_mode svg, .mid_resizer svg) {
   font-size: 1.3rem;
   margin-top: -4px;
 }
+.home_header{
+  position: fixed ;
+  width:100%;
+}
 
 @media screen and (max-width: 700px) {
   .mode_tag {
@@ -226,6 +230,11 @@ svg:not(.view_mode svg, .mid_resizer svg) {
     max-width: 50%;
   }
 } */
+@media only screen and (max-width: 1260px) {
+  .view_mode {
+    display: none !important;
+  }
+}
 @media screen and (max-width: 992px) {
   .title-name {
     font-size: 2rem;

@@ -22,8 +22,6 @@ const ProgressLoader = () => {
         loaderSpeed={1000}
         onLoaderFinished={() => setProgress(0)}
       />
-      <button style={{ visibility:"hidden"}} id='progress-100' onClick={() => setProgress(100)}>Complete</button>
-      <button style={{ visibility:"hidden"}} id='progress-50' onClick={() => setProgress( progress + 50)}>add 50</button>
       <br />
     </div>
   )
