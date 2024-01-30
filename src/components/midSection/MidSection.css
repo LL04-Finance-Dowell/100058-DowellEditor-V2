@@ -11,7 +11,7 @@
   flex-direction: column;
   flex-wrap: nowrap;
   align-items: center;
-  justify-content: flex-start;
+  /* justify-content: flex-start; */
 }
 
 .midSection {
@@ -26,6 +26,9 @@
   height: 297mm;
   position: relative;
   box-shadow: 1px 1px 6px #41414144;
+}
+.preview-canvas{
+  padding:0 24px;
 }
 .disable_pointer_event {
   pointer-events: none;
@@ -121,3 +124,40 @@
     height: 297mm;
     position: relative;
 } */
+@media only screen and (min-width: 1282px)and (max-width: 1366px) {
+  .midSection_container {
+    width: 173mm ;
+  }
+  .editSec_midSec {
+    padding-left: 70px !important;
+    column-gap: 2rem !important;
+  }
+}
+@media only screen and (min-width: 768px)and (max-width: 1281px) {
+  .midSection_container {
+    width: 160mm ;
+  }
+  .editSec_midSec {
+    padding-left: 70px !important;
+    column-gap: 1.7rem !important;
+  }
+}
+@media only screen and (min-width:1900px) {
+  .midSection_container {
+    width: 180mm ;
+  }
+  .editSec_midSec {
+    column-gap: 4rem !important;
+    margin-left: 80px !important;
+
+  }
+}
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (max-width: 768px) {
+  .editSec_midSec {
+    padding-top: 85px;
+    padding-left: 50px !important;
+  }
+}
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {}

@@ -182,7 +182,7 @@ const EditSection = () => {
             className='editSec_midSec'
             id='editSec_midSec'
           >
-            <div className='canvas-holder'> 
+            <div className='canvas-holder '> 
 
             <MidSection />
             </div>

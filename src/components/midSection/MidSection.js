@@ -59,6 +59,7 @@ import { toast } from 'react-toastify';
 import createGenBtnEl from './createElements/CreateGenBtnEl';
 import { saveDocument } from '../header/Header';
 import { BsNodeMinusFill } from 'react-icons/bs';
+import { handleResize } from '../../utils/responsived-design/responsive';
 // tHIS IS FOR A TEST COMMIT
 
 const dummyData = {
@@ -87,22 +88,20 @@ const dummyData = {
 export const renderPreview = (mainSection) => {
   document.querySelector('#main-section-container')?.remove();
   const editSec = mainSection;
-  const previewContainer=document.createElement('div');
-  previewContainer.id='main-section-container';
+  const previewContainer = document.createElement('div');
+  previewContainer.id = 'main-section-container';
   editSec.append(previewContainer);
   const midSecAll = document.querySelectorAll('.midSection_container');
   midSecAll.forEach((mid) => {
-    // mid.style.width = width + 'px';
     const previewCanvas = mid.cloneNode(true);
     previewCanvas.querySelectorAll('.holderDIV')?.forEach((div) => {
       div.style.border = 'none';
       div.style.pointerEvents = 'none';
     });
     previewCanvas.className = 'midSection_container print_container preview-canvas';
-    document.querySelector('#main-section-container').append(previewCanvas)
+    document.querySelector('#main-section-container').append(previewCanvas);
   });
 }
-// const MidSection = ({showSidebar}) => {
 const MidSection = React.forwardRef((props, ref) => {
   const {
     setDropdownName,
@@ -398,7 +397,7 @@ const MidSection = React.forwardRef((props, ref) => {
           // top: parseInt(holder.style.top.slice(0, -2)),
           // left: parseInt(holder.style.left.slice(0, -2))//elemLeft : 0
         };
-        
+
         return Object.seal(holderSize);
       })();
 
@@ -421,8 +420,8 @@ const MidSection = React.forwardRef((props, ref) => {
           holder.style.width = holderSize.width + (ev.screenX - initX) + 'px';
           holder.style.height = holderSize.height - (ev.screenY - initY) + 'px';
         }
-        const previewCanvas =document.querySelector('.preview-canvas');
-        if(previewCanvas){
+        const previewCanvas = document.querySelector('.preview-canvas');
+        if (previewCanvas) {
           const mainSection = document.querySelector('.editSec_midSec');
           renderPreview(mainSection);
 
@@ -736,9 +735,9 @@ const MidSection = React.forwardRef((props, ref) => {
             event.target.className != 'td-resizer' &&
             event.target.className != 'row-resizer'
           ) {
-            dragElementOverPage(event, resizing,mode);
+            dragElementOverPage(event, resizing, mode);
             const mainSection = document.querySelector('.editSec_midSec');
-            if(mainSection)renderPreview(mainSection);
+            if (mainSection) renderPreview(mainSection);
           }
         },
         false
@@ -754,7 +753,7 @@ const MidSection = React.forwardRef((props, ref) => {
       holderDIV.addEventListener('focus', (e) => {
         holderDIV.classList.add('zIndex-two');
         holderDIV.style.border = '2px solid orange';
-        
+
         holderDIV.append(resizerTL, resizerTR, resizerBL, resizerBR);
       });
 
@@ -1105,7 +1104,7 @@ const MidSection = React.forwardRef((props, ref) => {
     const resizerBR = getResizer('bottom', 'right');
 
     const holderMenu = getHolderMenu(measure.auth_user);
-    
+
     // const holderMenu = getHolderMenu(measure.auth_user);
 
     holderDIV.onmousedown = holderDIV.addEventListener(
@@ -1115,7 +1114,7 @@ const MidSection = React.forwardRef((props, ref) => {
           event.target.className != 'td-resizer' &&
           event.target.className != 'row-resizer'
         ) {
-          dragElementOverPage(event, resizing,mode);
+          dragElementOverPage(event, resizing, mode);
         }
       },
       false
@@ -2965,15 +2964,15 @@ const MidSection = React.forwardRef((props, ref) => {
       switch (selOpt) {
         case 'large':
           setMidSecWdith(fixedMidSecDim.width);
-          scaleMidSec();
+          // scaleMidSec();
           break;
         case 'mid':
           setMidSecWdith(720);
-          scaleMidSec();
+          // scaleMidSec();
           break;
         case 'small':
           setMidSecWdith(350);
-          scaleMidSec();
+          // scaleMidSec();
           break;
         default:
           setMidSecWdith(fixedMidSecDim.width);
@@ -2989,24 +2988,24 @@ const MidSection = React.forwardRef((props, ref) => {
   }, [isDataRetrieved, selOpt, mode]);
 
   // useEffect(() => {
-  //   // if (Object.keys(fetchedData).length) {
-  //   //   window.onresize = () => {
-  //   //     if (resizeChecker.current !== window.innerWidth) {
-  //   //       isCompsScaler || setIsCompsScaler(true);
-  //   //       scaleMidSec();
-  //   //       resizeChecker.current = window.innerWidth;
-  //   //     }
+  //   if (Object.keys(fetchedData).length) {
+  //     window.onresize = () => {
+  //       if (resizeChecker.current !== window.innerWidth) {
+  //         isCompsScaler || setIsCompsScaler(true);
+  //         scaleMidSec();
+  //         resizeChecker.current = window.innerWidth;
+  //       }
 
-  //   //     if (defOptRef.current !== 'large' && window.innerWidth > 993)
-  //   //       setDefSelOpt('large');
-  //   //     else if (
-  //   //       (defOptRef.current !== 'large' || defOptRef.current !== 'mid') &&
-  //   //       window.innerWidth <= 993 &&
-  //   //       window.innerWidth >= 770
-  //   //     )
-  //   //       setDefSelOpt('mid');
-  //   //   };
-  //   // }
+  //       if (defOptRef.current !== 'large' && window.innerWidth > 993)
+  //         setDefSelOpt('large');
+  //       else if (
+  //         (defOptRef.current !== 'large' || defOptRef.current !== 'mid') &&
+  //         window.innerWidth <= 993 &&
+  //         window.innerWidth >= 770
+  //       )
+  //         setDefSelOpt('mid');
+  //     };
+  //   }
 
   //   return () => (window.onresize = null);
   // }, [fetchedData, currMidSecWidth, isCompsScaler]);
@@ -3095,6 +3094,21 @@ const MidSection = React.forwardRef((props, ref) => {
   const getCurrentEl = (fromMidSection) => {
     return fromMidSection;
   };
+
+  useEffect(() => {
+    const midsectionContainers = document.querySelectorAll('.midSection_container');
+    midsectionContainers.forEach(midSection => {
+      if (!midSection.hasAttribute('data-resize-observed')) {
+        // Create a Resize Observer
+        const resizeObserver = new ResizeObserver(handleResize);
+        // Observe the midSection element
+        resizeObserver.observe(midSection);
+        // Mark the element as observed to avoid duplication
+        midSection.setAttribute('data-resize-observed', 'true');
+      }
+    })
+
+  }, [])
   return (
     <>
       {item?.map((currentItem, index) => {

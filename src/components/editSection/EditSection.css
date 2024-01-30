@@ -8,7 +8,7 @@
 
 .editSec_midSec {
   background: #e3eeff;
-  width: 100%;
+  /* width: 100%; */
   height: auto;
   display: flex;
   column-gap: 4rem;
