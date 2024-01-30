@@ -3,18 +3,15 @@ import { FaMobileAlt, FaTabletAlt, FaLaptop } from 'react-icons/fa';
 import { BsCaretDown, BsCaretUp } from 'react-icons/bs';
 import { useStateContext } from '../../contexts/contextProvider';
 import './midResizer.css';
+import { resizePreview } from '../../utils/responsived-design/responsive';
+import { renderPreview } from '../midSection/MidSection';
 
 const MidResizer = () => {
-  const { selOpt, setSelOpt, setIsCompsScaler, isCompsScaler } =
+  const {setIsCompsScaler, isCompsScaler } =
     useStateContext();
   const [isDrop, setIsDrop] = useState(false);
-  const [selOpts] = useState(
-    window.innerWidth > 993
-      ? ['large', 'mid', 'small']
-      : window.innerWidth <= 993 && window.innerWidth >= 600
-      ? ['mid', 'small']
-      : ['small']
-  );
+  const [selOpts] = useState(['large', 'mid']);
+  const [selOpt, setSelOpt] = useState('large');
 
   const containerRef = useRef(null);
   const contentRef = useRef(null);
@@ -47,6 +44,15 @@ const MidResizer = () => {
       else containerEl.style.height = '0px';
     }
   }, [isDrop, containerRef, contentRef]);
+  useEffect(() => {
+    if (selOpt === 'mid'){ 
+      resizePreview(720);
+    }else {
+      const mainSection = document.querySelector('.editSec_midSec');
+      renderPreview(mainSection);
+    }
+    console.log(selOpt);
+  }, [selOpt]);
 
   return (
     <div className='mid_resizer'>
@@ -57,11 +63,9 @@ const MidResizer = () => {
         <span className='opt_icon'>
           {selOpt === 'large' ? (
             <FaLaptop />
-          ) : selOpt === 'mid' ? (
+          ) :
             <FaTabletAlt />
-          ) : (
-            <FaMobileAlt />
-          )}
+          }
         </span>
         {selOpt}{' '}
         <span className='drop_icon'>
@@ -80,11 +84,9 @@ const MidResizer = () => {
               <span className='opt_icon'>
                 {opt === 'large' ? (
                   <FaLaptop />
-                ) : opt === 'mid' ? (
+                ) :
                   <FaTabletAlt />
-                ) : (
-                  <FaMobileAlt />
-                )}
+                }
               </span>
               {opt}
             </li>
