@@ -152,7 +152,7 @@ const CalendarRightSidebar = (props) => {
               if (date != startDate) {
 
                 var dateDiv = document.querySelector(".focussed");
-                if (dateDiv.parentElement.classList.contains("holderDIV") && isRequired) {
+                if (dateDiv.parentElement.classList.contains("holderDIV")) {
                   dateDiv.parentElement.classList.add("element_updated");
                 }
               }

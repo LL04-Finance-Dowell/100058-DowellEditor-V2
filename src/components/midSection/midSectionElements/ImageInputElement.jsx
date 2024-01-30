@@ -27,18 +27,6 @@ function createImageInputField(id, element, document_map_required, p, holderDIV,
   imageField.style.overflow = "overlay";
   imageField.style.position = "relative";
 
-  const required_map_document = document_map_required?.filter(
-    (item) => element.id === item.content
-  );
-
-  if (imageField?.parentElement?.classList.contains("holderDIV") && required_map_document?.length > 0) {
-    imageField?.parentElement?.classList.add("element_updated");
-  }
-
-  if (element.required) {
-    isAnyRequiredElementEdited = true;
-  }
-
   imageField.addEventListener("input", (e) => {
     // setIsFinializeDisabled(false);
   });
@@ -85,6 +73,18 @@ function createImageInputField(id, element, document_map_required, p, holderDIV,
     reader.addEventListener("load", () => {
       uploadedImage = reader.result;
       document.querySelector(".focussed").style.backgroundImage = `url(${uploadedImage})`;
+
+      const required_map_document = document_map_required?.filter(
+        (item) => element.id === item.content
+      );
+    
+      if (imageField?.parentElement?.classList.contains("holderDIV") && required_map_document?.length > 0) {
+        imageField?.parentElement?.classList.add("element_updated");
+      }
+    
+      if (element.required) {
+        isAnyRequiredElementEdited = true;
+      }
     });
     reader.readAsDataURL(imgBtn.files[0]);
   });

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import copyInput from '../CopyInput';
 
 // Regular JavaScript function to create a text input field
-function createSignInputField(id, element, p, holderDIV, focuseddClassMaintain, handleClicked, setSidebar) {
+function createSignInputField(id, element, p, holderDIV, focuseddClassMaintain, handleClicked, setSidebar, document_map_required) {
 
     let isAnyRequiredElementEdited = false;
 
@@ -56,6 +56,18 @@ function createSignInputField(id, element, p, holderDIV, focuseddClassMaintain, 
                     }
                     const signImage = `<img src=${uploadedImage} width="100%" height="100%"/>`;
                     document.querySelector(".focussed").innerHTML = signImage;
+
+                    const required_map_document = document_map_required?.filter(
+                        (item) => element.id === item.content
+                      );
+                    
+                      if (signField?.parentElement?.classList.contains("holderDIV") && required_map_document?.length > 0) {
+                        signField?.parentElement?.classList.add("element_updated");
+                      }
+                    
+                      if (element.required) {
+                        isAnyRequiredElementEdited = true;
+                      }
                 });
                 reader.readAsDataURL(signBtn.files[0]);
                 setSidebar(true);

@@ -3,7 +3,7 @@ import { Container, Row, Col, Button } from 'react-bootstrap';
 import './Header.css';
 import { FaCopy, FaPen, FaSave } from 'react-icons/fa';
 import { BiImport, BiExport, BiCut, BiCopyAlt } from 'react-icons/bi';
-import { ImRedo, ImUndo, ImPaste } from 'react-icons/im';
+import { ImRedo, ImUndo, ImPaste, ImShare } from 'react-icons/im';
 import CryptoJS from 'crypto-js';
 import { useStateContext } from '../../contexts/contextProvider';
 import Axios from 'axios';
@@ -28,6 +28,8 @@ import handleSocialMediaAPI from "../../utils/handleSocialMediaAPI";
 import ProgressLoader from '../../utils/progressLoader/ProgressLoader';
 import MidResizer from './MidResizer.jsx';
 import { current } from '@reduxjs/toolkit';
+import ShareDocModal from '../modals/ShareDocModal.jsx';
+import { shareToEmail } from '../midSection/sendEmail.js';
 
 const Header = () => {
   const inputRef = useRef(null);
@@ -134,7 +136,15 @@ const Header = () => {
   const [printContent, setPrintContent] = useState(false);
   const [rejectionMsg, setRejectionMsg] = useState('');
   const [isOpenRejectionModal, setIsOpenRejectionModal] = useState(false);
+  const [shareModalOpen, setShareModalOpen] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+  
+  const [toName, setToName] = useState("");
+  const [toEmail, setToEmail] = useState("");
+  const [froName, setFroName] = useState("");
+  const [froEmail, setFroEmail] = useState("");
+  const [subject, setSubject] = useState("");
+
 
   const handleOptions = () => {
     setIsMenuVisible(!isMenuVisible);
@@ -1909,6 +1919,25 @@ const Header = () => {
   }
   // copy text function end
 
+  // handle sharing starts here
+  function handleShare() {
+    const shareInfo = 
+      {
+        toname: toName,
+        toemail: toEmail,
+        fromname: froName,
+        fromemail: froEmail,
+        subject: subject
+      }
+  
+      try {
+        shareToEmail(shareInfo, token);
+      } catch (error) {
+        console.log(error);
+        toast.error('Please ensure all required data is submitted');
+      }
+  }
+
   function handleToken() {
     setData([]);
     setIsDataRetrieved(false);
@@ -2124,6 +2153,10 @@ const Header = () => {
                     className={`position-absolute bg-white d-flex flex-column p-4 bar-menu menu ${isMenuVisible ? 'show' : ''
                       }`}
                   >
+                    <div className='d-flex cursor_pointer' onClick={() => setShareModalOpen(true)}>
+                      <ImShare />
+                      <p>Share</p>
+                    </div>
                     <div className='d-flex cursor_pointer' onClick={handleUndo}>
                       <ImUndo />
                       <p>Undo</p>
@@ -2386,6 +2419,24 @@ const Header = () => {
             setMsg={setRejectionMsg}
           />
         )}
+        {shareModalOpen && (
+        <ShareDocModal 
+          openModal={setShareModalOpen}
+          toName={toName}
+          setToName={setToName}
+          toEmail={toEmail}
+          setToEmail={setToEmail}
+          froName={froName}
+          setFroName={setFroName}
+          froEmail={froEmail}
+          setFroEmail={setFroEmail}
+          subject={subject}
+          setSubject={setSubject}
+          handleShare={handleShare}
+
+        />
+        )}
+        
         <ProgressLoader />
       </div>
 
