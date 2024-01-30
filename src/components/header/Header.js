@@ -27,6 +27,7 @@ import handleSocialMediaAPI from "../../utils/handleSocialMediaAPI";
 
 import ProgressLoader from '../../utils/progressLoader/ProgressLoader';
 import MidResizer from './MidResizer.jsx';
+import { current } from '@reduxjs/toolkit';
 import ShareDocModal from '../modals/ShareDocModal.jsx';
 import { shareToEmail } from '../midSection/sendEmail.js';
 
@@ -257,12 +258,12 @@ const Header = () => {
 
 
 
-  async function saveSocialMedia(){
-    if(decoded.product_name === "Social Media Automation"){
+  async function saveSocialMedia() {
+    if (decoded.product_name === "Social Media Automation") {
       try {
-       await handleSocialMediaAPI(decoded, true);
-       toast.success("Social Media Info Saved!");
-       return;
+        await handleSocialMediaAPI(decoded, true);
+        toast.success("Social Media Info Saved!");
+        return;
       } catch (error) {
         toast.error("Something Went Wrong!");
         console.log(error);
@@ -274,7 +275,7 @@ const Header = () => {
   let elem = {};
   function saveDocument() {
     // console.log("/n>>> Decoded\n", decoded,"\n>>>")
-  
+
     const txt = document.getElementsByClassName("textInput");
     let elem = {};
     let contentFile = [];
@@ -518,6 +519,8 @@ const Header = () => {
           function getChildData() {
             const allTableCCells = [];
             const tableChildren = tables[t].querySelector('table')?.children;
+            const tableId = tables[t].querySelector('table')?.id ?? 'T1';
+            let tdId = tables[t].querySelector('table')?.querySelectorAll('.text_td').length + 1
             for (let i = 0; i < tableChildren.length; i++) {
               const tableTR = { tr: null };
               const newTableTR = [];
@@ -525,16 +528,16 @@ const Header = () => {
                 const childNodes = tableChildren[i].children[j]?.childNodes;
                 const currentTd = tableChildren[i].children[j]
                 const tdElement = [];
-                if (!childNodes) {
-                  tdElement.push(currentTd);
-                }
                 childNodes.forEach((child) => {
                   if (
                     !child.classList?.contains('row-resizer') &&
                     !child.classList?.contains('td-resizer')
                   ) {
                     if (!child.innerHTML) {
+                      currentTd.id = `${tableId}td${tdId}`
                       tdElement.push(currentTd);
+                      tdId++;
+                      console.log("\nCURRENT TD\n", currentTd, "\n")
                     } else {
                       tdElement.push(child);
                     }
@@ -549,7 +552,7 @@ const Header = () => {
                       (TdDivClassName == 'textInput' && 'TEXT_INPUT') ||
                       (TdDivClassName == 'imageInput' && 'IMAGE_INPUT') ||
                       (TdDivClassName == 'signInput' && 'SIGN_INPUT') ||
-                      (TdDivClassName == 'dropp' && 'dropp'),
+                      (TdDivClassName == 'dropp' && 'text_td'),
                     data:
                       TdDivClassName == 'imageInput'
                         ? tableChildren[i].children[j]?.firstElementChild.style
@@ -583,6 +586,8 @@ const Header = () => {
               ? tables[t].firstElementChild.id
               : `tab${t + 1}`,
           };
+          console.log("\nCURRENT ELEM\n", elem.data, "\n")
+
           const pageNum = findPaageNum(tables[t]);
           page[0][pageNum]?.push(elem);
         }
@@ -1129,7 +1134,7 @@ const Header = () => {
     return contentFile;
   }
 
-  
+
 
   const [searchParams] = useSearchParams();
   const token = searchParams.get('token');
@@ -2098,31 +2103,34 @@ const Header = () => {
   const handleModeChange = () => {
     if (mode === 'preview') {
       const setMidSecWdith = (width) => {
-        const midSecAll = document.querySelectorAll('.midSection_container');
-        midSecAll.forEach((mid) => {
+        const midSecAll = document.querySelectorAll('.preview-canvas');
+        midSecAll?.forEach((mid) => {
           mid.style.width = width + 'px';
         });
       };
 
       switch (defSelOpt) {
         case 'large':
-          setMidSecWdith(fixedMidSecDim.width);
-          scaleMidSec();
+          // setMidSecWdith(fixedMidSecDim.width);
+          // scaleMidSec();
           break;
         case 'mid':
-          setMidSecWdith(720);
-          scaleMidSec();
+          // setMidSecWdith(720);
+          // scaleMidSec();
           break;
         case 'small':
-          setMidSecWdith(350);
-          scaleMidSec();
+          // setMidSecWdith(350);
+          // scaleMidSec();
           break;
         default:
           return;
       }
-    }
-    setSelOpt(defSelOpt);
+    } 
+
+    // setSelOpt(defSelOpt);
     setMode(mode === 'edit' ? 'preview' : mode === 'preview' ? 'edit' : '');
+      
+    document.querySelectorAll('.preview-canvas')?.forEach(prev => prev.remove())
   };
 
   return (
@@ -2243,8 +2251,7 @@ const Header = () => {
               <div className='right_header'>
                 <div className='view_mode_wrapper'>
                   <button
-                    className={`view_mode ${enablePreview ? '' : 'btn_disable'
-                      }`}
+                    className={`view_mode`}
                     onClick={handleModeChange}
                     disabled={!enablePreview}
                   >

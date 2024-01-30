@@ -1013,7 +1013,7 @@ const TableRightSidebar = () => {
         // // console.log("numOfCol", numOfTr, numOfTd, numOfCol);
         var td = document.createElement("td");
         td.className = "dropp";
-
+        td.setAttribute('contenteditable', true);
         td.ondragover = function (e) {
           e.preventDefault();
           e.target.classList.add("table_drag");
@@ -1088,6 +1088,7 @@ const TableRightSidebar = () => {
     targetTR.forEach((tr, i) => {
       if (i > 0) {
         const td = document.createElement('td')
+        td.setAttribute('contenteditable', true);
         if (i == 1) {
           const resizer = document.createElement('div');
           resizer.classList.add('td-resizer');

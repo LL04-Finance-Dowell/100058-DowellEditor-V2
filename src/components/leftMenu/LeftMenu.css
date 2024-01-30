@@ -10,7 +10,7 @@
   text-align: center;
 }
 
-.leftMenu button:hover + .btn_tag {
+.leftMenu button:hover+.btn_tag {
   color: #25c7a3;
 }
 
@@ -23,7 +23,12 @@
   pointer-events: none;
 }
 
-.leftMenu .btn_wrapper > button {
+.title-name.px-3 {
+  display: grid;
+  align-items: center;
+}
+
+.leftMenu .btn_wrapper>button {
   outline: transparent;
   border: none;
   background-color: #394869;
@@ -31,11 +36,12 @@
   border-radius: 6px;
   transition: all ease 0.3s;
 }
-.leftMenu .btn_wrapper > button:hover {
+
+.leftMenu .btn_wrapper>button:hover {
   background-color: #25c7a3;
 }
 
-.leftMenu > img {
+.leftMenu>img {
   width: fit-content;
   width: -moz-fit-content;
   width: 30px;
@@ -68,6 +74,7 @@
   color: #fff;
   padding: 5px 15px;
 }
+
 .custom_finalize_button {
   background: #318e11;
   border-radius: 10px;
@@ -109,20 +116,27 @@
 @media screen and (max-width: 992px) {
   .leftMenu {
     background-color: #ffffff;
-    min-height: 8vh;
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     margin-top: 0px;
     flex-wrap: wrap;
-    padding: 5px 2px;
+    padding: 2px 6px;
+    column-gap: 1rem;
+    row-gap: 0;
   }
+
   .left_menu_wrapper {
     height: auto;
     z-index: 99;
     width: 100%;
     padding-top: 5px;
     padding-bottom: 5px;
+  }
+
+  .leftMenu .btn_wrapper {
+    text-align: center;
+    height: 3.8rem;
   }
 }

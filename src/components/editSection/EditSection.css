@@ -1,16 +1,29 @@
+#edit-container {
+  background-color: #e3eeff;
+}
+
 .editSec {
   background-color: #ffffff;
 }
+
 .editSec_midSec {
   background: #e3eeff;
+  /* width: 100%; */
   height: auto;
+  display: flex;
+  column-gap: 4rem;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
 }
+
 .editSec_rightMenu {
   position: fixed;
   right: 0;
   padding: 15px 20px;
   background-color: #fbfbfb;
-  /* max-height: 600px; */
+  max-width: 15%;
+  min-height: 100vh;
   height: 85%;
   overflow-y: auto;
 }
