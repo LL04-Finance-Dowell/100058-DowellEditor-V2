@@ -1673,9 +1673,6 @@ const Header = () => {
     saveSocialMedia();
     const finalize = document.getElementById('finalize-button');
 
-    const completeProgressBar = document.getElementById('progress-100');
-    const halfProgressBar = document.getElementById('progress-50');
-
     const titleName = document.querySelector('.title-name').innerHTML;
 
     const field = {
@@ -1730,14 +1727,14 @@ const Header = () => {
       }
     )
       .then((res) => {
-        completeProgressBar.click();
+        setProgress(100);
         if (res) {
           toast.success('Saved successfully');
           setIsLoading(false);
           setIsButtonDisabled(false);
           if (finalize) {
             setTimeout(() => {
-              halfProgressBar.click();
+              setProgress(50)
               handleFinalize();
             }, 2000);
           }
@@ -1761,7 +1758,7 @@ const Header = () => {
         }
       })
       .catch((err) => {
-        completeProgressBar.click();
+        setProgress(100);
         setIsLoading(false);
         setIsButtonDisabled(false);
       });
