@@ -2109,22 +2109,22 @@ const Header = () => {
         });
       };
 
-      // switch (defSelOpt) {
-      //   case 'large':
-      //     setMidSecWdith(fixedMidSecDim.width);
-      //     scaleMidSec();
-      //     break;
-      //   case 'mid':
-      //     setMidSecWdith(720);
-      //     scaleMidSec();
-      //     break;
-      //   case 'small':
-      //     setMidSecWdith(350);
-      //     scaleMidSec();
-      //     break;
-      //   default:
-      //     return;
-      // }
+      switch (defSelOpt) {
+        case 'large':
+          // setMidSecWdith(fixedMidSecDim.width);
+          // scaleMidSec();
+          break;
+        case 'mid':
+          // setMidSecWdith(720);
+          // scaleMidSec();
+          break;
+        case 'small':
+          // setMidSecWdith(350);
+          // scaleMidSec();
+          break;
+        default:
+          return;
+      }
     } 
 
     // setSelOpt(defSelOpt);
@@ -2251,8 +2251,7 @@ const Header = () => {
               <div className='right_header'>
                 <div className='view_mode_wrapper'>
                   <button
-                    className={`view_mode ${enablePreview ? '' : 'btn_disable'
-                      }`}
+                    className={`view_mode`}
                     onClick={handleModeChange}
                     disabled={!enablePreview}
                   >
