@@ -176,7 +176,7 @@ const SignsRightSidebar = () => {
           onChange={() => { }}
         />
       </div>
-      <div className="mt-2 text-center pt-5">
+      <div className="mt-2 text-center pt-3">
         <Button variant="primary" className="px-5" onClick={handleUpdate}>
           Update Changes
         </Button>
