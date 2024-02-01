@@ -153,6 +153,9 @@ export const ContextProvider = ({ children }) => {
 
   const [item, setItem] = useState(['div_1']);
 
+  //Pending mail
+  const [pendingMail, setPendingMail] = useState(false);
+
   // Scale id
   const [scaleId, setScaleId] = useState('id');
   const [scaleData, setScaleData] = useState([]);
@@ -924,7 +927,9 @@ export const ContextProvider = ({ children }) => {
         setIsCompsScaler,
         resizeChecker,
         socialMediaImg,
-        setSocialMediaImg
+        setSocialMediaImg,
+        pendingMail, 
+        setPendingMail
       }}
     >
       {children}

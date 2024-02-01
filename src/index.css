@@ -64,6 +64,22 @@ code {
   display: none;
 }
 
+.share-form {
+  position: relative;
+}
+
+.share-input {
+  width: 330px;
+}
+
+.share-btn {
+  position: absolute;
+  right: 0;
+  padding: 8px 25px;
+  margin-right: 10px;
+
+}
+
 @media screen and (max-width: 992px) {
   /* .drag_icon {
     display: inline-block;

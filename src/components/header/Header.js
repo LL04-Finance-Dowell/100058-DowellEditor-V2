@@ -131,6 +131,8 @@ const Header = () => {
     enablePreview,
     setEnablePreview,
     scaleMidSec,
+    pendingMail,
+    setPendingMail,
   } = useStateContext();
 
   const [printContent, setPrintContent] = useState(false);
@@ -138,7 +140,7 @@ const Header = () => {
   const [isOpenRejectionModal, setIsOpenRejectionModal] = useState(false);
   const [shareModalOpen, setShareModalOpen] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
-  
+
   const [toName, setToName] = useState("");
   const [toEmail, setToEmail] = useState("");
   const [froName, setFroName] = useState("");
@@ -1917,22 +1919,29 @@ const Header = () => {
   // copy text function end
 
   // handle sharing starts here
-  function handleShare() {
-    const shareInfo = 
-      {
-        toname: toName,
-        toemail: toEmail,
-        fromname: froName,
-        fromemail: froEmail,
-        subject: subject
-      }
-  
-      try {
-        shareToEmail(shareInfo, token);
-      } catch (error) {
-        console.log(error);
-        toast.error('Please ensure all required data is submitted');
-      }
+ async function handleShare() {
+  setPendingMail(true);
+    const shareInfo =
+    {
+      toname: toName,
+      toemail: toEmail,
+      fromname: froName,
+      fromemail: froEmail,
+      subject: subject
+    }
+    try {
+      const data = await shareToEmail(shareInfo, token);
+      setPendingMail(data);
+    } catch (error) {
+      console.log(error);
+      toast.error('Please ensure all required data is submitted');
+    } finally{
+      setToEmail("");
+      setToName("");
+      setFroEmail("");
+      setFroName("");
+      setSubject("");
+    }
   }
 
   function handleToken() {
@@ -2122,11 +2131,11 @@ const Header = () => {
         default:
           return;
       }
-    } 
+    }
 
     // setSelOpt(defSelOpt);
     setMode(mode === 'edit' ? 'preview' : mode === 'preview' ? 'edit' : '');
-      
+
     document.querySelectorAll('.preview-canvas')?.forEach(prev => prev.remove())
   };
 
@@ -2416,23 +2425,23 @@ const Header = () => {
           />
         )}
         {shareModalOpen && (
-        <ShareDocModal 
-          openModal={setShareModalOpen}
-          toName={toName}
-          setToName={setToName}
-          toEmail={toEmail}
-          setToEmail={setToEmail}
-          froName={froName}
-          setFroName={setFroName}
-          froEmail={froEmail}
-          setFroEmail={setFroEmail}
-          subject={subject}
-          setSubject={setSubject}
-          handleShare={handleShare}
+          <ShareDocModal
+            openModal={setShareModalOpen}
+            toName={toName}
+            setToName={setToName}
+            toEmail={toEmail}
+            setToEmail={setToEmail}
+            froName={froName}
+            setFroName={setFroName}
+            froEmail={froEmail}
+            setFroEmail={setFroEmail}
+            subject={subject}
+            setSubject={setSubject}
+            handleShare={handleShare}
 
-        />
+          />
         )}
-        
+
         <ProgressLoader />
       </div>
 
