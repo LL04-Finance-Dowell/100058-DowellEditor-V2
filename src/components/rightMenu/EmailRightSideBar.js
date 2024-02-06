@@ -345,12 +345,12 @@ const EmailRightSideBar = () => {
             )}
           </Row>
           <hr />
-          <SelectAnsAndQuestion
+          {/* <SelectAnsAndQuestion
             selectedType={selectedType}
             setSelectedType={setSelectedType}
             setAddedAns={setAddedAns}
             addedAns={addedAns}
-          />
+          /> */}
           <hr />
           <div className='d-flex justify-content-center'>
             <Button

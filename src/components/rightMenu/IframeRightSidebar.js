@@ -5,7 +5,7 @@ import { useStateContext } from '../../contexts/contextProvider';
 
 import { useSearchParams } from "react-router-dom";
 import jwt_decode from "jwt-decode";
-import SelectAnsAndQuestion from '../selectAnsAndQuestion';
+// import SelectAnsAndQuestion from '../selectAnsAndQuestion';
 import useSelectedAnswer from '../../customHooks/useSelectedAnswers';
 
 
@@ -111,7 +111,7 @@ const IframeRightSidebar = () => {
           <Form.Label>Enter Height</Form.Label>
           <Form.Control
             type="number"
-            disabled
+            // disabled
             placeholder=""
             min="1"
             id="iframe_height"
@@ -123,7 +123,7 @@ const IframeRightSidebar = () => {
           <Form.Control
             type="number"
             placeholder=""
-            disabled
+            // disabled
             min="1"
             id="iframe_width"
             className="shadow bg-white rounded mb-4"
@@ -163,19 +163,16 @@ const IframeRightSidebar = () => {
           )}
         </Row>
         <hr />
-        <SelectAnsAndQuestion
+        {/* <SelectAnsAndQuestion
           selectedType={selectedType}
           setSelectedType={setSelectedType}
           setAddedAns={setAddedAns}
           addedAns={addedAns} />
-        <hr />
-        <div className="mt-2 text-center pt-5">
+        <hr /> */}
+        <div className="mt-2 text-center pt-3 d-flex gap-2 mb-5">
           <Button variant="secondary" className="px-5" onClick={makeIframe}>
             Create Iframe
           </Button>
-        </div>
-
-        <div className="mt-2 text-center pt-5">
           <Button
             variant="primary"
 
@@ -186,6 +183,18 @@ const IframeRightSidebar = () => {
             Remove Iframe
           </Button>
         </div>
+
+        {/* <div className="mt-2 text-center pt-5">
+          <Button
+            variant="primary"
+
+            className={decoded.details.action === "template" ? "px-5 remove_button" : "px-5 remove_button disable_button"}
+            // onClick={removeIframe}
+            onClick={() => setConfirmRemove(!confirmRemove)}
+          >
+            Remove Iframe
+          </Button>
+        </div> */}
 
       </div>
 
