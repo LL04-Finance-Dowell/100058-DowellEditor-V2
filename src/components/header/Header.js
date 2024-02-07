@@ -1152,6 +1152,9 @@ const Header = () => {
   const titleName = decoded?.details?.name;
   const finalDocName = decoded?.details?.update_field.document_name;
   const docRight = decoded?.details?.document_right;
+  const docCreatedBy = decoded?.details?.created_by;
+  const docCreatedOn = decoded?.details?.created_on;
+  // const docPortfolio = decoded?.details?.auth_viewers[0]?.portfolio;
 
   const element_updated_length =
     document.getElementsByClassName('element_updated')?.length;
@@ -1224,6 +1227,9 @@ const Header = () => {
       content: decoded.details.update_field.content,
       document_name: decoded.details.update_field.document_name,
       page: decoded.details.update_field.page,
+      portfolio:decoded.details.update_field.portfolio,
+      created_by:decoded.details.update_field.created_by,
+      created_on:decoded.details.update_field.created_on,
       user_type: decoded.details.user_type,
       _id: decoded.details._id,
     };
@@ -1301,6 +1307,9 @@ const Header = () => {
       content: decoded.details.update_field.content,
       document_name: decoded.details.update_field.document_name,
       page: decoded.details.update_field.page,
+      portfolio:decoded.details.update_field.portfolio,
+      created_by:decoded.details.update_field.created_by,
+      created_on:decoded.details.update_field.created_on,
       user_type: decoded.details.user_type,
       _id: decoded.details._id,
     };
@@ -1692,10 +1701,15 @@ const Header = () => {
         document_name: titleName,
         content: JSON.stringify(dataa),
         page: item,
+        edited_by:decoded.details.edited_by,
+        edited_on:decoded.details.edited_on,
+        portfolio: decoded.details.portfolio
       }
     }
 
     // console.log(updateField.content);
+
+    console.log(">>decoded",decoded),
 
     <iframe src='http://localhost:5500/'></iframe>;
 
@@ -1715,6 +1729,9 @@ const Header = () => {
         command: decoded.details.command,
         database: decoded.details.database,
         document: decoded.details.document,
+        // edited_by:decoded.details.edited_by,
+        // edited_on: decoded.details.edited_on,
+        // portfolio: decoded.details.portfolio,
         field: field,
         function_ID: decoded.details.function_ID,
         team_member_ID: decoded.details.team_member_ID,
@@ -1818,6 +1835,8 @@ const Header = () => {
         action: decoded.details.action,
         database: decoded.details.database,
         collection: decoded.details.collection,
+        previous_viewers: decoded.details.previous_viewers,
+        next_viewers: decoded.details.next_viewers,
         team_member_ID: decoded.details.team_member_ID,
         function_ID: decoded.details.function_ID,
         cluster: decoded.details.cluster,

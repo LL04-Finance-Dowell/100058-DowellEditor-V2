@@ -2953,7 +2953,7 @@ const MidSection = React.forwardRef((props, ref) => {
     const mainSection = document.querySelector('.editSec_midSec');
     document.querySelectorAll('.preview-canvas')?.forEach(prev => prev.remove())
     if (isDataRetrieved && mode === 'preview') {
-      rightMenu.style.display = 'none';
+      // rightMenu.style.display = 'none';
       const setMidSecWdith = (width) => {
         const previewMidSecAll = document.querySelectorAll('.preview-canvas');
         previewMidSecAll.forEach((mid) => {
@@ -2981,7 +2981,10 @@ const MidSection = React.forwardRef((props, ref) => {
     } else {
       // const previews = document.querySelectorAll('.preview-canvas');
       // previews?.forEach(preview=>preview.remove());
-      rightMenu.style.display = 'flex'
+      if(rightMenu){
+        rightMenu.style.display = 'flex';
+      }
+      
       document.querySelectorAll('.preview-canvas')?.forEach(prev => prev.remove())
 
     }

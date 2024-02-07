@@ -4,6 +4,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 module.exports = { 
   //This property defines where the application starts
   entry: "./src/index.js",
+  // devtool: "eval-inline-source-map",
 
   //This property defines the file path and the file name which will be used for deploying the bundled file
   output: {
@@ -11,6 +12,7 @@ module.exports = {
     filename: "bundle.js",
     publicPath: '/100058-DowellEditor-V2/'
   },
+
   devServer: {
     port: 3000,
     historyApiFallback: true,
@@ -45,6 +47,8 @@ module.exports = {
       },
     ],
   },
+
+  devtool : 'inline-source-map',
 
   // Setup plugin to use a HTML file for serving bundled js files
   plugins: [

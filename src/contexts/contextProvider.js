@@ -194,7 +194,7 @@ export const ContextProvider = ({ children }) => {
   //social Media
   const [socialMediaImg, setSocialMediaImg] = useState(() => {
     const storedImg = localStorage.getItem('editor_social_img');
-    console.log(">>>>\n Image changes", storedImg)
+    // console.log(">>>>\n Image changes", storedImg)
     return storedImg;
   });
 
