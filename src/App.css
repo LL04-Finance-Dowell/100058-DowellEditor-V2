@@ -279,14 +279,7 @@ tr:nth-child(even) {
   overflow: inherit !important;
 }
 
-.left_menu_wrapper {
-  height: 95%;
-  position: fixed;
-  overflow: auto;
-  padding: 20px 30px;
-  margin-left: -12px;
-  padding-bottom: 40px;
-}
+
 
 ::-webkit-scrollbar-thumb {
   background-color: rgb(184, 177, 177);

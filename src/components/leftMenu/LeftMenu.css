@@ -6,6 +6,19 @@
   gap: 1rem;
 }
 
+.leftMenu-title {
+  grid-column: span 2;
+  color: #fff;
+  text-align: center;
+  border-radius: 3px;
+  background-color: #394869;
+}
+
+.leftMenu-title p {
+  padding: 0.3em 0.5em;
+  margin: 0;
+}
+
 .leftMenu .btn_wrapper {
   text-align: center;
 }
@@ -114,6 +127,12 @@
   }
 } */
 @media screen and (max-width: 992px) {
+
+  .leftMenu-title,
+  .btn_tag {
+    display: none;
+  }
+
   .leftMenu {
     background-color: #ffffff;
     display: flex;
@@ -138,5 +157,56 @@
   .leftMenu .btn_wrapper {
     text-align: center;
     height: 3.8rem;
+  }
+
+  .false.col-lg-1 {
+    padding: 0;
+  }
+}
+
+@media screen and (min-width:992px) {
+  .leftMenu {
+    display: grid;
+    margin: 0 auto;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto;
+    width: 100%;
+    flex: row wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .left_menu_wrapper {
+    height: 100%;
+    position: fixed;
+    overflow: auto;
+    padding: 20px 30px;
+    margin-left: -12px;
+    padding-bottom: 40px;
+    width: 16%;
+    top: 18%;
+  }
+
+}
+
+@media only screen and (min-width: 1280px) {
+  .left_menu_wrapper {
+    width: 16%;
+    top: 14%;
+  }
+}
+
+@media only screen and (min-width: 1360px) {
+  .left_menu_wrapper {
+    width: 14%;
+    top: 17%;
+  }
+}
+
+@media only screen and (min-width: 1400px) {
+  .left_menu_wrapper {
+    width: 14%;
+    top: 12%;
   }
 }
