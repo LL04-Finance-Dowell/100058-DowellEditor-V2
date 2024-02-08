@@ -60,6 +60,7 @@ import createGenBtnEl from './createElements/CreateGenBtnEl';
 import { saveDocument } from '../header/Header';
 import { BsNodeMinusFill } from 'react-icons/bs';
 import { handleResize } from '../../utils/responsived-design/responsive';
+import UserFinalizeReminderModal from '../modals/UserFinalizeReminderModal.jsx';
 // tHIS IS FOR A TEST COMMIT
 
 const dummyData = {
@@ -159,6 +160,9 @@ const MidSection = React.forwardRef((props, ref) => {
   const defOptRef = useRef(defSelOpt);
   const [focusedElement, setFocusedElement] = useState(null);
   const [allPages, setAllPages] = useState([]);
+  
+  const [showReminderModal, setShowReminderModal] = useState(false);
+
   const [searchParams] = useSearchParams();
   const token = searchParams.get('token');
   var decoded = jwt_decode(token);
@@ -188,6 +192,8 @@ const MidSection = React.forwardRef((props, ref) => {
   const closeSociaModal = () => {
     setSocialModalIsOpen(false);
   }
+
+  console.log("finalize decoded token", decoded.details.document_right);
 
   const boldCommand = () => {
     if (!editorRef.current) return;
@@ -2064,9 +2070,11 @@ const MidSection = React.forwardRef((props, ref) => {
 
 
 
-  useEffect(() => {
-    // onParagraphPost();
-  }, [socialMediaImg])
+  // useEffect(() => {
+  //   if(decoded.details.document_right === "add_edit"){
+  //     UserFinalizeReminderModal()
+  //   }
+  // }, [])
 
   const onParagraphPost = async () => {
 
@@ -2981,10 +2989,10 @@ const MidSection = React.forwardRef((props, ref) => {
     } else {
       // const previews = document.querySelectorAll('.preview-canvas');
       // previews?.forEach(preview=>preview.remove());
-      if(rightMenu){
+      if (rightMenu) {
         rightMenu.style.display = 'flex';
       }
-      
+
       document.querySelectorAll('.preview-canvas')?.forEach(prev => prev.remove())
 
     }
@@ -3098,6 +3106,13 @@ const MidSection = React.forwardRef((props, ref) => {
     return fromMidSection;
   };
 
+  //handle model in document level
+useEffect(() => {
+  setShowReminderModal(true);
+},[])
+
+const handleClose = () => setShowReminderModal(false);
+
   useEffect(() => {
     const midsectionContainers = document.querySelectorAll('.midSection_container');
     midsectionContainers.forEach(midSection => {
@@ -3112,6 +3127,7 @@ const MidSection = React.forwardRef((props, ref) => {
     })
 
   }, [])
+
   return (
     <>
       {item?.map((currentItem, index) => {
@@ -3178,6 +3194,10 @@ const MidSection = React.forwardRef((props, ref) => {
                   </Col>
                 </Row>
                 <SocialMedia isOpen={socialModalIsOpen} onRequestClose={closeSociaModal} />
+                  {
+                    decoded?.details?.action === "document" && decoded?.details?.document_right == "add_edit" ? <UserFinalizeReminderModal showReminderModal={showReminderModal} handleClose={handleClose}/> : null
+                  }
+
               </Container>
 
             </div>
