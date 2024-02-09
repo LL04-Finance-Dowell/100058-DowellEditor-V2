@@ -975,9 +975,9 @@ const ScaleRightSide = () => {
       const btnUpdateScaleFont = document.getElementById("font_style");
       const beNametnUpdateScal = document.getElementById("scaleLabel");
 
-      const btnUpdateLeft = document.getElementById("left");
-      const btnUpdateRight = document.getElementById("right");
-      const btnUpdateCenter = document.getElementById("centre");
+      // const btnUpdateLeft = document.getElementById("left");
+      // const btnUpdateRight = document.getElementById("right");
+      // const btnUpdateCenter = document.getElementById("centre");
 
       const button = scale?.querySelector(".label_hold");
       const scaleText = scale?.querySelector(".scale_text");
@@ -1126,9 +1126,9 @@ const ScaleRightSide = () => {
           no_of_scales: 6,
           time: timeId.style.display === "none" ? "00" : time?.value,
           name: beNametnUpdateScal.value,
-          left: btnUpdateLeft.value,
-          right: btnUpdateRight.value,
-          center: btnUpdateCenter.value,
+          left: " ",
+          right: " ",
+          center: " ",
           image_label_format: imageLabels,
           fontstyle: btnUpdateScaleFont.value,
           custom_emoji_format: emojiLabels,
@@ -1151,8 +1151,8 @@ const ScaleRightSide = () => {
             labelHold.innerHTML = "";
 
             if (beNametnUpdateScal.value !== "") {
-              scaleText.textContent = beNametnUpdateScal.value;
-              scaleText.style.display = "none";
+              scaleText.textContent = "On a scale of 0-10, how likely are you to recommend the product to your friends?";
+              // scaleText.style.display = "none";
             }
 
             if (btnUpdateFontColor.value !== "") {
@@ -1168,14 +1168,14 @@ const ScaleRightSide = () => {
               button4.style.fontFamily = btnUpdateScaleFont.value;
             }
 
-            buttonChildLeft.textContent = btnUpdateLeft.value;
-            buttonChildLeft.style.display = "none";
+            // buttonChildLeft.textContent = btnUpdateLeft.value;
+            // buttonChildLeft.style.display = "none";
 
-            buttonChildRight.textContent = btnUpdateRight.value;
-            buttonChildRight.style.display = "none";
+            // buttonChildRight.textContent = btnUpdateRight.value;
+            // buttonChildRight.style.display = "none";
 
-            buttonChildNeutral.style.display = "none";
-            buttonChildNeutral.textContent = btnUpdateCenter.value;
+            // buttonChildNeutral.style.display = "none";
+            // buttonChildNeutral.textContent = btnUpdateCenter.value;
 
             for (let i = 0; i <= 10; i++) {
               const selectedOption = optionSelect.value;
@@ -1192,7 +1192,8 @@ const ScaleRightSide = () => {
               circle.style.alignItems = "center";
               circle.style.backgroundColor = btnUpdateButton.value;
               labelHold.style.gap = "5px";
-              labelHold.style.height = "100%";
+              labelHold.style.height = "35px";
+              labelHold.style.marginTop = "15px";
               labelHold.style.justifyContent = "space-evenly";
               labelHold.style.position = "relative";
               button4.style.height = "100%";
@@ -1247,9 +1248,9 @@ const ScaleRightSide = () => {
           no_of_scales: 6,
           time: timeId?.style?.display === "none" ? "00" : time?.value,
           name: beNametnUpdateScal.value,
-          left: btnUpdateLeft.value,
-          right: btnUpdateRight.value,
-          center: btnUpdateCenter.value,
+          left: " ",
+          right: " ",
+          center: " ",
           label_images: { 0: "imagefile", 1: "imagefile", 2: "imagefile" },
           fontstyle: btnUpdateScaleFont.value,
           custom_emoji_format: emojiLabels,
@@ -1267,7 +1268,7 @@ const ScaleRightSide = () => {
               labelHold.innerHTML = "";
 
               if (beNametnUpdateScal.value !== "") {
-                scaleText.textContent = beNametnUpdateScal.value;
+                scaleText.textContent = "On a scale of 0-10, how likely are you to recommend the product to your friends?";
               }
 
               if (btnUpdateFontColor.value !== "") {
@@ -1283,14 +1284,14 @@ const ScaleRightSide = () => {
                 button4.style.fontFamily = btnUpdateScaleFont.value;
               }
 
-              buttonChildLeft.textContent = btnUpdateLeft.value;
-              buttonChildLeft.style.display = "none";
+              // buttonChildLeft.textContent = btnUpdateLeft.value;
+              // buttonChildLeft.style.display = "none";
 
-              buttonChildRight.textContent = btnUpdateRight.value;
-              buttonChildRight.style.display = "none";
+              // buttonChildRight.textContent = btnUpdateRight.value;
+              // buttonChildRight.style.display = "none";
 
-              buttonChildNeutral.style.display = "none";
-              buttonChildNeutral.textContent = btnUpdateCenter.value;
+              // buttonChildNeutral.style.display = "none";
+              // buttonChildNeutral.textContent = btnUpdateCenter.value;
 
               for (let i = 0; i <= 10; i++) {
                 const selectedOption = optionSelect.value;
@@ -4822,16 +4823,16 @@ const ScaleRightSide = () => {
                     }}
                   >
                     <div
-                      style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: "2px",
-                      }}
+                      // style={{
+                      //   display: "flex",
+                      //   flexDirection: "column",
+                      //   gap: "2px",
+                      // }}
                     >
-                      <h6 style={{ margin: "auto 0", fontSize: "12px" }}>
+                      {/* <h6 style={{ margin: "auto 0", fontSize: "12px" }}>
                         Left
-                      </h6>
-                      <div
+                      </h6> */}
+                      {/* <div
                         style={{
                           backgroundColor: "#e8e8e8",
                           padding: "5px 7px",
@@ -4872,19 +4873,19 @@ const ScaleRightSide = () => {
                               : false
                           }
                         />
-                      </div>
+                      </div> */}
                     </div>
                     <div
-                      style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: "2px",
-                      }}
+                      // style={{
+                      //   display: "flex",
+                      //   flexDirection: "column",
+                      //   gap: "2px",
+                      // }}
                     >
-                      <h6 style={{ margin: "auto 0", fontSize: "12px" }}>
+                      {/* <h6 style={{ margin: "auto 0", fontSize: "12px" }}>
                         Centre
-                      </h6>
-                      <div
+                      </h6> */}
+                      {/* <div
                         style={{
                           backgroundColor: "#e8e8e8",
                           padding: "3px 7px",
@@ -4919,28 +4920,28 @@ const ScaleRightSide = () => {
                               : false
                           }
                         />
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                   <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "7px",
-                      justifyContent: "space-between",
-                    }}
+                    // style={{
+                    //   display: "flex",
+                    //   alignItems: "center",
+                    //   gap: "7px",
+                    //   justifyContent: "space-between",
+                    // }}
                   >
                     <div
-                      style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: "2px",
-                      }}
+                      // style={{
+                      //   display: "flex",
+                      //   flexDirection: "column",
+                      //   gap: "2px",
+                      // }}
                     >
-                      <h6 style={{ margin: "auto 0", fontSize: "12px" }}>
+                      {/* <h6 style={{ margin: "auto 0", fontSize: "12px" }}>
                         Right
-                      </h6>
-                      <div
+                      </h6> */}
+                      {/* <div
                         style={{
                           backgroundColor: "#e8e8e8",
                           padding: "3px 7px",
@@ -4975,7 +4976,7 @@ const ScaleRightSide = () => {
                               : false
                           }
                         />
-                      </div>
+                      </div> */}
                     </div>
                     <div
                       style={{
@@ -5143,7 +5144,6 @@ const ScaleRightSide = () => {
                     <h6 style={{ fontSize: "12px" }}>
                       Show total score for all instances
                     </h6>
-
                     <div class="form-check form-switch">
                       <input
                         style={{ cursor: "pointer" }}

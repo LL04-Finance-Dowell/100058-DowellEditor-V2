@@ -23,6 +23,8 @@ function createNewScaleInputElement(
   scaleField.style.outline = "0px";
   scaleField.style.overflow = "overlay";
   scaleField.style.position = "absolute";
+  scaleField.style.paddingTop = "25px"
+  scaleField.style.paddingBottom = "none"
   // scaleField.innerText = "scale here";
 
   const scaleTypeHolder = document.createElement("h6");
@@ -38,6 +40,14 @@ function createNewScaleInputElement(
   tempText.style.width = "100%";
   tempText.style.textAlign = "center";
   scaleField.appendChild(tempText);
+
+  // const scaleQuestion = document.createElement("div");
+  // scaleQuestion.className = "scaleQuestion";
+  // scaleQuestion.textContent = "create your scale";
+  // scaleQuestion.style.fontWeight = "700";
+  // scaleQuestion.style.width = "100%";
+  // scaleQuestion.style.textAlign = "center";
+  // scaleField.appendChild(scaleQuestion);
 
   const scaleHold = document.createElement("div");
   scaleHold.className = "scool_input";

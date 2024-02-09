@@ -28,6 +28,8 @@ function createNewScaleInputField(
   scaleField.style.outline = "0px";
   scaleField.style.overflow = "overlay";
   scaleField.style.position = "absolute";
+  scaleField.style.paddingTop = "25px"
+  scaleField.style.paddingBottom = "none"
   const scaleHold = document.createElement("div");
   scaleHold.className = "scool_input";
   scaleHold.style.fontFamily = element?.raw_data?.fontFamily;
@@ -95,8 +97,8 @@ function createNewScaleInputField(
   optionHolderLikert.textContent = element?.raw_data?.likertOptionHolder || "";
   optionHolderLikert.style.display = "none";
   scaleHold.append(optionHolderLikert);
-  scaleText.style.marginBottom = "10px";
-  scaleText.style.height = "10%";
+  // scaleText.style.marginBottom = "10px";
+  // scaleText.style.height = "10%";
 
   const labelHold = document.createElement("div");
   labelHold.className = "label_hold";
@@ -128,13 +130,13 @@ function createNewScaleInputField(
       circle.style.alignItems = "center";
       circle.style.marginLeft = "2px";
 
-      labelHold.style.gap = "5px";
-      labelHold.style.height = "100%";
-      labelHold.style.justifyContent = "space-evenly";
-      labelHold.style.position = "relative";
-      scaleHold.style.height = "100%";
-      scaleHold.style.padding = "";
-      scaleText.style.display = "none";
+      // labelHold.style.gap = "5px";
+      // labelHold.style.height = "100%";
+      // labelHold.style.justifyContent = "space-evenly";
+      // labelHold.style.position = "relative";
+      // scaleHold.style.height = "100%";
+      // scaleHold.style.padding = "";
+      // scaleText.style.display = "none";
 
       const orientation = element?.raw_data?.orentation;
 
