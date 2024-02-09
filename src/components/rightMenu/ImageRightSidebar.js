@@ -168,12 +168,12 @@ const ImageRightSidebar = () => {
         )}
       </Row>
       <hr />
-      <SelectAnsAndQuestion
+      {/* <SelectAnsAndQuestion
         selectedType={selectedType}
         setSelectedType={setSelectedType}
         setAddedAns={setAddedAns}
         addedAns={addedAns} />
-      <hr />
+      <hr /> */}
       <div className="mt-2 text-center pt-5">
         <Button variant="secondary" className="px-5" onClick={handleUpdate}>
           Update Changes

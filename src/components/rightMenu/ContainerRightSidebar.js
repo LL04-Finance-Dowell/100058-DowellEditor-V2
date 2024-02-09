@@ -77,12 +77,12 @@ const ContainerRigntSideBar = () => {
             <span className="slider round"></span>
           </label>
         </div>
-        <SelectAnsAndQuestion
+        {/* <SelectAnsAndQuestion
           selectedType={selectedType}
           setSelectedType={setSelectedType}
           addedAns={addedAns}
           setAddedAns={setAddedAns}
-        />
+        /> */}
         {showSlider && (
           <div
             style={{

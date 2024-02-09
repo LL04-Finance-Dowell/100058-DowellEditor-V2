@@ -1280,12 +1280,12 @@ const TableRightSidebar = () => {
       </div>
 
       <hr />
-      <SelectAnsAndQuestion
+      {/* <SelectAnsAndQuestion
         selectedType={selectedType}
         setSelectedType={setSelectedType}
         setAddedAns={setAddedAns}
         addedAns={addedAns} />
-      <hr />
+      <hr /> */}
 
       <div className="mt-2 text-center pt-5">
         <Button

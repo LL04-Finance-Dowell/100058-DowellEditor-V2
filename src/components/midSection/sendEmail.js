@@ -3,6 +3,11 @@ import { downloadPDF, generatePDF } from "../../utils/genratePDF";
 import { toast } from "react-toastify";
 import { pdf } from "@react-pdf/renderer";
 import { takeScreenShot } from "../../utils/takeScreenShot";
+import { useStateContext } from "../../contexts/contextProvider";
+// const {
+//     pendingMail, 
+//     setPendingMail
+// } = useStateContext();
 
 var interval;
 const animateDots = (loadingDotsElement, dotCount, cancel = false) => {
@@ -68,7 +73,7 @@ const generateHTML = async (link) => {
                     A document has been shared with you, please click the button
                     below to open the document
                 </p>
-                <a href="${link}" style="text-decoration:none;font-weight:700;width:max-content;text-align: center;margin:1.2rem auto;padding: 2em 4em; background-color: #005733;color: #fff;">Open document</a>
+                <a href="${link}" style="text-decoration:none;font-weight:700;width:max-content;text-align: center;margin:1.2rem auto;padding: 2em 4em; background-color: #005733;color: #fff;">Open Document in Editor</a>
                 </section>
             </main>
 
@@ -176,7 +181,7 @@ const generateShareHTML = async (link) => {
                         width="100%"
                         alt="Document picture"
                         />
-                        <a href="${link}" style="text-decoration:none;font-weight:700;width:max-content;text-align: center;margin:1.2rem auto;padding: 2em 4em; background-color: #005733;color: #fff;">Open document</a>
+                        <a href="${link}" style="text-decoration:none;font-weight:700;width:max-content;text-align: center;margin:1.2rem auto;padding: 2em 4em; background-color: #005733;color: #fff;">Open Document in Editor</a>
                         </section>
                     </main>
         
@@ -251,29 +256,78 @@ const getEmailPayLoad = async (midsectionNode) => {
     }
 }
 
-export const shareToEmail = async (shareInfo, token) => {
-    const htmlTemplate = await getEmailPayLoadd(token)
-    console.log(htmlTemplate);
-    let config = {
-        method: 'post',
-        maxBodyLength: Infinity,
-        url: 'https://100085.pythonanywhere.com/api/uxlivinglab/email/',
-        data: {
-            ...shareInfo,
-            email_content: htmlTemplate
-        }
-    };
-    axios.request(config)
-        .then((response) => {
-            console.log(JSON.stringify(response.data));
-            toast.success('email sent successfully');
-        })
-        .catch((error) => {
-            console.log(error);
-            toast.error("email not sent")
-        });
 
-}
+// export const shareToEmail = async (shareInfo, token) => {
+//     try {
+//         const htmlTemplate = await getEmailPayLoadd(token);
+//         console.log(htmlTemplate);
+
+//         const config = {
+//             method: 'post',
+//             maxBodyLength: Infinity,
+//             url: 'https://100085.pythonanywhere.com/api/uxlivinglab/email/',
+//             data: {
+//                 ...shareInfo,
+//                 email_content: htmlTemplate
+//             }
+//         };
+
+//         // Return a Promise to handle the asynchronous behavior
+//         return new Promise(async (resolve) => {
+//             try {
+//                 // Set pending state to true initially
+//                 resolve(true);
+
+//                 const response = await axios.request(config);
+//                 console.log(JSON.stringify(response.data));
+//                 toast.success('Email sent successfully');
+//             } catch (error) {
+//                 console.error(error);
+//                 toast.error('Email not sent');
+//             } finally {
+//                 // Set pending state to false once the process is completed
+//                 resolve(false);
+//             }
+//         });
+//     } catch (error) {
+//         console.error("Error while fetching email payload:", error);
+//         // If an error occurs during the payload fetching, resolve the Promise with false
+//         return false;
+//     }
+// };
+
+
+export const shareToEmail = async (shareInfo, token) => {
+
+    const htmlTemplate = await getEmailPayLoadd(token);
+    console.log(htmlTemplate);
+    let pending = true
+
+    try {
+        const config = {
+            method: 'post',
+            maxBodyLength: Infinity,
+            url: 'https://100085.pythonanywhere.com/api/uxlivinglab/email/',
+            data: {
+                ...shareInfo,
+                email_content: htmlTemplate
+            }
+        };
+
+        const response = await axios.request(config);
+        console.log(JSON.stringify(response.data));
+        toast.success('Email sent successfully');
+    } catch (error) {
+        console.error(error);
+        toast.error('Email not sent');
+    } finally {
+        // Set pending state to false regardless of success or failure
+        pending = false;
+    }
+    return pending;
+};
+
+
 export const sendEmail = async (formData, buttonField, setSideBar) => {
     animateDots(buttonField, 4);
     const { email_content, ...data } = formData;
