@@ -27,6 +27,7 @@ function createNewScaleInputField(
   scaleField.style.borderRadius = "0px";
   scaleField.style.outline = "0px";
   scaleField.style.overflow = "overlay";
+  scaleField.style.overflowY = "hidden";
   scaleField.style.position = "absolute";
   scaleField.style.paddingTop = "25px"
   scaleField.style.paddingBottom = "none"
