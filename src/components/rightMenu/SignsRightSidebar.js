@@ -169,15 +169,15 @@ const SignsRightSidebar = () => {
       <div className="mt-2 mb-3 w-100">
         <h3>Signature Settings</h3>
         <Form.Label>Place Holder Name</Form.Label>
-        <Form.Control
+        <Form.Control className="text-center"
           type="text"
           placeholder="Signature Place Holder"
           id="image_name"
           onChange={() => { }}
         />
       </div>
-      <div className="mt-2 text-center pt-5">
-        <Button variant="secondary" className="px-5" onClick={handleUpdate}>
+      <div className="mt-2 text-center pt-3">
+        <Button variant="primary" className="px-5" onClick={handleUpdate}>
           Update Changes
         </Button>
       </div>
@@ -223,14 +223,14 @@ const SignsRightSidebar = () => {
       </Row>
       <hr />
 
-      <SelectAnsAndQuestion
+      {/* <SelectAnsAndQuestion
         selectedType={selectedType}
         setSelectedType={setSelectedType}
         setAddedAns={setAddedAns}
         addedAns={addedAns} />
-      <hr />
+      <hr /> */}
 
-      <div className="mt-5 text-center">
+      {/* <div className="mt-5 text-center">
         <Button
           variant="primary"
           // onClick={removeSign}
@@ -243,7 +243,7 @@ const SignsRightSidebar = () => {
         >
           Remove Signature
         </Button>
-      </div>
+      </div> */}
     </div>
   );
 };

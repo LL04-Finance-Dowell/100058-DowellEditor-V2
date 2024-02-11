@@ -116,7 +116,7 @@ const DropDownRightSide = () => {
         className="mt-2 mb-5 w-100"
         onClick={addOptions}
       >
-        +
+        add +
       </Button>
       <hr />
 
@@ -161,11 +161,11 @@ const DropDownRightSide = () => {
       </Row>
 
       <hr />
-      <SelectAnsAndQuestion
+      {/* <SelectAnsAndQuestion
         selectedType={selectedType}
         setSelectedType={setSelectedType}
         setAddedAns={setAddedAns}
-        addedAns={addedAns} />
+        addedAns={addedAns} /> */}
 
       <div />
       <div>
