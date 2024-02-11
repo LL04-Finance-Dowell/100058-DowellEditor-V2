@@ -1,34 +1,34 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Container, Row, Col, Button } from 'react-bootstrap';
-import './Header.css';
-import { FaCopy, FaPen, FaSave } from 'react-icons/fa';
-import { BiImport, BiExport, BiCut, BiCopyAlt } from 'react-icons/bi';
-import { ImRedo, ImUndo, ImPaste, ImShare } from 'react-icons/im';
-import CryptoJS from 'crypto-js';
-import { useStateContext } from '../../contexts/contextProvider';
-import Axios from 'axios';
-import { CgMenuLeft, CgPlayListRemove } from 'react-icons/cg';
+import React, { useEffect, useRef, useState } from "react";
+import { Container, Row, Col, Button } from "react-bootstrap";
+import "./Header.css";
+import { FaCopy, FaPen, FaSave } from "react-icons/fa";
+import { BiImport, BiExport, BiCut, BiCopyAlt } from "react-icons/bi";
+import { ImRedo, ImUndo, ImPaste, ImShare } from "react-icons/im";
+import CryptoJS from "crypto-js";
+import { useStateContext } from "../../contexts/contextProvider";
+import Axios from "axios";
+import { CgMenuLeft, CgPlayListRemove } from "react-icons/cg";
 import {
   MdOutlineEditCalendar,
   MdOutlinePostAdd,
   MdPreview,
-} from 'react-icons/md';
-import { useSearchParams } from 'react-router-dom';
-import jwt_decode from 'jwt-decode';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { AiFillPrinter } from 'react-icons/ai';
+} from "react-icons/md";
+import { useSearchParams } from "react-router-dom";
+import jwt_decode from "jwt-decode";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { AiFillPrinter } from "react-icons/ai";
 
-import { downloadPDF } from '../../utils/genratePDF.js';
+import { downloadPDF } from "../../utils/genratePDF.js";
 
 import handleSocialMediaAPI from "../../utils/handleSocialMediaAPI";
 // import generateImage from '../../utils/generateImage.js';
 // import RejectionModal from '../modals/RejectionModal.jsx';
 
-import ProgressLoader from '../../utils/progressLoader/ProgressLoader';
-import MidResizer from './MidResizer.jsx';
-import ShareDocModal from '../modals/ShareDocModal.jsx';
-import { shareToEmail } from '../midSection/sendEmail.js';
+import ProgressLoader from "../../utils/progressLoader/ProgressLoader";
+import MidResizer from "./MidResizer.jsx";
+import ShareDocModal from "../modals/ShareDocModal.jsx";
+import { shareToEmail } from "../midSection/sendEmail.js";
 
 const Header = () => {
   const inputRef = useRef(null);
@@ -133,17 +133,19 @@ const Header = () => {
   } = useStateContext();
 
   const [printContent, setPrintContent] = useState(false);
-  const [rejectionMsg, setRejectionMsg] = useState('');
+  const [rejectionMsg, setRejectionMsg] = useState("");
   const [isOpenRejectionModal, setIsOpenRejectionModal] = useState(false);
   const [shareModalOpen, setShareModalOpen] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
-  
+
   const [toName, setToName] = useState("");
   const [toEmail, setToEmail] = useState("");
-  const [froName, setFroName] = useState("");
-  const [froEmail, setFroEmail] = useState("");
   const [subject, setSubject] = useState("");
+  // text area
+  const [message, setMessage] = useState("");
 
+  // const [froName, setFroName] = useState("");
+  // const [froEmail, setFroEmail] = useState("");
 
   const handleOptions = () => {
     setIsMenuVisible(!isMenuVisible);
@@ -153,18 +155,18 @@ const Header = () => {
   //   const menuBar = document.getElementsByClassName("bar-menu")
   //   if(isMenuVisible === true) {
   //     setIsMenuVisible(!isMenuVisible);
-  //   } 
+  //   }
   // }, true);
 
   const handleUndo = () => {
-    document.execCommand('undo');
+    document.execCommand("undo");
   };
   const handleRedo = () => {
-    document.execCommand('redo');
+    document.execCommand("redo");
   };
 
   const handleCopy = () => {
-    document.execCommand('copy');
+    document.execCommand("copy");
   };
 
   const handleTitle = () => {
@@ -190,7 +192,7 @@ const Header = () => {
 
   let createPageNumber;
   if (item?.length) {
-    createPageNumber = item[item?.length - 1].split('_')[1];
+    createPageNumber = item[item?.length - 1].split("_")[1];
   } else {
     createPageNumber = 0;
   }
@@ -205,10 +207,10 @@ const Header = () => {
   function removePage() {
     const current = [...item];
 
-    var pageNumber = prompt('Enter the number of page to delete');
+    var pageNumber = prompt("Enter the number of page to delete");
     if (pageNumber != null) {
       const index = pageNumber - 1;
-      const page = document.getElementsByClassName('midSection_container')[
+      const page = document.getElementsByClassName("midSection_container")[
         index
       ];
 
@@ -243,26 +245,24 @@ const Header = () => {
   };
 
   function savingTableData() {
-    const tables = document.getElementsByClassName('tableInput');
+    const tables = document.getElementsByClassName("tableInput");
     let tables_tags = [];
 
     if (tables.length) {
       for (let t = 0; t < tables.length; t++) {
-        var new_table = document.getElementsByTagName('table')[0];
+        var new_table = document.getElementsByTagName("table")[0];
 
         tables_tags.push(new_table);
       }
     }
   }
 
-
-
-  async function saveSocialMedia(){
-    if(decoded.product_name === "Social Media Automation"){
+  async function saveSocialMedia() {
+    if (decoded.product_name === "Social Media Automation") {
       try {
-       await handleSocialMediaAPI(decoded, true);
-       toast.success("Social Media Info Saved!");
-       return;
+        await handleSocialMediaAPI(decoded, true);
+        toast.success("Social Media Info Saved!");
+        return;
       } catch (error) {
         toast.error("Something Went Wrong!");
         console.log(error);
@@ -274,19 +274,19 @@ const Header = () => {
   let elem = {};
   function saveDocument() {
     // console.log("/n>>> Decoded\n", decoded,"\n>>>")
-  
+
     const txt = document.getElementsByClassName("textInput");
     let elem = {};
     let contentFile = [];
 
     function getPosition(el, childEl = false) {
-      const midSec = document.getElementById('midSection_container');
-      const midSecAll = document.querySelectorAll('.midSection_container');
+      const midSec = document.getElementById("midSection_container");
+      const midSecAll = document.querySelectorAll(".midSection_container");
       const rect = el.getBoundingClientRect();
 
       if (!childEl) {
         const page = Number(
-          [...el.classList].find((cl) => cl.includes('page')).split('_')[1]
+          [...el.classList].find((cl) => cl.includes("page")).split("_")[1]
         );
         const midsectionRect = midSecAll[page - 1].getBoundingClientRect();
         const width =
@@ -307,7 +307,7 @@ const Header = () => {
         const left =
           window.innerWidth < 993
             ? ((rect.left - midsectionRect.left) / midsectionRect.width) *
-            fixedMidSecDim.width
+              fixedMidSecDim.width
             : rect.left - midsectionRect.left;
 
         return {
@@ -330,7 +330,7 @@ const Header = () => {
         left:
           window.innerWidth < 993
             ? (rect.left * 793.7007874) / midsectionRect.width -
-            midsectionRect.left
+              midsectionRect.left
             : rect.left - midsectionRect.left,
         // left:rect.left - midsectionRect.left,
         bottom: rect.bottom,
@@ -351,23 +351,23 @@ const Header = () => {
       let targetParent = element;
       let pageNum = null;
       while (1) {
-        if (targetParent.classList.contains('midSection_container')) {
+        if (targetParent.classList.contains("midSection_container")) {
           targetParent = targetParent;
           break;
         } else {
           targetParent = targetParent.parentElement;
         }
       }
-      pageNum = targetParent.innerText.split('\n')[0];
+      pageNum = targetParent.innerText.split("\n")[0];
       return pageNum;
     };
 
     if (txt.length) {
       for (let h = 0; h < txt.length; h++) {
         if (
-          txt[h]?.parentElement?.classList?.contains('holderDIV') &&
+          txt[h]?.parentElement?.classList?.contains("holderDIV") &&
           !txt[h]?.parentElement?.parentElement?.classList?.contains(
-            'containerInput'
+            "containerInput"
           )
         ) {
           let tempElem = txt[h].parentElement;
@@ -380,7 +380,7 @@ const Header = () => {
             // topp: txt[h].parentElement.style.top,
             topp: tempPosn.top,
             left: tempPosn.left,
-            type: 'TEXT_INPUT',
+            type: "TEXT_INPUT",
             data: txt[h].innerText,
             border: `${inputBorderSize} dotted ${inputBorderColor}`,
             borderWidths: txt[h].parentElement.style.border,
@@ -394,14 +394,14 @@ const Header = () => {
       }
     }
 
-    const img_input = document.getElementsByTagName('input');
-    const img = document.getElementsByClassName('imageInput');
+    const img_input = document.getElementsByTagName("input");
+    const img = document.getElementsByClassName("imageInput");
     if (img) {
       for (let h = 0; h < img.length; h++) {
         if (
-          img[h]?.parentElement?.classList?.contains('holderDIV') &&
+          img[h]?.parentElement?.classList?.contains("holderDIV") &&
           !img[h]?.parentElement?.parentElement?.classList?.contains(
-            'containerInput'
+            "containerInput"
           )
         ) {
           const reader = new FileReader();
@@ -423,7 +423,7 @@ const Header = () => {
             // topp: img[h].parentElement.style.top,
             topp: tempPosn.top,
             left: tempPosn.left,
-            type: 'IMAGE_INPUT',
+            type: "IMAGE_INPUT",
             data: dataName,
             border: `${borderSize}px dotted ${borderColor}`,
             imgBorder: img[h].parentElement.style.border,
@@ -436,13 +436,13 @@ const Header = () => {
       }
     }
 
-    const date = document.getElementsByClassName('dateInput');
+    const date = document.getElementsByClassName("dateInput");
     if (date.length) {
       for (let h = 0; h < date.length; h++) {
         if (
-          date[h]?.parentElement?.classList?.contains('holderDIV') &&
+          date[h]?.parentElement?.classList?.contains("holderDIV") &&
           !date[h]?.parentElement?.parentElement?.classList?.contains(
-            'containerInput'
+            "containerInput"
           )
         ) {
           let tempElem = date[h].parentElement;
@@ -454,7 +454,7 @@ const Header = () => {
             // topp: date[h].parentElement.style.top,
             topp: tempPosn.top,
             left: tempPosn.left,
-            type: 'DATE_INPUT',
+            type: "DATE_INPUT",
             border: `${calendarBorderSize} dotted ${calendarBorderColor}`,
             calBorder: date[h].parentElement.style.border,
             data: date[h].innerHTML,
@@ -467,13 +467,13 @@ const Header = () => {
       }
     }
 
-    const sign = document.getElementsByClassName('signInput');
+    const sign = document.getElementsByClassName("signInput");
     if (sign.length) {
       for (let h = 0; h < sign.length; h++) {
         if (
-          sign[h]?.parentElement?.classList?.contains('holderDIV') &&
+          sign[h]?.parentElement?.classList?.contains("holderDIV") &&
           !sign[h]?.parentElement?.parentElement?.classList?.contains(
-            'containerInput'
+            "containerInput"
           )
         ) {
           let tempElem = sign[h].parentElement;
@@ -486,7 +486,7 @@ const Header = () => {
             // topp: sign[h].parentElement.style.top,
             topp: tempPosn.top,
             left: tempPosn.left,
-            type: 'SIGN_INPUT',
+            type: "SIGN_INPUT",
             border: `${signBorderSize} dotted ${signBorderColor}`,
             signBorder: sign[h].parentElement.style.border,
             // data:
@@ -504,34 +504,34 @@ const Header = () => {
       }
     }
 
-    const tables = document.getElementsByClassName('tableInput');
+    const tables = document.getElementsByClassName("tableInput");
     if (tables.length) {
       for (let t = 0; t < tables.length; t++) {
         if (
-          tables[t]?.parentElement?.classList?.contains('holderDIV') &&
+          tables[t]?.parentElement?.classList?.contains("holderDIV") &&
           !tables[t]?.parentElement?.parentElement?.classList?.contains(
-            'containerInput'
+            "containerInput"
           )
         ) {
           let tempElem = tables[t].parentElement;
           let tempPosn = getPosition(tempElem);
           function getChildData() {
             const allTableCCells = [];
-            const tableChildren = tables[t].querySelector('table')?.children;
+            const tableChildren = tables[t].querySelector("table")?.children;
             for (let i = 0; i < tableChildren.length; i++) {
               const tableTR = { tr: null };
               const newTableTR = [];
               for (let j = 0; j < tableChildren[i].children.length; j++) {
                 const childNodes = tableChildren[i].children[j]?.childNodes;
-                const currentTd = tableChildren[i].children[j]
+                const currentTd = tableChildren[i].children[j];
                 const tdElement = [];
                 if (!childNodes) {
                   tdElement.push(currentTd);
                 }
                 childNodes.forEach((child) => {
                   if (
-                    !child.classList?.contains('row-resizer') &&
-                    !child.classList?.contains('td-resizer')
+                    !child.classList?.contains("row-resizer") &&
+                    !child.classList?.contains("td-resizer")
                   ) {
                     if (!child.innerHTML) {
                       tdElement.push(currentTd);
@@ -539,24 +539,23 @@ const Header = () => {
                       tdElement.push(child);
                     }
                   }
-
                 });
-                const TdDivClassName = tdElement[0]?.className?.split(' ')[0];
+                const TdDivClassName = tdElement[0]?.className?.split(" ")[0];
                 const trChild = {
                   td: {
                     type:
-                      (TdDivClassName == 'dateInput' && 'DATE_INPUT') ||
-                      (TdDivClassName == 'textInput' && 'TEXT_INPUT') ||
-                      (TdDivClassName == 'imageInput' && 'IMAGE_INPUT') ||
-                      (TdDivClassName == 'signInput' && 'SIGN_INPUT') ||
-                      (TdDivClassName == 'dropp' && 'dropp'),
+                      (TdDivClassName == "dateInput" && "DATE_INPUT") ||
+                      (TdDivClassName == "textInput" && "TEXT_INPUT") ||
+                      (TdDivClassName == "imageInput" && "IMAGE_INPUT") ||
+                      (TdDivClassName == "signInput" && "SIGN_INPUT") ||
+                      (TdDivClassName == "dropp" && "dropp"),
                     data:
-                      TdDivClassName == 'imageInput'
+                      TdDivClassName == "imageInput"
                         ? tableChildren[i].children[j]?.firstElementChild.style
-                          .backgroundImage
+                            .backgroundImage
                         : tdElement[0]?.innerHTML,
                     id:
-                      TdDivClassName == 'imageInput'
+                      TdDivClassName == "imageInput"
                         ? tableChildren[i].children[j]?.id
                         : tdElement[0]?.id,
                   },
@@ -575,7 +574,7 @@ const Header = () => {
             top: tempPosn.top,
             topp: tempPosn.top,
             left: tempPosn.left,
-            type: 'TABLE_INPUT',
+            type: "TABLE_INPUT",
             data: getChildData(),
             border: `${tableBorderSize} dotted ${tableBorderColor}`,
             tableBorder: tables[t].parentElement.style.border,
@@ -589,12 +588,12 @@ const Header = () => {
       }
     }
 
-    const containerElements = document.getElementsByClassName('containerInput');
+    const containerElements = document.getElementsByClassName("containerInput");
 
     if (containerElements.length) {
       for (let h = 0; h < containerElements.length; h++) {
         if (
-          containerElements[h]?.parentElement?.classList?.contains('holderDIV')
+          containerElements[h]?.parentElement?.classList?.contains("holderDIV")
         ) {
           let tempElem = containerElements[h].parentElement;
           let tempPosn = getPosition(tempElem);
@@ -608,7 +607,7 @@ const Header = () => {
 
               let tempPosnChild = getPosition(element, true);
               const containerChildClassName =
-                containerChildren[i].firstElementChild?.className.split(' ')[0];
+                containerChildren[i].firstElementChild?.className.split(" ")[0];
               const childData = {};
               childData.width = tempPosnChild.width;
               childData.height = tempPosnChild.height;
@@ -616,56 +615,56 @@ const Header = () => {
               childData.topp = element.style.top;
               childData.left = tempPosnChild.left;
 
-              let type = '';
+              let type = "";
 
               switch (containerChildClassName) {
-                case 'dateInput':
-                  type = 'DATE_INPUT';
+                case "dateInput":
+                  type = "DATE_INPUT";
                   break;
-                case 'textInput':
-                  type = 'TEXT_INPUT';
+                case "textInput":
+                  type = "TEXT_INPUT";
                   break;
-                case 'imageInput':
-                  type = 'IMAGE_INPUT';
+                case "imageInput":
+                  type = "IMAGE_INPUT";
                   break;
-                case 'signInput':
-                  type = 'SIGN_INPUT';
+                case "signInput":
+                  type = "SIGN_INPUT";
                   break;
-                case 'iframeInput':
-                  type = 'IFRAME_INPUT';
+                case "iframeInput":
+                  type = "IFRAME_INPUT";
                   break;
-                case 'scaleInput':
-                  type = 'SCALE_INPUT';
+                case "scaleInput":
+                  type = "SCALE_INPUT";
                   break;
-                case 'newScaleInput':
-                  type = 'NEW_SCALE_INPUT';
+                case "newScaleInput":
+                  type = "NEW_SCALE_INPUT";
                   break;
-                case 'buttonInput':
-                  type = 'BUTTON_INPUT';
+                case "buttonInput":
+                  type = "BUTTON_INPUT";
                   break;
-                case 'dropdownInput':
-                  type = 'DROPDOWN_INPUT';
+                case "dropdownInput":
+                  type = "DROPDOWN_INPUT";
                   break;
-                case 'cameraInput':
-                  type = 'CAMERA_INPUT';
+                case "cameraInput":
+                  type = "CAMERA_INPUT";
                   break;
-                case 'paymentInput':
-                  type = 'PAYMENT_INPUT';
+                case "paymentInput":
+                  type = "PAYMENT_INPUT";
                   break;
                 default:
-                  type = '';
+                  type = "";
               }
 
               childData.type = type;
               const imageData =
-                'imageInput' &&
-                  element?.firstElementChild?.style?.backgroundImage
+                "imageInput" &&
+                element?.firstElementChild?.style?.backgroundImage
                   ? element.firstElementChild.style.backgroundImage
                   : element.firstElementChild?.innerHTML;
-              if (type != 'TEXT_INPUT') {
+              if (type != "TEXT_INPUT") {
                 childData.data = imageData;
               }
-              if (type == 'TEXT_INPUT') {
+              if (type == "TEXT_INPUT") {
                 childData.data = element.firstElementChild?.innerText;
                 childData.raw_data = element.firstElementChild?.innerHTML;
               }
@@ -683,7 +682,7 @@ const Header = () => {
             // topp: containerElements[h].parentElement.style.top,
             topp: tempPosn.top,
             left: tempPosn.left,
-            type: 'CONTAINER_INPUT',
+            type: "CONTAINER_INPUT",
             border: `${containerBorderSize} dotted ${containerBorderColor}`,
             containerBorder: containerElements[h].parentElement.style.border,
             data: getChildData(),
@@ -695,12 +694,12 @@ const Header = () => {
         }
       }
     }
-    const iframes = document.getElementsByClassName('iframeInput');
+    const iframes = document.getElementsByClassName("iframeInput");
     if (iframes.length) {
       for (let i = 0; i < iframes.length; i++) {
         if (
           !iframes[i]?.parentElement?.parentElement?.classList?.contains(
-            'containerInput'
+            "containerInput"
           )
         ) {
           let tempElem = iframes[i].parentElement;
@@ -713,11 +712,11 @@ const Header = () => {
             // topp: iframes[i].parentElement.style.top,
             topp: tempPosn.top,
             left: tempPosn.left,
-            type: 'IFRAME_INPUT',
+            type: "IFRAME_INPUT",
             border: `${iframeBorderSize} dotted ${iframeBorderColor}`,
             iframeBorder: iframes[i].parentElement.style.border,
             data: iframes[i].innerText
-              ? 'iFrame here'
+              ? "iFrame here"
               : iframes[i].firstElementChild.src,
             id: `ifr${i + 1}`,
           };
@@ -728,12 +727,12 @@ const Header = () => {
       }
     }
 
-    const scales = document.getElementsByClassName('scaleInput');
+    const scales = document.getElementsByClassName("scaleInput");
     if (scales.length) {
       for (let s = 0; s < scales.length; s++) {
         if (
           !scales[s]?.parentElement?.parentElement?.classList?.contains(
-            'containerInput'
+            "containerInput"
           )
         ) {
           let tempElem = scales[s].parentElement;
@@ -746,7 +745,7 @@ const Header = () => {
             // topp: scales[s].parentElement.style.top,
             topp: tempPosn.top,
             left: tempPosn.left,
-            type: 'SCALE_INPUT',
+            type: "SCALE_INPUT",
             border: `${scaleBorderSize} dotted ${scaleBorderColor}`,
             scaleBorder: scales[s].parentElement.style.border,
             data: `${title}_scale_${s + 1}`,
@@ -754,9 +753,9 @@ const Header = () => {
             scaleId: tempElem.children[1].innerHTML,
             id: `scl${s + 1}`,
             details:
-              decoded.details.action === 'document'
-                ? 'Document instance'
-                : 'Template scale',
+              decoded.details.action === "document"
+                ? "Document instance"
+                : "Template scale",
           };
 
           const pageNum = findPaageNum(scales[s]);
@@ -765,40 +764,40 @@ const Header = () => {
       }
     }
 
-    const newScales = document.getElementsByClassName('newScaleInput');
+    const newScales = document.getElementsByClassName("newScaleInput");
     if (newScales.length) {
       for (let b = 0; b < newScales.length; b++) {
         if (
           !newScales[b]?.parentElement?.parentElement?.classList?.contains(
-            'containerInput'
+            "containerInput"
           )
         ) {
           let tempElem = newScales[b].parentElement;
           let tempPosn = getPosition(tempElem);
           // console.log(newScales[b]);
-          let circles = newScales[b].querySelector('.circle_label');
-          let scaleBg = newScales[b].querySelector('.label_hold');
+          let circles = newScales[b].querySelector(".circle_label");
+          let scaleBg = newScales[b].querySelector(".label_hold");
           let scaleField = newScales[b];
-          let leftChild = newScales[b].querySelector('.left_child');
-          let neutralChild = newScales[b].querySelector('.neutral_child');
-          let rightChild = newScales[b].querySelector('.right_child');
-          let scaleText = newScales[b].querySelector('.scale_text');
-          let font = newScales[b].querySelector('.scool_input');
-          let scaleType = newScales[b].querySelector('.scaleTypeHolder');
-          let scaleID = newScales[b].querySelector('.scaleId');
-          let orentation = newScales[b].querySelector('.nps_vertical');
-          let otherComponent = newScales[b].querySelector('.otherComponent');
-          let smallBox = newScales[b].querySelector('.small_box');
-          let leftLableStapel = newScales[b].querySelector('.leftToolTip');
-          let rightLableStapel = newScales[b].querySelector('.rightTooltip');
-          let stapelEmojiObj = newScales[b].querySelector('.stapelEmojiObj');
+          let leftChild = newScales[b].querySelector(".left_child");
+          let neutralChild = newScales[b].querySelector(".neutral_child");
+          let rightChild = newScales[b].querySelector(".right_child");
+          let scaleText = newScales[b].querySelector(".scale_text");
+          let font = newScales[b].querySelector(".scool_input");
+          let scaleType = newScales[b].querySelector(".scaleTypeHolder");
+          let scaleID = newScales[b].querySelector(".scaleId");
+          let orentation = newScales[b].querySelector(".nps_vertical");
+          let otherComponent = newScales[b].querySelector(".otherComponent");
+          let smallBox = newScales[b].querySelector(".small_box");
+          let leftLableStapel = newScales[b].querySelector(".leftToolTip");
+          let rightLableStapel = newScales[b].querySelector(".rightTooltip");
+          let stapelEmojiObj = newScales[b].querySelector(".stapelEmojiObj");
           let stapelUpperLimit =
-            newScales[b].querySelector('.upper_scale_limit');
-          let spaceUnit = newScales[b].querySelector('.space_unit');
+            newScales[b].querySelector(".upper_scale_limit");
+          let spaceUnit = newScales[b].querySelector(".space_unit");
           // let stapelScaleField = newScales[b].querySelector(".newScaleInput");
           // console.log(font);
 
-          let buttonText = newScales[b].querySelectorAll('.circle_label');
+          let buttonText = newScales[b].querySelectorAll(".circle_label");
           // console.log(buttonText);
 
           let emojiArr = [];
@@ -810,78 +809,78 @@ const Header = () => {
             }
           }
 
-          let stapelOptionHolder = '';
-          let stapelScaleArray = '';
-          let stapelOrientation = '';
+          let stapelOptionHolder = "";
+          let stapelScaleArray = "";
+          let stapelOrientation = "";
 
-          if (scaleType.textContent === 'snipte') {
-            stapelOrientation = newScales[b].querySelector('.stapel_vertical');
+          if (scaleType.textContent === "snipte") {
+            stapelOrientation = newScales[b].querySelector(".stapel_vertical");
             stapelOptionHolder = newScales[b].querySelector(
-              '.stapelOptionHolder'
+              ".stapelOptionHolder"
             );
-            stapelScaleArray = newScales[b].querySelector('.stapelScaleArray');
+            stapelScaleArray = newScales[b].querySelector(".stapelScaleArray");
             // console.log("This is the saved stapel", stapelScaleArray);
           }
 
-          let npsLiteTextArray = '';
-          let orientation = '';
+          let npsLiteTextArray = "";
+          let orientation = "";
 
-          if (scaleType.textContent === 'nps_lite') {
-            npsLiteTextArray = newScales[b].querySelector('.nps_lite_text');
-            orientation = newScales[b].querySelector('.nps_lite_orientation');
+          if (scaleType.textContent === "nps_lite") {
+            npsLiteTextArray = newScales[b].querySelector(".nps_lite_text");
+            orientation = newScales[b].querySelector(".nps_lite_orientation");
           }
 
-          let likertScaleArray = '';
+          let likertScaleArray = "";
 
-          if (scaleType.textContent === 'likert') {
+          if (scaleType.textContent === "likert") {
             likertScaleArray = newScales[b].querySelector(
-              '.likert_Scale_Array'
+              ".likert_Scale_Array"
             );
-            orientation = newScales[b].querySelector('.orientation');
+            orientation = newScales[b].querySelector(".orientation");
             // console.log("This is likert", likertScaleArray.textContent);
           }
 
-          let pairedScaleArray = '';
+          let pairedScaleArray = "";
 
-          if (scaleType.textContent === 'comparison_paired_scale') {
+          if (scaleType.textContent === "comparison_paired_scale") {
             pairedScaleArray = newScales[b].querySelector(
-              '.paired_Scale_Array'
+              ".paired_Scale_Array"
             );
-            orientation = newScales[b].querySelector('.orientation');
+            orientation = newScales[b].querySelector(".orientation");
             // console.log("This is likert", pairedScaleArray.textContent);
           }
 
-          let percentBackground = '';
-          let percentLabel = '';
-          let percentContainer = '';
-          let percentLeft = '';
+          let percentBackground = "";
+          let percentLabel = "";
+          let percentContainer = "";
+          let percentLeft = "";
           let percentCenter = [];
-          let percentRight = '';
+          let percentRight = "";
           let prodName = [];
 
           if (
-            scaleType.textContent === 'percent_scale' ||
-            scaleType.textContent === 'percent_sum_scale'
+            scaleType.textContent === "percent_scale" ||
+            scaleType.textContent === "percent_sum_scale"
           ) {
-            percentBackground = newScales[b].querySelector('.percent-slider');
-            percentLabel = newScales[b]?.querySelector('.label_hold').children;
-            percentContainer = newScales[b]?.querySelectorAll('.containerDIV');
+            percentBackground = newScales[b].querySelector(".percent-slider");
+            percentLabel = newScales[b]?.querySelector(".label_hold").children;
+            percentContainer = newScales[b]?.querySelectorAll(".containerDIV");
             // console.log(percentLabel);
 
             percentContainer.forEach((elem) => {
-              prodName.push(elem.querySelector('.product_name')?.textContent);
+              prodName.push(elem.querySelector(".product_name")?.textContent);
               percentCenter.push(
-                elem.querySelector('center-percent')?.textContent
-                  ? elem.querySelector('center-percent')?.textContent
+                elem.querySelector("center-percent")?.textContent
+                  ? elem.querySelector("center-percent")?.textContent
                   : 1
               );
               // console.log(prodName);
               // console.log(percentCenter);
             });
-            percentLeft = newScales[b].querySelector('.left-percent');
-            percentRight = document.querySelector('.right-percent');
+            percentLeft = newScales[b].querySelector(".left-percent");
+            percentRight = document.querySelector(".right-percent");
 
-            orientation = newScales[b].querySelector('.orientation');
+            orientation = newScales[b].querySelector(".orientation");
           }
           let properties = {
             scaleBgColor: scaleBg
@@ -894,7 +893,7 @@ const Header = () => {
             left: leftChild
               ? leftChild.textContent
               : leftLableStapel.textContent,
-            center: neutralChild ? neutralChild.textContent : '',
+            center: neutralChild ? neutralChild.textContent : "",
             right: rightChild
               ? rightChild.textContent
               : rightLableStapel.textContent,
@@ -918,7 +917,7 @@ const Header = () => {
             orientation: orientation?.textContent,
             orentation: orentation?.textContent,
             stapelOrientation: stapelOrientation?.textContent,
-            otherComponent: otherComponent ? otherComponent.textContent : '',
+            otherComponent: otherComponent ? otherComponent.textContent : "",
             smallBoxBgColor: smallBox?.style?.backgroundColor,
             stapelEmojiObj: stapelEmojiObj?.textContent,
             stapelUpperLimit: stapelUpperLimit?.textContent,
@@ -932,7 +931,7 @@ const Header = () => {
             // topp: newScales[b].parentElement.style.top,
             topp: tempPosn.top,
             left: tempPosn.left,
-            type: 'NEW_SCALE_INPUT',
+            type: "NEW_SCALE_INPUT",
             data: `${title}_scale_${b + 1}`,
             // raw_data: tempElem.children[1].innerHTML,
             raw_data: properties,
@@ -951,20 +950,20 @@ const Header = () => {
       }
     }
 
-    const imageCanva = document.getElementsByClassName('cameraInput');
+    const imageCanva = document.getElementsByClassName("cameraInput");
     if (imageCanva.length) {
       for (let b = 0; b < imageCanva.length; b++) {
         if (
           !imageCanva[b]?.parentElement?.parentElement?.classList?.contains(
-            'containerInput'
+            "containerInput"
           )
         ) {
           let tempElem = imageCanva[b].parentElement;
 
           let tempPosn = getPosition(tempElem);
           // console.log(imageCanva[b]);
-          let imageLinkHolder = imageCanva[b].querySelector('.imageLinkHolder');
-          let videoLinkHolder = imageCanva[b].querySelector('.videoLinkHolder');
+          let imageLinkHolder = imageCanva[b].querySelector(".imageLinkHolder");
+          let videoLinkHolder = imageCanva[b].querySelector(".videoLinkHolder");
 
           let properties = {
             imageLinkHolder: imageLinkHolder.textContent,
@@ -978,7 +977,7 @@ const Header = () => {
             // topp: imageCanva[b].parentElement.style.top,
             topp: tempPosn.top,
             left: tempPosn.left,
-            type: 'CAMERA_INPUT',
+            type: "CAMERA_INPUT",
             raw_data: properties,
             id: `cam1${b + 1}`,
           };
@@ -989,12 +988,12 @@ const Header = () => {
       }
     }
 
-    const buttons = document.getElementsByClassName('buttonInput');
+    const buttons = document.getElementsByClassName("buttonInput");
     if (buttons.length) {
       for (let b = 0; b < buttons.length; b++) {
         if (
           !buttons[b]?.parentElement?.parentElement?.classList?.contains(
-            'containerInput'
+            "containerInput"
           )
         ) {
           let tempElem = buttons[b].parentElement;
@@ -1007,7 +1006,7 @@ const Header = () => {
             // topp: buttons[b].parentElement.style.top,
             topp: tempPosn.top,
             left: tempPosn.left,
-            type: 'BUTTON_INPUT',
+            type: "BUTTON_INPUT",
             buttonBorder: `${buttonBorderSize}px dotted ${buttonBorderColor}`,
             data: buttons[b].textContent,
             raw_data: tempElem.children[1].innerHTML,
@@ -1020,12 +1019,12 @@ const Header = () => {
         }
       }
     }
-    const payments = document.getElementsByClassName('paymentInput');
+    const payments = document.getElementsByClassName("paymentInput");
     if (payments.length) {
       for (let p = 0; p < payments.length; p++) {
         if (
           !payments[p]?.parentElement?.parentElement?.classList?.contains(
-            'containerInput'
+            "containerInput"
           )
         ) {
           let tempElem = payments[p].parentElement;
@@ -1038,7 +1037,7 @@ const Header = () => {
             // topp: payments[p].parentElement.style.top,
             topp: tempPosn.top,
             left: tempPosn.left,
-            type: 'PAYMENT_INPUT',
+            type: "PAYMENT_INPUT",
             buttonBorder: `${buttonBorderSize}px dotted ${buttonBorderColor}`,
             data: payments[p].textContent,
             raw_data: tempElem.children[1].innerHTML,
@@ -1053,13 +1052,13 @@ const Header = () => {
       }
     }
 
-    const dropDowns = document.getElementsByClassName('dropdownInput');
+    const dropDowns = document.getElementsByClassName("dropdownInput");
 
     if (dropDowns.length) {
       for (let d = 0; d < dropDowns.length; d++) {
         if (
           !dropDowns[d]?.parentElement?.parentElement?.classList?.contains(
-            'containerInput'
+            "containerInput"
           )
         ) {
           let tempElem = dropDowns[d].parentElement;
@@ -1076,7 +1075,7 @@ const Header = () => {
             // topp: dropDowns[d].parentElement.style.top,
             topp: tempPosn.top,
             left: tempPosn.left,
-            type: 'DROPDOWN_INPUT',
+            type: "DROPDOWN_INPUT",
             border: `${dropdownBorderSize} dotted ${dropdownBorderColor}`,
             dropdownBorder: dropDowns[d].parentElement.style.border,
             data: selectedText,
@@ -1091,18 +1090,18 @@ const Header = () => {
       }
     }
 
-    const emails = document.getElementsByClassName('emailButton');
+    const emails = document.getElementsByClassName("emailButton");
     if (emails.length) {
       for (let e = 0; e < emails.length; e++) {
-        if (!emails[e]?.parentElement?.classList?.contains('containerInput')) {
+        if (!emails[e]?.parentElement?.classList?.contains("containerInput")) {
           let tempElem = emails[e].parentElement;
           let tempPosn = getPosition(tempElem);
 
           const emailDataDiv = tempElem.querySelector(
-            '.emailDataHolder_holder'
+            ".emailDataHolder_holder"
           );
           const emailSenderData = emailDataDiv.querySelector(
-            '.emailSenderDataHolder_holder'
+            ".emailSenderDataHolder_holder"
           )?.innerText;
 
           elem = {
@@ -1112,7 +1111,7 @@ const Header = () => {
             // topp: emails[e].parentElement.style.top,
             topp: tempPosn.top,
             left: tempPosn.left,
-            type: 'FORM',
+            type: "FORM",
             data: emails[e].textContent,
             emailData: emailSenderData,
             id: `eml${e + 1}`,
@@ -1129,11 +1128,9 @@ const Header = () => {
     return contentFile;
   }
 
-  
-
   const [searchParams] = useSearchParams();
-  const token = searchParams.get('token');
-  const link_idd = searchParams.get('link_id');
+  const token = searchParams.get("token");
+  const link_idd = searchParams.get("link_id");
 
   var decoded = jwt_decode(token);
 
@@ -1145,9 +1142,10 @@ const Header = () => {
   const titleName = decoded?.details?.name;
   const finalDocName = decoded?.details?.update_field.document_name;
   const docRight = decoded?.details?.document_right;
+  const fromEmail = decoded?.details?.email;
 
   const element_updated_length =
-    document.getElementsByClassName('element_updated')?.length;
+    document.getElementsByClassName("element_updated")?.length;
   const document_map_required = docMap?.filter((item) => item.required);
 
   // ? This "if" condition is to prevent code from running, everytime Header.js renders
@@ -1168,7 +1166,7 @@ const Header = () => {
     // console.log(username);
 
     function generateLoginUser() {
-      return 'user_' + Math.random().toString(36).substring(7);
+      return "user_" + Math.random().toString(36).substring(7);
       // return token;
     }
 
@@ -1176,15 +1174,15 @@ const Header = () => {
       return username === undefined ? generateLoginUser() : username;
     }
 
-    let scaleElements = document.querySelectorAll('.newScaleInput');
+    let scaleElements = document.querySelectorAll(".newScaleInput");
 
     const documentResponses = [];
     // console.log(scaleElements);
 
     scaleElements.forEach((scale) => {
       // console.log(scale);
-      const scaleId = scale?.querySelector('.scaleId')?.textContent;
-      const holdElem = scale?.querySelector('.holdElem')?.textContent;
+      const scaleId = scale?.querySelector(".scaleId")?.textContent;
+      const holdElem = scale?.querySelector(".holdElem")?.textContent;
 
       documentResponses.push({ scale_id: scaleId, score: holdElem });
     });
@@ -1195,8 +1193,8 @@ const Header = () => {
     const requestBody = {
       process_id: decoded.details.process_id,
       instance_id: 1,
-      brand_name: 'XYZ545',
-      product_name: 'XYZ511',
+      brand_name: "XYZ545",
+      product_name: "XYZ511",
       username: authorizedLogin(),
       document_responses: documentResponses,
 
@@ -1222,7 +1220,7 @@ const Header = () => {
     };
 
     Axios.post(
-      'https://100035.pythonanywhere.com/api/nps_responses_create',
+      "https://100035.pythonanywhere.com/api/nps_responses_create",
       requestBody
     )
       .then((response) => {
@@ -1244,7 +1242,7 @@ const Header = () => {
     // console.log(username);
 
     function generateLoginUser() {
-      return 'user_' + Math.random().toString(36).substring(7);
+      return "user_" + Math.random().toString(36).substring(7);
       // return token;
     }
 
@@ -1252,15 +1250,15 @@ const Header = () => {
       return username === undefined ? generateLoginUser() : username;
     }
 
-    let scaleElements = document.querySelectorAll('.newScaleInput');
+    let scaleElements = document.querySelectorAll(".newScaleInput");
 
     const documentResponses = [];
     // console.log(scaleElements);
 
     scaleElements.forEach((scale) => {
       // console.log(scale);
-      const scaleId = scale?.querySelector('.scaleId')?.textContent;
-      const holdElem = scale?.querySelector('.holdElem')?.textContent;
+      const scaleId = scale?.querySelector(".scaleId")?.textContent;
+      const holdElem = scale?.querySelector(".holdElem")?.textContent;
 
       documentResponses.push({ scale_id: scaleId, score: parseInt(holdElem) });
     });
@@ -1273,8 +1271,8 @@ const Header = () => {
     const requestBody = {
       process_id: decoded.details.process_id,
       instance_id: 1,
-      brand_name: 'XYZ545',
-      product_name: 'XYZ511',
+      brand_name: "XYZ545",
+      product_name: "XYZ511",
       username: authorizedLogin(),
       document_responses: documentResponses,
       action: decoded.details.action,
@@ -1299,7 +1297,7 @@ const Header = () => {
     };
 
     Axios.post(
-      'https://100035.pythonanywhere.com/stapel/api/stapel_responses_create/',
+      "https://100035.pythonanywhere.com/stapel/api/stapel_responses_create/",
       requestBody
     )
       .then((response) => {
@@ -1321,7 +1319,7 @@ const Header = () => {
     // console.log(username);
 
     function generateLoginUser() {
-      return 'user_' + Math.random().toString(36).substring(7);
+      return "user_" + Math.random().toString(36).substring(7);
       // return token;
     }
 
@@ -1329,7 +1327,7 @@ const Header = () => {
       return username === undefined ? generateLoginUser() : username;
     }
 
-    let scaleElements = document.querySelectorAll('.newScaleInput');
+    let scaleElements = document.querySelectorAll(".newScaleInput");
 
     let scaleId;
     let holdElem;
@@ -1337,13 +1335,13 @@ const Header = () => {
 
     scaleElements.forEach((scale) => {
       // console.log(scale);
-      scaleId = scale?.querySelector('.scaleId')?.textContent;
-      holdElem = scale?.querySelector('.holdElem')?.textContent;
+      scaleId = scale?.querySelector(".scaleId")?.textContent;
+      holdElem = scale?.querySelector(".holdElem")?.textContent;
 
       documentResponses.push({
         scale_id: scaleId,
         score:
-          typeof holdElem === 'number' || !isNaN(holdElem)
+          typeof holdElem === "number" || !isNaN(holdElem)
             ? parseInt(holdElem)
             : holdElem,
       });
@@ -1353,8 +1351,8 @@ const Header = () => {
     const requestBody = {
       process_id: decoded.details.process_id,
       instance_id: 1,
-      brand_name: 'XYZ545',
-      product_name: 'XYZ511',
+      brand_name: "XYZ545",
+      product_name: "XYZ511",
       username: authorizedLogin(),
       document_responses: documentResponses,
       action: decoded.details.action,
@@ -1379,7 +1377,7 @@ const Header = () => {
     };
 
     Axios.post(
-      'https://100035.pythonanywhere.com/nps-lite/api/nps-lite-response',
+      "https://100035.pythonanywhere.com/nps-lite/api/nps-lite-response",
       requestBody
     )
       .then((response) => {
@@ -1397,12 +1395,12 @@ const Header = () => {
   }
 
   function handleFinalizeButtonLikert() {
-    localStorage.setItem('hideFinalizeButton', 'true');
+    localStorage.setItem("hideFinalizeButton", "true");
     const username = decoded?.details?.authorized;
     // console.log(username);
 
     function generateLoginUser() {
-      return 'user_' + Math.random().toString(36).substring(7);
+      return "user_" + Math.random().toString(36).substring(7);
       // return token;
     }
 
@@ -1410,7 +1408,7 @@ const Header = () => {
       return username === undefined ? generateLoginUser() : username;
     }
 
-    let scaleElements = document.querySelectorAll('.newScaleInput');
+    let scaleElements = document.querySelectorAll(".newScaleInput");
 
     let scaleId;
     let holdElem;
@@ -1419,8 +1417,8 @@ const Header = () => {
 
     scaleElements.forEach((scale) => {
       // console.log(scale);
-      scaleId = scale?.querySelector('.scaleId')?.textContent;
-      holdElem = scale?.querySelector('.holdElem')?.textContent;
+      scaleId = scale?.querySelector(".scaleId")?.textContent;
+      holdElem = scale?.querySelector(".holdElem")?.textContent;
 
       documentResponses.push({ scale_id: scaleId, score: holdElem });
     });
@@ -1431,8 +1429,8 @@ const Header = () => {
     const requestBody = {
       process_id: decoded.details.process_id,
       instance_id: 1,
-      brand_name: 'XYZ545',
-      product_name: 'XYZ511',
+      brand_name: "XYZ545",
+      product_name: "XYZ511",
       username: authorizedLogin(),
       document_responses: documentResponses,
       action: decoded.details.action,
@@ -1457,7 +1455,7 @@ const Header = () => {
     };
 
     Axios.post(
-      'https://100035.pythonanywhere.com/likert/likert-scale_response/',
+      "https://100035.pythonanywhere.com/likert/likert-scale_response/",
       requestBody
     )
       .then((response) => {
@@ -1479,7 +1477,7 @@ const Header = () => {
     // console.log(username);
 
     function generateLoginUser() {
-      return 'user_' + Math.random().toString(36).substring(7);
+      return "user_" + Math.random().toString(36).substring(7);
       // return token;
     }
 
@@ -1487,21 +1485,21 @@ const Header = () => {
       return username === undefined ? generateLoginUser() : username;
     }
 
-    let scaleElements = document.querySelectorAll('.newScaleInput');
+    let scaleElements = document.querySelectorAll(".newScaleInput");
 
     const documentResponses = new Set(); // Use a Set to store unique entries
 
     scaleElements.forEach((scale) => {
-      const scaleIdElement = scale.querySelector('.scaleId');
+      const scaleIdElement = scale.querySelector(".scaleId");
       const scaleId = scaleIdElement ? scaleIdElement.textContent : null;
 
       if (scaleId !== null && !documentResponses.has(scaleId)) {
-        const centerTextElements = scale.querySelectorAll('.center-percent');
+        const centerTextElements = scale.querySelectorAll(".center-percent");
         const centerTextArray = [];
 
         centerTextElements.forEach((val) => {
           const originalText = val.textContent;
-          const textWithoutPercent = originalText.replace('%', '');
+          const textWithoutPercent = originalText.replace("%", "");
           centerTextArray.push(Number(textWithoutPercent));
         });
 
@@ -1522,8 +1520,8 @@ const Header = () => {
     const requestBody = {
       process_id: decoded.details.process_id,
       instance_id: 1,
-      brand_name: 'XYZ545',
-      product_name: 'XYZ511',
+      brand_name: "XYZ545",
+      product_name: "XYZ511",
       username: authorizedLogin(),
       document_responses: documentResponsesArray,
 
@@ -1549,7 +1547,7 @@ const Header = () => {
     };
 
     Axios.post(
-      'https://100035.pythonanywhere.com/percent/api/percent_responses_create/',
+      "https://100035.pythonanywhere.com/percent/api/percent_responses_create/",
       requestBody
     )
       .then((response) => {
@@ -1571,7 +1569,7 @@ const Header = () => {
     // console.log(username);
 
     function generateLoginUser() {
-      return 'user_' + Math.random().toString(36).substring(7);
+      return "user_" + Math.random().toString(36).substring(7);
       // return token;
     }
 
@@ -1579,21 +1577,21 @@ const Header = () => {
       return username === undefined ? generateLoginUser() : username;
     }
 
-    let scaleElements = document.querySelectorAll('.newScaleInput');
+    let scaleElements = document.querySelectorAll(".newScaleInput");
 
     const documentResponses = new Set(); // Use a Set to store unique entries
 
     scaleElements.forEach((scale) => {
-      const scaleIdElement = scale.querySelector('.scaleId');
+      const scaleIdElement = scale.querySelector(".scaleId");
       const scaleId = scaleIdElement ? scaleIdElement.textContent : null;
 
       if (scaleId !== null && !documentResponses.has(scaleId)) {
-        const centerTextElements = scale.querySelectorAll('.center-percent');
+        const centerTextElements = scale.querySelectorAll(".center-percent");
         const centerTextArray = [];
 
         centerTextElements.forEach((val) => {
           const originalText = val.textContent;
-          const textWithoutPercent = originalText.replace('%', '');
+          const textWithoutPercent = originalText.replace("%", "");
           centerTextArray.push(Number(textWithoutPercent));
         });
 
@@ -1614,8 +1612,8 @@ const Header = () => {
     const requestBody = {
       process_id: decoded.details.process_id,
       instance_id: 1,
-      brand_name: 'XYZ545',
-      product_name: 'XYZ511',
+      brand_name: "XYZ545",
+      product_name: "XYZ511",
       username: authorizedLogin(),
       document_responses: documentResponsesArray,
 
@@ -1642,7 +1640,7 @@ const Header = () => {
 
     // console.log("This is percent_sum payloaf", requestBody);
     Axios.post(
-      'https://100035.pythonanywhere.com/percent-sum/api/percent-sum-response-create/',
+      "https://100035.pythonanywhere.com/percent-sum/api/percent-sum-response-create/",
       requestBody
     )
       .then((response) => {
@@ -1666,45 +1664,45 @@ const Header = () => {
     setIsButtonDisabled(true);
     const dataa = saveDocument();
     saveSocialMedia();
-    const finalize = document.getElementById('finalize-button');
+    const finalize = document.getElementById("finalize-button");
 
-    const completeProgressBar = document.getElementById('progress-100');
-    const halfProgressBar = document.getElementById('progress-50');
+    const completeProgressBar = document.getElementById("progress-100");
+    const halfProgressBar = document.getElementById("progress-50");
 
-    const titleName = document.querySelector('.title-name').innerHTML;
+    const titleName = document.querySelector(".title-name").innerHTML;
 
     const field = {
       _id: decoded.details._id,
     };
     let updateField = {};
-    if (decoded.details.action === 'template') {
+    if (decoded.details.action === "template") {
       updateField = {
         template_name: titleName,
         content: JSON.stringify(dataa),
         page: item,
       };
-    } else if (decoded.details.action === 'document') {
+    } else if (decoded.details.action === "document") {
       updateField = {
         document_name: titleName,
         content: JSON.stringify(dataa),
         page: item,
-      }
+      };
     }
 
     // console.log(updateField.content);
 
-    <iframe src='http://localhost:5500/'></iframe>;
+    <iframe src="http://localhost:5500/"></iframe>;
 
     function sendMessage() {
       const message =
-        decoded.details.action === 'document'
-          ? 'Document saved'
-          : 'Template saved';
-      const iframe = document.querySelector('iframe');
-      iframe?.contentWindow?.postMessage(message, '*');
+        decoded.details.action === "document"
+          ? "Document saved"
+          : "Template saved";
+      const iframe = document.querySelector("iframe");
+      iframe?.contentWindow?.postMessage(message, "*");
     }
     Axios.post(
-      'https://100058.pythonanywhere.com/api/save-data-into-collection/',
+      "https://100058.pythonanywhere.com/api/save-data-into-collection/",
       {
         cluster: decoded.details.cluster,
         collection: decoded.details.collection,
@@ -1727,7 +1725,7 @@ const Header = () => {
       .then((res) => {
         completeProgressBar.click();
         if (res) {
-          toast.success('Saved successfully');
+          toast.success("Saved successfully");
           setIsLoading(false);
           setIsButtonDisabled(false);
           if (finalize) {
@@ -1736,19 +1734,19 @@ const Header = () => {
               handleFinalize();
             }, 2000);
           }
-          if (decoded.details.action === 'document') {
-            let scaleType = document.querySelector('.scaleTypeHolder');
-            if (scaleType.textContent === 'nps') {
+          if (decoded.details.action === "document") {
+            let scaleType = document.querySelector(".scaleTypeHolder");
+            if (scaleType.textContent === "nps") {
               handleFinalizeButton();
-            } else if (scaleType.textContent === 'snipte') {
+            } else if (scaleType.textContent === "snipte") {
               handleFinalizeButtonStapel();
-            } else if (scaleType.textContent === 'nps_lite') {
+            } else if (scaleType.textContent === "nps_lite") {
               handleFinalizeButtonNpsLite();
-            } else if (scaleType.textContent === 'likert') {
+            } else if (scaleType.textContent === "likert") {
               handleFinalizeButtonLikert();
-            } else if (scaleType.textContent === 'percent_scale') {
+            } else if (scaleType.textContent === "percent_scale") {
               handleFinalizeButtonPercent();
-            } else if (scaleType.textContent === 'percent_sum_scale') {
+            } else if (scaleType.textContent === "percent_sum_scale") {
               handleFinalizeButtonPercentSum();
             }
           }
@@ -1768,18 +1766,18 @@ const Header = () => {
     var encodedSource = CryptoJS.enc.Base64.stringify(source);
 
     // Remove padding equal characters
-    encodedSource = encodedSource.replace(/=+$/, '');
+    encodedSource = encodedSource.replace(/=+$/, "");
 
     // Replace characters according to base64url specifications
-    encodedSource = encodedSource.replace(/\+/g, '-');
-    encodedSource = encodedSource.replace(/\//g, '_');
+    encodedSource = encodedSource.replace(/\+/g, "-");
+    encodedSource = encodedSource.replace(/\//g, "_");
 
     return encodedSource;
   }
 
   var header = {
-    alg: 'HS256',
-    typ: 'JWT',
+    alg: "HS256",
+    typ: "JWT",
   };
 
   var stringifiedHeader = CryptoJS.enc.Utf8.parse(JSON.stringify(header));
@@ -1801,14 +1799,14 @@ const Header = () => {
   var stringifiedData = CryptoJS.enc.Utf8.parse(JSON.stringify(dataa));
   var encodedData = base64url(stringifiedData);
 
-  var exportToken = encodedHeader + '.' + encodedData;
+  var exportToken = encodedHeader + "." + encodedData;
 
   // token creation end
 
   const getPostData = async () => {
     // handleSocialMediaAPI(decoded, true);
     const response = await Axios.post(
-      'https://100058.pythonanywhere.com/api/get-data-from-collection/',
+      "https://100058.pythonanywhere.com/api/get-data-from-collection/",
       {
         document_id: decoded.details._id,
         action: decoded.details.action,
@@ -1826,9 +1824,9 @@ const Header = () => {
         const loadedDataT = res.data;
         // // console.log(res.data.content, "loaded");
 
-        if (decoded.details.action === 'template') {
+        if (decoded.details.action === "template") {
           setTitle(loadedDataT.template_name);
-        } else if (decoded.details.action === 'document') {
+        } else if (decoded.details.action === "document") {
           setTitle(loadedDataT.document_name);
         }
 
@@ -1855,7 +1853,7 @@ const Header = () => {
 
   const npsCustomData = () => {
     // console.log(decoded.details._id);
-    Axios.post('https://100035.pythonanywhere.com/api/nps_custom_data_all', {
+    Axios.post("https://100035.pythonanywhere.com/api/nps_custom_data_all", {
       template_id: decoded.details._id,
     })
       .then((res) => {
@@ -1879,58 +1877,57 @@ const Header = () => {
         setIsMenuVisible(true);
       }
     }
-    window.addEventListener('click', handleClickOutside);
+    window.addEventListener("click", handleClickOutside);
 
     return () => {
-      window.removeEventListener('click', handleClickOutside);
+      window.removeEventListener("click", handleClickOutside);
     };
-
   }, []);
 
   // copy text function
 
   function copyText() {
-    let div = document.querySelector('.token_text');
+    let div = document.querySelector(".token_text");
     let text = div.innerText;
-    let textArea = document.createElement('textarea');
-    textArea.width = '1px';
-    textArea.height = '1px';
-    textArea.background = 'transparents';
+    let textArea = document.createElement("textarea");
+    textArea.width = "1px";
+    textArea.height = "1px";
+    textArea.background = "transparents";
     textArea.value = text;
     document.body.append(textArea);
     textArea.select();
-    document.execCommand('copy'); //No i18n
+    document.execCommand("copy"); //No i18n
     document.body.removeChild(textArea);
-    toast('Text coppied', {
-      position: 'top-right',
+    toast("Text coppied", {
+      position: "top-right",
       autoClose: 1000,
       hideProgressBar: false,
       closeOnClick: true,
       pauseOnHover: true,
       draggable: true,
       progress: undefined,
-      theme: 'light',
+      theme: "light",
     });
   }
   // copy text function end
 
   // handle sharing starts here
   function handleShare() {
-    const shareInfo = 
-      {
-        toname: toName,
-        toemail: toEmail,
-        fromname: froName,
-        fromemail: froEmail,
-        subject: subject
-      }
-  
-      try {
-        shareToEmail(shareInfo, token);
-      } catch (error) {
-        console.log(error);
-        toast.error('Please ensure all required data is submitted');
-      }
+    const shareInfo = {
+      toname: toName,
+      toemail: toEmail,
+      subject: subject,
+      message: message,
+      fromname: fromEmail,
+      fromemail: fromEmail,
+    };
+
+    try {
+      shareToEmail(shareInfo, token);
+    } catch (error) {
+      console.log(error);
+      toast.error("Please ensure all required data is submitted");
+    }
   }
 
   function handleToken() {
@@ -1938,16 +1935,15 @@ const Header = () => {
     setIsDataRetrieved(false);
     setFetchedData([]);
     setIsLoading(true);
-    var tokenn = prompt('Paste your token here');
+    var tokenn = prompt("Paste your token here");
     if (tokenn == null) {
       console.log(" No token given here", tokenn);
-    }
-    else if (tokenn != null) {
+    } else if (tokenn != null) {
       const decodedTok = jwt_decode(tokenn);
-      console.log('tokkkkkkennn', decodedTok);
+      console.log("tokkkkkkennn", decodedTok);
       const getPostData = async () => {
         const response = await Axios.post(
-          'https://100058.pythonanywhere.com/api/get-data-from-collection/',
+          "https://100058.pythonanywhere.com/api/get-data-from-collection/",
           {
             document_id: decodedTok.document_id,
             action: decodedTok.action,
@@ -1964,10 +1960,10 @@ const Header = () => {
             const loadedDataT = res.data;
             // console.log(res);
 
-            if (decoded.details.action === 'template') {
-              setTitle('Untitle-File');
-            } else if (decoded.details.action === 'document') {
-              setTitle('Untitle-File');
+            if (decoded.details.action === "template") {
+              setTitle("Untitle-File");
+            } else if (decoded.details.action === "document") {
+              setTitle("Untitle-File");
             }
 
             //Handling content
@@ -1991,21 +1987,20 @@ const Header = () => {
       getPostData();
     }
     getPostData();
-
   }
 
   // // console.log('page count check', item);
   const linkId = decoded.details.link_id;
 
-  const halfProgressBar = document.getElementById('progress-50');
+  const halfProgressBar = document.getElementById("progress-50");
   function handleFinalize() {
     // setIsLoading(true);
     halfProgressBar.click();
     setIsButtonDisabled(true);
-    const finalize = document.getElementById('finalize-button');
-    const reject = document.getElementById('reject-button');
+    const finalize = document.getElementById("finalize-button");
+    const reject = document.getElementById("reject-button");
 
-    const completeProgressBar = document.getElementById('progress-100');
+    const completeProgressBar = document.getElementById("progress-100");
 
     Axios.post(
       // `https://100094.pythonanywhere.com/v1/processes/${process_id}/finalize/`,
@@ -2013,9 +2008,9 @@ const Header = () => {
       {
         user_type: user_type,
         link_id: link_idd,
-        action: 'finalized',
+        action: "finalized",
         authorized: authorized,
-        item_type: 'clone',
+        item_type: "clone",
         item_id: _id,
         company_id: companyId,
         role: role,
@@ -2026,8 +2021,8 @@ const Header = () => {
         setIsLoading(false);
         completeProgressBar.click();
         toast.success(res?.data);
-        finalize.style.visibility = 'hidden';
-        reject.style.visibility = 'hidden';
+        finalize.style.visibility = "hidden";
+        reject.style.visibility = "hidden";
       })
       .catch((err) => {
         setIsLoading(false);
@@ -2040,19 +2035,19 @@ const Header = () => {
   function handleReject() {
     // setIsLoading(true);
     setProgress(50);
-    const completeProgressBar = document.getElementById('progress-100');
+    const completeProgressBar = document.getElementById("progress-100");
 
-    const finalize = document.getElementById('finalize-button');
-    const reject = document.getElementById('reject-button');
+    const finalize = document.getElementById("finalize-button");
+    const reject = document.getElementById("reject-button");
     Axios.post(
       // `https://100094.pythonanywhere.com/v1/processes/${process_id}/reject/`,
       `https://100094.pythonanywhere.com/v1/processes/${process_id}/finalize-or-reject/`,
       {
-        action: 'rejected',
+        action: "rejected",
         // item_id: process_id,
         authorized: authorized,
         // document_id: _id,
-        item_type: 'clone',
+        item_type: "clone",
         item_id: _id,
         company_id: companyId,
         role: role,
@@ -2064,8 +2059,8 @@ const Header = () => {
       .then((res) => {
         completeProgressBar.click();
         setIsLoading(false);
-        finalize.style.visibility = 'hidden';
-        reject.style.visibility = 'hidden';
+        finalize.style.visibility = "hidden";
+        reject.style.visibility = "hidden";
         // console.log(res);
         // alert(res?.data);
         toast.error(res?.data);
@@ -2083,37 +2078,37 @@ const Header = () => {
 
   //Event handler for pdf print
   const handlePDFPrint = async () => {
-    const allScales = document.querySelectorAll('.newScaleInput');
+    const allScales = document.querySelectorAll(".newScaleInput");
     for (let i = 0; i <= Array.from(allScales).length; i++) {
       if (Array.from(allScales)[i]) {
         let res = await generateImage(Array.from(allScales)[i]);
-        Array.from(allScales)[i].setAttribute('snapshot', res);
+        Array.from(allScales)[i].setAttribute("snapshot", res);
       }
     }
-    const containerAll = document.querySelectorAll('.midSection_container');
-    const fileName = document.querySelector('.title-name').innerText;
+    const containerAll = document.querySelectorAll(".midSection_container");
+    const fileName = document.querySelector(".title-name").innerText;
     downloadPDF(Array.from(containerAll), fileName);
   };
 
   const handleModeChange = () => {
-    if (mode === 'preview') {
+    if (mode === "preview") {
       const setMidSecWdith = (width) => {
-        const midSecAll = document.querySelectorAll('.midSection_container');
+        const midSecAll = document.querySelectorAll(".midSection_container");
         midSecAll.forEach((mid) => {
-          mid.style.width = width + 'px';
+          mid.style.width = width + "px";
         });
       };
 
       switch (defSelOpt) {
-        case 'large':
+        case "large":
           setMidSecWdith(fixedMidSecDim.width);
           scaleMidSec();
           break;
-        case 'mid':
+        case "mid":
           setMidSecWdith(720);
           scaleMidSec();
           break;
-        case 'small':
+        case "small":
           setMidSecWdith(350);
           scaleMidSec();
           break;
@@ -2122,75 +2117,81 @@ const Header = () => {
       }
     }
     setSelOpt(defSelOpt);
-    setMode(mode === 'edit' ? 'preview' : mode === 'preview' ? 'edit' : '');
+    setMode(mode === "edit" ? "preview" : mode === "preview" ? "edit" : "");
   };
 
   return (
     <>
       <div
-        className={`header ${actionName == 'template' ? 'header_bg_template' : 'header_bg_document'
-          }`}
+        className={`header ${
+          actionName == "template" ? "header_bg_template" : "header_bg_document"
+        }`}
       >
         <Container fluid>
           <Row>
-            <Col className='d-flex lhs-header'>
+            <Col className="d-flex lhs-header">
               <div
-                className={`header_icons position-relative ${mode === 'preview' ? 'vis_hid' : ''
-                  }`}
+                className={`header_icons position-relative ${
+                  mode === "preview" ? "vis_hid" : ""
+                }`}
               >
-                <CgMenuLeft className='head-bar' onClick={handleOptions} />
+                <CgMenuLeft className="head-bar" onClick={handleOptions} />
                 {isMenuVisible && (
                   <div
                     ref={menuRef}
-                    className={`position-absolute bg-white d-flex flex-column p-4 bar-menu menu ${isMenuVisible ? 'show' : ''
-                      }`}
+                    className={`position-absolute bg-white d-flex flex-column p-4 bar-menu menu ${
+                      isMenuVisible ? "show" : ""
+                    }`}
                   >
-                    <div className='d-flex cursor_pointer' onClick={() => setShareModalOpen(true)}>
+                    <div
+                      className="d-flex cursor_pointer"
+                      onClick={() => setShareModalOpen(true)}
+                    >
                       <ImShare />
                       <p>Share</p>
                     </div>
-                    <div className='d-flex cursor_pointer' onClick={handleUndo}>
+                    <div className="d-flex cursor_pointer" onClick={handleUndo}>
                       <ImUndo />
                       <p>Undo</p>
                     </div>
-                    <div className='d-flex cursor_pointer' onClick={handleRedo}>
+                    <div className="d-flex cursor_pointer" onClick={handleRedo}>
                       <ImRedo />
                       <p>Redo</p>
                     </div>
-                    <div className='d-flex cursor_pointer' onClick={handleUndo}>
+                    <div className="d-flex cursor_pointer" onClick={handleUndo}>
                       {/* handleCut */}
                       <BiCut />
                       <p>Cut</p>
                     </div>
-                    <div className='d-flex cursor_pointer' onClick={handleCopy}>
+                    <div className="d-flex cursor_pointer" onClick={handleCopy}>
                       <BiCopyAlt />
                       <p>Copy</p>
                     </div>
-                    <div className='d-flex cursor_pointer' onClick={handleRedo}>
+                    <div className="d-flex cursor_pointer" onClick={handleRedo}>
                       {/* handlePaste */}
                       <ImPaste />
                       <p>Paste</p>
                     </div>
                     <div
-                      className='d-flex cursor_pointer'
+                      className="d-flex cursor_pointer"
                       onClick={() => handlePDFPrint()}
                     >
                       <AiFillPrinter />
                       <p>Print</p>
                     </div>
 
-                    {actionName == 'template' && (
+                    {actionName == "template" && (
                       <button
-                        className='page_btn p-0 d-flex cursor_pointer'
+                        className="page_btn p-0 d-flex cursor_pointer"
                         onClick={() => createNewPage()}
                       >
                         <MdOutlinePostAdd />
                         <p>Add Page</p>
                       </button>
                     )}
-                    {actionName == 'template' && (
+                    {actionName == "template" && (
                       <button
-                        className='page_btn p-0 d-flex cursor_pointer'
+                        className="page_btn p-0 d-flex cursor_pointer"
                         onClick={() => removePage()}
                       >
                         <CgPlayListRemove />
@@ -2198,17 +2199,17 @@ const Header = () => {
                       </button>
                     )}
                     <button
-                      className='page_btn p-0 d-flex cursor_pointer'
+                      className="page_btn p-0 d-flex cursor_pointer"
                       onClick={handleToken}
                     >
                       <BiImport />
                       <p>Import</p>
                     </button>
                     <button
-                      className='d-flex page_btn p-0 cursor_pointer'
-                      id='saving-button'
-                      data-bs-toggle='modal'
-                      data-bs-target='#exampleModal'
+                      className="d-flex page_btn p-0 cursor_pointer"
+                      id="saving-button"
+                      data-bs-toggle="modal"
+                      data-bs-target="#exampleModal"
                     >
                       <BiExport />
                       <p>Export</p>
@@ -2218,126 +2219,132 @@ const Header = () => {
               </div>
 
               <div
-                className={`d-flex align-items-center gap-2 header_p ${mode === 'preview' ? 'vis_hid' : ''
-                  }`}
+                className={`d-flex align-items-center gap-2 header_p ${
+                  mode === "preview" ? "vis_hid" : ""
+                }`}
               >
                 <div
-                  className='title-name px-3'
+                  className="title-name px-3"
                   contentEditable={true}
                   style={{
                     fontSize: 18,
-                    height: window.innerWidth < 993 ? '75px' : '50px',
-                    overflowY: 'auto',
-                    padding: '10px',
+                    height: window.innerWidth < 993 ? "75px" : "50px",
+                    overflowY: "auto",
+                    padding: "10px",
                   }}
-                  spellCheck='false'
+                  spellCheck="false"
                   ref={inputRef}
                 >
                   {docMap ? finalDocName : titleName}
                 </div>
-                <FaPen className='cursor-pointer' onClick={handleTitle} />
+                <FaPen className="cursor-pointer" onClick={handleTitle} />
               </div>
             </Col>
 
             <Col>
-              <div className='right_header'>
-                <div className='view_mode_wrapper'>
+              <div className="right_header">
+                <div className="view_mode_wrapper">
                   <button
-                    className={`view_mode ${enablePreview ? '' : 'btn_disable'
-                      }`}
+                    className={`view_mode ${
+                      enablePreview ? "" : "btn_disable"
+                    }`}
                     onClick={handleModeChange}
                     disabled={!enablePreview}
                   >
-                    {mode === 'edit' ? (
+                    {mode === "edit" ? (
                       <>
-                        <span className='mode_icon'>
+                        <span className="mode_icon">
                           <MdPreview />
-                        </span>{' '}
-                        <span className='mode_tag'>Preview</span>
+                        </span>{" "}
+                        <span className="mode_tag">Preview</span>
                       </>
-                    ) : mode === 'preview' ? (
+                    ) : mode === "preview" ? (
                       <>
-                        <span className='mode_icon'>
+                        <span className="mode_icon">
                           <MdOutlineEditCalendar />
                         </span>
-                        <span className='mode_tag'>Edit</span>
+                        <span className="mode_tag">Edit</span>
                       </>
                     ) : (
-                      'Mode bug'
+                      "Mode bug"
                     )}
                   </button>
 
-                  {actionName === 'template' && mode === 'preview' && (
+                  {actionName === "template" && mode === "preview" && (
                     <MidResizer />
                   )}
                 </div>
 
                 <div
-                  className={`${docMap ? 'header_btn' : 'savee'} ${mode === 'preview' ? 'vis_hid' : ''
-                    }`}
+                  className={`${docMap ? "header_btn" : "savee"} ${
+                    mode === "preview" ? "vis_hid" : ""
+                  }`}
                 >
                   {/* <div style={{ marginRight: "20px" }}>
                   <input type="checkbox" onChange={() => setAllowHighlight(!allowHighlight)} />{"  "}
                   <label>Allow Highlight</label>
                 </div> */}
                   <Button
-                    size='md'
-                    className='rounded remove_button'
-                    id='saving-buttonn'
+                    size="md"
+                    className="rounded remove_button"
+                    id="saving-buttonn"
                     onClick={
-                      decoded.product_name === "Social Media Automation" ? saveSocialMedia : submit
+                      decoded.product_name === "Social Media Automation"
+                        ? saveSocialMedia
+                        : submit
                     }
                     style={{
-                      visibility: documentFlag && 'hidden',
+                      visibility: documentFlag && "hidden",
                     }}
                     disabled={isButtonDisabled}
                   >
-                    Save <FaSave color='white' />
+                    Save <FaSave color="white" />
                   </Button>
                   {/*  )} */}
                 </div>
                 <div
-                  className={`mt-1 text-center p-2 ${mode === 'preview' ? 'vis_hid' : ''
-                    }`}
+                  className={`mt-1 text-center p-2 ${
+                    mode === "preview" ? "vis_hid" : ""
+                  }`}
                 >
                   <div
-                    className='modal fade'
-                    id='exampleModal'
-                    tabindex='-1'
-                    aria-labelledby='exampleModalLabel'
-                    aria-hidden='true'
+                    className="modal fade"
+                    id="exampleModal"
+                    tabindex="-1"
+                    aria-labelledby="exampleModalLabel"
+                    aria-hidden="true"
                   >
-                    <div className='modal-dialog'>
-                      <div className='modal-content'>
-                        <div className='modal-header'>
-                          <h5 className='modal-title' id='exampleModalLabel'>
+                    <div className="modal-dialog">
+                      <div className="modal-content">
+                        <div className="modal-header">
+                          <h5 className="modal-title" id="exampleModalLabel">
                             Token
                           </h5>
                           <button
-                            type='button'
-                            className='btn-close'
-                            data-bs-dismiss='modal'
-                            aria-label='Close'
+                            type="button"
+                            className="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"
                           ></button>
                         </div>
-                        <div className='modal-body token_text'>
+                        <div className="modal-body token_text">
                           {exportToken}
                         </div>
-                        <div className='modal-footer head'>
+                        <div className="modal-footer head">
                           <button
-                            type='button'
-                            className='btn btn-secondary'
-                            data-bs-dismiss='modal'
+                            type="button"
+                            className="btn btn-secondary"
+                            data-bs-dismiss="modal"
                           >
                             Close
                           </button>
                           <button
                             onClick={copyText}
-                            type='button'
-                            data-bs-dismiss='modal'
-                            className='copyBtnn btn btn-primary'
+                            type="button"
+                            data-bs-dismiss="modal"
+                            className="copyBtnn btn btn-primary"
                           >
-                            <FaCopy className='me-2' color='white' size={32} />
+                            <FaCopy className="me-2" color="white" size={32} />
                             Copy
                           </button>
                         </div>
@@ -2346,28 +2353,29 @@ const Header = () => {
                   </div>
                 </div>
 
-                {actionName == 'document' &&
+                {actionName == "document" &&
                   docMap &&
-                  data != '' &&
-                  docRight !== 'view' && (
+                  data != "" &&
+                  docRight !== "view" && (
                     <>
                       {/* <div className={`mt-2 text-center mb-2 px-2 ${isFinializeDisabled ? disable_pointer_event : enable_pointer_event}`}> */}
                       <div
-                        className={`mt-2 text-center mb-2 px-2 ${mode === 'preview' ? 'vis_hid' : ''
-                          }`}
+                        className={`mt-2 text-center mb-2 px-2 ${
+                          mode === "preview" ? "vis_hid" : ""
+                        }`}
                       >
                         <Button
-                          variant='success'
-                          size='md'
-                          className='rounded px-4'
-                          id='finalize-button'
+                          variant="success"
+                          size="md"
+                          className="rounded px-4"
+                          id="finalize-button"
                           disabled={isFinializeDisabled || isButtonDisabled}
                           onClick={submit}
                           style={{
                             visibility:
-                              documentFlag == 'processing'
-                                ? 'visible'
-                                : 'hidden',
+                              documentFlag == "processing"
+                                ? "visible"
+                                : "hidden",
                           }}
                         >
                           Finalize
@@ -2375,20 +2383,21 @@ const Header = () => {
                       </div>
 
                       <div
-                        className={`mt-2 text-center mb-2 px-2 ${mode === 'preview' ? 'vis_hid' : ''
-                          }`}
+                        className={`mt-2 text-center mb-2 px-2 ${
+                          mode === "preview" ? "vis_hid" : ""
+                        }`}
                       >
                         <Button
-                          variant='danger'
-                          size='md'
-                          className='rounded px-4'
-                          id='reject-button'
+                          variant="danger"
+                          size="md"
+                          className="rounded px-4"
+                          id="reject-button"
                           onClick={() => setIsOpenRejectionModal(true)}
                           style={{
                             visibility:
-                              documentFlag == 'processing'
-                                ? 'visible'
-                                : 'hidden',
+                              documentFlag == "processing"
+                                ? "visible"
+                                : "hidden",
                           }}
                           disabled={isButtonDisabled}
                         >
@@ -2412,23 +2421,24 @@ const Header = () => {
           />
         )}
         {shareModalOpen && (
-        <ShareDocModal 
-          openModal={setShareModalOpen}
-          toName={toName}
-          setToName={setToName}
-          toEmail={toEmail}
-          setToEmail={setToEmail}
-          froName={froName}
-          setFroName={setFroName}
-          froEmail={froEmail}
-          setFroEmail={setFroEmail}
-          subject={subject}
-          setSubject={setSubject}
-          handleShare={handleShare}
-
-        />
+          <ShareDocModal
+            openModal={setShareModalOpen}
+            toName={toName}
+            setToName={setToName}
+            toEmail={toEmail}
+            setToEmail={setToEmail}
+            froName={fromEmail}
+            // setFroName={setFroName}
+            froEmail={fromEmail}
+            // setFroEmail={setFroEmail}
+            subject={subject}
+            setSubject={setSubject}
+            message={message}
+            setMessage={setMessage}
+            handleShare={handleShare}
+          />
         )}
-        
+
         <ProgressLoader />
       </div>
 

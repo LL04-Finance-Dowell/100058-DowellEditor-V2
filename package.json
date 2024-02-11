@@ -82,6 +82,8 @@
     "html-webpack-plugin": "^5.5.3",
     "style-loader": "^3.3.3",
     "url-loader": "^4.1.1",
+    "vite": "^5.1.0",
     "webpack-cli": "^5.1.4"
-  }
+  },
+  "repository": "https://github.com/LL04-Finance-Dowell/100058-DowellEditor-V2.git"
 }

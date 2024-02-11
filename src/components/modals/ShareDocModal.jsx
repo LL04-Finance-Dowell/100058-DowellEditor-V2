@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import { FaTimes } from "react-icons/fa";
 import "./shareDocModle.css";
@@ -9,12 +9,14 @@ const ShareDocModal = ({
   setToName,
   toEmail,
   setToEmail,
-  froName,
-  setFroName,
-  froEmail,
-  setFroEmail,
+  // froName,
+  // setFroName,
+  // froEmail,
+  // setFroEmail,
   subject,
   setSubject,
+  message,
+  setMessage,
   handleShare,
 }) => {
   return (
@@ -87,7 +89,12 @@ const ShareDocModal = ({
             <Row style={{ marginTop: "0.5rem" }}>
               <Col>
                 <label>Message</label>
-                <textarea placeholder="messages"></textarea>
+                <textarea
+                  type="text"
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  placeholder="Enter your message here"
+                ></textarea>
               </Col>
             </Row>
             <Row>
