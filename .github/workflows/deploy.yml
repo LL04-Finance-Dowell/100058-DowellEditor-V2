@@ -13,17 +13,16 @@ jobs:
         with:
           node-version: "18.x"
       
-      - name: Cache dependencies
-        uses: actions/cache@v2
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
+    #   - name: Cache dependencies
+    #     uses: actions/cache@v2
+    #     with:
+    #       path: ~/.npm
+    #       key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+    #       restore-keys: |
+    #         ${{ runner.os }}-node-
               
-      - run: npm i
-      - run: npm ci
-      - run: CI=false npm run build
+      - run: yarn install --frozen-lockfile
+      - run: CI=false yarn run build
       - uses: actions/upload-artifact@v2
         with:
           name: production
