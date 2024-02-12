@@ -1218,15 +1218,30 @@
   resolved "https://registry.npmjs.org/@eslint-community/regexpp/-/regexpp-4.10.0.tgz"
   integrity sha512-Cu96Sd2By9mCNTx2iyKOmq10v22jUVQv0lQnlGNy16oE9589yE+QADPbrMGCkA51cKZSg3Pu/aTJVTGfL/qjUA==
 
-"@eslint-community/regexpp@^4.6.1":
-  version "4.10.0"
-  resolved "https://registry.npmjs.org/@eslint-community/regexpp/-/regexpp-4.10.0.tgz"
-  integrity sha512-Cu96Sd2By9mCNTx2iyKOmq10v22jUVQv0lQnlGNy16oE9589yE+QADPbrMGCkA51cKZSg3Pu/aTJVTGfL/qjUA==
+"@floating-ui/core@^1.6.0":
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/@floating-ui/core/-/core-1.6.0.tgz#fa41b87812a16bf123122bf945946bae3fdf7fc1"
+  integrity sha512-PcF++MykgmTj3CIyOQbKA/hDzOAiqI3mhuoN44WRCopIs1sgoDoU4oty4Jtqaj/y3oDU6fnVSm4QG0a3t5i0+g==
+  dependencies:
+    "@floating-ui/utils" "^0.2.1"
 
-"@eslint/eslintrc@^2.1.4":
-  version "2.1.4"
-  resolved "https://registry.npmjs.org/@eslint/eslintrc/-/eslintrc-2.1.4.tgz"
-  integrity sha512-269Z39MS6wVJtsoUl10L60WdkhJVdPG24Q4eZTH3nnF6lpvSShEK3wQjDX9JRWAUPvPh7COouPpU9IrqaZFvtQ==
+"@floating-ui/dom@^1.6.1":
+  version "1.6.1"
+  resolved "https://registry.yarnpkg.com/@floating-ui/dom/-/dom-1.6.1.tgz#d552e8444f77f2d88534372369b3771dc3a2fa5d"
+  integrity sha512-iA8qE43/H5iGozC3W0YSnVSW42Vh522yyM1gj+BqRwVsTNOyr231PsXDaV04yT39PsO0QL2QpbI/M0ZaLUQgRQ==
+  dependencies:
+    "@floating-ui/core" "^1.6.0"
+    "@floating-ui/utils" "^0.2.1"
+
+"@floating-ui/utils@^0.2.1":
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/@floating-ui/utils/-/utils-0.2.1.tgz#16308cea045f0fc777b6ff20a9f25474dd8293d2"
+  integrity sha512-9TANp6GPoMtYzQdt54kfAyMmz1+osLlXdg2ENroU7zzrtflTLrrC/lgrIfaSe+Wu0b89GKccT7vxXA0MoAIO+Q==
+
+"@jest/expect-utils@^29.7.0":
+  version "29.7.0"
+  resolved "https://registry.npmjs.org/@jest/expect-utils/-/expect-utils-29.7.0.tgz#023efe5d26a8a70f21677d0a1afc0f0a44e3a1c6"
+  integrity sha512-GlsNBWiFQFCVi9QVSx7f5AgMeLxe9YCCs5PuP2O2LdjDAA8Jh9eX7lA1Jq/xdXw3Wb3hyvlFNfZIfcRetSzYcA==
   dependencies:
     ajv "^6.12.4"
     debug "^4.3.2"
@@ -2927,6 +2942,11 @@ classnames@^2.2.6, classnames@^2.3.0, classnames@^2.3.2:
   version "2.3.2"
   resolved "https://registry.npmjs.org/classnames/-/classnames-2.3.2.tgz"
   integrity sha512-CSbhY4cFEJRe6/GQzIk5qXZ4Jeg5pcsP7b5peFSDpffpe1cqjASH/n9UTjBwOp6XpMSTwQ8Za2K5V02ueA7Tmw==
+
+classnames@^2.3.0:
+  version "2.5.1"
+  resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.5.1.tgz#ba774c614be0f016da105c858e7159eae8e7687b"
+  integrity sha512-saHYOzhIQs6wy2sVxTM6bUDsQO4F50V9RQ22qBpEdCW+I+/Wmke2HOl6lS6dTpdxVhb88/I6+Hs+438c3lfUow==
 
 clean-css@^5.2.2:
   version "5.3.3"
@@ -6276,11 +6296,11 @@ react-toastify@^9.1.3:
     clsx "^1.1.1"
 
 react-tooltip@^5.22.0:
-  version "5.22.0"
-  resolved "https://registry.npmjs.org/react-tooltip/-/react-tooltip-5.22.0.tgz"
-  integrity sha512-xbJBRY1LyHYd7j00UeBOqZR9SH/1S47Pe+m8vM1a+ZXglkeSNnBt5YYoPttU/amjC/VZJAPQ8+2B9x8Fl8U1qA==
+  version "5.26.1"
+  resolved "https://registry.yarnpkg.com/react-tooltip/-/react-tooltip-5.26.1.tgz#5bbd757c27274a183ed590bdf987186791380c90"
+  integrity sha512-z8QYiVIfMpIzu3d2ggvgfI5objNCRYfKnRLGWIOBShqRKrXpIrQw4NLYHTL2fj1hH8dtzj25OUnmB346XG1cHg==
   dependencies:
-    "@floating-ui/dom" "^1.0.0"
+    "@floating-ui/dom" "^1.6.1"
     classnames "^2.3.0"
 
 react-top-loading-bar@^2.3.1:
