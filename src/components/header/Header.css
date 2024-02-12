@@ -5,6 +5,10 @@
   padding: 0 1rem;
   box-shadow: 1px 1px 8px #96969657;
 }
+.header.desktop_header {
+  display: flex;
+  flex-direction:column;
+}
 
 .header_bg_template {
   /* background: #243485; */

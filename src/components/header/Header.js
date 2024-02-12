@@ -138,7 +138,7 @@ const Header = () => {
   const [isOpenRejectionModal, setIsOpenRejectionModal] = useState(false);
   const [shareModalOpen, setShareModalOpen] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
-  
+
   const [toName, setToName] = useState("");
   const [toEmail, setToEmail] = useState("");
   const [froName, setFroName] = useState("");
@@ -172,21 +172,21 @@ const Header = () => {
     const divElement = inputRef.current;
     divElement.focus();
 
-//     const range = document.createRange();
-//     range.selectNodeContents(divElement);
+    //     const range = document.createRange();
+    //     range.selectNodeContents(divElement);
 
-//     const endOffset = divElement.innerText.length;
-//     // range.setStart(divElement.firstChild, endOffset);
-//     // range.setEnd(divElement.firstChild, endOffset);
-//  console.log(divElement,endOffset);
-//     range.setStart(divElement, endOffset);
-//     range.setEnd(divElement, endOffset);
+    //     const endOffset = divElement.innerText.length;
+    //     // range.setStart(divElement.firstChild, endOffset);
+    //     // range.setEnd(divElement.firstChild, endOffset);
+    //  console.log(divElement,endOffset);
+    //     range.setStart(divElement, endOffset);
+    //     range.setEnd(divElement, endOffset);
 
-//     range.collapse(false);
+    //     range.collapse(false);
 
-//     const selection = window.getSelection();
-//     selection.removeAllRanges();
-//     selection.addRange(range);
+    //     const selection = window.getSelection();
+    //     selection.removeAllRanges();
+    //     selection.addRange(range);
   };
 
   let createPageNumber;
@@ -1918,21 +1918,21 @@ const Header = () => {
 
   // handle sharing starts here
   function handleShare() {
-    const shareInfo = 
-      {
-        toname: toName,
-        toemail: toEmail,
-        fromname: froName,
-        fromemail: froEmail,
-        subject: subject
-      }
-  
-      try {
-        shareToEmail(shareInfo, token);
-      } catch (error) {
-        console.log(error);
-        toast.error('Please ensure all required data is submitted');
-      }
+    const shareInfo =
+    {
+      toname: toName,
+      toemail: toEmail,
+      fromname: froName,
+      fromemail: froEmail,
+      subject: subject
+    }
+
+    try {
+      shareToEmail(shareInfo, token);
+    } catch (error) {
+      console.log(error);
+      toast.error('Please ensure all required data is submitted');
+    }
   }
 
   function handleToken() {
@@ -2122,11 +2122,11 @@ const Header = () => {
         default:
           return;
       }
-    } 
+    }
 
     // setSelOpt(defSelOpt);
     setMode(mode === 'edit' ? 'preview' : mode === 'preview' ? 'edit' : '');
-      
+
     document.querySelectorAll('.preview-canvas')?.forEach(prev => prev.remove())
   };
 
@@ -2416,23 +2416,23 @@ const Header = () => {
           />
         )}
         {shareModalOpen && (
-        <ShareDocModal 
-          openModal={setShareModalOpen}
-          toName={toName}
-          setToName={setToName}
-          toEmail={toEmail}
-          setToEmail={setToEmail}
-          froName={froName}
-          setFroName={setFroName}
-          froEmail={froEmail}
-          setFroEmail={setFroEmail}
-          subject={subject}
-          setSubject={setSubject}
-          handleShare={handleShare}
+          <ShareDocModal
+            openModal={setShareModalOpen}
+            toName={toName}
+            setToName={setToName}
+            toEmail={toEmail}
+            setToEmail={setToEmail}
+            froName={froName}
+            setFroName={setFroName}
+            froEmail={froEmail}
+            setFroEmail={setFroEmail}
+            subject={subject}
+            setSubject={setSubject}
+            handleShare={handleShare}
 
-        />
+          />
         )}
-        
+
         <ProgressLoader />
       </div>
       <div
@@ -2511,7 +2511,7 @@ const Header = () => {
                     {/*  )} */}
                   </div>
                   <div className='view_mode_wrapper'>
-                    <div
+                    {actionName === 'template' && <div
                       className={`share_button`}
                       onClick={handleModeChange}
                       disabled={!enablePreview}
@@ -2533,7 +2533,7 @@ const Header = () => {
                       ) : (
                         'Mode bug'
                       )}
-                    </div>
+                    </div>}
 
                     {actionName === 'template' && mode === 'preview' && (
                       <MidResizer />
@@ -2661,18 +2661,19 @@ const Header = () => {
                       }`}
         >
 
-
-          <div className='d-flex cursor_pointer' title='Cut' onClick={handleUndo}>
-            {/* handleCut */}
-            <BiCut />
-          </div>
-          <div className='d-flex cursor_pointer' title='Copy' onClick={handleCopy}>
-            <BiCopyAlt />
-          </div>
-          <div className='d-flex cursor_pointer' title='Paste' onClick={handleRedo}>
-            {/* handlePaste */}
-            <ImPaste />
-          </div>
+          {actionName == "template" && <>
+            <div className='d-flex cursor_pointer' title='Cut' onClick={handleUndo}>
+              {/* handleCut */}
+              <BiCut />
+            </div>
+            <div className='d-flex cursor_pointer' title='Copy' onClick={handleCopy}>
+              <BiCopyAlt />
+            </div>
+            <div className='d-flex cursor_pointer' title='Paste' onClick={handleRedo}>
+              {/* handlePaste */}
+              <ImPaste />
+            </div>
+          </>}
           <div
             className='d-flex cursor_pointer'
             title='Print'
