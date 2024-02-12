@@ -141,6 +141,7 @@ const Header = () => {
   const [shareModalOpen, setShareModalOpen] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
+
   const [toName, setToName] = useState("");
   const [toEmail, setToEmail] = useState("");
   const [froName, setFroName] = useState("");
@@ -174,21 +175,21 @@ const Header = () => {
     const divElement = inputRef.current;
     divElement.focus();
 
-    const range = document.createRange();
-    range.selectNodeContents(divElement);
+    //     const range = document.createRange();
+    //     range.selectNodeContents(divElement);
 
-    const endOffset = divElement.innerText.length;
-    // range.setStart(divElement.firstChild, endOffset);
-    // range.setEnd(divElement.firstChild, endOffset);
+    //     const endOffset = divElement.innerText.length;
+    //     // range.setStart(divElement.firstChild, endOffset);
+    //     // range.setEnd(divElement.firstChild, endOffset);
+    //  console.log(divElement,endOffset);
+    //     range.setStart(divElement, endOffset);
+    //     range.setEnd(divElement, endOffset);
 
-    range.setStart(divElement, endOffset);
-    range.setEnd(divElement, endOffset);
+    //     range.collapse(false);
 
-    range.collapse(false);
-
-    const selection = window.getSelection();
-    selection.removeAllRanges();
-    selection.addRange(range);
+    //     const selection = window.getSelection();
+    //     selection.removeAllRanges();
+    //     selection.addRange(range);
   };
 
   let createPageNumber;
@@ -2161,7 +2162,7 @@ const Header = () => {
   return (
     <>
       <div
-        className={`header ${actionName == 'template' ? 'header_bg_template' : 'header_bg_document'
+        className={`header mobile_header ${actionName == 'template' ? 'header_bg_template' : 'header_bg_document'
           }`}
       >
         <Container fluid>
@@ -2435,6 +2436,316 @@ const Header = () => {
           </Row>
         </Container>
 
+        {isOpenRejectionModal && (
+          <RejectionModal
+            openModal={setIsOpenRejectionModal}
+            handleReject={handleReject}
+            msg={rejectionMsg}
+            setMsg={setRejectionMsg}
+          />
+        )}
+        {shareModalOpen && (
+          <ShareDocModal
+            openModal={setShareModalOpen}
+            toName={toName}
+            setToName={setToName}
+            toEmail={toEmail}
+            setToEmail={setToEmail}
+            froName={froName}
+            setFroName={setFroName}
+            froEmail={froEmail}
+            setFroEmail={setFroEmail}
+            subject={subject}
+            setSubject={setSubject}
+            handleShare={handleShare}
+
+          />
+        )}
+
+        <ProgressLoader />
+      </div>
+      <div
+        className={`header desktop_header ${actionName == 'template' ? 'header_bg_template' : 'header_bg_document'
+          }`}
+      >
+        <Container fluid>
+          <Row>
+            <Col className='d-flex lhs-header'>
+              <div
+                className={`header_icons position-relative ${mode === 'preview' ? 'vis_hid' : ''
+                  }`}
+              >
+                <CgMenuLeft className='head-bar' onClick={handleOptions} />
+
+              </div>
+
+
+            </Col>
+
+            <Col>
+              <div className='right_header'>
+                <div
+                  className={`d-flex align-items-center gap-2 header_p ${mode === 'preview' ? 'vis_hid' : ''
+                    }`}
+                >
+                  <div
+                    className='title-name px-3'
+                    contentEditable={true}
+                    style={{
+                      fontSize: 18,
+
+                      height: window.innerWidth < 993 ? '75px' : '50px',
+                      overflowY: 'auto',
+                      padding: '10px',
+                    }}
+                    spellCheck='false'
+                    ref={inputRef}
+                  >
+                    {docMap ? finalDocName : titleName}
+                  </div>
+                  <div className='d-flex cursor_pointer' title='Edit' onClick={handleRedo}>
+                    <FaPen className='cursor-pointer' onClick={handleTitle} />
+                  </div>
+                  <div className='d-flex cursor_pointer' title='Undo' onClick={handleUndo}>
+                    <ImUndo />
+                  </div>
+                  <div className='d-flex cursor_pointer' title='Redo' onClick={handleRedo}>
+                    <ImRedo />
+                  </div>
+                </div>
+                <div className={`header-buttons ${mode === 'preview' ? 'margin_auto' : ''
+                  }`}>
+                  <div
+                    className={`${docMap ? 'header_btn' : 'savee'} ${mode === 'preview' ? 'vis_hid' : ''
+                      }`}
+                  >
+                    {/* <div style={{ marginRight: "20px" }}>
+                  <input type="checkbox" onChange={() => setAllowHighlight(!allowHighlight)} />{"  "}
+                  <label>Allow Highlight</label>
+                </div> */}
+                    <Button
+                      size='md'
+                      className='rounded remove_button'
+                      id='saving-buttonn'
+                      onClick={
+                        decoded.product_name === "Social Media Automation" ? saveSocialMedia : submit
+                      }
+                      style={{
+                        visibility: documentFlag && 'hidden',
+                      }}
+                      disabled={isButtonDisabled}
+                    >
+                      Save <FaSave color='white' />
+                    </Button>
+                    {/*  )} */}
+                  </div>
+                  <div className='view_mode_wrapper'>
+                    {actionName === 'template' && <div
+                      className={`share_button`}
+                      onClick={handleModeChange}
+                      disabled={!enablePreview}
+                    >
+                      {mode === 'edit' ? (
+                        <>
+                          <span className='mode_icon'>
+                            <MdPreview />
+                          </span>{' '}
+                          <span className='mode_tag'>Preview</span>
+                        </>
+                      ) : mode === 'preview' ? (
+                        <>
+                          <span className='mode_icon'>
+                            <MdOutlineEditCalendar />
+                          </span>
+                          <span className='mode_tag'>Edit</span>
+                        </>
+                      ) : (
+                        'Mode bug'
+                      )}
+                    </div>}
+
+                    {actionName === 'template' && mode === 'preview' && (
+                      <MidResizer />
+                    )}
+                  </div>
+                  <div className={`d-flex share_button ${mode === 'preview' ? 'vis_hid' : ''
+                    }`} onClick={() => setShareModalOpen(true)}>
+                    <ImShare />
+                    <p>Share</p>
+                  </div>
+                </div>
+
+
+                <div
+                  className={`mt-1 text-center p-2 ${mode === 'preview' ? 'vis_hid' : ''
+                    }`}
+                >
+                  <div
+                    className='modal fade'
+                    id='exampleModal'
+                    tabindex='-1'
+                    aria-labelledby='exampleModalLabel'
+                    aria-hidden='true'
+                  >
+                    <div className='modal-dialog'>
+                      <div className='modal-content'>
+                        <div className='modal-header'>
+                          <h5 className='modal-title' id='exampleModalLabel'>
+                            Token
+                          </h5>
+                          <button
+                            type='button'
+                            className='btn-close'
+                            data-bs-dismiss='modal'
+                            aria-label='Close'
+                          ></button>
+                        </div>
+                        <div className='modal-body token_text'>
+                          {exportToken}
+                        </div>
+                        <div className='modal-footer head'>
+                          <button
+                            type='button'
+                            className='btn btn-secondary'
+                            data-bs-dismiss='modal'
+                          >
+                            Close
+                          </button>
+                          <button
+                            onClick={copyText}
+                            type='button'
+                            data-bs-dismiss='modal'
+                            className='copyBtnn btn btn-primary'
+                          >
+                            <FaCopy className='me-2' color='white' size={32} />
+                            Copy
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {actionName == 'document' &&
+                  docMap &&
+                  data != '' &&
+                  docRight !== 'view' && (
+                    <>
+                      {/* <div className={`mt-2 text-center mb-2 px-2 ${isFinializeDisabled ? disable_pointer_event : enable_pointer_event}`}> */}
+                      <div
+                        className={`mt-2 text-center mb-2 px-2 ${mode === 'preview' ? 'vis_hid' : ''
+                          }`}
+                      >
+                        <Button
+                          variant='success'
+                          size='md'
+                          className='rounded px-4'
+                          id='finalize-button'
+                          disabled={isFinializeDisabled || isButtonDisabled}
+                          onClick={submit}
+                          style={{
+                            visibility:
+                              documentFlag == 'processing'
+                                ? 'visible'
+                                : 'hidden',
+                          }}
+                        >
+                          Finalize
+                        </Button>
+                      </div>
+
+                      <div
+                        className={`mt-2 text-center mb-2 px-2 ${mode === 'preview' ? 'vis_hid' : ''
+                          }`}
+                      >
+                        <Button
+                          variant='danger'
+                          size='md'
+                          className='rounded px-4'
+                          id='reject-button'
+                          onClick={() => setIsOpenRejectionModal(true)}
+                          style={{
+                            visibility:
+                              documentFlag == 'processing'
+                                ? 'visible'
+                                : 'hidden',
+                          }}
+                          disabled={isButtonDisabled}
+                        >
+                          Reject
+                        </Button>
+                      </div>
+                    </>
+                  )}
+
+              </div>
+              <ToastContainer size={5} />
+            </Col>
+          </Row>
+        </Container>
+        <div
+          ref={menuRef}
+          className={`icons-holder
+          ${mode === 'edit' ? "show" : ''}
+                      }`}
+        >
+
+          {actionName == "template" && <>
+            <div className='d-flex cursor_pointer' title='Cut' onClick={handleUndo}>
+              {/* handleCut */}
+              <BiCut />
+            </div>
+            <div className='d-flex cursor_pointer' title='Copy' onClick={handleCopy}>
+              <BiCopyAlt />
+            </div>
+            <div className='d-flex cursor_pointer' title='Paste' onClick={handleRedo}>
+              {/* handlePaste */}
+              <ImPaste />
+            </div>
+          </>}
+          <div
+            className='d-flex cursor_pointer'
+            title='Print'
+            onClick={() => handlePDFPrint()}
+          >
+            <AiFillPrinter />
+          </div>
+
+          {actionName == 'template' && (
+            <button
+              className='page_btn p-0 d-flex cursor_pointer'
+              title='Add Page'
+              onClick={() => createNewPage()}
+            >
+              <MdOutlinePostAdd />
+            </button>
+          )}
+          {actionName == 'template' && (
+            <button
+              className='page_btn p-0 d-flex cursor_pointer'
+              title='Remove page'
+              onClick={() => removePage()}
+            >
+              <CgPlayListRemove />
+            </button>
+          )}
+          <button
+            className='page_btn p-0 d-flex cursor_pointer'
+            title='Import Token'
+            onClick={handleToken}
+          >
+            <BiImport />
+          </button>
+          <button
+            className='d-flex page_btn p-0 cursor_pointer'
+            id='saving-button'
+            title='Export Token'
+            data-bs-toggle='modal'
+            data-bs-target='#exampleModal'
+          >
+            <BiExport />
+          </button>
+        </div>
         {isOpenRejectionModal && (
           <RejectionModal
             openModal={setIsOpenRejectionModal}

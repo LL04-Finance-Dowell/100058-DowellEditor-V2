@@ -124,23 +124,28 @@
     height: 297mm;
     position: relative;
 } */
-@media only screen and (min-width: 1282px)and (max-width: 1366px) {
+@media only screen and (min-width: 1280px)and (max-width: 1366px) {
   .midSection_container {
     width: 173mm ;
   }
   .editSec_midSec {
-    padding-left: 70px !important;
-    column-gap: 2rem !important;
+    column-gap: 1.8rem !important;
+    padding-top:3%;
+    background-color: red;
+    margin-left: -38px !important;
   }
+}
+@media only screen and (max-width: 768px) {
+  .midSection_container {
+    width: 160mm ;
+  }
+
 }
 @media only screen and (min-width: 768px)and (max-width: 1281px) {
   .midSection_container {
     width: 160mm ;
   }
-  .editSec_midSec {
-    padding-left: 70px !important;
-    column-gap: 1.7rem !important;
-  }
+
 }
 @media only screen and (min-width:1900px) {
   .midSection_container {
@@ -154,10 +159,6 @@
 }
 /* Large devices (laptops/desktops, 992px and up) */
 @media only screen and (max-width: 768px) {
-  .editSec_midSec {
-    padding-top: 85px;
-    padding-left: 50px !important;
-  }
 }
 /* Extra large devices (large laptops and desktops, 1200px and up) */
 @media only screen and (min-width: 1200px) {}

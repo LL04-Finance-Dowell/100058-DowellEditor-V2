@@ -1,7 +1,7 @@
 .mid_resizer {
   position: absolute;
-  top: 0;
-  left: 150%;
+  top: 2%;
+  left: 155%;
   width: 150px;
   background-color: #fff;
 }

@@ -40,3 +40,22 @@
   z-index: -1;
   pointer-events: none;
 }
+
+
+
+@media screen and (min-width: 992px) {
+  .editSec_rightMenu {
+    top:12%
+  }
+}
+
+@media screen and (min-width: 1279px) {
+  .editSec_rightMenu {
+    top:18%
+  }
+}
+@media screen and (min-width: 1367px) {
+  .editSec_rightMenu {
+    top:12%
+  }
+}
