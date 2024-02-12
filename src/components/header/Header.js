@@ -2031,7 +2031,8 @@ const Header = () => {
   const halfProgressBar = document.getElementById('progress-50');
   function handleFinalize() {
     // setIsLoading(true);
-    halfProgressBar.click();
+    // halfProgressBar.click();
+    setProgress(50);
     setIsButtonDisabled(true);
     const finalize = document.getElementById('finalize-button');
     const reject = document.getElementById('reject-button');
@@ -2055,7 +2056,8 @@ const Header = () => {
       .then((res) => {
         // console.log("This is my response", res);
         setIsLoading(false);
-        completeProgressBar.click();
+        // completeProgressBar.click();
+        setProgress(100);
         toast.success(res?.data);
         finalize.style.visibility = 'hidden';
         reject.style.visibility = 'hidden';
@@ -2093,7 +2095,8 @@ const Header = () => {
       }
     )
       .then((res) => {
-        completeProgressBar.click();
+        // completeProgressBar.click();
+        setProgress(100);
         setIsLoading(false);
         finalize.style.visibility = 'hidden';
         reject.style.visibility = 'hidden';
