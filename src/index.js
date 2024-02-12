@@ -14,11 +14,11 @@ root.render(
   <ContextProvider>
     <PrintProvider>
       <DraggableProvider>
-        <React.StrictMode>
+        {/* <React.StrictMode> */}
           <Router>
             <App/>
           </Router>
-        </React.StrictMode>
+        {/* </React.StrictMode> */}
       </DraggableProvider>
     </PrintProvider>
   </ContextProvider>

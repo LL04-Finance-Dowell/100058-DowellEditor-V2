@@ -687,13 +687,13 @@ const AlignRightSide = () => {
 
         <hr />
 
-        <SelectAnsAndQuestion
+        {/* <SelectAnsAndQuestion
           selectedType={selectedType}
           setSelectedType={setSelectedType}
           setAddedAns={setAddedAns}
           addedAns={addedAns}
         />
-        <hr />
+        <hr /> */}
 
         <Row className="pt-0">
           <div className="mt-3 text-center">

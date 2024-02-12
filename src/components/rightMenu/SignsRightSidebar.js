@@ -223,12 +223,12 @@ const SignsRightSidebar = () => {
       </Row>
       <hr />
 
-      <SelectAnsAndQuestion
+      {/* <SelectAnsAndQuestion
         selectedType={selectedType}
         setSelectedType={setSelectedType}
         setAddedAns={setAddedAns}
         addedAns={addedAns} />
-      <hr />
+      <hr /> */}
 
       <div className="mt-5 text-center">
         <Button

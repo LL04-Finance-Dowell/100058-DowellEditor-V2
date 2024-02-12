@@ -344,12 +344,12 @@ const ScaleRightSide = () => {
             )}
           </Row>
           <hr />
-          <SelectAnsAndQuestion
+          {/* <SelectAnsAndQuestion
             selectedType={selectedType}
             setSelectedType={setSelectedType}
             setAddedAns={setAddedAns}
             addedAns={addedAns} />
-          <hr />
+          <hr /> */}
           <div id="settingRight" style={{ display: "none" }}>
             <h3>Configurations</h3>
             {/* iframe */}
