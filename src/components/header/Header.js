@@ -2686,8 +2686,7 @@ const Header = () => {
         <div
           ref={menuRef}
           className={`icons-holder
-          ${mode === 'edit' ? "show" : ''}
-                      }`}
+          ${mode === 'edit' ? "show" : 'display_none'}`}
         >
 
           {actionName == "template" && <>

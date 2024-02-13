@@ -87,15 +87,21 @@ const dummyData = {
   },
 };
 export const renderPreview = (mainSection) => {
-  document.querySelector('#main-section-container')?.remove();
-  const editSec = mainSection;
+  document.querySelector('.preview-canvas')?.parentElement?.remove();
+  const editSec = document.querySelector('.editSec_midSec');
   const previewContainer = document.createElement('div');
   previewContainer.id = 'main-section-container';
   editSec.append(previewContainer);
   const midSecAll = document.querySelectorAll('.midSection_container');
   midSecAll.forEach((mid) => {
     const previewCanvas = mid.cloneNode(true);
+    const scale = 0.76;
     previewCanvas.querySelectorAll('.holderDIV')?.forEach((div) => {
+      const divWidth = +div.style.width.split('px')[0];
+      const currentLeft = +div.style.left.split('px')[0] || 0;
+      console.log(currentLeft,":TO ",(currentLeft * scale),"\n")
+      div.style.left = (currentLeft * scale) + 'px';
+      div.style.width = (divWidth * scale) + 'px';
       div.style.border = 'none';
       div.style.pointerEvents = 'none';
     });
@@ -160,7 +166,7 @@ const MidSection = React.forwardRef((props, ref) => {
   const defOptRef = useRef(defSelOpt);
   const [focusedElement, setFocusedElement] = useState(null);
   const [allPages, setAllPages] = useState([]);
-  
+
   const [showReminderModal, setShowReminderModal] = useState(false);
 
   const [searchParams] = useSearchParams();
@@ -3107,11 +3113,11 @@ const MidSection = React.forwardRef((props, ref) => {
   };
 
   //handle model in document level
-useEffect(() => {
-  setShowReminderModal(true);
-},[])
+  useEffect(() => {
+    setShowReminderModal(true);
+  }, [])
 
-const handleClose = () => setShowReminderModal(false);
+  const handleClose = () => setShowReminderModal(false);
 
   useEffect(() => {
     const midsectionContainers = document.querySelectorAll('.midSection_container');
@@ -3194,9 +3200,9 @@ const handleClose = () => setShowReminderModal(false);
                   </Col>
                 </Row>
                 <SocialMedia isOpen={socialModalIsOpen} onRequestClose={closeSociaModal} />
-                  {
-                    decoded?.details?.action === "document" && decoded?.details?.document_right == "add_edit" ? <UserFinalizeReminderModal showReminderModal={showReminderModal} handleClose={handleClose}/> : null
-                  }
+                {
+                  decoded?.details?.action === "document" && decoded?.details?.document_right == "add_edit" ? <UserFinalizeReminderModal showReminderModal={showReminderModal} handleClose={handleClose} /> : null
+                }
 
               </Container>
 
