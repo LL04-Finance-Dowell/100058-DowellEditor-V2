@@ -30,6 +30,9 @@
 .preview-canvas{
   padding:0 24px;
 }
+.print_container.preview-canvas{
+  width:158mm !important
+}
 .disable_pointer_event {
   pointer-events: none;
   opacity: 0.9;
@@ -103,62 +106,3 @@
   align-items: center;
   justify-content: center;
 }
-
-/*
-.midSection_container{
-    background-color: #ffffff;q
-    width: 216mm;
-    height: 297mm;
-    position: relative;
-        height: 1235.87px;
-    width: 100vw;
-    display: flex;
-    background-color: aliceblue;
-    place-content: center space-around;
-    align-items: center;
-}
-}
-.midSection_without_RightMenu_container{
-    background-color: #ffffff;
-    width: 210mm;
-    height: 297mm;
-    position: relative;
-} */
-@media only screen and (min-width: 1280px)and (max-width: 1366px) {
-  .midSection_container {
-    width: 173mm ;
-  }
-  .editSec_midSec {
-    column-gap: 1.8rem !important;
-    padding-top:3%;
-    background-color: red;
-    margin-left: -38px !important;
-  }
-}
-@media only screen and (max-width: 768px) {
-  .midSection_container {
-    width: 160mm ;
-  }
-
-}
-@media only screen and (min-width: 768px)and (max-width: 1281px) {
-  .midSection_container {
-    width: 160mm ;
-  }
-
-}
-@media only screen and (min-width:1900px) {
-  .midSection_container {
-    width: 180mm ;
-  }
-  .editSec_midSec {
-    column-gap: 4rem !important;
-    margin-left: 80px !important;
-
-  }
-}
-/* Large devices (laptops/desktops, 992px and up) */
-@media only screen and (max-width: 768px) {
-}
-/* Extra large devices (large laptops and desktops, 1200px and up) */
-@media only screen and (min-width: 1200px) {}

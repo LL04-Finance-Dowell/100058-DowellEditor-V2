@@ -28,24 +28,24 @@ export const maintainRatio = (parent, child) => {
 }
 
 export const handleResize = (entries) => {
-    entries.forEach(entry => {
-        if (!document.querySelector('.preview-canvas')) {
-            const parent = entry.target;
-            const children = parent.getElementsByClassName('holderDV');
-            console.log("\nSCALING:\n", parent, "\n")
-            Array.from(children).forEach(child => {
-                console.log(maintainRatio(parent, child));
-                console.log("\nSCALING:\n", child, "\n")
-            });
-        } else {
-            const parent = entry.target;
-            const children = parent.getElementsByClassName('holderDV');
-            Array.from(children).forEach(child => {
-                maintainRatio(parent, child);
-            });
-        }
+    // entries.forEach(entry => {
+    //     if (!document.querySelector('.preview-canvas')) {
+    //         const parent = entry.target;
+    //         const children = parent.getElementsByClassName('holderDV');
+    //         console.log("\nSCALING:\n", parent, "\n")
+    //         Array.from(children).forEach(child => {
+    //             console.log(maintainRatio(parent, child));
+    //             console.log("\nSCALING:\n", child, "\n")
+    //         });
+    //     } else {
+    //         const parent = entry.target;
+    //         const children = parent.getElementsByClassName('holderDV');
+    //         Array.from(children).forEach(child => {
+    //             maintainRatio(parent, child);
+    //         });
+    //     }
 
-    });
+    // });
 }
 
 
@@ -58,18 +58,15 @@ export const resizePreview = (targetWidth) => {
     const midSecAll = document.querySelectorAll('.midSection_container');
     midSecAll.forEach((mid) => {
         const previewCanvas = mid.cloneNode(true);
-        if (targetWidth === 720) {
-            previewCanvas.style.width = '140mm';
-
-        };
+        previewCanvas.style.width = '158mm';
         const scale = 650 / 794;
         previewCanvas.querySelectorAll('.holderDIV')?.forEach((div) => {
             const divWidth = +div.style.width.split('px')[0];
             const currentLeft = +div.style.left.split('px')[0] || 0;
             div.style.left = (currentLeft * scale) + 'px';
+            div.style.width = (divWidth * scale) + 'px';
             div.style.border = 'none';
             div.style.pointerEvents = 'none';
-            div.style.width = (divWidth * scale) + 'px';
         });
         previewCanvas.className = 'midSection_container print_container preview-canvas';
         document.querySelector('#main-section-container').append(previewCanvas);

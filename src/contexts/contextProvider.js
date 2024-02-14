@@ -54,13 +54,7 @@ export const ContextProvider = ({ children }) => {
   const [mode, setMode] = useState('edit');
   const [isDropped, setIsDropped] = useState(initialState);
   const [isResizing, setIsResizing] = useState(false);
-  const [defSelOpt, setDefSelOpt] = useState(
-    window.innerWidth > 993
-      ? 'large'
-      : window.innerWidth <= 993 && window.innerWidth >= 770
-        ? 'mid'
-        : 'small'
-  );
+  const [defSelOpt, setDefSelOpt] = useState('mid');
   const [selOpt, setSelOpt] = useState(defSelOpt);
   const [enablePreview, setEnablePreview] = useState(true);
   const [idIni, setIdIni] = useState('');

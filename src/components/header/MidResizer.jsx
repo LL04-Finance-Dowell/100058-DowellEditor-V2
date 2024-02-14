@@ -10,55 +10,51 @@ const MidResizer = () => {
   const {setIsCompsScaler, isCompsScaler } =
     useStateContext();
   const [isDrop, setIsDrop] = useState(false);
-  const [selOpts] = useState(['large', 'mid']);
-  const [selOpt, setSelOpt] = useState('large');
+  const [selOpts] = useState([ 'large','mid']);
+  const [selOpt, setSelOpt] = useState('mid');
 
   const containerRef = useRef(null);
   const contentRef = useRef(null);
 
-  const handleSelOpt = (opt) => {
-    if (window.scrollY === 0) {
-      setSelOpt(opt);
-      setIsDrop(false);
-      // isCompsScaler || setIsCompsScaler(true);
-    } else {
-      window.scrollTo(0, 0);
-      window.onscroll = () => {
-        if (window.scrollY === 0) {
-          setSelOpt(opt);
-          setIsDrop(false);
-          // isCompsScaler || setIsCompsScaler(true);
-          // window.onscroll = null;
-        }
-      };
-    }
-  };
+  // const handleSelOpt = (opt) => {
+  //   if (window.scrollY === 0) {
+  //     setSelOpt(opt);
+  //     setIsDrop(false);
+  //     // isCompsScaler || setIsCompsScaler(true);
+  //   } else {
+  //     window.scrollTo(0, 0);
+  //     window.onscroll = () => {
+  //       if (window.scrollY === 0) {
+  //         setSelOpt(opt);
+  //         setIsDrop(false);
+  //         // isCompsScaler || setIsCompsScaler(true);
+  //         // window.onscroll = null;
+  //       }
+  //     };
+  //   }
+  // };
+      // resizePreview(720);
 
-  useEffect(() => {
-    const containerEl = containerRef.current;
-    const contentEl = contentRef.current;
-    if (containerEl && contentEl) {
-      if (isDrop)
-        containerEl.style.height =
-          contentEl.getBoundingClientRect().height + 'px';
-      else containerEl.style.height = '0px';
-    }
-  }, [isDrop, containerRef, contentRef]);
-  useEffect(() => {
-    if (selOpt === 'mid'){ 
-      resizePreview(720);
-    }else {
-      const mainSection = document.querySelector('.editSec_midSec');
-      renderPreview(mainSection);
-    }
-    console.log(selOpt);
-  }, [selOpt]);
+  // useEffect(() => {
+  //   const containerEl = containerRef.current;
+  //   const contentEl = contentRef.current;
+  //   if (containerEl && contentEl) {
+  //     if (isDrop)
+  //       containerEl.style.height =
+  //         contentEl.getBoundingClientRect().height + 'px';
+  //     else containerEl.style.height = '0px';
+  //   }
+  // }, [isDrop, containerRef, contentRef]);
+  // useEffect(() => {
+
+    
+  //   console.log(selOpt);
+  // }, [selOpt]);
 
   return (
     <div className='mid_resizer'>
       <div
         className={`sel_opt ${isDrop ? 'drop' : ''}`}
-        onClick={() => setIsDrop(!isDrop)}
       >
         <span className='opt_icon'>
           {selOpt === 'large' ? (
@@ -68,12 +64,12 @@ const MidResizer = () => {
           }
         </span>
         {selOpt}{' '}
-        <span className='drop_icon'>
+        {/* <span className='drop_icon'>
           {isDrop ? <BsCaretUp /> : <BsCaretDown />}
-        </span>{' '}
+        </span>{' '} */}
       </div>
 
-      <div className='drop_container' ref={containerRef}>
+      {/* <div className='drop_container' ref={containerRef}>
         <ul className='drop_opts' ref={contentRef}>
           {selOpts.map((opt) => (
             <li
@@ -92,7 +88,7 @@ const MidResizer = () => {
             </li>
           ))}
         </ul>
-      </div>
+      </div> */}
     </div>
   );
 };

@@ -179,7 +179,7 @@ const EditSection = () => {
             // style={{marginTop:window.innerWidth< && left_menu_size?.height}}
             lg={sidebar ? 8 : 11}
             as='div'
-            className='editSec_midSec'
+            className={`editSec_midSec ${mode == "preview"?"preview":""}`}
             id='editSec_midSec'
           >
             <div className='canvas-holder '> 
