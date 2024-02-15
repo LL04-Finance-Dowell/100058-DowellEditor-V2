@@ -308,7 +308,7 @@ svg:not(.view_mode svg, .mid_resizer svg) {
     font-size: 2rem;
     margin-left: 0px;
   }
-  .desktop_header{
+  .desktop_header,.title-name.desktop-title{
     display: none !important;
   }
 
@@ -338,7 +338,7 @@ svg:not(.view_mode svg, .mid_resizer svg) {
   .d-flex.lhs-header {
     display: none !important;
   }
-  .mobile_header{
+  .mobile_header,.title-name.mobile-title{
     display: none !important;
   }
   .header_bg_template {

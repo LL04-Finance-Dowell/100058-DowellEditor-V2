@@ -1228,9 +1228,9 @@ const Header = () => {
       content: decoded.details.update_field.content,
       document_name: decoded.details.update_field.document_name,
       page: decoded.details.update_field.page,
-      portfolio:decoded.details.update_field.portfolio,
-      created_by:decoded.details.update_field.created_by,
-      created_on:decoded.details.update_field.created_on,
+      portfolio: decoded.details.update_field.portfolio,
+      created_by: decoded.details.update_field.created_by,
+      created_on: decoded.details.update_field.created_on,
       user_type: decoded.details.user_type,
       _id: decoded.details._id,
     };
@@ -1308,9 +1308,9 @@ const Header = () => {
       content: decoded.details.update_field.content,
       document_name: decoded.details.update_field.document_name,
       page: decoded.details.update_field.page,
-      portfolio:decoded.details.update_field.portfolio,
-      created_by:decoded.details.update_field.created_by,
-      created_on:decoded.details.update_field.created_on,
+      portfolio: decoded.details.update_field.portfolio,
+      created_by: decoded.details.update_field.created_by,
+      created_on: decoded.details.update_field.created_on,
       user_type: decoded.details.user_type,
       _id: decoded.details._id,
     };
@@ -1675,7 +1675,18 @@ const Header = () => {
         // console.log(error);
       });
   }
+  const getTitleName = () => {
+    const titleNames = document.querySelectorAll('.title-name');
 
+    for (let i = 0; i < titleNames.length; i++) {
+      const style = window.getComputedStyle(titleNames[i]);
+      if (style.display !== 'none') {
+        return titleNames[i].innerText;
+      }
+    }
+
+    return titleName;
+  }
   function submit(e) {
     setProgress(progress + 50);
     e.preventDefault();
@@ -1685,7 +1696,7 @@ const Header = () => {
     saveSocialMedia();
     const finalize = document.getElementById('finalize-button');
 
-    const titleName = document.querySelector('.title-name').innerHTML;
+    const titleName = getTitleName();
 
     const field = {
       _id: decoded.details._id,
@@ -1702,17 +1713,17 @@ const Header = () => {
         document_name: titleName,
         content: JSON.stringify(dataa),
         page: item,
-        edited_by:decoded.details.edited_by,
-        edited_on:decoded.details.edited_on,
+        edited_by: decoded.details.edited_by,
+        edited_on: decoded.details.edited_on,
         portfolio: decoded.details.portfolio
       }
     }
 
     // console.log(updateField.content);
 
-    console.log(">>decoded",decoded),
+    console.log(">>decoded", decoded),
 
-    <iframe src='http://localhost:5500/'></iframe>;
+      <iframe src='http://localhost:5500/'></iframe>;
 
     function sendMessage() {
       const message =
@@ -1939,8 +1950,8 @@ const Header = () => {
   // copy text function end
 
   // handle sharing starts here
- async function handleShare() {
-  setPendingMail(true);
+  async function handleShare() {
+    setPendingMail(true);
     const shareInfo =
     {
       toname: toName,
@@ -1955,7 +1966,7 @@ const Header = () => {
     } catch (error) {
       console.log(error);
       toast.error('Please ensure all required data is submitted');
-    } finally{
+    } finally {
       setToEmail("");
       setToName("");
       setFroEmail("");
@@ -2259,7 +2270,7 @@ const Header = () => {
                   }`}
               >
                 <div
-                  className='title-name px-3'
+                  className='title-name px-3 mobile-title'
                   contentEditable={true}
                   style={{
                     fontSize: 18,
@@ -2492,7 +2503,7 @@ const Header = () => {
                     }`}
                 >
                   <div
-                    className='title-name px-3'
+                    className='title-name px-3 desktop-title'
                     contentEditable={true}
                     style={{
                       fontSize: 18,
