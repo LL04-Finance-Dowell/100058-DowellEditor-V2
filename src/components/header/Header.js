@@ -2267,7 +2267,7 @@ const Header = () => {
                   }`}
               >
                 <div
-                  className='title-name px-3'
+                  className='title-name px-3 mobile-title'
                   contentEditable={true}
                   style={{
                     fontSize: 18,
@@ -2500,7 +2500,7 @@ const Header = () => {
                     }`}
                 >
                   <div
-                    className='title-name px-3'
+                    className='title-name px-3 desktop-title'
                     contentEditable={true}
                     style={{
                       fontSize: 18,
