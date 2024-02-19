@@ -35,20 +35,44 @@ function createContainerInputField(
   containerField.style.outline = '0px';
   containerField.style.overflow = 'overlay';
   containerField.style.position = 'relative';
+
+
+  holderDIV.style.position = "relative";
+  const overlayText = document.createElement('span');
+    overlayText.className = 'overlay-text';
+    overlayText.textContent = 'Container';
+    overlayText.style.position = "absolute";
+    overlayText.style.right = "0px";
+    overlayText.style.bottom = "-40px";
+    overlayText.style.backgroundColor = "#e3eeff";
+    overlayText.style.color = "gray";
+    overlayText.style.padding = "0px 10px";
+    overlayText.style.display = "none";
   containerField.onclick = (e) => {
     focuseddClassMaintain(e);
+    overlayText.style.display = "block";
     if (e.ctrlKey) {
       copyInput('container2');
     }
     handleClicked('container2');
     setSidebar(true);
   };
+
+
+  containerField.onmouseover = () => {
+    overlayText.style.display = "block";
+  }
+
+  containerField.onmouseleave = (e) => {
+    overlayText.style.display = "none";
+  }
   // // console.log("element.data container input retrieve", element.data);
   let elementData = element;
   if (copy_data) {
     element.data = copy_data;
     containerField.id = `c` + (parseInt(id[1]) + 1);
   }
+  
   for (let p = 0; p < element.data.length; p++) {
     const containerElement = element.data[p];
     //  console.log('\n>>>>>Container Data\n',containerElement,'\n>>>>>>>>>>>ELEMENT\n',element);
@@ -1074,6 +1098,7 @@ function createContainerInputField(
   };
 
   holderDIV.append(containerField);
+  holderDIV.append(overlayText);
   if (copy_data) {
     return holderDIV;
   } else {

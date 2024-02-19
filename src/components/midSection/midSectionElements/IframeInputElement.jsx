@@ -17,6 +17,19 @@ function createIframeInputField(id, element, p, holderDIV, table_dropdown_focuse
 
     iframeField.style.position = "absolute";
 
+
+    holderDIV.style.position = "relative";
+    const overlayText = document.createElement('span');
+      overlayText.className = 'overlay-text';
+      overlayText.textContent = 'Iframe';
+      overlayText.style.position = "absolute";
+      overlayText.style.right = "0px";
+      overlayText.style.bottom = "-40px";
+      overlayText.style.backgroundColor = "#e3eeff";
+      overlayText.style.color = "gray";
+      overlayText.style.padding = "0px 10px";
+      overlayText.style.display = "none";
+
     if (element.data == "iFrame here") {
         iframeField.innerHTML = element.data;
     }
@@ -31,6 +44,8 @@ function createIframeInputField(id, element, p, holderDIV, table_dropdown_focuse
 
     iframeField.onclick = (e) => {
         table_dropdown_focuseddClassMaintain(e);
+        overlayText.style.display = "block";
+
         if (e.ctrlKey) {
             copyInput("iframe2");
         }
@@ -38,7 +53,16 @@ function createIframeInputField(id, element, p, holderDIV, table_dropdown_focuse
         setSidebar(true);
     };
 
+    iframeField.onmouseover = () => {
+        overlayText.style.display = "block";
+      }
+    
+      iframeField.onmouseleave = (e) => {
+        overlayText.style.display = "none";
+      }
+
     holderDIV.append(iframeField);
+    holderDIV.append(overlayText);
 
     document
         .getElementsByClassName("midSection_container")

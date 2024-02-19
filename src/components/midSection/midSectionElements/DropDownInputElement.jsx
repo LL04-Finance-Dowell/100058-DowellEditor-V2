@@ -17,6 +17,19 @@ function createDropDownInputField(id, element, p, holderDIV, focuseddClassMainta
     // dropdownField.innerHTML = `<select><option>${postData.dropdownField.value}</option></select>`;
     dropdownField.style.position = "absolute";
 
+
+    holderDIV.style.position = "relative";
+  const overlayText = document.createElement('span');
+    overlayText.className = 'overlay-text';
+    overlayText.textContent = 'Dropdown';
+    overlayText.style.position = "absolute";
+    overlayText.style.right = "0px";
+    overlayText.style.bottom = "-40px";
+    overlayText.style.backgroundColor = "#e3eeff";
+    overlayText.style.color = "gray";
+    overlayText.style.padding = "0px 10px";
+    overlayText.style.display = "none";
+
     const selectElement = document.createElement("select");
     selectElement.className = "select-element";
     selectElement.innerHTML = element.data2;
@@ -24,6 +37,7 @@ function createDropDownInputField(id, element, p, holderDIV, focuseddClassMainta
     dropdownField.onclick = (e) => {
         // focuseddClassMaintain(e);
         table_dropdown_focuseddClassMaintain(e);
+        overlayText.style.display = "block";
         if (e.ctrlKey) {
             copyInput("dropdown2");
         }
@@ -31,6 +45,14 @@ function createDropDownInputField(id, element, p, holderDIV, focuseddClassMainta
         setRightSideDropDown(false);
         setSidebar(true);
     };
+
+    dropdownField.onmouseover = () => {
+        overlayText.style.display = "block";
+      }
+    
+      dropdownField.onmouseleave = (e) => {
+        overlayText.style.display = "none";
+      }
 
     // selectElement.innerHTML = element.data2;
 
@@ -46,6 +68,7 @@ function createDropDownInputField(id, element, p, holderDIV, focuseddClassMainta
     // paragraphField.innerHTML = `${data.normal.data[0][0].paragraph}`;
 
     holderDIV.append(dropdownField);
+    holderDIV.append(overlayText);
 
     // holderDIV.append(paragraphField);
 

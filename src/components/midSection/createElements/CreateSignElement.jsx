@@ -19,6 +19,19 @@ function createSignInputElement(holderDIV, focuseddClassMaintain, handleClicked,
     // signField.innerText = "";
     signField.style.position = "absolute";
 
+
+    holderDIV.style.position = "relative";
+    const overlayText = document.createElement('span');
+      overlayText.className = 'overlay-text';
+      overlayText.textContent = 'Signature';
+      overlayText.style.position = "absolute";
+      overlayText.style.right = "0px";
+      overlayText.style.bottom = "-40px";
+      overlayText.style.backgroundColor = "#e3eeff";
+      overlayText.style.color = "gray";
+      overlayText.style.padding = "0px 10px";
+      overlayText.style.display = "none";
+
     const span2 = document.createElement('span');
     span2.className = 'sign_text';
     if(copy_data){
@@ -57,13 +70,21 @@ function createSignInputElement(holderDIV, focuseddClassMaintain, handleClicked,
     signField.onclick = (e) => {
         e.stopPropagation();
         focuseddClassMaintain(e);
-
+        overlayText.style.display = "block";
         if (e.ctrlKey) {
             copyInput("signs2");
         }
         handleClicked("signs2", "container2");
         setSidebar(true);
     };
+
+    signField.onmouseover = () => {
+        overlayText.style.display = "block";
+      }
+    
+      signField.onmouseleave = (e) => {
+        overlayText.style.display = "none";
+      }
     const imageSignButton = document.createElement("div");
     imageSignButton.className = "addImageSignButton";
     imageSignButton.innerText = "Choose File";
@@ -109,6 +130,7 @@ function createSignInputElement(holderDIV, focuseddClassMaintain, handleClicked,
 
     holderDIV.append(signField);
     holderDIV.append(imageSignButton);
+    holderDIV.append(overlayText);
     return holderDIV;
 }
 export default createSignInputElement;

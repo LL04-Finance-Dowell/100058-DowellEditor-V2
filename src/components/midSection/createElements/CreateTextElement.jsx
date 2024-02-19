@@ -33,9 +33,22 @@ function createTextElement(holderDIV, focuseddClassMaintain, handleClicked, setS
     inputField.innerText = copy_data
   }
 
+  holderDIV.style.position = "relative";
+  const overlayText = document.createElement('span');
+    overlayText.className = 'overlay-text';
+    overlayText.textContent = 'Text';
+    overlayText.style.position = "absolute";
+    overlayText.style.right = "0px";
+    overlayText.style.bottom = "-40px";
+    overlayText.style.backgroundColor = "#e3eeff";
+    overlayText.style.color = "gray";
+    overlayText.style.padding = "0px 10px";
+    overlayText.style.display = "none";
+
   inputField.onfocus = () => {
     if (inputField.textContent === 'Enter text here!') {
       inputField.textContent = '';
+      overlayText.style.display = "block"
       inputField.classList.remove('empty')
     }
   }
@@ -43,6 +56,7 @@ function createTextElement(holderDIV, focuseddClassMaintain, handleClicked, setS
   inputField.onblur = () => {
     if (!inputField.textContent.trim()) {
       inputField.textContent = 'Enter text here!';
+      overlayText.style.display = "none"
       inputField.classList.add('empty')
     }
   }
@@ -71,13 +85,28 @@ function createTextElement(holderDIV, focuseddClassMaintain, handleClicked, setS
   inputField.onclick = (e) => {
     e.stopPropagation();
     focuseddClassMaintain(e);
+    overlayText.style.display = "block";
     if (e.ctrlKey) {
       copyInput("align2");
     }
     handleClicked("align2", "container2");
     setSidebar(true);
   };
+
+
+  inputField.onmouseover = () => {
+    overlayText.style.display = "block";
+  }
+
+  inputField.onmouseleave = (e) => {
+  
+    overlayText.style.display = "none";
+
+  }
+
+
   holderDIV.append(inputField);
+  holderDIV.append(overlayText);
   return holderDIV;
 }
 export default createTextElement;

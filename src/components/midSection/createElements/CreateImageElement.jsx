@@ -39,6 +39,20 @@ function createImageElement(
     imageField.append(span2);
   }
 
+  holderDIV.style.position = "relative";
+  const overlayText = document.createElement('span');
+    overlayText.className = 'overlay-text';
+    overlayText.textContent = 'Image';
+    overlayText.style.position = "absolute";
+    overlayText.style.right = "0px";
+    overlayText.style.bottom = "-40px";
+    overlayText.style.backgroundColor = "#e3eeff";
+    overlayText.style.color = "gray";
+    overlayText.style.padding = "0px 10px";
+    overlayText.style.display = "none";
+
+  
+
   const img = document.getElementsByClassName('imageInput');
   if (img.length) {
     const h = img.length;
@@ -53,8 +67,8 @@ function createImageElement(
 
   imageField.onclick = (e) => {
     e.stopPropagation();
-    focuseddClassMaintain(e);
-
+    focuseddClassMaintain(e);    
+    overlayText.style.display = "block";
     if (e.ctrlKey) {
       copyInput('image2');
     }
@@ -63,6 +77,17 @@ function createImageElement(
     // copyImage()
     setSidebar(true);
   };
+  // imageField.onfocus = (e) => {
+  //   overlayText.style.display = "block";
+
+  // }
+  imageField.onmouseover = () => {
+    overlayText.style.display = "block";
+  }
+
+  imageField.onmouseleave = (e) => {
+    overlayText.style.display = "none";
+  }
 
   const imageButton = document.createElement('div');
   imageButton.className = 'addImageButton';
@@ -111,6 +136,7 @@ function createImageElement(
   imageButton.append(imgBtn);
   holderDIV.append(imageField);
   holderDIV.append(imageButton);
+  holderDIV.append(overlayText);
   return holderDIV;
 }
 export default createImageElement;

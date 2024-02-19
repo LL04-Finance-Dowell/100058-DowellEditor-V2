@@ -19,6 +19,18 @@ function createCameraInputElement(holderDIV, handleClicked, setSidebar, table_dr
       cameraField.id = "cam1";
     }
 
+    holderDIV.style.position = "relative";
+    const overlayText = document.createElement('span');
+      overlayText.className = 'overlay-text';
+      overlayText.textContent = 'Camera';
+      overlayText.style.position = "absolute";
+      overlayText.style.right = "0px";
+      overlayText.style.bottom = "-40px";
+      overlayText.style.backgroundColor = "#e3eeff";
+      overlayText.style.color = "gray";
+      overlayText.style.padding = "0px 10px";
+      overlayText.style.display = "none";
+
     let videoField = document.createElement("video");
     videoField.className = "videoInput";
     videoField.style.width = "100%";
@@ -86,6 +98,7 @@ function createCameraInputElement(holderDIV, handleClicked, setSidebar, table_dr
     cameraField.onclick = (e) => {
       e.stopPropagation();
       table_dropdown_focuseddClassMaintain(e);
+      overlayText.style.display = "block";
       if (e.ctrlKey) {
         copyInput("camera2");
       }
@@ -102,7 +115,15 @@ function createCameraInputElement(holderDIV, handleClicked, setSidebar, table_dr
       handleClicked("camera2");
       setSidebar(true);
     };
+    cameraField.onmouseover = () => {
+      overlayText.style.display = "block";
+    }
+  
+    cameraField.onmouseleave = (e) => {
+      overlayText.style.display = "none";
+    }
 
     holderDIV.append(cameraField);
+    holderDIV.append(overlayText)
 }
 export default createCameraInputElement;

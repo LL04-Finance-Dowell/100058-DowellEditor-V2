@@ -61,6 +61,7 @@ import { saveDocument } from '../header/Header';
 import { BsNodeMinusFill } from 'react-icons/bs';
 import { handleResize } from '../../utils/responsived-design/responsive';
 import UserFinalizeReminderModal from '../modals/UserFinalizeReminderModal.jsx';
+import { FaIconName } from 'react-icons/fa';
 // tHIS IS FOR A TEST COMMIT
 
 const dummyData = {
@@ -1105,6 +1106,23 @@ const MidSection = React.forwardRef((props, ref) => {
       holderDIV.classList.add(`disable_pointer_event`);
     } else {
       holderDIV.classList.add(`dotted_border`);
+      holderDIV.onfocus = () => {
+        // console.log("focused...")
+      holderDIV.classList.add(`container_div`)
+      holderDIV.classList.add(`parent_div`)
+      holderDIV.classList.add(`highligted_div`)
+      let iconElement = document.createElement('span');
+      iconElement.className = 'drag_icon';
+      iconElement.innerHTML = `<FaIconName />`;
+      holderDIV.append(iconElement);
+      }
+      holderDIV.onblur = () => {
+
+        holderDIV.classList.remove(`container_div`)
+        holderDIV.classList.remove(`parent_div`)
+        holderDIV.classList.remove(`highligted_div`)
+        
+      }
     }
 
     holderDIV.addEventListener('dragstart', (event) => { });

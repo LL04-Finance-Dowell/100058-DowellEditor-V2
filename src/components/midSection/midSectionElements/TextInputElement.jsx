@@ -56,6 +56,18 @@ function createTextInputField(
     }
   };
 
+  holderDIV.style.position = "relative";
+  const overlayText = document.createElement('span');
+    overlayText.className = 'overlay-text';
+    overlayText.textContent = 'Text';
+    overlayText.style.position = "absolute";
+    overlayText.style.right = "0px";
+    overlayText.style.bottom = "-40px";
+    overlayText.style.backgroundColor = "#e3eeff";
+    overlayText.style.color = "gray";
+    overlayText.style.padding = "0px 10px";
+    overlayText.style.display = "none";
+
   inputField.onclick = (e) => {
     focuseddClassMaintain(e);
     if (e.ctrlKey) {
@@ -69,6 +81,8 @@ function createTextInputField(
   inputField.innerHTML = text;
 
   holderDIV.appendChild(inputField);
+  holderDIV.append(overlayText);
+
 
   const midSectionContainers = document.getElementsByClassName(
     "midSection_container"

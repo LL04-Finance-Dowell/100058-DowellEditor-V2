@@ -21,6 +21,20 @@ function createContainerInputElement(holderDIV, focuseddClassMaintain, handleCli
   placeholder.textContent = 'Container';
   containerField.append(placeholder);
 
+
+  holderDIV.style.position = "relative";
+  const overlayText = document.createElement('span');
+    overlayText.className = 'overlay-text';
+    overlayText.textContent = 'Container';
+    overlayText.style.position = "absolute";
+    overlayText.style.right = "0px";
+    overlayText.style.bottom = "-40px";
+    overlayText.style.backgroundColor = "#e3eeff";
+    overlayText.style.color = "gray";
+    overlayText.style.padding = "0px 10px";
+    overlayText.style.display = "none";
+
+
   const mutationConfig = { childList: true };
 
   const mutationObserver = new MutationObserver(entries => {
@@ -41,6 +55,7 @@ function createContainerInputElement(holderDIV, focuseddClassMaintain, handleCli
   containerField.onclick = (e) => {
     e.stopPropagation();
     focuseddClassMaintain(e);
+    overlayText.style.display = "block";
     if (e.ctrlKey) {
       copyInput("container2");
     }
@@ -54,6 +69,14 @@ function createContainerInputElement(holderDIV, focuseddClassMaintain, handleCli
       copyInput("container2");
     }
   };
+
+  containerField.onmouseover = () => {
+    overlayText.style.display = "block";
+  }
+
+  containerField.onmouseleave = (e) => {
+    overlayText.style.display = "none";
+  }
   containerField.ondrop = (event) => {
     if (containerField.children[0].classList.contains('placeholder')) containerField.removeChild(containerField.children[0])
     const parentId = containerField.id
@@ -576,6 +599,8 @@ function createContainerInputElement(holderDIV, focuseddClassMaintain, handleCli
       containerField.append(holderDIVContainer);
   };
   holderDIV.append(containerField);
+  holderDIV.append(overlayText);
+
   return holderDIV;
 }
 export default createContainerInputElement;

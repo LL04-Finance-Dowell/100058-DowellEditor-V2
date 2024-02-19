@@ -31,6 +31,20 @@ function createImageInputField(id, element, document_map_required, p, holderDIV,
     // setIsFinializeDisabled(false);
   });
 
+  holderDIV.style.position = "relative";
+  const overlayText = document.createElement('span');
+    overlayText.className = 'overlay-text';
+    overlayText.textContent = 'Image';
+    overlayText.style.position = "absolute";
+    overlayText.style.right = "0px";
+    overlayText.style.bottom = "-40px";
+    overlayText.style.backgroundColor = "#e3eeff";
+    overlayText.style.color = "gray";
+    overlayText.style.padding = "0px 10px";
+    overlayText.style.display = "none";
+
+
+
   holderDIV.appendChild(imageField);
 
   document
@@ -39,12 +53,21 @@ function createImageInputField(id, element, document_map_required, p, holderDIV,
 
   imageField.onclick = (e) => {
     focuseddClassMaintain(e);
+    overlayText.style.display = "block";
     if (e.ctrlKey) {
       copyInput("image2");
     }
     handleClicked("image2");
     setSidebar(true);
   };
+
+  imageField.onmouseover = () => {
+    overlayText.style.display = "block";
+  }
+
+  imageField.onmouseleave = (e) => {
+    overlayText.style.display = "none";
+  }
 
   const createImageButton = (text, type, eventListener) => {
     const button = document.createElement("div");
@@ -120,6 +143,8 @@ function createImageInputField(id, element, document_map_required, p, holderDIV,
 
   holderDIV.appendChild(imageField);
   holderDIV.appendChild(imageButton);
+  holderDIV.append(overlayText);
+
 
   document.getElementsByClassName("midSection_container")[p - 1]?.appendChild(holderDIV);
 

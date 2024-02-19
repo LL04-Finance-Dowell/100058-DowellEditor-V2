@@ -15,6 +15,18 @@ function createDateInputField(id, element, document_map_required, p, holderDIV, 
     dateField.style.overflow = "overlay";
     dateField.style.position = "relative";
 
+    holderDIV.style.position = "relative";
+  const overlayText = document.createElement('span');
+    overlayText.className = 'overlay-text';
+    overlayText.textContent = 'Calender';
+    overlayText.style.position = "absolute";
+    overlayText.style.right = "0px";
+    overlayText.style.bottom = "-40px";
+    overlayText.style.backgroundColor = "#e3eeff";
+    overlayText.style.color = "gray";
+    overlayText.style.padding = "0px 10px";
+    overlayText.style.display = "none";
+
     function dateClick() {
         document.getElementById("date_picker")?.click();
 
@@ -25,6 +37,7 @@ function createDateInputField(id, element, document_map_required, p, holderDIV, 
             copyInput("calendar2");
         }
         focuseddClassMaintain(e);
+        overlayText.style.display = "block";
         handleClicked("calendar2");
         setRightSideDateMenu(false);
         //console.log("innerText", e.target.innerText);
@@ -51,9 +64,19 @@ function createDateInputField(id, element, document_map_required, p, holderDIV, 
         setTimeout(dateClick, 0);
     };
 
+    dateField.onmouseover = () => {
+        overlayText.style.display = "block";
+      }
+    
+      dateField.onmouseleave = (e) => {
+        overlayText.style.display = "none";
+      }
+    
+
     dateField.innerText = `${element.data}`;
 
     holderDIV.append(dateField);
+    holderDIV.append(overlayText);
 
     document
         .getElementsByClassName("midSection_container")

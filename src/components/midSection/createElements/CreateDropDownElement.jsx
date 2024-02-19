@@ -23,6 +23,19 @@ function createDropDownInputElement(
 
   dropdownField.style.position = "absolute";
 
+
+  holderDIV.style.position = "relative";
+  const overlayText = document.createElement('span');
+    overlayText.className = 'overlay-text';
+    overlayText.textContent = 'Dropdown';
+    overlayText.style.position = "absolute";
+    overlayText.style.right = "0px";
+    overlayText.style.bottom = "-40px";
+    overlayText.style.backgroundColor = "#e3eeff";
+    overlayText.style.color = "gray";
+    overlayText.style.padding = "0px 10px";
+    overlayText.style.display = "none";
+
   const dropD = document.getElementsByClassName("dropdownInput");
   if (dropD.length) {
     const d = dropD.length;
@@ -105,6 +118,7 @@ function createDropDownInputElement(
     // focuseddClassMaintain(e);
     table_dropdown_focuseddClassMaintain(e);
     // dropdownField.classList.add("focussed");
+    overlayText.style.display = "block";
     if (e.ctrlKey) {
       copyInput("dropdown2");
     }
@@ -112,6 +126,13 @@ function createDropDownInputElement(
     setRightSideDropDown(false);
     setSidebar(true);
   };
+  dropdownField.onmouseover = () => {
+    overlayText.style.display = "block";
+  }
+
+  dropdownField.onmouseleave = (e) => {
+    overlayText.style.display = "none";
+  }
 
   holderDIV.append(svg);
 
@@ -129,6 +150,7 @@ function createDropDownInputElement(
   }
 
   holderDIV.append(dropdownField);
+  holderDIV.append(overlayText);
   return holderDIV;
 }
 export default createDropDownInputElement;

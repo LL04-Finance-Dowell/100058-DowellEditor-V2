@@ -18,8 +18,21 @@ function createSignInputField(id, element, p, holderDIV, focuseddClassMaintain, 
 
     signField.style.position = "absolute";
 
+    holderDIV.style.position = "relative";
+    const overlayText = document.createElement('span');
+      overlayText.className = 'overlay-text';
+      overlayText.textContent = 'Signature';
+      overlayText.style.position = "absolute";
+      overlayText.style.right = "0px";
+      overlayText.style.bottom = "-40px";
+      overlayText.style.backgroundColor = "#e3eeff";
+      overlayText.style.color = "gray";
+      overlayText.style.padding = "0px 10px";
+      overlayText.style.display = "none";
+
     signField.onclick = (e) => {
         focuseddClassMaintain(e);
+        overlayText.style.display = "block";
         if (e.ctrlKey) {
             copyInput("signs2");
         }
@@ -27,6 +40,14 @@ function createSignInputField(id, element, p, holderDIV, focuseddClassMaintain, 
         handleClicked("signs2");
         setSidebar(true);
     };
+
+    signField.onmouseover = () => {
+        overlayText.style.display = "block";
+      }
+    
+      signField.onmouseleave = (e) => {
+        overlayText.style.display = "none";
+      }
 
     element.data?.startsWith("url(" && "data")
         ? (signField.innerHTML = `<img src=${element.data} />`)
@@ -87,6 +108,7 @@ function createSignInputField(id, element, p, holderDIV, focuseddClassMaintain, 
 
     holderDIV.append(signField);
     holderDIV.append(imageSignButton);
+    holderDIV.append(overlayText);
 
     document
         .getElementsByClassName("midSection_container")

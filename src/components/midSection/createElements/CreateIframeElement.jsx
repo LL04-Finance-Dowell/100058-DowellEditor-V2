@@ -26,9 +26,22 @@ function createIframeElement( holderDIV, table_dropdown_focuseddClassMaintain, h
           iframeField.id = "ifr1";
         }
 
+        holderDIV.style.position = "relative";
+        const overlayText = document.createElement('span');
+          overlayText.className = 'overlay-text';
+          overlayText.textContent = 'Iframe';
+          overlayText.style.position = "absolute";
+          overlayText.style.right = "0px";
+          overlayText.style.bottom = "-40px";
+          overlayText.style.backgroundColor = "#e3eeff";
+          overlayText.style.color = "gray";
+          overlayText.style.padding = "0px 10px";
+          overlayText.style.display = "none";
+
         iframeField.onclick = (e) => {
           // focuseddClassMaintain(e);
           e.stopPropagation();
+          overlayText.style.display = "block";
           if (e.ctrlKey) {
             copyInput("iframe2");
           }
@@ -38,7 +51,17 @@ function createIframeElement( holderDIV, table_dropdown_focuseddClassMaintain, h
           setSidebar(true);
         };
 
+
+        iframeField.onmouseover = () => {
+          overlayText.style.display = "block";
+        }
+      
+        iframeField.onmouseleave = (e) => {
+          overlayText.style.display = "none";
+        }
+
         holderDIV.append(iframeField);
+        holderDIV.append(overlayText)
         return holderDIV;
 }
 export default createIframeElement;
