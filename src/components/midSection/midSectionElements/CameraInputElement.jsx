@@ -13,6 +13,18 @@ function createCameraInputField(id, p, holderDIV, handleClicked, setSidebar, tab
   cameraField.style.outline = "0px";
   cameraField.style.overflow = "overlay";
 
+  holderDIV.style.position = "relative";
+  const overlayText = document.createElement('span');
+    overlayText.className = 'overlay-text';
+    overlayText.textContent = 'Camera';
+    overlayText.style.position = "absolute";
+    overlayText.style.right = "0px";
+    overlayText.style.bottom = "-40px";
+    overlayText.style.backgroundColor = "#e3eeff";
+    overlayText.style.color = "gray";
+    overlayText.style.padding = "0px 10px";
+    overlayText.style.display = "none";
+
   if (decoded.details.action === "template") {
     let videoField = document.createElement("video");
     const imageLinkHolder1 = document.createElement("h1");
@@ -81,6 +93,7 @@ function createCameraInputField(id, p, holderDIV, handleClicked, setSidebar, tab
     imgHolder.onclick = (e) => {
       e.stopPropagation();
       table_dropdown_focuseddClassMaintain(e);
+      overlayText.style.display = "block";
       if (e.ctrlKey) {
         copyInput("camera2");
       }
@@ -182,8 +195,17 @@ function createCameraInputField(id, p, holderDIV, handleClicked, setSidebar, tab
     handleClicked("camera2");
     setSidebar(true);
   };
+  cameraField.onmouseover = () => {
+    overlayText.style.display = "block";
+  }
+
+  cameraField.onmouseleave = (e) => {
+    overlayText.style.display = "none";
+  }
 
   holderDIV.append(cameraField);
+
+  holderDIV.append(overlayText);
 
   document
     .getElementsByClassName("midSection_container")
