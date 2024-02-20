@@ -5,16 +5,6 @@ import { useStateContext } from '../contexts/contextProvider';
 const handleSocialMediaAPI = async (decoded, save=false ) => {
 
     const response = await axios.post("https://uxlivinglab.pythonanywhere.com/", {
-        // document_id: decoded.details.document_id,
-        // action: decoded.details.action,
-        // database: decoded.details.database,
-        // collection: decoded.details.collection,
-        // team_member_ID: decoded.details.team_member_ID,
-        // function_ID: decoded.details.function_ID,
-        // cluster: decoded.details.cluster,
-        // document: decoded.details.document,
-        // update_field: updateField,
-        
         document_id: decoded.details._id,
         action: decoded.details.action,
         database: decoded.details.database,
@@ -50,41 +40,48 @@ const handleSocialMediaAPI = async (decoded, save=false ) => {
     
     
     
-        const socialData = {
-          cluster: "socialmedia",
-          database: "socialmedia",
-          collection: "step4_data",
-          document: "step4_data",
-          team_member_ID: "1163",
-          function_ID: "ABCDE",
-          command: "insert",
-          eventId: eventId,
-          field: {
-            user_id: user_id,
-            session_id: session_id,
-            eventId: eventId,
-            client_admin_id: client_admin_id,
-            title: title,
-            paragraph: paragraph,
-            source: source,
-            qualitative_categorization: qualitative_categorization,
-            targeted_for: targeted_for,
-            designed_for: designed_for,
-            targeted_category: targeted_category,
-            image: image,
-            date: new Date(),
-            time: new Date().toISOString(),
-            status: " "
+        // const socialData = {
+        //   cluster: "socialmedia",
+        //   database: "socialmedia",
+        //   collection: "step4_data",
+        //   document: "step4_data",
+        //   team_member_ID: "1163",
+        //   function_ID: "ABCDE",
+        //   command: "insert",
+        //   eventId: eventId,
+        //   field: {
+        //     user_id: user_id,
+        //     session_id: session_id,
+        //     eventId: eventId,
+        //     client_admin_id: client_admin_id,
+        //     title: title,
+        //     paragraph: paragraph,
+        //     source: source,
+        //     qualitative_categorization: qualitative_categorization,
+        //     targeted_for: targeted_for,
+        //     designed_for: designed_for,
+        //     targeted_category: targeted_category,
+        //     image: image,
+        //     date: new Date(),
+        //     time: new Date().toISOString(),
+        //     status: " "
     
-          },
-          update_field: {
-            order_nos: order_nos
-          },
-          "platform": "bangalore"
+        //   },
+        //   update_field: {
+        //     order_nos: order_nos
+        //   },
+        //   "platform": "bangalore"
+        // }
+        const postId = decoded.details._id
+        const socialData = {
+          post_id: postId,
+          title: title,
+          paragraph: paragraph,
+          image: image,
         }
 
         console.log("/n>>> Decoded\n", socialData,"\n>>>")
-        const saveResponse = await axios.post("https://uxlivinglab.pythonanywhere.com/", socialData);
+        const saveResponse = await axios.post(`https://100007.pythonanywhere.com/edit_post/${postId}/`, socialData);
     console.log("save response data", saveResponse);
 
       }else {

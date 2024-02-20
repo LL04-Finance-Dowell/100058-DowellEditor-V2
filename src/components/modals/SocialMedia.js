@@ -102,17 +102,19 @@ const SocialMedia = ({ isOpen, onRequestClose }) => {
 
 
 
-
+    const imgField = document.getElementById("i1");
 
   const handleImageClick = (event) => {
     console.log('Image clicked');
 
     const imgSrc = event.target.getAttribute('data-src');
+
     // console.log('Clicked image src:', imgSrc);
     setSocialMediaImg(imgSrc);
     localStorage.setItem('editor_social_img', imgSrc);
     console.log('Updated image source:', imgSrc);
-
+    imgField.style.backgroundImage = `url(${imgSrc})`;
+    imgField.innerText = " ";
     onRequestClose()
  
   };
