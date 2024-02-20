@@ -2593,7 +2593,7 @@ const Header = () => {
                 >
                   <div
                     className='modal fade'
-                    id='exampleModal'
+                    id='desktopModal'
                     tabindex='-1'
                     aria-labelledby='exampleModalLabel'
                     aria-hidden='true'
@@ -2751,7 +2751,7 @@ const Header = () => {
             id='saving-button'
             title='Export Token'
             data-bs-toggle='modal'
-            data-bs-target='#exampleModal'
+            data-bs-target='#desktopModal'
           >
             <BiExport />
           </button>
