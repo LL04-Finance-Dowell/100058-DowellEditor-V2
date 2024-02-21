@@ -2140,8 +2140,9 @@ const MidSection = React.forwardRef((props, ref) => {
 
 
 
-    const { title, image, paragraph } = JSON.parse(response.data)?.data[0] //title field
-
+    // const { title, image, paragraph } = JSON.parse(response.data)?.data[0] //title field
+    const { title, paragraph } = JSON.parse(response.data)?.data[0] //title field
+    const image_data = decoded?.details?.image;
 
 
     // const socialData = {
@@ -2360,7 +2361,7 @@ const MidSection = React.forwardRef((props, ref) => {
     <br />
     let imageField = document.createElement("div");
     imageField.className = "imageInput sm-image";
-    imageField.id = "inputImg";
+    imageField.id = "inputImgg";
     imageField.style.width = "100%";
     imageField.style.height = "100%";
     imageField.style.borderRadius = "0px";
@@ -2371,6 +2372,9 @@ const MidSection = React.forwardRef((props, ref) => {
 
     if (socialMediaImg) {
       imageField.style.backgroundImage = `url(${socialMediaImg})`;
+      imageField.innerText = " ";
+    } else if (image_data != null) {
+      imageField.style.backgroundImage = `url(${image_data})`;
       imageField.innerText = " ";
     }
     // console.log( imageField.style.backgroundImage = `url(${socialImg})`)
