@@ -18,7 +18,6 @@ import jwt_decode from 'jwt-decode';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { AiFillPrinter } from 'react-icons/ai';
-
 import { downloadPDF } from '../../utils/genratePDF.js';
 
 import handleSocialMediaAPI from "../../utils/handleSocialMediaAPI";
@@ -2142,13 +2141,6 @@ const Header = () => {
 
   const handleModeChange = () => {
     if (mode === 'preview') {
-      const setMidSecWdith = (width) => {
-        const midSecAll = document.querySelectorAll('.preview-canvas');
-        midSecAll?.forEach((mid) => {
-          mid.style.width = width + 'px';
-        });
-      };
-
       switch (defSelOpt) {
         case 'large':
           // setMidSecWdith(fixedMidSecDim.width);
@@ -2156,7 +2148,7 @@ const Header = () => {
           break;
         case 'mid':
           // setMidSecWdith(720);
-          // scaleMidSec();
+          // scaleMidSec()
           break;
         case 'small':
           // setMidSecWdith(350);
@@ -2170,7 +2162,8 @@ const Header = () => {
     // setSelOpt(defSelOpt);
     setMode(mode === 'edit' ? 'preview' : mode === 'preview' ? 'edit' : '');
 
-    document.querySelectorAll('.preview-canvas')?.forEach(prev => prev.remove())
+    document.querySelectorAll('.preview-canvas')?.forEach(elem=>elem.parentElement?.remove());
+
   };
 
   return (

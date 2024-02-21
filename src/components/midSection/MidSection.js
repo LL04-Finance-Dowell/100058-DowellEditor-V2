@@ -86,22 +86,17 @@ const dummyData = {
     sampling_status_text: 'Not expected',
   },
 };
-export const renderPreview = (mainSection) => {
-  document.querySelector('.preview-canvas')?.parentElement?.remove();
+export const renderPreview = (mainSection=null) => {
+  document.querySelectorAll('.main-section-container-preview')?.forEach(elem=>elem?.remove());
   const editSec = document.querySelector('.editSec_midSec');
   const previewContainer = document.createElement('div');
   previewContainer.id = 'main-section-container';
+  previewContainer.className = 'main-section-container-preview';
   editSec.append(previewContainer);
   const midSecAll = document.querySelectorAll('.midSection_container');
   midSecAll.forEach((mid) => {
     const previewCanvas = mid.cloneNode(true);
-    const scale = 0.76;
     previewCanvas.querySelectorAll('.holderDIV')?.forEach((div) => {
-      const divWidth = +div.style.width.split('px')[0];
-      const currentLeft = +div.style.left.split('px')[0] || 0;
-      console.log(currentLeft,":TO ",(currentLeft * scale),"\n")
-      div.style.left = (currentLeft * scale) + 'px';
-      div.style.width = (divWidth * scale) + 'px';
       div.style.border = 'none';
       div.style.pointerEvents = 'none';
     });
@@ -2967,31 +2962,8 @@ const MidSection = React.forwardRef((props, ref) => {
     const mainSection = document.querySelector('.editSec_midSec');
     document.querySelectorAll('.preview-canvas')?.forEach(prev => prev.remove())
     if (isDataRetrieved && mode === 'preview') {
-      // rightMenu.style.display = 'none';
-      const setMidSecWdith = (width) => {
-        const previewMidSecAll = document.querySelectorAll('.preview-canvas');
-        previewMidSecAll.forEach((mid) => {
-          mid.style.width = width + 'px';
-        });
-      };
-      renderPreview(mainSection)
-      switch (selOpt) {
-        case 'large':
-          setMidSecWdith(fixedMidSecDim.width);
-          // scaleMidSec();
-          break;
-        case 'mid':
-          setMidSecWdith(720);
-          // scaleMidSec();
-          break;
-        case 'small':
-          setMidSecWdith(350);
-          // scaleMidSec();
-          break;
-        default:
-          setMidSecWdith(fixedMidSecDim.width);
-          return;
-      }
+      renderPreview()
+     
     } else {
       // const previews = document.querySelectorAll('.preview-canvas');
       // previews?.forEach(preview=>preview.remove());
@@ -2999,7 +2971,7 @@ const MidSection = React.forwardRef((props, ref) => {
         rightMenu.style.display = 'flex';
       }
 
-      document.querySelectorAll('.preview-canvas')?.forEach(prev => prev.remove())
+      document.querySelectorAll('.preview-canvas')?.forEach(prev => prev?.parentElement?.remove())
 
     }
   }, [isDataRetrieved, selOpt, mode]);

@@ -30,9 +30,7 @@
 .preview-canvas{
   padding:0 24px;
 }
-.print_container.preview-canvas{
-  width:158mm !important
-}
+
 .disable_pointer_event {
   pointer-events: none;
   opacity: 0.9;
