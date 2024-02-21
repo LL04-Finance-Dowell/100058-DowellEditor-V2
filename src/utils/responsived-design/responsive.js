@@ -49,17 +49,18 @@ export const handleResize = (entries) => {
 }
 
 
-export const resizePreview = (targetWidth) => {
-    document.querySelector('.preview-canvas')?.parentElement?.remove();
+export const resizePreview = () => {
+    document.querySelectorAll('.main-section-container-preview')?.forEach(elem=>elem?.remove());
     const editSec = document.querySelector('.editSec_midSec');
     const previewContainer = document.createElement('div');
     previewContainer.id = 'main-section-container';
+    previewContainer.className = 'main-section-container-preview';
     editSec.append(previewContainer);
     const midSecAll = document.querySelectorAll('.midSection_container');
     midSecAll.forEach((mid) => {
         const previewCanvas = mid.cloneNode(true);
         previewCanvas.style.width = '158mm';
-        const scale = 650 / 794;
+        const scale = 600 / 794;
         previewCanvas.querySelectorAll('.holderDIV')?.forEach((div) => {
             const divWidth = +div.style.width.split('px')[0];
             const currentLeft = +div.style.left.split('px')[0] || 0;
