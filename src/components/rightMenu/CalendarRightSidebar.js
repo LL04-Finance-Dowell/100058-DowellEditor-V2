@@ -184,14 +184,14 @@ const CalendarRightSidebar = (props) => {
       )}
       <hr />
 
-      <SelectAnsAndQuestion
+      {/* <SelectAnsAndQuestion
         selectedType={selectedType}
         setSelectedType={setSelectedType}
         addedAns={addedAns}
         setAddedAns={setAddedAns}
       />
 
-      <hr />
+      <hr /> */}
       <Row className="pt-4">
         <div style={{ display: "flex", alignItems: "center" }}>
           <h6 style={{ marginRight: "10rem" }}>Border</h6>

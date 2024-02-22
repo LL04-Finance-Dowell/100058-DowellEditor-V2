@@ -58,6 +58,9 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import createGenBtnEl from './createElements/CreateGenBtnEl';
 import { saveDocument } from '../header/Header';
+import { BsNodeMinusFill } from 'react-icons/bs';
+import { handleResize } from '../../utils/responsived-design/responsive';
+import UserFinalizeReminderModal from '../modals/UserFinalizeReminderModal.jsx';
 // tHIS IS FOR A TEST COMMIT
 
 const dummyData = {
@@ -83,8 +86,29 @@ const dummyData = {
     sampling_status_text: 'Not expected',
   },
 };
-
-// const MidSection = ({showSidebar}) => {
+export const renderPreview = (mainSection) => {
+  document.querySelector('.preview-canvas')?.parentElement?.remove();
+  const editSec = document.querySelector('.editSec_midSec');
+  const previewContainer = document.createElement('div');
+  previewContainer.id = 'main-section-container';
+  editSec.append(previewContainer);
+  const midSecAll = document.querySelectorAll('.midSection_container');
+  midSecAll.forEach((mid) => {
+    const previewCanvas = mid.cloneNode(true);
+    const scale = 0.76;
+    previewCanvas.querySelectorAll('.holderDIV')?.forEach((div) => {
+      const divWidth = +div.style.width.split('px')[0];
+      const currentLeft = +div.style.left.split('px')[0] || 0;
+      console.log(currentLeft,":TO ",(currentLeft * scale),"\n")
+      div.style.left = (currentLeft * scale) + 'px';
+      div.style.width = (divWidth * scale) + 'px';
+      div.style.border = 'none';
+      div.style.pointerEvents = 'none';
+    });
+    previewCanvas.className = 'midSection_container print_container preview-canvas';
+    document.querySelector('#main-section-container').append(previewCanvas);
+  });
+}
 const MidSection = React.forwardRef((props, ref) => {
   const {
     setDropdownName,
@@ -132,7 +156,7 @@ const MidSection = React.forwardRef((props, ref) => {
     resizeChecker,
     setDefSelOpt,
     defSelOpt,
-    socialMediaImg, 
+    socialMediaImg,
     setSocialMediaImg
   } = useStateContext();
 
@@ -142,6 +166,9 @@ const MidSection = React.forwardRef((props, ref) => {
   const defOptRef = useRef(defSelOpt);
   const [focusedElement, setFocusedElement] = useState(null);
   const [allPages, setAllPages] = useState([]);
+
+  const [showReminderModal, setShowReminderModal] = useState(false);
+
   const [searchParams] = useSearchParams();
   const token = searchParams.get('token');
   var decoded = jwt_decode(token);
@@ -171,6 +198,8 @@ const MidSection = React.forwardRef((props, ref) => {
   const closeSociaModal = () => {
     setSocialModalIsOpen(false);
   }
+
+  console.log("finalize decoded token", decoded.details.document_right);
 
   const boldCommand = () => {
     if (!editorRef.current) return;
@@ -380,6 +409,7 @@ const MidSection = React.forwardRef((props, ref) => {
           // top: parseInt(holder.style.top.slice(0, -2)),
           // left: parseInt(holder.style.left.slice(0, -2))//elemLeft : 0
         };
+
         return Object.seal(holderSize);
       })();
 
@@ -401,6 +431,12 @@ const MidSection = React.forwardRef((props, ref) => {
           holder.style.top = holderSize.top + (ev.screenY - initY) + 'px';
           holder.style.width = holderSize.width + (ev.screenX - initX) + 'px';
           holder.style.height = holderSize.height - (ev.screenY - initY) + 'px';
+        }
+        const previewCanvas = document.querySelector('.preview-canvas');
+        if (previewCanvas) {
+          const mainSection = document.querySelector('.editSec_midSec');
+          renderPreview(mainSection);
+
         }
       }
 
@@ -458,7 +494,7 @@ const MidSection = React.forwardRef((props, ref) => {
 
   const handleElOverflow = (el, holderDiv) => {
     const midSecs = [...document.querySelectorAll('.midSection_container')];
-    if(!el) return;
+    if (!el) return;
     if (el.classList.contains('textInput')) {
       if (el.scrollHeight > el.getBoundingClientRect().height) {
         const iniHeight = holderDiv.getBoundingClientRect().height;
@@ -711,7 +747,9 @@ const MidSection = React.forwardRef((props, ref) => {
             event.target.className != 'td-resizer' &&
             event.target.className != 'row-resizer'
           ) {
-            dragElementOverPage(event, resizing);
+            dragElementOverPage(event, resizing, mode);
+            const mainSection = document.querySelector('.editSec_midSec');
+            if (mainSection) renderPreview(mainSection);
           }
         },
         false
@@ -1088,7 +1126,7 @@ const MidSection = React.forwardRef((props, ref) => {
           event.target.className != 'td-resizer' &&
           event.target.className != 'row-resizer'
         ) {
-          dragElementOverPage(event, resizing);
+          dragElementOverPage(event, resizing, mode);
         }
       },
       false
@@ -1138,11 +1176,11 @@ const MidSection = React.forwardRef((props, ref) => {
     const midSecWidth = midSec.getBoundingClientRect()?.width;
     let iniDimRatio = [];
 
-    scaleMidSec(true);
+    // scaleMidSec(true);
 
     for (let p = 1; p <= item?.length; p++) {
       fetchedData[p]?.forEach((element) => {
-      
+
         if (element.type === "TEXT_INPUT") {
           // ! This two lines of codes is for removing the occasionally added duplicate elements
           const elPar = document.getElementById(element.id)?.parentElement;
@@ -2029,18 +2067,20 @@ const MidSection = React.forwardRef((props, ref) => {
     });
 
     sessionStorage.setItem('dimRatios', JSON.stringify(iniDimRatio));
-    setDimRatios(iniDimRatio);
+    // setDimRatios(iniDimRatio);
   };
 
-  
 
 
 
- 
 
-  useEffect(() => {
-    // onParagraphPost();
-  }, [socialMediaImg])
+
+
+  // useEffect(() => {
+  //   if(decoded.details.document_right === "add_edit"){
+  //     UserFinalizeReminderModal()
+  //   }
+  // }, [])
 
   const onParagraphPost = async () => {
 
@@ -2082,7 +2122,7 @@ const MidSection = React.forwardRef((props, ref) => {
     //     Authorization: "Hl1vc1m448ZiRV4JJGGkPqxgMtZtQ99ttmzZq7XHyKiTBDvF20dYZZsY"
     //   }
     // });
-    
+
 
     // // const [getImg, setImg] = useState();
     // // // const getImages = async () => {
@@ -2092,7 +2132,7 @@ const MidSection = React.forwardRef((props, ref) => {
 
 
 
-    
+
 
     // console.log("\n>>action: \n>>", resp.data.photos[0].src.original);
     if (!response.data) {
@@ -2100,12 +2140,12 @@ const MidSection = React.forwardRef((props, ref) => {
       return;
     }
 
-   
 
 
-   
 
-    const { title, image, paragraph} = JSON.parse(response.data)?.data[0] //title field
+
+
+    const { title, image, paragraph } = JSON.parse(response.data)?.data[0] //title field
 
 
 
@@ -2144,17 +2184,17 @@ const MidSection = React.forwardRef((props, ref) => {
 
 
 
-    
+
     // const saveResponse = await axios.post("http://uxlivinglab.pythonanywhere.com/", socialData);
     // console.log("save response data", saveResponse);
 
-    
+
     // setSocialResponse(saveResponse);
-   
-    
+
+
 
     const curr_user = document.getElementById("curr_user");
-    
+
 
     const measure = {
       width: '300px',
@@ -2249,80 +2289,80 @@ const MidSection = React.forwardRef((props, ref) => {
       .getElementById('midSection_container')
       // .item(0)
       .append(holderDIV2);
-   
-      
-
-      // const response = await handleSocialMediaAPI(decoded);
-      // const resp = await axios.get("https://api.pexels.com/v1/curated", {
-      //   headers: {
-      //     Authorization: "Hl1vc1m448ZiRV4JJGGkPqxgMtZtQ99ttmzZq7XHyKiTBDvF20dYZZsY"
-      //   }
-      // });
-      
-  
-      // const [getImg, setImg] = useState();
-      // // const getImages = async () => {
-      //   const resp =  axios.get("https://api.pexels.com/v1/curated") 
-      //   console.log(resp)
-      // // }
-  
-  
-  
-      // const measure4 = {
-      //   width: '400px',
-      //   height: '400px',
-      //   top: '100px',
-      //   border: "2px dotted gray",
-      //   auth_user: curr_user,
-      // };
-  
-      // const holderDIV4 = getHolderDIV(measure4);
-      
-  
-      // console.log("\n>>action: \n>>", resp.data.photos[0].src.original);
-
-      // let iframeField = document.createElement("iframe");
-      // iframeField.className ="iframInput";
-      // iframeField.style.width = "800px";
-      // iframeField.style.height = "800px";
-      // iframeField.style.border = "2px dotted gray"
-      // let iframeField = document.createElement("iframe");
-      // resp.data.photos.map((img) => {
-      // iframeField.className ="iframInput";
-      // iframeField.style.width = "800px";
-      // iframeField.style.height = "800px";
-      // iframeField.style.border = "2px dotted gray"
-      // iframeField.src = `${img.src.original}`
-      // }
-      // )
-      // const iframeContent = resp.data.photos.map(img => `<img src="${img.src.original}" alt="${img.photographer}">`).join("");
-      // iframeField.src = resp.data.photos.map(img => `${img.src.original}`)
-      // resp.data.photos.map((img) => 
-      // // <iframe width="300" height="300"  src={img.src.original} title="W3Schools Free Online Web Tutorials"></iframe>
-      // // {
-    
-      // iframeField.src = `${img.src.original}`
-
-      
-      // // }
-
-      //   // {
-      //     // console.log("\n>>>", img.src.original)
-      //   // }
-      //   )
-        // holderDIV4.append(iframeField);
 
 
-      // let iframeField = document.createElement("iframe");
-      // iframeField.className ="iframInput";
-      // iframeField.style.width = "300px";
-      // iframeField.style.height = "300px";
-      // iframeField.src = {img.src.original}
-      // document
-      // .getElementById('midSection_container')
-      // // .item(0)
-      // .append(holderDIV4);
-<br/>
+
+    // const response = await handleSocialMediaAPI(decoded);
+    // const resp = await axios.get("https://api.pexels.com/v1/curated", {
+    //   headers: {
+    //     Authorization: "Hl1vc1m448ZiRV4JJGGkPqxgMtZtQ99ttmzZq7XHyKiTBDvF20dYZZsY"
+    //   }
+    // });
+
+
+    // const [getImg, setImg] = useState();
+    // // const getImages = async () => {
+    //   const resp =  axios.get("https://api.pexels.com/v1/curated") 
+    //   console.log(resp)
+    // // }
+
+
+
+    // const measure4 = {
+    //   width: '400px',
+    //   height: '400px',
+    //   top: '100px',
+    //   border: "2px dotted gray",
+    //   auth_user: curr_user,
+    // };
+
+    // const holderDIV4 = getHolderDIV(measure4);
+
+
+    // console.log("\n>>action: \n>>", resp.data.photos[0].src.original);
+
+    // let iframeField = document.createElement("iframe");
+    // iframeField.className ="iframInput";
+    // iframeField.style.width = "800px";
+    // iframeField.style.height = "800px";
+    // iframeField.style.border = "2px dotted gray"
+    // let iframeField = document.createElement("iframe");
+    // resp.data.photos.map((img) => {
+    // iframeField.className ="iframInput";
+    // iframeField.style.width = "800px";
+    // iframeField.style.height = "800px";
+    // iframeField.style.border = "2px dotted gray"
+    // iframeField.src = `${img.src.original}`
+    // }
+    // )
+    // const iframeContent = resp.data.photos.map(img => `<img src="${img.src.original}" alt="${img.photographer}">`).join("");
+    // iframeField.src = resp.data.photos.map(img => `${img.src.original}`)
+    // resp.data.photos.map((img) => 
+    // // <iframe width="300" height="300"  src={img.src.original} title="W3Schools Free Online Web Tutorials"></iframe>
+    // // {
+
+    // iframeField.src = `${img.src.original}`
+
+
+    // // }
+
+    //   // {
+    //     // console.log("\n>>>", img.src.original)
+    //   // }
+    //   )
+    // holderDIV4.append(iframeField);
+
+
+    // let iframeField = document.createElement("iframe");
+    // iframeField.className ="iframInput";
+    // iframeField.style.width = "300px";
+    // iframeField.style.height = "300px";
+    // iframeField.src = {img.src.original}
+    // document
+    // .getElementById('midSection_container')
+    // // .item(0)
+    // .append(holderDIV4);
+    <br />
     let imageField = document.createElement("div");
     imageField.className = "imageInput sm-image";
     imageField.id = "inputImg";
@@ -2335,11 +2375,11 @@ const MidSection = React.forwardRef((props, ref) => {
     imageField.style.position = "relative";
 
     if (socialMediaImg) {
-          imageField.style.backgroundImage = `url(${socialMediaImg})`;
-          imageField.innerText = " ";
-        }
-        // console.log( imageField.style.backgroundImage = `url(${socialImg})`)
-  
+      imageField.style.backgroundImage = `url(${socialMediaImg})`;
+      imageField.innerText = " ";
+    }
+    // console.log( imageField.style.backgroundImage = `url(${socialImg})`)
+
 
     const measure3 = {
       width: "400px",
@@ -2400,7 +2440,7 @@ const MidSection = React.forwardRef((props, ref) => {
     // imageButton.append(imgBtn);
     holderDIV3.append(imageField);
     // holderDIV3.append(imageButton);
-    
+
 
     document
       .getElementById('midSection_container')
@@ -2441,7 +2481,6 @@ const MidSection = React.forwardRef((props, ref) => {
 
   const dragOver = (event) => {
     const isLink = event.dataTransfer.types.includes('text/plain');
-
     if (isLink) {
       event.preventDefault();
       event.currentTarget.classList.add('drop_zone');
@@ -2914,7 +2953,7 @@ const MidSection = React.forwardRef((props, ref) => {
       //   onParagraphPost();
       //   // console.log(decoded)
       // }
-    } 
+    }
     if (decoded && decoded?.details?.cluster === 'socialmedia') {
       // setSocialMediaImg(socialMediaImg)
       // console.log(socialMediaImg)
@@ -2924,130 +2963,145 @@ const MidSection = React.forwardRef((props, ref) => {
   }, [fetchedData]);
 
   useEffect(() => {
+    const rightMenu = document.querySelector('.false.col-lg-1')
+    const mainSection = document.querySelector('.editSec_midSec');
+    document.querySelectorAll('.preview-canvas')?.forEach(prev => prev.remove())
     if (isDataRetrieved && mode === 'preview') {
+      // rightMenu.style.display = 'none';
       const setMidSecWdith = (width) => {
-        const midSecAll = document.querySelectorAll('.midSection_container');
-        midSecAll.forEach((mid) => {
+        const previewMidSecAll = document.querySelectorAll('.preview-canvas');
+        previewMidSecAll.forEach((mid) => {
           mid.style.width = width + 'px';
         });
       };
-
+      renderPreview(mainSection)
       switch (selOpt) {
         case 'large':
           setMidSecWdith(fixedMidSecDim.width);
-          scaleMidSec();
+          // scaleMidSec();
           break;
         case 'mid':
           setMidSecWdith(720);
-          scaleMidSec();
+          // scaleMidSec();
           break;
         case 'small':
           setMidSecWdith(350);
-          scaleMidSec();
+          // scaleMidSec();
           break;
         default:
+          setMidSecWdith(fixedMidSecDim.width);
           return;
       }
+    } else {
+      // const previews = document.querySelectorAll('.preview-canvas');
+      // previews?.forEach(preview=>preview.remove());
+      if (rightMenu) {
+        rightMenu.style.display = 'flex';
+      }
+
+      document.querySelectorAll('.preview-canvas')?.forEach(prev => prev.remove())
+
     }
   }, [isDataRetrieved, selOpt, mode]);
 
-  useEffect(() => {
-    if (Object.keys(fetchedData).length) {
-      window.onresize = () => {
-        if (resizeChecker.current !== window.innerWidth) {
-          isCompsScaler || setIsCompsScaler(true);
-          scaleMidSec();
-          resizeChecker.current = window.innerWidth;
-        }
+  // useEffect(() => {
+  //   if (Object.keys(fetchedData).length) {
+  //     window.onresize = () => {
+  //       if (resizeChecker.current !== window.innerWidth) {
+  //         isCompsScaler || setIsCompsScaler(true);
+  //         scaleMidSec();
+  //         resizeChecker.current = window.innerWidth;
+  //       }
 
-        if (defOptRef.current !== 'large' && window.innerWidth > 993)
-          setDefSelOpt('large');
-        else if (
-          (defOptRef.current !== 'large' || defOptRef.current !== 'mid') &&
-          window.innerWidth <= 993 &&
-          window.innerWidth >= 770
-        )
-          setDefSelOpt('mid');
-      };
-    }
+  //       if (defOptRef.current !== 'large' && window.innerWidth > 993)
+  //         setDefSelOpt('large');
+  //       else if (
+  //         (defOptRef.current !== 'large' || defOptRef.current !== 'mid') &&
+  //         window.innerWidth <= 993 &&
+  //         window.innerWidth >= 770
+  //       )
+  //         setDefSelOpt('mid');
+  //     };
+  //   }
 
-    return () => (window.onresize = null);
-  }, [fetchedData, currMidSecWidth, isCompsScaler]);
+  //   return () => (window.onresize = null);
+  // }, [fetchedData, currMidSecWidth, isCompsScaler]);
 
-  useEffect(() => {
-    if (
-      Object.keys(fetchedData).length &&
-      currMidSecWidth > 0 &&
-      isCompsScaler
-    ) {
-      compsResizer();
-    }
-  }, [currMidSecWidth, fetchedData, isCompsScaler]);
+  // useEffect(() => {
+  //   if (
+  //     Object.keys(fetchedData).length &&
+  //     currMidSecWidth > 0 &&
+  //     isCompsScaler
+  //   ) {
+  //     compsResizer();
+  //   }
+  // }, [currMidSecWidth, fetchedData, isCompsScaler]);
 
   useEffect(() => {
     if (Object.keys(fetchedData).length && currMidSecWidth > 0) {
-      const editSec = document.querySelector('.editSec_midSec');
+      //DISABLE RESPONSIVE DESIGN USING OBSERVERS
+      // const editSec = document.querySelector('.editSec_midSec');
 
-      const editSecObserver = new MutationObserver((mutationLists) => {
-        for (const mutation of mutationLists) {
-          if (mutation.target.classList.contains('midSection_container')) {
-            if (
-              mutation.addedNodes.length &&
-              !mutation.addedNodes[0].classList.contains('modal-container') &&
-              !mutation.addedNodes[0].classList.contains('positioning')
-            ) {
-              const [holder] = mutation.addedNodes;
-              const el = holder.children[1]?.classList.contains('dropdownInput')
-                ? holder.children[1]
-                : holder.children[0];
-              const elRect = el.getBoundingClientRect();
-              const midSec = document.querySelector('.midSection_container');
-              const midSecWidth = midSec.getBoundingClientRect().width;
-              const page = Number(
-                [...holder.classList]
-                  .find((cl) => cl.includes('page'))
-                  .split('_')[1]
-              );
+      // const editSecObserver = new MutationObserver((mutationLists) => {
+      //   for (const mutation of mutationLists) {
+      //     if (mutation.target.classList.contains('midSection_container')) {
+      //       if (
+      //         mutation.addedNodes.length &&
+      //         !mutation.addedNodes[0].classList.contains('modal-container') &&
+      //         !mutation.addedNodes[0].classList.contains('positioning')
+      //       ) {
+      //         const [holder] = mutation.addedNodes;
+      //         const el = holder.children[1]?.classList.contains('dropdownInput')
+      //           ? holder.children[1]
+      //           : holder.children[0];
+      //         const elRect = el.getBoundingClientRect();
+      //         const midSec = document.querySelector('.midSection_container');
+      //         const midSecWidth = midSec.getBoundingClientRect().width;
+      //         const page = Number(
+      //           [...holder.classList]
+      //             .find((cl) => cl.includes('page'))
+      //             .split('_')[1]
+      //         );
 
-              // * This codes opens Right sidebar once user drops component on midsection
-              !dimRatios.find((dim) => dim.id === el.id) && el.click();
+      //         // * This codes opens Right sidebar once user drops component on midsection
+      //         !dimRatios.find((dim) => dim.id === el.id) && el.click();
 
-              const modDimRatio = {
-                type: el.className,
-                id: el.id,
-                top: elRect.top / midSecWidth,
-                left: elRect.left / midSecWidth,
-                width: elRect?.width / midSecWidth,
-                height: elRect?.height / midSecWidth,
-                page,
-              };
+      //         const modDimRatio = {
+      //           type: el.className,
+      //           id: el.id,
+      //           top: elRect.top / midSecWidth,
+      //           left: elRect.left / midSecWidth,
+      //           width: elRect?.width / midSecWidth,
+      //           height: elRect?.height / midSecWidth,
+      //           page,
+      //         };
 
-              const modDimRatios = [...dimRatios, modDimRatio];
-              sessionStorage.setItem('dimRatios', JSON.stringify(modDimRatios));
-              setDimRatios(modDimRatios);
-            }
+      //         const modDimRatios = [...dimRatios, modDimRatio];
+      //         sessionStorage.setItem('dimRatios', JSON.stringify(modDimRatios));
+      //         setDimRatios(modDimRatios);
+      //       }
 
-            if (
-              mutation.removedNodes.length &&
-              !mutation.removedNodes[0].classList.contains('modal-container') &&
-              !mutation.removedNodes[0].classList.contains('positioning')
-            ) {
-              const [holder] = mutation.removedNodes;
-              const el = holder.children[1]?.classList.contains('dropdownInput')
-                ? holder.children[1]
-                : holder.children[0];
+      //       if (
+      //         mutation.removedNodes.length &&
+      //         !mutation.removedNodes[0].classList.contains('modal-container') &&
+      //         !mutation.removedNodes[0].classList.contains('positioning')
+      //       ) {
+      //         const [holder] = mutation.removedNodes;
+      //         const el = holder.children[1]?.classList.contains('dropdownInput')
+      //           ? holder.children[1]
+      //           : holder.children[0];
 
-              const modDimRatios = dimRatios.filter(
-                (ratio) => ratio.id !== el.id
-              );
-              sessionStorage.setItem('dimRatios', JSON.stringify(modDimRatios));
-              setDimRatios(modDimRatios);
-            }
-          }
-        }
-      });
+      //         const modDimRatios = dimRatios.filter(
+      //           (ratio) => ratio.id !== el.id
+      //         );
+      //         sessionStorage.setItem('dimRatios', JSON.stringify(modDimRatios));
+      //         setDimRatios(modDimRatios);
+      //       }
+      //     }
+      //   }
+      // });
 
-      editSecObserver.observe(editSec, { childList: true, subtree: true });
+      // editSecObserver.observe(editSec, { childList: true, subtree: true });
 
       if (dimRatios.length) setEnablePreview(true);
       else setEnablePreview(false);
@@ -3057,6 +3111,29 @@ const MidSection = React.forwardRef((props, ref) => {
   const getCurrentEl = (fromMidSection) => {
     return fromMidSection;
   };
+
+  //handle model in document level
+  useEffect(() => {
+    setShowReminderModal(true);
+  }, [])
+
+  const handleClose = () => setShowReminderModal(false);
+
+  useEffect(() => {
+    const midsectionContainers = document.querySelectorAll('.midSection_container');
+    midsectionContainers.forEach(midSection => {
+      if (!midSection.hasAttribute('data-resize-observed')) {
+        // Create a Resize Observer
+        const resizeObserver = new ResizeObserver(handleResize);
+        // Observe the midSection element
+        resizeObserver.observe(midSection);
+        // Mark the element as observed to avoid duplication
+        midSection.setAttribute('data-resize-observed', 'true');
+      }
+    })
+
+  }, [])
+
   return (
     <>
       {item?.map((currentItem, index) => {
@@ -3065,8 +3142,8 @@ const MidSection = React.forwardRef((props, ref) => {
             <div
               ref={ref}
               key={index}
+              id="main-section"
               className={`midSection print_midsection_${index}`}
-              id='main-section'
             >
               <Container
                 as='div'
@@ -3122,8 +3199,13 @@ const MidSection = React.forwardRef((props, ref) => {
                     {isLoading && <Spinner />}
                   </Col>
                 </Row>
-                <SocialMedia isOpen={socialModalIsOpen} onRequestClose={closeSociaModal}/>
+                <SocialMedia isOpen={socialModalIsOpen} onRequestClose={closeSociaModal} />
+                {
+                  decoded?.details?.action === "document" && decoded?.details?.document_right == "add_edit" ? <UserFinalizeReminderModal showReminderModal={showReminderModal} handleClose={handleClose} /> : null
+                }
+
               </Container>
+
             </div>
           </Print>
         );

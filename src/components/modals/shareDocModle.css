@@ -14,6 +14,7 @@
     background-color: #fefefe;
     margin: 10% auto; /* 10% from the top and centered */
     padding: 20px;
+    padding-bottom: 80px;
     border: 1px solid #888;
     width: 30%; /* Could be more or less, depending on screen size */
   }
@@ -23,6 +24,12 @@
     float: right;
     font-size: 28px;
     font-weight: bold;
+  }
+
+  .email-close-button {
+    /* display: flex; */
+    justify-content: end;
+    margin-right: 20px;
   }
   
   .close:hover,

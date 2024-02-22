@@ -1,16 +1,38 @@
+#edit-container {
+  background-color: #e3eeff;
+}
+
 .editSec {
+  padding-top: 7vh;
   background-color: #ffffff;
 }
+
 .editSec_midSec {
   background: #e3eeff;
   height: auto;
+  display: flex;
+  column-gap: 4rem;
+  flex-wrap: nowrap;
+  justify-content: center;
+  margin-left: 4%;
+  align-items: center;
 }
+.editSec_midSec.preview {
+  margin-left: -4%;
+
+}
+
+.display_none{
+  display:none;
+}
+
 .editSec_rightMenu {
   position: fixed;
   right: 0;
   padding: 15px 20px;
   background-color: #fbfbfb;
-  /* max-height: 600px; */
+  max-width: 25%;
+  min-height: 100vh;
   height: 85%;
   overflow-y: auto;
 }
@@ -26,4 +48,29 @@
   opacity: 0;
   z-index: -1;
   pointer-events: none;
+}
+
+@media only screen and (min-width: 992px)and (max-width: 1366px) {
+
+  .editSec_midSec {
+    column-gap: 1rem !important;
+    top:12%;
+    padding-top:3%;
+  }
+}
+
+@media screen and (min-width: 992px) {
+  .editSec_rightMenu {
+  }
+}
+
+@media screen and (min-width: 1279px) {
+  .editSec_rightMenu {
+    top:18%
+  }
+}
+@media screen and (min-width: 1367px) {
+  .editSec_rightMenu {
+    top:12%
+  }
 }

@@ -4,7 +4,7 @@ import { useStateContext } from "../../contexts/contextProvider";
 import { useSearchParams } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 import useSelectedAnswer from "../../customHooks/useSelectedAnswers";
-import SelectAnsAndQuestion from "../selectAnsAndQuestion";
+// import SelectAnsAndQuestion from "../selectAnsAndQuestion";
 
 
 const DropDownRightSide = () => {
@@ -113,7 +113,7 @@ const DropDownRightSide = () => {
       />
       <Button
         variant="primary"
-        className="mt-2 mb-5 w-100"
+        className="remove_button mt-2 mb-5 w-100"
         onClick={addOptions}
       >
         add +

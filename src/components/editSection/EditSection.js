@@ -129,7 +129,9 @@ const EditSection = () => {
     ?.getBoundingClientRect();
 
   useEffect(() => {
-    const allHolderDivs = [...document.querySelectorAll('.holderDIV')];
+    const previewCanvas =document.querySelector('.preview-canvas');
+    if(!previewCanvas)return;
+    const allHolderDivs = [...previewCanvas.querySelectorAll('.holderDIV')];
     switch (mode) {
       case 'preview':
         setSidebar(false);
@@ -151,7 +153,9 @@ const EditSection = () => {
   return (
     <div className='editSec'>
       <Container fluid>
-        <Row>
+        <Row
+        id='edit-container'
+        >
           <Col
             lg={1}
             className={`${actionName == 'document' && 'document_left_col'}`}
@@ -175,10 +179,13 @@ const EditSection = () => {
             // style={{marginTop:window.innerWidth< && left_menu_size?.height}}
             lg={sidebar ? 8 : 11}
             as='div'
-            className='editSec_midSec'
+            className={`editSec_midSec ${mode == "preview"?"preview":""}`}
             id='editSec_midSec'
           >
+            <div className='canvas-holder '> 
+
             <MidSection />
+            </div>
           </Col>
 
           {/* <div style={{overflowY:"scroll"}}>s */}

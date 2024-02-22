@@ -1,7 +1,6 @@
-import { useStateContext } from "../../contexts/contextProvider";
+import { renderPreview } from "./MidSection";
 
-export const dragElementOverPage = (event, resizing) => {
-
+export const dragElementOverPage = (event, resizing, mode) => {
   let holder;
 
   if (!resizing) {
@@ -84,6 +83,11 @@ export const dragElementOverPage = (event, resizing) => {
             holder.style.left = holderPos.left + "px";
           }
         }
+        const previewCanvas =document.querySelector('.preview-canvas');
+        if (previewCanvas) {
+          const mainSection = document.querySelector('.editSec_midSec');
+          if (mainSection) renderPreview(mainSection);
+        };
       }
 
       window.addEventListener("mouseup", stopMove);

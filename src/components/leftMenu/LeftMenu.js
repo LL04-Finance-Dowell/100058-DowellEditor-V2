@@ -38,6 +38,7 @@ const LeftMenu = ({ showSidebar }) => {
             <span>X</span>
           ) : (
             <div className='leftMenu fixed2' ref={leftMenuRef}>
+              <div className='leftMenu-title'><p>Components</p></div> 
               <TextButton customFunc={() => handleDrop('align')} />
               <ImageButton customFunc={() => handleDrop('image')} />
               <TableButton customFunc={() => handleDrop('table')} />

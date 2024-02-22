@@ -8,6 +8,7 @@ import React, {
 import createButtonInputElement from '../components/midSection/createElements/CreateButtonElement.jsx';
 import CreatePyamentElement from '../components/midSection/createElements/CreatePyamentElement.jsx';
 import createFormInputElement from '../components/midSection/createElements/CreateFormElement.jsx';
+import { FaBullseye } from 'react-icons/fa';
 
 const StateContext = createContext();
 
@@ -53,15 +54,9 @@ export const ContextProvider = ({ children }) => {
   const [mode, setMode] = useState('edit');
   const [isDropped, setIsDropped] = useState(initialState);
   const [isResizing, setIsResizing] = useState(false);
-  const [defSelOpt, setDefSelOpt] = useState(
-    window.innerWidth > 993
-      ? 'large'
-      : window.innerWidth <= 993 && window.innerWidth >= 770
-      ? 'mid'
-      : 'small'
-  );
+  const [defSelOpt, setDefSelOpt] = useState('mid');
   const [selOpt, setSelOpt] = useState(defSelOpt);
-  const [enablePreview, setEnablePreview] = useState(false);
+  const [enablePreview, setEnablePreview] = useState(true);
   const [idIni, setIdIni] = useState('');
   const [modHeightEls, setModHeightEls] = useState([]);
 
@@ -122,7 +117,7 @@ export const ContextProvider = ({ children }) => {
   const [newToken, setNewToken] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [isFlipClicked, setIsFlipClicked] = useState(true);
-  const [sidebar, setSidebar] = useState(false);
+  const [sidebar, setSidebarStatus] = useState(false);
   const [rightSideDatemenu, setRightSideDateMenu] = useState(false);
   const [rightSideDropDown, setRightSideDropDown] = useState(false);
   const [savedSripeKey, setSavedSripeKey] = useState({
@@ -134,6 +129,14 @@ export const ContextProvider = ({ children }) => {
     secret_key: null,
     key: null,
   });
+
+  const setSidebar = (bool) => {
+    const previewCanvas = document.querySelector('.preview-canvas')
+    if (!previewCanvas) {
+      setSidebarStatus(bool);
+    };
+
+  }
   // handling date format
   const [method, setMethod] = useState('first');
   // handling page delete
@@ -143,6 +146,9 @@ export const ContextProvider = ({ children }) => {
   //handling new pages
 
   const [item, setItem] = useState(['div_1']);
+
+  //Pending mail
+  const [pendingMail, setPendingMail] = useState(false);
 
   // Scale id
   const [scaleId, setScaleId] = useState('id');
@@ -182,8 +188,8 @@ export const ContextProvider = ({ children }) => {
   //social Media
   const [socialMediaImg, setSocialMediaImg] = useState(() => {
     const storedImg = localStorage.getItem('editor_social_img');
-    console.log(">>>>\n Image changes", storedImg)
-    return storedImg; 
+    // console.log(">>>>\n Image changes", storedImg)
+    return storedImg;
   });
 
   // useEffect(() => {
@@ -585,9 +591,9 @@ export const ContextProvider = ({ children }) => {
     copyEle.id += counter;
     if (
       parseInt(copyEle.style.top.slice(0, -2)) +
-        parseInt(rect.height) +
-        parseInt(rect.height) +
-        20 <
+      parseInt(rect.height) +
+      parseInt(rect.height) +
+      20 <
       1122
     ) {
       midSec.appendChild(copyEle);
@@ -600,62 +606,90 @@ export const ContextProvider = ({ children }) => {
   };
 
   const scaleMidSec = (isOnPost) => {
-    const midSecAll = document.querySelectorAll('.midSection_container');
-    const ratio = fixedMidSecDim?.height / fixedMidSecDim?.width;
-    const parentRatio = fixedMidSecDim?.parentHeight / fixedMidSecDim?.height;
-    const currWidth = Number(
-      midSecAll[0].getBoundingClientRect().width.toFixed(2)
-    );
-    const scaledHeight = Number((ratio * currWidth).toFixed(2));
-    const leftRect = document
-      .getElementsByClassName('left_menu_wrapper')[0]
-      ?.getBoundingClientRect();
+    if (!document.querySelector('.preview-canvas')) {
+      const midSecAll = document.querySelectorAll('.midSection_container');
+      const ratio = fixedMidSecDim?.height / fixedMidSecDim?.width;
+      const parentRatio = fixedMidSecDim?.parentHeight / fixedMidSecDim?.height;
+      const currWidth = Number(
+        midSecAll[0].getBoundingClientRect().width.toFixed(2)
+      );
+      const scaledHeight = Number((ratio * currWidth).toFixed(2));
+      const leftRect = document
+        .getElementsByClassName('left_menu_wrapper')[0]
+        ?.getBoundingClientRect();
 
-    if (isOnPost || currWidth !== currMidSecWidth) {
-      midSecAll?.forEach((mid) => {
-        mid.style.height = scaledHeight + 'px';
-        mid.parentElement.style.height =
-          (scaledHeight * parentRatio).toFixed(2) + 'px';
-      });
+      if (isOnPost || currWidth !== currMidSecWidth) {
+        midSecAll?.forEach((mid) => {
+          mid.style.height = scaledHeight + 'px';
+          mid.parentElement.style.height =
+            (scaledHeight * parentRatio).toFixed(2) + 'px';
+        });
 
-      midSecAll[0].parentElement.parentElement.parentElement.style.marginTop =
-        window.innerWidth > 993 ? 0 : leftRect?.height + 'px';
+        midSecAll[0].parentElement.parentElement.parentElement.style.marginTop =
+          window.innerWidth > 993 ? 0 : leftRect?.height + 'px';
 
-      setCurrMidSecWidth(currWidth);
+        setCurrMidSecWidth(currWidth);
+      }
+
+    } else {
+      const midSecAll = document.querySelectorAll('.preview-canvas');
+      const ratio = fixedMidSecDim?.height / fixedMidSecDim?.width;
+      const parentRatio = fixedMidSecDim?.parentHeight / fixedMidSecDim?.height;
+      const currWidth = Number(
+        midSecAll[0].getBoundingClientRect().width.toFixed(2)
+      );
+      const scaledHeight = Number((ratio * currWidth).toFixed(2));
+      const leftRect = document
+        .getElementsByClassName('left_menu_wrapper')[0]
+        ?.getBoundingClientRect();
+
+      if (isOnPost || currWidth !== currMidSecWidth) {
+        midSecAll?.forEach((mid) => {
+          mid.style.height = scaledHeight + 'px';
+          mid.parentElement.style.height =
+            (scaledHeight * parentRatio).toFixed(2) + 'px';
+        });
+
+        midSecAll[0].parentElement.parentElement.parentElement.style.marginTop =
+          window.innerWidth > 993 ? 0 : leftRect?.height + 'px';
+
+        setCurrMidSecWidth(currWidth);
+      }
     }
   };
 
   const updateDimRatios = (holder) => {
-    const midSecWidth = document
-      .querySelector('.midSection_container')
-      .getBoundingClientRect().width;
-    const holderStyles = window.getComputedStyle(holder);
-    const el = holder.children[1]?.classList.contains('dropdownInput')
-      ? holder.children[1]
-      : holder.children[0];
+      const midSecWidth = document
+        .querySelector('.midSection_container')
+        .getBoundingClientRect().width;
+      const holderStyles = window.getComputedStyle(holder);
+      const el = holder.children[1]?.classList.contains('dropdownInput')
+        ? holder.children[1]
+        : holder.children[0];
 
-    const holderTop = parseFloat(holderStyles.top);
-    const holderLeft = parseFloat(holderStyles.left);
-    const holderWidth = parseFloat(holderStyles.width);
-    const holderHeight = parseFloat(holderStyles.height);
+      const holderTop = parseFloat(holderStyles.top);
+      const holderLeft = parseFloat(holderStyles.left);
+      const holderWidth = parseFloat(holderStyles.width);
+      const holderHeight = parseFloat(holderStyles.height);
 
-    const dimRatios = sessionStorage.getItem('dimRatios')
-      ? JSON.parse(sessionStorage.getItem('dimRatios'))
-      : [];
-    const modDimRatios = dimRatios.map((ratio) =>
-      ratio.id === el.id
-        ? {
+      const dimRatios = sessionStorage.getItem('dimRatios')
+        ? JSON.parse(sessionStorage.getItem('dimRatios'))
+        : [];
+      const modDimRatios = dimRatios.map((ratio) =>
+        ratio.id === el.id
+          ? {
             ...ratio,
             top: holderTop / midSecWidth,
             left: holderLeft / midSecWidth,
             width: holderWidth / midSecWidth,
             height: holderHeight / midSecWidth,
           }
-        : ratio
-    );
+          : ratio
+      );
 
-    sessionStorage.setItem('dimRatios', JSON.stringify(modDimRatios));
-    setDimRatios(modDimRatios);
+      sessionStorage.setItem('dimRatios', JSON.stringify(modDimRatios));
+      setDimRatios(modDimRatios);
+   
   };
 
   useEffect(() => {
@@ -886,8 +920,10 @@ export const ContextProvider = ({ children }) => {
         isCompsScaler,
         setIsCompsScaler,
         resizeChecker,
-        socialMediaImg, 
-        setSocialMediaImg
+        socialMediaImg,
+        setSocialMediaImg,
+        pendingMail, 
+        setPendingMail
       }}
     >
       {children}
