@@ -86,8 +86,8 @@ const dummyData = {
     sampling_status_text: 'Not expected',
   },
 };
-export const renderPreview = (mainSection=null) => {
-  document.querySelectorAll('.main-section-container-preview')?.forEach(elem=>elem?.remove());
+export const renderPreview = (mainSection = null) => {
+  document.querySelectorAll('.main-section-container-preview')?.forEach(elem => elem?.remove());
   const editSec = document.querySelector('.editSec_midSec');
   const previewContainer = document.createElement('div');
   previewContainer.id = 'main-section-container';
@@ -723,7 +723,9 @@ const MidSection = React.forwardRef((props, ref) => {
         holderDIV.classList.add(`dotted_border`);
       }
 
-      holderDIV.addEventListener('dragstart', (event) => { });
+      holderDIV.addEventListener('input', (event) => {
+        console.log(event)
+      });
       holderDIV.ondragstart = (e) => { };
 
       const resizerTL = getResizer('top', 'left');
@@ -766,7 +768,7 @@ const MidSection = React.forwardRef((props, ref) => {
 
       holderDIV.addEventListener('focusout', (e) => {
         holderDIV.classList.remove('zIndex-two');
-
+        console.log(e.target)
         holderDIV.style.border = '3px dotted gray';
 
         holderMenu.remove();
@@ -1142,8 +1144,11 @@ const MidSection = React.forwardRef((props, ref) => {
 
     holderDIV.addEventListener('focusout', (e) => {
       holderDIV.classList.remove('zIndex-two');
-
       holderDIV.style.border = '3px dotted gray';
+      console.log(e.target)
+      document.querySelectorAll('.textInput')?.forEach((text) => {
+        text.parentElement.style.border = 'none'
+      })
 
       holderMenu.remove();
       resizerTL.remove();
@@ -2893,7 +2898,7 @@ const MidSection = React.forwardRef((props, ref) => {
       const holderDIV = document.getElementsByClassName('holderDIV');
       const holderr = document.getElementsByClassName('holder-menu');
       const resizerr = document.getElementsByClassName('resizeBtn');
-
+      //remove border from text
       if (event?.target?.id === midSectionRef?.current?.id) {
         // holderDIV.classList.remove('focussedd')
         if (document.querySelector('.focussedd')) {
@@ -2902,6 +2907,7 @@ const MidSection = React.forwardRef((props, ref) => {
         if (document.querySelector('.focussed')) {
           document.querySelector('.focussed').classList.remove('focussed');
         }
+
         setIsMenuVisible(false);
         setSidebar(false);
         setIsClicked(false);
@@ -2963,7 +2969,7 @@ const MidSection = React.forwardRef((props, ref) => {
     document.querySelectorAll('.preview-canvas')?.forEach(prev => prev.remove())
     if (isDataRetrieved && mode === 'preview') {
       renderPreview()
-     
+
     } else {
       // const previews = document.querySelectorAll('.preview-canvas');
       // previews?.forEach(preview=>preview.remove());

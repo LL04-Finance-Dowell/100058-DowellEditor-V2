@@ -29,13 +29,14 @@ function createTextInputField(
   inputField.style.overflow = "overlay";
   inputField.style.position = "relative";
   inputField.style.cursor = "text";
-  inputField.addEventListener('input', function() {
-    const previewCanvas =document.querySelector('.preview-canvas');
+  holderDIV.style.border = 'none'
+  inputField.addEventListener('input', function () {
+    const previewCanvas = document.querySelector('.preview-canvas');
     if (previewCanvas) {
       const mainSection = document.querySelector('.editSec_midSec');
       if (mainSection) renderPreview(mainSection);
     };
-});
+  });
   if (window.innerWidth < 993) {
     inputField.classList.add("text_eabled_pointer_event");
   }
@@ -58,12 +59,17 @@ function createTextInputField(
 
   inputField.onclick = (e) => {
     focuseddClassMaintain(e);
+    holderDIV.style.border = '3px dotted gray'
     if (e.ctrlKey) {
       copyInput("align2");
     }
     handleClicked("align2");
     setSidebar(true);
   };
+  inputField.onfocusout = () => {
+    alert('focus out')
+    holderDIV.style.border = 'none'
+  }
 
   const text = `${element.raw_data}`;
   inputField.innerHTML = text;

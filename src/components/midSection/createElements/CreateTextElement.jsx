@@ -21,13 +21,14 @@ function createTextElement(holderDIV, focuseddClassMaintain, handleClicked, setS
 
   inputField.textContent = 'Enter text here!';
   inputField.classList.add('empty')
-  inputField.addEventListener('input', function() {
-    const previewCanvas =document.querySelector('.preview-canvas');
+  holderDIV.style.border = 'none';
+  inputField.addEventListener('input', function (e) {
+    const previewCanvas = document.querySelector('.preview-canvas');
     if (previewCanvas) {
       const mainSection = document.querySelector('.editSec_midSec');
       if (mainSection) renderPreview(mainSection);
     };
-});
+  });
   // holderDIV.style.height = '130px';
   if (copy_data) {
     inputField.innerText = copy_data
@@ -38,6 +39,8 @@ function createTextElement(holderDIV, focuseddClassMaintain, handleClicked, setS
       inputField.textContent = '';
       inputField.classList.remove('empty')
     }
+    holderDIV.style.border = '3px dotted gray'
+
   }
 
   inputField.onblur = () => {
