@@ -23,6 +23,7 @@
 }
 
 .modal-content-share {
+  border-radius: 6px;
   background-color: #fefefe;
   margin: 10% auto;
   padding: 20px;
