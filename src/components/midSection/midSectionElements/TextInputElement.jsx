@@ -77,6 +77,14 @@ function createTextInputField(
     setSidebar(true);
   };
 
+  inputField.onmouseover = () => {
+    overlayText.style.display = "block";
+  }
+
+  inputField.onmouseleave = (e) => {
+    overlayText.style.display = "none";
+  }
+
   const text = `${element.raw_data}`;
   inputField.innerHTML = text;
 

@@ -70,13 +70,10 @@ function createContainerInputElement(holderDIV, focuseddClassMaintain, handleCli
     }
   };
 
-  containerField.onmouseover = () => {
-    overlayText.style.display = "block";
-  }
-
-  containerField.onmouseleave = (e) => {
-    overlayText.style.display = "none";
-  }
+  const focusedElement = document.getElementById("midSection_container");
+ focusedElement.onclick = () => {
+  overlayText.style.display = "none";
+ }
   containerField.ondrop = (event) => {
     if (containerField.children[0].classList.contains('placeholder')) containerField.removeChild(containerField.children[0])
     const parentId = containerField.id

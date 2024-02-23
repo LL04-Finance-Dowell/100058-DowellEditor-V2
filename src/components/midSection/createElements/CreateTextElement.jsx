@@ -93,16 +93,10 @@ function createTextElement(holderDIV, focuseddClassMaintain, handleClicked, setS
     setSidebar(true);
   };
 
-
-  inputField.onmouseover = () => {
-    overlayText.style.display = "block";
-  }
-
-  inputField.onmouseleave = (e) => {
-  
-    overlayText.style.display = "none";
-
-  }
+  const focusedElement = document.getElementById("midSection_container");
+ focusedElement.onclick = () => {
+  overlayText.style.display = "none";
+ }
 
 
   holderDIV.append(inputField);

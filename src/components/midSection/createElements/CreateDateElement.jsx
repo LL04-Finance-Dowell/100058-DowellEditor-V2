@@ -88,13 +88,10 @@ function createDateInputElement(holderDIV, focuseddClassMaintain, handleClicked,
     setTimeout(dateClick, 0);
   };
 
-  dateField.onmouseover = () => {
-    overlayText.style.display = "block";
-  }
-
-  dateField.onmouseleave = (e) => {
-    overlayText.style.display = "none";
-  }
+  const focusedElement = document.getElementById("midSection_container");
+ focusedElement.onclick = () => {
+  overlayText.style.display = "none";
+ }
 
   if(copy_data && copy_data != "mm/dd/yyyy"){
     dateField.innerText = copy_data;

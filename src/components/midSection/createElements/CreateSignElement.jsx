@@ -78,13 +78,12 @@ function createSignInputElement(holderDIV, focuseddClassMaintain, handleClicked,
         setSidebar(true);
     };
 
-    signField.onmouseover = () => {
-        overlayText.style.display = "block";
-      }
+    const focusedElement = document.getElementById("midSection_container");
+    focusedElement.onclick = () => {
+     overlayText.style.display = "none";
+    }
+
     
-      signField.onmouseleave = (e) => {
-        overlayText.style.display = "none";
-      }
     const imageSignButton = document.createElement("div");
     imageSignButton.className = "addImageSignButton";
     imageSignButton.innerText = "Choose File";

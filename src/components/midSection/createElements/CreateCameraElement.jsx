@@ -115,12 +115,9 @@ function createCameraInputElement(holderDIV, handleClicked, setSidebar, table_dr
       handleClicked("camera2");
       setSidebar(true);
     };
-    cameraField.onmouseover = () => {
-      overlayText.style.display = "block";
-    }
-  
-    cameraField.onmouseleave = (e) => {
-      overlayText.style.display = "none";
+    const focusedElement = document.getElementById("midSection_container");
+    focusedElement.onclick = () => {
+     overlayText.style.display = "none";
     }
 
     holderDIV.append(cameraField);

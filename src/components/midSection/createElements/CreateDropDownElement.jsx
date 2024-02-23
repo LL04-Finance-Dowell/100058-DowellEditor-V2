@@ -126,12 +126,10 @@ function createDropDownInputElement(
     setRightSideDropDown(false);
     setSidebar(true);
   };
-  dropdownField.onmouseover = () => {
-    overlayText.style.display = "block";
-  }
-
-  dropdownField.onmouseleave = (e) => {
-    overlayText.style.display = "none";
+ 
+  const focusedElement = document.getElementById("midSection_container");
+  focusedElement.onclick = () => {
+   overlayText.style.display = "none";
   }
 
   holderDIV.append(svg);

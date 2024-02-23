@@ -51,6 +51,7 @@ function createImageElement(
     overlayText.style.padding = "0px 10px";
     overlayText.style.display = "none";
 
+
   
 
   const img = document.getElementsByClassName('imageInput');
@@ -60,10 +61,6 @@ function createImageElement(
   } else {
     imageField.id = 'i1';
   }
-
-  imageField.addEventListener('onclick', () => {
-    // console.log("imgData clicked");
-  });
 
   imageField.onclick = (e) => {
     e.stopPropagation();
@@ -77,17 +74,12 @@ function createImageElement(
     // copyImage()
     setSidebar(true);
   };
-  // imageField.onfocus = (e) => {
-  //   overlayText.style.display = "block";
 
-  // }
-  imageField.onmouseover = () => {
-    overlayText.style.display = "block";
-  }
 
-  imageField.onmouseleave = (e) => {
-    overlayText.style.display = "none";
-  }
+  const focusedElement = document.getElementById("midSection_container");
+ focusedElement.onclick = () => {
+  overlayText.style.display = "none";
+ }
 
   const imageButton = document.createElement('div');
   imageButton.className = 'addImageButton';
