@@ -88,7 +88,7 @@ function createCameraInputField(id, p, holderDIV, handleClicked, setSidebar, tab
       setSidebar(true);
       // console.log("The camera", cameraField);
     };
-  } else if (decoded.details.action === "document") {
+  } else {
     let videoField = document.createElement("video");
     const videoLinkHolder1 = document.createElement("h1");
     if (videoLinkHolder === "video_link" || videoLinkHolder === "") {
