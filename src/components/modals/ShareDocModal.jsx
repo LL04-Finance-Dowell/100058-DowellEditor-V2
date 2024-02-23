@@ -10,13 +10,13 @@ const ShareDocModal = ({
     setSubject, handleShare
 }) => {
     const {
-        pendingMail, 
+        pendingMail,
         setPendingMail
-    }= useStateContext()
-    console.log("pending mail",pendingMail);
+    } = useStateContext()
+    console.log("pending mail", pendingMail);
     return (
         <section className='modal_sect'>
-            <div className="modal-content">
+            <div className="modal-content-share">
                 <div className='email-close-button'>
                     <span className="close" onClick={() => openModal(false)}>&times;</span>
                 </div>
@@ -67,11 +67,11 @@ const ShareDocModal = ({
                                 </label>
                             </Col>
                         </Row>
-                        <Row>
-                            <Col>
-                                <Button className='remove_button share-btn text-white mt-2' type="button" onClick={handleShare}>{pendingMail?"Sending": "Share"}</Button>
-                            </Col>
-                        </Row>
+                        <div className="w-full justify-items-center">
+
+                        <Button className='remove_button share-btn text-white mt-2' type="button" onClick={handleShare}>{pendingMail ? "Sending" : "Share"}</Button>
+                        </div>
+
 
                     </form>
                 </Container>
