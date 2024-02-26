@@ -277,6 +277,15 @@ function createContainerInputField(
           isAnyRequiredElementEdited = true;
         }
       };
+
+      inputFieldContainer.onfocus = () => {
+        if (inputFieldContainer.textContent === 'Enter text here!') {
+          inputFieldContainer.textContent = '';
+          inputFieldContainer.classList.remove('empty')
+        }
+        inputFieldContainer.parentElement.style.border = '3px dotted gray'
+    
+      }
       inputFieldContainer.onclick = (e) => {
         e.stopPropagation();
         focuseddClassMaintain(e);
