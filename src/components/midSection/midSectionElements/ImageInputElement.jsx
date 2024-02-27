@@ -39,6 +39,7 @@ function createImageInputField(id, element, document_map_required, p, holderDIV,
     ?.appendChild(holderDIV);
 
   imageField.onclick = (e) => {
+    holderDIV.style.border = '3px dotted gray';
     focuseddClassMaintain(e);
     if (e.ctrlKey) {
       copyInput("image2");
