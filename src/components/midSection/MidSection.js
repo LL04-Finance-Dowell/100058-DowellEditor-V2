@@ -1146,7 +1146,7 @@ const MidSection = React.forwardRef((props, ref) => {
       holderDIV.classList.remove('zIndex-two');
       holderDIV.style.border = '3px dotted gray';
       console.log(e.target)
-      document.querySelectorAll('.textInput')?.forEach((text) => {
+      document.querySelectorAll('.textInput,.imageInput')?.forEach((text) => {
         text.parentElement.style.border = 'none'
       })
 
