@@ -22,6 +22,7 @@ function createImageElement(
   imageField.style.overflow = 'overlay';
   // imageField.innerHTML = `<img src="${postData.imageField.value}" alt="">`;
   imageField.style.position = 'relative';
+  holderDIV.style.border = 'none';
   const span2 = document.createElement('span');
   const span1 = document.createElement('span');
   if (copy_data && copy_data != 'Choose Image') {
@@ -54,6 +55,7 @@ function createImageElement(
   imageField.onclick = (e) => {
     e.stopPropagation();
     focuseddClassMaintain(e);
+    holderDIV.style.border = '3px dotted gray'
 
     if (e.ctrlKey) {
       copyInput('image2');
@@ -63,6 +65,7 @@ function createImageElement(
     // copyImage()
     setSidebar(true);
   };
+  
 
   const imageButton = document.createElement('div');
   imageButton.className = 'addImageButton';

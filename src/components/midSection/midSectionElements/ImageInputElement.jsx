@@ -26,6 +26,7 @@ function createImageInputField(id, element, document_map_required, p, holderDIV,
   imageField.style.outline = "0px";
   imageField.style.overflow = "overlay";
   imageField.style.position = "relative";
+  holderDIV.style.border = 'none';
 
   imageField.addEventListener("input", (e) => {
     // setIsFinializeDisabled(false);
