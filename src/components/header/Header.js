@@ -1799,13 +1799,13 @@ const Header = () => {
       });
   }
 
-  // saving succesfully every 30 seconds
-  // useEffect(() => {
-  //   const timer = setInterval(() => {
-  //     submit();
-  //   }, 30000); // Auto save in 3 seconds
-  //   return () => clearInterval(timer);
-  // }, []);
+  // saving succesfully every 3 minutes
+  useEffect(() => {
+    const timer = setInterval(() => {
+      submit();
+    }, 180000); // Auto save in 3 minutes
+    return () => clearInterval(timer);
+  }, []);
 
   // token creation code
   function base64url(source) {
