@@ -269,6 +269,15 @@ function createContainerInputElement(holderDIV, focuseddClassMaintain, handleCli
       inputFieldContainer.style.overflow = "overlay";
       inputFieldContainer.style.position = "relative";
       inputFieldContainer.style.cursor = "text";
+
+      inputFieldContainer.onfocus = () => {
+        if (inputFieldContainer.textContent === 'Enter text here!') {
+          inputFieldContainer.textContent = '';
+          inputFieldContainer.classList.remove('empty')
+        }
+        inputFieldContainer.parentElement.style.border = '3px dotted gray'
+    
+      }
       const txt = containerField.querySelectorAll(".textInput");
       if (txt.length) {
         const h = txt.length;

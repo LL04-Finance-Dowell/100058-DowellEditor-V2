@@ -9,7 +9,8 @@ function createCameraInputElement(holderDIV, handleClicked, setSidebar, table_dr
     cameraField.style.height = "100%";
     cameraField.style.borderRadius = "0px";
     cameraField.style.outline = "0px";
-    cameraField.style.overflow = "overlay";
+    // cameraField.style.overflow = "overlay";
+    cameraField.style.overflow = "hidden";
 
     const camera = document.getElementsByClassName("cameraInput");
     if (camera.length) {

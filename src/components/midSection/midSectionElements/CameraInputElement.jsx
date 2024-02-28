@@ -11,7 +11,9 @@ function createCameraInputField(id, p, holderDIV, handleClicked, setSidebar, tab
   cameraField.style.height = "100%";
   cameraField.style.borderRadius = "0px";
   cameraField.style.outline = "0px";
-  cameraField.style.overflow = "overlay";
+  // cameraField.style.overflow = "overlay";
+  cameraField.style.overflow = "hidden";
+
 
   if (decoded.details.action === "template") {
     let videoField = document.createElement("video");
