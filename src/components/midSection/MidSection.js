@@ -155,6 +155,7 @@ const MidSection = React.forwardRef((props, ref) => {
     setSocialMediaImg
   } = useStateContext();
 
+
   const { contextMenu, setContextMenu, setFromContextMenu } =
     useCutMenuContext();
 
@@ -2221,11 +2222,11 @@ const MidSection = React.forwardRef((props, ref) => {
     titleLevel.style.overflow = 'overlay';
     titleLevel.style.position = 'relative';
     titleLevel.style.cursor = 'text';
-    titleLevel.onclick = () => {
-      handleClicked('align2');
-      setSidebar(true);
-      // titleLevel.parentElement.focus();
-    };
+    // titleLevel.onclick = () => {
+    //   handleClicked('align2');
+    //   setSidebar(true);
+    //   // titleLevel.parentElement.focus();
+    // };
 
     let titleField = document.createElement('div');
 
@@ -2263,11 +2264,12 @@ const MidSection = React.forwardRef((props, ref) => {
     descriptionLevel.style.overflow = 'overlay';
     descriptionLevel.style.position = 'relative';
     descriptionLevel.style.cursor = 'text';
-    descriptionLevel.onclick = () => {
-      handleClicked('align2');
-      setSidebar(true);
-      // descriptionLevel.parentElement.focus();
-    };
+    // descriptionLevel.onclick = () => {
+    //   handleClicked('align2');
+    //   setSidebar(true);
+    //   // descriptionLevel.parentElement.focus();
+    // };
+
 
     let descriptionField = document.createElement('div');
     descriptionField.contentEditable = true;
@@ -2278,8 +2280,22 @@ const MidSection = React.forwardRef((props, ref) => {
     descriptionField.style.outline = 'none';
     descriptionField.style.fontWeight = 400;
 
+    let countDiv = document.createElement('div');
+    const text = descriptionField.innerText;
+    const count = text.length;
+    countDiv.innerText = `${count} word(s)`
+    countDiv.style.backgroundColor = 'gray'
+    countDiv.style.width = '100px'
+    descriptionField.addEventListener('input', function () {
+      const text = this.innerText;
+      const count = text.length;
+      countDiv.innerText = `${count} word(s)`
+    });
+
+
     descriptionLevel.append(descriptionField);
     holderDIV2.append(descriptionLevel);
+    holderDIV2.append(countDiv);
 
     document
       .getElementById('midSection_container')
@@ -2375,10 +2391,11 @@ const MidSection = React.forwardRef((props, ref) => {
     imageField.innerText = "Choose Image";
     imageField.style.position = "relative";
 
-    if (socialMediaImg) {
-      imageField.style.backgroundImage = `url(${socialMediaImg})`;
-      imageField.innerText = " ";
-    } else if (image_data != null) {
+    // if (socialMediaImg) {
+    //   imageField.style.backgroundImage = `url(${socialMediaImg})`;
+    //   imageField.innerText = " ";
+    // } else
+    if (image_data != null) {
       imageField.style.backgroundImage = `url(${image_data})`;
       imageField.innerText = " ";
     }
