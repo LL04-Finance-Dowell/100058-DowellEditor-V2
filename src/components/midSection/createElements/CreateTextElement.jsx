@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import copyInput from '../CopyInput';
 import { renderPreview } from '../MidSection';
+import { handleHolderDivOverFlow } from '../handleoverflow';
 
 // Regular JavaScript function to create a text input field
 function createTextElement(holderDIV, focuseddClassMaintain, handleClicked, setSidebar, getOffset, copy_data = false) {
@@ -22,12 +23,20 @@ function createTextElement(holderDIV, focuseddClassMaintain, handleClicked, setS
   inputField.textContent = 'Enter text here!';
   inputField.classList.add('empty')
   holderDIV.style.border = 'none';
+  holderDIV.style.height = 'auto';
+  holderDIV.style.width = 'auto';
+  holderDIV.style.minHeight = '70px';
+  holderDIV.style.minWidth = '200px';
   inputField.addEventListener('input', function (e) {
+    handleHolderDivOverFlow(holderDIV);
     const previewCanvas = document.querySelector('.preview-canvas');
     if (previewCanvas) {
       const mainSection = document.querySelector('.editSec_midSec');
       if (mainSection) renderPreview(mainSection);
     };
+
+
+
   });
   // holderDIV.style.height = '130px';
   if (copy_data) {

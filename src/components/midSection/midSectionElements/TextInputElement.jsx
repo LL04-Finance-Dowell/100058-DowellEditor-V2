@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import copyInput from "../CopyInput";
 import { renderPreview } from "../MidSection";
+import { handleHolderDivOverFlow } from "../handleoverflow";
 // import copyInput from '../CopyInput';
 
 // Regular JavaScript function to create a text input field
@@ -29,8 +30,14 @@ function createTextInputField(
   inputField.style.overflow = "overlay";
   inputField.style.position = "relative";
   inputField.style.cursor = "text";
+  holderDIV.style.width = 'auto'
+  holderDIV.style.height = 'auto'
+  holderDIV.style.minHeight = '70px';
+  holderDIV.style.minWidth = '200px';
+
   holderDIV.style.border = 'none'
   inputField.addEventListener('input', function () {
+    handleHolderDivOverFlow(holderDIV);
     const previewCanvas = document.querySelector('.preview-canvas');
     if (previewCanvas) {
       const mainSection = document.querySelector('.editSec_midSec');
@@ -66,8 +73,7 @@ function createTextInputField(
     handleClicked("align2");
     setSidebar(true);
   };
-  inputField.onfocusout = () => {
-    alert('focus out')
+  holderDIV.onfocusout = () => {
     holderDIV.style.border = 'none'
   }
 
