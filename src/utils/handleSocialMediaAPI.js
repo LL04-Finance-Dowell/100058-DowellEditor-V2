@@ -75,56 +75,17 @@ const handleSocialMediaAPI = async (decoded, save=false ) => {
         // }
 
         const postId = decoded.details._id
-        // const socialData = {
-        //   post_id: postId,
-        //   title: title,
-        //   paragraph: paragraph,
-        //   image: image,
-        // }
+        const socialData = {
+          post_id: postId,
+          title: title,
+          paragraph: paragraph,
+          image: image,
+        }
+        localStorage.setItem('socialMediaData', JSON.stringify(socialData));
 
-         // token creation code
-  function base64url(source) {
-    // Encode in classical base64
-    var encodedSource = CryptoJS.enc.Base64.stringify(source);
-
-    // Remove padding equal characters
-    encodedSource = encodedSource.replace(/=+$/, '');
-
-    // Replace characters according to base64url specifications
-    encodedSource = encodedSource.replace(/\+/g, '-');
-    encodedSource = encodedSource.replace(/\//g, '_');
-
-    return encodedSource;
-  }
-
-  var header = {
-    alg: 'HS256',
-    typ: 'JWT',
-  };
-
-  var stringifiedHeader = CryptoJS.enc.Utf8.parse(JSON.stringify(header));
-  var encodedHeader = base64url(stringifiedHeader);
-
-  const socialData = {
-    post_id: postId,
-    title: title,
-    paragraph: paragraph,
-    image: image,
-  }
-
-  var stringifiedData = CryptoJS.enc.Utf8.parse(JSON.stringify(socialData));
-  var encodedData = base64url(stringifiedData);
-
-  var token = encodedHeader + '.' + encodedData;
-
-  // token creation end
-
-
-
-        console.log("/n>>> Decoded\n", token,"\n>>>")
-        // const saveResponse = await axios.post(`https://100007.pythonanywhere.com/edit_post/${postId}/`, socialData);
-        const saveResponse = await axios.post(`https://100007.pythonanywhere.com/edit_post/${postId}/`, {token});
-    console.log("save response data", saveResponse);
+   console.log("/n>>> Decoded\n", socialData,"\n>>>")
+  //       const saveResponse = await axios.post(`https://100007.pythonanywhere.com/edit_post/${postId}/`, socialData);
+  //   console.log("save response data", saveResponse);
 
       }else {
         return response;
