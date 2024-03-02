@@ -81,7 +81,8 @@ const handleSocialMediaAPI = async (decoded, save=false ) => {
           paragraph: paragraph,
           image: image,
         }
-        localStorage.setItem('socialMediaData', JSON.stringify(socialData));
+
+        window.postMessage(socialData, "*");
 
    console.log("/n>>> Decoded\n", socialData,"\n>>>")
   //       const saveResponse = await axios.post(`https://100007.pythonanywhere.com/edit_post/${postId}/`, socialData);
