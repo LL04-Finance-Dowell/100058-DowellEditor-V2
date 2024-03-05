@@ -2,9 +2,7 @@ import React, { useState } from 'react';
 import copyInput from '../CopyInput';
 import Axios from 'axios';
 
-// Regular JavaScript function to create a text input field
-
-const getContainerField = (focuseddClassMaintain, handleClicked, setSidebar, table_dropdown_focuseddClassMaintain, decoded, setPostData, postData, getHolderDIV, getOffset, setStartDate, setMethod, setRightSideDateMenu, title, curr_user) => {
+const getContainerField = (focuseddClassMaintain, handleClicked, setSidebar, table_dropdown_focuseddClassMaintain, decoded, setPostData, postData, getHolderDIV, getOffset, setStartDate, setMethod, setRightSideDateMenu, title, curr_user, containerHolder) => {
     let containerField = document.createElement("div");
     containerField.className = "containerInput";
     containerField.id = "containerInput";
@@ -12,10 +10,10 @@ const getContainerField = (focuseddClassMaintain, handleClicked, setSidebar, tab
     containerField.style.outline = "0px";
     containerField.style.overflow = "overlay";
 
-    // const placeholder = document.createElement('p');
-    // placeholder.className = 'placeholder'
-    // placeholder.textContent = 'Container';
-    // containerField.append(placeholder);
+    const placeholder = document.createElement('p');
+    placeholder.className = 'placeholder'
+    placeholder.textContent = 'Container';
+    containerField.append(placeholder);
 
     const mutationConfig = { childList: true };
 
@@ -25,7 +23,6 @@ const getContainerField = (focuseddClassMaintain, handleClicked, setSidebar, tab
     })
 
     mutationObserver.observe(containerField, mutationConfig)
-
 
     const container = document.getElementsByClassName("containerInput");
     if (container.length) {
@@ -66,6 +63,13 @@ const getContainerField = (focuseddClassMaintain, handleClicked, setSidebar, tab
         };
 
         const holderDIVContainer = getHolderDIV(measureContainer);
+        holderDIVContainer.style.width = '100%';
+        holderDIVContainer.style.height = '100%';
+        holderDIVContainer.style.position = 'relative';
+        holderDIVContainer.style.top = '0';
+        holderDIVContainer.style.left = '0';
+        holderDIVContainer.classList.add('container-element');
+
         if (typeOfOperationContainer === "DATE_INPUT") {
             let dateFieldContainer = document.createElement("div");
             dateFieldContainer.className = "dateInput";
@@ -578,11 +582,10 @@ const getContainerField = (focuseddClassMaintain, handleClicked, setSidebar, tab
             holderDIVContainer.append(purposeHolder);
         }
         if (typeOfOperationContainer !== "CONTAINER_INPUT")
-            containerField.append(holderDIVContainer);
+            containerHolder.replaceChild(holderDIVContainer, containerField);
     };
     return containerField
-}
-
+};
 
 function createContainerInputElement(holderDIV, focuseddClassMaintain, handleClicked, setSidebar, table_dropdown_focuseddClassMaintain, decoded, setPostData, postData, getHolderDIV, getOffset, setStartDate, setMethod, setRightSideDateMenu, title, curr_user) {
     holderDIV.style.width = 'auto';
@@ -590,18 +593,22 @@ function createContainerInputElement(holderDIV, focuseddClassMaintain, handleCli
     holderDIV.style.minWidth = '270px';
     holderDIV.style.minHeight = '100px';
     const containerHolder = document.createElement("div");
+    const containerHolderHeader = document.createElement("div");
     containerHolder.className = 'containerHolder'
+    containerHolderHeader.className = 'container-add-button-wrapper'
     let addButton = document.createElement("p");
     addButton.innerHTML = `+`
     addButton.className = 'container_add-button'
     addButton.addEventListener('click', (e) => {
-        const containerField = getContainerField(focuseddClassMaintain, handleClicked, setSidebar, table_dropdown_focuseddClassMaintain, decoded, setPostData, postData, getHolderDIV, getOffset, setStartDate, setMethod, setRightSideDateMenu, title, curr_user)
+        const containerField = getContainerField(focuseddClassMaintain, handleClicked, setSidebar, table_dropdown_focuseddClassMaintain, decoded, setPostData, postData, getHolderDIV, getOffset, setStartDate, setMethod, setRightSideDateMenu, title, curr_user, containerHolder)
         containerHolder.append(containerField);
     });
-    containerHolder.append(addButton);
-    const containerField = getContainerField(focuseddClassMaintain, handleClicked, setSidebar, table_dropdown_focuseddClassMaintain, decoded, setPostData, postData, getHolderDIV, getOffset, setStartDate, setMethod, setRightSideDateMenu, title, curr_user)
+    containerHolderHeader.append(addButton);
+    containerHolder.append(containerHolderHeader);
+    const containerField = getContainerField(focuseddClassMaintain, handleClicked, setSidebar, table_dropdown_focuseddClassMaintain, decoded, setPostData, postData, getHolderDIV, getOffset, setStartDate, setMethod, setRightSideDateMenu, title, curr_user, containerHolder)
     containerHolder.append(containerField);
     holderDIV.append(containerHolder);
     return holderDIV;
-}
+};
+
 export default createContainerInputElement;

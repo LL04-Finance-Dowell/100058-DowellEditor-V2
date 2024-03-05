@@ -115,7 +115,7 @@
   width: 100%;
   height: 100%;
   display: flex;
-  flex-wrap:wrap;
+  flex-wrap: wrap;
   flex-basis: auto;
   flex-grow: 1;
   padding: 8px;
@@ -123,26 +123,30 @@
   flex-shrink: 1;
 }
 
-.container_add-button {
+.container-add-button-wrapper {
   position: absolute;
   top: -38px;
-  left: 34%;
+  width: 100%;
+
+}
+
+.container_add-button {
+  margin: -0 auto;
   border: 2px dotted gray;
   border-bottom: 0;
   font-size: 1.5rem;
   text-align: center;
   border-radius: 3px 3px 0 0;
   width: 4.5rem;
-  margin: 0;
 }
 
 .container_add-button:hover {
   cursor: pointer;
 }
 
-.containerInput {
+.containerInput,.container-element {
   flex: 1;
-  background-color:blue;
   min-width: 195px;
   min-height: 95px;
+  position: relative;
 }
