@@ -25,14 +25,14 @@ const handleSocialMediaAPI = async (decoded, save = false) => {
     return;
   }
   if (save == true) {
-    const title = document.querySelector(".sm-title")?.innerText;
-    const paragraph = document.querySelector(".sm-paragraph")?.innerText;
+    const title = document.getElementById("trueTitle")?.innerText;
+    const paragraph = document.getElementById("trueParagraph")?.innerText;
     // const image = document.querySelector(".sm-image")?.style?.backgroundImage;
     const image = localStorage.getItem("editor_social_img");
 
-    if (title == null || paragraph == null || image == null) {
-      return;
-    }
+    // if (title == null || paragraph == null || image == null) {
+    //   return;
+    // }
 
 
     const { user_id, session_id, eventId, client_admin_id, qualitative_categorization, targeted_for, designed_for, targeted_category, source, order_nos } = JSON.parse(response.data)?.data[0] //title field

@@ -2231,8 +2231,8 @@ const MidSection = React.forwardRef((props, ref) => {
     let titleField = document.createElement('div');
 
     titleField.contentEditable = true;
-    titleField.className = "textInput";
-    titleField.className = 'socialInnerText';
+    titleField.className = "textInput "
+    titleField.id = 'trueTitle';
     titleField.innerText = title;
     titleField.style.border = 'none';
     titleField.style.outline = 'none';
@@ -2274,7 +2274,7 @@ const MidSection = React.forwardRef((props, ref) => {
     let descriptionField = document.createElement('div');
     descriptionField.contentEditable = true;
     descriptionField.className = "textInput";
-    descriptionField.className = 'socialDescriptionText';
+    descriptionField.id = "trueParagraph";
     descriptionField.innerText = paragraph;
     descriptionField.style.border = 'none';
     descriptionField.style.outline = 'none';
