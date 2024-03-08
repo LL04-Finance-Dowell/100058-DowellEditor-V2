@@ -411,23 +411,34 @@ const MidSection = React.forwardRef((props, ref) => {
 
       window.addEventListener('mousemove', resizeElement);
       function resizeElement(ev) {
-        if (attr1 == 'bottom' && attr2 == 'right') {
-          holder.style.width = ev.screenX - initX + holderSize.width + 'px';
-          holder.style.height = ev.screenY - initY + holderSize.height + 'px';
-        } else if (attr1 == 'bottom' && attr2 == 'left') {
-          holder.style.left = holderSize.left + (ev.screenX - initX) + 'px';
-          holder.style.width = holderSize.width - (ev.screenX - initX) + 'px';
-          holder.style.height = ev.screenY - initY + holderSize.height + 'px';
-        } else if (attr1 == 'top' && attr2 == 'left') {
-          holder.style.top = holderSize.top + (ev.screenY - initY) + 'px';
-          holder.style.left = holderSize.left + (ev.screenX - initX) + 'px';
-          holder.style.width = holderSize.width - (ev.screenX - initX) + 'px';
-          holder.style.height = holderSize.height - (ev.screenY - initY) + 'px';
-        } else if (attr1 == 'top' && attr2 == 'right') {
-          holder.style.top = holderSize.top + (ev.screenY - initY) + 'px';
-          holder.style.width = holderSize.width + (ev.screenX - initX) + 'px';
-          holder.style.height = holderSize.height - (ev.screenY - initY) + 'px';
+        const wWidth = window.innerWidth;
+        const el = document.getElementById("midSection_container");
+        const midsectionRect = el.getBoundingClientRect();
+
+        if (
+          ev.screenX > midsectionRect.left &&
+          ev.screenY > midsectionRect.top &&
+          ev.screenX < midsectionRect.right
+        ) {
+          if (attr1 == 'bottom' && attr2 == 'right') {
+            holder.style.width = ev.screenX - initX + holderSize.width + 'px';
+            holder.style.height = ev.screenY - initY + holderSize.height + 'px';
+          } else if (attr1 == 'bottom' && attr2 == 'left') {
+            holder.style.left = holderSize.left + (ev.screenX - initX) + 'px';
+            holder.style.width = holderSize.width - (ev.screenX - initX) + 'px';
+            holder.style.height = ev.screenY - initY + holderSize.height + 'px';
+          } else if (attr1 == 'top' && attr2 == 'left') {
+            holder.style.top = holderSize.top + (ev.screenY - initY) + 'px';
+            holder.style.left = holderSize.left + (ev.screenX - initX) + 'px';
+            holder.style.width = holderSize.width - (ev.screenX - initX) + 'px';
+            holder.style.height = holderSize.height - (ev.screenY - initY) + 'px';
+          } else if (attr1 == 'top' && attr2 == 'right') {
+            holder.style.top = holderSize.top + (ev.screenY - initY) + 'px';
+            holder.style.width = holderSize.width + (ev.screenX - initX) + 'px';
+            holder.style.height = holderSize.height - (ev.screenY - initY) + 'px';
+          }
         }
+        
         const previewCanvas = document.querySelector('.preview-canvas');
         if (previewCanvas) {
           const mainSection = document.querySelector('.editSec_midSec');
