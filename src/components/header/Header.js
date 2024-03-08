@@ -612,7 +612,9 @@ const Header = () => {
 
             for (let i = 0; i < containerChildren.length; i++) {
               const element = containerChildren[i];
-
+               if(element.className == "container-add-button-wrapper"){
+                continue;
+               }
               let tempPosnChild = getPosition(element, true);
               const containerChildClassName =
                 containerChildren[i].firstElementChild?.className.split(' ')[0];

@@ -31,7 +31,7 @@ import createScaleInputField from './midSectionElements/ScaleInputElement.jsx';
 import createCameraInputField from './midSectionElements/CameraInputElement.jsx';
 import createDropDownInputField from './midSectionElements/DropDownInputElement.jsx';
 import createNewScaleInputField from './midSectionElements/NewScaleInputElement.jsx';
-import createContainerInputField from './midSectionElements/ContainerInputElement.jsx';
+import createContainerInputField from './midSectionElements/NewContainerInput.js';
 import createTextElement from './createElements/CreateTextElement.jsx';
 import createImageElement from './createElements/CreateImageElement.jsx';
 import createTextFillElement from './createElements/CreateTextFillElement.jsx';
@@ -688,7 +688,7 @@ const MidSection = React.forwardRef((props, ref) => {
       midSection.append(tableElement);
     }
 
-    function getHolderDIV(measure, i, idMatch) {
+    function getHolderDIV(measure, i, idMatch,disableDrag=false) {
       const holderDIV = document.createElement('div');
 
       holderDIV.style.position = 'absolute';
@@ -742,7 +742,7 @@ const MidSection = React.forwardRef((props, ref) => {
         (event) => {
           if (
             event.target.className != 'td-resizer' &&
-            event.target.className != 'row-resizer'
+            event.target.className != 'row-resizer' && !disableDrag
           ) {
             dragElementOverPage(event, resizing, mode);
             const mainSection = document.querySelector('.editSec_midSec');
@@ -1069,7 +1069,7 @@ const MidSection = React.forwardRef((props, ref) => {
     });
   };
 
-  function getHolderDIV(measure, i, idMatch) {
+  function getHolderDIV(measure, i=1, idMatch=null,disableDrag=false) {
     const holderDIV = document.createElement('div');
 
     holderDIV.style.position = 'absolute';
@@ -1121,7 +1121,7 @@ const MidSection = React.forwardRef((props, ref) => {
       (event) => {
         if (
           event.target.className != 'td-resizer' &&
-          event.target.className != 'row-resizer'
+          event.target.className != 'row-resizer' && !disableDrag
         ) {
           dragElementOverPage(event, resizing, mode);
         }

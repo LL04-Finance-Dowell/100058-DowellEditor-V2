@@ -4,8 +4,8 @@ import Axios from 'axios';
 
 const getContainerField = (focuseddClassMaintain, handleClicked, setSidebar, table_dropdown_focuseddClassMaintain, decoded, setPostData, postData, getHolderDIV, getOffset, setStartDate, setMethod, setRightSideDateMenu, title, curr_user, containerHolder) => {
     let containerField = document.createElement("div");
-    containerField.className = "containerInput";
-    containerField.id = "containerInput";
+    containerField.className = "container-section";
+    containerField.id = "container-section";
     containerField.style.borderRadius = "0px";
     containerField.style.outline = "0px";
     containerField.style.overflow = "overlay";
@@ -24,7 +24,7 @@ const getContainerField = (focuseddClassMaintain, handleClicked, setSidebar, tab
 
     mutationObserver.observe(containerField, mutationConfig)
 
-    const container = document.getElementsByClassName("containerInput");
+    const container = document.getElementsByClassName("container-section");
     if (container.length) {
         const h = container.length;
         containerField.id = `c${h + 1}`;
@@ -69,6 +69,7 @@ const getContainerField = (focuseddClassMaintain, handleClicked, setSidebar, tab
         holderDIVContainer.style.top = '0';
         holderDIVContainer.style.left = '0';
         holderDIVContainer.classList.add('container-element');
+        holderDIVContainer.addEventListener('drag',(e)=>null);
 
         if (typeOfOperationContainer === "DATE_INPUT") {
             let dateFieldContainer = document.createElement("div");
@@ -595,6 +596,7 @@ function createContainerInputElement(holderDIV, focuseddClassMaintain, handleCli
     const containerHolder = document.createElement("div");
     const containerHolderHeader = document.createElement("div");
     containerHolder.className = 'containerHolder'
+    containerHolder.classList.add('containerInput')
     containerHolderHeader.className = 'container-add-button-wrapper'
     let addButton = document.createElement("p");
     addButton.innerHTML = `+`

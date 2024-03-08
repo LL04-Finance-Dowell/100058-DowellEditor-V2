@@ -144,7 +144,7 @@
   cursor: pointer;
 }
 
-.containerInput,.container-element {
+.container-section,.container-element {
   flex: 1;
   min-width: 195px;
   min-height: 95px;
