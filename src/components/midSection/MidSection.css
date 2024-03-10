@@ -13,7 +13,10 @@
   align-items: center;
   /* justify-content: flex-start; */
 }
-
+.main-section-container-preview{
+ max-width: calc(100vw - 223mm) !important;
+ overflow: hidden;
+}
 .midSection {
   display: flex;
   height: 327mm;
@@ -27,9 +30,7 @@
   position: relative;
   box-shadow: 1px 1px 6px #41414144;
 }
-.preview-canvas{
-  padding:0 24px;
-}
+
 
 .disable_pointer_event {
   pointer-events: none;

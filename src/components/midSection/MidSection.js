@@ -96,14 +96,25 @@ export const renderPreview = (mainSection = null) => {
   const midSecAll = document.querySelectorAll('.midSection_container');
   midSecAll.forEach((mid) => {
     const previewCanvas = mid.cloneNode(true);
+
+    let availableWidth = screen.availWidth - 850;
+    if (availableWidth >= 793.69) availableWidth = 793.69;
+    previewCanvas.style.width = `${availableWidth}px`
+    const scale = availableWidth / 794;
     previewCanvas.querySelectorAll('.holderDIV')?.forEach((div) => {
+      const divWidth = +div.style.width.split('px')[0];
+      const currentLeft = +div.style.left.split('px')[0] || 0;
+      div.style.left = (currentLeft * scale - 1.5) + 'px';
+      div.style.width = (divWidth * scale - 1.5) + 'px';
       div.style.border = 'none';
       div.style.pointerEvents = 'none';
+      div.style.fontSize = (16 * scale) + 'px';
     });
     previewCanvas.className = 'midSection_container print_container preview-canvas';
     document.querySelector('#main-section-container').append(previewCanvas);
   });
 }
+
 const MidSection = React.forwardRef((props, ref) => {
   const {
     setDropdownName,

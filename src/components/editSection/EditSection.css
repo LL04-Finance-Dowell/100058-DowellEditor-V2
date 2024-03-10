@@ -17,8 +17,13 @@
   align-items: center;
 }
 .editSec_midSec.preview {
-  margin-left: -4%;
+  margin-left: 0;
+  width: 100vw;
 
+
+}
+.preview-canvas {
+  padding: 0 24px;
 }
 
 .display_none{
@@ -53,8 +58,6 @@
 
   .editSec_midSec {
     column-gap: 1rem !important;
-    top:12%;
-    padding-top:3%;
   }
 }
 
