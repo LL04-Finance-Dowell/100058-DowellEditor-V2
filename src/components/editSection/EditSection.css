@@ -4,9 +4,20 @@
 
 .editSec {
   padding-top: 7vh;
-  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 10vh;
 }
-
+.footer{
+  position: fixed;
+  width: 50%;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
 .editSec_midSec {
   background: #e3eeff;
   height: auto;
