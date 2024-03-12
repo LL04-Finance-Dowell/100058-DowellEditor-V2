@@ -192,14 +192,14 @@
 
 @media only screen and (min-width: 1280px) {
   .left_menu_wrapper {
-    width: 16%;
+    width: 10%;
     top: 14%;
   }
 }
 
 @media only screen and (min-width: 1360px) {
   .left_menu_wrapper {
-    width: 14%;
+    width: 12%;
     top: 17%;
   }
 }
