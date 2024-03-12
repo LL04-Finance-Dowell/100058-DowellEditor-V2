@@ -44,3 +44,7 @@
   font-size: 0.9rem;
   font-weight: bolder;
 }
+
+.hide {
+  display: none;
+}

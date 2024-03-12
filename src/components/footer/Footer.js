@@ -11,21 +11,28 @@ const Footer = () => {
         nextUser: '',
         prevUser: '',
     });
+    const [display, setDisplay] = useState(false);
 
 
     const [searchParams] = useSearchParams();
     useEffect(() => {
         const token = searchParams.get('token');
         var decoded = jwt_decode(token);
-        console.log(decoded);
-        setUserDetails({
-            authorized: decoded?.details?.authorized,
-            nextUser: decoded?.details?.next_viewers[0],
-            prevUser: decoded?.details?.previous_viewers[0],
-        });
+
+        if (decoded?.details?.hasOwnProperty('document_map')) {
+            setDisplay(true);
+            setUserDetails({
+                authorized: decoded?.details?.authorized,
+                nextUser: decoded?.details?.next_viewers[0],
+                prevUser: decoded?.details?.previous_viewers[0],
+            });
+        } else {
+            setDisplay(false);
+        }
+
     }, []);
     return (
-        <div className={styles.footer_container}>
+        <div className={` ${display ? `${styles.footer_container}` : `${styles.hide}`}`}>
             <div>
                 <h1>Previous User:</h1>
                 <h2 className='details'>{userDetails.prevUser}</h2>
