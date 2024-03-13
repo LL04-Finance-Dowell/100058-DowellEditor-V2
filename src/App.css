@@ -119,6 +119,7 @@ td::-webkit-scrollbar {
 }
 .tb-rightsidebar-buttons{
   background-color: rgb(28, 43, 72) !important;
+  padding: 0.25em 1.4em !important;
 }
 
 .row-resizer {
