@@ -1,23 +1,23 @@
 #main-section-container{
-  display: flex;
+  /* display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
   align-items: center;
   justify-content: flex-start;
-  gap: 7rem;
+  gap: 7rem; */
 }
 .canvas-holder{
-  display: flex;
+  /* display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
-  align-items: center;
+  align-items: center; */
   /* justify-content: flex-start; */
 }
 
 .midSection {
-  display: flex;
+  /* display: flex;
   height: 327mm;
-  align-items: center;
+  align-items: center; */
 }
 .midSection_container {
   background-color: #ffffff;
@@ -48,7 +48,7 @@
 }
 
 .textInput.empty:after {
-  content: 'T';
+  /* content: 'T';
   position: absolute;
   top: 60%;
   left: 50%;
@@ -57,7 +57,7 @@
   font-family: courier;
   font-weight: 500;
   color: #e3eeff;
-  z-index: -1;
+  z-index: -1; */
 }
 
 .sign_text,

@@ -28,13 +28,14 @@ const HomePage = () => {
 
   const homeElem = document.getElementById('homeID');
   return (
-    <div className='home' id='homeID'>
-      <div className='home_header fixed'>
+    <div className="home" id="homeID">
+      <div className="home_header fixed">
         <Header />
       </div>
-      <div className='home_leftmenu'>
+      <div className="home_leftmenu">
         <EditSection homeElem={homeElem} />
       </div>
+
     </div>
   );
 };
