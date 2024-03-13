@@ -71,6 +71,7 @@ export const getResizer = (attr1, attr2, decoded) => {
           ev.screenY > midsectionRect.top &&
           ev.screenX < midsectionRect.right
         ) {
+    
           if (attr1 == "bottom" && attr2 == "right") {
             if (wWidth < 993) {
               holder.style.width = ev.screenX - initX + ((holderSize.width/wWidth) * 100)/2 + "vw";
