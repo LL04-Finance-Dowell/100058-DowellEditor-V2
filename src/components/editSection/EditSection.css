@@ -1,11 +1,22 @@
-#edit-container {
-  background-color: #e3eeff;
-}
+
 
 .editSec {
   padding-top: 7vh;
+  background-color:  #e3eeff;;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 10vh;
 }
-
+.footer{
+  position: fixed;
+  width: 50%;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
 .editSec_midSec {
   background: #e3eeff;
   height: auto;
@@ -35,7 +46,7 @@
   right: 0;
   padding: 15px 20px;
   background-color: #fbfbfb;
-  max-width: 25%;
+  max-width: 21%;
   min-height: 100vh;
   height: 85%;
   overflow-y: auto;
@@ -58,6 +69,7 @@
 
   .editSec_midSec {
     column-gap: 1rem !important;
+    top:12%;
   }
 }
 

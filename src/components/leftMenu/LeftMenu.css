@@ -21,6 +21,7 @@
 
 .leftMenu .btn_wrapper {
   text-align: center;
+  height: 3.7rem;
 }
 
 .leftMenu button:hover+.btn_tag {
@@ -146,13 +147,13 @@
     row-gap: 0;
   }
 
-  .left_menu_wrapper {
+  /* .left_menu_wrapper {
     height: auto;
     z-index: 99;
     width: 100%;
     padding-top: 5px;
     padding-bottom: 5px;
-  }
+  } */
 
   .leftMenu .btn_wrapper {
     text-align: center;
@@ -192,14 +193,14 @@
 
 @media only screen and (min-width: 1280px) {
   .left_menu_wrapper {
-    width: 16%;
+    width: 10%;
     top: 14%;
   }
 }
 
 @media only screen and (min-width: 1360px) {
   .left_menu_wrapper {
-    width: 14%;
+    width: 12%;
     top: 17%;
   }
 }
