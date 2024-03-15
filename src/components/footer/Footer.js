@@ -22,12 +22,13 @@ const Footer = () => {
         if (decoded?.details?.hasOwnProperty('document_map')) {
             setDisplay(true);
             setUserDetails({
-                authorized: decoded?.details?.authorized,
-                nextUser: decoded?.details?.next_viewers[0],
-                prevUser: decoded?.details?.previous_viewers[0],
+                authorized: decoded?.details?.authorized ? decoded.details.authorized : '',
+                nextUser: decoded?.details?.next_viewers ? decoded.details.next_viewers[0] : '',
+                prevUser: decoded?.details?.previous_viewers ? decoded.details.previous_viewers[0] : '',
             });
         } else {
             setDisplay(false);
+
         }
 
     }, []);
