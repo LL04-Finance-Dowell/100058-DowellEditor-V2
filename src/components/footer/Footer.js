@@ -33,7 +33,7 @@ const Footer = () => {
 
     }, []);
     return (
-        <div className={` ${display ? `${styles.footer_container}` : `${styles.hide}`}`}>
+        <div className={` ${display ? `${styles.footer_container}` : `${styles.hide}`} `}>
             <div>
                 <h1>Previous User:</h1>
                 <h2 className='details'>{userDetails.prevUser}</h2>
