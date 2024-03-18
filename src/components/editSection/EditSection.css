@@ -46,7 +46,7 @@
 .editSec_rightMenu {
   position: fixed;
   right: 0;
-  top: 144px;
+  top: 110px;
   padding: 15px 20px;
   background-color: #fbfbfb;
   max-width: 21%;
@@ -76,7 +76,7 @@
 
   .editSec_midSec {
     margin-left: 10px;
-    margin-top: 96px;
+    margin-top: 66px;
   }
 
   .editSec_rightMenu {
@@ -93,7 +93,7 @@
 
   .editSec_midSec {
     column-gap: 1rem !important;
-    top: 144px;
+    top: 110px;
   }
 
 }
