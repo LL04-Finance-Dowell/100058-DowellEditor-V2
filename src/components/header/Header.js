@@ -2332,9 +2332,14 @@ const Header = () => {
                     }}
                     disabled={isButtonDisabled}
                   >
-                    Save <FaSave color='white' />
+                   <FaSave color='white' />
                   </Button>
-                  {/*  )} */}
+                 
+                  
+                </div>
+                <div className={`d-flex share_button ${mode === 'preview' ? 'vis_hid' : ''
+                  }`} onClick={() => setShareModalOpen(true)}>
+                  <ImShare />
                 </div>
                 <div
                   className={`mt-1 text-center p-2 ${mode === 'preview' ? 'vis_hid' : ''

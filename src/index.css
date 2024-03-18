@@ -78,7 +78,7 @@ code {
 }
 
 @media screen and (max-width: 992px) {
-  /* .drag_icon {
+  .drag_icon {
     display: inline-block;
     position: fixed;
     right: 5px;
@@ -90,9 +90,9 @@ code {
     justify-content: center;
     background-color: #000;
     border-radius: 5px;
-  } */
+  } 
 
-  /* .fixed3 {
+  .fixed3 {
     position: fixed;
     padding: 15px 20px;
     border-radius: 10px;
@@ -105,9 +105,9 @@ code {
     overflow: auto;
     touch-action: none;
     max-width: 500px;
-  } */
+  } 
 
-  /* .fixed3 {
+  .fixed3 {
     position: fixed;
     padding: 10px 15px;
     border-radius: 10px;
@@ -118,7 +118,7 @@ code {
     transform: translate(-50%, -50%);
     max-height: 300px;
     overflow: auto;
-} */
+}
   .midSection_container {
     /* margin-top: 181px; */
   }

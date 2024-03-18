@@ -1,14 +1,13 @@
-
-
 .editSec {
   padding-top: 7vh;
-  background-color:  #e3eeff;;
+  background-color: #e3eeff;
   display: flex;
   flex-direction: column;
   align-items: center;
   padding-bottom: 10vh;
 }
-.footer{
+
+.footer {
   position: fixed;
   width: 50%;
   bottom: 0;
@@ -17,6 +16,7 @@
   align-items: center;
   margin-top: 20px;
 }
+
 .editSec_midSec {
   background: #e3eeff;
   height: auto;
@@ -27,23 +27,26 @@
   margin-left: 4%;
   align-items: center;
 }
+
 .editSec_midSec.preview {
   margin-left: 0;
   width: 100vw;
 
 
 }
+
 .preview-canvas {
   padding: 0 24px;
 }
 
-.display_none{
-  display:none;
+.display_none {
+  display: none;
 }
 
 .editSec_rightMenu {
   position: fixed;
   right: 0;
+  top: 144px;
   padding: 15px 20px;
   background-color: #fbfbfb;
   max-width: 21%;
@@ -65,26 +68,31 @@
   pointer-events: none;
 }
 
+@media screen and (max-width: 992px) {
+  .editSec {
+    padding-top: 0;
+  }
+
+  .editSec_midSec {
+    margin-left: 10px;
+    margin-top: 96px;
+  }
+
+  .editSec_rightMenu {
+    background-color: transparent;
+  
+}
+
+#edit-container {
+  overflow-x: scroll;
+}
+}
+
 @media only screen and (min-width: 992px)and (max-width: 1366px) {
 
   .editSec_midSec {
     column-gap: 1rem !important;
-    top:12%;
+    top: 144px;
   }
-}
 
-@media screen and (min-width: 992px) {
-  .editSec_rightMenu {
-  }
-}
-
-@media screen and (min-width: 1279px) {
-  .editSec_rightMenu {
-    top:18%
-  }
-}
-@media screen and (min-width: 1367px) {
-  .editSec_rightMenu {
-    top:12%
-  }
 }

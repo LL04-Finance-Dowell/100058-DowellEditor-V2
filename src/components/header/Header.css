@@ -6,9 +6,10 @@
   padding: 0 1rem;
   box-shadow: 1px 1px 8px #96969657;
 }
+
 .header.desktop_header {
   display: flex;
-  flex-direction:column;
+  flex-direction: column;
 }
 
 .header_bg_template {
@@ -64,7 +65,7 @@
   display: flex;
   gap: 5px;
   font-weight: 600;
-  padding:0.4em 0.5em !important;
+  padding: 0.4em 0.5em !important;
   border-radius: 4px;
   color: white;
   outline: none;
@@ -74,22 +75,27 @@
   color: white !important;
   outline: none;
 }
+
 .share_button p {
- margin: 0;
+  margin: 0;
 }
+
 .share_button:hover {
   cursor: pointer;
 }
-.icons-holder{
+
+.icons-holder {
   display: flex;
   width: 100%;
   padding-left: 3.4rem;
   gap: 2rem;
   visibility: hidden;
 }
-.show{
+
+.show {
   visibility: visible;
 }
+
 .savee .share-btn {
   background-color: transparent;
   border: 1px solid #bababa4a;
@@ -113,19 +119,22 @@
   transition: all 0.3s ease-in-out;
   padding-left: 10px;
 }
-.header-buttons{
-  display:flex;
+
+.header-buttons {
+  display: flex;
   justify-content: center;
   align-items: center;
-  gap:1rem;
+  gap: 1rem;
   margin-left: auto;
 
 }
-.margin_auto{
+
+.margin_auto {
   margin: 0 auto;
   position: relative;
-  right:12%
+  right: 12%
 }
+
 .right_header {
   display: flex;
   align-items: center;
@@ -171,7 +180,7 @@ svg:not(.view_mode svg, .mid_resizer svg) {
 .cursor_pointer {
   cursor: pointer;
   padding: 8px 0 !important;
-  
+
 }
 
 .cursor_pointer:last-of-type:not(div.cursor_pointer) {
@@ -309,7 +318,9 @@ svg:not(.view_mode svg, .mid_resizer svg) {
     font-size: 2rem;
     margin-left: 0px;
   }
-  .desktop_header,.title-name.desktop-title{
+
+  .desktop_header,
+  .title-name.desktop-title {
     display: none !important;
   }
 
@@ -333,19 +344,42 @@ svg:not(.view_mode svg, .mid_resizer svg) {
     width: 2rem !important;
   }
 
+  .home_leftmenu {
+    margin-top: 75px;
+  }
+
+  .home_header {
+    height: 75px;
+  }
+
+  .right_header {
+    justify-content: flex-end;
+    column-gap: 1rem;
+  }
+
+  .savee .share-btn {
+    width: 2rem;
+  }
+
+  #saving-buttonn svg {
+    margin: 0;
+  }
 }
 
 @media screen and (min-width: 992px) {
   .d-flex.lhs-header {
     display: none !important;
   }
-  .mobile_header,.title-name.mobile-title{
+
+  .mobile_header,
+  .title-name.mobile-title {
     display: none !important;
   }
+
   .header_bg_template {
     /* background: #243485; */
     display: flex;
-    flex-direction:column;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     max-height: fit-content;
@@ -353,9 +387,11 @@ svg:not(.view_mode svg, .mid_resizer svg) {
 
   .header {
     padding: 0.4rem 0 0;
+    height: 144px;
   }
+
   .head-bar {
     padding: 0.2rem 0.6rem;
- 
+
   }
 }
