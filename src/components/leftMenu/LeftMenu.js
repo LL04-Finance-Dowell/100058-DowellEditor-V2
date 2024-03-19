@@ -17,6 +17,7 @@ import NewScaleButton from './buttons/NewScaleButton';
 import CameraButton from './buttons/CameraButton';
 import { useDraggableContext } from '../../contexts/DraggableContext';
 import PaymentButton from './buttons/PaymentButton';
+import GoogleDocsButton from './buttons/GoogleDocs';
 
 const CustomButton = ({ children, style }) => (
   <button className={style} type='button'>
@@ -38,7 +39,7 @@ const LeftMenu = ({ showSidebar }) => {
             <span>X</span>
           ) : (
             <div className='leftMenu fixed2' ref={leftMenuRef}>
-              <div className='leftMenu-title'><p>Components</p></div> 
+              <div className='leftMenu-title'><p>Components</p></div>
               <TextButton customFunc={() => handleDrop('align')} />
               <ImageButton customFunc={() => handleDrop('image')} />
               <TableButton customFunc={() => handleDrop('table')} />
@@ -52,6 +53,7 @@ const LeftMenu = ({ showSidebar }) => {
               {/* <EmailButton customFunc={() => handleDrop("email")} /> */}
               <NewScaleButton customFunc={() => handleDrop('newScale')} />
               <CameraButton customFunc={() => handleDrop('camera')} />
+              <GoogleDocsButton customFunc={() => handleDrop('googleDocs')} />
               {/* <PaymentButton customFunc={() => handleDrop("payment")} /> */}
             </div>
           )

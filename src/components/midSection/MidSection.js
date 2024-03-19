@@ -438,7 +438,7 @@ const MidSection = React.forwardRef((props, ref) => {
             holder.style.height = holderSize.height - (ev.screenY - initY) + 'px';
           }
         }
-        
+
         const previewCanvas = document.querySelector('.preview-canvas');
         if (previewCanvas) {
           const mainSection = document.querySelector('.editSec_midSec');
@@ -958,6 +958,9 @@ const MidSection = React.forwardRef((props, ref) => {
                 case 'paymentInput':
                   type = 'PAYMENT_INPUT';
                   break;
+                case 'gooogleDocsInput':
+                  type = 'GOOGLE_DOCS_INPUT';
+                  break;
                 default:
                   type = '';
               }
@@ -1053,6 +1056,11 @@ const MidSection = React.forwardRef((props, ref) => {
           break;
         case targetElement.querySelector('.cameraInput') && true:
           type = 'CAMERA_INPUT';
+          elem.type = type;
+          elem.data = targetElement.firstChild.innerHTML;
+          break;
+        case targetElement.querySelector('.googleDocsInput') && true:
+          type = 'GOOGLE_DOCS_INPUT';
           elem.type = type;
           elem.data = targetElement.firstChild.innerHTML;
           break;
