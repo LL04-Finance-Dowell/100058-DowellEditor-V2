@@ -8,7 +8,7 @@ function createDateInputField(id, element, document_map_required, p, holderDIV, 
     dateField.className = "dateInput";
     dateField.id = id;
     dateField.style.width = "100%";
-    dateField.style.height = "100%";
+    dateField.style.height = "96px";
     dateField.style.backgroundColor = "#dedede";
     dateField.style.borderRadius = "0px";
     dateField.style.outline = "0px";

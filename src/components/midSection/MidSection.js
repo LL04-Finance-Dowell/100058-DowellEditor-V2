@@ -1972,6 +1972,8 @@ const MidSection = React.forwardRef((props, ref) => {
 
         // conteiner retrive data
         if (element.type === 'CONTAINER_INPUT') {
+          console.log("\nELEMENT\n\n", element, "\n\n\n")
+
           // ! This two lines of codes is for removing the occasionally added duplicate elements
           const elPar = document.getElementById(element.id)?.parentElement;
           elPar && elPar.remove();
@@ -2022,7 +2024,8 @@ const MidSection = React.forwardRef((props, ref) => {
             setMethod,
             setRightSideDateMenu,
             title,
-            curr_user
+            curr_user,
+            setRightSideDropDown
           );
 
           // * This is to get the ratios of the dimensions of the element, to be used for resposiveness purposes
@@ -2822,7 +2825,8 @@ const MidSection = React.forwardRef((props, ref) => {
             setMethod,
             setRightSideDateMenu,
             title,
-            curr_user
+            curr_user,
+            setRightSideDropDown
           );
         } else if (
           typeOfOperation === 'FORM' &&
