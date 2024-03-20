@@ -315,7 +315,7 @@ svg:not(.view_mode svg, .mid_resizer svg) {
 
 @media screen and (max-width: 992px) {
   .title-name {
-    font-size: 2rem;
+    font-size: 12px;
     margin-left: 0px;
   }
 
