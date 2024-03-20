@@ -74,19 +74,27 @@
     padding-top: 0;
   }
 
+  .canvas-holder {
+    position: relative;
+    left: 210px;
+  }
+
   .editSec_midSec {
-    margin-left: 10px;
-    margin-top: 66px;
+    margin-left: -9px;
+    margin-top: 98px;
+    overflow-x: scroll;
+    width: 100vw;
+    position: relative;
   }
 
   .editSec_rightMenu {
     background-color: transparent;
-  
-}
 
-#edit-container {
-  overflow-x: scroll;
-}
+  }
+
+  #edit-container {
+    overflow-x: scroll;
+  }
 }
 
 @media only screen and (min-width: 992px)and (max-width: 1366px) {
