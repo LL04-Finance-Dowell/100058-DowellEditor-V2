@@ -1,57 +1,69 @@
 import React from 'react';
 import copyInput from '../CopyInput';
+import { renderPreview } from '../MidSection';
 
 
-function CreateGoogleDocsElement(holderDIV, focuseddClassMaintain, handleClicked) {
-    let googleDocs = document.createElement("button");
+
+function CreateGoogleDocsElement(holderDIV, focuseddClassMaintain, handleClicked, setSidebar, getOffset, copy_data = false) {
+    let googleDocs = document.createElement("div");
+    //  googleDocs.setAttribute('draggable', true);
+    googleDocs.setAttribute("contenteditable", false);
     googleDocs.className = "googleDocsButton";
+    googleDocs.placeholder = "Enter text here";
     googleDocs.style.width = "100%";
     googleDocs.style.height = "100%";
+    googleDocs.style.resize = "none";
     googleDocs.style.backgroundColor = "#0000";
     googleDocs.style.borderRadius = "0px";
-    // paymentField.style.outline = "0px";
+    googleDocs.style.outline = "0px";
     googleDocs.style.overflow = "overlay";
-    googleDocs.style.position = "absolute";
-    googleDocs.style.outline = "none";
-    // paymentField.style.boxShadow="none"; 
-    googleDocs.style.border = "none"
-    googleDocs.textContent = "Create a google docs";
+    googleDocs.style.position = "relative";
+    googleDocs.style.cursor = "pointer";
 
-    // const googleDocsInput = document.getElementsByClassName("googleDocsInput");
-    // if (googleDocsInput.length) {
-    //     const p = googleDocsInput.length;
-    //     googleDocs.id = `pay${p + 1}`;
-    // } else {
-    //     googleDocs.id = "pay1";
-    // }
+    googleDocs.textContent = 'Enter the Link for your googleDocs';
+    googleDocs.classList.add('empty')
+    holderDIV.style.border = '';
+    googleDocs.addEventListener('input', function (e) {
+        const previewCanvas = document.querySelector('.preview-canvas');
+        if (previewCanvas) {
+            const mainSection = document.querySelector('.editSec_midSec');
+            if (mainSection) renderPreview(mainSection);
+        };
+    });
+
+    // googleDocs.style.width = "100%";
+    // googleDocs.style.height = "100%";
+    // googleDocs.style.backgroundColor = "#0000";
+    // googleDocs.style.borderRadius = "0px";
+    // // paymentField.style.outline = "0px";
+    // googleDocs.style.overflow = "overlay";
+    // googleDocs.style.position = "absolute";
+    // googleDocs.style.outline = "none";
+    // // paymentField.style.boxShadow="none"; 
+    // googleDocs.style.border = "none"
+    // googleDocs.textContent = "Create a google docs";
+
+    // // const googleDocsInput = document.getElementsByClassName("googleDocsInput");
+    // // if (googleDocsInput.length) {
+    // //     const p = googleDocsInput.length;
+    // //     googleDocs.id = `pay${p + 1}`;
+    // // } else {
+    // //     googleDocs.id = "pay1";
+    // // }
 
     googleDocs.onclick = (e) => {
         e.stopPropagation();
         focuseddClassMaintain(e);
         if (e.ctrlKey) {
-            copyInput("payment2");
+            copyInput("googleDocs2");
         }
-        handleClicked("payment2", "container2");
+        handleClicked("googleDocs2", "container2");
+        setSidebar(true);
     };
 
-    const linkHolder = document.createElement("div");
-    linkHolder.className = "stripe_key";
-    linkHolder.style.display = "none";
-
-    const purposeHolder = document.createElement("div");
-    purposeHolder.className = "paypal_id";
-    purposeHolder.style.display = "none";
-
     holderDIV.append(googleDocs);
-    holderDIV.append(linkHolder);
-    holderDIV.append(purposeHolder);
+    return holderDIV;
+}
 
-    // * This loop is to trigger rightside bar to update to the recently selected btn type
-    let x = true;
-    while (x) {
-        googleDocs.click();
-        x = false;
-    }
-};
 
 export default CreateGoogleDocsElement;

@@ -2889,6 +2889,7 @@ const MidSection = React.forwardRef((props, ref) => {
             holderDIV,
             focuseddClassMaintain,
             handleClicked,
+            setSidebar
           )
         }
         if (decoded.details.action === 'template') {

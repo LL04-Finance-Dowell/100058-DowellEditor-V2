@@ -28,6 +28,7 @@ const initialState = {
   newScale: false,
   camera: false,
   payment: false,
+  googleDocs: false,
 };
 const initialState2 = {
   align2: false,
@@ -45,6 +46,7 @@ const initialState2 = {
   newScale2: false,
   camera2: false,
   payment2: false,
+  googleDocs2: false
 };
 
 export const ContextProvider = ({ children }) => {
@@ -560,6 +562,9 @@ export const ContextProvider = ({ children }) => {
             case 'emailButton':
               type = 'email2';
               break;
+            case 'googleDOcsButton':
+              type = 'googleDOcs2'
+              break;
             default:
               type = '';
           }
@@ -659,37 +664,37 @@ export const ContextProvider = ({ children }) => {
   };
 
   const updateDimRatios = (holder) => {
-      const midSecWidth = document
-        .querySelector('.midSection_container')
-        .getBoundingClientRect().width;
-      const holderStyles = window.getComputedStyle(holder);
-      const el = holder.children[1]?.classList.contains('dropdownInput')
-        ? holder.children[1]
-        : holder.children[0];
+    const midSecWidth = document
+      .querySelector('.midSection_container')
+      .getBoundingClientRect().width;
+    const holderStyles = window.getComputedStyle(holder);
+    const el = holder.children[1]?.classList.contains('dropdownInput')
+      ? holder.children[1]
+      : holder.children[0];
 
-      const holderTop = parseFloat(holderStyles.top);
-      const holderLeft = parseFloat(holderStyles.left);
-      const holderWidth = parseFloat(holderStyles.width);
-      const holderHeight = parseFloat(holderStyles.height);
+    const holderTop = parseFloat(holderStyles.top);
+    const holderLeft = parseFloat(holderStyles.left);
+    const holderWidth = parseFloat(holderStyles.width);
+    const holderHeight = parseFloat(holderStyles.height);
 
-      const dimRatios = sessionStorage.getItem('dimRatios')
-        ? JSON.parse(sessionStorage.getItem('dimRatios'))
-        : [];
-      const modDimRatios = dimRatios.map((ratio) =>
-        ratio.id === el.id
-          ? {
-            ...ratio,
-            top: holderTop / midSecWidth,
-            left: holderLeft / midSecWidth,
-            width: holderWidth / midSecWidth,
-            height: holderHeight / midSecWidth,
-          }
-          : ratio
-      );
+    const dimRatios = sessionStorage.getItem('dimRatios')
+      ? JSON.parse(sessionStorage.getItem('dimRatios'))
+      : [];
+    const modDimRatios = dimRatios.map((ratio) =>
+      ratio.id === el.id
+        ? {
+          ...ratio,
+          top: holderTop / midSecWidth,
+          left: holderLeft / midSecWidth,
+          width: holderWidth / midSecWidth,
+          height: holderHeight / midSecWidth,
+        }
+        : ratio
+    );
 
-      sessionStorage.setItem('dimRatios', JSON.stringify(modDimRatios));
-      setDimRatios(modDimRatios);
-   
+    sessionStorage.setItem('dimRatios', JSON.stringify(modDimRatios));
+    setDimRatios(modDimRatios);
+
   };
 
   useEffect(() => {
@@ -922,7 +927,7 @@ export const ContextProvider = ({ children }) => {
         resizeChecker,
         socialMediaImg,
         setSocialMediaImg,
-        pendingMail, 
+        pendingMail,
         setPendingMail
       }}
     >
