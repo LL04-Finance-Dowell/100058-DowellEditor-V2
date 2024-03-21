@@ -69,6 +69,28 @@
   margin: 0;
 }
 
+.left_menu_preview_holder {
+  margin: 0 auto;
+  padding-top: 10px;
+}
+
+.left_menu_preview {
+  background-color: rgb(251, 251, 251) !important;
+  z-index: 200;
+  width: 100% !important;
+  height: 80px !important;
+  top: 59px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  left: 0;
+  right: 0;
+}
+
+.left_menu_preview_wrapper {
+  display: flex !important;
+  flex-flow: row nowrap;
+}
+
 .custom_reject_button {
   background-color: #e43429;
   border-radius: 10px;
@@ -143,10 +165,10 @@
     margin-top: 0px;
     flex-wrap: wrap;
     padding: 8px;
-    column-gap:1.5rem;
+    column-gap: 1.5rem;
     row-gap: 0;
     z-index: 20;
-    
+
   }
 
   .left_menu_wrapper {
@@ -159,7 +181,7 @@
 
   .leftMenu .btn_wrapper {
     text-align: center;
-      width: 2.4rem;
+    width: 2.4rem;
   }
 
   .leftMenu .btn_wrapper>button {
@@ -182,7 +204,7 @@
     grid-template-columns: 1fr 1fr;
     grid-template-rows: auto;
     width: 100%;
-    flex: row wrap;
+    flex-flow: row wrap;
     justify-content: center;
     align-items: center;
     gap: 1rem;
@@ -206,6 +228,6 @@
 @media only screen and (min-width: 1400px) {
   .left_menu_wrapper {
     width: 14%;
-   
+
   }
 }
