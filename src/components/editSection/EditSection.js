@@ -201,7 +201,7 @@ const EditSection = () => {
             }
             lg={sidebar ? 3 : 0}
             as='div'
-            className='editSec_rightMenu'
+            className={`${mode === 'preview' ? 'vis_hid' : ''} editSec_rightMenu`}
           >
             <div className={`${mode === 'preview' ? 'vis_hid' : ''}`}
 
