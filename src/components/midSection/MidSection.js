@@ -46,6 +46,7 @@ import createButtonInputElement from './createElements/CreateButtonElement.jsx';
 import RemoveElementModal from '../RemoveElementModal';
 import createFormInputElement from './createElements/CreateFormElement.jsx';
 import createContainerInputElement from './createElements/CreateContainerElement.jsx';
+import CreateGoogleDocsElement from './createElements/CreateGoogleDocsElement.jsx';
 import { finding_percent } from './../../utils/util_functions/finding_percent';
 
 import handleSocialMediaAPI from "../../utils/handleSocialMediaAPI";
@@ -2880,6 +2881,15 @@ const MidSection = React.forwardRef((props, ref) => {
             handleClicked,
             setSidebar
           );
+        } else if (
+          typeOfOperation === 'GOOGLE_DOCS_INPUT' &&
+          decoded.details.action === 'template'
+        ) {
+          CreateGoogleDocsElement(
+            holderDIV,
+            focuseddClassMaintain,
+            handleClicked,
+          )
         }
         if (decoded.details.action === 'template') {
           document.querySelector('.drop_zone').append(holderDIV);
