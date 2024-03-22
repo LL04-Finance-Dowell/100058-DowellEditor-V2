@@ -170,7 +170,7 @@ const EditSection = () => {
                       ? { background: '#e3eeff' }
                       : { background: '#1c2b48' }
                 }
-                className='left_menu_wrapper scrollbar'
+                className={`left_menu_wrapper scrollbar ${mode === 'preview' ? "left_menu_preview":''}`}
               >
                 <LeftMenu />
               </div>
@@ -201,7 +201,7 @@ const EditSection = () => {
             }
             lg={sidebar ? 3 : 0}
             as='div'
-            className='editSec_rightMenu'
+            className={`${mode === 'preview' ? 'vis_hid' : ''} editSec_rightMenu`}
           >
             <div className={`${mode === 'preview' ? 'vis_hid' : ''}`}
 

@@ -2478,7 +2478,7 @@ const Header = () => {
       </div>
       <div
         className={`header desktop_header ${actionName == 'template' ? 'header_bg_template' : 'header_bg_document'
-          }`}
+          } ${mode == 'preview' ? "preview_header" : ''}` }
       >
         <Container fluid>
           <Row>
