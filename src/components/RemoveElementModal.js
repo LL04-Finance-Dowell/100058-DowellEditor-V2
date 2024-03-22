@@ -4,7 +4,7 @@ import { useStateContext } from "../contexts/contextProvider";
 import { useCutMenuContext } from "./midSection/cutMenuHook";
 
 
-const RemoveElmentModal = ({ handleRemoveInput, targetEl}) => {
+const RemoveElmentModal = ({ handleRemoveInput, targetEl }) => {
   const { setConfirmRemove, setSidebar } = useStateContext()
   let targetElement = document.querySelector(".focussedd")
   if (targetEl) targetElement = targetEl;
@@ -44,10 +44,14 @@ const RemoveElmentModal = ({ handleRemoveInput, targetEl}) => {
     case targetElement.querySelector('.dropdownInput') && true:
       componentType = 'Dropdown Component';
       break;
-  
+
     case targetElement.querySelector('.cameraInput') && true:
       componentType = 'Camera Component';
       break;
+    case targetElement.querySelector('.googleDocsButton') && true:
+      componentType = 'GoogleDocs component'
+      break
+
     default:
       componentType = '';
   }
@@ -63,13 +67,13 @@ const RemoveElmentModal = ({ handleRemoveInput, targetEl}) => {
           <Modal.Title>Warning</Modal.Title>
         </Modal.Header>
 
-        <Modal.Body>
+        <Modal.Body>;
           <p>Are you sure you want to remove {componentType} ?</p>
         </Modal.Body>
 
         <Modal.Footer>
           <Button variant="secondary" onClick={() => {
-            setConfirmRemove(false)         
+            setConfirmRemove(false)
           }}>No</Button>
           <Button variant="primary" className="modal-confirm-remove" onClick={() => {
             if (handleRemoveInput) {

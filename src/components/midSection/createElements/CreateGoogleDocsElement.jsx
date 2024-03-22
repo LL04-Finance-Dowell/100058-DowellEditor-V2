@@ -31,25 +31,7 @@ function CreateGoogleDocsElement(holderDIV, focuseddClassMaintain, handleClicked
         };
     });
 
-    // googleDocs.style.width = "100%";
-    // googleDocs.style.height = "100%";
-    // googleDocs.style.backgroundColor = "#0000";
-    // googleDocs.style.borderRadius = "0px";
-    // // paymentField.style.outline = "0px";
-    // googleDocs.style.overflow = "overlay";
-    // googleDocs.style.position = "absolute";
-    // googleDocs.style.outline = "none";
-    // // paymentField.style.boxShadow="none"; 
-    // googleDocs.style.border = "none"
-    // googleDocs.textContent = "Create a google docs";
 
-    // // const googleDocsInput = document.getElementsByClassName("googleDocsInput");
-    // // if (googleDocsInput.length) {
-    // //     const p = googleDocsInput.length;
-    // //     googleDocs.id = `pay${p + 1}`;
-    // // } else {
-    // //     googleDocs.id = "pay1";
-    // // }
 
     googleDocs.onclick = (e) => {
         e.stopPropagation();
