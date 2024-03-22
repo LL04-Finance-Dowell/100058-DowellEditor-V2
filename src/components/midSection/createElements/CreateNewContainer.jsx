@@ -63,8 +63,8 @@ const getContainerField = (focuseddClassMaintain, handleClicked, setSidebar, tab
         const containerRect = container.getBoundingClientRect();
         const typeOfOperationContainer = event.dataTransfer.getData("text/plain");
         const measureContainer = {
-            width: "100%",
-            height: "100%",
+            width: "200px",
+            height: "80px",
             left: event.clientX - containerRect.left + "px",
             top: event.clientY - containerRect.top + "px",
             auth_user: curr_user,

@@ -227,6 +227,8 @@ const MidSection = React.forwardRef((props, ref) => {
     let x = e.clientX;
     let y = e.clientY;
     const foundElement = document.elementFromPoint(x, y)?.parentElement;
+    console.info('\n\n FOUND ELEMENT',foundElement,'\n\n');
+
     const midSec = document.getElementById('midSection_container');
     if (foundElement.classList.contains('midSection_container')) return;
     const midsectionRect = midSec.getBoundingClientRect();

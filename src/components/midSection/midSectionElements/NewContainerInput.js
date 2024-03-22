@@ -129,6 +129,7 @@ const renderContainerItems = (
     setRightSideDateMenu,
     title,
     curr_user,
+    setRightSideDropDown,
     copy_data = false
 ) => {
    const document_map_required =false;
@@ -147,9 +148,9 @@ const renderContainerItems = (
             measureContainer.left = containerElement.left;
         }
         const typeOfOperationContainer = containerElement.type;
-        const holderDIVContainer = getHolderDIV(measureContainer);
-        holderDIVContainer.style.width = '100%';
-        holderDIVContainer.style.height = '100%';
+        let holderDIVContainer = getHolderDIV(measureContainer);
+        // holderDIVContainer.style.width = '100%';
+        // holderDIVContainer.style.height = '100%';
         holderDIVContainer.style.position = 'relative';
         holderDIVContainer.style.top = '0';
         holderDIVContainer.style.left = '0';
@@ -175,10 +176,15 @@ const renderContainerItems = (
         } else if (typeOfOperationContainer == "PAYMENT_INPUT") {
             createPaymentInputField(id, containerElement, p, holderDIVContainer, focuseddClassMaintain, handleClicked, setSidebar, finalizeButton, rejectButton, decoded, document_map_required)
         }
-        if (typeOfOperationContainer !== 'CONTAINER_INPUT')
-            containerHolder.append(holderDIVContainer);
 
-        // return containerHolder;
+        if(containerElement?.data == "Container"){
+            holderDIVContainer = getContainerField(focuseddClassMaintain, handleClicked, setSidebar, table_dropdown_focuseddClassMaintain, decoded, setPostData, postData, getHolderDIV, getOffset, setStartDate, setMethod, setRightSideDateMenu, title, curr_user, containerHolder, setRightSideDropDown)
+        }
+        if (typeOfOperationContainer !== 'CONTAINER_INPUT')
+        {
+          containerHolder.append(holderDIVContainer);
+        };
+                // return containerHolder;
     }
 }
 function createContainerInputField(
@@ -244,7 +250,8 @@ function createContainerInputField(
         setMethod,
         setRightSideDateMenu,
         title,
-        curr_user
+        curr_user,
+       setRightSideDropDown
    )
 
     holderDIV.append(containerHolder);
