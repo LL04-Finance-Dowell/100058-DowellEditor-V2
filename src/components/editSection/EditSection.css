@@ -69,7 +69,17 @@
   pointer-events: none;
 }
 
-@media screen and (max-width: 992px) {
+
+@media only screen and (min-width: 1260px)and (max-width: 1366px) {
+
+  .editSec_midSec {
+    column-gap: 1rem !important;
+    top: 110px;
+  }
+
+}
+
+@media screen and (max-width: 1260px) {
   .editSec {
     padding-top: 0;
   }
@@ -79,8 +89,10 @@
     left: 210px;
   }
 
+
+
+
   .editSec_midSec {
-    margin-left: -9px;
     margin-top: 98px;
     overflow-x: scroll;
     width: 100vw;
@@ -97,11 +109,50 @@
   }
 }
 
-@media only screen and (min-width: 992px)and (max-width: 1366px) {
-
+@media only screen and (max-width: 1024px) {
   .editSec_midSec {
-    column-gap: 1rem !important;
-    top: 110px;
+    margin-left: -10px;
   }
 
+  .canvas-holder {
+    position: relative;
+    left: 0;
+  }
+
+
+}
+
+@media only screen and (max-width: 992px) {
+  .editSec_midSec {
+    margin-left: 4px;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .editSec_midSec {
+    margin-left: 0;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .editSec_midSec {
+    margin-left: 0;
+  }
+
+  .canvas-holder {
+    position: relative;
+    left: 220px;
+    padding: 0 35px;
+  }
+}
+@media only screen and (max-width: 375px) {
+  .editSec_midSec {
+    margin-left: 0;
+  }
+
+  .canvas-holder {
+    position: relative;
+    left: 225px;
+    padding: 0 35px;
+  }
 }

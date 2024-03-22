@@ -313,9 +313,9 @@ svg:not(.view_mode svg, .mid_resizer svg) {
   }
 }
 
-@media screen and (max-width: 992px) {
+@media screen and (max-width: 1260px) {
   .title-name {
-    font-size: 12px;
+    font-size: 8px;
     margin-left: 0px;
   }
 
@@ -366,7 +366,7 @@ svg:not(.view_mode svg, .mid_resizer svg) {
   }
 }
 
-@media screen and (min-width: 992px) {
+@media screen and (min-width: 1260px) {
   .d-flex.lhs-header {
     display: none !important;
   }
@@ -393,5 +393,13 @@ svg:not(.view_mode svg, .mid_resizer svg) {
   .head-bar {
     padding: 0.2rem 0.6rem;
 
+  }
+}
+
+@media only screen and (max-width:375px) {
+
+  .savee,
+  .share_button {
+    width: 2.5rem;
   }
 }
