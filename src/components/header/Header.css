@@ -285,6 +285,7 @@ svg:not(.view_mode svg, .mid_resizer svg) {
   width: 100%;
 }
 
+ /* Mobile responsiveness */
 @media screen and (max-width: 700px) {
   .mode_tag {
     display: none;
