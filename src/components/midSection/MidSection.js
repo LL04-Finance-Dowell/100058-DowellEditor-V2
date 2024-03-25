@@ -2887,6 +2887,7 @@ const MidSection = React.forwardRef((props, ref) => {
         if (decoded.details.action === 'template') {
           document.querySelector('.drop_zone').append(holderDIV);
         }
+        if(mode == 'preview') renderPreview();
       }
     }
   };

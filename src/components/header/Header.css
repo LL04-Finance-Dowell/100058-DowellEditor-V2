@@ -112,6 +112,11 @@
   height: 100%;
 }
 
+.preview_header {
+  height: 61px !important;
+  justify-content: space-between !important;
+}
+
 .header_icons {
   display: flex;
   align-items: center;
