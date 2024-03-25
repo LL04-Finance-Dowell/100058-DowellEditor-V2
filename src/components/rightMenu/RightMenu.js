@@ -502,7 +502,7 @@ const RightMenu = () => {
       <div className="fixed3 right-menu"
       style={{height:"auto"}}
        id="rightMenuDragStart" draggable={false} onDragStart={(event) => rightMenuDragStart(event)} onDragEnd={(event) => rightMenuDragEnd(event)} ref={rightMenuRef} onPointerDown={handleGestureDown} onPointerMove={handleGestureMove} onPointerUp={handleGestureUp} onPointerLeave={handleGestureUp}>
-        {window.innerWidth < 1260 && <span id="move_icon" onPointerLeave={handleGestureUp}>
+        {window.innerWidth < 1024 && <span id="move_icon" onPointerLeave={handleGestureUp}>
           <AiOutlineDrag />
         </span>}
         {isClicked.align2 && <AlignRightSide />}
