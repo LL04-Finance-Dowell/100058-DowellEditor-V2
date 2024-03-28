@@ -313,13 +313,13 @@ svg:not(.view_mode svg, .mid_resizer svg) {
     max-width: 50%;
   }
 } */
-@media only screen and (max-width: 1140px) {
+@media only screen and (max-width: 1260px) {
   .view_mode {
     display: none !important;
   }
 }
 
-@media screen and (max-width: 1140px) {
+@media screen and (max-width: 1260px) {
   .title-name {
     font-size: 8px;
     margin-left: 0px;
@@ -372,7 +372,7 @@ svg:not(.view_mode svg, .mid_resizer svg) {
   }
 }
 
-@media screen and (min-width: 1140px) {
+@media screen and (min-width: 1260px) {
   .d-flex.lhs-header {
     display: none !important;
   }
