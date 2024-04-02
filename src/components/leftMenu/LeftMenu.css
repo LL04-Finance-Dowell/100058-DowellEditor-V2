@@ -149,16 +149,15 @@
     padding-bottom: 5px;
   }
 } */
-
 @media screen and (max-width: 1279px) {
 
-  /* .leftMenu-title, */
+  .leftMenu-title,
   .btn_tag {
     display: none;
   }
 
   .leftMenu {
-    /* background-color: #ffffff; */
+    background-color: #ffffff;
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
@@ -198,13 +197,7 @@
   }
 }
 
-@media screen and (max-width:1024px) {
-  .leftMenu-title {
-    display: none;
-  }
-}
-
-@media screen and (min-width:1024px) {
+@media screen and (min-width:1280px) {
   .leftMenu {
     display: grid;
     margin: 0 auto;
