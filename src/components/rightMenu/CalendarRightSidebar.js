@@ -5,7 +5,6 @@ import jwt_decode from "jwt-decode";
 import DatePicker from "react-datepicker";
 import { useStateContext } from "../../contexts/contextProvider";
 import { useSearchParams } from "react-router-dom";
-import SelectAnsAndQuestion from "../selectAnsAndQuestion";
 import useSelectedAnswer from "../../customHooks/useSelectedAnswers";
 
 const CalendarRightSidebar = (props) => {
