@@ -1,10 +1,17 @@
 import React from "react";
-import { Routes,Route } from "react-router-dom";
+import { Routes,Route, useSearchParams } from "react-router-dom";
 import "./App.css";
+import jwt_decode from 'jwt-decode';
 import HomePage from "./pages/HomePage";
 import ThankYouPage from "./utils/redirectPages/ThankYouPage";
 
 function App() {
+  const [searchParams] = useSearchParams();
+  const token = searchParams.get('token');
+  var decoded = jwt_decode(token);
+  const titleName = decoded?.details?.name;
+  document.title = titleName
+
   return (
     <div className="app">
       <Routes>  
