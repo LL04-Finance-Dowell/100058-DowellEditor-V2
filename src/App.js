@@ -11,7 +11,7 @@ import { useEffect } from "react";
 
 function App() {
   const [searchParams] = useSearchParams();
-  const [tokenError, setTokenError] = useState(true)
+  const [tokenError, setTokenError] = useState(null)
 
   useEffect(() => {
     const token = searchParams.get('token') ?? null;
@@ -31,7 +31,7 @@ function App() {
 
   return <>
     <div className="app">
-      {tokenError ?
+      {tokenError === true ?
         (
           <>
             <div className="mb-4 text-center">
@@ -44,7 +44,7 @@ function App() {
           </>
         )
         :
-        (<Routes>
+        (tokenError !== null && <Routes>
           <Route path="/100058-DowellEditor-V2/status" element={<ThankYouPage />} />
           <Route exact path="/100058-DowellEditor-V2/" element={<HomePage />} />
         </Routes>
