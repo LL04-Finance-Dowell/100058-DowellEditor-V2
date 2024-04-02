@@ -1,25 +1,58 @@
-import React from "react";
-import { Routes,Route, useSearchParams } from "react-router-dom";
+import React, { useState } from "react";
+import { Routes, Route, useSearchParams } from "react-router-dom";
 import "./App.css";
 import jwt_decode from 'jwt-decode';
 import HomePage from "./pages/HomePage";
 import ThankYouPage from "./utils/redirectPages/ThankYouPage";
+import failurePayment from "./assets/failure.svg"
+
+
+import { useEffect } from "react";
 
 function App() {
   const [searchParams] = useSearchParams();
-  const token = searchParams.get('token');
-  var decoded = jwt_decode(token);
-  const titleName = decoded?.details?.name;
-  document.title = titleName
+  const [tokenError, setTokenError] = useState(true)
 
-  return (
+  useEffect(() => {
+    const token = searchParams.get('token') ?? null;
+    if (token == null) {
+      setTokenError(true);
+    } else {
+      try {
+        var decoded = jwt_decode(token);
+        const titleName = decoded?.details?.name;
+        document.title = titleName;
+        setTokenError(false);
+      } catch (error) {
+        setTokenError(true);
+      }
+    };
+  }, [tokenError])
+
+  return <>
     <div className="app">
-      <Routes>  
-              <Route path="/100058-DowellEditor-V2/status" element={<ThankYouPage />} />
-              <Route exact path="/100058-DowellEditor-V2/" element={<HomePage />} />
-       </Routes>
+      {tokenError ?
+        (
+          <>
+            <div className="mb-4 text-center">
+              <img src={failurePayment} alt='Token Error' />
+            </div>
+            <div className="text-center">
+              <h1>Sorry</h1>
+              <p>You token is not valid or empty.</p>
+            </div>
+          </>
+        )
+        :
+        (<Routes>
+          <Route path="/100058-DowellEditor-V2/status" element={<ThankYouPage />} />
+          <Route exact path="/100058-DowellEditor-V2/" element={<HomePage />} />
+        </Routes>
+        )
+
+      }
     </div>
-  );
+  </>;
 }
 
 export default App;
