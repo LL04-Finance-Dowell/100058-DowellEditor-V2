@@ -7,7 +7,6 @@ import jwt_decode from "jwt-decode";
 import { useSearchParams } from "react-router-dom";
 import { GrEmoji } from "react-icons/gr";
 import Picker from "emoji-picker-react";
-import SelectAnsAndQuestion from "../selectAnsAndQuestion";
 import useSelectedAnswer from "../../customHooks/useSelectedAnswers";
 
 const ScaleRightSide = () => {

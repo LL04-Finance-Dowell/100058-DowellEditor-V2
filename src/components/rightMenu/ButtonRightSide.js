@@ -3,7 +3,6 @@ import { Row, Button, Form } from 'react-bootstrap';
 import { useStateContext } from '../../contexts/contextProvider';
 import { useSearchParams } from 'react-router-dom';
 import jwt_decode from 'jwt-decode';
-import SelectAnsAndQuestion from '../selectAnsAndQuestion';
 import useSelectedAnswer from '../../customHooks/useSelectedAnswers';
 
 const ButtonRightSide = () => {

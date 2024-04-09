@@ -4,7 +4,6 @@ import { useStateContext } from "../../contexts/contextProvider";
 import Axios from "axios";
 import jwt_decode from "jwt-decode";
 import { useSearchParams } from "react-router-dom";
-import SelectAnsAndQuestion from "../selectAnsAndQuestion";
 import useSelectedAnswer from '../../customHooks/useSelectedAnswers';
 
 
