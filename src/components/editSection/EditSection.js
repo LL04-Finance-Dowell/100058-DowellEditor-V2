@@ -5,6 +5,7 @@ import jwt_decode from 'jwt-decode';
 import LeftMenu from '../leftMenu/LeftMenu';
 import MidSection from '../midSection/MidSection.js';
 import RightMenu from '../rightMenu/RightMenu';
+import Footer from '../footer/Footer';
 
 import './EditSection.css';
 import { useStateContext } from '../../contexts/contextProvider';
@@ -129,8 +130,8 @@ const EditSection = () => {
     ?.getBoundingClientRect();
 
   useEffect(() => {
-    const previewCanvas =document.querySelector('.preview-canvas');
-    if(!previewCanvas)return;
+    const previewCanvas = document.querySelector('.preview-canvas');
+    if (!previewCanvas) return;
     const allHolderDivs = [...previewCanvas.querySelectorAll('.holderDIV')];
     switch (mode) {
       case 'preview':
@@ -154,7 +155,7 @@ const EditSection = () => {
     <div className='editSec'>
       <Container fluid>
         <Row
-        id='edit-container'
+          id='edit-container'
         >
           <Col
             lg={1}
@@ -169,7 +170,7 @@ const EditSection = () => {
                       ? { background: '#e3eeff' }
                       : { background: '#1c2b48' }
                 }
-                className='left_menu_wrapper scrollbar'
+                className={`left_menu_wrapper scrollbar ${mode === 'preview' ? "left_menu_preview":''}`}
               >
                 <LeftMenu />
               </div>
@@ -179,12 +180,12 @@ const EditSection = () => {
             // style={{marginTop:window.innerWidth< && left_menu_size?.height}}
             lg={sidebar ? 8 : 11}
             as='div'
-            className={`editSec_midSec ${mode == "preview"?"preview":""}`}
+            className={`editSec_midSec ${mode == "preview" ? "preview" : ""}`}
             id='editSec_midSec'
           >
-            <div className='canvas-holder '> 
+            <div className='canvas-holder '>
 
-            <MidSection />
+              <MidSection />
             </div>
           </Col>
 
@@ -200,10 +201,10 @@ const EditSection = () => {
             }
             lg={sidebar ? 3 : 0}
             as='div'
-            className='editSec_rightMenu'
+            className={`${mode === 'preview' ? 'vis_hid' : ''} editSec_rightMenu`}
           >
             <div className={`${mode === 'preview' ? 'vis_hid' : ''}`}
-            
+
             >
               <RightMenu />
             </div>
@@ -211,6 +212,10 @@ const EditSection = () => {
           {/* </div> */}
         </Row>
       </Container>
+      <div className='footer'>
+        <Footer />
+      </div>
+
     </div>
   );
 };

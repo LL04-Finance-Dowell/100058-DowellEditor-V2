@@ -4,7 +4,6 @@ import { useStateContext } from "../../contexts/contextProvider";
 import { useSearchParams } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 import useSelectedAnswer from "../../customHooks/useSelectedAnswers";
-import SelectAnsAndQuestion from "../selectAnsAndQuestion";
 
 
 const ContainerRigntSideBar = () => {

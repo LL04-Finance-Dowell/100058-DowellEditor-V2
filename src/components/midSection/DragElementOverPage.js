@@ -46,6 +46,10 @@ export const dragElementOverPage = (event, resizing, mode) => {
         ev.preventDefault();
         const el = document.getElementById("midSection_container");
         const midsectionRect = el.getBoundingClientRect();
+        console.log("event screenx", ev.screenX);
+        console.log("event screeny", ev.screenY);
+        console.log("midsect left", midsectionRect.left);
+        console.log("midsect right", midsectionRect.right);
         if (!hodlerRect) return;
         const elemtnMeasureX =
           ev.screenX + holderPos.left + hodlerRect.width - initX;

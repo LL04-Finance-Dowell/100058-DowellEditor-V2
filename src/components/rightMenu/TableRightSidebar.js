@@ -11,7 +11,6 @@ import { Row, Button, Form, DropdownButton, Dropdown } from "react-bootstrap";
 
 import { useStateContext } from "../../contexts/contextProvider";
 import { table_dropdown_focuseddClassMaintain } from "../../utils/focusClassMaintain/focusClass";
-import SelectAnsAndQuestion from "../selectAnsAndQuestion";
 import useSelectedAnswer from '../../customHooks/useSelectedAnswers';
 
 

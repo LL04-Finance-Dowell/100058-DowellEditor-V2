@@ -32,13 +32,13 @@ const LeftMenu = ({ showSidebar }) => {
 
   return (
     <>
-      <div className={` ${mode === 'preview' ? 'vis_hid' : ''}`}>
+      <div className={`${mode === 'preview' ? 'left_menu_preview_holder' : ''}`} >
         {isFlipClicked ? (
           isMobileView ? (
             <span>X</span>
           ) : (
-            <div className='leftMenu fixed2' ref={leftMenuRef}>
-              <div className='leftMenu-title'><p>Components</p></div> 
+              <div ref={leftMenuRef} className={`leftMenu fixed2 ${mode === 'preview' ? 'left_menu_preview_wrapper' : ''}`}>
+              <div className={`leftMenu-title  ${mode === 'preview' ? 'vis_hid' : ''}`}><p>Components</p></div> 
               <TextButton customFunc={() => handleDrop('align')} />
               <ImageButton customFunc={() => handleDrop('image')} />
               <TableButton customFunc={() => handleDrop('table')} />

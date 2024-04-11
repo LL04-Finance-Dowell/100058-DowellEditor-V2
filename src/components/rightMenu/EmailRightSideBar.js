@@ -6,7 +6,6 @@ import { ToastContainer, toast } from 'react-toastify';
 import { useSearchParams } from 'react-router-dom';
 import jwt_decode from 'jwt-decode';
 import { useStateContext } from '../../contexts/contextProvider';
-import SelectAnsAndQuestion from '../selectAnsAndQuestion';
 import useSelectedAnswer from '../../customHooks/useSelectedAnswers';
 
 const EmailRightSideBar = () => {

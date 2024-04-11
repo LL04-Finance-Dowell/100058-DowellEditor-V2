@@ -51,7 +51,7 @@ const MidResizer = () => {
 
   return (
     <div className='mid_resizer'>
-      <div
+      {/* <div
         className={`sel_opt ${isDrop ? 'drop' : ''}`}
         onClick={() => setIsDrop(!isDrop)}
       >
@@ -87,7 +87,7 @@ const MidResizer = () => {
             </li>
           ))}
         </ul>
-      </div>
+      </div> */}
     </div>
   );
 };
