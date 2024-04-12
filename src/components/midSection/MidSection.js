@@ -426,7 +426,6 @@ const MidSection = React.forwardRef((props, ref) => {
         const wWidth = window.innerWidth;
         const el = document.getElementById("midSection_container");
         const midsectionRect = el.getBoundingClientRect();
-
         if (
           ev.screenX > midsectionRect.left &&
           ev.screenY > midsectionRect.top &&

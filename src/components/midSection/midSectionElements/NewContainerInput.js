@@ -135,7 +135,7 @@ const renderContainerItems = (
    const document_map_required =false;
     for (let p = 0; p < element.data.length; p++) {
         const containerElement = element.data[p];
-         console.log('\n>>>>>Container Data\n',containerElement,'\n>>>>>>>>>>>ELEMENT\n',element);
+         console.log('\n>>>>>Container Data\n',containerElement,'\n>>>>>>>>>>>ELEMENT\n',element.height);
         const measureContainer = {
             width: containerElement.width + 'px',
             height: containerElement.height + 'px',
@@ -157,6 +157,7 @@ const renderContainerItems = (
         holderDIVContainer.classList.add('container-element');
         holderDIVContainer.addEventListener('drag', (e) => null);
         const id  = element.id
+        console.log(holderDIVContainer);
         if (typeOfOperationContainer === "DATE_INPUT") {
             createDateInputField(id, containerElement, document_map_required, p, holderDIVContainer, focuseddClassMaintain, handleClicked, setSidebar, setRightSideDateMenu, setMethod, setStartDate);
         } else if (typeOfOperationContainer === "IMAGE_INPUT") {
@@ -210,10 +211,10 @@ function createContainerInputField(
     copy_data = false
     )
 {
-    holderDIV.style.width = 'auto';
-    holderDIV.style.height = 'auto';
-    holderDIV.style.minWidth = '270px';
-    holderDIV.style.minHeight = '100px';
+    // holderDIV.style.width = 'auto';
+    // holderDIV.style.height = 'auto';
+    // holderDIV.style.minWidth = '270px';
+    // holderDIV.style.minHeight = '100px';
     const containerHolder = document.createElement("div");
     const containerHolderHeader = document.createElement("div");
     containerHolder.className = 'containerHolder'
