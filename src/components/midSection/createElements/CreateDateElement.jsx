@@ -6,7 +6,7 @@ function createDateInputElement(holderDIV, focuseddClassMaintain, handleClicked,
   let dateField = document.createElement("div");
   dateField.className = "dateInput";
   dateField.style.width = "100%";
-  dateField.style.height = "96px";
+  dateField.style.height = "100%";
   dateField.style.backgroundColor = "#0000";
   dateField.style.borderRadius = "0px";
   dateField.style.outline = "0px";

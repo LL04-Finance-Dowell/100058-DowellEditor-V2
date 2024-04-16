@@ -5,7 +5,7 @@ import icon from '../../../assets/icons/sign.svg'
 
 // Regular JavaScript function to create a text input field
 function createSignInputElement(holderDIV, focuseddClassMaintain, handleClicked, setSidebar, setPostData, getOffset, copy_data=false) {
-    holderDIV.style.height = '110px'
+    // holderDIV.style.height = '110px'
 
     let signField = document.createElement("div");
     signField.className = "signInput";
