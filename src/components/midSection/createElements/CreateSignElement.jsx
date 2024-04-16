@@ -10,7 +10,7 @@ function createSignInputElement(holderDIV, focuseddClassMaintain, handleClicked,
     let signField = document.createElement("div");
     signField.className = "signInput";
     signField.style.width = "100%";
-    signField.style.height = "100%";
+    signField.style.height = "96px";
     signField.style.backgroundColor = "#0000";
     signField.style.borderRadius = "0px";
     signField.style.outline = "0px";
