@@ -145,7 +145,7 @@
 
 .container-section,.container-element {
   flex: 1;
-  min-width: 195px;
+  /* min-width: 195px; */
   /* min-height: 95px; */
   position: relative;
 }
@@ -182,11 +182,4 @@
 
 .container_add-button:hover {
   cursor: pointer;
-}
-
-.container-section,.container-element {
-  flex: 1;
-  min-width: 195px;
-  /* min-height: 95px; */
-  position: relative;
 }

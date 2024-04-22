@@ -213,8 +213,8 @@ function createContainerInputField(
 {
     // holderDIV.style.width = 'auto';
     // holderDIV.style.height = 'auto';
-    // holderDIV.style.minWidth = '270px';
-    // holderDIV.style.minHeight = '100px';
+    holderDIV.style.minWidth = '270px';
+    holderDIV.style.minHeight = '100px';
     const containerHolder = document.createElement("div");
     const containerHolderHeader = document.createElement("div");
     containerHolder.className = 'containerHolder'
