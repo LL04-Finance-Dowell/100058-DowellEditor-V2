@@ -107,6 +107,8 @@ const getContainerField = (focuseddClassMaintain, handleClicked, setSidebar, tab
 function createContainerInputElement(holderDIV, focuseddClassMaintain, handleClicked, setSidebar, table_dropdown_focuseddClassMaintain, decoded, setPostData, postData, getHolderDIV, getOffset, setStartDate, setMethod, setRightSideDateMenu, title, curr_user, setRightSideDropDown) {
     holderDIV.style.width = 'auto';
     holderDIV.style.height = 'auto';
+    holderDIV.style.left = '0px';
+    holderDIV.style.right = '0px';
     holderDIV.style.minWidth = '270px';
     holderDIV.style.minHeight = '100px';
     const containerHolder = document.createElement("div");

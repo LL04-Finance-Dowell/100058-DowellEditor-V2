@@ -20,7 +20,7 @@ function createImageInputField(id, element, document_map_required, p, holderDIV,
   //   position: "relative",
   // };
   imageField.style.width = "100%";
-  imageField.style.height = "95px";
+  imageField.style.height = "100%";
   imageField.style.backgroundColor = "#e3eeff";
   imageField.style.borderRadius = "0px";
   imageField.style.outline = "0px";

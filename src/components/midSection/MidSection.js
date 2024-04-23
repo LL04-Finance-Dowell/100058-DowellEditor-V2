@@ -2563,13 +2563,21 @@ const MidSection = React.forwardRef((props, ref) => {
         // border: "2px dotted gray",
         auth_user: curr_user,
       };
+      const containerMeasure = {
+        width: midsectionRect.widtth + 'px',
+        left: midsectionRect.left + 'px',
+        height: '80px',
+        top: event.clientY - midsectionRect.top + 'px',
+        // border: "2px dotted gray",
+        auth_user: curr_user,
+      };
 
       let pageNum = null;
       let holderDIV = null;
       if (event.target.classList.contains('midSection_container')) {
         pageNum = event.target.innerText.split('\n')[0];
         holderDIV = getHolderDIV(measure, pageNum);
-      } else {
+      }else {
         holderDIV = getHolderDIV(measure);
       }
 
@@ -2849,6 +2857,7 @@ const MidSection = React.forwardRef((props, ref) => {
             setRightSideDateMenu,
             title,
             curr_user,
+            midsectionRect,
             setRightSideDropDown
           );
         } else if (
