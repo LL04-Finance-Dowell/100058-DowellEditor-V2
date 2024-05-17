@@ -25,8 +25,8 @@ function createTextElement(holderDIV, focuseddClassMaintain, handleClicked, setS
   holderDIV.style.border = 'none';
   holderDIV.style.height = 'auto';
   holderDIV.style.width = 'auto';
-  holderDIV.style.minHeight = '70px';
-  holderDIV.style.minWidth = '200px';
+  // holderDIV.style.minHeight = '70px';
+  // holderDIV.style.minWidth = '200px';
   inputField.addEventListener('input', function (e) {
     handleHolderDivOverFlow(holderDIV);
     const previewCanvas = document.querySelector('.preview-canvas');

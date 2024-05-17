@@ -238,7 +238,7 @@ const MidSection = React.forwardRef((props, ref) => {
     let x = e.clientX;
     let y = e.clientY;
     const foundElement = document.elementFromPoint(x, y)?.parentElement;
-    console.info('\n\n FOUND ELEMENT',foundElement,'\n\n');
+    console.info('\n\n FOUND ELEMENT', foundElement, '\n\n');
 
     const midSec = document.getElementById('midSection_container');
     if (foundElement.classList.contains('midSection_container')) return;
@@ -370,6 +370,7 @@ const MidSection = React.forwardRef((props, ref) => {
     resizer.style.height = '5px';
     resizer.style.display = 'block';
     resizer.className = 'resizeBtn';
+    resizer.id = 'resizeBtn';
     resizer.style.position = 'absolute';
     resizer.style.backgroundColor = '#00aaff';
 
@@ -449,7 +450,7 @@ const MidSection = React.forwardRef((props, ref) => {
             holder.style.height = holderSize.height - (ev.screenY - initY) + 'px';
           }
         }
-        
+
         const previewCanvas = document.querySelector('.preview-canvas');
         if (previewCanvas) {
           const mainSection = document.querySelector('.editSec_midSec');
@@ -711,7 +712,7 @@ const MidSection = React.forwardRef((props, ref) => {
       midSection.append(tableElement);
     }
 
-    function getHolderDIV(measure, i, idMatch,disableDrag=false) {
+    function getHolderDIV(measure, i, idMatch, disableDrag = false) {
       const holderDIV = document.createElement('div');
 
       holderDIV.style.position = 'absolute';
@@ -739,9 +740,11 @@ const MidSection = React.forwardRef((props, ref) => {
       if (idMatch?.length > 0) {
         holderDIV.classList.add(`enable_pointer_event`);
         holderDIV.style.border = '1px solid green !important';
+        disableDrag = true
       } else if (idMatch?.length < 1 && actionName == 'document') {
         holderDIV.classList.add(`dotted_border`);
         holderDIV.classList.add(`disable_pointer_event`);
+        disableDrag = true
       } else {
         holderDIV.classList.add(`dotted_border`);
       }
@@ -1092,8 +1095,9 @@ const MidSection = React.forwardRef((props, ref) => {
     });
   };
 
-  function getHolderDIV(measure, i=1, idMatch=null,disableDrag=false) {
+  function getHolderDIV(measure, i = 1, idMatch = null, disableDrag = false) {
     const holderDIV = document.createElement('div');
+    const resizeBtn = document.getElementById('resizeBtn')
 
     holderDIV.style.position = 'absolute';
     holderDIV.style.overflow = 'visible';
@@ -1119,9 +1123,11 @@ const MidSection = React.forwardRef((props, ref) => {
 
     if (idMatch?.length > 0) {
       holderDIV.classList.add(`enable_pointer_event`);
+      disableDrag = true
       holderDIV.style.border = '1px solid green !important';
     } else if (idMatch?.length < 1 && actionName == 'document') {
       holderDIV.classList.add(`dotted_border`);
+      disableDrag = true
       holderDIV.classList.add(`disable_pointer_event`);
     } else {
       holderDIV.classList.add(`dotted_border`);
@@ -1161,8 +1167,12 @@ const MidSection = React.forwardRef((props, ref) => {
     holderDIV.addEventListener('focus', (e) => {
       holderDIV.classList.add('zIndex-two');
       holderDIV.style.border = '2px solid #25c7a3';
+      if (idMatch?.length > 0) {
+        console.log('no resizers');
+      } else {
+        holderDIV.append(resizerTL, resizerTR, resizerBL, resizerBR);
+      }
 
-      holderDIV.append(resizerTL, resizerTR, resizerBL, resizerBR);
     });
 
     holderDIV.addEventListener('focusout', (e) => {
@@ -2577,7 +2587,7 @@ const MidSection = React.forwardRef((props, ref) => {
       if (event.target.classList.contains('midSection_container')) {
         pageNum = event.target.innerText.split('\n')[0];
         holderDIV = getHolderDIV(measure, pageNum);
-      }else {
+      } else {
         holderDIV = getHolderDIV(measure);
       }
 
@@ -2884,7 +2894,7 @@ const MidSection = React.forwardRef((props, ref) => {
         if (decoded.details.action === 'template') {
           document.querySelector('.drop_zone').append(holderDIV);
         }
-        if(mode == 'preview') renderPreview();
+        if (mode == 'preview') renderPreview();
       }
     }
   };

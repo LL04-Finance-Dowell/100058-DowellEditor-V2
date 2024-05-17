@@ -30,10 +30,10 @@ function createTextInputField(
   inputField.style.overflow = "overlay";
   inputField.style.position = "relative";
   inputField.style.cursor = "text";
-  holderDIV.style.width = 'auto'
-  holderDIV.style.height = 'auto'
-  holderDIV.style.minHeight = '70px';
-  holderDIV.style.minWidth = '200px';
+  // holderDIV.style.width = 'auto'
+  // holderDIV.style.height = 'auto'
+  // holderDIV.style.minHeight = '70px';
+  // holderDIV.style.minWidth = '200px';
 
   holderDIV.style.border = 'none'
   inputField.addEventListener('input', function () {
