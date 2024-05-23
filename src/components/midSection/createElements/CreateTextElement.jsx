@@ -23,8 +23,6 @@ function createTextElement(holderDIV, focuseddClassMaintain, handleClicked, setS
   inputField.textContent = 'Enter text here!';
   inputField.classList.add('empty')
   holderDIV.style.border = 'none';
-  holderDIV.style.height = 'auto';
-  holderDIV.style.width = 'auto';
   // holderDIV.style.minHeight = '70px';
   // holderDIV.style.minWidth = '200px';
   inputField.addEventListener('input', function (e) {

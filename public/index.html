@@ -64,6 +64,13 @@
          crossorigin="anonymous"
       ></script>
   
+      <script>
+        if (screen.width <= 1024) {
+          document.querySelector('meta[name="viewport"]').setAttribute('content', 'width=1024, maximum-scale=1, user-scalable=no');
+        }
+      </script>
+    
+
       <title>Dowell Editor</title>
    </head>
    <body>
