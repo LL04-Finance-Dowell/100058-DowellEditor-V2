@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Row, Button, Form } from 'react-bootstrap';
+import { Row, Button, Form, Col } from 'react-bootstrap';
 import { useStateContext } from '../../contexts/contextProvider';
 import { useSearchParams } from 'react-router-dom';
 import jwt_decode from 'jwt-decode';
 import useSelectedAnswer from '../../customHooks/useSelectedAnswers';
+import { AiOutlineFontColors } from 'react-icons/ai';
+import { MdBorderColor, MdFormatColorFill } from 'react-icons/md';
 
 const ButtonRightSide = () => {
   const {
@@ -66,6 +68,75 @@ const ButtonRightSide = () => {
     }
   };
 
+  function changeFont(font) {
+    var sel = document.getSelection(); // Gets selection
+
+    //console.log("This is sel range", sel)
+    if (sel.rangeCount) {
+      // Creates a new element, and insert the selected text with the chosen font inside
+      var e = document.createElement("span");
+      e.style = "font-family:" + font.target.value + ";";
+      e.innerHTML = sel.toString();
+
+      var range = sel.getRangeAt(0);
+      range.deleteContents(); // Deletes selected text…
+      range.insertNode(e); // … and inserts the new element at its place
+    }
+
+  }
+
+  function changeFontColor(font) {
+    const textDiv = document.getElementsByClassName("focussed").item(0);
+
+    // textDiv.style = "color:" + font.target.value + ";";
+    textDiv.style.color = font.target.value;
+  }
+
+  function changeBgColor(font) {
+    const textDiv = document.getElementsByClassName("focussed").item(0);
+
+    textDiv.style = "background-color:" + font.target.value + ";";
+  }
+
+  function changeFontTBgColor(font) {
+    var sel = document.getSelection(); // Gets selection
+    if (sel.rangeCount) {
+      // Creates a new element, and insert the selected text with the chosen font inside
+      var e = document.createElement("span");
+      e.style = "background-color:" + font.target.value + ";";
+      e.innerHTML = sel.toString();
+
+      var range = sel.getRangeAt(0);
+      range.deleteContents(); // Deletes selected text…
+      range.insertNode(e); // … and inserts the new element at its place
+    }
+  }
+
+  function showColorInput() {
+    const fontColor = document.getElementById("colorInputColor");
+    if (fontColor.style.diplay === "none") {
+      fontColor.style.display = "block";
+    } else {
+      fontColor.style.display = "block";
+    }
+  }
+  function showBgColorInput() {
+    const BgColor = document.getElementById("colorBgInputColor");
+    if (BgColor.style.diplay === "none") {
+      BgColor.style.display = "block";
+    } else {
+      BgColor.style.display = "block";
+    }
+  }
+  function showTBgColorInput() {
+    const tBgColor = document.getElementById("colorTBgInputColor");
+    if (tBgColor.style.diplay === "none") {
+      tBgColor.style.display = "block";
+    } else {
+      tBgColor.style.display = "block";
+    }
+  }
+
   const removeButton = () => {
     document.querySelector('.focussedd').remove();
   };
@@ -106,10 +177,10 @@ const ButtonRightSide = () => {
       purpose === 'finalize'
         ? 1
         : purpose === 'reject'
-        ? 2
-        : purpose === 'custom'
-        ? 3
-        : 0;
+          ? 2
+          : purpose === 'custom'
+            ? 3
+            : 0;
   }, []);
 
   return (
@@ -141,8 +212,26 @@ const ButtonRightSide = () => {
           type='text'
           placeholder='Button name'
           id='button_name'
-          onChange={() => {}}
+          onChange={() => { }}
         />
+
+        <br />
+        <Row className="pt-0">
+          <h6>Text Color</h6>
+          <Col className="col-lg-4">
+            <Button className="text_formatting_btn" variant="white" onClick={showColorInput}>
+              <AiOutlineFontColors className="text_color_formatting" color="purple" size={40} />
+            </Button>
+            <input
+              type="color"
+              id="colorInputColor"
+              onChange={changeFontColor}
+              style={{ display: "none" }}
+            />
+          </Col>
+
+        </Row>
+
       </div>
 
       <div className='sel_wrapper'>
@@ -173,7 +262,7 @@ const ButtonRightSide = () => {
           type='text'
           placeholder='Website link'
           id='link'
-          onChange={() => {}}
+          onChange={() => { }}
         />
       </div>
       <hr />

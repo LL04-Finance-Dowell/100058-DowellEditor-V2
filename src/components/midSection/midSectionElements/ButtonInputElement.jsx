@@ -15,6 +15,7 @@ function createButtonInputField(id, element, p, holderDIV, focuseddClassMaintain
     buttonField.style.overflow = "overlay";
     buttonField.style.position = "absolute";
     buttonField.textContent = element.data;
+    buttonField.style.color = element.textColor;
 
     if (decoded.details.action === "template") {
         buttonField.onclick = (e) => {

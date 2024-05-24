@@ -1019,6 +1019,7 @@ const Header = () => {
             type: 'BUTTON_INPUT',
             buttonBorder: `${buttonBorderSize}px dotted ${buttonBorderColor}`,
             data: buttons[b].textContent,
+            textColor: buttons[b].style.color,
             raw_data: tempElem.children[1].innerHTML,
             purpose: tempElem.children[2].innerHTML,
             id: `btn${b + 1}`,
