@@ -1208,7 +1208,6 @@ const MidSection = React.forwardRef((props, ref) => {
     const midSec = document.querySelector('.midSection_container');
     const midSecWidth = midSec.getBoundingClientRect()?.width;
     let iniDimRatio = [];
-
     // scaleMidSec(true);
 
     for (let p = 1; p <= item?.length; p++) {

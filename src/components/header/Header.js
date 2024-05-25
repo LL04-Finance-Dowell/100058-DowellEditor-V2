@@ -4,11 +4,13 @@ import './Header.css';
 import { FaCopy, FaPen, FaSave } from 'react-icons/fa';
 import { BiImport, BiExport, BiCut, BiCopyAlt } from 'react-icons/bi';
 import { ImRedo, ImUndo, ImPaste, ImShare } from 'react-icons/im';
+import { GrDocumentImage } from "react-icons/gr";
 import CryptoJS from 'crypto-js';
 import { useStateContext } from '../../contexts/contextProvider';
 import Axios from 'axios';
 import { CgMenuLeft, CgPlayListRemove } from 'react-icons/cg';
 import {
+  MdFormatColorFill,
   MdOutlineEditCalendar,
   MdOutlinePostAdd,
   MdPreview,
@@ -612,9 +614,9 @@ const Header = () => {
 
             for (let i = 0; i < containerChildren.length; i++) {
               const element = containerChildren[i];
-               if(element.className == "container-add-button-wrapper"){
+              if (element.className == "container-add-button-wrapper") {
                 continue;
-               }
+              }
               let tempPosnChild = getPosition(element, true);
               const containerChildClassName =
                 containerChildren[i].firstElementChild?.className.split(' ')[0];
@@ -1690,6 +1692,7 @@ const Header = () => {
     return titleName;
   }
   function submit(e) {
+    const canvas = document.getElementsByClassName("midSection_container").item(0);
     setProgress(progress + 50);
     e.preventDefault();
     // setIsLoading(true);
@@ -1709,12 +1712,16 @@ const Header = () => {
         template_name: titleName,
         content: JSON.stringify(dataa),
         page: item,
+        pageColor: canvas.style.backgroundColor,
+        pageImage: canvas.style.backgroundImage,
       };
     } else if (decoded.details.action === 'document') {
       updateField = {
         document_name: titleName,
         content: JSON.stringify(dataa),
         page: item,
+        pageColor: canvas.style.backgroundColor,
+        pageImage: canvas.style.backgroundImage,
         edited_by: decoded.details.edited_by,
         edited_on: decoded.details.edited_on,
         portfolio: decoded.details.portfolio
@@ -1883,6 +1890,14 @@ const Header = () => {
         const company_id = res.data.company_id;
         setCompanyId(company_id);
         npsCustomData();
+
+        const canvases = document.getElementsByClassName("midSection_container");
+        for (let i = 0; i < canvases.length; i++) {
+          canvases[i].style.backgroundImage = res.data.pageImage;
+          canvases[i].style.backgroundColor = res.data.pageColor;
+
+        }
+
       })
       .catch((err) => {
         setIsLoading(false);
@@ -2128,6 +2143,54 @@ const Header = () => {
     // bodyEl.style.display = "block";
   };
 
+  function showBgColorInput() {
+    const BgColor = document.getElementById("colorBgInputColor");
+    if (BgColor.style.diplay === "none") {
+      BgColor.style.display = "block";
+    } else {
+      BgColor.style.display = "block";
+    }
+  }
+
+  function changeBgColor(font) {
+    const textDivs = document.getElementsByClassName("midSection_container");
+    const BgColor = document.getElementById("colorBgInputColor");
+
+    // Loop through all elements with class 'midSection_container' and change their background color
+    for (let i = 0; i < textDivs.length; i++) {
+      textDivs[i].style.backgroundColor = font.target.value;
+    }
+
+    // Hide the BgColor input after 200ms
+    setTimeout(() => {
+      BgColor.style.display = "none";
+    }, 200);
+  }
+
+  const chooseFileClick = (e) => {
+    e.stopPropagation();
+    const imgInput = document.querySelector("#imageBgInputImg");
+    imgInput.click()
+  }
+
+  function uploadImage() {
+    const imgInput = document.querySelector("#imageBgInputImg");
+    const canvases = document.getElementsByClassName("midSection_container");
+
+    const reader = new FileReader();
+    var uploadedImage = '';
+    reader.addEventListener('load', () => {
+      uploadedImage = reader.result;
+      for (let i = 0; i < canvases.length; i++) {
+        canvases[i].style.backgroundImage = `url(${uploadedImage})`
+      }
+    });
+    imgInput.files[0] && reader.readAsDataURL(imgInput.files[0]);
+    console.log(uploadedImage);
+
+  }
+
+
   //Event handler for pdf print
   const handlePDFPrint = async () => {
     const allScales = document.querySelectorAll('.newScaleInput');
@@ -2165,7 +2228,7 @@ const Header = () => {
     // setSelOpt(defSelOpt);
     setMode(mode === 'edit' ? 'preview' : mode === 'preview' ? 'edit' : '');
 
-    document.querySelectorAll('.preview-canvas')?.forEach(elem=>elem.parentElement?.remove());
+    document.querySelectorAll('.preview-canvas')?.forEach(elem => elem.parentElement?.remove());
 
   };
 
@@ -2335,10 +2398,10 @@ const Header = () => {
                     }}
                     disabled={isButtonDisabled}
                   >
-                   <FaSave color='white' />
+                    <FaSave color='white' />
                   </Button>
-                 
-                  
+
+
                 </div>
                 <div className={`d-flex share_button ${mode === 'preview' ? 'vis_hid' : ''
                   }`} onClick={() => setShareModalOpen(true)}>
@@ -2481,7 +2544,7 @@ const Header = () => {
       </div>
       <div
         className={`header desktop_header ${actionName == 'template' ? 'header_bg_template' : 'header_bg_document'
-          } ${mode == 'preview' ? "preview_header" : ''}` }
+          } ${mode == 'preview' ? "preview_header" : ''}`}
       >
         <Container fluid>
           <Row>
@@ -2752,13 +2815,43 @@ const Header = () => {
           </button>
           <button
             className='d-flex page_btn p-0 cursor_pointer'
-            id='saving-button'
             title='Export Token'
             data-bs-toggle='modal'
             data-bs-target='#desktopModal'
           >
             <BiExport />
           </button>
+          <div>
+            <button
+              className='d-flex page_btn p-0 cursor_pointer'
+              title='Page color'
+              onClick={showBgColorInput}
+            >
+              <MdFormatColorFill />
+            </button>
+            <input
+              type="color"
+              id="colorBgInputColor"
+              onChange={changeBgColor}
+              style={{ display: "none" }}
+            />
+          </div>
+          <div>
+            <button
+              className='d-flex page_btn p-0 cursor_pointer'
+              title='Page image'
+              onClick={(e) => chooseFileClick(e)}
+            >
+              <GrDocumentImage />
+            </button>
+            <input
+              type="file"
+              id="imageBgInputImg"
+              onChange={uploadImage}
+              style={{ display: "none" }}
+            />
+          </div>
+
         </div>
         {isOpenRejectionModal && (
           <RejectionModal
