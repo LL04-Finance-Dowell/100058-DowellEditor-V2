@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Row, Button, Form } from "react-bootstrap";
+import { Row, Button, Form, Col } from "react-bootstrap";
 import { useStateContext } from "../../contexts/contextProvider";
 import { useSearchParams } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 import useSelectedAnswer from "../../customHooks/useSelectedAnswers";
+import { AiOutlineFontColors } from "react-icons/ai";
 // import SelectAnsAndQuestion from "../selectAnsAndQuestion";
 
 
@@ -94,6 +95,24 @@ const DropDownRightSide = () => {
   const handleRangeBlur = (e) => {
     e.target.focus();
   };
+
+  function changeFontColor(font) {
+    const textDiv = document.getElementsByClassName("focussed").item(0);
+
+    const selectElement = textDiv.getElementsByTagName('select')[0];
+    // textDiv.style = "color:" + font.target.value + ";";
+    textDiv.style.color = font.target.value;
+    selectElement.style.color = font.target.value;
+  }
+
+  function showColorInput() {
+    const fontColor = document.getElementById("inputColorD");
+    if (fontColor.style.diplay === "none") {
+      fontColor.style.display = "block";
+    } else {
+      fontColor.style.display = "block";
+    }
+  }
   return (
     <div>
       <h3>Dropdown Settings</h3>
@@ -119,6 +138,22 @@ const DropDownRightSide = () => {
         +
       </Button>
       <hr />
+
+      <Row className="pt-0">
+          <h6>Text Color</h6>
+          <Col className="col-lg-4">
+            <Button className="text_formatting_btn" variant="white" onClick={showColorInput}>
+              <AiOutlineFontColors className="text_color_formatting" color="purple" size={40} />
+            </Button>
+            <input
+              type="color"
+              id="inputColorD"
+              onChange={changeFontColor}
+              style={{ display: "none" }}
+            />
+          </Col>
+
+        </Row>
 
       <Row className="pt-4">
         <div style={{ display: "flex", alignItems: "center" }}>

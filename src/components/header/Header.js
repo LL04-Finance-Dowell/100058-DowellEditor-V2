@@ -1094,6 +1094,7 @@ const Header = () => {
             data: selectedText,
             data1: dropDowns[d].firstElementChild.innerHTML,
             data2: dropDowns[d].lastElementChild.innerHTML,
+            color: dropDowns[d].style.color,
             id: `dd${d + 1}`,
           };
 
@@ -1692,7 +1693,12 @@ const Header = () => {
     return titleName;
   }
   function submit(e) {
-    const canvas = document.getElementsByClassName("midSection_container").item(0);
+    const canvas = document.getElementsByClassName("midSection_container")
+    let pageColors = []
+    for (let c = 0; c < canvas.length; c++) {
+      const bgColor = canvas[c].style.backgroundColor;
+      pageColors.push(bgColor);
+    }
     setProgress(progress + 50);
     e.preventDefault();
     // setIsLoading(true);
@@ -1712,16 +1718,16 @@ const Header = () => {
         template_name: titleName,
         content: JSON.stringify(dataa),
         page: item,
-        pageColor: canvas.style.backgroundColor,
-        pageImage: canvas.style.backgroundImage,
+        pageColor: pageColors,
+        // pageImage: canvas.style.backgroundImage,
       };
     } else if (decoded.details.action === 'document') {
       updateField = {
         document_name: titleName,
         content: JSON.stringify(dataa),
         page: item,
-        pageColor: canvas.style.backgroundColor,
-        pageImage: canvas.style.backgroundImage,
+        pageColor: pageColors,
+        // pageImage: canvas.style.backgroundImage,
         edited_by: decoded.details.edited_by,
         edited_on: decoded.details.edited_on,
         portfolio: decoded.details.portfolio
@@ -1891,12 +1897,15 @@ const Header = () => {
         setCompanyId(company_id);
         npsCustomData();
 
-        const canvases = document.getElementsByClassName("midSection_container");
-        for (let i = 0; i < canvases.length; i++) {
-          canvases[i].style.backgroundImage = res.data.pageImage;
-          canvases[i].style.backgroundColor = res.data.pageColor;
+        setTimeout(() => {
+          const canvases = document.getElementsByClassName("midSection_container");
+          const pageColors = res.data.pageColor; // Assume this is the array of colors
 
-        }
+          for (let i = 0; i < canvases.length; i++) {
+            canvases[i].style.backgroundColor = pageColors[i];
+          }
+        }, 200);
+
 
       })
       .catch((err) => {
@@ -2145,25 +2154,33 @@ const Header = () => {
 
   function showBgColorInput() {
     const BgColor = document.getElementById("colorBgInputColor");
+    const bgNumberField = document.getElementById("colorBgNumber");
     if (BgColor.style.diplay === "none") {
       BgColor.style.display = "block";
+      bgNumberField.style.display = "block";
     } else {
       BgColor.style.display = "block";
+      bgNumberField.style.display = "block";
     }
   }
 
   function changeBgColor(font) {
     const textDivs = document.getElementsByClassName("midSection_container");
     const BgColor = document.getElementById("colorBgInputColor");
+    const bgNumberField = document.getElementById("colorBgNumber");
+
+    const pageNumber = bgNumberField.value
 
     // Loop through all elements with class 'midSection_container' and change their background color
     for (let i = 0; i < textDivs.length; i++) {
-      textDivs[i].style.backgroundColor = font.target.value;
+      console.log(bgNumberField.value);
+      textDivs[pageNumber - 1].style.backgroundColor = font.target.value;
     }
 
     // Hide the BgColor input after 200ms
     setTimeout(() => {
       BgColor.style.display = "none";
+      bgNumberField.style.display = "none";
     }, 200);
   }
 
@@ -2829,6 +2846,11 @@ const Header = () => {
             >
               <MdFormatColorFill />
             </button>
+            <input
+              type="number"
+              id="colorBgNumber"
+              style={{ display: "none" }}
+            />
             <input
               type="color"
               id="colorBgInputColor"

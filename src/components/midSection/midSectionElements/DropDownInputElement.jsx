@@ -4,7 +4,7 @@ import copyInput from '../CopyInput';
 // Regular JavaScript function to create a text input field
 function createDropDownInputField(id, element, p, holderDIV, focuseddClassMaintain, handleClicked, setSidebar, table_dropdown_focuseddClassMaintain, decoded, setRightSideDropDown, setDropdownName) {
     let isAnyRequiredElementEdited = false;
-    
+
     let dropdownField = document.createElement("div");
     dropdownField.className = "dropdownInput";
     dropdownField.id = id;
@@ -14,13 +14,17 @@ function createDropDownInputField(id, element, p, holderDIV, focuseddClassMainta
     dropdownField.style.borderRadius = "0px";
     dropdownField.style.outline = "0px";
     dropdownField.style.overflow = "overlay";
+    dropdownField.style.color = element.color;
     // dropdownField.innerHTML = `<select><option>${postData.dropdownField.value}</option></select>`;
     dropdownField.style.position = "absolute";
 
     const selectElement = document.createElement("select");
     selectElement.className = "select-element";
+    selectElement.style.backgroundColor = "#0000";
     selectElement.innerHTML = element.data2;
-    
+    selectElement.style.color = element.color;
+
+
     dropdownField.onclick = (e) => {
         // focuseddClassMaintain(e);
         table_dropdown_focuseddClassMaintain(e);

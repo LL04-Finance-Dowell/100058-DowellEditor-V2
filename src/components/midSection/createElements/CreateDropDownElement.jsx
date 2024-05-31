@@ -38,8 +38,9 @@ function createDropDownInputElement(
 
   const selectElement = document.createElement("select");
   selectElement.className = "select-element";
-  selectElement.style.width = "500";
+  selectElement.style.width = "100%";
   selectElement.style.height = "auto";
+  selectElement.style.backgroundColor = "#0000";
   // otion design updated code
   var opt = document.createElement("option");
   opt.setAttribute("selected", "selected")
@@ -68,7 +69,7 @@ function createDropDownInputElement(
   // console.log("BiSolidDownArrow", biSolidDArrow);
   // to do dropdown img need to added
 
-  opt.value = "default";
+  // opt.value = "default";
   opt.innerHTML = "Select List Here";
   // opt.append(svg)
   selectElement.append(opt);
