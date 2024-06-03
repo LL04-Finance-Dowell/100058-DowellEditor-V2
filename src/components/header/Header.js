@@ -1695,9 +1695,14 @@ const Header = () => {
   function submit(e) {
     const canvas = document.getElementsByClassName("midSection_container")
     let pageColors = []
+    let pageImages = []
     for (let c = 0; c < canvas.length; c++) {
       const bgColor = canvas[c].style.backgroundColor;
       pageColors.push(bgColor);
+    }
+    for (let i = 0; i < canvas.length; i++) {
+      const bgImage = canvas[i].style.backgroundImage;
+      pageImages.push(bgImage);
     }
     setProgress(progress + 50);
     e.preventDefault();
@@ -1719,7 +1724,7 @@ const Header = () => {
         content: JSON.stringify(dataa),
         page: item,
         pageColor: pageColors,
-        // pageImage: canvas.style.backgroundImage,
+        pageImage: pageImages,
       };
     } else if (decoded.details.action === 'document') {
       updateField = {
@@ -1727,7 +1732,7 @@ const Header = () => {
         content: JSON.stringify(dataa),
         page: item,
         pageColor: pageColors,
-        // pageImage: canvas.style.backgroundImage,
+        pageImage: pageImages,
         edited_by: decoded.details.edited_by,
         edited_on: decoded.details.edited_on,
         portfolio: decoded.details.portfolio
@@ -1899,11 +1904,16 @@ const Header = () => {
 
         setTimeout(() => {
           const canvases = document.getElementsByClassName("midSection_container");
-          const pageColors = res.data.pageColor; // Assume this is the array of colors
+          const pageColors = res.data.pageColor; 
+          const pageImages = res.data.pageImage; 
 
           for (let i = 0; i < canvases.length; i++) {
-            canvases[i].style.backgroundColor = pageColors[i];
+            if(pageColors){
+              canvases[i].style.backgroundColor = pageColors[i];
+              canvases[i].style.backgroundImage = pageImages[i];
+            }
           }
+
         }, 200);
 
 
@@ -2184,22 +2194,50 @@ const Header = () => {
     }, 200);
   }
 
+  function showBgColorInput() {
+    const BgColor = document.getElementById("colorBgInputColor");
+    const bgNumberField = document.getElementById("colorBgNumber");
+    if (BgColor.style.diplay === "none") {
+      BgColor.style.display = "block";
+      bgNumberField.style.display = "block";
+    } else {
+      BgColor.style.display = "block";
+      bgNumberField.style.display = "block";
+    }
+  }
+  function showBgImgInput() {
+    const BgColor = document.getElementById("colorBgInputColor");
+    const bgNumberField = document.getElementById("imgBgNumber");
+    if (BgColor.style.diplay === "none") {
+      bgNumberField.style.display = "block";
+    } else {
+      bgNumberField.style.display = "block";
+    }
+  }
+
   const chooseFileClick = (e) => {
+    const bgNumberField = document.getElementById("imgBgNumber");
     e.stopPropagation();
     const imgInput = document.querySelector("#imageBgInputImg");
     imgInput.click()
+    setTimeout(() => {
+      bgNumberField.style.display = "none";
+    }, 200);
+
   }
 
   function uploadImage() {
     const imgInput = document.querySelector("#imageBgInputImg");
     const canvases = document.getElementsByClassName("midSection_container");
+    const bgNumberField = document.getElementById("imgBgNumber");
+    const pageNumber = bgNumberField.value
 
     const reader = new FileReader();
     var uploadedImage = '';
     reader.addEventListener('load', () => {
       uploadedImage = reader.result;
       for (let i = 0; i < canvases.length; i++) {
-        canvases[i].style.backgroundImage = `url(${uploadedImage})`
+        canvases[pageNumber - 1].style.backgroundImage = `url(${uploadedImage})`
       }
     });
     imgInput.files[0] && reader.readAsDataURL(imgInput.files[0]);
@@ -2849,6 +2887,7 @@ const Header = () => {
             <input
               type="number"
               id="colorBgNumber"
+              placeholder='Page number'
               style={{ display: "none" }}
             />
             <input
@@ -2862,10 +2901,17 @@ const Header = () => {
             <button
               className='d-flex page_btn p-0 cursor_pointer'
               title='Page image'
-              onClick={(e) => chooseFileClick(e)}
+              onClick={showBgImgInput}
             >
               <GrDocumentImage />
             </button>
+            <input
+              type="number"
+              id="imgBgNumber"
+              onChange={(e) => chooseFileClick(e)}
+              placeholder='Page number'
+              style={{ display: "none" }}
+            />
             <input
               type="file"
               id="imageBgInputImg"

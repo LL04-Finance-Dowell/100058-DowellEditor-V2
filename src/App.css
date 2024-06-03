@@ -217,7 +217,7 @@ tr:nth-child(even) {
 }
 
 .select-element {
-  min-width: 180px;
+  /* min-width: 180px; */
   /* border:none; */
   outline: none;
   /* appearance: none; */

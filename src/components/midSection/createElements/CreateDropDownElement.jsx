@@ -42,25 +42,25 @@ function createDropDownInputElement(
   selectElement.style.height = "auto";
   selectElement.style.backgroundColor = "#0000";
   // otion design updated code
-  var opt = document.createElement("option");
-  opt.setAttribute("selected", "selected")
-  opt.setAttribute("disabled", true)
+  // var opt = document.createElement("option");
+  // opt.setAttribute("selected", "selected")
+  // opt.setAttribute("disabled", true)
 
   // to do dropdown img need to added
-  const svg = document.createElement("svg")
-  svg.setAttribute("stroke", "currentColor")
-  svg.setAttribute("fill", "currentColor")
-  svg.setAttribute("stroke-width", "0")
-  svg.setAttribute("viewBox", "0 0 24 24")
-  svg.setAttribute("height", "1em")
-  svg.setAttribute("width", "1em")
-  svg.setAttribute("xmlns", "http://www.w3.org/2000/svg")
-  const path = document.createElement("path")
-  path.setAttribute("d", "M11.178 19.569a.998.998 0 0 0 1.644 0l9-13A.999.999 0 0 0 21 5H3a1.002 1.002 0 0 0-.822 1.569l9 13z")
-  svg.append(path)
-  let img = document.createElement('img');
-  img.src =
-    'https://media.geeksforgeeks.org/wp-content/uploads/20190529122828/bs21.png';
+  // const svg = document.createElement("svg")
+  // svg.setAttribute("stroke", "currentColor")
+  // svg.setAttribute("fill", "currentColor")
+  // svg.setAttribute("stroke-width", "0")
+  // svg.setAttribute("viewBox", "0 0 24 24")
+  // svg.setAttribute("height", "1em")
+  // svg.setAttribute("width", "1em")
+  // svg.setAttribute("xmlns", "http://www.w3.org/2000/svg")
+  // const path = document.createElement("path")
+  // path.setAttribute("d", "M11.178 19.569a.998.998 0 0 0 1.644 0l9-13A.999.999 0 0 0 21 5H3a1.002 1.002 0 0 0-.822 1.569l9 13z")
+  // svg.append(path)
+  // let img = document.createElement('img');
+  // img.src =
+  //   'https://media.geeksforgeeks.org/wp-content/uploads/20190529122828/bs21.png';
 
   // svg.setAttributeNS(stroke="currentColor", fill="currentColor", stroke-width="0", viewBox="0 0 24 24", height="1em", width="1em", xmlns="http://www.w3.org/2000/svg")
   // const biSolidDArrow = <BiText/>
@@ -70,9 +70,9 @@ function createDropDownInputElement(
   // to do dropdown img need to added
 
   // opt.value = "default";
-  opt.innerHTML = "Select List Here";
+  // opt.innerHTML = "Select List Here";
   // opt.append(svg)
-  selectElement.append(opt);
+  // selectElement.append(opt);
   // selectElement.append(<BiText/>);
 
   selectElement.onclick = () => {
@@ -112,9 +112,14 @@ function createDropDownInputElement(
     handleClicked("dropdown2", "container2");
     setRightSideDropDown(false);
     setSidebar(true);
+    dropdownField.firstElementChild.style.display = "block"
   };
 
-  holderDIV.append(svg);
+  dropdownField.onmouseleave = () => {
+    dropdownField.firstElementChild.style.display = "none"
+}
+
+  // holderDIV.append(svg);
 
   if (copy_data) {
     dropdownField.innerHTML = copy_data;
@@ -122,6 +127,7 @@ function createDropDownInputElement(
     const para = document.createElement("p");
     para.innerHTML = " Dropdown Name";
     para.className = "dropdownName";
+    para.style.display = "none"
     para.onclick = () => {
       para.parentElement.click();
     };

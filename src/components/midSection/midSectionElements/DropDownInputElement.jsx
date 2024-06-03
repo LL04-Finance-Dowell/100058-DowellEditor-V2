@@ -23,7 +23,18 @@ function createDropDownInputField(id, element, p, holderDIV, focuseddClassMainta
     selectElement.style.backgroundColor = "#0000";
     selectElement.innerHTML = element.data2;
     selectElement.style.color = element.color;
+    selectElement.style.width = "100%"
 
+    const savedSelectedValue = element.data; // This is the value of the saved selected option
+
+    // Find and set the saved selected option
+    const options = selectElement.options;
+    for (let i = 0; i < options.length; i++) {
+        if (options[i].text === savedSelectedValue) {
+            options[i].selected = true;
+            break;
+        }
+    }
 
     dropdownField.onclick = (e) => {
         // focuseddClassMaintain(e);
@@ -34,7 +45,12 @@ function createDropDownInputField(id, element, p, holderDIV, focuseddClassMainta
         handleClicked("dropdown2");
         setRightSideDropDown(false);
         setSidebar(true);
+        para.style.display = "block"
     };
+
+    dropdownField.onmouseleave = () => {
+        para.style.display = "none"
+    }
 
     // selectElement.innerHTML = element.data2;
 
@@ -42,6 +58,7 @@ function createDropDownInputField(id, element, p, holderDIV, focuseddClassMainta
     para.innerHTML = " Dropdown Name";
     para.className = "dropdownName";
     para.innerText = element.data1;
+    para.style.display = "none"
 
     dropdownField.append(para);
     dropdownField.append(selectElement);
