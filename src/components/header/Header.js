@@ -2060,6 +2060,20 @@ const Header = () => {
             // setSort(loadedData[0][0]);
             setIsLoading(false);
             // setFetchedData(loadedData[0][0]);
+
+            setTimeout(() => {
+              const canvases = document.getElementsByClassName("midSection_container");
+              const pageColors = res.data.pageColor; 
+              const pageImages = res.data.pageImage; 
+    
+              for (let i = 0; i < canvases.length; i++) {
+                if(pageColors){
+                  canvases[i].style.backgroundColor = pageColors[i];
+                  canvases[i].style.backgroundImage = pageImages[i];
+                }
+              }
+    
+            }, 200);
           })
           .catch((err) => {
             setIsLoading(false);
@@ -2248,13 +2262,13 @@ const Header = () => {
 
   //Event handler for pdf print
   const handlePDFPrint = async () => {
-    const allScales = document.querySelectorAll('.newScaleInput');
-    for (let i = 0; i <= Array.from(allScales).length; i++) {
-      if (Array.from(allScales)[i]) {
-        let res = await generateImage(Array.from(allScales)[i]);
-        Array.from(allScales)[i].setAttribute('snapshot', res);
-      }
-    }
+    // const allScales = document.querySelectorAll('.newScaleInput');
+    // for (let i = 0; i <= Array.from(allScales).length; i++) {
+    //   if (Array.from(allScales)[i]) {
+    //     let res = await generateImage(Array.from(allScales)[i]);
+    //     Array.from(allScales)[i].setAttribute('snapshot', res);
+    //   }
+    // }
     const containerAll = document.querySelectorAll('.midSection_container');
     const fileName = document.querySelector('.title-name').innerText;
     downloadPDF(Array.from(containerAll), fileName);

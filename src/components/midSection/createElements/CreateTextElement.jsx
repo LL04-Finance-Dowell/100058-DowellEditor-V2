@@ -46,7 +46,7 @@ function createTextElement(holderDIV, focuseddClassMaintain, handleClicked, setS
       inputField.textContent = '';
       inputField.classList.remove('empty')
     }
-    holderDIV.style.border = '3px dotted gray'
+    holderDIV.style.border = '3px solid gray'
 
   }
 

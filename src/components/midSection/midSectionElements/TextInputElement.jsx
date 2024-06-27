@@ -15,6 +15,7 @@ function createTextInputField(
   handleClicked,
   setSidebar
 ) {
+  console.log(element);
   let isAnyRequiredElementEdited = false;
   const inputField = document.createElement("div");
   inputField.setAttribute("contenteditable", true);
